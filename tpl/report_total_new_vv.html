@@ -1,0 +1,44 @@
+<hr>
+
+<form target="_self" method="POST" name=form11 id=form11>
+
+<h1>Добавление внепланового визита</h1>
+
+<table>
+<tr>
+<td>
+Выберите ТЗ (Область - Сеть - Название ТЗ - Адрес ТЗ)
+</td>
+<td>
+Выберите заказчика
+</td>
+<td>
+Выберите дату
+</td>
+</tr>
+<tr>
+<td>
+<select required name=vv_tp>
+<option></option>
+{foreach key=k item=i from=$vv_tp name=vv_tp}
+<option value={$i.kodtp}>{$i.tz_oblast} - {$i.net_name} - {$i.ur_tz_name} - {$i.tz_address}</option>
+{/foreach}
+</select>
+</td>
+<td>
+<select required name=vv_ag>
+<option></option>
+{foreach key=key item=item from=$routes_head_agents}
+<option value={$item.id}>{$item.name|escape}</option>
+{/foreach}
+</select>
+</td>
+<td>
+<input required name=vv_dt class="datepicker">
+</td>
+</tr>
+</table>
+
+<input {$disabled} name="add_vv" value="Добавить" type="submit">
+
+</form>

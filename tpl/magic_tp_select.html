@@ -1,0 +1,108 @@
+<h1>Выбор ТП для участия в акции</h1>
+
+{foreach key=er_tp_key item=er_tp_item from=$er_tp name=er_tp}
+{/foreach}
+{if $smarty.foreach.er_tp.total > 0}
+<p style="color:red;font-style:bold">Некоторые из выбранных ТП не удовлетворяют условиям акции</p>
+{/if}
+
+<form target="_self" method="POST" name=form_tp id=form_tp>
+	<input type=submit name=save id=save class=save value="Сохранить">
+	<br>
+	<br>
+	<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold; text-align:center">
+			<td>№ п/п</td>
+			<td>ТС</td>
+			<td>ФИО ЭТА</td>
+			<td>Название ТП</td>
+			<td>Адрес ТП</td>
+
+			<td>Среднемесячные<br>продажи<br>июль-декабрь<br>2011,<br>{$valuta}.</td>
+			<td>Минимальный<br>план<br>продаж<br>января,<br>{$valuta}.</td>
+			<td>Продажи<br>января,<br>{$valuta}.</td>
+			<td>Участвует<br>в акции</td>
+			<td>План<br>январь,<br>{$valuta}.</td>
+			<td>Контактный<br>номер ЛПР, имя</td>
+
+		</tr>
+		{foreach key=tp_key item=tp_item from=$tp name=tp}
+		<tr
+
+{foreach key=er_tp_key item=er_tp_item from=$er_tp name=er_tp}
+
+			{if $tp_item.kod_tp eq $er_tp_key}
+				style="font-weight:bold;color:red"
+			{/if}
+
+{/foreach}
+
+		>
+			<td>{$smarty.foreach.tp.iteration}</td>
+			<td>{$tp_item.ts}</td>
+			<td>{$tp_item.eta}</td>
+			<td>{$tp_item.tp_name}</td>
+			<td>{$tp_item.address}</td>
+			<td style="text-align:right">{$tp_item.avg6|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.december|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.january|default:0|num:2}</td>
+			<td {if $tp_item.selected eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
+				<input
+					onclick="javascript:check_item1({$tp_item.kod_tp},'selected','jan_plan','contact_lpr',true)"
+					type=checkbox
+					{if $tp_item.selected eq 1}checked{/if}
+					{if $tp_item.ok_traid neq null}disabled{/if}
+					name=selected_on[{$tp_item.kod_tp}]
+					value="{$tp_item.kod_tp}"
+				>
+				<input type=hidden name=selected_changed[{$tp_item.kod_tp}] value="">
+				<input type=hidden name=december[{$tp_item.kod_tp}] value="{$tp_item.december}">
+			</td>
+			<td><input {if $tp_item.selected neq 1 or $tp_item.ok_traid neq null} disabled {/if} required size=8 name=jan_plan[{$tp_item.kod_tp}] id=jan_plan[{$tp_item.kod_tp}] value="{$tp_item.jan_plan}"></td>
+			<td><input {if $tp_item.selected neq 1 or $tp_item.ok_traid neq null} disabled {/if} required size=25 name=contact_lpr[{$tp_item.kod_tp}] id=contact_lpr[{$tp_item.kod_tp}] value="{$tp_item.contact_lpr|escape}"></td>
+		</tr>
+		{/foreach}
+		<tr style="font-weight:bold; text-align:center">
+			<td colspan=5>Итого</td>
+			{foreach key=tp_key item=tp_item from=$tp_total}
+			<td style="text-align:right">{$tp_item.avg6|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.december|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.january|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.selected|default:0}</td>
+			<td style="text-align:right">{$tp_item.jan_plan|default:0|num:2}</td>
+			<td></td>
+			{/foreach}
+		</tr>
+	</table>
+	<br>
+	<input type=submit name=save id=save class=save value="Сохранить">
+	<br>
+	<br>
+</form>
+
+{literal}
+<script>
+function check_item1($v,$v2,$b,$v3,required)
+{
+	var e = document.forms["form_tp"].elements[$v3+"["+$v+"]"];
+	var cbs = document.forms["form_tp"].elements[$v2+"_on["+$v+"]"];
+	var cbs2 = document.forms["form_tp"].elements[$v2+"_changed["+$v+"]"];
+	var b = document.forms["form_tp"].elements[$b+"["+$v+"]"];
+	if (cbs.checked)
+	{
+		cbs2.value='on';
+		e.disabled=false;
+		e["required"]="required";
+		b.disabled=false;
+		b["required"]="required";
+	}
+	else
+	{
+		cbs2.value=$v;
+		e.disabled=true;
+		b.disabled=true;
+		//e["required"]=!required;
+	}
+}
+</script>
+{/literal}

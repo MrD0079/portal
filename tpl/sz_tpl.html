@@ -1,0 +1,24 @@
+<h1>Редактор шаблонов СЗ</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+	Выберите шаблон:
+	<br>
+	<select name=id id=id onChange="javascript:form3.submit()">
+		<option value=0></option>
+		{foreach key=key item=item from=$sz_tpl}
+		<option value={$item.id}>{$item.head|escape}</option>
+		{/foreach}
+	</select>
+	<br>
+	<script>$("#id option[value='{$smarty.request.id}']").prop('selected', true);</script>
+	Заголовок шаблона:
+	<br>
+	<input name=head value="{foreach key=key item=item from=$sz_tpl}{if $item.id eq $smarty.request.id}{$item.head|escape}{/if}{/foreach}">
+	<br>
+	Тело шаблона:
+	<br>
+	<textarea name=text id=text cols=80 rows=20>{foreach key=key item=item from=$sz_tpl}{if $item.id eq $smarty.request.id}{$item.text|escape}{/if}{/foreach}</textarea>
+	<br>
+	<input value="Сохранить" name="save" type="submit">
+	<input value="Добавить" name="add" type="submit">
+	<input value="Удалить" name="del" type="submit">
+</form>

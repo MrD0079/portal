@@ -1,0 +1,180 @@
+<h2>Ход акции "Весь мир для тебя с АВК" - {$m_cur} {$y_cur}</h2>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_process id=form_process>
+
+{if $is_ts neq 1}
+
+<input type="hidden" name="form_submit">
+
+<h2>Форма</h2>
+
+<a {if $smarty.request.page eq 'ts'}style="font-weight:bold"{/if} href="?action=w4u_process&dt={$smarty.request.dt}&m={$smarty.request.m}&y={$smarty.request.y}&page=ts&ver={$smarty.request.ver}">по ТС</a>&nbsp
+<a {if $smarty.request.page eq 'tm'}style="font-weight:bold"{/if} href="?action=w4u_process&dt={$smarty.request.dt}&m={$smarty.request.m}&y={$smarty.request.y}&page=tm&ver={$smarty.request.ver}">по ТМ</a>&nbsp
+<a {if $smarty.request.page eq 'rm'}style="font-weight:bold"{/if} href="?action=w4u_process&dt={$smarty.request.dt}&m={$smarty.request.m}&y={$smarty.request.y}&page=rm&ver={$smarty.request.ver}">по РМ</a>&nbsp
+<a {if $smarty.request.page eq 'nm'}style="font-weight:bold"{/if} href="?action=w4u_process&dt={$smarty.request.dt}&m={$smarty.request.m}&y={$smarty.request.y}&page=nm&ver={$smarty.request.ver}">по НМ</a>&nbsp
+
+
+<h2>Фильтр</h2>
+
+<p>
+По РМ:
+<br>
+<select name=w4u_process_rm_list id=w4u_process_rm_list onchange="javascript:fn_submit('w4u_process_rm_list');">
+<option value=0></option>
+{foreach key=key item=item from=$w4u_process_rm_list}
+<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.dt}уволен {$item.dt}{/if}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+По ТМ:
+<br>
+<select name=w4u_process_tm_list id=w4u_process_tm_list onchange="javascript:fn_submit('w4u_process_tm_list');">
+<option value=0></option>
+{foreach key=key item=item from=$w4u_process_tm_list}
+<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.dt}уволен {$item.dt}{/if}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+По ТС:
+<br>
+<select name=w4u_process_ts_list id=w4u_process_ts_list onchange="javascript:fn_submit('w4u_process_ts_list');">
+<option value=0></option>
+{foreach key=key item=item from=$w4u_process_ts_list}
+<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.dt}уволен {$item.dt}{/if}</option>
+{/foreach}
+</select>
+</p>
+
+<script>$("#w4u_process_ts_list option[value='{$smarty.request.w4u_process_ts_list}']").prop('selected', true);</script>
+<script>$("#w4u_process_tm_list option[value='{$smarty.request.w4u_process_tm_list}']").prop('selected', true);</script>
+<script>$("#w4u_process_rm_list option[value='{$smarty.request.w4u_process_rm_list}']").prop('selected', true);</script>
+
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	//$('#form_submit').val(val);
+	//$('#form_report').submit();
+}
+</script>
+{/literal}
+
+{/if}
+
+
+<input type=submit name=generate value="Показать">
+</form>
+
+{/if}
+
+{if $smarty.request.generate}
+
+<!--<h2>Обеспечивается прирост к базовому месяцу: {$m_bas} {$y_bas}</h2>-->
+<!--
+Расшифровка классификации продуктов.<br>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr>
+	{foreach key=k item=i name=classif from=$classif}
+		{if $smarty.foreach.classif.iteration%5 eq 1 and $smarty.foreach.classif.iteration neq 1}<tr>{/if}
+		<td style="vertical-align: top; background-color: rgb(204, 255, 255);"><nobr>{$i.name}</nobr></td>
+		{if $smarty.foreach.classif.iteration%5 eq 0 and $smarty.foreach.classif.iteration neq 1}</tr>{/if}
+	{/foreach}
+	</tr>
+</table>
+-->
+
+{if not $smarty.request.print}
+<p><a href="?action=w4u_process&dt={$smarty.request.dt}&m={$smarty.request.m}&y={$smarty.request.y}&page={$smarty.request.page}&print=1&excel=1&filename=Ход акции Весь мир для тебя с АВК - {$m_cur} {$y_cur}&generate=1">Экспорт в Excel</a></p>
+{else}
+<p></p>
+{/if}
+
+{if $smarty.request.page eq 'ts'}
+{/if}
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2>категория</td>
+		<td rowspan=2>продукт</td>
+		<td rowspan=2>балл</td>
+		<td rowspan=2>минимум</td>
+		<td colspan=5>ИТОГО</td>
+		{foreach key=colsk item=colsi from=$d.cols name=cols}
+		<td colspan=5>
+			{$colsi.head.fio}
+			<br>
+			{if $colsi.head.akb eq 0}<font style="color:red">{/if}план по АКБ (выбранный месяц) - {$colsi.head.akb|default:0}{if $colsi.head.akb eq 0}</font>{/if}
+			<br>
+			{if $colsi.head.akbprev eq 0}<font style="color:red">{/if}план по АКБ (базовый месяц) - {$colsi.head.akbprev|default:0}{if $colsi.head.akbprev eq 0}</font>{/if}
+		</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td>План ТП выбранный месяц<!--{$m_bas} {$y_bas}--></td>
+		<td>Факт ТП выбранный месяц<!--{$m_bas} {$y_bas}--></td>
+		<td>Дистрибуция базовый месяц<!--{$m_bas} {$y_bas}-->, %</td>
+		<td>Дистрибуция выбранный месяц<!--{$m_bas} {$y_bas}-->, %</td>
+		<td>Балл</td>
+		{foreach key=colsk item=colsi from=$d.cols name=cols}
+		<td>План ТП выбранный месяц<!--{$m_bas} {$y_bas}--></td>
+		<td>Факт ТП выбранный месяц<!--{$m_bas} {$y_bas}--></td>
+		<td>Дистрибуция базовый месяц<!--{$m_bas} {$y_bas}-->, %</td>
+		<td>Дистрибуция выбранный месяц<!--{$m_bas} {$y_bas}-->, %</td>
+		<td>Балл</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold">
+		<td colspan=4><font style="color:red">ИТОГО БАЛЛОВ</font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$d.total.bm_qtytt}--></font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$d.total.m_qtytt}--></font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$d.total.bperc|num:2}--></font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$d.total.perc|num:2}--></font></td>
+		<td style="text-align:right"><font style="color:red">{$d.total.fact_ball|default:0}</font></td>
+		{foreach key=colsk item=colsi from=$d.cols name=cols}
+		<td style="text-align:right"><font style="color:red"><!--{$colsi.total.bm_qtytt|default:0}--></font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$colsi.total.m_qtytt|default:0}--></font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$colsi.total.bperc|num:2}--></font></td>
+		<td style="text-align:right"><font style="color:red"><!--{$colsi.total.perc|num:2}--></font></td>
+		<td style="text-align:right"><font style="color:red">{$colsi.total.fact_ball|default:0}</font></td>
+		{/foreach}
+	</tr>
+	{foreach key=cellsk item=cellsi from=$d.cells name=cells}
+		{foreach key=cellsk1 item=cellsi1 from=$cellsi name=cellsi}
+		{/foreach}
+		<tr>
+			<td rowspan={$smarty.foreach.cellsi.total+1}><font style="color:red;font-weight:bold">{$cellsk}</font></td>
+			<td></td>
+		</tr>
+		{foreach key=cellsk1 item=cellsi1 from=$cellsi name=cellsi}
+		<tr>
+			<td>{$cellsi1.head.product_name_sw}</td>
+			<td style="text-align:right">{$cellsi1.head.ball}</td>
+			<td style="text-align:right">{$cellsi1.head.min_por}</td>
+			<td style="text-align:right;font-weight:bold">{$cellsi1.total.bm_qtytt|default:0}</td>
+			<td style="text-align:right;font-weight:bold">{$cellsi1.total.m_qtytt|default:0}</td>
+			<td style="text-align:right;font-weight:bold">{$cellsi1.total.bperc|default:0|num:2}</td>
+			<td style="text-align:right;font-weight:bold">{$cellsi1.total.perc|default:0|num:2}</td>
+			<td style="text-align:right;font-weight:bold;{if $cellsi1.total.fact_ball < 0}background-color:red{/if}">{$cellsi1.total.fact_ball|default:0}</td>
+			{foreach key=colsk item=colsi from=$d.cols name=cols}
+			<td style="text-align:right;{if $cellsi1.data.$colsk.bm_qtytt eq 0}background-color:red{/if}">{$cellsi1.data.$colsk.bm_qtytt|default:0}</td>
+			<td style="text-align:right;{if $cellsi1.data.$colsk.m_qtytt eq 0}background-color:red{/if}">{$cellsi1.data.$colsk.m_qtytt|default:0}</td>
+			<td style="text-align:right;">{$cellsi1.data.$colsk.bperc|default:0|num:2}</td>
+			<td style="text-align:right;">{$cellsi1.data.$colsk.perc|default:0|num:2}</td>
+			<td style="text-align:right;{if $cellsi1.data.$colsk.fact_ball < 0}background-color:red{/if}"">{$cellsi1.data.$colsk.fact_ball|default:0}</td>
+			{/foreach}
+		</tr>
+		{/foreach}
+	{/foreach}
+</table>
+
+
+{/if}
+

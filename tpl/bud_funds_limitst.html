@@ -1,0 +1,26 @@
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td rowspan=2 style="background-color: rgb(255, 204, 153);">План продаж<br>на месяц<br>по ДБ,<br>тыс. {$valuta}</td>
+		{foreach key=k item=i from=$f_list}
+		<td colspan=4 style="border-left: 3px solid">{$i.name}</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold; text-align:center">
+		{foreach key=k item=i from=$f_list}
+		<td style="border-left: 3px solid">ПЛАН нац. активности (Утвержден ДП),<br>тыс. {$valuta}</td>
+		<td>ПЛАН лок. активности (Утвержден ДП),<br>тыс. {$valuta}</td>
+		<td>ФАКТ,<br>тыс. {$valuta}</td>
+		<td>ФАКТ,<br>%</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td style="background-color: rgb(255, 204, 153); text-align:right">{$plan|num:3}</td>
+		{foreach key=k1 item=i1 from=$f}
+		<td style="text-align:right; border-left: 3px solid">{$i1.plan_val|num:3} ({$i1.accepted_plan_val|num:3})</td>
+			<input type=hidden id="hidden_plan_val_{$i1.id}" value="{$i1.plan_val}">
+		<td style="text-align:right">{$i1.planl_val|num:3} ({$i1.accepted_planl_val|num:3})</td>
+		<td style="text-align:right">{$i1.fakt_val|num:3}</td>
+		<td style="text-align:right">{$i1.fakt_perc|num:3}</td>
+		{/foreach}
+	</tr>
+</table>

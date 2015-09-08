@@ -1,0 +1,68 @@
+<h1>Поля формы "Бегунок"</h1>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+<input type=submit value="сохранить">
+</p>
+
+<p>
+новое поле формы <input name=new[0][name] size=40>
+<input type=hidden name=new[0][dpt_id] value="{$dpt_id}">
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>[x]</td>
+		<td>по-<br>ря-<br>док</td>
+		<td>тип</td>
+		<td bgcolor="#ccffff">название<br>поля<br>формы</td>
+		<td bgcolor="#ccffff">обя-<br>за-<br>тель-<br>ное<br>по-<br>ле<br>фор-<br>мы</td>
+		<td bgcolor="#ccffff">вы-<br>во-<br>дить<br>в<br>ре-<br>ест-<br>ре</td>
+	</tr>
+	{foreach key=key item=item from=$beg_ff}
+	<tr style="text-align:center">
+		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path|escape}"></td>
+		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=3></td>
+		<td>
+			<select name=update[{$item.id}][type] id=update_{$item.id}_type>
+				<option value="string">Строка (по умолчанию)</option>
+				<option value="textarea">Текст</option>
+				<option value="number_int">Целое число</option>
+				<option value="number">Дробное число</option>
+				<option value="datepicker">Дата</option>
+				<option value="file">Файл</option>
+				<!--<option value="select">Выпадающий список</option>-->
+			</select>
+			<script>$('#update_{$item.id}_type').val("{$item.type}"==""?"string":"{$item.type}");</script>
+		</td>
+		<td bgcolor="#ccffff"><input name=update[{$item.id}][name] size=40 value="{$item.name|escape}"></td>
+		<td bgcolor="#ccffff">
+			<input
+				type=checkbox
+				id=chk_{$item.id}_required
+				onclick="
+					$('#update_{$item.id}_required').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_required').prop('checked','{$item.required}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][required] id=update_{$item.id}_required value="{$item.required}">
+		</td>
+		<td bgcolor="#ccffff">
+			<input
+				type=checkbox
+				id=chk_{$item.id}_r_visible
+				onclick="
+					$('#update_{$item.id}_r_visible').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_r_visible').prop('checked','{$item.r_visible}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][r_visible] id=update_{$item.id}_r_visible value="{$item.r_visible}">
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+
+</form>

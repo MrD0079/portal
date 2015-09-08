@@ -1,0 +1,31 @@
+<h1>Заказ промобюджета</h1>
+<form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
+	<table>
+		<tr>
+			<td>Выберите сеть из списка</td>
+			<td>
+				<select name="nets" id="nets">
+					<option></option>
+					{foreach key=key item=item from=$nets}
+							<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+			<td>Планируемый год</td>
+			<td>
+				<select name="calendar_years" id="calendar_years">
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+						<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+	</table>
+	<input value="Выбрать" name="select_plan" type="submit">
+</form>
+<hr><br>
+
+

@@ -1,0 +1,111 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td rowspan=2>
+			Дата начала / Тренер / Тренинг / Локация
+		</td>
+		<td colspan=3>
+			Участники
+		</td>
+		<td colspan=2>
+			Подтверждение
+		</td>
+		<td rowspan=2 style="width:400px">
+			Комментарии
+		</td>
+	</tr>
+	<tr style="font-weight:bold; text-align:center">
+		<td>
+			ФИО
+		</td>
+		<td>
+			Должность
+		</td>
+		<td>
+			Статус
+		</td>
+		<td>
+			Первичное
+		</td>
+		<td>
+			Финальное
+		</td>
+	</tr>
+
+	{foreach key=k item=i from=$d}
+		<tr>
+			{foreach key=k1 item=i1 from=$i.body name=body}{/foreach}
+			<td rowspan={$smarty.foreach.body.total+1} style="vertical-align:top">
+				<b>Дата начала:</b> {$i.head.dt_start_t}<br>
+				<b>Тренер:</b> {$i.head.fio}<br>
+				<b>Тренинг:</b> {$i.head.name}<br>
+				<b>Локация:</b> {$i.head.loc_name}<br>
+				<b>Участников:</b> {$i.head.stud_cnt}<br>
+				{if $i.head.ok_final neq 1 and ($is_admin or $pos_id eq 63 or $tn eq $i.head.tn)}
+				<p><input type=checkbox name=del[] value={$i.head.id}>выбрать для удаления</p>
+				<p><a target=_blank href="?action=tr_pt_order_edit&id={$i.head.id}">Редактировать</a></p>
+				<p><input type=submit name=ok_primary_retry value="Повторно оповестить" onClick="javascript:$('#form_tr').find('input[class=ok_primary_retry_id]').val({$i.head.id});$('#form_tr').submit();"></p>
+				<input type=hidden name=ok_primary_retry_id class=ok_primary_retry_id>
+				{/if}
+				<b>Комментарий:</b><br>{$i.head.text|nl2br}<br>
+				{if $i.head.completed eq 1 and ($is_admin or $is_coach)}
+				<p><a target=_blank href="?action=tr_pt_order_edit&id={$i.head.id}">Добавление участников по факту проведения тренинга</a></p>
+				{/if}
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td rowspan={$smarty.foreach.body.total+1} style="text-align:center" {if $i.head.ok_primary eq 1}bgcolor="#00ff00"{/if}>
+				<input type=checkbox name=ok_primary[{$i.head.id}]
+				{if $i.head.ok_primary eq 1 or $i.head.ok_final eq 1 or not ($is_admin or $pos_id eq 63)}disabled{/if}
+				{if $i.head.ok_primary eq 1}checked{/if}
+				>
+			</td>
+			<td rowspan={$smarty.foreach.body.total+1} style="text-align:center" {if $i.head.ok_final eq 1}bgcolor="#00ff00"{/if}>
+				<input type=checkbox
+				onclick="
+					$('#ok_final_{$i.head.id}').attr('disabled',false);
+					$('#ok_final_{$i.head.id}').val(this.checked?1:0);
+				"
+				{if $i.head.ok_primary neq 1 or not ($is_admin or $pos_id eq 63)}disabled{/if}
+				{if $i.head.ok_final eq 1}checked{/if}
+				>
+				<input type=hidden disabled name=ok_final[{$i.head.id}] id=ok_final_{$i.head.id}>
+			</td>
+			<td rowspan={$smarty.foreach.body.total+1} style="text-align:left;vertical-align:top">
+				{foreach key=k1 item=i1 from=$i.chat}
+					<font style="color:red">{$i1.c_lu}</font>
+					<font style="color:green">{$i1.c_fio}:</font>
+					<br>
+					<font style="color:blue">{$i1.c_text}</font>
+					<br>
+				{/foreach}
+				{if ($is_admin or $pos_id eq 63 or $tn eq $i.head.tn)}
+					<textarea cols=40 name="chat[{$i.head.id}]"></textarea>
+					<p><input type=submit name=save value="Сохранить"></p>
+				{/if}
+			</td>
+		</tr>
+		{foreach key=k1 item=i1 from=$i.body}
+			<tr>
+				<td>
+					{$i1.stud_fio}
+				</td>
+				<td>
+					{$i1.stud_pos}
+				</td>
+				<td style="text-align:center"
+					{if $i1.manual eq -1}bgcolor="#ff0000"{/if}
+					{if $i1.manual eq 1}bgcolor="#ffff00"{/if}
+					{if $i1.manual eq 2}bgcolor="#00ffff"{/if}
+				>
+					{if $i1.manual eq -1}Удален{/if}
+					{if $i1.manual eq 1}Добавлен{/if}
+					{if $i1.manual eq 2}Добавлен по факту проведения тренинга{/if}
+				</td>
+			</tr>
+		{/foreach}
+	{/foreach}
+</table>

@@ -1,0 +1,166 @@
+<h1>Сводный отчет по задачам</h1>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+Проект:
+<select name=prj_id id=prj_id>
+<option value=0></option>
+{foreach key=k item=i from=$project_report_heads}
+<option value={$i.id}>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#prj_id option[value="{$smarty.request.prj_id}"]').prop('selected', true);</script>
+</p>
+
+<p>
+Фильтр по руководителю:
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+<script>
+$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);
+</script>
+</p>
+
+<p>
+Тип отчета:
+<input type=radio id=table name=table value=1>сводный
+<input type=radio id=table name=table value=2>по сотрудникам
+
+
+<script>$("input[name=table][value={$smarty.request.table|default:1}]").attr('checked',true);</script>
+
+</p>
+
+
+<p>
+<input type=submit name=generate value="построить отчет">
+</p>
+
+
+
+
+</form>
+
+{if $smarty.request.prj_id neq 0 and $smarty.request.generate}
+<a href="?action=project_report&print=1&excel=1&table=1&filename=Сводный отчет по задачам с детализацией">Экспорт в Excel (с детализацией)</a>
+<a href="?action=project_report&print=1&excel=1&table=2&filename=Сводный отчет по задачам по сотрудникам">Экспорт в Excel (по сотрудникам)</a>
+{/if}
+
+{/if}
+
+{if $smarty.request.prj_id neq 0 and $smarty.request.generate}
+
+{if $smarty.request.table neq 2}
+
+<h3>{$i.head.fio}</h3>
+<table border=1 cellspacing=0 cellpadding=3 width=1000>
+	<tr style="font-weight:bold">
+		<td>Раздел / Подраздел</td>
+		<td>Дата начала</td>
+		<td>Установленная дата завершения</td>
+		<td>Кол-во участников (ответственных)</td>
+		<td>Всего завершено, кол-во / %</td>
+		<td>Завершено в срок, кол-во / %</td>
+		<td>Завершено не в срок, кол-во / %</td>
+		<td>Не завершено, кол-во / %</td>
+		<td>Подтверждено руководителем, кол-во / %</td>
+	</tr>
+	{foreach key=key item=item from=$project_report_1}
+	<tr
+	{if $item.level eq 1}style="background-color:#cccccc;font-weight:bold"{/if}
+	>
+		{if $item.level eq 1}
+		<td colspan=3>{$item.name|escape}</td>
+		<td style="text-align:right">{$item.cnt.0|default:0}</td>
+		<td colspan=5></td>
+		{/if}
+		{if $item.level eq 2}
+		<td>{$item.name|escape}</td>
+		<td>{$item.dt_start}</td>
+		<td>{$item.dt_end}</td>
+		<td style="text-align:right"></td>
+		<td style="text-align:right">{$item.cnt.1|default:0}/{$item.cnt.2|default:0|num:2}</td>
+		<td style="text-align:right">{$item.cnt.3|default:0}/{$item.cnt.4|default:0|num:2}</td>
+		<td style="text-align:right">{$item.cnt.5|default:0}/{$item.cnt.6|default:0|num:2}</td>
+		<td style="text-align:right">{$item.cnt.7|default:0}/{$item.cnt.8|default:0|num:2}</td>
+		<td style="text-align:right">{$item.cnt.9|default:0}/{$item.cnt.10|default:0|num:2}</td>
+		{/if}
+
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+{if $smarty.request.table neq 1}
+
+<table border=1 cellspacing=0 cellpadding=3 width=1000>
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2></td>
+		<td rowspan=2></td>
+		<td rowspan=2></td>
+		{foreach key=k item=i from=$project_report_2_grp}
+		{foreach key=k1 item=i1 from=$i name=z1}
+		{/foreach}
+		<td colspan={$smarty.foreach.z1.iteration}>{$k}</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+	{foreach key=k item=i from=$project_report_2_grp}
+		{foreach key=k1 item=i1 from=$i}
+			<td style="background-color:{if $i.active neq 1}green{else}red{/if}">{$k1} - до {$i1.p1_dt_end}</td>
+		{/foreach}
+	{/foreach}
+	{foreach key=k item=i from=$project_report_2 name=x}
+	</tr>
+	<tr style="text-align:center">
+		<td>{$smarty.foreach.x.iteration}</td>
+		<td>{$i.head.p1_fio}</td>
+		<td>{$i.head.p1_pos_name}</td>
+		{foreach key=k1 item=i1 from=$i.data}
+		<!--<td>{$k1}</td>-->
+			{foreach key=k2 item=i2 from=$i1}
+				<!--<td>{$k2}</td>-->
+				<td
+					{if $i2.completed_dt and $i2.ok_chief_dt}
+						style="background-color:green"
+					{else}
+						{if $i2.completed_dt and not $i2.ok_chief_dt}
+							style="background-color:yellow"
+						{else}
+							{if $i2.prosroch eq 1}
+								style="background-color:red"
+							{/if}
+						{/if}
+					{/if}
+				>
+					{if $i2.dt_end}
+						<b>{if $i2.completed_dt}да{else}нет{/if}</b>
+						/
+						{if $i2.ok_chief_dt}да{else}нет	{/if}
+					{/if}
+				</td>
+<!--				{foreach key=k3 item=i3 from=$i2}
+					<td>{$k3}</td>
+					<td>{$i3}</td>
+				{/foreach}
+-->
+			{/foreach}
+		{/foreach}
+	</tr>
+	{/foreach}
+</table>
+
+
+
+{/if}
+
+{/if}
+

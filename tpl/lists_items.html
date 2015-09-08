@@ -1,0 +1,24 @@
+<table id=tlists_{$smarty.request.id} border=0 cellpadding=3 cellspacing=0>
+	<tbody>
+		{if $smarty.request.id eq 0}
+		{/if}
+		<tr>
+			<td>
+				<input size=50 id=new_list_name_{$smarty.request.id}>
+				<a href="javascript:void(0);" onClick="add_list({$smarty.request.id});">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$lists}
+			<tr id=list_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_list({$i.id})">[x]</a>
+					<input id=d_{$i.id}_name size=50 value="{$i.name}" onChange="save_list({$i.id},'name',this.value);">
+					{if $smarty.request.id eq 0}
+					<a href='javascript:void(0);' onClick="show_items({$i.id})">Развернуть</a>
+					<div style="margin-left:50px" id=detail_{$i.id}></div>
+					{/if}
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>

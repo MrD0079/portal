@@ -1,0 +1,66 @@
+
+			{if $is_admin or $is_ma}
+
+			<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+				<ul>
+					<li><a href="javascript:void(0);"><span class="dir">Заказчики</span></a>
+						<ul>
+							<li><a href="?action=routes_agents">Заказчики</a></li>
+							<li><a href="?action=routes_agents_pwd">Логины/пароли заказчиков</a></li>
+						</ul>
+					</li>
+					<li><a href="?action=replace_svms">Замена СВМС</a></li>
+					<li><a href="?action=svms">Привязка СВМС-область</a></li>
+					<li><a href="?action=mkk">Привязка МКК-область</a></li>
+					<li><a href="?action=routes_pos">Должности</a></li>
+					<li><a href="?action=merch_spec">Привязка спецификаций М-Сервис</a></li>
+					<li><a href="?action=merch_routes">Закрепление маршрута за сотрудниками</a></li>
+					<li><a href="?action=cpp">Торговые залы</a></li>
+					<li><a href="?action=ms_nets">Сети</a></li>
+					<li><a href="?action=merch_report_4admin_by_spec_new">Сводный отчет по спецификациям</a></li>
+					<li><a href="?action=routes_report_by_sku_new">Сводный отчет по SKU</a></li>
+					<li><a href="?action=mr_gps_log">Лог GPS</a></li>
+					<li><a href="?action=ms_sendmaster">Мастер рассылок</a></li>
+					<li><a href="?action=merch_report_vp">Выбрать продукты</a></li>
+					<li><a href="?action=merch_report_sb_comm">Комментарии сроки/браки</a></li>
+					<li><a href="?action=merch_dt_ag">Стоимость SKU</a></li>
+					<li><a href="?action=ms_sku_visit">SKU-визиты</a></li>
+					<li><a href="?action=routes_text">Стандартные комментарии</a></li>
+					<li><a href="javascript:void(0);"><span class="dir">Календарь МР</span></a>
+						<ul>
+							<li><a href="?action=merch_report_cal">Календарь</a></li>
+							<li><a href="?action=merch_report_cal_rep">Вид отчета</a></li>
+							<li><a href="?action=merch_report_cal_aa">Акционные активности</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+
+			{/if}
+
+			<li><a href="javascript:void(0);"><span class="dir">Маршруты</span></a>
+				<ul>
+
+					{if ($is_mservice or $is_admin) and not $is_ma}
+
+					<li><a href="?action=routes_add_tp">Выбор ТП для маршрута</a></li>
+					<li><a href="?action=routes_form">Сформировать маршрут</a></li>
+
+					{/if}
+
+					<li><a href="?action=routes_report_new">Маршрутный лист</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
+				<ul>
+					<li><a href="?action=report_total_new">Общий сводный отчет</a></li>
+					<li><a href="?action=merch_report_4sv_by_spec_new">Сводный отчет по спецификациям для СВ</a></li>
+					<li><a href="?action=merch_report_4sv_by_spec_new1">Сводный отчет по спецификациям для СВ (за период)</a></li>
+					<li><a href="?action=merch_report_4sv_by_spec_new1&nophoto=1">Сводный отчет по спецификациям для СВ (за период, без фото)</a></li>
+					<li><a href="?action=merch_report_4sv_file_chat">Комментарии по работе в ТЗ</a></li>
+					<li><a href="?action=merch_photo_report_new">Выгрузка фотоотчета</a></li>
+					<li><a href="?action=report_gps_new">Отчет по GPS</a></li>
+					<li><a href="?action=ms_tabel">Табельный учет</a></li>
+					<li><a href="?action=ms_agenda">Дни визитов</a></li>
+				</ul>
+			</li>

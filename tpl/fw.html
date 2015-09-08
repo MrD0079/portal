@@ -1,0 +1,107 @@
+<h1>Полевые работы</h1>
+
+{if not $smarty.request.print}
+
+<form name=form_fw id=form_fw target=_self method=post>
+
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+	<td>
+		Месяц
+		<br>
+		{if $smarty.request.print neq 1}
+			<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+		{else}
+			<b>
+			{foreach key=key item=item from=$month_list}
+				{if $item.sd_c eq $smarty.request.month_list}
+					{$item.my}
+				{/if}
+			{/foreach}
+			</b>
+		{/if}
+	</td>
+	<td>
+		Должность
+		<br>
+		{if $smarty.request.print neq 1}
+			<select name=pos id=pos>
+				<option value=0></option>
+				{foreach key=key item=item from=$pos_list}
+				<option value="{$item.pos_id}">{$item.pos_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#pos option[value='{$smarty.request.pos}']").prop('selected', true);</script>
+
+		{else}
+			<b>
+			{foreach key=key item=item from=$pos_list}
+				{if $item.pos_id eq $smarty.request.pos}
+					{$item.pos_name}
+				{/if}
+			{/foreach}
+			</b>
+		{/if}
+	</td>
+	<td>
+		<input type=radio id="fw_flt" name="fw_flt" value=1>мои полевые работы<br>
+		<input type=radio id="fw_flt" name="fw_flt" value=2>полевые работы прямых подчиненных<br>
+		<input type=radio id="fw_flt" name="fw_flt" value=3>полевые работы непрямых подчиненных<br>
+		<input type=radio id="fw_flt" name="fw_flt" value=4>все полевые работы<br>
+		<script>$("input[name=fw_flt][value={$smarty.request.fw_flt|default:1}]").attr('checked',true);</script>
+	</td>
+	<td>
+		<input type="submit" name="select" value="Показать">
+	</td>
+	</tr>
+</table>
+
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_fw').submit();
+}
+</script>
+{/literal}
+
+</form>
+
+
+<p><a href="?action=fw&fw_flt={$smarty.request.fw_flt}&month={$smarty.request.month}&print=1&excel=1&select=1&filename=Полевые работы">Экспорт в Excel</a></p>
+<input type=hidden name=generate value="Выбрать">
+
+{/if}
+
+
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr style="text-align:center;font-weight:bold;">
+		<td>Дата           </td>
+		<td>ФИО сотрудника </td>
+		<td>Должность      </td>
+		<td>Вид ПР         </td>
+		<td>ФИО ЭТА        </td>
+		<td>Количество ТП  </td>
+		<td>Ссылка на бланк</td>
+	</tr>
+	{foreach key=k item=i from=$fw}
+	<tr align=center>
+		<td>{$i.dt}</td>
+		<td>{$i.fio_ts}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.name}</td>
+		<td>{$i.fio_eta}</td>
+		<td>{$i.tp_qty}</td>
+		<td><a target=_blank href="{$i.h_link}">Ссылка</a></td>
+	</tr>
+	{/foreach}
+</table>

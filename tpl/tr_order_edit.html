@@ -1,0 +1,12 @@
+<h1>Редактирование заявки на проведение тренинга</h1>
+
+{if not $smarty.request.save}
+	<form target="_self" method="POST" name=form_tr id=form_tr enctype="multipart/form-data">
+	{include file="tr_order_edit_filters.html"}
+	{include file="tr_order_edit_table.html"}
+	<p>
+		<input name="SendNBT" value="Сохранить" type="submit">
+	</p>
+	</form>
+{/if}
+

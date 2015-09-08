@@ -1,0 +1,43 @@
+<h2>Раздел 3. Стажировки</h2>
+  {if $smarty.request.print neq 1 and $self}
+  <b><a href="javascript:void(0);" onClick="javascript:submit_val('new_probation');">Добавить стажировку</a></b>
+  {/if}
+
+      <table border=1 cellpadding=0 cellspacing=0 style="text-align:center; background-color: rgb(255,255,204)">
+        <tr style="font-weight:bold; text-align:center; background-color: rgb(204,255,255)">
+          <td>[удал.]</td>
+          <td>Цель</td>
+          <td>Срок завершения</td>
+          <td>Ценность для развития</td>
+        </tr>
+        {foreach key=probation_key item=probation_item from=$probations}
+        <tr>
+          <td align=center><b>{if $smarty.request.print neq 1 and $self}<input type=checkbox name=del[r_probation][probation_id][{$probation_item.probation_id}] value={$probation_item.probation_id}>{/if}</b></td>
+          {if $smarty.request.print neq 1 and $self}
+            <td><textarea wrap="virtual" cols="50" rows="5" name=r_probation[{$probation_item.probation_id}][target]>{$probation_item.target}</textarea></td>
+            <td><input class="datepicker" value="{$probation_item.period}" name=r_probation[{$probation_item.probation_id}][period]></td>
+          {else}
+            <td>{$probation_item.target|nl2br}</td>
+            <td>{$probation_item.period}</td>
+          {/if}
+          <td>
+            {if $smarty.request.print neq 1 and $self}
+            <select name=r_probation[{$probation_item.probation_id}][probation_value] id=r_probation_{$probation_item.probation_id}_probation_value>
+              <option value=0>
+              <option value=1>Высокая
+              <option value=2>Средняя
+              <option value=3>Низкая
+            </select>
+            {else}
+              {if $probation_item.probation_value eq 0}<nobr>Не определена</nobr>{/if}
+              {if $probation_item.probation_value eq 1}Высокая{/if}
+              {if $probation_item.probation_value eq 2}Средняя{/if}
+              {if $probation_item.probation_value eq 3}Низкая{/if}
+            {/if}
+            {if $smarty.request.print neq 1 and $self}
+            <script>$('#r_probation_{$probation_item.probation_id}_probation_value option[value="{$probation_item.probation_value}"]').prop('selected', true);</script>
+            {/if}
+          </td>
+        </tr>
+        {/foreach}
+      </table>

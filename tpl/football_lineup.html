@@ -1,0 +1,44 @@
+<h1>Состав команд</h1>
+
+<table border=1 cellpadding=3 cellspacing=0>
+	{foreach key=k item=i from=$football_lineup}
+	<tr style="text-align:center;vertical-align:top">
+		<td bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<h3>
+				<a href="javascript:void(0)" onclick="javascript:show1('text_{$i.id}')">
+					{$i.dpt_name|escape}
+					{$i.gruppa|escape}
+					{$i.region|escape}
+				</a>
+			</h3>
+			<div class="football_lineup_text" id=text_{$i.id}>
+				<table border=1 cellpadding=3 cellspacing=0>
+					<tr style="font-weight:bold;text-align:center">
+						<td>ФИО игрока</td>
+						<td>Должность</td>
+						<td>Непосредственный руководитель</td>
+						<td>Дата рождения</td>
+						<td>Фото</td>
+					</tr>
+					{foreach key=k1 item=i1 from=$i.members}
+					<tr>
+						<td>{$i1.fio|escape}</td>
+						<td>{$i1.pos|escape}</td>
+						<td>{$i1.chief}</td>
+						<td>{$i1.birthday}</td>
+						<td><a target=_blank href="football_teams_members_files/{$i1.photo}"><img height=100px src="football_teams_members_files/{$i1.photo}"></a></td>
+					</tr>
+					{/foreach}
+				</table>
+			</div>
+			<script>$('#text_{$i.id}').hide();</script>
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+{literal}
+<script>
+function show1(el){$(".football_lineup_text").each(function(){$(this).attr('id')==el?$(this).toggle():$(this).hide();});}
+</script>
+{/literal}

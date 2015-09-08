@@ -1,0 +1,158 @@
+{literal}
+<script>
+a=1;
+function addSel(v,v1)
+{
+	var input = $('<div />', {id: v+a});
+	$('#'+v+'_list').append(input);
+	$('#'+v+a).append($('#'+v).html());
+	$('#'+v+a).find('select').val(v1);
+	$('#'+v+a).find('select').attr('name',v+'[]');
+	$('#'+v+a).find('select').attr('required','true');
+	//alert($('#'+v+a).find('select').attr('name'));
+	a++;
+}
+</script>
+{/literal}
+<table style="text-align: left; " border="0" cellpadding="2" cellspacing="2">
+	<tr>
+		<td>Тренинг</td>
+		<td>
+			<select required name="tr">
+				<option></option>
+				{foreach key=key item=item from=$tr}
+					<option value={$item.id}>{$item.name|escape}</option>
+				{/foreach}
+			</select>
+			<script>$('[name=tr]').val({$smarty.request.tr});</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Дата начала тренинга</td>
+		<td>
+			<input required class="datepicker" size=10 name=dt>
+			<script>$('[name=dt]').val('{$smarty.request.dt}');</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Место проведения тренинга</td>
+		<td>
+			<select required name="tr_loc">
+				<option></option>
+				{foreach key=key item=item from=$tr_loc}
+					<option value={$item.id}>{$item.name|escape}</option>
+				{/foreach}
+			</select>
+			<script>$('[name=tr_loc]').val({$smarty.request.tr_loc});</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Комментарий</td>
+		<td>
+			<textarea cols=50 rows=5 name=text>{$smarty.request.text}</textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>Только для не проходивших</td>
+		<td>
+			<input class=chkPass value="true" type="checkbox" onClick="$('[name=notPass]').val($(this).is(':checked'));">
+			<input type=hidden name="notPass">
+			<script>$('.chkPass').val([{$smarty.request.notPass}]);</script>
+			<script>$('[name=notPass]').val({$smarty.request.notPass});</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Страна участников</td>
+		<td>
+			<!--<a href="javascript:void(0)" onclick="javascript:addSel('country');">Добавить</a>-->
+			<input type=submit value="Добавить" onclick="javascript:addSel('country'); return false;">
+			<br>
+
+			<div id=country_list>
+				<div id=country>
+					<select>
+						<option></option>
+						{foreach key=key item=item from=$cnt}
+							<option value={$item.dpt_id}>{$item.cnt_name|escape}</option>
+						{/foreach}
+					</select>
+					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->
+					<input type=submit value="Удалить" onclick="$(this).parent().remove(); return false;">
+					<br>
+				</div>
+			</div>
+
+			<script>
+				$('#country').hide();
+				{if not $smarty.request.country}
+					addSel('country',{$dpt_id});
+				{else}
+					{foreach key=k item=i from=$smarty.request.country name=country}
+						{if $i!=''}
+							addSel('country',{$i});
+						{/if}
+					{/foreach}
+				{/if}
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Должность участников</td>
+		<td>
+			<!--<a href="javascript:void(0)" onclick="javascript:addSel('pos');">Добавить</a>-->
+			<input type=submit value="Добавить" onclick="javascript:addSel('pos'); return false;">
+			<br>
+			<div id=pos_list>
+				<div id=pos>
+					<select>
+						<option></option>
+						{foreach key=key item=item from=$pos}
+							<option value={$item.pos_id}>{$item.pos_name|escape}</option>
+						{/foreach}
+					</select>
+					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->
+					<input type=submit value="Удалить" onclick="$(this).parent().remove(); return false;">
+					<br>
+				</div>
+			</div>
+			<script>
+				$('#pos').hide();
+				{foreach key=k item=i from=$smarty.request.pos name=pos}
+					{if $i!=''}
+						addSel('pos',{$i});
+					{/if}
+				{/foreach}
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td>По руководителю</td>
+		<td>
+			<!--<a href="javascript:void(0)" onclick="javascript:addSel('ruk');">Добавить</a>-->
+			<input type=submit value="Добавить" onclick="javascript:addSel('ruk'); return false;">
+			<br>
+			<div id=ruk_list>
+				<div id=ruk>
+					<select>
+						<option></option>
+						{foreach key=key item=item from=$parents}
+							<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>
+						{/foreach}
+					</select>
+					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->
+					<input type=submit value="Удалить" onclick="$(this).parent().remove(); return false;">
+					<br>
+				</div>
+			</div>
+			<script>
+				$('#ruk').hide();
+				{foreach key=k item=i from=$smarty.request.ruk name=ruk}
+					{if $i!=''}
+						addSel('ruk',{$i});
+					{/if}
+				{/foreach}
+			</script>
+		</td>
+	</tr>
+</table>
+<p><input name="form_list" value="Сформировать группу" type="submit"></p>

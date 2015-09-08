@@ -1,0 +1,512 @@
+<h3>Реестр заявок на проведение активности</h3>
+
+<form target="_self" method="POST" name=form_bud_ru_zay_reestr id=form_bud_ru_zay_reestr>
+
+<table>
+	<tr>
+		<td style="text-align:right">По дате с/по</td>
+		<td>
+			<input type=radio name=date_between_brzr value='dt12'>
+			заявки
+			<input type=radio name=date_between_brzr value='dt34'>
+			начала активности
+			<input size=10 class="dt12 datepicker" name=dates_list1 id=dates_list1>
+			<input size=10 class="dt12 datepicker" name=dates_list2 id=dates_list2>
+			<script>
+				$('#dates_list1').val('{$smarty.request.dates_list1}');
+				$('#dates_list2').val('{$smarty.request.dates_list2}');
+			</script>
+		</td>
+	</tr>
+<script>
+$("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").attr('checked',true);
+$("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").click();
+</script>
+	<tr>
+		<td style="text-align:right">Инициатор</td>
+		<td>
+			<select name=creator id=creator>
+				<option value=0></option>
+				{foreach key=key item=item from=$creators_list}
+				<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#creator option[value="{$smarty.request.creator}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Статья расходов</td>
+		<td>
+			<select name=st id=st>
+				<option value=0></option>
+				{foreach key=key item=item from=$st}
+				{if $item.parent eq 0}<option value={$item.id}>{$item.name}</option>{/if}
+				{/foreach}
+			</select>
+			<script>$('#st option[value="{$smarty.request.st}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Категория статьи расходов</td>
+		<td>
+			<select name=kat id=kat>
+				<option value=0></option>
+				{foreach key=key item=item from=$st}
+					<option
+						{if $item.parent eq 0}disabled style="background-color: rgb(200, 200, 200);"{/if}
+						value="{$item.id}"
+					>{$item.name|escape}</option>
+				{/foreach}
+			</select>
+			<script>$('#kat option[value="{$smarty.request.kat}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Дистрибьютор</td>
+		<td>
+			<select name=fil id=fil>
+				<option value=0></option>
+				{foreach key=key item=item from=$fil_list}
+				<option value="{$item.id}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#fil option[value="{$smarty.request.fil}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Фонд</td>
+		<td>
+			<select name=funds id=funds>
+				<option value=0></option>
+				{foreach key=key item=item from=$funds_list}
+				<option value="{$item.id}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#funds option[value="{$smarty.request.funds}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Сеть</td>
+		<td>
+			<select name=id_net id=id_net>
+				<option value=0></option>
+				{foreach key=key item=item from=$nets}
+				<option value="{$item.id_net}">{$item.net_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#id_net option[value="{$smarty.request.id_net}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Страна</td>
+		<td>
+			<select name=country id=country>
+				<option value='0'></option>
+				{foreach key=key item=item from=$countries}
+				{if $item.checked eq 1}
+				<option value='{$item.cnt_kod}'>{$item.cnt_name}</option>
+				{/if}
+				{/foreach}
+			</select>
+			<script>
+			{if $smarty.request.country neq ''}
+				$('#country option[value="{$smarty.request.country}"]').prop('selected', true);
+			{else}
+				$('#country option[value="{$cnt_kod}"]').prop('selected', true);
+			{/if}
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Должность</td>
+		<td>
+			<select name=bud_ru_zay_pos_id id=bud_ru_zay_pos_id>
+				<option value=0></option>
+				{foreach key=key item=item from=$pos_list}
+				<option value={$item.pos_id}>{$item.pos_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#bud_ru_zay_pos_id option[value="{$smarty.request.bud_ru_zay_pos_id}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Регион</td>
+		<td>
+			<select name=region_name id=region_name>
+				<option value=0></option>
+				{foreach key=key item=item from=$region_list}
+				<option value="{$item.region_name}">{$item.region_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#region_name option[value="{$smarty.request.region_name}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Подразделение</td>
+		<td>
+			<select name=department_name id=department_name>
+				<option value=0></option>
+				{foreach key=key item=item from=$department_list}
+				<option value="{$item.department_name}">{$item.department_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#department_name option[value="{$smarty.request.department_name}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Cортировать по</td>
+		<td>
+			<input checked="checked" name="orderby" id="orderby" value="1" type="radio"> по дате написания
+			<input name="orderby" id="orderby" value="2" type="radio"> по дате согласования
+			<script>$("input[name=orderby][value={$smarty.request.orderby}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Фильтр по мне</td>
+		<td>
+			<input checked="checked" name="who" id="who" value="0" type="radio"> все
+			<input name="who" id="who" value="1" type="radio"> я - инициатор
+			<input name="who" id="who" value="2" type="radio"> я - согласовываю
+			<script>$("input[name=who][value={$smarty.request.who}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Фильтр по статусу</td>
+		<td>
+			<input checked="checked" name="status" id="status" value="0" type="radio"> все
+			<input name="status" id="status" value="1" type="radio"> подтвержденные
+			<input name="status" id="status" value="2" type="radio"> еще на согласовании
+			<input name="status" id="status" value="3" type="radio"> отклоненные
+			<input name="status" id="status" value="4" type="radio"> недействительные
+			<script>$("input[name=status][value={$smarty.request.status}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Фильтр по дате отчета</td>
+		<td>
+			<input checked="checked" name="report_data" id="report_data" value="0" type="radio"> все
+			<input name="report_data" id="report_data" value="1" type="radio"> дата выставлена
+			<input name="report_data" id="report_data" value="2" type="radio"> дата не выставлена
+			<script>$("input[name=report_data][value={$smarty.request.report_data}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right;vertical-align:top">Динамический фильтр по полям ЗАЯВКИ</td>
+		<td id="td1">
+			<a href="javascript:void(0);" onClick="f1();">добавить фильтр</a><br>
+			<script>
+			var a=1;
+			{literal}
+
+			function get_list(id,v,item)
+			{
+			x=loadwait_show('subtype_list_'+id);
+			$('#subtype_list_'+id).load(
+			'?action=bud_ru_ff_subtypes_get_list&nohead=1&id='+id+'&subtype='+v+'&item='+item
+			,
+			{
+			}
+			,
+			function() {
+				loadwait_hide(x);
+				
+			}
+			);
+			}
+
+			function f1(val1,val2)
+			{
+				$('#td1').append('<div style="display:inline" id=st'+a+'></div>');
+				$('#st'+a).load('?action=bud_ru_ff_subtypes&nohead=1',{id: a, subtype: val1, item: val2});
+				a++;
+			}
+			{/literal}
+			{foreach key=k item=i from=$smarty.request.dyn_flt}{if $i.subtype and $i.item}f1({$i.subtype},{$i.item});{/if}{/foreach}
+
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Поиск по номеру</td>
+		<td>
+			<input onChange="this.value==''?this.value=0:null;" class="number_int" name="z_id" value="{$smarty.request.z_id}">
+			{if $find_bud_ru_zay}
+				{if $find_bud_ru_zay.exist eq 0}
+					<font style="font-weight:bold;color:red">Заявка с указанным номером не найдена</font>
+				{else}
+					{if $find_bud_ru_zay.visible eq 0}
+						<font style="font-weight:bold;color:red">Заявка в реестре найдена, но у вас нет прав для ее просмотра</font>
+					{/if}
+				{/if}
+			{/if}
+		</td>
+	</tr>
+
+</table>
+
+<p>
+	<input type="submit" name="select" id="select" value="Отобразить реестр">
+</p>
+
+</form>
+
+
+{if $smarty.request.select and not $smarty.request.z_id}
+
+<h3>Сводные данные</h3>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2>название</td>
+		{foreach key=key item=item from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}{/foreach}
+		<td colspan="{$smarty.foreach.bud_ru_ff_st_ras.total}">cтатьи расходов</td>
+	</tr>
+
+	<tr style="font-weight:bold;text-align:center">
+	{foreach key=key item=item from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
+		<td>{$item.name}</td>
+	{/foreach}
+	</tr>
+	{foreach key=key item=item from=$bud_ru_ff}
+	<tr style="text-align:center">
+		<td style="text-align:left">{$item.name|escape}</td>
+		{foreach key=bk item=bi from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
+			{assign var="x" value="0"}
+			{foreach key=sk item=si from=$bud_ru_ff_st name=bud_ru_ff_st}
+				{if $si.ff eq $item.id and $si.st eq $bi.id}
+					{assign var="x" value=`$si.v`}
+				{/if}
+			{/foreach}
+			<td>{$x}</td>
+		{/foreach}
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+{if $smarty.request.select or $smarty.request.z_id}
+
+<h3>Реестр</h3>
+
+<table border=1 cellpadding=5 cellspacing=0>
+	<tr style="text-align:center;font-weight:bold">
+		<td rowspan=2>Заголовок заявки</td>
+		<td rowspan=2>Поля заявки</td>
+		<td colspan=3>Блок согласования</td>
+		<td rowspan=2>Заявка недействительна</td>
+	</tr>
+	<tr style="text-align:center;font-weight:bold">
+		<td>
+				Должность, подразделение, <font style="color:red">согласователь</font>
+				<font style="color:green">статус</font>
+				<font style="color:blue">дата</font>
+		</td>
+		<td>Причина отказа</td>
+		<td>Комментарии / Уточнения</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+
+<form target="_self" method="POST">
+
+	{if $i.head.current_status eq 464260}{assign var=color value="#FFFF66"}{/if}
+	{if $i.head.current_status eq 464261}{assign var=color value="#66FF66"}{/if}
+	{if $i.head.current_status eq 464262}{assign var=color value="#FFCC99"}{/if}
+	{if $i.head.valid_no eq 1}{assign var=color value="#66FFFF"}{/if}
+	<tr style="background-color:{$color};vertical-align:top">
+		<td>
+			№{$i.head.id}
+			</br>
+			{if ($i.head.creator_tn eq $tn or $is_do) and ($i.head.current_status eq 464262 or $i.head.not_seen eq 1)}
+			<input type="submit" name="del_bud_ru_zay" id="del_bud_ru_zay" value="Удал.">
+			<nobr>удал.<input type=checkbox name=del[] value={$i.head.id}></nobr>
+			<br>
+			{/if}
+			{if ($i.head.creator_tn eq $tn and ($i.head.current_status eq 464262 or $i.head.not_seen eq 1)) or ($is_do and $i.head.current_status neq 464261)}<a target=_blank href="?action=bud_ru_zay_create_2&id={$i.head.id}">ред.</a>{/if}
+			{if $i.head.current_status eq 464261 and $i.head.valid_no neq 1}<a target=_blank href="?action=bud_ru_zay_view&id={$i.head.id}&print=1&pdf=1&tn={$tn}">Экспорт</a>{/if}
+
+	{if $is_db or $is_do or $is_traid or $is_traid_kk}
+		<input type="submit" name="save" id="save" value="Сохранить"><br>
+	{/if}
+
+
+{if $i.head.net_name}
+<p style="border:2px dotted red">
+			<b>Сеть:</b>{$i.head.net_name}<br>
+			<b>Форма оплаты:</b>{$i.head.payment_type_name}<br>
+			<b>Статья затрат:</b>{$i.head.statya_name}<br>
+			<b>Возмещение дистрибутору:</b>{if $i.head.distr_compensation eq 1}да{else}нет{/if}<br>
+</p>
+{/if}
+
+
+			<b>Дата создания:</b>{$i.head.created}<br>
+			<b>Дата начала проведения активности:</b>{$i.head.dt_start}<br>
+			<b>Дата окончания проведения активности:</b>{$i.head.dt_end}<br>
+			<b>Регион / Подразделение:</b>{$i.head.region_name}<br>
+			<b>ФИО РМ:</b>{$i.head.rm_fio}<br>
+			<b>Мобильный телефон:</b>{$i.head.phone}<br>
+			<b>Электронный корпоративный адрес:</b>{$i.head.e_mail}<br>
+			<b>Скайп:</b>{$i.head.skype}<br>
+			<b>Статья:</b>{$i.head.st_name}<br>
+			<b>Категория:</b>{$i.head.kat_name}<br>
+			<b>Дистрибьютор:</b>{$i.head.fil_name}<br>
+			<b>Фонд:</b>{$i.head.funds_name}<br>
+			<b>Инициатор:</b>{$i.head.creator_pos_name},{$i.head.creator_department_name},<font style="color:red">{$i.head.creator}</font><br>
+			<b>Адресат:</b>{$i.head.recipient_pos_name},{$i.head.recipient_department_name},<font style="color:red">{$i.head.recipient}</font><br>
+			<b>Дата отчета по заявке:</b>
+<!--
+*{$i.head.current_status}
+*{$is_traid}
+*{$is_traid_kk}
+*{$i.head.valid_no}
+*{$i.head.report_done}
+-->
+
+			{if $i.head.current_status eq 464261 and (($is_traid or $is_traid_kk) and $i.head.valid_no neq 1) and not $i.head.report_done}
+				<input class='datepicker' onChange="
+					$('#d_{$i.head.id}_report_data').attr('disabled',false);
+					$('#d_{$i.head.id}_report_data').val(this.value);
+					$('#d_{$i.head.id}_report_short_edit').attr('disabled',false);
+					$('#d_{$i.head.id}_report_short').attr('disabled',false);
+					$('#d_{$i.head.id}_report_data_tn').attr('disabled',false);
+					$('#d_{$i.head.id}_report_data_text_edit').attr('disabled',false);
+					$('#d_{$i.head.id}_report_data_text').attr('disabled',false);
+				"
+				value='{$i.head.report_data}'
+				>
+				<br>
+				Сокращенный отчет <input type=checkbox {if not $i.head.report_data}disabled{/if} id='d_{$i.head.id}_report_short_edit' onChange="
+					$('#d_{$i.head.id}_report_short').attr('disabled',false);
+					$('#d_{$i.head.id}_report_short').val(this.checked?1:null);
+				"
+				{if $i.head.report_short eq 1}checked{/if}
+				>
+				<br>
+				<textarea
+					{if not $i.head.report_data}disabled{/if} id='d_{$i.head.id}_report_data_text_edit' cols=20 rows=3 onkeyup="
+					$('#d_{$i.head.id}_report_data_text').attr('disabled',false);
+					$('#d_{$i.head.id}_report_data_text').val(this.value);
+				"
+				>{$i.head.report_data_text}</textarea>
+
+				<input type=hidden disabled name='d[{$i.head.id}][report_data]' id='d_{$i.head.id}_report_data'>
+				<input type=hidden disabled name='d[{$i.head.id}][report_short]' id='d_{$i.head.id}_report_short'>
+				<input type=hidden disabled name='d[{$i.head.id}][report_data_tn]' id='d_{$i.head.id}_report_data_tn' value='{$tn}'>
+				<input type=hidden disabled name='d[{$i.head.id}][report_data_text]' id='d_{$i.head.id}_report_data_text'>
+				<br>
+			{/if}
+			{if $i.head.report_data}
+				{$i.head.report_data}<br>
+				<font style="font-weight:bold;color:green">{$i.head.report_data_fio|escape} {$i.head.report_data_lu}</font><br>
+				{$i.head.report_data_text|nl2br}<br>
+			{/if}
+			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">Сокращенный отчет</font><br>{/if}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.ff}
+				<b>{$i1.name}:&nbsp</b>
+				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
+
+
+								<!--
+								{if $i1.type eq 'list' and $is_db and $i.head.creator_tn eq $tn}
+									<select id=new_st_{$i1.id} name=new_st[{$i1.id}] {if $i1.required}required{/if}>
+										<option></option>
+										{foreach key=lk item=li from=$i1.list}	
+											<option value={$li.id}>{$li.name}</option>
+										{/foreach}
+									</select>
+									<script>
+										$('#new_st_{$i1.id}').val("{$i1.val_list}");
+									</script>
+								{/if}
+								-->
+
+
+
+
+				{if $i1.type eq 'formula'}	{$i1.val_formula|num:3}{/if}
+				{if $i1.type eq 'string'}	{$i1.val_string}{/if}
+				{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
+				{if $i1.type eq 'number_int'}	{$i1.val_number_int|num:0}{/if}
+				{if $i1.type eq 'number'}	{$i1.val_number|num:5}{/if}
+				{if $i1.type eq 'datepicker'}	{$i1.val_datepicker}{/if}
+				{if $i1.type eq 'bool'}		{if $i1.val_bool eq 1}да{else}нет{/if}{/if}
+				{if $i1.type eq 'file'}
+					{foreach key=k2 item=i2 from=$i1.val_file}
+						<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>&nbsp
+					{/foreach}
+				{/if}
+				<br>
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.data name=rn}
+				<b>{$smarty.foreach.rn.iteration}.</b>
+				{$i1.acceptor_pos_name},
+				{$i1.acceptor_department_name},
+				<font style="color:red">{$i1.acceptor_name}</font>
+				<font style="color:green; font-weight:bold">{$i1.accepted_name}</font>
+				{if $i1.accepted_date}<font style="color:blue">{$i1.accepted_date}</font>{/if}
+				<br>
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.data}
+				{$i1.failure}<br>
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.chat}
+				<font style="color:red">{$i1.chat_time}</font>
+				<font style="color:green">{$i1.chater}:</font>
+				<font style="color:blue">{$i1.text}</font>
+				<br>
+			{/foreach}
+		</td>
+		<td style="text-align:center">
+			{if $i.head.valid_no eq 1}
+				<font style="color:red">{$i.head.valid_fio}</font>
+				<font style="color:blue">{$i.head.valid_lu}</font>
+				<br>
+			{/if}
+			{if $i.head.current_status eq 464261 and (($is_do and $i.head.valid_no neq 1) or $is_admin)}
+				<input onclick="
+				$('#valid_no_{$i.head.id}').val(this.checked?1:0);
+				$('#valid_no_{$i.head.id}').attr('disabled',false);
+				$('#valid_text_{$i.head.id}').attr('disabled',!this.checked);
+				" type=checkbox {if $i.head.valid_no eq 1}checked{/if}>
+				отметить
+				<br>
+				<input type=hidden name="d[{$i.head.id}][valid_tn]" value="{$tn}">
+				<input type=hidden name="d[{$i.head.id}][valid_no]" id="valid_no_{$i.head.id}" disabled>
+				<textarea rows=5 cols=20 name="d[{$i.head.id}][valid_text]" id="valid_text_{$i.head.id}" {if $i.head.valid_no eq 0}disabled{/if}>{$i.head.valid_text|escape}</textarea>
+			{else}
+				<font style="color:green">{$i.head.valid_text|escape}</font>
+			{/if}
+		</td>
+	</tr>
+</form>
+	{/foreach}
+
+
+	<tr style="text-align:left;font-weight:bold">
+		<td colspan=12>
+		ИТОГО: &nbsp
+		{foreach key=k item=i from=$d1}
+			{$i.current_status_txt} - {$i.c} &nbsp
+		{/foreach}
+		</td>
+	</tr>
+
+
+
+
+
+
+
+</table>
+
+{/if}
+

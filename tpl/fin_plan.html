@@ -1,0 +1,174 @@
+{if $smarty.request.plan_type eq 1}
+	{if
+		(
+		($is_mkk and $nets_plan_year.ok_rmkk_tmkk neq 1)
+		or
+		($is_rmkk and $nets_plan_year.ok_dpu neq 1)
+		)
+	}
+		{assign var=enabled value='enabled'}
+	{/if}
+	{if not (
+		(
+		($is_mkk and $nets_plan_year.ok_rmkk_tmkk neq 1)
+		or
+		($is_rmkk and $nets_plan_year.ok_dpu neq 1)
+		)
+		)
+	}
+		{assign var=disabled value='disabled'}
+	{/if}
+{/if}
+
+{if $smarty.request.plan_type eq 2}
+	{if (($is_mkk or $is_rmkk) and $nets_plan_year.ok_fin_man neq 1)}
+		{assign var=enabled value='enabled'}
+	{else}
+		{assign var=disabled value='disabled'}
+	{/if}
+{/if}
+
+{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4}
+	{if $is_mkk or $is_rmkk}	{assign var=enabled value='enabled'}	{/if}
+	{if not ($is_mkk or $is_rmkk)}	{assign var=disabled value='disabled'}	{/if}
+{/if}
+
+
+{if $smarty.request.plan_type eq 3}
+	{if
+		(
+			$plan_year_type_1.sales >= $parameters.valNMKK.val_number
+			or
+			$plan_year_type_1.perc >= $parameters.budKK.val_number
+		)
+	}
+		{assign var=NeedNMKK value=1}
+	{/if}
+{/if}
+
+
+
+
+
+
+{if $smarty.request.plan_type eq 2 and $nets_plan_year.du_complete neq 1}
+{assign var=dog_plan_disabled value='disabled'}
+{/if}
+
+{if $smarty.request.plan_type eq 2 and $nets_plan_year.du_complete eq 1}
+{assign var=dog_plan_enabled value='enabled'}
+{/if}
+
+
+<!--
+
+<br>
+enabled: {if $enabled}{$enabled}{else}null{/if}.
+<br>
+disabled: {if $disabled}{$disabled}{else}null{/if}.
+<br>
+
+-->
+
+
+{include file="fin_plan_select.html"}
+
+
+
+
+
+{if $smarty.request.debug}
+<h2>
+s1 {$plan_year_type_1.sales|default:0|num:2} p1 {$plan_year_type_1.perc|default:0|num:2} ok_rmkk_tmkk {$plan_year_type_1.ok_rmkk_tmkk} ok_fin_man {$plan_year_type_1.ok_fin_man}<br>
+s2 {$plan_year_type_2.sales|default:0|num:2} p2 {$plan_year_type_2.perc|default:0|num:2} ok_rmkk_tmkk {$plan_year_type_2.ok_rmkk_tmkk} ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
+s3 {$plan_year_type_3.sales|default:0|num:2} p3 {$plan_year_type_3.perc|default:0|num:2} ok_rmkk_tmkk {$plan_year_type_3.ok_rmkk_tmkk} ok_fin_man {$plan_year_type_3.ok_fin_man}<br>
+$parameters.valNMKK.val_number {$parameters.valNMKK.val_number}<br>
+$parameters.budKK.val_number {$parameters.budKK.val_number}<br>
+$smarty.request.plan_type {$smarty.request.plan_type}<br>
+$oper_plan_disabled {$oper_plan_disabled}<br>
+$plan_year_type_2.ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
+</h2>
+{/if}
+
+
+
+{if $smarty.request.nets and $smarty.request.calendar_years}
+
+	{if $dog_plan_disabled}
+		<p style="font-weight:bold;color:red">
+		Работа с договорным планированием возможна только после завершения договорной кампании.
+		<br>
+		Для этого проверьте, выставлен ли статус "Договорная кампания завершена" в разделе "Договорная кампания/Встречи с клиентом".
+		</p>
+	{/if}
+
+
+	{if $plan_year_type_1.ok_rmkk_tmkk neq 1 and $smarty.request.plan_type eq 3}
+		<p style="font-weight:bold;color:red">
+		Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование РМ КК.
+		</p>
+		{assign var=oper_plan_disabled value=1}
+	{/if}
+
+	{if NeedNMKK eq 1 and $smarty.request.plan_type eq 3}
+		<p style="font-weight:bold;color:red">
+		Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование НМ КК.
+		</p>
+		{assign var=oper_plan_disabled value=1}
+	{/if}
+
+	{if $smarty.request.plan_type eq 3 and not $oper_plan_disabled and $plan_year_type_2.ok_fin_man neq 1}
+		<p style="font-weight:bold;color:red">Договорное планирование по данной сети не утверждено ФМ</p>
+	{/if}
+
+	{if not $dog_plan_disabled and $smarty.request.plan_type neq 3 and $smarty.request.plan_type neq 4}
+										{include file="fin_plan_year.html"}
+											{/if}
+
+	{if not ($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $dog_plan_disabled)}
+										{include file="fin_plan_year_ok.html"}
+											{/if}
+
+	{if $smarty.request.plan_type eq 4 and $smarty.request.plan_month}
+										{include file="fin_plan_fakt_uslug_base.html"}
+		{if $fakt_uslug_ok.ok_rmkk_tmkk eq 1 and not ($NeedNMKK eq 1 and $fakt_uslug_ok.ok_nmkk eq 0)}
+										{include file="fin_plan_dog_plan_one_month.html"}
+		{/if}
+											{/if}
+
+	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3 and $smarty.request.plan_month and $plan_year_type_2.ok_fin_man eq 1}
+										{include file="fin_plan_dog_plan_one_month.html"}
+											{/if}
+
+	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3}
+										{include file="fin_plan_month_ok.html"}
+											{/if}
+
+	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3 and $smarty.request.plan_month}
+										{include file="fin_plan_one_month.html"}
+											{/if}
+
+	{if $dog_plan_enabled and $enabled}
+		<form target="_self" method="POST" name=fin2dog id=fin2dog>
+		<input type=hidden name=nets value={$smarty.request.nets}>
+		<input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
+		<input type=submit name=fin2dog value="Скопировать финансовое планирование в договорное">
+		</form>
+		<form target="_self" method="POST" name=senddog2fm id=senddog2fm>
+		<input type=hidden name=nets value={$smarty.request.nets}>
+		<input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
+		<input type=submit name=senddog2fm value="Отправить договорное планирование ФМ на проверку">
+		</form>
+		<hr>
+	{/if}
+
+	{if $enabled and not $oper_plan_disabled}
+										{include file="fin_plan_plan_month_edit.html"}
+											{/if}
+	{if $enabled and not $oper_plan_disabled and not (($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4) and not $smarty.request.edit)}
+											{/if}
+
+	{if not $dog_plan_disabled and not $oper_plan_disabled and ($smarty.request.plan_type eq 1 or $smarty.request.plan_type eq 2 or $smarty.request.plan_month)}
+										{include file="fin_plan_plan_month_table.html"}
+											{/if}
+{/if}

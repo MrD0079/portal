@@ -1,0 +1,98 @@
+<h1>Развитие участника "Девелопмент-центра"</h1>
+
+Ф.И.О.:
+
+{foreach key=key item=item from=$os_user_list}
+{if $smarty.request.k.tn eq $item.tn}<b>{$item.fio}</b>{/if}
+{/foreach}
+
+{if $smarty.request.k.tn and $smarty.request.k.y}
+
+<table border=0 cellpadding=3 cellspacing=3>
+{foreach key=k item=i from=$os_body name=body}
+
+{if $i.level eq 2}
+<tr>
+<td style="border: 1px solid black" rowspan={$i.c+1}>{$i.name}</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по компетенции</td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255); text-align:center; font-weight:bold">{$i.en0|default:0} из {$i.c}</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204); text-align:center; font-weight:bold">{$i.en1|default:0} из {$i.c}</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153); text-align:center; font-weight:bold">{$i.en2|default:0} из {$i.c}</td>
+</tr>
+{/if}
+
+{if $i.level eq 3}
+<tr>
+<td style="border: 1px solid black">{$i.name}</td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255); text-align:center">{if $i.d0_v_int eq 1}да{/if}</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204); text-align:center">{if $i.d1_v_int eq 1}да{/if}</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153); text-align:center">{if $i.d2_v_int eq 1}да{/if}</td>
+</tr>
+{/if}
+
+{if $i.level eq 1}
+<tr>
+<td style="text-align:right" colspan=8><h2>Блок "{$i.name}"</h2></td>
+</tr>
+
+<tr style="text-align:center;font-weight:bold">
+<td style="border: 1px solid black"></td>
+<td style="border: 1px solid black"></td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255);" colspan=2>{$smarty.request.k.y}</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204);" colspan=2>{$smarty.request.k.y-1}</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153);" colspan=2>{$smarty.request.k.y-2}</td>
+</tr>
+<tr style="text-align:center;font-weight:bold">
+<td style="border: 1px solid black">Компетенция</td>
+<td style="border: 1px solid black">Индикаторы</td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255);" width=50px>Проявление</td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255);" width=150px>Выводы по блоку</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204);" width=50px>Проявление</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204);" width=150px>Выводы по блоку</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153);" width=50px>Проявление</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153);" width=150px>Выводы по блоку</td>
+</tr>
+<tr>
+<td colspan=2 style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по блоку</td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255); text-align:center; font-weight:bold">{$i.en0|default:0} из {$i.c1}</td>
+<td style="border: 1px solid black; background-color: rgb(204, 255, 255); text-align:center" rowspan={$i.c+1}>{$i.d0_v_text|nl2br}</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204); text-align:center; font-weight:bold">{$i.en1|default:0} из {$i.c1}</td>
+<td style="border: 1px solid black; background-color: rgb(255, 255, 204); text-align:center" rowspan={$i.c+1}>{$i.d1_v_text|nl2br}</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153); text-align:center; font-weight:bold">{$i.en2|default:0} из {$i.c1}</td>
+<td style="border: 1px solid black; background-color: rgb(153, 255, 153); text-align:center" rowspan={$i.c+1}>{$i.d2_v_text|nl2br}</td>
+</tr>
+{/if}
+
+{/foreach}
+
+<tr>
+<td style="text-align:right" colspan=8><h2>ОС участнику ДЦ</h2></td>
+</tr>
+
+<tr>
+<td colspan=2></td>
+<td colspan=2 style="border: 1px solid black; background-color: rgb(204, 255, 255);">{$os_head[0].os|nl2br}</td>
+<td colspan=2 style="border: 1px solid black; background-color: rgb(255, 255, 204);">{$os_head[1].os|nl2br}</td>
+<td colspan=2 style="border: 1px solid black; background-color: rgb(153, 255, 153);">{$os_head[2].os|nl2br}</td>
+</tr>
+
+<tr>
+<td style="text-align:right" colspan=8><h2>Решение оценочной комиссии</h2></td>
+</tr>
+
+<tr>
+<td colspan=2></td>
+<td colspan=2 style="border: 1px solid black; background-color: rgb(204, 255, 255);">{$os_head[0].findings|nl2br}</td>
+<td colspan=2 style="border: 1px solid black; background-color: rgb(255, 255, 204);">{$os_head[1].findings|nl2br}</td>
+<td colspan=2 style="border: 1px solid black; background-color: rgb(153, 255, 153);">{$os_head[2].findings|nl2br}</td>
+</tr>
+
+</table>
+
+
+{/if}
+
+
+
+
+

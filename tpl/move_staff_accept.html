@@ -1,0 +1,114 @@
+<h1>Подтверждение перевода сотрудников</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+<input type=submit value="Сохранить" name="move">
+
+{foreach key=key1 item=item1 from=$move_staff}
+<hr>
+<table cellpadding=3 border=0>
+	<tr>
+		<td>
+			<table cellpadding=3 border=0>
+				<tr>
+					<td>ФИО переводимого сотрудника</td>
+					<td>
+						{$item1.uvol_name}
+						{if $item1.tn_new_db}
+								<div id="uploadOutput{$item1.id}" style="display: inline;">
+								</div>
+								<script>
+								$db={$item1.tn_new_db};
+								$tn={$item1.tn};
+								$id={$item1.id};
+								{literal}
+									$('#uploadOutput'+$id).load('?action=move_staff_my_emp_all&nohead=1&tn='+$tn+'&id='+$id+'&db='+$db/*,
+									function() {$('#move_staff_'+$id+'_tn_new_db').val($db);}*/
+									);
+								{/literal}
+								</script>
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<td>Новая должность</td>
+					<td>
+						<select required name="move_staff[{$item1.id}][pos_id]" id="move_staff_{$item1.id}_pos_id">
+							<option></option>
+							{foreach key=key item=item from=$dolgn_list_all}
+								<option value={$item.pos_id}>{$item.pos_name}</option>
+							{/foreach}
+						</select>
+						<script>$('#move_staff_{$item1.id}_pos_id option[value="{$item1.pos_id}"]').prop('selected', true);</script>
+					</td>
+				</tr>
+				<tr>
+					<td>Дата перевода</td>
+					<td><input required name="move_staff[{$item1.id}][datamove]" class="datepicker" value="{$item1.datamove_t}"></td>
+				</tr>
+				<tr>
+					<td>Условия перевода<br>(дорабатывает до...)<br>(Достигнута договоренность...) и т.д.</td>
+					<td><textarea required cols="60" rows="5" name="move_staff[{$item1.id}][params]">{$item1.params|escape}</textarea></td>
+				</tr>
+				<tr>
+					<td style="">ФИО, должность сотрудника, принимающего территорию<br>(или кто будет исполнять обязанности):</td>
+					<td style=""><input required size="50" id=f1 name="move_staff[{$item1.id}][fio_new]" value="{$item1.fio_new|escape}"></td>
+				</tr>
+				<tr>
+					<td>Акт приема-передачи</td>
+					<td><a target=_blank href="move_staff_files/{$item1.fn}">{$item1.fn}</a></td>
+				</tr>
+				<tr>
+					<td colspan=2><hr></td>
+				</tr>
+				<tr>
+					<td>Статусы</td>
+					<td>
+						<input type=checkbox {if $item1.is_mservice eq 1}checked{/if} onClick="$('#move_staff_{$item1.id}_is_mservice').val(this.checked?1:null)">МС<br>
+						<input type=checkbox {if $item1.is_mz eq 1}checked{/if}       onClick="$('#move_staff_{$item1.id}_is_mz').val(this.checked?1:null)">МШ<br>
+						<input type=checkbox {if $item1.is_coach eq 1}checked{/if}    onClick="$('#move_staff_{$item1.id}_is_coach').val(this.checked?1:null)">Тренер<br>
+						<input type=checkbox {if $item1.is_db eq 1}checked{/if}       onClick="
+															$('#move_staff_{$item1.id}_is_db').val(this.checked?1:null);
+															!this.checked?$('.all_{$item1.id}').prop('checked',true):null;
+															!this.checked?$('.all_{$item1.id}').click():null;
+															$('.all_{$item1.id}').attr('disabled',this.checked?false:true);
+															">ДБ<br>
+
+
+						<input type=hidden {if $item1.is_mservice eq 1}value=1{/if} id=move_staff_{$item1.id}_is_mservice name=move_staff[{$item1.id}][is_mservice]>
+						<input type=hidden {if $item1.is_mz eq 1}value=1{/if}       id=move_staff_{$item1.id}_is_mz       name=move_staff[{$item1.id}][is_mz]>
+						<input type=hidden {if $item1.is_coach eq 1}value=1{/if}    id=move_staff_{$item1.id}_is_coach    name=move_staff[{$item1.id}][is_coach]>
+						<input type=hidden {if $item1.is_db eq 1}value=1{/if}       id=move_staff_{$item1.id}_is_db       name=move_staff[{$item1.id}][is_db]>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2><hr></td>
+				</tr>
+				<tr>
+					<td>Филиалы</td>
+					<td>
+						{foreach key=k1 item=i1 from=$item1.bud_fil name=bud_fil}
+							<input {if $item1.is_db neq 1}disabled{/if} class="all_{$item1.id}" type=checkbox {if $i1.enabled}checked{/if} onClick="$('#move_staff_{$item1.id}_bud_fil_{$i1.id}').val(this.checked?{$i1.id}:null)">{$i1.name}
+							<input class="all_hidden_{$item1.id}" type=hidden {if $i1.enabled}value={$i1.id}{/if} id=move_staff_{$item1.id}_bud_fil_{$i1.id} name=move_staff_detail[{$item1.id}][bud_fil][{$i1.id}]>
+							{if ($smarty.foreach.bud_fil.iteration+1)%5 eq 1}<br>{/if}
+						{/foreach}
+
+
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<input onClick="$('#comment_{$item1.id}').attr('disabled',true)" type=radio name="r[{$item1.id}]" value=1>Подтвердить
+			<input onClick="$('#comment_{$item1.id}').attr('disabled',false)" type=radio name="r[{$item1.id}]" value=0>Удалить
+			<textarea disabled name="comment[{$item1.id}]" id="comment_{$item1.id}"></textarea>
+		</td>
+	</tr>
+</table>
+{/foreach}
+
+<hr>
+
+<input type=submit value="Сохранить" name="move">
+
+</form>

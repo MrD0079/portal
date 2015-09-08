@@ -1,0 +1,141 @@
+<h1>Планы активности подчиненных</h1>
+
+<form name=form_plan_activ id=form_plan_activ target=_self method=post>
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_plan_activ').submit();
+}
+</script>
+{/literal}
+
+{literal}
+<script>
+function fn_href(e1,e2)
+{
+$('#'+e1).href="?action=my_slaves_plans_data"+"&"+e2+"="+$('#'+e2).val();
+}
+</script>
+{/literal}
+
+<a name=a1 id=a1 target=_blank href="?action=my_slaves_plans_data&dates_list=01.01.2011">План активности прямых подчиненных на дату</a>
+
+<select name=dates_list id=dates_list onchange="javascript:fn_href('a1','dates_list');">
+{foreach key=key item=item from=$dates_list}
+<option value="{$item.data_c}">{$item.data_c}</option>
+{/foreach}
+</select>
+
+<script>
+$('#dates_list').val('{$smarty.request.dates_list}');
+fn_href('a1','dates_list');
+</script>
+</form>
+
+
+
+
+
+<form name=form_zat id=form_zat target=_self method=post>
+
+<input type="hidden" name="form_submit" id=form_submitz>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submitz').val(val);
+	$('#form_zat').submit();
+}
+</script>
+{/literal}
+
+	Период:
+	<br>
+	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+		{foreach key=key item=item from=$month_list}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+</form>
+
+
+
+
+
+<h3>Мои подчиненные, заполнившие план активности</h3>
+
+<table border=1 cellspacing=0 cellpadding=1>
+
+
+<tr style="font-weight:bold">
+<td>
+Прямые
+</td>
+<td>
+Непрямые
+</td>
+</tr>
+
+
+<tr align=left valign=top>
+
+<td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr style="font-weight:bold">
+<td>Ф.И.О.</td>
+<!--<td>Заполнен</td>-->
+<td>Утвержден</td>
+</tr>
+{assign var=rownum value=0}
+{foreach key=key1 item=item1 from=$my_slaves_plans}
+{if $item1.full eq 1}
+{assign var=rownum value=`$rownum+1`}
+<tr align=left>
+<td>
+{$rownum}
+<a target=_blank href="?action=plan_activ&emp_tn={$item1.tn}&readonly={$item1.readonly}">{$item1.emp_name}</a>
+</td>
+<!--<td {if $item1.pa_zapolnen}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>{if $item1.pa_zapolnen}да{else}нет{/if}</td>-->
+<td {if $item1.monthly_plan_ok}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>{if $item1.monthly_plan_ok}да{else}нет{/if}</td>
+</tr>
+{/if}
+{/foreach}
+</table>
+</td>
+
+
+<td>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr style="font-weight:bold">
+<td>Ф.И.О.</td>
+<!--<td>Заполнен</td>-->
+<td>Утвержден</td>
+</tr>
+{assign var=rownum value=0}
+{foreach key=key1 item=item1 from=$my_slaves_plans}
+{if $item1.full eq 0}
+{assign var=rownum value=`$rownum+1`}
+<tr align=left>
+<td>
+{$rownum}
+<a target=_blank href="?action=plan_activ&emp_tn={$item1.tn}&readonly={$item1.readonly}">{$item1.emp_name}</a>
+</td>
+<!--<td {if $item1.pa_zapolnen}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>{if $item1.pa_zapolnen}да{else}нет{/if}</td>-->
+<td {if $item1.monthly_plan_ok}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>{if $item1.monthly_plan_ok}да{else}нет{/if}</td>
+</tr>
+{/if}
+{/foreach}
+</table>
+</td>
+
+
+
+</tr>
+</table>

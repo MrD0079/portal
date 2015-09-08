@@ -1,0 +1,80 @@
+<h1>Результат тренинга ЭТА "{$h.name}", {$h.dt_start_t}, {$h.loc_name}</h1>
+
+
+{if ($h.completed eq 1 and $is_coach) or $is_test_admin}
+{assign var=disabled value='disabled'}
+{/if}
+
+<form target="_self" method="POST" name=form_tr id=form_tr enctype="multipart/form-data">
+	<p>
+		{if not $is_test_admin or $is_coach}<input name="SendNBT" value="Сохранить" type="submit">{/if}
+	</p>
+	<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+		<tr style="text-align: center;">
+			<td>ФИО участника</td>
+			<td>Должность</td>
+			<td>Присутствовал</td>
+			<td>ОС по участнику</td>
+			<td>Статус теста</td>
+		</tr>
+		{foreach key=k item=i from=$tru name=tru}
+		<tr>
+			<td>{$i.fio}</td>
+			<td>{$i.pos_name}</td>
+			<td style="text-align:center;{if $i.completed eq 1}background-color:#00ff00;{/if}">
+				<input {$disabled} {if $i.completed eq 1}checked{/if} type=checkbox onClick="
+					$('#completed_{$i.id}').val(this.checked ? 1 : 0);
+					$('#completed_{$i.id}').attr('disabled',false);
+					$('#os_{$i.id}').attr('disabled',!this.checked);
+				">
+				<input {$disabled} type=hidden id=completed_{$i.id} name=a[{$i.id}][completed] disabled>
+			</td>
+			<td><textarea {$disabled} cols="50" rows="5" id=os_{$i.id} name=a[{$i.id}][os] {if $i.completed neq 1}disabled{/if}>{$i.os|escape}</textarea></td>
+			<td style="text-align:center;
+				{if $i.test eq 2}background-color:#00ff00;{/if}
+				{if $i.test eq 3}background-color:#ff0000;{/if}
+				">
+				{if $i.test eq 0}Выключен{/if}
+				{if $i.test eq 1}Включен{/if}
+				{if $i.test eq 2}Пройден{/if}
+				{if $i.test eq 3}Не пройден{/if}
+				<br>
+				{$i.test_lu}
+				<br>
+				<!--{if ($is_admin or $pos_id eq 63 or $i.test_count eq 1) and (not $is_test_admin or $is_coach)}
+					{if $i.test eq 2 or $i.test eq 3}<input type=submit name=b[{$i.id}] value='Включить повторно'>{/if}
+				{/if}-->
+				{if ($is_admin or $pos_id eq 63 or $i.test_count eq 1) and not $is_test_admin}
+					{if $i.test eq 2 or $i.test eq 3}<input type=submit name=b[{$i.id}] value='Включить повторно'>{/if}
+				{/if}
+			</td>
+		</tr>
+		{/foreach}
+	</table>
+	<p>
+		<table style="width:300px;{if $h.completed eq 1}background-color:#00ff00;{/if}">
+			<tr>
+				<td>
+					<input
+					{if ($smarty.session.pos_id neq 63 and $h.completed eq 1) or ($is_test_admin and not $is_coach)}disabled{/if}
+					{if $h.completed eq 1}checked{/if} type=checkbox
+					onClick="
+					$('#tr').val(this.checked ? 1 : 0);
+					$('#tr').attr('disabled',false);
+					">
+					<input type=hidden id=tr name=tr disabled>
+				</td>
+				<td>
+					Тренинг проведен {$h.completed_lu}
+					<br>
+					Отправить ОС по участнику руководителю
+					<br>
+					Включить тестирование участникам
+				</td>
+			</tr>
+		</table>
+	</p>
+	<p>
+		 {if not $is_test_admin or $is_coach}<input name="SendNBT" value="Сохранить" type="submit">{/if}
+	</p>
+</form>

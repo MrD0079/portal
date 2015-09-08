@@ -1,0 +1,61 @@
+<h1>Выбор продуктов</h1>
+
+<form name=form_dimproduct id=form_dimproduct target=_self method=post>
+
+<p><input type="submit" name="save" value="Сохранить"></p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<td>№ п/п</td>
+<td>Категория</td>
+<td>Формат</td>
+<td>Продукт</td>
+<td>Вес продукта</td>
+<td>Код продукта</td>
+<td>Участвует</td>
+<td>Порядок</td>
+</tr>
+{assign var=cnt value=0}
+{foreach key=k item=i from=$pl name=pl}
+{if $i.prod_id}
+{assign var=cnt value=$cnt+1}
+{/if}
+<tr>
+<td style="text-align:center">{$smarty.foreach.pl.iteration}</td>
+<td>{$i.altgroup}</td>
+<td>{$i.unit_name_sw}</td>
+<td>{$i.product_name_sw}</td>
+<td style="text-align:right">{$i.product_weight|num:3}</td>
+<td style="text-align:center">{$i.product_id}</td>
+<td style="text-align:center; {if $i.prod_id}background-color:green;{/if}">
+	<input type=checkbox {if $i.prod_id}checked{/if} onclick="
+		$('#keys_{$i.product_id}').attr('disabled',false);
+		$('#keys_{$i.product_id}').val(this.checked?1:0);
+		$('#data_{$i.product_id}_sort').attr('disabled',!this.checked);
+		$('#data_{$i.product_id}_prod_id').attr('disabled',!this.checked);
+	">
+	<input disabled name=keys[{$i.product_id}] id=keys_{$i.product_id} type=hidden>
+</td>
+	<input {if not $i.prod_id}disabled{/if} name=data[{$i.product_id}][prod_id] id=data_{$i.product_id}_prod_id type=hidden value="{$i.product_id}">
+<td>
+	<input
+		{if not $i.prod_id}disabled{/if}
+		name=data[{$i.product_id}][sort]
+		id=data_{$i.product_id}_sort
+		onKeyUp="
+			$('#keys_{$i.product_id}').attr('disabled',false);
+			$('#keys_{$i.product_id}').val(1);
+		"
+		class="number_int"
+		value="{$i.sort}"
+		size=5
+	>
+</td>
+</tr>
+{/foreach}
+<tr><td style="text-align:center; font-weight:bold" colspan=10>Итого участвует продуктов: {$cnt}</td></tr>
+</table>
+
+<p><input type="submit" name="save" value="Сохранить"></p>
+
+</form>

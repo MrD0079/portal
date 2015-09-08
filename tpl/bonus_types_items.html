@@ -1,0 +1,36 @@
+<table id=tbonus_types_{$smarty.request.id} border=0 cellpadding=3 cellspacing=0>
+	<tbody>
+		{if $smarty.request.id eq 0}
+		{/if}
+		<tr>
+			<td>
+				<input size=50 id=new_name_{$smarty.request.id}>
+				<a href="javascript:void(0);" onClick="add_item({$smarty.request.id});">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$bonus_types}
+			<tr id=list_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_item({$i.id})">[x]</a>
+					<input id=d_{$i.id}_name size=50 value="{$i.name}" onChange="save_item({$i.id},'name',this.value);">
+					{if $smarty.request.id eq 0}
+					<div style="display: inline;" id="d_{$i.id}_koef">
+					<input
+						id="v_{$i.id}_koef"
+						type="checkbox"
+						onChange="save_item({$i.id},'koef',this.checked?1:-1);"
+					>
+					коеф (+1/-1)
+					<script>$('#v_{$i.id}_koef').prop('checked','{$i.koef}'==1?true:false);</script>
+					</div>
+					<a href='javascript:void(0);' onClick="show_items({$i.id})">Развернуть</a>
+					<div style="margin-left:50px" id=detail_{$i.id}></div>
+					{else}
+					код
+					<input id=d_{$i.id}_pcode size=50 value="{$i.pcode}" onChange="save_item({$i.id},'pcode',this.value);" class="number_int" size=8>
+					{/if}
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>

@@ -1,0 +1,81 @@
+<h1>Календарь МР</h1>
+
+
+Месяц
+<form name=form_zat_month id=form_zat_month target=_self method=post enctype="multipart/form-data">
+<select name=month_list id=month_list onchange="$('#form_zat_month').submit();">
+{foreach key=key item=item from=$month_list}
+	{if $item.merch_report_cal_enabled}<option value="{$item.sd_c}">{$item.my}</option>{/if}
+{/foreach}
+</select>
+<script>$('#month_list option[value="{$smarty.request.month_list}"]').prop('selected', true);</script>
+</form>
+
+<div id="ok" style="display: inline;"></div>
+
+<p>
+<a id=fill_reminders_button href="javascript:void(0);" onclick="fill_reminders($('#month_list').val());">Рассчитать</a>
+</p>
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>Заказчик</td>
+		<td>№ п/п</td>
+		<td>Вид отчета</td>
+		<td>Частота</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	{foreach key=k1 item=i1 from=$i.data name=i}
+	{/foreach}
+	<tr style="font-weight:bold">
+		<td rowspan={$smarty.foreach.i.total+1} style="text-align:center">{$smarty.foreach.d.iteration}</td>
+		<td rowspan={$smarty.foreach.i.total+1} style="text-align:center">{$i.head.ag_name}</td>
+		<td colspan=6></td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data name=i}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:center">{$smarty.foreach.i.iteration}</td>
+		<td style="text-align:center">{$i1.rep_name}</td>
+		<td style="text-align:center">
+			<select id='d_{$k}_{$k1}' onchange="save($('#month_list').val(),{$k},{$k1},this.value);">
+				<option></option>
+				{foreach key=fk item=fi from=$freq}
+				<option value={$fi.id}>{$fi.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#d_{$k}_{$k1} option[value="{$i1.freq_id}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+</table>
+
+{literal}
+<script>
+function fill_reminders(dt)
+{
+	x=loadwait_show('ok');
+	$('#fill_reminders_button').hide();
+	$('#ok').load('?action=merch_report_cal&fill_reminders=1&nohead=1', {dt: dt}, function() {
+		loadwait_hide(x);
+		$('#fill_reminders_button').show();
+	});
+}
+function save(dt,ag_id,rep_id,freq_id)
+{
+	$('#d_'+ag_id+'_'+rep_id).css('background-color','red');
+	$('#ok').load('?action=merch_report_cal&save=1&nohead=1',
+	{
+		dt: dt,
+		ag_id: ag_id,
+		rep_id: rep_id,
+		freq_id: freq_id
+	},
+	function() {
+	$('#d_'+ag_id+'_'+rep_id).css('background-color','white');
+	});
+}
+</script>
+{/literal}

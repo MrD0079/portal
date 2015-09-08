@@ -1,0 +1,121 @@
+<h1>Утренний митинг</h1>
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+	{if not $is_eta}
+	<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+	</p>
+	<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+<script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value='{$smarty.request.exp_list_only_ts}']").prop('selected', true);</script>
+
+	</p>
+	<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
+			{/foreach}
+		</select>
+		<script>
+		$('#eta_list').val('{$smarty.request.eta_list}');
+		</script>
+	</p>
+	{/if}
+	<p>
+	Дата <input class="datepicker" name=dt id=dt value="{$smarty.request.dt}">
+	</p>
+	<input type=submit name=generate id=generate value='Выбрать'>
+{/if}
+{if $smarty.request.generate}
+	{if not $smarty.request.print}
+		<p><a href="?action=um&dt={$smarty.request.dt}&print=1&excel=1&generate=1&filename=Утренний митинг">Экспорт в Excel</a></p>
+		<input type=hidden name=generate value="Выбрать">
+	{/if}
+	<table border=1>
+		<tr style="font-weight:bold; text-align:center">
+			<td>№ п/п</td>
+			<td>ФИО руководителя</td>
+			<td>ФИО ТС</td>
+			<td>ФИО ЭТА</td>
+			<td>Время начала УМ</td>
+			<td>Время последнего обновления УМ</td>
+			<td>Подтв УМ ТС</td>
+			<td>План ВАЛ</td>
+			<td>План Цель 1</td>
+			<td>План Цель 2</td>
+			<td>План Цель 3</td>
+			<td>План ЭВ</td>
+			<td>Время первого визита</td>
+			<td>Код Название Адрес ТП</td>
+			<td>Коорд GPS</td>
+			<td>Время последнего визита</td>
+			<td>Код Название Адрес ТП</td>
+			<td>Коорд GPS</td>
+			<td>Митинг проведен</td>
+		</tr>
+		{foreach key=list_key item=list_item from=$list name=list}
+		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<td>{$smarty.foreach.list.iteration}</td>
+			<td>{$list_item.chief_fio}</td>
+			<td>{$list_item.fio_ts}</td>
+			<td>{$list_item.fio_eta}</td>
+			<td style="text-align:center{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.time_begin}{/if}</td>
+			<td style="text-align:center{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.time_last_update}{/if}</td>
+			<td style="text-align:center{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.ts_visa}{/if}</td>
+			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_val|num:3}{/if}</td>
+			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_c1|num:3}{/if}</td>
+			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_c2|num:3}{/if}</td>
+			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_c3|num:3}{/if}</td>
+			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_ev|num:3}{/if}</td>
+			<td style="text-align:center">{$list_item.time_first_visit}</td>
+			<td>{$list_item.tp_kod} {$list_item.tp_ur} {$list_item.tp_addr}</td>
+			<td style="text-align:center"><a target=_blank href="https://www.google.com/maps/place/{$list_item.gps_koord}/@{$list_item.gps_koord},19z">{$list_item.gps_koord}</a></td>
+			<td style="text-align:center">{$list_item.time_last_visit}</td>
+			<td>{$list_item.tp_kod_last} {$list_item.tp_ur_last} {$list_item.tp_addr_last}</td>
+			<td style="text-align:center"><a target=_blank href="https://www.google.com/maps/place/{$list_item.gps_koord_last_visit}/@{$list_item.gps_koord_last_visit},19z">{$list_item.gps_koord_last_visit}</a></td>
+			<td style="text-align:center">{if $list_item.um_posted}да{/if}</td>
+		</tr>
+		{/foreach}
+		<tr style="font-weight:bold; text-align:center">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="text-align:center">{$list_total.ts_visa}</td>
+			<td style="text-align:right">{$list_total.plan_val|num:3}</td>
+			<td style="text-align:right">{$list_total.plan_c1|num:3}</td>
+			<td style="text-align:right">{$list_total.plan_c2|num:3}</td>
+			<td style="text-align:right">{$list_total.plan_c3|num:3}</td>
+			<td style="text-align:right">{$list_total.plan_ev|num:3}</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="text-align:center">{$list_total.um_posted}</td>
+		</tr>
+	</table>
+{/if}
+{if not $smarty.request.print}
+	</form>
+{/if}
+

@@ -1,0 +1,23 @@
+<h1>Категории СЗ</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>название</td>
+<td style="color:red;font-size:20px"></td>
+</tr>
+{foreach key=key item=item from=$sz_cat}
+<tr>
+<td>{$item.id}<br><input name=del[{$item.id}] type=checkbox></td>
+<td><input name=data[{$item.id}][name] size=50 value="{$item.name|escape}"></td>
+<td><textarea cols=80 rows=6 name=data[{$item.id}][hint]>{$item.hint|escape}</textarea></td>
+</tr>
+{/foreach}
+</table>
+Категория
+<br>
+<input size=50 name=new_sz_cat_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>

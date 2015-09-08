@@ -1,0 +1,20 @@
+<table id=tac_test_{$smarty.request.id} border=1 cellpadding=3 cellspacing=0>
+	<tbody>
+		<tr>
+			<td>
+				текст ответа <textarea size=50 id=name_{$smarty.request.id}></textarea>
+				правильный <input size=8 class="number_int" id=a_ok_{$smarty.request.id}>
+				<a href="javascript:void(0);" onClick="add_ac_test_a({$smarty.request.id});">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$ac_test_a}
+		<tr id=ac_test_{$i.id} {if $i.a_ok}style="background-color:lightgreen"{/if}>
+			<td>
+				<a href='javascript:void(0);' onClick="del_ac_test({$i.id})">[x]</a>
+				текст ответа <textarea id=d_{$i.id}_name size=50 onChange="save_ac_test({$i.id},'name',this.value);">{$i.name|escape}</textarea>
+				правильный <input id=d_{$i.id}_a_ok size=8 class="number_int" value="{$i.a_ok}" onChange="save_ac_test({$i.id},'a_ok',this.value);">
+			</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>

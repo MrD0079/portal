@@ -1,0 +1,104 @@
+<h1>Обходной лист</h1>
+
+<p>
+<a href="javascript:void(0);" onClick="$('#ok').load('?action=pr_ol_staff_recreate&nohead=1&dpt_id={$dpt_id}');">Обновить ОЛ страны: <b>{$dpt_name}</b></a>
+<div style="color:red" id=ok></div>
+</p>
+
+<form target="_self" method="POST" name=form1 id=form1>
+
+<input type=submit name=save value="Сохранить">
+
+<table border=1 cellpadding=3 cellspacing=0>
+
+<tr style="font-weight:bold;text-align:center">
+<td>[x]</td>
+<td>Участник</td>
+<td>Порядковый<br>номер<br>в<br>группе</td>
+<td>Категория</td>
+<td>Группа</td>
+<td>Комментарий</td>
+<td>Параметры</td>
+</tr>
+
+{foreach key=k item=i from=$ol}
+<tr>
+<td style="text-align:center"><input name=del[{$i.id}] type=checkbox></td>
+<td>
+<select name=data[{$i.id}][tn] id=data{$i.id}tn>
+<option></option>
+{foreach key=key item=item from=$spd_list}
+<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+{/foreach}
+</select>
+<script>$('#data{$i.id}tn option[value="{$i.tn}"]').prop('selected', true);</script>
+</td>
+<td><input size=10 name=data[{$i.id}][num] value="{$i.num}" class="number_int_899"></td>
+<td><input size=40 name=data[{$i.id}][cat] value="{$i.cat|escape}" ></td>
+<td>
+<select name=data[{$i.id}][gruppa] id=data{$i.id}gruppa>
+<option></option>
+{foreach key=k1 item=i1 from=$ol_gr}
+{if $i1.id neq 0}
+<option value={$i1.id}>{$i1.gr}. {$i1.name}</option>
+{/if}
+{/foreach}
+</select>
+<script>$('#data{$i.id}gruppa option[value="{$i.gruppa}"]').prop('selected', true);</script>
+</td>
+<td><textarea name=data[{$i.id}][comm]>{$i.comm}</textarea></td>
+<td>
+<input {if $i.see_all_ol}checked{/if} type=checkbox onChange="$('#data_{$i.id}_see_all_ol').val(this.checked?1:0);">
+<input {if $i.see_all_ol}value=1{/if} type=hidden name=data[{$i.id}][see_all_ol] id=data_{$i.id}_see_all_ol>
+Видит весь ОЛ
+<br>
+<input {if $i.summi}checked{/if} type=checkbox onChange="$('#data_{$i.id}_summi').val(this.checked?1:0);">
+<input {if $i.summi}value=1{/if} type=hidden name=data[{$i.id}][summi] id=data_{$i.id}_summi>
+Суммы
+</td>
+</tr>
+{/foreach}
+
+<input type=hidden value="{$smarty.session.dpt_id}" name=data_new[dpt_id]>
+<tr>
+<td><input type=submit name=new value="Добавить"></td>
+<td>
+<select name=data_new[tn]>
+<option></option>
+{foreach key=key item=item from=$spd_list}
+<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+{/foreach}
+</select>
+</td>
+<td><input size=10 name=data_new[num] class="number_int_899"></td>
+<td><input size=40 name=data_new[cat]></td>
+<td>
+<select name=data_new[gruppa]>
+<option></option>
+{foreach key=k1 item=i1 from=$ol_gr}
+{if $i1.id neq 0}
+<option value={$i1.gr}>{$i1.gr}. {$i1.name}</option>
+{/if}
+{/foreach}
+</select>
+</td>
+<td><textarea name=data_new[comm]></textarea></td>
+<td>
+<input type=checkbox onChange="$('#data_see_all_ol').val(this.checked?1:0);">
+<input type=hidden name=data_new[see_all_ol] id=data_see_all_ol>
+Видит весь ОЛ
+<br>
+<input type=checkbox onChange="$('#data_summi').val(this.checked?1:0);">
+<input type=hidden name=data_new[summi] id=data_summi>
+Суммы
+</td>
+
+
+
+</tr>
+
+</table>
+
+</form>
+
+<script>{literal}$(function(){$('.number_int_899').autoNumeric('init',{aSep: '',mDec: 0,vMin: 0,vMax: 899});});{/literal}</script>

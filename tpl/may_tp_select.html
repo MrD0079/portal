@@ -1,0 +1,78 @@
+<h1>Выбор ТП для участия в акции "МаЕвка"</h1>
+<form target="_self" method="POST" name=form_tp id=form_tp>
+	<input type=submit name=save id=save class=save value="Сохранить">
+	<br>
+	<br>
+	<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold; text-align:center">
+			<td>№ п/п</td>
+			<td>ТС</td>
+			<td>ФИО ЭТА</td>
+			<td>Код ТП</td>
+			<td>Название ТП</td>
+			<td>Адрес ТП</td>
+			<td>Участвует<br>в акции</td>
+			<td>Контактный<br>номер ЛПР, имя</td>
+		</tr>
+		{foreach key=tp_key item=tp_item from=$tp name=tp}
+		<tr {if $tp_item.enabled eq 1}style="font-weight:bold;color:red"{/if}>
+			<td>{$smarty.foreach.tp.iteration}</td>
+			<td>{$tp_item.fio_ts}</td>
+			<td>{$tp_item.fio_eta}</td>
+			<td>{$tp_item.tp_kod}</td>
+			<td>{$tp_item.tp_ur}</td>
+			<td>{$tp_item.tp_addr}</td>
+			{if $tp_item.enabled eq 1}
+				<td colspan=3></td>
+			{else}
+				<td {if $tp_item.selected eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
+					<input
+						onclick="javascript:check_item1({$tp_item.tp_kod},'{$tp_item.fio_eta}','selected','contact_lpr',true)"
+						type=checkbox
+						{if $tp_item.selected eq 1}checked{/if}
+						name=selected_on[{$tp_item.tp_kod}][{$tp_item.fio_eta}]
+						value="{$tp_item.tp_kod}"
+					>
+					<input type=hidden name=selected_changed[{$tp_item.tp_kod}][{$tp_item.fio_eta}] value="">
+				</td>
+				<td><input {if $tp_item.selected neq 1} disabled {/if} type=text required="required" size=25 name=contact_lpr[{$tp_item.tp_kod}][{$tp_item.fio_eta}] id=contact_lpr[{$tp_item.tp_kod}][{$tp_item.fio_eta}] value="{$tp_item.contact_lpr|escape}"></td>
+			{/if}
+		</tr>
+		{/foreach}
+		<tr style="font-weight:bold; text-align:center">
+			<td colspan=6>Итого</td>
+			{foreach key=tp_key item=tp_item from=$tp_total}
+			<td style="text-align:right">{$tp_item.selected|default:0}</td>
+			<td colspan=2></td>
+			{/foreach}
+		</tr>
+	</table>
+	<br>
+	<input type=submit name=save id=save class=save value="Сохранить">
+	<br>
+	<br>
+</form>
+
+{literal}
+<script>
+function check_item1($v,$v1,$v2,$v3,required)
+{
+	//alert($v+'***'+$v1);
+	//alert($v2+"_on["+$v+"]["+$v1+"]");
+	var e = document.forms["form_tp"].elements[$v3+"["+$v+"]["+$v1+"]"];
+	var cbs = document.forms["form_tp"].elements[$v2+"_on["+$v+"]["+$v1+"]"];
+	var cbs2 = document.forms["form_tp"].elements[$v2+"_changed["+$v+"]["+$v1+"]"];
+	if (cbs.checked)
+	{
+		cbs2.value='on';
+		e.disabled=false;
+		e["required"]="required";
+	}
+	else
+	{
+		cbs2.value=$v;
+		e.disabled=true;
+	}
+}
+</script>
+{/literal}

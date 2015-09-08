@@ -1,0 +1,190 @@
+<table border=1>
+<tr style="font-weight:bold; text-align:center">
+<td rowspan=2>период</td>
+<td rowspan=2>Дистрибутор / филиал</td>
+<td rowspan=2>Фактическая скидка,<br>{$valuta}</td>
+<td colspan=5>Компенсация дистрибутору</td>
+<td colspan=5>ФАКТ сумма затрат дистрибутора</td>
+<td rowspan=2>Компенсация ДБ</td>
+</tr>
+<tr style="font-weight:bold; text-align:center">
+<td>нац. акции,<br>{$valuta}</td>
+<td>лок. акции,<br>{$valuta}</td>
+<td>заявки на акт.,<br>{$valuta}</td>
+<td>торговые условия,<br>{$valuta}</td>
+<td>ИТОГО,<br>{$valuta}</td>
+<td>нац. акции,<br>{$valuta}</td>
+<td>лок. акции,<br>{$valuta}</td>
+<td>заявки на акт.,<br>{$valuta}</td>
+<td>торговые условия,<br>{$valuta}</td>
+<td>ИТОГО,<br>{$valuta}</td>
+</tr>
+
+{foreach key=k item=i from=$xx}
+<tr>
+<td>{$i.period_text}</td>
+<td>{$i.name}</td>
+<td style="text-align:right">{$i.skidka_val|num:2}</td>
+<td style="text-align:right">{$i.act_compens_distr|num:2}</td>
+<td style="text-align:right">{$i.act_local_compens_distr|num:2}</td>
+<td style="text-align:right">{$i.zay_compens_distr|num:2}</td>
+<td style="text-align:right">{$i.svs_compens_distr|num:2}</td>
+<td style="text-align:right">{$i.compens_distr|num:2}</td>
+<td style="text-align:right">{$i.act_fakt_distr|num:2}</td>
+<td style="text-align:right">{$i.act_local_fakt_distr|num:2}</td>
+<td style="text-align:right">{$i.zay_fakt_distr|num:2}</td>
+<td style="text-align:right">{$i.svs_fakt_distr|num:2}</td>
+<td style="text-align:right">{$i.fakt_distr|num:2}</td>
+<td style="text-align:right">{$i.compens_db|num:2}</td>
+<tr>
+{/foreach}
+
+<tr style="font-weight:bold; text-align:center">
+<td></td>
+<td>ИТОГО</td>
+<td style="text-align:right">{$list_total.skidka_val|num:2}</td>
+<td style="text-align:right">{$list_total.act_compens_distr|num:2}</td>
+<td style="text-align:right">{$list_total.act_local_compens_distr|num:2}</td>
+<td style="text-align:right">{$list_total.zay_compens_distr|num:2}</td>
+<td style="text-align:right">{$list_total.svs_compens_distr|num:2}</td>
+<td style="text-align:right">{$list_total.compens_distr|num:2}</td>
+<td style="text-align:right">{$list_total.act_fakt_distr|num:2}</td>
+<td style="text-align:right">{$list_total.act_local_fakt_distr|num:2}</td>
+<td style="text-align:right">{$list_total.zay_fakt_distr|num:2}</td>
+<td style="text-align:right">{$list_total.svs_fakt_distr|num:2}</td>
+<td style="text-align:right">{$list_total.fakt_distr|num:2}</td>
+<td style="text-align:right">{$list_total.compens_db|num:2}</td>
+</tr>
+</table>
+
+{foreach key=k item=i from=$list}
+
+{if $i.act or $i.act_local or $i.zay}
+<h1>{$i.name}</h1>
+<p>{$i.db_list}</p>
+{/if}
+
+{if $i.act}
+<h3>Национальные акции</h3>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold; text-align:center">
+      <td>период</td>
+      <td>Название акции</td>
+      <td>Кол-во<br>ТП</td>
+      <td>Объем<br>продаж,<br>{$valuta}</td>
+      <td>Сумма<br>бонуса<br>ФАКТИЧЕСКАЯ,<br>{$valuta}</td>
+      <td width=100px>Компенсация дистрибутору с учетом скидки филиала и логистики, {$valuta}</td>
+    </tr>
+{foreach key=k1 item=i1 from=$i.act}
+    <tr>
+      <td>{$i1.period_text}</td>
+      <td><a target=_blank href="?action={$i1.act}_report_a&month={$i1.month}">{$i1.act_name}</a></td>
+      <td style="text-align:right">{$i1.tp}</td>
+      <td style="text-align:right">{$i1.sales|num:2}</td>
+      <td style="text-align:right">{$i1.bonus|num:2}</td>
+      <td style="text-align:right">{$i1.compens_distr|num:2}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>ИТОГО</td>
+      <td style="text-align:right">{$i.act_total.tp}</td>
+      <td style="text-align:right">{$i.act_total.sales|num:2}</td>
+      <td style="text-align:right">{$i.act_total.bonus|num:2}</td>
+      <td style="text-align:right">{$i.act_total.compens_distr|num:2}</td>
+    </tr>
+  </tbody>
+</table>
+{/if}
+
+{if $i.act_local}
+<h3>Локальные акции</h3>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold;text-align:center">
+      <td>период</td>
+      <td>Название акции</td>
+      <td>Кол-во<br>ТП</td>
+      <td>Объем<br>продаж,<br>{$valuta}</td>
+      <td>Сумма<br>бонуса<br>ФАКТИЧЕСКАЯ,<br>{$valuta}</td>
+      <td width=100px>Компенсация дистрибутору с учетом скидки филиала и логистики, {$valuta}</td>
+    </tr>
+{foreach key=k1 item=i1 from=$i.act_local}
+    <tr>
+      <td>{$i1.period_text}</td>
+      <td>
+	<a target=_blank href="?action=bud_ru_zay_report&z_id={$i1.id}&select=1">{$i1.id}</a>
+	<a target=_blank href="?action=akcii_local_report&z_id={$i1.id}&ok_selected=2">{$i1.val_string}</a>
+      </td>
+      <td style="text-align:right">{$i1.c}</td>
+      <td style="text-align:right">{$i1.summa|num:2}</td>
+      <td style="text-align:right">{$i1.bonus_sum|num:2}</td>
+      <td style="text-align:right">{$i1.compens_distr|num:2}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>ИТОГО</td>
+      <td style="text-align:right">{$i.act_local_total.c}</td>
+      <td style="text-align:right">{$i.act_local_total.summa|num:2}</td>
+      <td style="text-align:right">{$i.act_local_total.bonus_sum|num:2}</td>
+      <td style="text-align:right">{$i.act_local_total.compens_distr|num:2}</td>
+    </tr>
+  </tbody>
+</table>
+{/if}
+
+{if $i.zay}
+<h3>Заявки на активность</h3>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold;text-align:center">
+      <td>период</td>
+      <td>№ заявки</td>
+      <td>Статья</td>
+      <td>Категория</td>
+      <td>ПЛАН<br>сумма<br>затрат,<br>{$valuta}</td>
+      <td>ФАКТ<br>сумма<br>затрат,<br>{$valuta}</td>
+      <td>Компенсация<br>дистрибутору</td>
+      <td>Компенсация<br>ДБ</td>
+    </tr>
+{foreach key=k1 item=i1 from=$i.zay}
+{foreach key=k2 item=i2 from=$i1.data}
+    <tr>
+      <td>{$i2.period_text}</td>
+      <td><a target=_blank href="?action=bud_ru_zay_report&z_id={$i2.id}&select=1">{$i2.id}</a></td>
+      <td style="text-align:left">{$i2.st_name}</td>
+      <td style="text-align:left">{$i2.kat_name}</td>
+      <td style="text-align:right">{$i2.z_plan|num:2}</td>
+      <td style="text-align:right">{$i2.z_fakt|num:2}</td>
+      <td style="text-align:right">{$i2.compens_distr|num:2}</td>
+      <td style="text-align:right">{$i2.compens_db|num:2}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td style="text-align:right">{$i1.st_total.c}</td>
+      <td style="text-align:left">{$i1.st_total.st_name}</td>
+      <td style="text-align:left">{$i1.st_total.kat_name}</td>
+      <td style="text-align:right">{$i1.st_total.z_plan|num:2}</td>
+      <td style="text-align:right">{$i1.st_total.z_fakt|num:2}</td>
+      <td style="text-align:right">{$i1.st_total.compens_distr|num:2}</td>
+      <td style="text-align:right">{$i1.st_total.compens_db|num:2}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td style="text-align:right">{$i.zay_total.c}</td>
+      <td>ИТОГО</td>
+      <td></td>
+      <td style="text-align:right">{$i.zay_total.z_plan|num:2}</td>
+      <td style="text-align:right">{$i.zay_total.z_fakt|num:2}</td>
+      <td style="text-align:right">{$i.zay_total.compens_distr|num:2}</td>
+      <td style="text-align:right">{$i.zay_total.compens_db|num:2}</td>
+    </tr>
+  </tbody>
+</table>
+{/if}
+
+{/foreach}

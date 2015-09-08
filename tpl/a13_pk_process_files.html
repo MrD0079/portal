@@ -1,0 +1,32 @@
+<h2>Загрузка сканкопий реестра накладных на бонусную продукцию (размер одного файла - не более 3 MВ)</h2>
+
+
+<p>
+<input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+Загрузить файл с реестром <input type=file name=new_fn>
+
+Сумма к компенсации дистрибутору согласно данному реестру, {$valuta} <input class="number" name=new[bonus]>
+
+<input type=submit name=save id=save value="Добавить">
+</p>
+ 
+
+ 
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td><a href="javascript:void(0)" onclick="javascript:form_tp.submit()">[x]</a></td>
+		<td>Название файла-сканкопии</td>
+		<td>Сумма к компенсации дистрибутору согласно данному реестру, {$valuta}</td>
+		<td>Подтверждено ВСТМ</td>
+		<td>Комментарий ВСТМ</td>
+	</tr>
+	{foreach key=file_list_key item=file_list_item from=$file_list name=file_list}
+	<tr style="text-align:center"   bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td><input {if $file_list_item.ok_traid eq 1}disabled{/if} type=checkbox name=del_file[{$file_list_item.id}]></td>
+		<td><a target=_blank href="a13_pk_files/{$file_list_item.tn}/{$file_list_item.fn}">{$file_list_item.fn}</a></td>
+		<td style="text-align:right">{$file_list_item.bonus|default:0|num:2}</td>
+		<td {if $file_list_item.ok_traid eq '1'}bgcolor="#00ff00"{/if}>{if $file_list_item.ok_traid eq '1'}да{/if}{if $file_list_item.ok_traid eq '0'}нет{/if}</td>
+		<td style="text-align:left">{$file_list_item.text_traid}</td>
+	</tr>
+	{/foreach}
+</table>

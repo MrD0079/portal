@@ -1,0 +1,213 @@
+<h1>Стандарт ТО - статистика</h1>
+
+{if not $smarty.request.print}
+
+	<form target="_self" method="POST" name=form_report id=form_report>
+	<p>
+	Дата
+	с
+	<input id=sd name=sd class=datepicker value='{$smarty.request.sd}'>
+	по
+	<input id=ed name=ed class=datepicker value='{$smarty.request.ed}'>
+	</p>
+
+	{if $is_ts neq 1 and $is_eta neq 1}
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+		</p>
+		<p>
+		По региону:
+		<select name=region_list id=region_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$region_list}
+			<option value="{$item.region_name}">{$item.region_name}</option>
+			{/foreach}
+		</select>
+		<script>$("#region_list option[value='{$smarty.request.region_list}']").prop('selected', true);</script>
+		</p>
+	{/if}
+	{if $is_eta neq 1}
+		<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+		</p>
+	{/if}
+	<p>
+	<table border=0>
+		<tr>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=1>все</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=2>есть фото</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=3>нет фото</td>
+		</tr>
+		<script>$("input[name=ok_photo][value={$smarty.request.ok_photo}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=1>все</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=2>был визит</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=3>не было визита</td>
+		</tr>
+		<script>$("input[name=ok_visit][value={$smarty.request.ok_visit}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_ts" name="ok_ts" value=1>все</td>
+			<td><input type=radio id="ok_ts" name="ok_ts" value=2>проверил ТС</td>
+			<td><input type=radio id="ok_ts" name="ok_ts" value=3>не проверил ТС</td>
+		</tr>
+		<script>$("input[name=ok_ts][value={$smarty.request.ok_ts}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_auditor" name="ok_auditor" value=1>все</td>
+			<td><input type=radio id="ok_auditor" name="ok_auditor" value=2>проверил аудитор</td>
+			<td><input type=radio id="ok_auditor" name="ok_auditor" value=3>не проверил аудитор</td>
+		</tr>
+		<script>$("input[name=ok_auditor][value={$smarty.request.ok_auditor}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="st_ts" name="st_ts" value=1>все</td>
+			<td><input type=radio id="st_ts" name="st_ts" value=2>соответствует стандарту - ТС</td>
+			<td><input type=radio id="st_ts" name="st_ts" value=3>не соответствует стандарту - ТС</td>
+		</tr>
+		<script>$("input[name=st_ts][value={$smarty.request.st_ts}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="st_auditor" name="st_auditor" value=1>все</td>
+			<td><input type=radio id="st_auditor" name="st_auditor" value=2>соответствует стандарту - аудитор</td>
+			<td><input type=radio id="st_auditor" name="st_auditor" value=3>не соответствует стандарту - аудитор</td>
+		</tr>
+		<script>$("input[name=st_auditor][value={$smarty.request.st_auditor}]").attr('checked',true);</script>
+	</table>
+	</p>
+	<p>
+	<table border=0>
+		<tr>
+			<td><input type=radio id="by_who" name="by_who" value='eta'>по ЭТА</td>
+			<td><input type=radio id="by_who" name="by_who" value='ts'>по ТС</td>
+			<td><input type=radio id="by_who" name="by_who" value='tm'>по ТМ</td>
+		</tr>
+		<script>$("input[name=by_who][value={$smarty.request.by_who}]").attr('checked',true);</script>
+	</table>
+	</p>
+	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+
+	<p><a href="?action=a14to_stat&print=1&excel=1&generate=1&filename=Стандарт ТО - статистика">Экспорт в Excel</a></p>
+	<input type=hidden name=generate value="Выбрать">
+{/if}
+
+<table style="text-align: center;" border=1>
+<tbody>
+<tr style="font-weight: bold;">
+<td colspan=4>ИТОГО</td>
+<td>{$tt.tp_cnt}</td>
+<td>{$tt2.tp_cnt}</td>
+<td>{$tt.visit_cnt}</td>
+<td>{$tt1.stelag}</td>
+<td>{$tt1.tumb}</td>
+<td>{$tt1.sto_total}</td>
+<td>{$tt1.photo_plan}</td>
+<td>{$tt1.photo_fakt}</td>
+<td>{$tt1.photo_perc|num:2}</td>
+<td>{$tt1.ts1}</td>
+<td>{$tt1.auditor1}</td>
+<td style="font-weight: bold;">{$tt1.perc_ts|num:2}</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$tt1.perc_auditor|num:2}</td>
+<td>{$tt1.tsnull}</td>
+<td>{$tt1.auditornull}</td>
+<td>{$tt2.value|num:2}</td>
+<td>{$tt2.perc_pokr_sto|num:2}</td>
+</tr>
+{foreach key=k item=i from=$d name=d}
+{if $smarty.foreach.d.iteration%20 eq 1}
+<tr style="font-weight: bold;">
+<td>ФИО ЭТА</td>
+<td>ФИО ТС</td>
+<td>ФИО ТМ</td>
+<td>Регион</td>
+<td>Всего ТП с СТО по маршруту</td>
+<td>Уникальных ТП с СТО</td>
+<td>Совершено визитов</td>
+<td>Стеллажи</td>
+<td>Витрины</td>
+<td>ИТОГО СТО</td>
+<td>Фото ПЛАН</td>
+<td>Фото ФАКТ</td>
+<td>Фото %</td>
+<td>Стандарт ТО - ТС</td>
+<td>Стандарт ТО - аудит</td>
+<td style="font-weight: bold;">% ТО со стандартом ТС</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">% ТО со стандартом аудит</td>
+<td>Не проверено - ТС</td>
+<td>Не проверено - аудит</td>
+<td>План АКБ</td>
+<td>% покрытия СТО</td>
+</tr>
+{/if}
+<tr>
+<td style="text-align: left;"><nobr>{$i.t.fio_eta}</nobr></td>
+<td style="text-align: left;"><nobr>{$i.t.fio_ts}</nobr></td>
+<td style="text-align: left;"><nobr>{$i.t.parent_fio}</nobr></td>
+<td>{$i.t.region_name}</td>
+<td>{$i.t.tp_cnt}</td>
+<td>{$i.t2.tp_kod_cnt}</td>
+<td>{$i.t.visit_cnt}</td>
+<td>{$i.t1.stelag}</td>
+<td>{$i.t1.tumb}</td>
+<td>{$i.t1.sto_total}</td>
+<td>{$i.t1.photo_plan}</td>
+<td>{$i.t1.photo_fakt}</td>
+<td>{$i.t1.photo_perc|num:2}</td>
+<td>{$i.t1.ts1}</td>
+<td>{$i.t1.auditor1}</td>
+<td style="font-weight: bold;">{$i.t1.perc_ts|num:2}</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$i.t1.perc_auditor|num:2}</td>
+<td>{$i.t1.tsnull}</td>
+<td>{$i.t1.auditornull}</td>
+<td>{$i.t2.value|num:2}</td>
+<td>{$i.t2.perc_pokr_sto|num:2}</td>
+</tr>
+{/foreach}
+<tr style="font-weight: bold;">
+<td colspan=4>ИТОГО</td>
+<td>{$tt.tp_cnt}</td>
+<td>{$tt2.tp_cnt}</td>
+<td>{$tt.visit_cnt}</td>
+<td>{$tt1.stelag}</td>
+<td>{$tt1.tumb}</td>
+<td>{$tt1.sto_total}</td>
+<td>{$tt1.photo_plan}</td>
+<td>{$tt1.photo_fakt}</td>
+<td>{$tt1.photo_perc|num:2}</td>
+<td>{$tt1.ts1}</td>
+<td>{$tt1.auditor1}</td>
+<td style="font-weight: bold;">{$tt1.perc_ts|num:2}</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$tt1.perc_auditor|num:2}</td>
+<td>{$tt1.tsnull}</td>
+<td>{$tt1.auditornull}</td>
+<td>{$tt2.value|num:2}</td>
+<td>{$tt2.perc_pokr_sto|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+{if not $smarty.request.print}
+</form>
+{/if}

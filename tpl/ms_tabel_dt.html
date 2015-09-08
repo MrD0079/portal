@@ -1,0 +1,38 @@
+<p id=ok_nmms>
+{if not $smarty.request.print and $is_nmms}
+	<input type=checkbox {$disabled} {if $ok_nmms}checked{/if} onChange="save_tabel_dt('{$smarty.request.dates_list2}','ok_nmms',this.checked?1:0)">
+{/if}
+{if $ok_nmms}
+Месяц закрыт для изменений НМ МС
+{$ok_nmms_lu}
+{/if}
+</p>
+
+{if not $smarty.request.print}
+
+<script>
+{literal}
+
+function save_tabel_dt(dt,field,val)
+{
+$('#ok_nmms').css('background-color','red');
+var fd = new FormData();
+fd.append('dt',  dt);
+fd.append('field',  field);
+fd.append('val',  val);
+$.ajax({
+  type: 'POST',
+  url: '?action=ms_tabel_save_dt&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+    $('#ok_nmms').css('background-color','white');
+  }
+});
+}
+
+{/literal}
+</script>
+
+{/if}

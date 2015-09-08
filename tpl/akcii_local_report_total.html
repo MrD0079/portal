@@ -1,0 +1,16 @@
+<table style="text-align: left; " cellpadding="2" cellspacing="0" border="1">
+    <tr>
+      <td style="vertical-align: top; text-align: center;">всего ТП</td>
+      <td style="vertical-align: top; text-align: center;">ТП приняло участие</td>
+      <td style="vertical-align: top; text-align: center;">Продажи ТП за месяц, {$valuta}</td>
+      <td style="vertical-align: top; text-align: center;">Сумма бонуса, {$valuta}</td>
+      <td style="vertical-align: top; text-align: center;">Затраты, %</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">{$total.c}</td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">{$total.selected}</td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">{$total.summa|num:3}</td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">{$total.bonus_sum|num:3}</td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">{$total.zat|num:2}</td>
+    </tr>
+</table>

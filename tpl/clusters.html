@@ -1,0 +1,93 @@
+<h3>Кластеры</h3>
+
+<div id=detail_0></div>
+
+{literal}
+<script>
+function add_cluster(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('new_cluster_name', $('#new_cluster_name_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=clusters_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tclusters_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+function save_cluster(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=clusters_save&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function del_cluster(id)
+{
+save_cluster(id,'id',0);
+$('#cluster_'+id).remove();
+}
+function show_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=clusters_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+$(function() {show_items(0);});
+function show_fils_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=clusters_fils_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+function save_cluster_fils(id,parent,val)
+{
+	$('#d_'+id+'_'+parent).css('background-color','red');
+	$('#t_'+id+'_'+parent).load('?action=clusters_fils_save&nohead=1',
+	{
+		id: id,
+		parent: parent,
+		val: val
+	},
+	function() {
+	val==1?$('#d_'+id+'_'+parent).css('background-color','rgb(153, 255, 153)'):$('#d_'+id+'_'+parent).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

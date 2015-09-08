@@ -1,0 +1,1 @@
+select * from merch_spec_body where head_id=:head_id order by sort

@@ -1,0 +1,63 @@
+<h1>Списки</h1>
+
+<div id=detail_0></div>
+
+{literal}
+<script>
+function add_list(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('new_list_name', $('#new_list_name_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=lists_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tlists_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+function save_list(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=lists_save&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function del_list(id)
+{
+save_list(id,'id',0);
+$('#list_'+id).remove();
+}
+function show_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=lists_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+$(function() {show_items(0);});
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

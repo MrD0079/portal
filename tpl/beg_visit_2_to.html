@@ -1,0 +1,107 @@
+<div id=ok style="display: inline;"></div>
+
+<table style="text-align: left;" border="1">
+	<tr style="text-align: center;">
+		<td>Торговое<br>оборудование</td>
+		<td>Наличие<br>в ТП</td>
+		<td>Наличие<br>и формат<br>топера "АВК"</td>
+		<td>Наличие<br>продукции<br>конкурентов<br>на ТО</td>
+		<td>"Рошен"<br>наличие ТО<br>в ТП</td>
+		<td>"Конти"<br>наличие ТО<br>в ТП</td>
+		<td>"Другие"<br>наличие ТО<br>в ТП</td>
+		<td>Фото</td>
+		<td>Комментарии</td>
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+	<tr>
+		<td>{$i.name}</td>
+		<td><input id="ex_tp_{$i.to_id}" onChange="save_to({$smarty.request.head},'{$i.to_id}','ex_tp',this.value);" size="10" value="{$i.ex_tp}" class="number_int"></td>
+		<td><input id="ex_topavk_{$i.to_id}" onChange="save_to({$smarty.request.head},'{$i.to_id}','ex_topavk',this.value);" size="50" value="{$i.ex_topavk}"></td>
+		<td style="text-align:center" id="ex_konkto_{$i.to_id}">
+			<input
+			type="checkbox"
+			{if $i.ex_konkto}checked{/if}
+			onClick="
+			save_to({$smarty.request.head},'{$i.to_id}','ex_konkto',this.checked?1:0);
+			">
+		</td>
+		<td><input id="ex_roshen_{$i.to_id}" onChange="save_to({$smarty.request.head},'{$i.to_id}','ex_roshen',this.value);" size="10" value="{$i.ex_roshen}" class="number_int"></td>
+		<td><input id="ex_konti_{$i.to_id}" onChange="save_to({$smarty.request.head},'{$i.to_id}','ex_konti',this.value);" size="10" value="{$i.ex_konti}" class="number_int"></td>
+		<td><input id="ex_other_{$i.to_id}" onChange="save_to({$smarty.request.head},'{$i.to_id}','ex_other',this.value);" size="10" value="{$i.ex_other}" class="number_int"></td>
+		<td id="td_{$i.to_id}">
+			<input type=file name="files_{$i.to_id}[]" id="files_{$i.to_id}" multiple>
+			<a href="javascript:void(0);" onClick="send_file({$i.to_id},{$smarty.request.head});" class="send_file_button">Добавить фото</a>
+			<br>
+			<div id="files_list_{$i.to_id}" style="display: inline;"></div>
+		</td>
+		<td><input id="comments_{$i.to_id}" onChange="save_to({$smarty.request.head},'{$i.to_id}','comments',this.value);" size="50" value="{$i.comments}"></td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight: bold;">
+		<td>ИТОГО</td>
+		<td style="text-align:center"><div id="total_to">0</div></td>
+	</tr>
+</table>
+
+
+
+{literal}
+<script>
+function save_to(head,to_id,field,val)
+{
+	$('#'+field+'_'+to_id).css('background-color','red');
+	$('#ok').load('?action=beg_visit_2_to_save&nohead=1',
+	{
+		head: head,
+		to_id: to_id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#'+field+'_'+to_id).css('background-color','white');
+	});
+	
+}
+
+
+function send_file(to_id,head)
+{
+$('#td_'+to_id).css('background-color','red');
+//$('#files_'+to_id).attr('disabled',true);
+//$('.send_file_button').attr('disabled',true);
+var fd = new FormData();
+fd.append('to_id', to_id);
+fd.append('head', head);
+//fd.append('img', $('#files_'+id)[0].files[0]);
+jQuery.each($('#files_'+to_id)[0].files, function(i, file) {
+fd.append('img['+i+']', file);
+});
+$.ajax({
+  type: 'POST',
+  url: '?action=beg_visit_2_to_f_save&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  /*contentType:attr( "enctype", "multipart/form-data" ),*/
+  /*contentType: "multipart/form-data",*/
+  /*dataType: "json",*/
+  success: function(data) {
+    $('#files_list_'+to_id).html(data);
+$('#td_'+to_id).css('background-color','white');
+//$('#files_'+to_id).attr('disabled',false);
+//    console.log(data);
+  },
+  error: function(data) {
+    $('#files_list_'+to_id).html(data);
+$('#td_'+to_id).css('background-color','white');
+//$('#files_'+to_id).attr('disabled',false);
+//$('.send_file_button').attr('disabled',false);
+//    console.log(data);
+  }
+});
+}
+
+$('.send_file_button').click();
+
+</script>
+{/literal}

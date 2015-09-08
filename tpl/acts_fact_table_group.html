@@ -1,0 +1,78 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold">
+	<td rowspan=2 style="text-align: center;">№ счета</td>
+	<td rowspan=2 style="text-align: center;">Дата счета</td>
+	<td rowspan=2 style="text-align: center;">Сумма счета<br>(выставленная),<br>тыс.{$valuta}.</td>
+	<td rowspan=2 style="text-align: center;">Сеть</td>
+	<td rowspan=2 style="text-align: center;">ФИО РМ КК </td>
+	<td rowspan=2 style="text-align: center;">ФИО МКК </td>
+	<td colspan=5 style="text-align: center;">Статьи затрат</td>
+	<td rowspan=2 style="text-align: center;">Плательщик</td>
+	<td rowspan=2 style="text-align: center;">Месяц проведения акта</td>
+	<td rowspan=2 style="text-align: center;">Сумма по акту, тыс.{$valuta}.</td>
+</tr>
+<tr style="font-weight:bold;text-align: center;">
+	<td>Месяц / год услуги</td>
+	<td>Наименование группы</td>
+	<td>Статья затрат</td>
+	<td>Количество единиц</td>
+	<td>Итоговая сумма, {$valuta}</td>
+</tr>
+{foreach key=key item=item from=$invoice name=invoice}
+	{cycle assign=bgcolor values="#ccffff,#ffffcc"}
+	{foreach key=key1 item=item1 from=$item.detail name=detail}
+	{/foreach}
+	<tr bgcolor="{$bgcolor}">
+		<td rowspan={$smarty.foreach.detail.total+1} style="text-align: center;">{$item.num}</td>
+		<td rowspan={$smarty.foreach.detail.total+1}>{$item.data_t}</td>
+		<td rowspan={$smarty.foreach.detail.total+1} style="text-align:right">{$item.summa|default:0|num:3}</td>
+		<td rowspan={$smarty.foreach.detail.total+1}>{$item.net_name}</td>
+		<td rowspan={$smarty.foreach.detail.total+1}>{$item.rmkk}</td>
+		<td rowspan={$smarty.foreach.detail.total+1}>{$item.mkk}</td>
+		<td colspan=5></td>
+		<td rowspan={$smarty.foreach.detail.total+1}>{$item.payer_name}</td>
+		<td rowspan={$smarty.foreach.detail.total+1}>{$i.act_prov_month}
+			<select id=d_{$item.id}_act_prov_month onchange="save({$item.id},'act_prov_month',this.value);">
+			<option></option>
+			{foreach key=km item=im from=$month_list}
+				<option value="{$im.sd_c}">{$im.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#d_{$item.id}_act_prov_month').val("{$item.act_prov_month}");</script>
+		</td>
+		<td rowspan={$smarty.foreach.detail.total+1} style="text-align:right">
+			<input id=d_{$item.id}_act_sum class="number" value="{$item.act_sum}" onchange="save({$item.id},'act_sum',this.value);">
+		</td>
+	</tr>
+	{foreach key=key1 item=item1 from=$item.detail}
+	<tr bgcolor="{$bgcolor}">
+		<td>{$item1.month_name} {$item1.year}</td>
+		<td>{$item1.groupp}</td>
+		<td>{$item1.statya}</td>
+		<td style="text-align:right">{$item1.cnt|default:0|num:3}</td>
+		<td style="text-align:right">{$item1.total|default:0|num:3}</td>
+	</tr>
+	{/foreach}
+{/foreach}
+</tbody>
+</table>
+
+{literal}
+<script>
+function save(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=acts_fact&save=1&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+

@@ -1,0 +1,20 @@
+{foreach key=k item=i from=$tp_list}
+<input id=tp_{$i.tp_kod} type=checkbox {if $i.tp}checked{/if} value={$i.tp_kod} onClick="save_tp({$i.tp_kod},this.checked?1:0);">{$i.name}
+<div id=ok_{$i.tp_kod} style="display: inline;"></div>
+<br>
+{/foreach}
+
+
+{literal}
+<script>
+function save_tp(kod,val)
+{
+	$('#tp_'+kod).attr('disabled',true);
+	$('#ok_'+kod).load('?action=beg_routes_save_tp&nohead=1&dt='+$('#dt').val()+'&tp='+kod+'&val='+val,function() {
+		$('#tp_'+kod).attr('disabled',false);
+		load_days_list();
+	});
+	
+}
+</script>
+{/literal}

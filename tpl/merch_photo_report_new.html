@@ -1,0 +1,82 @@
+<h1>Выгрузка фотоотчета М-Сервис с {$smarty.request.dates_list1} по {$smarty.request.dates_list2}</h1>
+
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+<p>
+Дата
+с
+<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+по
+<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+</p>
+
+
+<p>
+Область
+<select name=oblast id=oblast>
+	<option value=0></option>
+	{foreach key=key item=item from=$oblast}
+	<option value="{$item.oblast}">{$item.oblast}</option>
+	{/foreach}
+</select>
+<script>$('#oblast option[value="{$smarty.request.oblast}"]').prop('selected', true);</script>
+</p>
+
+<p>
+Город
+<select name="city" id="city">
+	<option value=0></option>
+	{foreach key=key item=item from=$city}
+	<option value="{$item.city|escape}">{$item.city|escape}</option>
+	{/foreach}
+</select>
+<script>$('#city option[value="{$smarty.request.city}"]').prop('selected', true);</script>
+</p>
+
+<p>
+Сеть
+<select name=nets id=nets>
+	<option value=0></option>
+	{foreach key=key item=item from=$nets}
+	<option value="{$item.id_net}">{$item.net_name}</option>
+	{/foreach}
+</select>
+<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+</p>
+
+<p>
+Заказчик
+<select required name=agent id=agent>
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head_agents}
+	<option value="{$item.id}">{$item.name|escape}</option>
+	{/foreach}
+</select>
+<script>$('#agent option[value="{$smarty.request.agent}"]').prop('selected', true);</script>
+</p>
+
+<input type=submit name=select value="Сформировать архив">
+
+<br>
+<br>
+
+{/if}
+
+{if $archive and $smarty.request.agent neq 0 and $smarty.request.select}
+<a href="{$archive}">Скачать фотоархив</a>
+{else}
+При выбранных фильтрах нет данных для создания архива
+{/if}
+
+<br>
+<br>
+
+{if not $smarty.request.print}
+</form>
+{/if}

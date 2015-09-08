@@ -1,0 +1,108 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<div style="text-align: left; background-color:lightblue">
+<span style="font-weight: bold;">Фильтры</span>
+<table>
+<tbody>
+<tr>
+	<td>Год</td>
+	<td>
+		<select name=calendar_years id=calendar_years>
+			<option></option>
+			{foreach key=key item=item from=$calendar_years}
+			<option value={$item.y}>{$item.y}</option>
+			{/foreach}
+		</select>
+		<script>$('#calendar_years option[value={$smarty.request.calendar_years}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Месяц</td>
+	<td>
+		<select name="calendar_months" id="calendar_months">
+			<option value=0></option>
+			{foreach key=key item=item from=$calendar_months}
+			<option value={$item.my}>{$item.mt}</option>
+			{/foreach}
+		</select>
+		<script>$('#calendar_months option[value={$smarty.request.calendar_months}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Ответственный РМ КК</td>
+	<td>
+		<select name=tn_rmkk id=tn_rmkk>
+			<option value=0></option>
+			{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+			<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+			{/foreach}
+		</select>
+		<script>$('#tn_rmkk option[value={$smarty.request.tn_rmkk}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Ответственный МКК</td>
+	<td>
+		<select name=tn_mkk id=tn_mkk>
+			<option value=0></option>
+			{foreach key=mkk_key item=mkk_item from=$list_mkk}
+			<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+			{/foreach}
+		</select>
+		<script>$('#tn_mkk option[value={$smarty.request.tn_mkk}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Сеть</td>
+	<td>
+		<select name="nets" id="nets">
+			<option value=0></option>
+			{foreach key=key item=item from=$nets}
+				<option value={$item.id_net}>{$item.net_name}</option>
+			{/foreach}
+		</select>
+		<script>$('#nets option[value={$smarty.request.nets}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Плательщик</td>
+	<td>
+		<select name="payer" id="payer">
+			<option value=0></option>
+			{foreach key=key item=item from=$payer}
+				<option value={$item.id}>{$item.name}</option>
+			{/foreach}
+		</select>
+		<script>$('#payer option[value={$smarty.request.payer}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Формат</td>
+	<td>
+		<input checked="checked" name="format" id="format" value="0" type="radio"> краткий
+		<input name="format" id="format" value="1" type="radio"> развернутый
+		<script>$("input[name=format][value={$smarty.request.format}]").attr('checked',true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Подтверждено ФМ</td>
+	<td>
+		<input checked="checked" name="okfm" id="okfm" value="all" type="radio"> все
+		<input name="okfm" id="okfm" value="no" type="radio"> не подтверждено
+		<input name="okfm" id="okfm" value="ok" type="radio"> подтверждено
+		<script>$("input[name=okfm][value={$smarty.request.okfm}]").attr('checked',true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Подтверждено НМ КК</td>
+	<td>
+		<input checked="checked" name="oknmkk" id="oknmkk" value="all" type="radio"> все
+		<input name="oknmkk" id="oknmkk" value="no" type="radio"> не подтверждено
+		<input name="oknmkk" id="oknmkk" value="ok" type="radio"> подтверждено
+		<script>$("input[name=oknmkk][value={$smarty.request.oknmkk}]").attr('checked',true);</script>
+	</td>
+</tr>
+</tbody>
+</table>
+<input name="generate" value="Отобразить реестр" type="submit">
+</div>
+</form>

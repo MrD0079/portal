@@ -1,0 +1,80 @@
+<h1>Реестр уволенных сотрудников</h1>
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+Период с:  
+<input class="datepicker" name=sd id=sd>
+<script>$('#sd').val("{if $smarty.request.sd}{$smarty.request.sd}{else}{$smarty.request.month_list}{/if}");</script>
+<br>
+Период до:  
+<input class="datepicker" name=ed id=ed>
+<script>$('#ed').val("{if $smarty.request.ed}{$smarty.request.ed}{else}{$smarty.request.month_list}{/if}");</script>
+<br>
+
+По должности:
+<select name="pos" id="pos">
+<option value=0></option>
+{foreach key=key item=item from=$dolgn_list_all}
+<option value={$item.pos_id}>{$item.pos_name}</option>
+{/foreach}
+</select>
+<script>$('#pos option[value="{$smarty.request.pos}"]').prop('selected', true);</script>
+<br>
+
+
+
+Причина увольнения
+<select name="seat" id="seat">
+<option value=0></option>
+{foreach key=key item=item from=$seat}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+<script>$('#seat option[value="{$smarty.request.seat}"]').prop('selected', true);</script>
+<br>
+
+
+<input type=submit value="Отобразить реестр уволенных" name="generate">
+
+{if $smarty.request.generate}
+
+<table cellpadding=3 border=1>
+	<tr>
+		<td>Ф.И.О. уволенного сотрудника</td>
+		<td>Должность</td>
+		<td>Территория</td>
+		<td>Дата увольнения</td>
+		<td>Причина увольнения</td>
+		<td>ФИО, должность замещающего сотрудника</td>
+		<td>Условия увольнения</td>
+		<td>ФИО сотрудника, сделавшего заявку</td>
+		<td>Дата заявки</td>
+		<td>Дата подтверждения заявки</td>
+
+
+
+
+
+
+
+
+
+	</tr>
+	{foreach key=key1 item=item1 from=$free_staff}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$item1.fio}</td>
+		<td>{$item1.dolgn}</td>
+		<td></td>
+		<td>{$item1.datauvol}</td>
+		<td>{$item1.seat}</td>
+		<td>{$item1.fio_new}</td>
+		<td>{$item1.params}</td>
+		<td>{$item1.creator_name}</td>
+		<td>{$item1.created}</td>
+		<td>{$item1.accept_data}</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+</form>

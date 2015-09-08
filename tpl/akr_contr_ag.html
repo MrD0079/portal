@@ -1,0 +1,82 @@
+<h1>Контролеры от агенства</h1>
+
+
+
+{if not $smarty.request.print}
+
+<a href="?action=akr_contr_ag&print=1&excel=1&filename=Контролеры от агенства">Экспорт в Excel</a>
+
+<form target="_self" method="POST" name=form1 id=form1>
+<p><input type=submit name=add value="Добавить запись"></p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>Ф.И.О.</td>
+<td>почта</td>
+<td>телефон</td>
+</tr>
+<tr>
+<td><input required name=new[fio] size=30></td>
+<td><input required name=new[mail] size=30></td>
+<td><input required name=new[phone] size=20></td>
+</tr>
+</table>
+</form>
+<form target="_self" method="POST" name=form2 id=form2>
+<p><input type=submit name=save value="Сохранить"></p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>[x]</td>
+<td>Ф.И.О.</td>
+<td>почта</td>
+<td>телефон</td>
+<td>логин</td>
+<td>пароль</td>
+<td>супер</td>
+<td>
+<a href="javascript:void(0);" onclick="$('.send').attr('checked', 'checked');">выделить все</a>
+<br>
+<a href="javascript:void(0);" onclick="$('#form2').submit();">отправить пароль</a>
+</td>
+</tr>
+{foreach key=key item=item from=$akr_contr_ag}
+<tr>
+<td><input name=del[{$item.id}] type=checkbox></td>
+<td><input name=data[{$item.id}][fio] size=30 value="{$item.fio|escape}"></td>
+<td><input name=data[{$item.id}][mail] size=30 value="{$item.mail|escape}"></td>
+<td><input name=data[{$item.id}][phone] size=20 value="{$item.phone|escape}"></td>
+<td style="text-align:center">{$item.login}</td>
+<td style="text-align:center">{$item.password}</td>
+<td style="text-align:center"><input type=checkbox {if $item.is_super eq 1}checked{/if} onclick="$('#data_{$item.id}_is_super').val(this.checked?1:0)"><input type=hidden id=data_{$item.id}_is_super name=data[{$item.id}][is_super] value="{$item.is_super}"></td>
+<td style="text-align:center"><input class="send" name=send[{$item.id}][send] type=checkbox></td>
+<input type=hidden name=send[{$item.id}][fio] value="{$item.fio}">
+<input type=hidden name=send[{$item.id}][phone] value="{$item.phone}">
+<input type=hidden name=send[{$item.id}][login] value="{$item.login}">
+<input type=hidden name=send[{$item.id}][password] value="{$item.password}">
+</tr>
+{/foreach}
+</table>
+
+</form>
+{else}
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>Ф.И.О.</td>
+<td>почта</td>
+<td>телефон</td>
+<td>ИНН</td>
+<td>логин</td>
+<td>пароль</td>
+</tr>
+{foreach key=key item=item from=$akr_contr_ag}
+<tr>
+<td>{$item.fio|escape}</td>
+<td>{$item.mail|escape}</td>
+<td>{$item.phone|escape}</td>
+<td style="text-align:center">{$item.login}</td>
+<td style="text-align:center">{$item.password}</td>
+</tr>
+{/foreach}
+</table>
+
+{/if}

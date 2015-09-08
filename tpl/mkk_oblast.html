@@ -1,0 +1,33 @@
+<h1>Привязка МКК - Область</h1>
+<form name=form target=_self method=post>
+<table>
+<tr>
+<td style="text-align:left">
+
+{if $smarty.request.tn}
+
+<h2>{$fio_mkk}</h2>
+
+<table border=0>
+<tr style="font-weight:bold">
+<td>[+]</td>
+<td>Область</td>
+<td>[-]</td>
+</tr>
+{foreach key=key item=item from=$oblast_list}
+<tr>
+<td><input type=checkbox name=obl_add[] value="{$item.tz_oblast}" {if $item.tn}checked disabled{/if}></td>
+<td {if $item.tn}style="background-color:rgb(204,204,204)"{/if}>
+	<span title="Закрепленные супервайзеры:{foreach key=key1 item=item1 from=$mkk_oblast}{if $item1.oblast eq $item.tz_oblast}&#10;&#13;{$item1.name}{/if}{/foreach}">{$item.tz_oblast}</span>
+</td>
+<td><input type=checkbox name=obl_del[] value="{$item.tz_oblast}" {if not $item.tn}checked disabled{/if}></td>
+</tr>
+{/foreach}
+</table>
+<input type=submit name=save value=Сохранить>
+{/if}
+
+</td>
+</tr>
+</table>
+</form>

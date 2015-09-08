@@ -1,0 +1,125 @@
+<h1>Сводный отчет по работе Музеев шоколада</h1>
+
+
+
+{if not $smarty.request.print}
+
+<form name=form_zat id=form_zat target=_self method=post>
+
+<input type="hidden" name="form_submit">
+
+
+<p>
+Период:
+с
+<select name=sd id=sd>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#sd').val('{$smarty.request.sd}');</script>
+по
+<select name=ed id=ed>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#ed').val('{$smarty.request.ed}');</script>
+</p>
+
+
+<p>
+<input checked="checked" name="dataz" id="dataz" value="0" type="radio"> действующие
+<input name="dataz" id="dataz" value="1" type="radio"> все
+<input name="dataz" id="dataz" value="2" type="radio"> закрытые
+<script>$("input[name=dataz][value={$smarty.request.dataz}]").attr('checked',true);</script>
+</p>
+
+<p>
+<input type=submit name=generate value="Построить отчет">
+</p>
+
+<p>
+<a href="?action=mz_rep_svod&print=1&excel=1&filename=Сводный отчет по работе Музеев шоколада&generate=1">Экспорт в Excel</a>
+</p>
+
+
+</form>
+
+{/if}
+
+
+
+{if $smarty.request.generate}
+
+
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">Музей</td>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">Расходы (администратор), грн.</td>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">Расходы (спецсчет), грн.</td>
+      <td style="text-align: center; background-color: rgb(255, 255, 204); font-weight: bold;">Расходы ИТОГО, грн.</td>
+    {foreach key=k1 item=i1 from=$d1}
+      <td style="text-align: center; background-color: rgb(204, 255, 255);">{$k1}, грн</td>
+    {/foreach}
+      <td style="text-align: center; background-color: rgb(204, 255, 255); font-weight: bold;">Приходы ИТОГО, грн</td>
+      <td style="text-align: center; background-color: rgb(204, 204, 204);">Инвестиции, грн.</td>
+      <td style="text-align: center; background-color: rgb(204, 204, 204);">Переведено на спецсчет, грн.</td>
+      <td style="text-align: center; background-color: rgb(204, 204, 204);">Остаток денег в кассе на последнее число месяца, грн.</td>
+      <td style="text-align: center; background-color: rgb(255, 102, 102); font-weight: bold;">Контрольная сумма по деньгам, грн.</td>
+      <td style="text-align: center; background-color: rgb(153, 255, 153);">Поступление продукции для реализации, грн.</td>
+      <td style="text-align: center; background-color: rgb(153, 255, 153);">Поступление продукции для дегустации, грн.</td>
+      <td style="text-align: center; background-color: rgb(153, 255, 153); font-weight: bold;">Результаты инвентаризации, грн.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 255);">Валовая прибыль, грн.</td>
+      <td style="text-align: center; background-color: rgb(204, 204, 255);">Экономический эффект, грн.</td>
+      <td style="text-align: center; background-color: rgb(204, 204, 255); font-weight: bold;">Рентабельность, %</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153); font-weight: bold;">Посещаемость, чел.</td>
+    </tr>
+    {foreach key=k item=i from=$d}
+    <tr>
+      <td style="text-align:left; background-color: rgb(255, 255, 204);">{$i.head.name}</td>
+      <td style="text-align:right; background-color: rgb(255, 255, 204);">{$i.head.ras|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 255, 204);">{$i.head.rss|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 255, 204);">{$i.head.ras_rss|default:0|num:2}</td>
+    {foreach key=k1 item=i1 from=$i.data}
+      <td style="text-align:right; background-color: rgb(204, 255, 255);">{$i1.p_val|default:0|num:2}</td>
+    {/foreach}
+      <td style="text-align:right; background-color: rgb(204, 255, 255);">{$i.head.pri|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 204);">{$i.head.inv|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 204);">{$i.head.pds|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 204);">{$i.head.ld_ost|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 102, 102);">{$i.head.ksum|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(153, 255, 153);">{$i.head.ppr|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(153, 255, 153);">{$i.head.ppd|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(153, 255, 153);">{$i.head.invent|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 255);">{$i.head.nsv|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 255);">{$i.head.ek_ef|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 255);">{$i.head.rent|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.head.vis|default:0|num:2}</td>
+    </tr>
+    {/foreach}
+    <tr style="font-weight:bold">
+      <td style="text-align:left; background-color: rgb(255, 255, 204);">ИТОГО</td>
+      <td style="text-align:right; background-color: rgb(255, 255, 204);">{$dt.head.ras|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 255, 204);">{$dt.head.rss|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 255, 204);">{$dt.head.ras_rss|default:0|num:2}</td>
+    {foreach key=k1 item=i1 from=$dt.data}
+      <td style="text-align:right; background-color: rgb(204, 255, 255);">{$i1.p_val|default:0|num:2}</td>
+    {/foreach}
+      <td style="text-align:right; background-color: rgb(204, 255, 255);">{$dt.head.pri|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 204);">{$dt.head.inv|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 204);">{$dt.head.pds|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 204);">{$dt.head.ld_ost|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 102, 102);">{$dt.head.ksum|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(153, 255, 153);">{$dt.head.ppr|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(153, 255, 153);">{$dt.head.ppd|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(153, 255, 153);">{$dt.head.invent|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 255);">{$dt.head.nsv|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 255);">{$dt.head.ek_ef|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(204, 204, 255);">{$dt.head.rent|default:0|num:2}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$dt.head.vis|default:0|num:2}</td>
+    </tr>
+</table>
+
+{/if}

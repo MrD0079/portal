@@ -1,0 +1,77 @@
+<h1>Лог GPS</h1>
+<form target="_self" method="POST">
+
+
+<p>
+
+Дата
+с
+<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+по
+<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+
+
+</p>
+
+
+
+
+<input type=submit name="select" value="показать журнал">
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+{if $smarty.request.select}
+
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+  <tr align=center>
+    <td>dt</td>
+    <td>kod_ag</td>
+    <td>kod_tp</td>
+    <td>tp_name</td>
+    <td>time_in</td>
+    <td>time_out</td>
+    <td>kod_logger</td>
+  </tr>
+  {foreach key=key item=log from=$mr_gps_log}
+  <tr>
+    <td><nobr>{$log.dt}</nobr></td>
+    <td><nobr>{$log.kod_ag}</nobr></td>
+    <td><nobr>{$log.kod_tp}</nobr></td>
+    <td><nobr>{$log.tp_name}</nobr></td>
+    <td><nobr>{$log.time_in_c}</nobr></td>
+    <td><nobr>{$log.time_out_c}</nobr></td>
+    <td><nobr>{$log.kod_logger}</nobr></td>
+  </tr>
+  {/foreach}
+</table>
+
+
+
+
+{/if}
+
+
+
+
+
+
+
+</form>

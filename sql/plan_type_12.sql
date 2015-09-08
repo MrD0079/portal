@@ -1,0 +1,1 @@
+select * from nets_plan_type where id in (1,2) order by id

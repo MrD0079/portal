@@ -1,0 +1,67 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style=" text-align: center; font-weight: bold; background-color: rgb(255, 255, 204);"> ритерии</td>
+      <td style=" text-align: center; font-weight: bold; background-color: rgb(255, 255, 204);">—отрудник</td>
+      <td style=" text-align: center; font-weight: bold; background-color: rgb(255, 255, 204);">–уководитель - {$parent_fio}</td>
+      <td style=" text-align: center; font-weight: bold; background-color: rgb(255, 255, 204);">Ёксперты</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);"><a target=_blank href="?action=ocenka_report_self&emp_tn={$smarty.request.k.tn}&event={$smarty.request.k.y-1}">ќценка</a></td>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">{$ocenka_result.self_score_t|default:0|num:2}</td>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">{$ocenka_result.chief_score_t|default:0|num:2}</td>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">{$ocenka_result.exp_avg_score_t|default:0|num:2}</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">¬ыводы</td>
+      <td style="background-color: rgb(255, 255, 204);">
+		{foreach key=exp_comm_key item=exp_comm_item name=exp_comm from=$exp_comm}
+			{if $exp_comm_item.is_self}
+				{$exp_comm_item.comm}
+			{/if}
+		{/foreach}
+	</td>
+      <td style="background-color: rgb(255, 255, 204);">
+		{foreach key=exp_comm_key item=exp_comm_item name=exp_comm from=$exp_comm}
+			{if $exp_comm_item.is_chief}
+				{$exp_comm_item.comm}
+			{/if}
+		{/foreach}
+	</td>
+      <td style="background-color: rgb(255, 255, 204);">
+		{foreach key=exp_comm_key item=exp_comm_item name=exp_comm from=$exp_comm}
+			{if not $exp_comm_item.is_self and not $exp_comm_item.is_chief}
+				<b>{$smarty.foreach.exp_comm.iteration}. {$exp_comm_item.fio} -</b> {$exp_comm_item.comm}<br>
+			{/if}
+		{/foreach}
+	</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; background-color: rgb(255, 255, 204);">ќценка за тест</td>
+      <td colspan="3" rowspan="1" style="text-align: center; background-color: rgb(255, 255, 204);">{$ocenka_result.test_result|default:0|num:1}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold;" align="center">
+      <td colspan="5" rowspan="1" style="background-color: rgb(153, 255, 153);">–езультаты тренингов за последние 6 мес€цев</td>
+    </tr>
+{foreach key=k item=i from=$tr}
+    <tr>
+      <td style="background-color: rgb(153, 255, 153);">{$i.dt_start}</td>
+      <td style="background-color: rgb(153, 255, 153);">{$i.tr_fio}</td>
+      <td style="background-color: rgb(153, 255, 153);">{$i.name}</td>
+      <td style="background-color: rgb(153, 255, 153);">{$i.os}</td>
+      <td style="background-color: rgb(153, 255, 153);">
+{foreach key=k1 item=i1 from=$i.test}
+<nobr>{$i1.dt} - {$i1.ball} балл(ов) / {$i1.test_perc} %</nobr><br>
+{/foreach}
+	</td>
+    </tr>
+{/foreach}
+  </tbody>
+</table>

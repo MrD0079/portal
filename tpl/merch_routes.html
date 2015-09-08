@@ -1,0 +1,64 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<h1>Закрепление маршрута за сотрудниками</h1>
+Выберите месяц
+<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+{foreach key=key item=item from=$month_list}
+<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+<input value="Выбрать" name="select_month" type="submit"><br>
+<br>
+<input name="save" value="Сохранить" type="submit">
+<br>
+<table border=1 cellspacing=0 cellpadding=3>
+{foreach key=k item=i from=$d name=d}
+	<tr style="font-weight:bold">
+		<td>№ п/п</td>
+		<td>Выслать на СВ</td>
+		<td>ФИО СВ МС</td>
+		<td>№ п/п</td>
+		<td>Название маршрута</td>
+		<td>ФИО ответственного</td>
+		<td>Логин</td>
+		<td>Пароль</td>
+		<td>Обновить пароль</td>
+		<td>Учитывать в отчете GPS</td>
+	</tr>
+	<tr style="font-weight:bold">
+		<td rowspan={$i.head.c+1} style="text-align:center">{$smarty.foreach.d.iteration}</td>
+		<td rowspan={$i.head.c+1} style="text-align:center"><input type=checkbox name=mail[{$i.head.tn}]></td>
+		<td rowspan={$i.head.c+1} style="text-align:center">{$i.head.svms}</td>
+		<td colspan=6></td>
+	</tr>
+		{foreach key=k1 item=i1 from=$i.data name=i}
+		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<td style="text-align:center">{$smarty.foreach.i.iteration}</td>
+			<td style="text-align:center">{$i1.num}</td>
+			<td style="text-align:center">{$i1.fio_otv}</td>
+			<td style="text-align:center">{$i1.login}</td>
+			<td style="text-align:center">{$i1.password}</td>
+			<td style="text-align:center"><input type=checkbox name=pwd[{$i1.login}]></td>
+
+
+					<td>
+						<select name=gps[{$i1.id}] id=gps{$i1.id}>
+							<option value=1>да</option>
+							<option value=0>нет</option>
+						</select>
+						<script>$('#gps{$i1.id}').val({$i1.gps});</script>
+					</td>
+
+
+
+
+		</tr>
+		{/foreach}
+{/foreach}
+</table>
+<input name="save" value="Сохранить" type="submit">
+<br>
+</form>
+
+

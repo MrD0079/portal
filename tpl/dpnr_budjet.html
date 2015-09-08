@@ -1,0 +1,262 @@
+<h1>Бюджеты ДПНР</h1>
+
+{if not $smarty.request.print}
+
+<div id="ok" style="display: inline;"></div>
+
+<form target="_self" method="POST" name=form1 id=form1>
+<table style="text-align: left;" border=0>
+<tbody>
+<tr>
+<td>Рынок:
+			<select required name=market id=market>
+			<option></option>
+			{foreach key=key item=item from=$markets}
+				<option value="{$item.id}">{$item.name}</option>
+			{/foreach}
+			</select>
+			<script>$('#market').val({$smarty.request.market});</script>
+</td>
+<td>Месяц:
+			<select name=month_list id=month_list>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#month_list').val('{$smarty.request.month_list}');</script>
+</td>
+</tr>
+</tbody>
+</table>
+<p><input name="generate" value="Построить отчет" type="submit"><p>
+
+{if $market_enabled and not $head.ok_chief}
+<table style="text-align: left;" border=0>
+<tbody>
+<tr>
+<td><input name="copy" value="Скопировать плановые показатели из выбранного месяца" type="submit"></td>
+<td>
+			<select name=ml id=ml>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#ml').val('{$smarty.request.ml}');</script>
+</td>
+</tr>
+</tbody>
+</table>
+{/if}
+
+{/if}
+
+{if $smarty.request.generate}
+
+<table style="text-align: left;" border=0>
+<tbody>
+<tr>
+<td style=" text-align: right;">Подтверждение руководителя</td>
+<td>
+	{if $tn eq $head.chief_tn and not $smarty.request.print}
+	<select name="rukAccept" id=ok_chief onChange="
+		save('head',{$smarty.request.market},'{$smarty.request.month_list}','ok_chief',this.value, this);
+		save('head',{$smarty.request.market},'{$smarty.request.month_list}','ok_chief_fio','{$fio}', this);
+	">
+		<option value=0>нет</option>
+		<option value=1>да</option>
+	</select>
+	<script>$('#ok_chief option[value={$head.ok_chief}]').prop('selected', true);</script>
+	{else}
+		{$head.ok_chief_fio}
+		{$head.ok_chief_lu}
+	{/if}
+</td>
+</tr>
+<tr>
+<td style=" text-align: right;">Подтверждение ДОСП</td>
+<td>
+	{if $is_acceptor and not $smarty.request.print}
+	<select name="dospAccept" id=ok_dosp onChange="
+		save('head',{$smarty.request.market},'{$smarty.request.month_list}','ok_dosp',this.value, this);
+		save('head',{$smarty.request.market},'{$smarty.request.month_list}','ok_dosp_fio','{$fio}', this);
+	">
+		<option value=0>нет</option>
+		<option value=1>да</option>
+	</select>
+	<script>$('#ok_dosp option[value={$head.ok_dosp}]').prop('selected', true);</script>
+	{else}
+		{$head.ok_dosp_fio}
+		{$head.ok_dosp_lu}
+	{/if}
+</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Объем реализации и затраты</h3>
+
+<table style="text-align: left;" border=0>
+<tbody>
+<tr>
+<td style="font-weight:bold">Тонны</td>
+<td>План:
+	{if $market_enabled and not $head.ok_chief and not $smarty.request.print}
+	<input size="7" class="number" value="{$head.plan_weight}" onChange="save('head',{$smarty.request.market},'{$smarty.request.month_list}','plan_weight',this.value, this);">
+	{else}
+	{$head.plan_weight|num:2}
+	{/if}
+</td>
+<td>Факт:{$head.fakt_weight|num:2}</td>
+<td colspan="1" rowspan="1" style="  background-color: rgb(204, 255, 255); font-weight: bold;">Затраты на продвижение, %:</td>
+</tr>
+<tr>
+<td style="font-weight:bold">$</td>
+<td>План:
+	{if $market_enabled and not $head.ok_chief and not $smarty.request.print}
+	<input size="7" class="number" value="{$head.plan_sum}" onChange="save('head',{$smarty.request.market},'{$smarty.request.month_list}','plan_sum',this.value, this);">
+	{else}
+	{$head.plan_sum|num:2}
+	{/if}
+</td>
+<td>Факт:{$head.fakt_sum|num:2}</td>
+<td style="  background-color: rgb(204, 255, 255); font-weight: bold;">
+<b>План:</b>{$body.zat_plan|num:2}
+<b>Факт:</b>{$body.zat_fakt|num:2}
+</td>
+</tr>
+<tr>
+<td style="font-weight:bold">Евро</td>
+<td>План:
+	{if $market_enabled and not $head.ok_chief and not $smarty.request.print}
+	<input size="7" class="number" value="{$head.plan_sume}" onChange="save('head',{$smarty.request.market},'{$smarty.request.month_list}','plan_sume',this.value, this);">
+	{else}
+	{$head.plan_sume|num:2}
+	{/if}
+</td>
+<td>Факт:{$head.fakt_sume|num:2}</td>
+<td style="  background-color: rgb(204, 255, 255); font-weight: bold;">
+<b>План:</b>{$body.zat_plane|num:2}
+<b>Факт:</b>{$body.zat_fakte|num:2}
+</td>
+</tr>
+</tbody>
+</table>
+
+{if not $smarty.request.print}
+<p><a href="?action=dpnr_budjet&print=1&excel=1&generate=1&filename=Бюджеты ДПНР">Экспорт в Excel</a></p>
+{/if}
+
+<table style="text-align: left;" border=1>
+<tbody>
+{foreach key=k item=i from=$body.data}
+<tr>
+	<td>Наименование</td>
+	{foreach key=kc item=ic from=$body.columns}
+	<td colspan="2" rowspan="1" style=" ">{$ic}</td>
+	{/foreach}
+	<td>ИТОГО</td>
+</tr>
+<tr>
+	<td colspan="1" rowspan="2" style="  background-color: rgb(204, 204, 204); font-weight: bold;">{$i.spname}</td>
+	{foreach key=k1 item=i1 from=$i.columns}
+	<td style="  background-color: rgb(204, 204, 204); font-weight: bold;">План</td>
+	<td style="  background-color: rgb(204, 204, 204); font-weight: bold; text-align:right;">{$i1.plan|num:2}</td>
+	{/foreach}
+	<td style="  background-color: rgb(204, 204, 204); text-align:right;">{$i.plan|num:2}</td>
+</tr>
+<tr>
+	{foreach key=k1 item=i1 from=$i.columns}
+	<td style="  background-color: rgb(204, 204, 204); font-weight: bold;">Факт</td>
+	<td style="  background-color: rgb(204, 204, 204); font-weight: bold; text-align:right;">{$i1.fakt|num:2}</td>
+	{/foreach}
+	<td style=" background-color: rgb(204, 204, 204); text-align:right;">{$i.fakt|num:2}</td>
+</tr>
+
+{foreach key=k1 item=i1 from=$i.data}
+{cycle assign=bgcolor values="#ccffff,#ffffcc"}
+<tr bgcolor="{$bgcolor}">
+	<td colspan="1" rowspan="2" style="">{$i1.scname}</td>
+	{foreach key=k2 item=i2 from=$i1.columns}
+	<td>План:
+		{if $market_enabled and not $head.ok_chief and not $smarty.request.print}
+			<input size="7" class="number" value="{$i2.plan}"
+				onChange="save('body',{$smarty.request.market},'{$smarty.request.month_list}','plan',this.value, this, {$k1}, {$k2});"
+			>
+		{else}{$i2.plan|num:2}{/if}
+	</td>
+	<td colspan="1" rowspan="2" style=" ">
+		Коммент<br>
+		{if $market_enabled and not $smarty.request.print}
+			<textarea
+				onChange="save('body',{$smarty.request.market},'{$smarty.request.month_list}','comm',this.value, this, {$k1}, {$k2});"
+				cols=10
+				name="comm"
+			>{$i2.comm}</textarea>
+		{else}
+			{$i2.comm}
+		{/if}
+	</td>
+	{/foreach}
+	<td style=" text-align:right;">{$i1.plan|num:2}</td>
+</tr>
+<tr bgcolor="{$bgcolor}">
+	{foreach key=k2 item=i2 from=$i1.columns}
+	<td>Факт:
+		{if $market_enabled and not $smarty.request.print}
+			<input size="7" class="number" value="{$i2.fakt}"
+				onChange="save('body',{$smarty.request.market},'{$smarty.request.month_list}','fakt',this.value, this, {$k1}, {$k2});"
+			>
+		{else}{$i2.fakt|num:2}{/if}</td>
+	{/foreach}
+	<td style=" text-align:right;">{$i1.fakt|num:2}</td>
+</tr>
+{/foreach}
+
+{/foreach}
+
+<tr>
+	<td colspan="1" rowspan="2" style="vertical-align: middle; font-weight: bold;  background-color: rgb(255, 255, 204);">ИТОГО</td>
+	{foreach key=k item=i from=$body.total}
+	<td style="  background-color: rgb(255, 255, 204); font-weight: bold;">План</td>
+	<td style="  background-color: rgb(255, 255, 204); font-weight: bold; text-align:right;">{$i.plan|num:2}</td>
+	{/foreach}
+	<td style=" background-color: rgb(255, 255, 204); font-weight: bold; text-align:right; ">{$body.plan|num:2}</td>
+</tr>
+<tr>
+	{foreach key=k item=i from=$body.total}
+	<td style="  background-color: rgb(255, 255, 204); font-weight: bold;">Факт</td>
+	<td style="  background-color: rgb(255, 255, 204); font-weight: bold; text-align:right;">{$i.fakt|num:2}</td>
+	{/foreach}
+	<td style=" background-color: rgb(255, 255, 204); font-weight: bold; text-align:right; ">{$body.fakt|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+{/if}
+
+</form>
+
+{literal}
+<script>
+function save(table,market,dt,field,val,elem,k1,k2)
+{
+	//$('#d_'+id+'_'+field).css('background-color','red');
+	$(elem).css('background-color','red');
+	$('#ok').load('?action=dpnr_budjet_save&nohead=1',
+	{
+		table: table,
+		market: market,
+		dt: dt,
+		field: field,
+		val: val,
+		st: k1,
+		cmp: k2
+	},
+	function() {
+	//$('#d_'+id+'_'+field).css('background-color','white');
+	$(elem).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+

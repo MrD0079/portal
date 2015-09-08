@@ -1,0 +1,10 @@
+<select name=dyn_flt[{$smarty.request.id}][item] id="dyn_flt_{$smarty.request.subtype}_item">
+	<option></option>
+	{foreach key=key1 item=item1 from=$list}
+	<option value={$item1.id}>{$item1.name}</option>
+	{/foreach}
+</select>
+
+<script>
+	$('#dyn_flt_{$smarty.request.subtype}_item option[value={$smarty.request.item}]').prop('selected', true);
+</script>

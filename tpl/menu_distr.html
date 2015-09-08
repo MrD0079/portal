@@ -1,0 +1,44 @@
+
+			{if ($is_db or $has_child_db or $is_admin or $is_super or $is_do) and $cnt_kod neq 'nr'}
+
+			<li><a href="?action=distr_access">Доступ дистрибутора</a></li>
+
+			{/if}
+
+			{if $is_db or $has_child_db or $is_admin or $is_super or $is_do or $has_parent_db or $is_assist or $cnt_kod eq 'nr'}
+
+			<li><a href="?action=distr_prot">Протоколы встреч</a></li>
+			<li><a href="?action=distr_passport">Паспорта</a></li>
+
+			{/if}
+
+			{if ($is_traid or $is_traid_kk or $bud_admin or $is_admin or $is_super) and $cnt_kod neq 'nr'}
+
+			<li><a href="?action=clusters">Кластеры</a></li>
+
+			{/if}
+
+			{if ($is_admin or $is_do) and $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Админка</span></a>
+				<ul>
+					<li><a href="?action=distr_prot_conq">Контрольные вопросы</a></li>
+					<li><a href="?action=distr_prot_cat">Категории протоколов</a></li>
+					<li><a href="?action=distr_ownership">Форма собственности</a></li>
+					<li><a href="?action=distr_activity">Род деятельности</a></li>
+				</ul>
+			</li>
+
+			{/if}
+
+			{if ($is_admin or $is_super) and $cnt_kod neq 'nr'}
+
+			<li><a href="?action=bud_fil_passport_fill_perc">Процент заполнения паспортов дистрибьюторов</a></li>
+
+			{/if}
+
+			{if ($is_traid or $is_traid_kk or $is_admin) and $cnt_kod neq 'nr'}
+
+			<li><a href="?action=bud_fil_discount">Скидки дистрибуторов</a></li>
+
+			{/if}

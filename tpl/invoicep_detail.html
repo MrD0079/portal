@@ -1,0 +1,158 @@
+<h2>Привязать статьи к промо</h2>
+
+
+<form target="_self" method="POST" name=invoice_detail id=invoice_detail>
+
+
+<table cellpadding=5 border=0>
+	<tr style="font-weight:bold">
+		<td>Сеть<br>{$invoice.net_name}</td>
+		<td>
+			№ промо<br>
+			<input name="upd[num]" id="num">
+			<script>$('#num').val("{$invoice.num}");</script>
+		</td>
+		<td>Дата промо<br>{$invoice.data_t}</td>
+		<td>Сумма промо<br>{$invoice.summa|default:0|num:3}</td>
+		{if $is_fin_man or $is_admin}
+		<td>
+			Плательщик<br>
+			<select name="upd[payer]" id="payer">
+			{foreach key=key item=item from=$payer}
+			<option value={$item.id}>{$item.name}</option>
+			{/foreach}
+			</select>
+			<script>$('#payer option[value="{$invoice.payer}"]').prop('selected', true);</script>
+		</td>
+		<td>
+			Юр.лицо<br>
+			<select name="upd[urlic]" id="urlic"></select>
+			<script>
+			{literal}
+			$(document).ajaxComplete(function(){
+			{/literal}
+			$("#urlic").val({$invoice.urlic});
+			{literal}
+			});
+			{/literal}
+			{literal}
+			function ListLoad(val)
+			{
+				$("#urlic").load('?action=urlic_net_list&id_net='+val+'&nohead=1'); 
+			}
+			{/literal}
+			ListLoad({$invoice.id_net});
+			</script>
+		</td>
+		<td>
+			<input type=submit name="link" value="Сохранить изменения">
+		</td>
+		{/if}
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td>Период отображаемых статей затрат:</td>
+		<td>
+			с
+			<select name=sd id=sd>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#sd').val("{if $smarty.request.sd}{$smarty.request.sd}{else}{$smarty.request.month_list}{/if}");</script>
+		</td>
+		<td>
+			по
+			<select name=ed id=ed>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#ed').val("{if $smarty.request.ed}{$smarty.request.ed}{else}{$smarty.request.month_list}{/if}");</script>
+		</td>
+		<td><input type=submit name=save value="Отобразить статьи"></td>
+	</tr>
+</table>
+
+<hr>
+
+<h3>Подтвержденные статьи затрат для привязки к промо {$invoice.num} за выбранный период:</h3>
+	<table border=1 cellpadding=3 cellspacing=0>
+		<tr style="font-weight:bold">
+			<td>Год</td>
+			<td>Месяц</td>
+			<td>Формат оплаты</td>
+			<td>Наименование группы</td>
+			<td>Статья затрат</td>
+			<td>Описание активности</td>
+			<td>Форма оплаты</td>
+			<td>Кол-во единиц</td>
+			<td>Цена</td>
+			<td>Бонус,%</td>
+			<td>Итоговая сумма, тыс. {$valuta}</td>
+			<td>Не покрыто промо, тыс.{$valuta}.</td>
+			<td>Привязать услугу к промо</td>
+			<td>
+				Сумма, покрываемая промо, тыс.{$valuta}
+				<br>
+				(сумма привязанных статей /
+				<br>
+				сумма по данному столбцу)
+			</td>
+		</tr>
+		{foreach key=key item=item from=$invoice_detail name=invoice_detail}
+		{math assign="color" equation='x-y' x=1 y=$smarty.foreach.invoice_detail.iteration%2} 
+		<tr
+			{if $color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+			{if $color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+		>
+			<td>{$item.year}</td>
+			<td>{$item.month_name}</td>
+			<td>{$item.pay_format}</td>
+			<td>{$item.groupp}</td>
+			<td>{$item.statya}</td>
+			<td>{$item.descript}</td>
+			<td>{$item.pay_type}</td>
+			<td align=right>{$item.cnt|default:0|num:0}</td>
+			<td align=right>{$item.price|default:0|num:3}</td>
+			<td align=right>{$item.bonus|default:0|num:3}</td>
+			<td align=right>{$item.total|default:0|num:3}</td>
+			<td align=right>{$item.nocover|default:0|num:3}</td>
+			<td align=center {if $item.linked2invoice neq 0}style="background-color:rgb(51,255,51)"{/if}><input
+				{if $item.linked2invoice neq 0} checked {/if}
+				onclick="$('#ok1{$item.rid}').val(this.checked?1:0)"
+				type=checkbox name=st[] value="{$item.rid}">
+			</td>
+			<input type=hidden name=ok1[{$item.rid}] id=ok1{$item.rid}>
+			<td>
+				<input name=summa[{$item.rid}]
+				onChange="$('#ok1{$item.rid}').val(1)"
+				value="{$item.invoice_summa|default:$item.nocover}">
+			</td>
+		</tr>
+		{/foreach}
+		<tr>
+			<td colspan=7></td>
+			<td align=right>{$invoice_detail_total.cnt|default:0|num:0}</td>
+			<td align=right></td>
+			<td align=right>{$invoice_detail_total.bonus|default:0|num:3}</td>
+			<td align=right>{$invoice_detail_total.total|default:0|num:3}</td>
+			<td align=right>{$invoice_detail_total.nocover|default:0|num:3}</td>
+			<td></td>
+			<td align=right>
+				{$invoice_detail_total.invoice_summa|default:0|num:3}
+				/
+				{$invoice_detail_total.cover|default:0|num:3}
+			</td>
+		</tr>
+	</table>
+<br>
+
+<center>
+<input type=submit name="link" value="Привязать статьи / Сохранить изменения">
+</center>
+
+</form>
+<br>

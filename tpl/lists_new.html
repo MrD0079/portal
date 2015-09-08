@@ -1,0 +1,10 @@
+<tr id=list_{$id}>
+	<td>
+		<a href='javascript:void(0);' onClick="del_list({$id})">[x]</a>
+		<input id=d_{$id}_name size=50 value="{$name}" onChange="save_list({$id},'name',this.value);">
+		{if $smarty.request.id eq 0}
+		<a href='javascript:void(0);' onClick="show_items({$id})">Развернуть</a>
+		<div style="margin-left:50px" id=detail_{$id}></div>
+		{/if}
+	</td>
+</tr>

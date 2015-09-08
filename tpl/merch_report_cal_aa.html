@@ -1,0 +1,120 @@
+<h1>Акционные активности</h1>
+
+<script>
+{literal}
+
+function del_item(id)
+{
+	var fd = new FormData();
+	fd.append('id',  id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_cal_aa&del_item=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#tr_'+id).remove();
+		}
+	});
+
+}
+
+function get_item(id)
+{
+	//$('#td_'+field+key2).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_cal_aa&get_item=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			//$('#td_'+field+key2).css('background-color','white');
+			//$('#ok').html(data);
+			//field==='msg'?$('#chat').load('?action=kcm_chat&nohead=1&sd='+dt):null;
+			//$(''+data+'').insertAfter('#tr_'+coach);
+			//$('#tbl>tbody:last').append(''+data+'');
+			//alert(data);
+		}
+	});
+
+}
+
+function get_list()
+{
+	x=loadwait_show('tbl');
+	var fd = new FormData();
+	fd.append('list_ag_id',  $('#list_ag_id').val());
+	fd.append('list_dt',  $('input[name=list_dt]:checked').val());
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_cal_aa&get_list=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			loadwait_hide(x);
+			$('#tbl').html(''+data+'');
+		}
+	});
+
+}
+
+function add_item()
+{
+	var fd = new FormData();
+	fd.append('id',  $('#id').val());
+	var selectedIdsArray = $(".obl:checked").map(function(){return this.value;});
+	var selectedIdsStr = selectedIdsArray.get().toString();
+	fd.append('obl',  selectedIdsStr);
+	fd.append('dts',  $('#dts').val());
+	fd.append('dte',  $('#dte').val());
+	fd.append('ag_id',  $('#ag_id').val());
+	fd.append('h_city',  $('#h_city').val());
+	fd.append('id_net',  $('#id_net').val());
+	fd.append('text',  $('#text').val());
+	fd.append('tasks',  $('#tasks').val());
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_cal_aa&add_item=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#add_item').html(''+data+'');
+			get_list();
+		}
+	});
+}
+
+{/literal}
+</script>
+
+<div id=ok></div>
+<div id=add_item></div>
+<script>add_item();</script>
+<h3>Реестр активностей</h3>
+
+<p>
+Заказчик
+<select id=list_ag_id>
+<option value=0></option>
+{foreach key=key item=item from=$agents}
+<option value="{$item.id}">{$item.name}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+<input type=radio id="list_dt" name="list_dt" value=1 checked>Текущие
+<input type=radio id="list_dt" name="list_dt" value=2>Завершенные
+<input type=radio id="list_dt" name="list_dt" value=3>Все
+</p>
+
+
+<p><a href="javascript:void(0);" onclick="get_list();">Отобразить реестр</a></p>
+
+<div id=tbl></div>

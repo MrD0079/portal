@@ -1,0 +1,15 @@
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+	<tr style="text-align:center">
+		<td style="background-color: #F5E3BF"><b>Сотрудники в отпуске</b></td>
+	</tr>
+	<tr>
+		<td valign="top">
+			{foreach key=k item=i from=$in_vac1}
+			<font style="color:red;font-weight:bold">{$k}</font><br>
+			{foreach key=k1 item=i1 from=$i}
+			<b>{$i1.v_from} - {$i1.v_to}</b> - {$i1.fio}, {$i1.department_name} (и.о. - {$i1.replacement_fio}, тел.: {$i1.replacement_mob}, почта: {$i1.replacement_mail})<br />
+			{/foreach}
+			{/foreach}
+		</td>
+	</tr>
+</table>

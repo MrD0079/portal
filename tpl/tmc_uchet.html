@@ -1,0 +1,52 @@
+<h1>Учет ТМЦ</h1>
+
+<form action="index.php" method="POST" name=tmc_uchet id=tmc_uchet target=_self method=post enctype="multipart/form-data">
+<!-- onSubmit="fn_load_tmc_list();"-->
+<input type=hidden name="nohead" value="1">
+<input type=hidden name="action" value="tmc_uchet">
+
+
+	<p>
+		<select name=emp id=emp onChange="fn_load_tmc_list();">
+			<option></option>
+			{foreach key=key item=item from=$emp}
+			<option value="{$item.tn}">{$item.fio} - {$item.pos_name} {if $item.datauvol}- уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+	</p>
+
+	<p><div id="tmc_list" style="display: inline;"></div></p>
+
+
+
+</form>
+
+<div id="uploadOutput" style="display: inline;"></div>
+
+{literal}
+<script>
+
+function fn_load_tmc_list()
+{
+	x=loadwait_show('tmc_list');
+	$('#emp').val()?$('#tmc_list').load('?action=tmc_uchet_tmc_list&nohead=1&tn='+$('#emp').val(),function() {loadwait_hide(x);}):$('#tmc_list').text('');
+	return true;
+}
+
+$(document).ready(
+function()
+{
+	var options = {
+		target: '#uploadOutput',
+		complete: function(response)
+		{ 
+			fn_load_tmc_list();
+		}
+	};
+	$('#tmc_uchet').ajaxForm(options);
+	fn_load_tmc_list();
+}
+); 
+
+</script>
+{/literal}

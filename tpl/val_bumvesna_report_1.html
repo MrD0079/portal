@@ -1,0 +1,26 @@
+{if not $smarty.request.print}
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td style="vertical-align: top; text-align: center;">Количество ТП всего<br></td>
+		<td style="vertical-align: top; text-align: center;">Количество акционных накладных<br></td>
+		<td style="vertical-align: top; text-align: center;">Сумма продаж по акционным накладным, {$valuta}<br></td>
+		<td style="vertical-align: top; text-align: center;">Сумма продаж весовых конфет, {$valuta}<br></td>
+		<td style="vertical-align: top; text-align: center;">Сумма продаж весового печенья, {$valuta}<br></td>
+		<td style="vertical-align: top; text-align: center;">Подтверждено руководителем<br></td>
+		<td style="vertical-align: top; text-align: center;">Сумма бонуса, {$valuta}<br></td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(255, 255, 204);">Сумма по реестрам, подтвержденным ВСТМ, {$valuta}<br></td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(204, 255, 255); font-weight: bold;">Затраты на акцию, %<br></td>
+	</tr>
+	<tr style="text-align:right">
+		<td>{$itogi.cnt_tp|default:0}</td>
+		<td>{$itogi.cnt_nakl|default:0}</td>
+		<td>{$itogi.summa|default:0|num:2}</td>
+		<td>{$itogi.summshok|default:0|num:2}</td>
+		<td>{$itogi.summvespech|default:0|num:2}</td>
+		<td>{$itogi.ok_chief|default:0|num:0}<br></td>
+		<td>{$itogi.bonus_sum|default:0|num:2}</td>
+		<td style="background-color: rgb(255, 255, 204);">{$itogi.files_bonus|default:0|num:2}</td>
+		<td style="background-color: rgb(204, 255, 255); font-weight: bold;">{$itogi.zat|default:0|num:2}</td>
+	</tr>
+</table>
+{/if}

@@ -1,0 +1,62 @@
+<h1>Справочник для формы ОС ДЦ (блоки/компетенции/индикаторы)</h1>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<input type=submit value="сохранить">
+
+<br>
+<br>
+
+<nobr>
+Новый блок <input name=new[os_spr][0][name] size=60>
+порядок <input name=new[os_spr][0][sort] class="number_int" size=5>
+</nobr>
+<input type=hidden name=new[os_spr][0][parent] value=0>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>[x]</td>
+		<td>
+			блок
+			<br>
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			компетенция
+			<br>
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			индикатор
+		</td>
+		<td>добавление новых значений</td>
+	</tr>
+	{foreach key=key item=item from=$os_spr}
+	<tr>
+		<td>
+			<input type=checkbox name=delete[os_spr][{$item.id}] value="{$item.path|escape}">
+		</td>
+		<td>
+{if $item.level eq 1}блок{/if}
+{if $item.level eq 2}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp компетенция{/if}
+{if $item.level eq 3}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp индикатор{/if}
+			<nobr>
+			<input name=update[os_spr][{$item.id}][name] size=60 value="{$item.name|escape}">
+			<input name=update[os_spr][{$item.id}][sort] size=5 class="number_int" value="{$item.sort}">
+			</nobr>
+		</td>
+		{if $item.level neq 3}
+		<td>
+			<nobr>
+			Добавить {if $item.level eq 1}компетенцию{/if}{if $item.level eq 2}индикатор{/if}
+			<input name=new[os_spr][{$item.id}][name] size=60>
+			порядок
+			<input name=new[os_spr][{$item.id}][sort] class="number_int" size=5>
+			</nobr>
+			<input type=hidden name=new[os_spr][{$item.id}][parent] value={$item.id}>
+		</td>
+		{/if}
+	</tr>
+	{/foreach}
+</table>
+
+</form>

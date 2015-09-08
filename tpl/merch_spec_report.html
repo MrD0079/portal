@@ -1,0 +1,145 @@
+{if not $smarty.request.print}
+
+<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dt}&spec_id={$smarty.request.spec_id}&print=1">для печати</a>
+<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dt}&spec_id={$smarty.request.spec_id}&print=1&excel=1&filename=Специя {$smarty.request.dt} {$ag_name} {$net_name} {$tz_name} {$tz_address}">экспорт в Excel</a>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+{/if}
+<h1>Отчет по спецификации</h1>
+
+Дата: <b>{$smarty.request.dt}</b>
+&nbsp&nbsp&nbsp
+Заказчик: <b>{$ag_name}</b>
+&nbsp&nbsp&nbsp
+Сеть: <b>{$net_name}</b>
+&nbsp&nbsp&nbsp
+ТЗ: <b>{$tz_name}</b>
+&nbsp&nbsp&nbsp
+Адрес ТЗ: <b>{$tz_address}</b>
+
+{if not $smarty.request.print}
+<br>
+<br>
+<input name="save" value="Сохранить" type="submit">
+<br>
+<br>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+<tr style="font-weight:bold">
+<td>№</td>
+<td>Артикул</td>
+<td>Название</td>
+<td>Марка</td>
+<td>Ед. измерения</td>
+<td>Вес, кг</td>
+<td>Код</td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields}
+<td>{$item1.text}</td>
+{/foreach}
+</tr>
+{foreach key=key item=item from=$merch_spec_report_body}
+<tr>
+<td style="text-align:right">{$item.sort}</td>
+<td>{$item.art}</td>
+<td>{$item.name}</td>
+<td>{$item.brand}</td>
+<td style="text-align:center">{$item.izm}</td>
+<td style="text-align:right">{$item.weight|num:2}</td>
+<td>{$item.kod}</td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields}
+<td>
+{assign var="field_name" value="`$item1.name`"}
+{if not $smarty.request.print}
+	{if $item1.tip eq 'float'}<input name=rb[{$item.id}][{$item1.name}] value="{$item.$field_name}" class="number3">{/if}
+	{if $item1.tip eq 'text'}<input name=rb[{$item.id}][{$item1.name}] value="{$item.$field_name|escape}">{/if}
+	{if $item1.tip eq 'bool'}
+	<input
+	onclick="$('#rb{$item.id}{$item1.name}').val(this.checked?1:0)"
+	{if $item.$field_name eq 1}checked{/if}
+	type="checkbox"
+	>
+	<input
+	type=hidden
+	name=rb[{$item.id}][{$item1.name}]
+	id="rb{$item.id}{$item1.name}"
+	value="{$item.$field_name}"
+	>
+	{/if}
+{else}
+	{if $item1.tip eq 'float'}{$item.$field_name}{/if}
+	{if $item1.tip eq 'text'}{$item.$field_name|escape}{/if}
+	{if $item1.tip eq 'bool'}{if $item.$field_name eq 1}да{/if}{/if}
+{/if}
+</td>
+{/foreach}
+</tr>
+{/foreach}
+<tr style="font-weight:bold">
+<td colspan=5></td>
+<td style="text-align:right">{$merch_spec_report_body_total.weight|num:2}</td>
+<td></td>
+
+{foreach key=key1 item=item1 from=$merch_spec_report_fields}
+<td style="text-align:right">
+{assign var="field_name" value="`$item1.name`"}
+{if $item1.tip eq 'float'}{$merch_spec_report_body_total.$field_name|num:2}{/if}
+{if $item1.tip eq 'bool'}{$merch_spec_report_body_total.$field_name|num:0}{/if}
+</td>
+{/foreach}
+
+
+
+</tr>
+</table>
+
+
+
+{if not $smarty.request.print}
+<br>
+<input name="save" value="Сохранить" type="submit">
+<br>
+
+
+
+<h3>Фотоотчет</h3>
+
+<table><tr><td>
+{foreach key=key item=item from=$file_list name=fl}
+{math assign="color" equation='y' y=$smarty.foreach.fl.iteration%7} 
+{if $color eq 1}<br>{/if}
+<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}/{$item.file}');">[X]</a>
+<div class="pics">
+	<a target=_blank href="{$item.path}/{$item.file}">
+		<img src="{$item.path}/{$item.file}" height=50px>
+	</a>
+	<img src="{$item.path}/{$item.file}" class="hov">
+</div>
+{/foreach}
+</td></tr></table>
+
+<!--<p>Загрузить файл с фотоотчетом <input name="files" type="file"></p>-->
+
+<p>Загрузить файл(ы) с фотоотчетом (можно выбрать сразу несколько файлов)</p>
+<p><input name="multiple_files[]" type="file" multiple></p>
+
+<br>
+<br>
+<input name="save" value="Сохранить" type="submit">
+<br>
+<br>
+
+
+</form>
+
+{literal}
+<script>
+function del_file(rid)
+{
+	$("#form1").append($('<input type=hidden name=del_file id=del_file value='+rid+'>'));
+	$("#form1").submit();
+}
+</script>
+{/literal}
+
+{/if}

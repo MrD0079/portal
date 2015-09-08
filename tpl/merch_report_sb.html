@@ -1,0 +1,97 @@
+<script>
+{literal}
+function ProductAdd(kodtp,id)
+{
+var fd = new FormData();
+fd.append('kodtp', kodtp);
+fd.append('id', id);
+$.ajax({
+	type: 'POST',
+	url: '?action=merch_report_sb_item&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+		$('#Products_'+kodtp+'>tbody:last').append(''+data+'');
+		
+	}
+});
+}
+function ProductDel(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+	type: 'POST',
+	url: '?action=merch_report_sb_item_del&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+		$('#Product'+id).remove();
+	}
+});
+}
+function ProductSave(id,field,val)
+{
+$('#val'+field+id).css('background-color','red');
+var fd = new FormData();
+fd.append('id', id);
+fd.append('field', field);
+fd.append('val', val);
+$.ajax({
+	type: 'POST',
+	url: '?action=merch_report_sb_item_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+		$('#val'+field+id).css('background-color','white');
+	}
+});
+}
+{/literal}
+</script>
+
+<table style="text-align: left;" border="1">
+	<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+		<td>Область / Сеть / Юридическое название ТЗ / Адрес ТЗ</td>
+		<td>
+			Продукты
+			<p style="color:red">продукт, кол-во, комментарий - обязательны для заполнения, если одно из полей - пустое, строка не попадет в отчет</p>
+		</td>
+		<td>Подтверждение КК</td>
+		<td>Подтверждение МС</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	<tr style="font-weight:bold">
+		<td>{$smarty.foreach.d.iteration}. {$i.tz_oblast} / {$i.net_name} / {$i.ur_tz_name} / {$i.tz_address}</td>
+		<td>
+			<a href="javascript:void(0);" onClick="ProductAdd({$i.kodtp},0);">добавить</a>
+			<table id=Products_{$i.kodtp} style="text-align: left;" border="1">
+				<tbody>
+				<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+					<td>[x]</td>
+					<td>Продукт</td>
+					<td>Количество</td>
+					<td>Коммент</td>
+					<td>Окончание срока годности</td>
+				</tr>
+				{foreach key=k1 item=i1 from=$i.products}
+					<script>ProductAdd({$i.kodtp},{$i1.id});</script>
+				{/foreach}
+				</tbody>
+			</table>
+
+		</td>
+		<td>
+			{$i.ok_kk_fio}
+			{$i.ok_kk_lu}
+		</td>
+		<td>
+			{$i.ok_ms_fio}
+			{$i.ok_ms_lu}
+		</td>
+	</tr>
+	{/foreach}
+</table>

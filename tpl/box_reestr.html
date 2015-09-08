@@ -1,0 +1,90 @@
+<h2>Реестр предложений ДП</h2>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
+
+<p>
+	период создания с/по
+	<input size=10 class="datepicker created" name=sd id=sd>
+	<input size=10 class="datepicker created" name=ed id=ed>
+	<script>
+		$('#sd').val('{$smarty.request.sd}');
+		$('#ed').val('{$smarty.request.ed}');
+	</script>
+</p>
+<p>
+	инициатор:
+	<select name=creator id=creator>
+		<option value=0></option>
+		{foreach key=key item=item from=$creator}
+		<option value={$item.tn}>{$item.fio}</option>
+		{/foreach}
+	</select>
+	<br>
+	<script>
+	$('#creator').val('{$smarty.request.creator}');
+	</script>
+</p>
+<p>
+	<input type="submit" name="select" id="select" value="Отобразить реестр">
+	{if $is_do}
+		<input type="submit" name="save" id="save" value="Сохранить">
+	{/if}
+</p>
+
+
+
+</form>
+
+{/if}
+
+{if $smarty.request.select}
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>инициатор</td>
+		<td>дата обращения</td>
+		<td>тема предложения</td>
+		<td>текст предложения</td>
+		<td>дата закрытия обсуждения</td>
+	</tr>
+	{foreach key=k item=i from=$box}
+	<tr>
+		<td>
+			{$i.head.creator_pos_name}
+			<br>
+			{$i.head.creator_department_name}
+			<br>
+			{$i.head.creator_fio}
+		</td>
+		<td>{$i.head.created}</td>
+		<td>{$i.head.subj}</td>
+		<td>
+			<table>
+				{foreach key=k1 item=i1 from=$i.chat}
+				<tr style="vertical-align:top">
+					<td>
+						<font style="color:red"><nobr>{$i1.lu}</nobr></font>
+					</td>
+					<td>
+						<font style="color:green">{$i1.who}</font>
+					</td>
+					<td>
+						<font style="color:blue">{$i1.text|nl2br}</font>
+					</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		<td>{$i.head.lu}</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+
+
+
+

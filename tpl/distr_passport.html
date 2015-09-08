@@ -1,0 +1,50 @@
+<h1>Паспорт дистрибутора</h1>
+
+<p>
+<form target="_self" method="POST" name=form1 id=form1>
+<select onchange="this.value>0?show_passport(this.value):$('#passport').html('');">
+<option></option>
+{foreach key=k item=i from=$da_di}
+<option value='{$i.id}'>{$i.name}</option>
+{/foreach}
+</select>
+</form>
+</p>
+
+
+<table><tr><td>
+<div style="display:inline" id=passport></div>
+</td></tr></table>
+
+
+<script>
+
+{if $is_assist}
+var x='';
+{else}
+var x='&print=1';
+{/if}
+
+{literal}
+
+function show_passport(id)
+{
+	$('#passport').html('');
+	var fd = new FormData();
+	fd.append('id', id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_fil_passport_get&nohead=1'+x,
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#passport').html(data);
+			
+		}
+	});
+}
+
+{/literal}
+</script>
+

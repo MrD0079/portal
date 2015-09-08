@@ -1,0 +1,30 @@
+<div style="height:100px;overflow-y:auto;">
+{foreach key=key item=item from=$os_ac_list_memb}
+<a href="javascript:void(0);" onclick="load_head_body({$item.id},'{$item.ie}',{$item.ac_id})">{$item.fio} ({$item.iet})</a><br>
+{/foreach}
+</div>
+
+
+{literal}
+<script>
+function load_head_body(id,ie,ac_id,resume,fio)
+{
+	$('#os_ac_head_body').html('');
+	$('#os_ac_head_body').load(
+		'?action=os_ac_head_body&nohead=1',
+		{
+			id: id,
+			ac_id: ac_id,
+			ie: ie
+		},
+		function() {}
+	);
+}
+</script>
+{/literal}
+
+{if $smarty.request.ac_id > 0}
+<script>
+load_head_body({$smarty.request.memb_id},'ext',{$smarty.request.ac_id});
+</script>
+{/if}

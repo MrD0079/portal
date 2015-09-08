@@ -1,0 +1,319 @@
+
+			{if not $is_eta}
+
+			<li><a href="javascript:void(0);"><span class="dir">Планы активности</span></a>
+			<ul>
+				<li><a href="?action=plan_activ">Мой план активности</a></li>
+				<li><a href="?action=my_slaves">Планы активности подчиненных</a></li>
+
+				{if $is_admin or $is_super}
+
+				<li><a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
+					<ul>
+						<li><a href="?action=log&prg=activ">Журнал посещений</a></li>
+						<li><a href="?action=plans">"Планы активности"</a></li>
+						<li><a href="?action=activ">"Виды активностей"</a></li>
+					</ul>
+				</li>
+
+				{/if}
+
+				<li><a href="?action=plan_activ_help">Инструкция</a></li>
+			</ul>
+			</li>
+			<li><a href="javascript:void(0);"><span class="dir">Подбор и найм</span></a>
+			<ul>
+				<li><a href="?action=new_staff">Добавить новичка</a></li>
+				<li><a href="?action=move_staff">Перевод сотрудника на другую должность</a></li>
+
+				{if not $is_eta}
+				<li><a href="javascript:void(0);"><span class="dir">Цикл собеседований</span></a>
+				<ul>
+					<li><a href="?action=iv_create">Новое собеседование</a></li>
+					<li><a href="?action=iv_accept">Проведенные собеседования</a></li>
+					<li><a href="?action=main">Поиск по базе кандидатов</a></li>
+				</ul>
+				</li>
+				{/if}
+
+				{if $is_admin or $is_super or $is_dc}
+
+				<li><a href="javascript:void(0);"><span class="dir">Ассессмент</span></a>
+				<ul>
+					<li><a href="files/ua/Pamyatka BT dlya provedeniya ATS.pdf">Памятка</a></li>
+					<li><a href="files/ua/Reglament assessment.pdf">Регламент</a></li>
+
+					{if $is_dc}
+
+					<li><a href="?action=ac_new">Создание заявки на проведение АЦ</a></li>
+
+					{/if}
+
+					<li><a href="?action=ac_accept">Согласование заявок на проведение АЦ</a></li>
+					<li><a href="?action=os_ac">ОС по участнику АЦ</a></li>
+					<li><a href="?action=ac_report">Отчет по АЦ</a></li>
+					<li><a href="?action=ac_test_report">Тестирование АЦ</a></li>
+				</ul>
+				</li>
+
+				{/if}
+
+			</ul>
+			</li>
+
+			{if $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Адаптация</span></a>
+			<ul>
+				<li><a href="?action=prob_plan">Мой план адаптации</a></li>
+				<li><a href="?action=probs_my&ad_completed=2">Мои новые сотрудники</a></li>
+
+				{if $is_admin}
+
+				<li><a href="?action=prob_new">Создать адаптационную программу</a></li>
+
+				{/if}
+
+				{if $is_ndp}
+
+				<li><a href="?action=prob_test_report">Тестирование</a></li>
+
+				{/if}
+			</ul>
+			</li>
+
+			{/if}
+
+			{/if}
+
+			{if $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Обучение</span></a>
+			<ul>
+
+				{if not $is_eta}
+
+					<li><a href="?action=tr_plan">Мой план обучения</a></li>
+					<li><a href="?action=tr_shed">График обучения менеджеров</a></li>
+
+					{if $cnt_kod eq "ua" or $cnt_kod eq "exp" or $cnt_kod eq "md"}
+
+						<li><a href="?action=tr_pt_shed">График обучения агентов</a></li>
+
+					{/if}
+
+					<li><a href="?action=tr_os">ОС по тренингу и тестирование</a></li>
+				{/if}
+			
+				{if $is_eta}
+
+					<li><a href="?action=tr_pt_os">ОС по тренингу и тестирование агентов</a></li>
+
+				{/if}
+			
+				{if $is_coach or $is_test_admin or $is_admin}
+
+					<li><a href="javascript:void(0);"><span class="dir">Для менеджеров</span></a>
+					<ul>
+						<li><a href="?action=tr_order">Заявка на проведение</a></li>
+						<li><a href="?action=tr_list">Редактирование заявки</a></li>
+						<li><a href="?action=tr_report_total">Результаты тренингов</a></li>
+
+						{if $is_coach}
+
+						<li><a href="?action=tr_rep_common">Отчет по тренингам</a></li>
+						<li><a href="?action=tr_rep_test_error">Ошибки в тестах</a></li>
+
+						{/if}
+
+					</ul>
+					</li>
+
+					{if $cnt_kod eq "ua" or $cnt_kod eq "exp" or $cnt_kod eq "md"}
+
+						<li><a href="javascript:void(0);"><span class="dir">Для агентов</span></a>
+						<ul>
+							<li><a href="?action=tr_pt_order">Заявка на проведение</a></li>
+							<li><a href="?action=tr_pt_list">Редактирование заявки</a></li>
+							<li><a href="?action=tr_pt_report_total">Результаты тренингов</a></li>
+
+							{if $is_coach}
+
+							<li><a href="?action=tr_pt_rep_common">Отчет по тренингам</a></li>
+							<li><a href="?action=tr_pt_rep_test_error">Ошибки в тестах</a></li>
+
+							{/if}
+
+						</ul>
+						</li>
+
+					{/if}
+
+				{/if}
+			
+				{if $is_test_admin or $is_admin}
+
+					<li><a href="javascript:void(0);"><span class="dir">Администрирование</span></a>
+						<ul>
+							<li><a href="?action=tr">Тренинги</a></li>
+							<li><a href="?action=tr_pos">Лестница тренингов</a></li>
+							<li><a href="?action=tr_loc">Места проведения</a></li>
+							<li><a href="?action=tr_test_qa">Тестирование</a></li>
+							<li><a href="?action=ac_test">Тестирование АЦ</a></li>
+							<li><a href="?action=prob_test">Тестирование АП</a></li>
+						</ul>
+					</li>
+
+				{/if}
+
+			</ul>
+			</li>
+
+			{/if}
+
+			{if not $is_eta}
+
+			<li><a href="javascript:void(0);"><span class="dir">Мотивация</span></a>
+			<ul>
+				<li><a href="files/ua/INSTRUKTSIYA__Pooshchreniya_shtrafi.pdf">Инструкция</a></li>
+				<li><a href="?action=bonus_create">Заявка на применение административных мер</a></li>
+				<li><a href="?action=bonus_reestr">Реестр административных мер</a></li>
+				<li><a href="?action=box_reestr">Реестр предложений ДП</a></li>
+				<li><a href="javascript:void(0);"><span class="dir">Оплата</span></a>
+				<ul>
+					{if $is_acceptor or $is_test_admin or $is_admin}
+					<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+					<ul>
+						<li><a href="?action=advance_pos">Базовый аванс</a></li>
+					</ul>
+					</li>
+					{/if}
+					<li><a href="?action=advances">Авансы</a></li>
+					{if $is_acceptor or $is_test_admin or $is_super or $is_admin}
+					<li><a href="?action=advances_accept">Согласование авансов</a></li>
+					{/if}
+				</ul>
+				</li>
+			</ul>
+			</li>
+
+			{if $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">План проф. развития</span></a>
+			<ul>
+				<li><a href="?action=razv_plan">Мой план развития</a></li>
+				<li><a href="?action=razv_slaves">Планы развития подчиненных</a></li>
+				<li><a href="?action=reserv">Резервисты</a></li>
+			</ul>
+			</li>
+
+			{/if}
+
+			{if $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Оценка персонала</span></a>
+			<ul>
+				<!--<li><a href="?action=ocenka_help">Инструкция по оценке</a></li>-->
+				<li><a href="?action=ocenka">Провести оценку</a></li>
+
+				{if $test_enabled eq 1}
+
+				<li><a href="?action=ocenka_test">Пройти тест</a></li>
+
+				{/if}
+
+				{if $is_admin or $is_super}
+
+				<li><a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
+					<ul>
+						<li><a href="?action=log&prg=ocenka">Журнал посещений</a></li>
+						<li><a href="?action=ocenka_report">Итог оценки</a></li>
+					</ul>
+				</li>
+
+				{/if}
+
+				{if $is_dc}
+
+				<li><a href="javascript:void(0);"><span class="dir">Девелопмент-центр</span></a>
+				<ul>
+					<li><a href="?action=os">ОС по участникам</a></li>
+					<li><a href="?action=reestr_dc">Реестр отчетов по ДЦ</a></li>
+					<li><a href="?action=dc_order">Формирование групп</a></li>
+					<li><a href="?action=dc_list">Редактирование групп</a></li>
+				</ul>
+				</li>
+
+				{/if}
+
+			</ul>
+			</li>
+
+			{/if}
+
+			<li><a href="javascript:void(0);"><span class="dir">Увольнение подчиненного</span></a>
+			<ul>
+				<li><a href="?action=free_staff">Заявка на увольнение</a></li>
+				<li><a href="?action=ol_staff">Обходные листы</a></li>
+				<li><a href="?action=ol_arch">Архив обходных листов</a></li>
+                                {if $is_admin or $is_acceptor or $is_super}
+                                <li><a href="?action=ol_stat">Статистика подтверждений обходных листов</a></li>
+                                {/if}
+				<li><a href="files/ua/INSTRUKTSIYA__Obhodnoy_list.pdf">Инструкция по работе с ОЛ</a></li>
+			</ul>
+			</li>
+			<li><a href="javascript:void(0);"><span class="dir">Реестры</span></a>
+			<ul>
+				<li><a href="?action=accepted_new_staff">Принятые</a></li>
+				<li><a href="?action=accepted_free_staff">Уволенные</a></li>
+			</ul>
+			</li>
+
+			{if $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Торговые агенты</span></a>
+				<ul>
+					<li><a href="?action=spr_users_eta">Список агентов</a></li>
+				</ul>
+			</li>
+
+			{/if}
+
+			{/if}
+
+			<li><a href="javascript:void(0);"><span class="dir">Отпуска</span></a>
+			<ul>
+
+				<li><a href="files/ua/INSTRUKTSIYA _Soglasovanie zayavki na otpusk.pdf">Инструкция</a></li>
+
+				{if not $is_eta}
+
+				<li><a href="?action=vacation_create">Заявка на отпуск</a></li>
+
+				{/if}
+
+				<li><a href="?action=vacation_report">Отчет по задачам</a></li>
+
+				{if not $is_eta}
+
+				<li><a href="?action=vacation_reestr">Реестр отпусков</a></li>
+
+				{/if}
+
+			</ul>
+			</li>
+
+			{if $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Анкетирование</span></a>
+			<ul>
+				<li><a href="javascript:void(0);"><span class="dir">Знание языков</span></a>
+				<ul>
+					<li><a href="?action=anketa_lang_form">Заполнить анкету</a></li>
+					<li><a href="?action=anketa_lang_report">Отчет</a></li>
+				</ul>
+				</li>
+			</ul>
+			</li>
+
+			{/if}

@@ -1,0 +1,88 @@
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+    <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+      <td>Дата</td>
+      <td>Маршрут</td>
+      <td>Ф.И.О. отв.</td>
+      <td>Область<br>      </td>
+      <td>Сеть</td>
+      <td>Юридическое название ТЗ<br></td>
+      <td>Адрес ТЗ<br></td>
+      <td>Заказчик<br></td>
+      <td style="background-color: rgb(204, 255, 255);">План по МР, мин<br></td>
+      <td style="background-color: rgb(204, 255, 255);">Факт по МР, мин<br></td>
+      <td style="background-color: rgb(204, 255, 255);">Отклонение МР, мин<br></td>
+      <td style="background-color: rgb(204, 255, 255);">Комментарии по отклонению МР<br></td>
+      <!--<td style="background-color: rgb(255, 255, 204);">План по Ф, мин<br></td>
+      <td style="background-color: rgb(255, 255, 204);">Факт по Ф, мин<br></td>
+      <td style="background-color: rgb(255, 255, 204);">Отклонение Ф, мин<br></td>
+      <td style="background-color: rgb(255, 255, 204);">Комментарии по отклонению Ф<br></td>
+      <td style="background-color: rgb(255, 204, 255);">Расфас. ВК+ВП, ящ.<br></td>
+      <td style="background-color: rgb(255, 204, 255);">Комментарии по отклонению расфас<br></td>-->
+      <td>GPS</td>
+      <td>Подтверждаю СВ МС<br></td>
+    </tr>
+{foreach key=k item=i from=$d name=d}
+	{assign var=s value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s value=`$s+$i1.c+1`}
+	{/foreach}
+		{foreach key=k1 item=i1 from=$i.data name=i1}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+		<tr>
+			<td>{$i.head.dt}</td>
+			<td>{$i.head.num}</td>
+			<td>{$i.head.fio_otv}</td>
+			<td>{$i1.head.tz_oblast}</td>
+			<td>{$i1.head.net_name}</td>
+			<td>{$i1.head.ur_tz_name}</td>
+			<td>{$i1.head.tz_address}</td>
+			<td>{$i2.ag_name}</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_mr}</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_fakt}</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
+			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">{$i2.mr_text|escape}</td>
+			<!--<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_f}</td>
+			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_fakt}</td>
+			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_delta}</td>
+			<td style="background-color: {if $i2.day_time_f neq $i2.f_fakt}red{else}rgb(255, 255, 204){/if};text-align: center;">{$i2.f_text|escape}</td>
+			<td style="background-color: rgb(255, 204, 255);text-align: center;">{$i2.ras}</td>
+			<td style="background-color: rgb(255, 204, 255);text-align: center;">{$i2.ras_text|escape}</td>-->
+
+
+			<td {if $i1.head.is_red}bgcolor="red"{else}style="background-color: rgb(153, 255, 153);"{/if}>
+				{if $i1.total.plan > 10 or $i1.total.vv	eq 1}
+					{if $i1.head.in_out}
+						<nobr>Код агента: {$i1.head.kod_ag}</nobr>
+						<nobr>Вход/выход: {$i1.head.in_out}</nobr>
+					{/if}
+					<nobr>Отклонение: {$i1.total.gps_delta|num:-1} мин.</nobr>
+					<!--<nobr>Плановое время: {$i1.total.plan} мин.</nobr>-->
+				{else}
+					В анализе не учитывается
+				{/if}
+			</td>
+
+
+
+
+
+			<td>{$i.head.svms_ok_date}</td>
+		</tr>
+		{/foreach}
+		{/foreach}
+{/foreach}
+    <tr style="text-align: center;font-weight:bold">
+      <td colspan="8" style="">ИТОГО</td>
+      <td>{$rb_total.day_time_mr}</td>
+      <td>{$rb_total.mr_fakt}</td>
+      <td>{$rb_total.mr_delta}</td>
+      <!--<td></td>
+      <td>{$rb_total.day_time_f}</td>
+      <td>{$rb_total.f_fakt}</td>
+      <td>{$rb_total.f_delta}</td>
+      <td></td>
+      <td>{$rb_total.ras}</td>
+      <td></td>
+      <td></td>-->
+    </tr>
+</table><br>

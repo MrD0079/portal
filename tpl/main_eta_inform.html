@@ -1,0 +1,23 @@
+<form method="post" name="form_eta" id="form_eta">
+
+<table style="text-align: center; width:300px" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+
+{if $smarty.request.eta_comment_send}<p><font style="color: red;">письмо отправлено</font></p>{/if}
+
+<h2>Горячая линия руководства дирекции по продажам</h2>
+
+<p>Ваше сообщение / предложение / инициатива будут получены руководством дирекции по продажам и не останутся без внимания.</p>
+
+<p><textarea cols="40" rows="5" name="eta_comment"></textarea></p>
+
+<p>Ваше Ф.И.О. будет вставлено в заголовок сообщения автоматически.</p>
+
+<p><input name="eta_comment_send" value="Отправить сообщение" type="submit"></p>
+
+</td>
+</tr>
+</table>
+
+</form>

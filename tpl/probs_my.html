@@ -1,0 +1,68 @@
+<h1>Мои новые сотрудники</h1>
+
+
+<form target="_self" method="POST" name=form_pm id=form_pm>
+	Адаптационные программы:
+	<br>
+	<a href="?action=probs_my&ad_completed=1">Все</a>
+	&nbsp&nbsp&nbsp
+	<a href="?action=probs_my&ad_completed=2">Открытые</a>
+	&nbsp&nbsp&nbsp
+	<a href="?action=probs_my&ad_completed=3">Закрытые</a>
+
+
+
+
+
+<table border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td rowspan=2>№</td>
+<td rowspan=2>{if $is_admin}<a href="javascript:void(0)" onclick="javascript:form_pm.submit()">[x]</a>{/if}</td>
+<td colspan=2>Новый сотрудник</td>
+<td rowspan=2>Период адаптации</td>
+<td rowspan=2>Период<br>адаптации<br>завершен</td>
+<td rowspan=2>Осуществляющий поддержку</td>
+<td rowspan=2>Бизнес-тренер</td>
+<td rowspan=2>Вышестоящий руководитель</td>
+<td rowspan=2>Адаптация<br>завершена</td>
+<td rowspan=2>Дата<br>завершения</td>
+
+<!--<td rowspan=2>R/O</td>-->
+</tr>
+<tr>
+<td>Ф.И.О.</td>
+<td>Должность</td>
+</tr>
+{foreach key=key1 item=item1 from=$probs_my name=probs_my}
+
+
+
+<tr
+	bgcolor="{cycle values="#ccffff,#ffffcc"}"
+	{if $item1.datauvol} style="text-align:left; background-color: red;" {/if}
+	{if $item1.period_ended eq 1} style="text-align:left; background-color: #CCCCCC;" {/if}
+>
+<td>{$smarty.foreach.probs_my.iteration}</td>
+<td>{if $is_admin}<input type=checkbox name=del[{$item1.prob_tn}]>{/if}</td>
+<td><a target=_blank href="?action=prob_plan&tn={$item1.prob_tn}{if $item1.read_only eq 1 and not $is_admin}&print=1{/if}">{$item1.prob_name}</a></td>
+<td>{$item1.prob_dolgn}</td>
+<td>{$item1.data_start_t} - {$item1.data_end_t}</td>
+<td style="text-align:center;">{if $item1.period_ended eq 1}да{/if}</td>
+<td>{$item1.inst_name}</td>
+<td>{$item1.chief_name}</td>
+<td>{$item1.dir_name}</td>
+<td style="text-align:center;" {if $item1.ad_completed eq 1}bgcolor="green"{/if}>{if $item1.ad_completed eq 1}да{/if}</td>
+<td style="text-align:center;" {if $item1.ad_completed eq 1}bgcolor="green"{/if}>{if $item1.ad_completed eq 1}{$item1.ad_completed_data}{/if}</td>
+<!--<td style="text-align:center;">{if $item1.read_only eq 1}да{/if}</td>-->
+</tr>
+
+
+
+
+
+
+
+{/foreach}
+</table>
+
+</form>

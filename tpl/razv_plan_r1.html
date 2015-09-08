@@ -1,0 +1,84 @@
+<h2>Раздел 1. Карьера и мобильность</h2>
+
+<table border=1 cellpadding=0 cellspacing=0 style="text-align:center; background-color: rgb(255,255,204)">
+  <tr>
+    <td>
+      <b>Карьера</b>
+      <br>
+      К чему вы стремитесь
+      <br>
+      в области карьеры?
+    </td>
+    <td colspan=2>
+      <b>Ближайшая перспектива (1-3 года)</b>
+      <br>
+      {if $smarty.request.print neq 1 and $self}
+      <textarea wrap="virtual" cols="50" rows="5" name=r_plan[immediate_outlook]>{$immediate_outlook}</textarea>
+      {else}
+      {$immediate_outlook|nl2br}
+      {/if}
+      <br>
+      <b>Дальнейшая перспектива (4-6 лет)</b>
+      <br>
+      {if $smarty.request.print neq 1 and $self}
+      <textarea wrap="virtual" cols="50" rows="5" name=r_plan[further_outlook]>{$further_outlook}</textarea>
+      {else}
+      {$further_outlook|nl2br}
+      {/if}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <b>Мобильность</b><br>
+      Как вы оцениваете<br>
+      свою мобильность<br>
+      с целью развития карьеры?
+    </td>
+    <td>
+      <b>Готовность перемещения<br>
+      в другие подразделения или должности</b>
+      <br>
+      {if $smarty.request.print neq 1 and $self}
+      <input value=0 type=radio name=r_plan[mobile_region] onclick="getElementById('r_plan[mobile_region_text]').disabled=true;getElementById('r_plan[mobile_region_text]').value=''" checked> Не мобилен
+      <br>
+      <input value=1 type=radio name=r_plan[mobile_region] onclick="getElementById('r_plan[mobile_region_text]').disabled=true;getElementById('r_plan[mobile_region_text]').value=''"> Мобилен без ограничений и условий
+      <br>
+      <input value=2 type=radio name=r_plan[mobile_region] onclick="getElementById('r_plan[mobile_region_text]').disabled=false"> Мобилен при определенных условиях
+      <br>
+      <i>(опишите условия)</i>
+      <br>
+      <textarea {if $mobile_region neq 2}disabled{/if} wrap="virtual" cols="50" rows="5" name=r_plan[mobile_region_text] id=r_plan[mobile_region_text]>{$mobile_region_text}</textarea>
+      {else}
+      {if $mobile_region eq 0}Не мобилен{/if}
+      {if $mobile_region eq 1}Мобилен без ограничений и условий{/if}
+      {if $mobile_region eq 2}Мобилен при определенных условиях:<br>{$mobile_region_text|nl2br}{/if}
+      {/if}
+    </td>
+    <td>
+      <b>Готовность<br>
+      к территориальным перемещениям</b>
+      <br>
+      {if $smarty.request.print neq 1 and $self}
+      <input value=0 type=radio name=r_plan[mobile_post] onclick="$('#r_plan_mobile_post_text').attr('disabled',true);$('#r_plan_mobile_post_text').val('')" checked> Не мобилен
+      <br>
+      <input value=1 type=radio name=r_plan[mobile_post] onclick="$('#r_plan_mobile_post_text').attr('disabled',true);$('#r_plan_mobile_post_text').val('')"> Мобилен без ограничений и условий
+      <br>
+      <input value=2 type=radio name=r_plan[mobile_post] onclick="$('#r_plan_mobile_post_text').attr('disabled',false)"> Мобилен при определенных условиях
+      <br>
+      <i>(опишите условия)</i>
+      <br>
+      <textarea {if $mobile_post neq 2}disabled{/if} wrap="virtual" cols="50" rows="5" name=r_plan[mobile_post_text] id=r_plan_mobile_post_text>{$mobile_post_text}</textarea>
+      {else}
+      {if $mobile_post eq 0}Не мобилен{/if}
+      {if $mobile_post eq 1}Мобилен без ограничений и условий{/if}
+      {if $mobile_post eq 2}Мобилен при определенных условиях:<br>{$mobile_post_text|nl2br}{/if}
+      {/if}
+    </td>
+  </tr>
+</table>
+{if $smarty.request.print neq 1 and $self}
+
+<script>$("input[name='r_plan[mobile_region]'][value={$mobile_region}]").attr('checked',true);</script>
+<script>$("input[name='r_plan[mobile_post]'][value={$mobile_post}]").attr('checked',true);</script>
+
+{/if}

@@ -1,0 +1,147 @@
+<h1>Филиалы(UA)/Дистрибуторы(RU)</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>[x]</td>
+<td>название</td>
+<td>код</td>
+<td>Национальное<br>подразделение</td>
+<td>Начальный<br>остаток<br>ПЛАН/ФАКТ,<br>тыс.ден.ед</td>
+<td>Дата<br>прекращения<br>работы</td>
+<td>Комментарий</td>
+<td>Логин/Пароль</td>
+<td>Последнее<br>изменение</td>
+<td>Паспорт</td>
+<td>Доставка<br>силами<br>ТК</td>
+<td>ГСМ</td>
+<td>бонус<br>логистика</td>
+<td>страна</td>
+<td>КК</td>
+</tr>
+{foreach key=key item=item from=$bud_fil}
+<tr id=tr_{$item.id} style="text-align:center;vertical-align:top">
+<td>
+<a href="javascript:void(0);" onclick="del_fil({$item.id});">[x]</a>
+</td>
+<td><input id="div_{$item.id}_name" onChange="save_fil({$item.id},'name',this.value);" name=data[{$item.id}][name] size=30 value="{$item.name|escape}"></td>
+<td><input id="div_{$item.id}_sw_kod" onChange="save_fil({$item.id},'sw_kod',this.value);" name=data[{$item.id}][sw_kod] size=3 value="{$item.sw_kod}"></td>
+<td>
+	<select id="div_{$item.id}_nd" onchange="save_fil({$item.id},'nd',this.value);" name=data[{$item.id}][nd]>
+		<option></option>
+		{foreach key=k item=i from=$nd}
+		<option value="{$i.id}">{$i.name}</option>
+		{/foreach}
+	</select>
+	<script>$("#div_{$item.id}_nd").val("{$item.nd}");</script>
+</td>
+<td>
+<input id="div_{$item.id}_rp" onChange="save_fil({$item.id},'rp',this.value);" class="number3" name=data[{$item.id}][rp] size=10 value="{$item.rp}">
+<br>
+<input id="div_{$item.id}_rf" onChange="save_fil({$item.id},'rf',this.value);" class="number3" name=data[{$item.id}][rf] size=10 value="{$item.rf}">
+</td>
+<td>
+		<select id="div_{$item.id}_data_end" onchange="save_fil({$item.id},'data_end',this.value);" name=data[{$item.id}][data_end]>
+			<option></option>
+			{foreach key=k item=i from=$month_list}
+			<option value="{$i.sd_c}">{$i.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#div_{$item.id}_data_end').val('{$item.data_end}');</script>
+</td>
+<td><textarea id="div_{$item.id}_comm" onChange="save_fil({$item.id},'comm',this.value);" name=data[{$item.id}][comm]>{$item.comm|escape}</textarea></td>
+<td>
+	Логин/Пароль: <div style="display: inline; font-weight:bold;">{$item.login}</div>/<div style="display: inline; font-weight:bold;" id=div_change_{$item.id}>{$item.password}</div>
+	<br>
+	Отправить логин/пароль
+	<div style="display: inline;" id=div_send_{$item.id}>
+	<a
+		href="javascript:void(0);"
+		onclick="$('#div_send_{$item.id}').load('?action=bud_fil_send_pwd&nohead=1&fil='+'{$item.id}');">
+		<img title="Отправить логин/пароль" src="/design/send_pwd.jpg">
+	</a>
+	</div>
+	<br>
+	Сменить пароль
+	<a
+		href="javascript:void(0);"
+		onclick="$('#div_change_{$item.id}').load('?action=bud_fil_change_pwd&nohead=1&fil='+'{$item.id}');">
+		<img title="Сменить пароль" src="/design/send_pwd.jpg">
+	</a>
+</td>
+<td style="text-align:left">
+<input type=hidden disabled name=data[{$item.id}][lu_fio] id=lu{$item.id} value="{$fio}">
+{$item.lu}<br>{$item.lu_fio}
+</td>
+<td>
+	<a
+		href="javascript:void(0);"
+		onclick="show_passport({$item.id});"
+	>
+	паспорт
+	</a>
+</td>
+<td>
+	<select id="div_{$item.id}_sales_team_delivery" onchange="save_fil({$item.id},'sales_team_delivery',this.value);" name=data[{$item.id}][sales_team_delivery]>
+		<option value=0>нет</option>
+		<option value=1>да</option>
+	</select>
+	<script>$("#div_{$item.id}_sales_team_delivery").val("{$item.sales_team_delivery}");</script>
+</td>
+<td>
+	<input id="div_{$item.id}_gsm" onChange="save_fil({$item.id},'gsm',this.value);" class="number_int" name=data[{$item.id}][gsm] size=10 value="{$item.gsm}">
+</td>
+<td>
+	<input id="div_{$item.id}_bonus_log_koef" onChange="save_fil({$item.id},'bonus_log_koef',this.value);" class="number" name=data[{$item.id}][bonus_log_koef] size=10 value="{$item.bonus_log_koef}">
+</td>
+<td>
+		<select id="div_{$item.id}_dpt_id" onchange="save_fil({$item.id},'dpt_id',this.value);" name=data[{$item.id}][dpt_id]>
+			<option></option>
+			{foreach key=k item=i from=$countries}
+			<option value="{$i.dpt_id}">{$i.dpt_name}</option>
+			{/foreach}
+		</select>
+		<script>$('#div_{$item.id}_dpt_id').val('{$item.dpt_id}');</script>
+</td>
+<td>                                                               	
+	<select id="div_{$item.id}_kk" onchange="save_fil({$item.id},'kk',this.value);" name=data[{$item.id}][kk]>
+		<option value=0>нет</option>
+		<option value=1>да</option>
+	</select>
+	<script>$("#div_{$item.id}_kk").val("{$item.kk}");</script>
+</td>
+</tr>
+{/foreach}
+</table>
+Название
+<br>
+<input size=80 name=new_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>
+
+
+<script>
+{literal}
+
+function show_passport(id)
+{
+	$('.passport').remove();
+	var fd = new FormData();
+	fd.append('id', id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_fil_passport_get&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('<tr class="passport"><td colspan=999>'+data+'</td></tr>').insertAfter('#tr_'+id);
+			
+		}
+	});
+}
+
+{/literal}
+</script>
+
+

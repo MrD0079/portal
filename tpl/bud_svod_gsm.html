@@ -1,0 +1,87 @@
+{include file="bud_svod_filter.html"}
+{include file="bud_svod_filter_fil.html"}
+{include file="bud_svod_filter_cluster.html"}
+
+<p><a href="javascript:void(0);" onClick="load_ag();">Показать список агентов</a></p>
+
+
+<div id="tp" style="display: inline;"></div>
+
+<script>
+v_dt='{$smarty.request.dt}';
+{literal}
+function load_ag()
+{
+x=loadwait_show('tp');
+$('#tp').load('?action=bud_svod_gsm_ag&nohead=1',
+{
+	eta_list: $('#eta_list').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	exp_list_only_ts: $('#exp_list_only_ts').val(),
+	fil: $('#fil').val(),
+	clusters: $('#clusters').val(),
+	dt: v_dt
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+
+function get_val(id,field)
+{
+	$('#d_'+id+'_'+field).load('?action=bud_svod_gsm_ag_get_val&nohead=1',
+	{
+		id: id,
+		field: field
+	});
+}
+
+function save_ag(id,h_eta,unscheduled,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=bud_svod_gsm_ag_save&nohead=1',
+	{
+		id: id,
+		h_eta: h_eta,
+		unscheduled: unscheduled,
+		dt: v_dt,
+		field: field,
+		val: val
+	},
+	function() {
+	get_val(id,'amort_perc');
+	get_val(id,'total1');
+	get_val(id,'perc_zat');
+	load_ag_total();
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function load_ag_total()
+{
+var fd = new FormData();
+fd.append('eta_list',  $('#eta_list').val());
+fd.append('exp_list_without_ts',  $('#exp_list_without_ts').val());
+fd.append('exp_list_only_ts',  $('#exp_list_only_ts').val());
+fd.append('fil',  $('#fil').val());
+fd.append('clusters',  $('#clusters').val());
+fd.append('dt',  v_dt);
+$.ajax({
+  type: 'POST',
+  url: '?action=bud_svod_gsm_ag_total&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+//    $('#total').html(data);
+ //$('#mytable').append('<tr>'+data+'</tr>');
+$('#total').remove();
+$('#mytable>tbody:last').append('<tr id="total" style="font-weight: bold;">'+data+'</tr>');
+  }
+});
+}
+
+{/literal}
+</script>

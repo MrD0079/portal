@@ -1,0 +1,42 @@
+<h2>Раздел 5. Выводы и комментарии</h2>
+      <table border=1 cellpadding=0 cellspacing=0 style="text-align:center; background-color: rgb(204,204,204)">
+        <tr>
+          <td>
+      <b>Выводы сотрудника</b>
+	<br>
+	(самое важное достижение в развитии. чему главному вы научились?)
+	<br>
+	{if $smarty.request.print neq 1 and $self}
+	<textarea wrap="virtual" cols="50" rows="5" name=r_plan[employee_summary]>{$employee_summary}</textarea>
+	{else}
+	{$employee_summary|nl2br}
+	{/if}
+	</td>
+	</tr>
+	<tr>
+          <td>
+      <b>Комментарии и подпись руководителя подготовки</b>
+      <br>
+      (оценка прогресса в развитии и рекомендации на следующий период)
+      <br>
+      {if $smarty.request.print neq 1 and $teacher}
+      <textarea wrap="virtual" cols="50" rows="5" name=r_plan[teacher_comment]>{$teacher_comment}</textarea>
+      {else}
+      {$teacher_comment}
+      {/if}
+	</td>
+	</tr>
+	<tr>
+          <td>
+      <b>Комментарии и подпись вышестоящего руководителя</b>
+      <br>
+      (оценка прогресса в развитии и рекомендации на следующий период)
+      <br>
+      {if $smarty.request.print neq 1 and $chief}
+      <textarea wrap="virtual" cols="50" rows="5" name=r_plan[chief_comment]>{$chief_comment}</textarea>
+      {else}
+      {$chief_comment}
+      {/if}
+	</td>
+        </tr>
+      </table>

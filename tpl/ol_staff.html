@@ -1,0 +1,181 @@
+<h1>Обходные листы</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+{if $is_ts neq 1}
+
+<p>
+По руководителю:
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> <!-- - {$item.emp_pos}--> - {$item.dpt_name} {if $item.datauvol}- уволен {$item.datauvol}{/if}</option>
+{/foreach}
+</select>
+<input name="select" value="Выбрать" type="submit">
+
+</p>
+
+<script>
+$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);
+</script>
+
+{/if}
+
+
+<hr>
+
+{foreach key=k item=i from=$ol_staff}
+
+<h3>{$i.fio} ({$i.dpt_name})</h3>
+
+
+<table cellspacing=0 border=0 cellpadding=3>
+<tr><td style="text-align:right;vertical-align:top">Должность</td><td style="text-align:left;vertical-align:top"><b>{$i.pos_name}</b><br>
+<tr><td style="text-align:right;vertical-align:top">Дата начала работы в компании</td><td style="text-align:left;vertical-align:top"><b>{$i.start_company}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата начала работы в должности</td><td style="text-align:left;vertical-align:top"><b>{$i.start_pos}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата увольнения</td><td style="text-align:left;vertical-align:top"><b>{$i.datauvol}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Категория сотрудника</td><td style="text-align:left;vertical-align:top"><b>{$i.oplatakat}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Причина увольнения</td><td style="text-align:left;vertical-align:top"><b>{$i.seat}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Комментарии</td><td style="text-align:left;vertical-align:top;width:300px"><b>{$i.params}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Руководитель увольняемого сотрудника</td><td style="text-align:left;vertical-align:top"><b>{$i.chief_fio}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата формирования обходного листа</td><td style="text-align:left;vertical-align:top"><b>{$i.accept_data}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Срок рассмотрения (дней)</td><td><b>{$i.srok}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Группа, которая сейчас подтверждает</td><td><b>{$i.gruppa}. {$i.gr_name}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">№ СЗ на увольнение</td><td><b><a target=_blank href="?action=sz_reestr&sz_id={$i.sz_id}&select=1">{$i.sz_id}</a></b></td></tr>
+</table>
+
+<input name="save" value="Сохранить" type="submit"><br>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold">
+		<td style="text-align: center;">Категория</td>
+		<td style="text-align: center;">ФИО<br>сотрудника</td>
+		<td style="text-align: center;">Сумма<br>удержания</td>
+		<td style="text-align: center;">Сумма<br>доплаты</td>
+		<td style="text-align: center; width:400px;">Комментарии</td>
+		<td style="text-align: center;">Прилагаемые<br>файлы</td>
+		<td style="text-align: center;">Подтверждаю</td>
+		<td style="text-align: center;">Срок<br>рассмотрения<br>(дней)</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.body}
+	<tr>
+		<td style="font-weight:bold; background-color:#F5E3BF; text-align:left" colspan=8>
+			Группа: {$i1.gruppa}. {$i1.gr_name}
+		</td>
+	</tr>
+	{foreach key=k2 item=i2 from=$i1.data}
+	{if $i2.accepted eq 1 or not $i2.i_am_is_acceptor or ($i2.gruppa neq $i.gruppa)}
+		{assign var=disabled value='disabled'}
+	{else}
+		{assign var=disabled value=''}
+	{/if}
+	<tr
+		{if $i2.gruppa eq $i.gruppa}
+			{if not $disabled}
+				style="background-color:#66FF66"
+			{else}
+				style="background-color:yellow"
+			{/if}
+		{/if}
+	>
+		<td style="">{$i2.cat}</td>
+		<td style="">{$i2.fio}</td>
+		<td style="text-align: center;">{if not $disabled and $i2.summi_enabled}<input class="number" size="10" name="data[{$i2.id}][sum_plus]" value="{$i2.sum_plus}">{else}{$i2.sum_plus|num:2}{/if}</td>
+		<td style="text-align: center;">{if not $disabled and $i2.summi_enabled}<input class="number" size="10" name="data[{$i2.id}][sum_minus]" value="{$i2.sum_minus}">{else}{$i2.sum_minus|num:2}{/if}</td>
+		<td style="text-align: left;">{if not $disabled}<textarea cols="30" rows="5" name="data[{$i2.id}][text]">{$i2.text}</textarea>{else}{$i2.text|nl2br}{/if}</td>
+		<td style="">
+			{foreach key=k3 item=i3 from=$i2.fl}
+			<div id="uploadOutput_{$i2.id}_{$i3.id}" style="display: inline;">
+			<nobr>
+			{if not $disabled}
+			<a href="javascript:void(0);" onclick="
+				$('#uploadOutput_{$i2.id}_{$i3.id}').load('?action=ol_staff_file&del=1&nohead=1&file_id={$i3.id}');
+				$('#uploadOutput_{$i2.id}_{$i3.id}').remove();
+			">[x]</a>
+			{/if}
+			<a target=_blank href="ol_files/{$i2.id}/{$i3.fn}">{$i3.fn}</a>
+			</nobr>
+			<br>
+			</div>
+			{/foreach}
+			<div style="display: inline;" id=file_list_{$i2.id}></div>
+			{if not $disabled} 
+			<p>
+				<a
+				href="javascript:void(0);"
+				onclick="
+					$iterator++;
+					$('#file_list_{$i2.id}').append(
+						$('<div id='+$iterator+'>').load(
+							'?action=ol_staff_file&nohead=1&add=1&id='+$iterator+'&sid={$i2.id}'
+						)
+					);
+					$('#'+$iterator).css('display','inline');
+					
+				"
+				>
+				<nobr>Добавить файл</nobr>
+				</a>
+			</p>
+			{/if}
+		</td>
+		<td style="text-align: center;">
+			{if not $i2.i_am_is_acceptor or ($i2.gruppa neq $i.gruppa)}
+			{if $i2.accepted eq 1}Да{/if}
+			{else}
+			<input
+        
+					onclick="
+					$('#accepted_{$i2.id}').attr('disabled',false);
+					$('#accepted_{$i2.id}').val(this.checked?1:0);
+					"
+        
+				{if $i2.accepted eq 1}checked{/if} type="checkbox">
+			<input type=hidden disabled id="accepted_{$i2.id}" name="data[{$i2.id}][accepted]">
+			{/if}
+			<br>
+			{$i2.accepted_log|nl2br}
+		</td>
+		<td style="text-align: center;">{$i2.srok}</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+	<tr align="center">
+		<td colspan="8" rowspan="1" style="vertical-align: top;"><big><span style="font-weight: bold;">Итоговая сумма к удержанию: {$i.summa|default:0|num:2}</span></big></td>
+	</tr>
+</table>
+
+
+{if $i.tmc}
+<h3>За сотрудником закреплены следующие ТМЦ:</h3>
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td>Тип<br>ТМЦ</td>
+		<td>Наименование/модель</td>
+		<td>Серийный<br>номер</td>
+		<td>Состояние<br>при<br>выдаче</td>
+		<td>Дата<br>выдачи</td>
+		<td>Внесение<br>записи<br>о выдаче</td>
+	</tr>
+	{foreach key=k item=i from=$i.tmc}
+	<tr>
+		{if not $i.removed}
+		<td>{$i.tmcs}</td>
+		<td>{$i.name}</td>
+		<td>{$i.sn}</td>
+		<td>{$i.state}</td>
+		<td>{$i.dtv}</td>
+		<td>{$i.add_fio} {$i.add_lu}</td>
+		{/if}
+	</tr>
+	{/foreach}
+</table>
+<hr>
+{/if}
+
+
+
+
+{/foreach}
+
+</form>

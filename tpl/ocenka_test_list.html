@@ -1,0 +1,40 @@
+<h1>Включение теста</h1>
+<form target="_self" method="POST" name=form_test_list>
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;">
+		<td align=center><a href="javascript:form_test_list.submit();">+</a></td>
+		<td>Тестируемый</td>
+<!--
+		<td>Логин</td>
+		<td>Пароль</td>
+-->
+	</tr>
+	{foreach key=test_list_key item=test_list_item from=$test_list}
+	<tr>
+		<td>
+		{if $test_list_item.test eq 1}
+			включен
+		{else}
+			<input type=checkbox name=test_on[{$test_list_key}] value="{$test_list_item.emp_tn}">
+		{/if}
+		</td>
+		<td>{$test_list_item.emp_name}</td>
+<!--
+		<td>{$test_list_item.login}</td>
+		<td>{$test_list_item.password}</td>
+-->
+	</tr>
+	{/foreach}
+</table>
+<br>
+Длительность теста в секундах:
+<br>
+<input size=5 type=text name=test_length id=test_length value="{$test_length}">
+<input type=submit name=test_length_save id=test_length_save value="Сохранить">
+<br>
+<br>
+<input type=submit name=test_all_on id=test_all_on value="Включить тест всем">
+<br>
+<br>
+<input type=submit name=test_all_off id=test_all_off value="Выключить тест всем">
+</form>

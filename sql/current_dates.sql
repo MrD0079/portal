@@ -1,0 +1,1 @@
+select to_char(trunc(sysdate,'mm'),'dd.mm.yyyy'),to_char(sysdate,'dd.mm.yyyy') from dual

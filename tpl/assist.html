@@ -1,0 +1,80 @@
+<h1>Назначение ассистентов</h1>
+
+
+<form target="_self" method="POST" name=form_emp_exp>
+
+
+<input type=hidden name=add[dpt_id] value={$dpt_id}>
+
+Руководитель
+<select name=add[parent]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+
+Ассистент
+<select name=add[child]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+
+<input type=submit name=new value="Добавить">
+<br>
+<br>
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td rowspan=2><a href="javascript:void(0)" onclick="javascript:form_emp_exp.submit()">Удалить</a></td>
+<td colspan=3>Руководитель</td>
+<td colspan=3>Ассистент</td>
+<td rowspan=2>Согласовывает<br><a href="javascript:void(0)" onclick="javascript:form_emp_exp.submit()">Сохранить</a></td>
+</tr>
+<tr style="font-weight:bold;text-align:center">
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Департамент</td>
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Департамент</td>
+</tr>
+{foreach key=emp_exp_key item=emp_exp_item from=$emp_exp name=emp_exp}
+<tr>
+<td>
+	<input type=checkbox name=del[{$emp_exp_key}] value="{$emp_exp_item.child},{$emp_exp_item.parent},{$emp_exp_item.dpt_id}">
+	{$smarty.foreach.emp_exp.iteration}
+</td>
+<td>{$emp_exp_item.parent}</td>
+<td>{$emp_exp_item.exp_name}</td>
+<td>{$emp_exp_item.dpt_name_x}</td>
+<td>{$emp_exp_item.child}</td>
+<td>{$emp_exp_item.emp_name}</td>
+<td>{$emp_exp_item.dpt_name_m}</td>
+<td>
+
+<select name=accept[{$emp_exp_item.child},{$emp_exp_item.parent},{$emp_exp_item.dpt_id}] id=accept_{$emp_exp_key}>
+<option value=1>да</option>
+<option value=0>нет</option>
+</select>
+<script>
+$("#accept_{$emp_exp_key} option[value='{$emp_exp_item.accept}']").prop('selected', true);
+</script>
+</td>
+</tr>
+{/foreach}
+</table>
+</form>
+
+
+
+
+
+
+

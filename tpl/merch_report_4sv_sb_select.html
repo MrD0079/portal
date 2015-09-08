@@ -1,0 +1,124 @@
+<table>
+
+<tr>
+<td>
+Дата
+</td>
+<td>
+<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+</td>
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+</tr>
+
+<tr>
+<td>Область
+</td>
+<td>
+<select name=oblast id=oblast>
+	<option value=0></option>
+	{foreach key=key item=item from=$oblast}
+	<option value="{$item.oblast}">{$item.oblast}</option>
+	{/foreach}
+</select>
+<script>$('#oblast option[value="{$smarty.request.oblast}"]').prop('selected', true);</script>
+</td>
+</tr>
+
+<tr>
+<td>Город
+</td>
+<td>
+<select name="city" id="city">
+	<option value=0></option>
+	{foreach key=key item=item from=$city}
+	<option value="{$item.city|escape}">{$item.city|escape}</option>
+	{/foreach}
+</select>
+<script>$('#city option[value="{$smarty.request.city}"]').prop('selected', true);</script>
+</td>
+</tr>
+
+<tr>
+<td>Сеть</td>
+<td>
+<select name=nets id=nets>
+	<option value=0></option>
+	{foreach key=key item=item from=$nets}
+	<option value="{$item.id_net}">{$item.net_name}</option>
+	{/foreach}
+</select>
+<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+</td>
+</tr>
+
+
+<tr>
+<td>Адрес ТЗ
+</td>
+<td>
+<select name=tz id=tz>
+	<option value=0></option>
+	{foreach key=key item=item from=$tz}
+	<option value="{$item.cpp1_tz_address}">{$item.cpp1_tz_address}</option>
+	{/foreach}
+</select>
+<script>$('#tz option[value="{$smarty.request.tz}"]').prop('selected', true);</script>
+</td>
+</tr>
+
+
+<tr><td>СВ МС</td>
+<td>
+<select name=svms_list id=svms_list>
+	<option value=0></option>
+	{foreach key=key item=item from=$svms_list}
+	<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+</td>
+</tr>
+
+
+
+<tr><td>название продукта</td>
+<td>
+<select name=vp id=vp>
+	<option value=0></option>
+	{foreach key=key item=item from=$vp}
+	<option value="{$item.product_id}">{$item.product_name_sw}</option>
+	{/foreach}
+</select>
+<script>$('#vp option[value="{$smarty.request.vp}"]').prop('selected', true);</script>
+</td>
+</tr>
+
+
+
+<tr>
+<td></td>
+<td>
+<input name=ok_kk value=1 type=radio>Все
+<input name=ok_kk value=2 type=radio>есть подтверждение КК
+<input name=ok_kk value=3 type=radio>нет подтверждения КК
+<script>$("input[name=ok_kk][value={$smarty.request.ok_kk}]").attr('checked',true);</script>
+</td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+<input name=ok_ms value=1 type=radio>Все
+<input name=ok_ms value=2 type=radio>есть подтверждение МС
+<input name=ok_ms value=3 type=radio>нет подтверждения МС
+<script>$("input[name=ok_ms][value={$smarty.request.ok_ms}]").attr('checked',true);</script>
+</td>
+</tr>
+
+
+
+</table>

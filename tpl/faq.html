@@ -1,0 +1,22 @@
+<table border=0 width=100% cellpadding=3>
+<tr>
+<td valign=top align=left>
+{foreach key=key item=item from=$files}
+{if $item.parent eq null}
+<p style="color:red;font-weight:bold">{$item.name}</p>
+{else}
+&nbsp&nbsp&nbsp&nbsp&nbsp<a target=_blank href="{$item.path}">{$item.name}</a><br>
+{/if}
+{/foreach}
+</td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+

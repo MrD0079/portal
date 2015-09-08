@@ -1,0 +1,63 @@
+<h3>Статьи затрат ДПНР</h3>
+
+<div id=detail_0></div>
+
+{literal}
+<script>
+function add_item(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('new_cost_item', $('#new_cost_item_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=dpnr_statyas_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tdpnr_statyas_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+function save_item(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=dpnr_statyas_save&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function del_item(id)
+{
+save_item(id,'id',0);
+$('#list_'+id).remove();
+}
+function show_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=dpnr_statyas_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+$(function() {show_items(0);});
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

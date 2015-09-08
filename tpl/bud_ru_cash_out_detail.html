@@ -1,0 +1,85 @@
+<h3>Отчетный месяц:
+{foreach key=key item=item from=$dt}
+{if $item.sd_c eq $smarty.request.head.dt}{$item.my}{/if}
+{/foreach}
+</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+
+<tr style="font-weight:bold;text-align: center;">
+<td rowspan="2"><a href="javascript:void(0)" onclick="javascript:$('#bud_ru_cash_out').submit();">[x]</a></td>
+
+<td rowspan="2">ред.</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Подразделение<br>      <br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Дистрибутор<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Регион<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">ДБ</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Статья<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Категория<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">ПЛАН, тыс. ден. ед.</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">ФАКТ, тыс. ден. ед.</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Комментарии<br>      </td>
+      <td colspan="2" style="vertical-align: top; text-align: center;">Затраты дистрибутора</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Изменено<br>      </td>
+    </tr>
+    <tr style="font-weight:bold">
+      <td>ФАКТ, тыс. ден. ед.</td>
+      <td>Комментарии</td>
+    </tr>
+{foreach key=k item=i from=$pd}
+	{foreach key=k1 item=i1 from=$i.body}{/foreach}
+	{cycle assign='bgcolor' values="#ccffff,#ffffcc"}
+	<tr bgcolor="{$bgcolor}">
+		<td rowspan="{$i.c1+1}"><input {if $i.ok_db_tn}disabled{/if} name="del_heads[{$i.id}]" type="checkbox"></td>
+		<td rowspan="{$i.c1+1}">{if not $i.ok_db_tn}<a href="javascript:void(0)" onclick="javascript:fn_change_by_id({$i.id})">ред.</a>{/if}</td>
+		<td rowspan="{$i.c1+1}">{$i.nd}</td>
+		<td rowspan="{$i.c1+1}">{$i.fil_name}</td>
+		<td rowspan="{$i.c1+1}">{$i.db_region}</td>
+		<td rowspan="{$i.c1+1}">{$i.db_fio}</td>
+		<td style="font-weight:bold">итого по дистрибьютору</td>
+		<td style="font-weight:bold"></td>
+		<td style="font-weight:bold">{$i.plan|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i.fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+		<td style="font-weight:bold">{$i.zd_fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+		<td rowspan="{$i.c1+1}">{$i.lu} {$i.lu_fio}</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.body}
+	<tr bgcolor="{$bgcolor}">
+		<td rowspan="{$i1.c+1}">{$i1.name}</td>
+		<td style="font-weight:bold">итого по статье</td>
+		<td style="font-weight:bold">{$i1.plan|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i1.fakt|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i1.text}</td>
+		<td style="font-weight:bold">{$i1.zd_fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+	</tr>
+	{foreach key=k2 item=i2 from=$i1.body}
+	<tr bgcolor="{$bgcolor}">
+		<td>{$i2.kat_name}</td>
+		<td>{$i2.plan|default:0|num:3}</td>
+		<td>{$i2.fakt|default:0|num:3}</td>
+		<td>{$i2.text}</td>
+		<td>{$i2.zd_fakt|default:0|num:3}</td>
+		<td>{$i2.zd_text}</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+{/foreach}
+
+
+
+
+<tr style="font-weight: bold;">
+	<td colspan="7" rowspan="1"></td>
+	<td>ИТОГО</td>
+	<td>{$pdt.plan|default:0|num:3}</td>
+	<td>{$pdt.fakt|default:0|num:3}</td>
+	<td></td>
+	<td>{$pdt.zd_fakt|default:0|num:3}</td>
+	<td></td>
+</tr>
+
+
+</table>

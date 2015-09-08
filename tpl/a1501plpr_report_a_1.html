@@ -1,0 +1,16 @@
+{if not $smarty.request.print}
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td>Количество ТП всего<br></td>
+		<td>Объем продаж январь 2015, {$valuta}</td>
+		<td>Сумма бонуса, {$valuta}</td>
+		<td>Выдано</td>
+	</tr>
+	<tr style="text-align:right">
+		<td>{$itogi.cnt|default:0}</td>
+		<td>{$itogi.sales|default:0|num:2}</td>
+		<td>{$itogi.bonus_sum1|default:0|num:2}</td>
+		<td>{$itogi.bonus_dt1|default:0|num:0}</td>
+	</tr>
+</table>
+{/if}

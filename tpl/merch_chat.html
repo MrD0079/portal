@@ -1,0 +1,85 @@
+{foreach key=k item=i from=$chat}
+<p>
+<font style="color:red">{$i.lu}</font>
+<font style="color:green">{$i.fio}</font>
+<font style="color:blue">{$i.text}</font>
+</p>
+<p>
+{foreach key=k1 item=i1 from=$chat_f}
+{if $i.id eq $i1.chat_id}
+<div class="pics">
+<a target=_blank href="/merch_chat_files/{$i1.fn}"><img src="/merch_chat_files/{$i1.fn}" height=50px></a>
+<img src="/merch_chat_files/{$i1.fn}" class="hov">
+</div>
+{/if}
+{/foreach}
+</p>
+{/foreach}
+
+
+{if $smarty.request.chat_closed neq 1}
+
+<!--
+<div id="uploadOutput_{$smarty.request.dt1}_{$smarty.request.ag_id}_{$smarty.request.kod_tp}" style="display: inline;">
+</div>
+-->
+
+<form
+target="_self"
+action="index.php"
+method="POST"
+id="form_add_comment_{$smarty.request.dt1}_{$smarty.request.ag_id}_{$smarty.request.kod_tp}"
+name="form_add_comment[{$smarty.request.dt1}{$smarty.request.ag_id}{$smarty.request.kod_tp}]"
+enctype="multipart/form-data"
+>
+<input type=hidden name="action" value="merch_chat">
+<input type=hidden name="nohead" value="1">
+<input type=hidden name="dt" value="{$smarty.request.dt}">
+<input type=hidden name="ag_id" value="{$smarty.request.ag_id}">
+<input type=hidden name="kod_tp" value="{$smarty.request.kod_tp}">
+<input type=hidden name="close_comment" value="1" disabled id="close_comment">
+
+<textarea
+rows=5
+cols=15
+name="add_comment"
+></textarea>
+
+<br>
+
+Приложить файлы
+<br>
+<input type=file name=files[] multiple>
+
+
+</form>
+
+<a href="javascript:void(0);" onclick="
+$('#form_add_comment_{$smarty.request.dt1}_{$smarty.request.ag_id}_{$smarty.request.kod_tp}').submit();
+">Добавить задачу</a>
+
+{if $is_admin or $is_ma}
+<a href="javascript:void(0);" onclick="
+$('#close_comment').attr('disabled',false);
+$('#form_add_comment_{$smarty.request.dt1}_{$smarty.request.ag_id}_{$smarty.request.kod_tp}').submit();
+">Закрыть задачу</a>
+{/if}
+
+<script>
+$dt = '{$smarty.request.dt1}';
+$ag_id = '{$smarty.request.ag_id}';
+$kod_tp = '{$smarty.request.kod_tp}';
+{literal}
+	$(document).ready(function() {
+		var options = {
+			/*target: '#uploadOutput_'+$dt+'_'+$ag_id+'_'+$kod_tp,*/
+			success: function() {
+			$('#load_comments_'+$dt+'_'+$ag_id+'_'+$kod_tp).click();
+			}
+		};
+		$('#form_add_comment_'+$dt+'_'+$ag_id+'_'+$kod_tp).ajaxForm(options);
+	}); 
+{/literal}
+</script> 
+
+{/if}

@@ -1,0 +1,210 @@
+<h1>Торговые условия работы с ТП</h1>
+
+{if not $is_ts and not $is_admin}
+	{assign var=disabled value='disabled'}
+{/if}
+
+{if not $smarty.request.print}
+
+<form method=POST name=form_report id=form_report target=_self method=post enctype="multipart/form-data">
+
+{if $is_ts neq 1 and $is_mkk neq 1 and $is_eta neq 1}
+
+По руководителю:
+<br>
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+<br>
+
+По ТС/МКК:
+<br>
+<select name=exp_list_only_ts id=exp_list_only_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_only_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+
+{/if}
+
+{if $is_eta neq 1}
+
+По ЭТА:
+<br>
+<select name=routes_eta_list id=routes_eta_list>
+<option value=''></option>
+{foreach key=key item=item from=$routes_eta_list}
+<option value="{$item.h_eta}">{$item.eta}</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#routes_eta_list option[value='{$smarty.request.routes_eta_list}']").prop('selected', true);</script>
+
+<input checked="checked" name="sc" id="sc" value="0" type="radio">все
+<input name="sc" id="sc" value="1" type="radio">с торговыми условиями
+<input name="sc" id="sc" value="2" type="radio">с торговыми условиями, но БЕЗ ПРОТОКОЛА
+<script>$("input[name=sc][value={$smarty.request.sc}]").attr('checked',true);</script>
+<br>
+
+<input checked="checked" name="sc_tp" id="sc_tp" value="0" type="radio">все
+<input name="sc_tp" id="sc_tp" value="1" type="radio">неработающие ТП
+<input name="sc_tp" id="sc_tp" value="2" type="radio">работающие ТП
+<script>$("input[name=sc_tp][value={$smarty.request.sc_tp}]").attr('checked',true);</script>
+<br>
+
+<table>
+	<tr>
+		<td style="text-align:right">Регион</td>
+		<td>
+<select name=region_name id=region_name>
+	<option value=0></option>
+	{foreach key=key item=item from=$region_list}
+	<option value="{$item.region_name}">{$item.region_name}</option>
+	{/foreach}
+</select>
+<script>$("#region_name option[value='{$smarty.request.region_name}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Подразделение</td>
+		<td>
+<select name=department_name id=department_name>
+	<option value=0></option>
+	{foreach key=key item=item from=$department_list}
+	<option value="{$item.department_name}">{$item.department_name}</option>
+	{/foreach}
+</select>
+<script>$("#department_name option[value='{$smarty.request.department_name}']").prop('selected', true);</script>
+		</td>
+	</tr>
+</table>
+
+
+
+
+
+{/if}
+
+<p>
+<input type=submit name=generate id=generate value="Построить отчет">
+</p>
+
+{if $smarty.request.generate}
+<p>
+<input type=submit name=save id=save value="Сохранить">
+</p>
+
+<p><a href="?action=sc&print=1&excel=1&generate=1&filename=Торговые условия работы с ТП">Экспорт в Excel</a></p>
+
+{/if}
+
+{/if}
+
+{if $smarty.request.generate}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>ТС</td>
+		<td>ЭТА</td>
+		<td>Код, название, адрес ТП</td>
+		<td>Отсрочка</td>
+		<td>Скидка,<br>%</td>
+		<td>Бонус,<br>%</td>
+		<td>Фикс.<br>оплата<br>в<br>месяц,<br>{$valuta}</td>
+		<td>Наценка,<br>%</td>
+		<td>Обоснование<br>предоставления<br>скидки/бонуса</td>
+
+		{if not $smarty.request.print}
+
+		<td>Протокол<br>условий<br>сотрудничества,<br>срок<br>начала<br>его<br>действия</td>
+
+		{/if}
+
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+		<tr>
+			<td style="text-align:center">{$smarty.foreach.list.iteration}</td>
+			<td>{$i.head.ts}</td>
+			<td>{$i.head.eta}</td>
+			<td>{$i.head.tp_kod} {$i.head.tp_name} {$i.head.tp_address}</td>
+
+			{if not $smarty.request.print and not $disabled}
+
+			<td><input class="number_int" size=4 name=data[{$i.head.tp_kod}][delay] value="{$i.head.delay}"></td>
+			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][discount] value="{$i.head.discount}"></td>
+			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][bonus] value="{$i.head.bonus}"></td>
+			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][fixed] value="{$i.head.fixed}"></td>
+			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][margin] value="{$i.head.margin}"></td>
+			<td><textarea cols=20 rows=2 name=data[{$i.head.tp_kod}][justification]>{$i.head.justification}</textarea></td>
+			<td>
+				{foreach key=k1 item=i1 from=$i.files name=files}
+					<div id="uploadOutput{$k1}" style="display: inline;">
+						<nobr>
+						{if $smarty.foreach.files.iteration eq $smarty.foreach.files.total}
+							<a href="javascript:void(0);" onclick="
+							$('#uploadOutput{$k1}').load('?action=sc&nohead=1&del_file={$k1}');
+							$('#uploadOutput{$k1}').remove();
+							">[x]</a>
+						{/if}
+						<a target=_blank href="sc_files/{$i1.fn}">{$i1.fn}</a>
+						{$i1.dt} загружен {$i1.lu}
+						</nobr>
+						<br>
+					</div>
+				{/foreach}
+				<input type=file name=files[fn][{$i.head.tp_kod}]>
+				<input class="datepicker" size=8 name=files[dt][{$i.head.tp_kod}]>
+			</td>
+
+			{else}
+
+			<td style="text-align:right">{$i.head.delay}</td>
+			<td style="text-align:right">{$i.head.discount|num:2}</td>
+			<td style="text-align:right">{$i.head.bonus|num:2}</td>
+			<td style="text-align:right">{$i.head.fixed|num:2}</td>
+			<td style="text-align:right">{$i.head.margin|num:2}</td>
+			<td>{$i.head.justification|nl2br}</td>
+			<td>
+				{foreach key=k1 item=i1 from=$i.files name=files}
+					<nobr>
+					<a target=_blank href="sc_files/{$i1.fn}">{$i1.fn}</a>
+					{$i1.dt} загружен {$i1.lu}
+					</nobr>
+					<br>
+				{/foreach}
+			</td>
+
+			{/if}
+
+		</tr>
+	{/foreach}
+</table>
+
+<p style="font-weight:bold;text-align:center">Итого ТП: {$smarty.foreach.list.total}</p>
+
+{/if}
+
+{if not $smarty.request.print}
+{if $smarty.request.generate}
+<p>
+<input type=submit name=save id=save value="Сохранить">
+</p>
+{/if}
+
+</form>
+
+{/if}

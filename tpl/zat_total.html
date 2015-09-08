@@ -1,0 +1,159 @@
+<h1>Общие затраты команды для начисления ЗП</h1>
+
+{if not $smarty.request.print}
+<p><a href="?action=zat_total&month_list={$smarty.request.month_list}&print=1&excel=1&filename=Общие затраты команды для начисления ЗП {$zat_total_y}-{$zat_total_m}">Передать отчет в Excel</a></p>
+<form name=form_zat id=form_zat target=_self method=post>
+{/if}
+
+<table border=1 sellpadding=0 cellspacing=0>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№</td>
+		<!--<td>Регион</td>
+		<td>Дистрибьютор</td>-->
+		<td>Должность</td>
+		<td>Ф.И.О.</td>
+		<td>Аванс</td>
+		<td>Транспортные расходы</td>
+		<td>Командировочные расходы</td>
+		<td>Представительские расходы  </td>
+		<td>Канцелярия                 </td>
+		<td>Объявления в СМИ           </td>
+		<td>Почта                      </td>
+		<td>Конференцзал               </td>
+		<td>Питание участников тренинга</td>
+		<td>ЕСВ                        </td>
+		<td>Единый налог               </td>
+		<td>Оплата услуг ведения счета 	</td>
+		<td>Мобильная связь</td>
+		<td>Амортизация                </td>
+		<td>Итого к компенсации</td>
+		{assign var=avans value=0}
+		{assign var=cost_transp value=0}
+		{assign var=cost_kom value=0}
+		{assign var=present_cost value=0}
+		{assign var=stationery value=0}
+		{assign var=media_advert value=0}
+		{assign var=mail value=0}
+		{assign var=conference value=0}
+		{assign var=training_food value=0}
+		{assign var=esv value=0}
+		{assign var=single_tax value=0}
+		{assign var=account_payments value=0}
+		{assign var=mobile value=0}
+		{assign var=amort value=0}
+		{assign var=total value=0}
+	</tr>
+	{foreach key=key item=item from=$zat_total}
+	<tr align=right {if $item.rep_date neq $smarty.request.month_list and $item.rep_date neq null}style="color:orange;"{elseif $item.accepted_in_time neq 1}style="color:red;"{/if}>
+		{assign var=tn value=`$item.emp_tn`}
+
+
+{if $item.accepted_in_time eq 1 or $item.rep_date neq $smarty.request.month_list}
+
+
+		{assign var=avans         value=`$avans+$item.avans`}
+		{assign var=cost_transp   value=`$cost_transp+$item.cost_transp`}
+		{assign var=cost_kom      value=`$cost_kom+$item.cost_kom`}
+		{assign var=present_cost  value=`$present_cost+$item.present_cost`}
+		{assign var=stationery    value=`$stationery+$item.stationery`}
+		{assign var=media_advert  value=`$media_advert+$item.media_advert`}
+		{assign var=mail          value=`$mail+$item.mail`}
+		{assign var=conference    value=`$conference+$item.conference`}
+		{assign var=training_food value=`$training_food+$item.training_food`}
+		{assign var=esv           value=`$esv+$item.esv`}
+		{assign var=single_tax    value=`$single_tax+$item.single_tax`}
+		{assign var=account_payments value=`$account_payments+$item.account_payments`}
+		{assign var=mobile        value=`$mobile+$item.mobile`}
+		{assign var=amort         value=`$amort+$item.amort`}
+{/if}
+
+
+
+
+{if $smarty.request.refresh}
+		{assign var=total_line         value=`$item.total-$smarty.request.avans.$tn`}
+{else}
+		{assign var=total_line         value=`$item.total-$item.avans`}
+{/if}
+
+		<td>{$item.rownum}</td>
+		<!--<td align=left>{$item.region}</td>
+		<td align=left>{$item.distr}</td>-->
+		<td align=left>{$item.emp_dolgn}</td>
+		<td align=left>
+			{if not $smarty.request.print}
+			<a target=_blank href="?action=zat&emp_tn={$item.emp_tn}&month_list={$smarty.request.month_list}&readonly=1">{$item.emp_name}</a>
+			{else}
+			{$item.emp_name}
+			{/if}
+			{if $item.rep_date neq $smarty.request.month_list and $item.rep_date neq null}
+				<font style="font-weight:bold;color:orange"> отчет за {$item.rep_date}</font>
+			{/if}
+			{if $item.datauvol}
+				<font style="font-weight:bold;color:#8FFFFF"> уволен {$item.datauvol}</font>
+			{/if}
+		</td>
+		<td>
+		{if $is_acceptor and $item.rep_date eq $smarty.request.month_list}
+			<input size=5 name=avans[{$item.emp_tn}] id=avans[{$item.emp_tn}] value={if $smarty.request.refresh}{$smarty.request.avans.$tn}{else}{$item.avans}{/if}>
+		{else}
+			{$item.avans|num:2}
+		{/if}
+		</td>
+		<td>{$item.cost_transp|num:2}</td>
+		<td>{$item.cost_kom|num:2}</td>
+		<td>{$item.present_cost|num:2}</td>
+		<td>{$item.stationery|num:2}</td>
+		<td>{$item.media_advert|num:2}</td>
+		<td>{$item.mail|num:2}</td>
+		<td>{$item.conference|num:2}</td>
+		<td>{$item.training_food|num:2}</td>
+		<td>{$item.esv|num:2}</td>
+		<td>{$item.single_tax|num:2}</td>
+		<td>{$item.account_payments|num:2}</td>
+		<td>{$item.mobile|num:2}</td>
+		<td>{$item.amort|num:2}</td>
+		<td>
+
+
+
+{if $item.accepted_in_time eq 1 or $item.rep_date neq $smarty.request.month_list}
+		{$total_line|num:2}
+		{assign var=total         value=`$total+$total_line`}
+{else}
+			0
+{/if}
+
+
+
+
+
+
+		</td>
+	</tr>
+	{/foreach}
+	<tr align=right style="font-weight:bold">
+		<td align=left colspan=3>Итого</td>
+		<td>{$avans|num:2}</td>
+		<td>{$cost_transp|num:2}</td>
+		<td>{$cost_kom|num:2}</td>
+		<td>{$present_cost|num:2}</td>
+		<td>{$stationery|num:2}</td>
+		<td>{$media_advert|num:2}</td>
+		<td>{$mail|num:2}</td>
+		<td>{$conference|num:2}</td>
+		<td>{$training_food|num:2}</td>
+		<td>{$esv|num:2}</td>
+		<td>{$single_tax|num:2}</td>
+		<td>{$account_payments|num:2}</td>
+		<td>{$mobile|num:2}</td>
+		<td>{$amort|num:2}</td>
+		<td>{$total|num:2}</td>
+	</tr>
+</table>
+
+{if not $smarty.request.print}
+<input type=submit name="refresh" value="Пересчитать">
+<input type=submit name="save" value="Сохранить">
+</form>
+{/if}

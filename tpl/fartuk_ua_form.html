@@ -1,0 +1,26 @@
+<h1>Заполнить отчет по акции "Фартук"</h1>
+<form target="_self" method="POST" name=form_tp id=form_tp enctype="multipart/form-data">
+<input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+<input type=submit name=save id=save class=save value="Сохранить"><br>
+Получено фартуков, шт.<input class="number" name="d[far_poluch]" value="{$d.far_poluch}"><br>
+Кол-во ТП накопительно, сыгравших в акцию, шт.<input class="number" name="d[far_vidano]" value="{$d.far_vidano}"><br>
+Сумма по акционным накладным накопительно, грн.<input class="number" name="d[summa_act]" value="{$d.summa_act}"><br>
+Кол-во выданных фартуков, шт.<input class="number" name="d[count_tp]" value="{$d.count_tp}"><br>
+Загрузить файл<input type=file name=fn>
+
+
+
+
+
+{foreach key=k item=i from=$fl}
+<p>
+<input type=checkbox name=del_file[] value="{$i.path}/{$i.file}">
+<a target=_blank href="{$i.path}/{$i.file}">{$i.file}</a>
+</p>
+{/foreach}
+
+
+
+
+
+</form>

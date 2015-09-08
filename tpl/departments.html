@@ -1,0 +1,98 @@
+<h1>Страны</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="text-align:center">
+<td>
+<input type=submit name=delete value="Удалить">
+</td>
+<td>
+департамент
+</td>
+<td>
+страна
+</td>
+<td>
+код
+</td>
+<td>
+порядок
+</td>
+<td>
+валюта
+</td>
+<td>
+код<br>из<br>базы<br>"персонал"
+</td>
+<td>
+возможен<br>экспорт<br>отпусков<br>в<br>базу<br>"персонал"<br>(есть<br>ДБ-линк)
+</td>
+</tr>
+
+{foreach key=key item=item from=$departments}
+<tr style="text-align:center">
+<td>
+<input name=del[{$item.dpt_id}] type=checkbox>
+</td>
+<td>
+<input name=data[{$item.dpt_id}][dpt_name] size=50 value="{$item.dpt_name|escape}">
+</td>
+<td>
+<input name=data[{$item.dpt_id}][cnt_name] size=50 value="{$item.cnt_name|escape}">
+</td>
+<td>
+<input name=data[{$item.dpt_id}][cnt_kod] size=5 value="{$item.cnt_kod|escape}">
+</td>
+<td>
+<input name=data[{$item.dpt_id}][sort] size=5 value="{$item.sort}" class="number_int">
+</td>
+<td>
+<select id=cur{$item.dpt_id} name=data[{$item.dpt_id}][cur_id]>
+<option></option>
+{foreach key=k1 item=i1 from=$currencies}
+<option value={$i1.id}>{$i1.name}</option>
+{/foreach}
+</select>
+<script>
+$('#cur{$item.dpt_id}').val({$item.cur_id});
+</script>
+</td>
+<td>
+<input name=data[{$item.dpt_id}][manufak] size=5 value="{$item.manufak}" class="number_int">
+</td>
+<td>
+{if $item.store_vac}да{/if}
+</td>
+</tr>
+{/foreach}
+<tr>
+<td>
+<input type=submit name=add value="Добавить">
+</td>
+<td>
+<input name=new[dpt_name] size=50>
+</td>
+<td>
+<input name=new[cnt_name] size=50>
+</td>
+<td>
+<input name=new[cnt_kod] size=5>
+</td>
+<td>
+<input name=new[sort] size=5 class="number_int">
+</td>
+<td>
+<select name=new[cur_id]>
+<option></option>
+{foreach key=k1 item=i1 from=$currencies}
+<option value={$i1.id}>{$i1.name}</option>
+{/foreach}
+</select>
+</td>
+<td>
+<input name=new[manufak] size=5 class="number_int">
+</td>
+</tr>
+</table>
+
+</form>

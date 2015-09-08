@@ -1,0 +1,385 @@
+{if $zp_ag_total.fil_null}<p style="color:red;">Не привязаны к филиалам {$zp_ag_total.fil_null} агентов(-а)</p>{/if}
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="
+?action=bud_svod
+&page=tus
+&print=1
+&dt={$smarty.request.dt}
+&fil={$smarty.request.fil}
+&clusters={$smarty.request.clusters}
+&exp_list_without_ts={$smarty.request.exp_list_without_ts}
+&exp_list_only_ts={$smarty.request.exp_list_only_ts}
+&eta_list={$smarty.request.eta_list}
+&ok_bonus={$smarty.request.ok_bonus}
+&fakt_gt_plan={$smarty.request.fakt_gt_plan}
+&cash={$smarty.request.cash}
+&excel=1
+&filename=Сводный отчет - торговые условия - {$smarty.request.dt}
+">Excel</a>
+</p>
+{/if}
+
+
+<h3>
+Торговые условия
+</h3>
+
+<p>
+<div id="total" style="font-weight: bold;"></div>
+</p>
+
+<h2>Детализация</h2>
+
+<table id=mytable style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold">
+<td style="text-align: center;">№ п/п</td>
+<td style="text-align: center;">ФИО ТС</td>
+<td style="text-align: center;">ФИО ЭТА</td>
+<td style="text-align: center;">Код ТП</td>
+<td style="text-align: center;">Юридическое название ТП</td>
+<td style="text-align: center;">Фактический адрес ТП</td>
+<td style="text-align: center;">Тип ТП</td>
+<td style="text-align: center;">Отсрочка</td>
+<td style="text-align: center;">Скидка, %</td>
+<td style="text-align: center; background-color: rgb(255, 255, 204);">Фактическая скидка, %</td>
+<td style="text-align: center; background-color: rgb(255, 255, 204);">Фактическая скидка, {$valuta}</td>
+<td style="text-align: center;">Бонус, %</td>
+<td style="text-align: center;">Фикс. оплата в месяц, {$valuta}</td>
+<td style="text-align: center;">Наценка, %</td>
+<td style="text-align: center;">Последние загруженные условия</td>
+<td style="text-align: center;">Сумма продаж, ден. ед.</td>
+<td style="text-align: center;">ТС/СТС: планирую выдать бонус</td>
+<td style="text-align: center;">Возврат денежных средств, {$valuta}</td>
+<td style="text-align: center;">Бонус расчетный ТП, {$valuta}</td>
+<td style="text-align: center;">Бонус фактический, {$valuta}</td>
+<td style="text-align: center;">Фикс. оплата в месяц ФАКТ, {$valuta}</td>
+<td style="text-align: center;">Максимум по ТП, {$valuta}</td>
+<td style="text-align: center; background-color: rgb(153, 255, 153);">ИТОГО</td>
+<td style="text-align: center;">Бонус по форме 2</td>
+<td style="text-align: center;background-color:#FFCC99;">Компенсация дистрибутору, {$valuta}</td>
+<td style="text-align: center;">Затраты на ТП, %</td>
+<td style="text-align: center;">ДБ: выдачу подтверждаю</td>
+<td style="text-align: center;">Комментарий</td>
+</tr>
+
+{foreach key=k item=i from=$tp name=tp}
+<tr>
+
+
+
+			<td style="text-align:center">{$smarty.foreach.tp.iteration}</td>
+			<td>{$i.ts}</td>
+			<td>{$i.eta}</td>
+			<td>{$i.tp_kod}</td>
+			<td>{$i.tp_name}</td>
+			<td>{$i.tp_addr}</td>
+			<td>{$i.tp_type}</td>
+			<td style="text-align:center">{$i.delay}</td>
+			<td style="text-align:center">{$i.discount|num:3}</td>
+			<td style="text-align:center; background-color: rgb(255, 255, 204);">{$i.skidka|num:6}</td>
+			<td style="text-align:center; background-color: rgb(255, 255, 204);">{$i.skidka_val|num:2}</td>
+			<td style="text-align:center">{$i.bonus|num:2}</td>
+			<td style="text-align:center">{$i.fixed|num:2}</td>
+			<td style="text-align:center">{$i.margin}</td>
+			<td><a target=_blank href="sc_files/{$i.last_fn}">{$i.last_fn}</a></td>
+			<td style="text-align:right">{$i.summa|num:2}</td>
+			<td style=" text-align: center;" id="d_{$i.tp_kod}_tp_kod">
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+					{if $i.selected}да{/if}
+				{else}
+					<input
+						name="selected[{$i.tp_kod}]"
+						id="selected_{$i.tp_kod}" type="checkbox"
+						onChange="
+							this.checked?null:$('#summa_return_{$i.tp_kod}').val('');
+							this.checked?null:$('#fixed_fakt_{$i.tp_kod}').val('');
+							$('#summa_return_{$i.tp_kod}').attr('disabled',!this.checked);
+							$('#fixed_fakt_{$i.tp_kod}').attr('disabled',!this.checked);
+							$('#bonus_fakt_{$i.tp_kod}').attr('disabled',!this.checked);
+							$('#cash_{$i.tp_kod}').attr('disabled',!this.checked);
+							$('#comm_{$i.tp_kod}').attr('disabled',!this.checked);
+							save_tp('{$i.tp_kod}','tp_kod',this.checked?1:0);
+							this.checked?save_tp('{$i.tp_kod}','summa_return','{$i.summa_return}'):null;
+							this.checked?save_tp('{$i.tp_kod}','bonus_fakt','{$i.bonus_fakt}'):null;
+							this.checked?save_tp('{$i.tp_kod}','fixed_fakt','{$i.fixed_fakt}'):null;
+							this.checked?save_tp('{$i.tp_kod}','cash','{$i.cash}'):null;
+							this.checked?save_tp('{$i.tp_kod}','comm','{$i.comm}'):null;
+							/*after_save('{$i.tp_kod}');*/
+						"
+					>
+					<script>
+						$('#selected_{$i.tp_kod}').prop('checked','{$i.selected}'==1?true:false);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.tp_kod}_summa_return">
+				<!--*{$is_ts}*{$i.ok_db_tn}*{$smarty.request.print}*{$i.taf_ok_db_tn}*-->
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i.summa_return|num:2}
+				{else}
+					<a href="javascript:void(0);" onclick="$('#summa_return_{$i.tp_kod}').val({$i.bedt_summ});$('#summa_return_{$i.tp_kod}').change();">{$i.bedt_summ|num:3} =></a>
+					<input
+						class="number"
+						size="10"
+						name="summa_return[{$i.tp_kod}]"
+						id="summa_return_{$i.tp_kod}"
+						onChange="save_tp('{$i.tp_kod}','summa_return',this.value);/*after_save('{$i.tp_kod}');*/"
+					>
+					<script>
+						$('#summa_return_{$i.tp_kod}').val({$i.summa_return});
+						$('#summa_return_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_tp">{$i.bonus_tp|num:2}</td>
+			<td style=" text-align:right;" id="d_{$i.tp_kod}_bonus_fakt">
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i.bonus_fakt|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="bonus_fakt[{$i.tp_kod}]"
+						id="bonus_fakt_{$i.tp_kod}"
+						onChange="save_tp('{$i.tp_kod}','bonus_fakt',this.value);/*after_save('{$i.tp_kod}');*/"
+					>
+					<script>
+						$('#bonus_fakt_{$i.tp_kod}').val({$i.bonus_fakt});
+						$('#bonus_fakt_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.tp_kod}_fixed_fakt">
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i.fixed_fakt|num:2}
+				{else}
+					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.tp_kod}').val({$i.fixed});$('#fixed_fakt_{$i.tp_kod}').change();">{$i.fixed|num:3} =></a>
+					<input
+						class="number"
+						size="10"
+						name="fixed_fakt[{$i.tp_kod}]"
+						id="fixed_fakt_{$i.tp_kod}"
+						onChange="save_tp('{$i.tp_kod}','fixed_fakt',this.value);/*after_save('{$i.tp_kod}');*/"
+					>
+					<script>
+						$('#fixed_fakt_{$i.tp_kod}').val({$i.fixed_fakt});
+						$('#fixed_fakt_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right ; {if $i.total > $i.maxtp} background-color:red {/if} " id="d_{$i.tp_kod}_maxtp">{$i.maxtp|num:2}</td>
+			<td style=" text-align:right ;background-color: rgb(153, 255, 153);" id="d_{$i.tp_kod}_total">{$i.total|num:2}</td>
+			<td style=" text-align:center" id="d_{$i.tp_kod}_cash">
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+					{if $i.cash}да{/if}
+				{else}
+					<input
+						name="cash[{$i.tp_kod}]"
+						id="cash_{$i.tp_kod}" type="checkbox"
+						onChange="save_tp('{$i.tp_kod}','cash',this.checked?1:0);"
+					>
+					<script>
+						$('#cash_{$i.tp_kod}').prop('checked','{$i.cash}'==1?true:false);
+						$('#cash_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;background-color:#FFCC99;" id="d_{$i.tp_kod}_compens_distr">{$i.compens_distr|num:2}</td>
+			<td style=" text-align:right" id="d_{$i.tp_kod}_zat">{$i.zat|num:2}</td>
+			<td style=" text-align:center;" id="d_{$i.tp_kod}_ok_db_tn">
+				{if not $i.selected or $tn neq $i.parent_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{else}
+					<input
+						name="ok_db_tn[{$i.tp_kod}]"
+						id="ok_db_tn_{$i.tp_kod}" type="checkbox"
+						onChange="
+							save_tp('{$i.tp_kod}','ok_db_tn',this.checked?{$i.parent_tn}:'');/*after_save('{$i.tp_kod}');*/
+						"
+					>
+					<script>
+						$('#ok_db_tn_{$i.tp_kod}').prop('checked','{$i.ok_db_tn}'!==''?true:false);
+					</script>
+				{/if}
+				{$i.ok_db_fio}
+				{$i.ok_db_lu}
+			</td>
+			<td style=" text-align:left;" id="d_{$i.tp_kod}_comm">
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i.comm|nl2br}
+				{else}
+					<textarea
+						name="comm[{$i.tp_kod}]"
+						id="comm_{$i.tp_kod}"
+						onChange="save_tp('{$i.tp_kod}','comm',this.value);"
+					></textarea>
+					<script>
+						$('#comm_{$i.tp_kod}').val('{$i.comm}');
+						$('#comm_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+
+<p>
+<div id="svodf"></div>
+</p>
+
+
+
+<div id="ok" style="display: inline;"></div>
+
+
+<script>
+v_dt='{$smarty.request.dt}';
+{literal}
+function save_tp(tp_kod,field,val)
+{
+	$('#d_'+tp_kod+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('tp_kod',  tp_kod);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	fd.append('dt',  v_dt);
+	$.ajax({
+	type: 'POST',
+	url: '?action=bud_svod_tus_tp_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+	$('#ok').html(''+data+'');
+	get_val(tp_kod,'bonus_tp');
+	get_val(tp_kod,'maxtp');
+	get_val(tp_kod,'total');
+	get_val(tp_kod,'zat');
+	load_tp_total();
+	$('#d_'+tp_kod+'_'+field).css('background-color','white');
+}});
+}
+
+function save_reestr()
+{
+	$('#reestr_load').css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  v_dt);
+	fd.append('file', $('#reestr_fn')[0].files[0]);
+	fd.append('summa', $('#reestr_sum').val());
+	$.ajax({
+	type: 'POST',
+	url: '?action=bud_svod_tus_tp_svodf_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+	$('#ok').html(''+data+'');
+	load_tp_svodf();
+	$('#reestr_load').css('background-color','white');
+}});
+}
+
+function del_reestr(id)
+{
+	$('#reestr_tr_'+id).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	$.ajax({
+	type: 'POST',
+	url: '?action=bud_svod_tus_tp_svodf_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+	$('#ok').html(''+data+'');
+	$('#reestr_tr_'+id).remove();
+	load_tp_svodf();
+}});
+}
+
+function get_val(tp_kod,field)
+{
+	$('#d_'+tp_kod+'_'+field).load('?action=bud_svod_tus_tp_get_val&nohead=1',
+	{
+		tp_kod: tp_kod,
+		field: field,
+		dt: v_dt
+	});
+}
+
+function load_tp_total()
+{
+var fd = new FormData();
+fd.append('eta_list',  $('#eta_list').val());
+fd.append('ok_bonus',  $('#ok_bonus').val());
+fd.append('fakt_gt_plan',  $('#fakt_gt_plan').val());
+fd.append('cash',  $('#cash').val());
+fd.append('exp_list_without_ts',  $('#exp_list_without_ts').val());
+fd.append('exp_list_only_ts',  $('#exp_list_only_ts').val());
+fd.append('fil',  $('#fil').val());
+fd.append('clusters',  $('#clusters').val());
+fd.append('dt',  v_dt);
+$.ajax({
+  type: 'POST',
+  url: '?action=bud_svod_tus_tp_total&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+//$('#total').remove();
+//$('#mytable>tbody:last').append('<tr id="total" style="font-weight: bold;">'+data+'</tr>');
+$('#total').html(''+data+'');
+//$('#total').html(''+data+'');
+  }
+});
+}
+
+
+function load_tp_svodf()
+{
+var fd = new FormData();
+fd.append('eta_list',  $('#eta_list').val());
+fd.append('ok_bonus',  $('#ok_bonus').val());
+fd.append('fakt_gt_plan',  $('#fakt_gt_plan').val());
+fd.append('cash',  $('#cash').val());
+fd.append('exp_list_without_ts',  $('#exp_list_without_ts').val());
+fd.append('exp_list_only_ts',  $('#exp_list_only_ts').val());
+fd.append('fil',  $('#fil').val());
+fd.append('clusters',  $('#clusters').val());
+fd.append('dt',  v_dt);
+$.ajax({
+  type: 'POST',
+  url: '?action=bud_svod_tus_tp_svodf&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+//$('#total').remove();
+//$('#mytable>tbody:last').append('<tr id="total" style="font-weight: bold;">'+data+'</tr>');
+$('#svodf').html(''+data+'');
+//$('#total').html(''+data+'');
+  }
+});
+}
+
+
+
+{/literal}
+
+
+{if not $smarty.request.print}
+load_tp_total();
+load_tp_svodf();
+{/if}
+
+</script>
+
+
+
+
+

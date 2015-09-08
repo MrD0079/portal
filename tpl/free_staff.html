@@ -1,0 +1,101 @@
+<h1>Увольнение подчиненного</h1>
+
+{if $smarty.request.free_staff}Ваша заявка успешно добавлена на рассмотрение. В течение нескольких часов Вам на корпоративную почту придет сообщение о результате{/if}
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+<p><input type=submit value="Отправить запрос на подтверждение"></p>
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td>ФИО увольняющегося сотрудника
+      </td>
+      <td>
+	<select required name="free_staff[tn]" onChange="this.value!=''?$('#uploadOutput').load('?action=free_staff_my_emp_all&nohead=1&tn='+this.value):$('#uploadOutput').text('');">
+		<option></option>
+		{foreach from=$my_emp key=k item=i}
+			<option value={$i.emp_tn}>{$i.emp_name}</option>
+		{/foreach}
+	</select>
+	<div id="uploadOutput" style="display: inline;">
+	</div>
+      </td>
+    </tr>
+    <tr>
+      <td>Причина увольнения
+      </td>
+      <td>
+      <select required name="free_staff[seat]">
+		<option></option>
+		{foreach from=$seat key=k item=i}
+			<option value={$i.id}>{$i.name}</option>
+		{/foreach}
+      </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Дата увольнения
+      </td>
+      <td><input required name="free_staff[datauvol]" class="datepicker">
+      </td>
+    </tr>
+    <tr>
+      <td>
+Условия увольнения<br>
+(дорабатывает до...)<br>
+(увольняется без отработки)<br>
+"Наложено удержание в сумме... за....<br>
+(Достигнута договоренность...) и т.д.
+      </td>
+      <td><textarea required cols="85" rows="5" name="free_staff[params]"></textarea>
+</td>
+    </tr>
+    <tr>
+      <td>Дата блокировки корпоративного электронного адреса
+      </td>
+      <td><input required name="free_staff[block_email]" class="datepicker"></td>
+    </tr>
+    <tr>
+      <td style="">Дата блокировки корпоративного мобильного номера
+      </td>
+      <td style=""><input required name="free_staff[block_mob]" class="datepicker"></td>
+    </tr>
+    <tr>
+      <td style="">Дата блокировки доступа к корпоративному порталу
+      </td>
+      <td style=""><input required name="free_staff[block_portal]" class="datepicker"></td>
+    </tr>
+    <tr>
+      <td style="">ФИО, должность сотрудника, принимающего территорию<br>(или кто будет исполнять обязанности):
+      </td>
+	<td style="">
+		<input type=radio name="free_staff[val_new]" value=1 onClick="$('#y1').attr('disabled',false);$('#f1').attr('disabled',true);$('#s1').attr('disabled',true)" checked>я
+
+			<input type=hidden required id=y1 name="free_staff[tn_new]" value="{$tn}">
+
+		<input type=radio name="free_staff[val_new]" value=2 onClick="$('#y1').attr('disabled',true);$('#f1').attr('disabled',true);$('#s1').attr('disabled',false)">подчиненный
+
+			<select required disabled id=s1 name="free_staff[tn_new]">
+			<option></option>
+			{foreach key=k item=i from=$childs}
+			<option value="{$i.tn}">{$i.fio}</option>
+			{/foreach}
+			</select>
+
+		<input type=radio name="free_staff[val_new]" value=3 onClick="$('#y1').attr('disabled',true);$('#f1').attr('disabled',false);$('#s1').attr('disabled',true)">другое (указать ФИО, должность) 
+
+			<input required disabled size="50" id=f1 name="free_staff[fio_new]">
+	</td>
+    </tr>
+    <tr>
+      <td style="">Номер с/з на увольнение (для РФ)
+      </td>
+      <td style=""><input name="free_staff[sz_id]" class="number_int"></td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+<p><input type=submit value="Отправить запрос на подтверждение"></p>
+
+</form>

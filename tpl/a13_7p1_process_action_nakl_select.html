@@ -1,0 +1,46 @@
+<table border="1" cellspacing="0" cellpadding=3 width=1000px>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п<br></td>
+		<td>Дата накладной</td>
+		<td>Номер накладной</td>
+		<td>Сумма по накладной, {$valuta}</td>
+		<td>
+			<nobr>Присутствует ассортимент:</nobr>
+			<br>
+			<nobr>КСК / "Шарм" / "Плоские вафли"</nobr>
+		</td>
+		<td>Акционная накладная</td>
+	</tr>
+	{foreach key=nakl_list_key item=nakl_list_item from=$nakl_list name=nakl_list}
+	<tr {if $nakl_list_item.action_nakl eq 1}bgcolor="#00ff00"{/if} bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$smarty.foreach.nakl_list.iteration}</td>
+		<td>{$nakl_list_item.data}</td>
+		<td>{$nakl_list_item.nakl}</td>
+		<td style="text-align:right">{$nakl_list_item.summa|default:0|num:2}</td>
+		<td style="text-align:center"><nobr>{$nakl_list_item.ksk} / {$nakl_list_item.sharm} / {$nakl_list_item.vf}</nobr></td>
+		<td {if $nakl_list_item.is_act eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
+			<input
+				{if not $nakl_list_item.ok_traid neq 1 or $nakl_list_item.ok_chief eq 1}disabled{/if} {if $nakl_list_item.is_act neq 1} disabled {/if}
+				onclick="
+				$('#selected{$nakl_list_item.h_tp_kod_data_nakl}').val(this.checked?1:0);
+				"
+				type=checkbox
+				{if $nakl_list_item.selected eq 1}checked{/if}
+			>
+			<input
+				type=hidden
+				id=selected{$nakl_list_item.h_tp_kod_data_nakl}
+				name=selected[{$nakl_list_item.h_tp_kod_data_nakl}]
+				{if $nakl_list_item.is_act neq 1} disabled {/if}
+			>
+			<script>$('#selected{$nakl_list_item.h_tp_kod_data_nakl}').val({$nakl_list_item.selected});</script>
+
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+<p>
+<input type=submit name=add id=add value="Добавить накладные в акцию">
+</p>
+

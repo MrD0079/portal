@@ -1,0 +1,40 @@
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+<!--<td>Дата</td>-->
+<td>СВ МС</td>
+<td>Маршрут</td>
+<td>Ф.И.О. отв.</td>
+<td>Область      </td>
+<td>Город</td>
+<td>Сеть</td>
+<td>Юридическое название ТЗ</td>
+<td>Адрес ТЗ</td>
+<td>Заказчик</td>
+<td>Всего визитов<br>за выбранный<br>период</td>
+{foreach key=k1 item=i1 from=$days}
+<td>{$i1.dwt}</td>
+{/foreach}
+</tr>
+{foreach key=k item=i from=$d name=d}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<!--<td>{$i.dt}</td>-->
+		<td>{$i.svms_name}</td>
+		<td>{$i.num}</td>
+		<td>{$i.fio_otv}</td>
+		<td>{$i.tz_oblast}</td>
+		<td>{$i.city}</td>
+		<td>{$i.net_name}</td>
+		<td>{$i.ur_tz_name}</td>
+		<td>{$i.tz_address}</td>
+		<td>{$i.ag_name}</td>
+		<td style="text-align:center">{$i.visits_total}</td>
+		<td style="text-align:center">{if $i.d1 neq 0}*{/if}</td>
+		<td style="text-align:center">{if $i.d2 neq 0}*{/if}</td>
+		<td style="text-align:center">{if $i.d3 neq 0}*{/if}</td>
+		<td style="text-align:center">{if $i.d4 neq 0}*{/if}</td>
+		<td style="text-align:center">{if $i.d5 neq 0}*{/if}</td>
+		<td style="text-align:center">{if $i.d6 neq 0}*{/if}</td>
+		<td style="text-align:center">{if $i.d7 neq 0}*{/if}</td>
+	</tr>
+{/foreach}
+</table>

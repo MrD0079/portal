@@ -1,0 +1,6 @@
+<?
+
+$smarty->display('blank.html');
+
+
+?>

@@ -1,0 +1,229 @@
+<h1>Согласование финансового и договорного планирования</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+{if not $smarty.request.print}
+	<table>
+		<tr>
+			<td colspan=10>
+				<input checked="checked" name="neednmkk" value="0" type="radio">Все сети
+				<input name="neednmkk" value="1" type="radio">Обязательны для принятия НМ КК
+				<script>$("input[name=neednmkk][value={$smarty.request.neednmkk}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Выберите сеть из списка
+				<br>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			{if not $is_mkk}
+			<td>
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+			{/if}
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+<br>
+{/if}
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+<a href="?action=fin_dog_accept&print=1&excel=1&filename=Согласование финансового и договорного планирования">Экспорт в Excel</a>
+<p style="text-align:center"><input value="Сохранить" name="save" type="submit"></p>
+{/if}
+<table border=1 cellspacing=0 cellpadding=3>
+
+	<tr style="font-weight:bold;text-align:center">
+		<td colspan=7>Общая информация</td>
+		<td colspan={if not $smarty.request.print}7{else}6{/if} class="bg-l-blue">Финансовое планирование</td>
+		<td colspan={if not $smarty.request.print}7{else}6{/if} style="background-color: rgb(255, 255, 204);">Договорное планирование</td>
+	</tr>
+
+	{foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
+
+
+	{if $fin_report_item.draw_head eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО РМКК</td>
+		<td>ФИО МКК</td>
+		<td>Факт. назв.сети</td>
+		<td>Сеть работает без бюджета</td>
+		<!--<td>Факт продаж пред. года, тыс. {$valuta}</td>-->
+		<td>План продаж, тыс.{$valuta}</td>
+		<td>% прироста продаж</td>
+		<!--<td>Бюджет пред. года, тыс.{$valuta}.</td>-->
+
+		{if not $smarty.request.print}
+		<td style="background-color: rgb(204, 255, 255);">Переход</td>
+		{/if}
+		<td style="background-color: rgb(204, 255, 255);">Бюджет, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(204, 255, 255);">% прироста бюджета</td>
+		<td style="background-color: rgb(204, 255, 255);">% затрат</td>
+		<td style="background-color: rgb(204, 255, 255);">РМ КК</td>
+		<td style="background-color: rgb(204, 255, 255);">ФМ</td>
+		<td style="background-color: rgb(204, 255, 255);">ЗГДП</td>
+
+		{if not $smarty.request.print}
+		<td style="background-color: rgb(255, 255, 204);">Переход</td>
+		{/if}
+		<td style="background-color: rgb(255, 255, 204);">Договорная кампания завершена</td>
+		<td style="background-color: rgb(255, 255, 204);">Бюджет, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(255, 255, 204);">Бюджет СДУ, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(255, 255, 204);">% прироста бюджета</td>
+		<td style="background-color: rgb(255, 255, 204);">% затрат</td>
+		<td style="background-color: rgb(255, 255, 204);">Проверено ФМ</td>
+ 
+
+	</tr>
+	{/if}
+
+	<tr {if $fin_report_item.no_budget eq 'да'}style="background-color: yellow;"{/if}>
+		<td>{$smarty.foreach.fin_report.iteration}</td>
+		<td>{$fin_report_item.rmkk}</td>
+		<td>{$fin_report_item.mkk}</td>
+		<td>{$fin_report_item.net_name}</td>
+		<td>{$fin_report_item.no_budget}</td>
+		<!--<td style="text-align:right">{$fin_report_item.prev_year_fakt|default:0|num:3}</td>-->
+		<td style="text-align:right">{$fin_report_item.year_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.perc_rost|default:0|num:2}</td>
+		<!--<td style="text-align:right">{$fin_report_item.prev_year_budget|default:0|num:3}</td>-->
+		{if not $smarty.request.print}
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if}/><a target=_blank href="?action=fin_plan&plan_type=1&nets={$fin_report_item.id_net}&calendar_years={$smarty.request.calendar_years}">Переход</a></td>
+		{/if}
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget_rost|default:0|num:2}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr|default:0|num:2}</td>
+
+
+		<td {if $fin_report_item.ok_rmkk_tmkk}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_rmkk_tmkk'.val(this.checked?1:0)" 
+				{if $fin_report_item.ok_rmkk_tmkk}checked{/if}
+				{if not $is_rmkk}disabled{/if}
+			>
+			<input type=hidden name=ok[1][{$fin_report_item.id_net}][ok_rmkk_tmkk] id=ok_1_{$fin_report_item.id_net}_ok_rmkk_tmkk>
+			{else}
+				{if $fin_report_item.ok_rmkk_tmkk}да{/if}
+			{/if}
+		</td>
+		<td {if $fin_report_item.ok_fin_man}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_fin_man'.val(this.checked?1:0)" 
+				{if $fin_report_item.ok_fin_man}checked{/if}
+				{if not $is_fin_man}disabled{/if}
+			>
+			<input type=hidden name=ok[1][{$fin_report_item.id_net}][ok_fin_man] id=ok_1_{$fin_report_item.id_net}_ok_fin_man>
+			{else}
+				{if $fin_report_item.ok_fin_man}да{/if}
+			{/if}
+		</td>
+
+		<td {if $fin_report_item.ok_dpu}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_dpu'.val(this.checked?1:0)" 
+				{if $fin_report_item.ok_dpu}checked{/if}
+				{if not $is_dpu}disabled{/if}
+			>
+			<input type=hidden name=ok[1][{$fin_report_item.id_net}][ok_dpu] id=ok_1_{$fin_report_item.id_net}_ok_dpu>
+			{else}
+				{if $fin_report_item.ok_dpu}да{/if}
+			{/if}
+		</td>
+
+		{if not $smarty.request.print}
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if}/><a target=_blank href="?action=fin_plan&plan_type=2&nets={$fin_report_item.id_net}&calendar_years={$smarty.request.calendar_years}">Переход</a></td>
+		{/if}
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/><nobr>{$fin_report_item.du_complete}</nobr></td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_sdu|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog_rost|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr_dog|default:0|num:3}</td>
+
+		<td {if $fin_report_item.ok_fin_man_dog}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok_2_{$fin_report_item.id_net}_ok_fin_man'.val(this.checked?1:0)" 
+				{if $fin_report_item.ok_fin_man_dog}checked{/if}
+				{if not $is_fin_man}disabled{/if}
+			>
+			<input type=hidden name=ok[2][{$fin_report_item.id_net}][ok_fin_man] id=ok_2_{$fin_report_item.id_net}_ok_fin_man>
+			{else}
+				{if $fin_report_item.ok_fin_man_dog}да{/if}
+			{/if}
+		</td>
+
+
+	</tr>
+	{/foreach}
+	{foreach key=fin_report_key_total item=fin_report_item_total from=$fin_report_total name=fin_report_total}
+	<tr style="font-weight:bold">
+		<td colspan=4>Итого</td>
+		<td style="text-align:right">{$fin_report_item_total.no_budget}</td>
+		<!--<td style="text-align:right">{$fin_report_item_total.prev_year_fakt|default:0|num:3}</td>-->
+		<td style="text-align:right">{$fin_report_item_total.year_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_rost|default:0|num:2}</td>
+		<!--<td style="text-align:right">{$fin_report_item_total.prev_year_budget|default:0|num:3}</td>-->
+		{if not $smarty.request.print}
+		<td></td>
+		{/if}
+		<td style="text-align:right">{$fin_report_item_total.budget|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_rmkk_tmkk}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_fin_man}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_dpu}</td>
+		{if not $smarty.request.print}
+		<td></td>
+		{/if}
+		<td style="text-align:right"><nobr>{$fin_report_item_total.du_complete}</nobr></td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_sdu|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog_rost|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr_dog|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_fin_man_dog}</td>
+	</tr>
+	{/foreach}
+</table>
+{if not $smarty.request.print}
+<p style="text-align:center"><input value="Сохранить" name="save" type="submit"></p>
+{/if}
+{/if}
+</form>

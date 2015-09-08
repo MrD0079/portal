@@ -1,0 +1,262 @@
+<h2>Реестр отпусков</h2>
+
+<form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
+
+<table>
+	<tr>
+		<td style="text-align:right"></td>
+		<td>
+			<input checked="checked" name="full" id="full" value="0" type="radio">все отпуска
+			<input name="full" id="full" value="1" type="radio">мои отпуска
+			<input name="full" id="full" value="2" type="radio">отпуска моих прямых подчиненных
+			<input name="full" id="full" value="3" type="radio">отпуска моих непрямых подчиненных
+			<script>$("input[name=full][value={$smarty.request.full}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right"></td>
+		<td>
+			<input checked="checked" name="in_vac" id="in_vac" value="0" type="radio">сейчас в отпуске
+			<input name="in_vac" id="in_vac" value="1" type="radio">все
+			<input name="in_vac" id="in_vac" value="2" type="radio">отпуск закончился
+			<script>$("input[name=in_vac][value={$smarty.request.in_vac}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right"></td>
+		<td>
+			<input checked="checked" name="vac_finished" id="vac_finished" value="0" type="radio">итоги по отпуску НЕ ПОДВЕДЕНЫ
+			<input name="vac_finished" id="vac_finished" value="1" type="radio">итоги по отпуску ПОДВЕДЕНЫ
+			<input name="vac_finished" id="vac_finished" value="2" type="radio">все
+			<script>$("input[name=vac_finished][value={$smarty.request.vac_finished}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Дата с/по</td>
+		<td>
+			<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+			<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+			<script>
+				$('#dates_list1').val('{$smarty.request.dates_list1}');
+				$('#dates_list2').val('{$smarty.request.dates_list2}');
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Отпускник</td>
+		<td>
+			<select name=creator id=creator>
+				<option value=0></option>
+				{foreach key=key item=item from=$creators_list}
+				<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#creator option[value='{$smarty.request.creator}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">И.о.</td>
+		<td>
+			<select name=replacement id=replacement>
+				<option value=0></option>
+				{foreach key=key item=item from=$replacements_list}
+				<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#replacement option[value='{$smarty.request.replacement}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Руководитель</td>
+		<td>
+			<select name=parent_list id=parent_list>
+				<option value=0></option>
+				{foreach key=key item=item from=$parent_list}
+				<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#parent_list option[value='{$smarty.request.parent_list}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Страна</td>
+		<td>
+			<select name=country id=country>
+			<option value='0'></option>
+			{foreach key=key item=item from=$countries}
+			{if $item.checked eq 1}
+			<option value='{$item.cnt_kod}'>{$item.cnt_name}</option>
+			{/if}
+			{/foreach}
+			</select>
+			<script>
+			{if $smarty.request.country neq ''}
+				$("#country option[value='{$smarty.request.country}']").prop('selected', true);
+			{else}
+				$("#country option[value='{$cnt_kod}']").prop('selected', true);
+			{/if}
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Должность</td>
+		<td>
+			<select name=vac_pos_id id=vac_pos_id>
+				<option value=0></option>
+				{foreach key=key item=item from=$pos_list}
+				<option value={$item.pos_id}>{$item.pos_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#vac_pos_id option[value='{$smarty.request.vac_pos_id}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Регион</td>
+		<td>
+			<select name=region_name id=region_name>
+				<option value=0></option>
+				{foreach key=key item=item from=$region_list}
+				<option value="{$item.region_name}">{$item.region_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#region_name option[value='{$smarty.request.region_name}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Подразделение</td>
+		<td>
+			<select name=department_name id=department_name>
+				<option value=0></option>
+				{foreach key=key item=item from=$department_list}
+				<option value="{$item.department_name}">{$item.department_name}</option>
+				{/foreach}
+			</select>
+			<script>$("#department_name option[value='{$smarty.request.department_name}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Плановость</td>
+		<td>
+			<input checked="checked" name=planned value=0 type="radio"> все
+			{foreach key=k item=i from=$planned}
+			<input name=planned value="{$i.id}" type="radio"> {$i.name}
+			{/foreach}
+			<script>$('input:radio[name=planned][value="'+{$smarty.request.planned}+'"]').attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Оплачивается</td>
+		<td>
+			<input checked="checked" name=paided value=0 type="radio"> все
+			{foreach key=k item=i from=$paided}
+			<input name=paided value="{$i.id}" type="radio"> {$i.name}
+			{/foreach}
+			<script>$('input:radio[name=paided][value="'+{$smarty.request.paided}+'"]').attr('checked',true);</script>
+		</td>
+	</tr>
+</table>
+
+<p>
+	<input type="submit" name="select" id="select" value="Отобразить реестр">
+	{if $is_do}
+		<input type="submit" name="save" id="save" value="Сохранить">
+	{/if}
+</p>
+
+
+
+</form>
+
+
+{if $smarty.request.select}
+
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>ФИО отпускника</td>
+		<td>Должность</td>
+		<td>№ заявки</td>
+		<td>Период<br>отпуска</td>
+		<td>ФИО и.о.</td>
+		<td>Плановость</td>
+		<td>Оплачивается</td>
+
+		<td>Количество<br>задач<br>на<br>период<br>отпуска</td>
+		<td>Выполнено<br>задач</td>
+		<td>Подтверждено<br>руководителем</td>
+		<td>Отчет<br>завершен</td>
+		<td>Выводы<br>руководителя</td>
+		<td>Сбросить<br>завершение<br>отчета</td>
+		<!--<td>full</td>-->
+		<!--<td>Текущий статус СЗ на отпуск</td>-->
+	</tr>
+	{foreach key=k item=i from=$vacation name=vacation}
+	{if $i.sz_status_id eq 464260}{assign var=color value="#FFFF66"}{/if}
+	{if $i.sz_status_id eq 464261}{assign var=color value="#66FF66"}{/if}
+	{if $i.sz_status_id eq 464262}{assign var=color value="#FFCC99"}{/if}
+	<tr>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.sz_id}</td>
+		<td>{$i.v_from} - {$i.v_to}</td>
+		<td>{$i.replacement_fio}</td>
+		<td>{$i.planned}</td>
+		<td>{$i.paided}</td>
+		<td style="text-align:center">
+			<a href="javascript:void(0);" onclick="$('.tasks').each(function(){literal}{{/literal}$(this).attr('id')=='jopa_{$smarty.foreach.vacation.iteration}'?$(this).toggle():$(this).hide();{literal}}{/literal});">{$i.c}</a>
+			<div class="tasks" id="jopa_{$smarty.foreach.vacation.iteration}">
+				<table id="jopa" style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+					<tr>
+						<td rowspan=2 style="vertical-align: top; text-align: center; background-color: rgb(204, 255, 255); font-weight: bold;">Описание задачи</td>
+						<td rowspan=2 style="vertical-align: top; text-align: center; background-color: rgb(255, 255, 204); font-weight: bold;">Планируемый результат</td>
+						<td rowspan=2 style="vertical-align: top; text-align: center; background-color: rgb(153, 255, 153); font-weight: bold;">Срок завершения</td>
+						<td colspan=2 style="vertical-align: top; text-align: center; font-weight: bold;">Исполняющий обязанности</td>
+						<td colspan=2 style="vertical-align: top; text-align: center; font-weight: bold;">Отпускник</td>
+					</tr>
+					<tr>
+						<td rowspan="2" style="vertical-align: top; text-align: center;">Выполнено</td>
+						<td rowspan="2" style="vertical-align: top; text-align: center;">Достигнутый результат</td>
+						<td rowspan="2" style="vertical-align: top; text-align: center;">Подтверждено</td>
+						<td rowspan="2" style="vertical-align: top; text-align: center;">Комментарии</td>
+					</tr>
+					{foreach key=k1 item=i1 from=$i.tasks}
+					<tr><td colspan=3 style="font-weight:bold;background-color:red">{$i1.head.part_name}</td></tr>
+					{foreach key=k2 item=i2 from=$i1.data}
+					<tr>
+						<td>{$i2.task}</td>
+						<td>{$i2.result}</td>
+						<td>{$i2.dt_end}</td>
+						<td style="text-align: center;">{if $i2.replacement_ok}да{/if}</td>
+						<td>{$i2.replacement_result|escape}</td>
+						<td style="text-align: center;">{if $i2.chief_ok}да{/if}</td>
+						<td>{$i2.chief_comment|escape}</td>
+					</tr>
+					{/foreach}
+					{/foreach}
+				</table>
+			</div>
+			<script>
+				$('#jopa_{$smarty.foreach.vacation.iteration}').hide();
+			</script>
+		</td>
+		<td style="text-align:center">{$i.replacement_ok}</td>
+		<td style="text-align:center">{$i.chief_ok}</td>
+		<td style="text-align:center" id=a{$i.id}>{if $i.vac_finished}да {$i.vac_finished_lu}{else}нет{/if}</td>
+		<td>{$i.summary}</td>
+		<td style="text-align:center">{if $i.vac_finished and ($is_super or $is_admin)}<a href="javascript:void(0);" onclick="drop_vac_finished({$i.id});" id=b{$i.id}>Сбросить завершение отчета</a>{/if}</td>
+		<!--<td>{$i.full}</td>-->
+		<!--<td {if $i.sz_status}style="background-color:{$color}"{/if}>
+			<a target=_blank href="?action=sz_reestr&sz_id={$i.sz_id}"> {$i.sz_status}</a> {$i.failure}
+		</td>-->
+	</tr>
+	{/foreach}
+</table>
+
+{literal}<script>function drop_vac_finished(id){$('#b'+id).load('?action=vacation_reestr_drop_vac_finished&nohead=1&id='+id,function() {$('#a'+id).text('нет');});}</script>{/literal}
+
+{/if}
+
+
+
+
+

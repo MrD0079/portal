@@ -1,0 +1,72 @@
+<h3>Расходы</h3>
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>Дата</td>
+		{foreach key=key item=item from=$mz_spr_ras}
+		<td>{$item.name|escape}</td>
+		{/foreach}
+		{if not $smarty.request.print}
+		<td>Подтверждающие документы</td>
+		{/if}
+		<td>ИТОГО</td>
+		<td>Подтверждаю</td>
+		<td>Комментарий</td>
+	</tr>
+	{foreach key=k item=i from=$mz_rep_ras.data}
+	{if $i.head.mz_admin_ok eq 1 and not $is_admin}
+		{assign var=disabled value='disabled'}
+	{else}
+		{assign var=disabled value=''}
+	{/if}
+	<tr align=center {if $i.head.is_wd eq 0}bgcolor="#FFCC99"{/if}>
+		<td style="text-align:center">{$i.head.dm}<br>{$i.head.dwt}</td>
+		{assign var="kk_h" value=0}
+		{foreach key=k1 item=i1 from=$i.spr}
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="ras[{$i.head.dt}][spr][{$k1}][val]" class="number" size=7 value="{$i1.val}">{else}{$i1.val|default:0|num:2}{/if}</td>
+		{assign var="kk_h" value=`$kk_h+$i1.val`}
+		{/foreach}
+		{if not $smarty.request.print}
+		<td>
+			{foreach key=k2 item=i2 from=$i.files}
+				{if $i2}
+					{if not $disabled and not $disabled_edit}
+					<a href="javascript:void(0);" onClick="javascript:del_file('mz_rep_files/ras/{$i.head.dt}/{$smarty.request.mz_list}/{$i2}','ras');">[X]</a>
+					{/if}
+					<a target=_blank href="mz_rep_files/ras/{$i.head.dt}/{$smarty.request.mz_list}/{$i2}">{$i2}</a>
+					<br>
+				{/if}
+			{/foreach}
+			<input {$disabled} {$disabled_all} {$disabled_edit} name="ras[{$i.head.dt}]" type=file>
+			<br>
+			<input {$disabled} {$disabled_all} {$disabled_edit} type=submit name=save value="Отправить файл">
+		</td>
+		{/if}
+		<td>{$kk_h}</td>
+		<td>
+			{if not $smarty.request.print}
+			<input
+				type=checkbox
+				onclick="$('#ras_{$i.head.dtt}_mz_admin_ok'.val(this.checked?1:0);$('#ras_{$i.head.dtt}_mz_admin_ok_tn'.val(this.checked?{$tn}:0);"
+				{if $i.head.mz_admin_ok eq 1}checked{/if}
+				{if not $is_mz_admin}disabled{/if}
+				{$disabled} {$disabled_all}
+			>
+			<input {$disabled} {$disabled_all} type=hidden name=ras[{$i.head.dt}][mz_admin_ok] id=ras_{$i.head.dtt}_mz_admin_ok {if $i.head.mz_admin_ok}value={$i.head.mz_admin_ok}{/if}>
+			{if $i.head.mz_admin_ok eq 1}{$i.head.mz_admin_ok_name}<br>{$i.head.mz_rep_d_lu}{/if}
+			<input {$disabled} {$disabled_all} type=hidden name=ras[{$i.head.dt}][mz_admin_ok_tn] id=ras_{$i.head.dtt}_mz_admin_ok_tn {if $i.head.mz_admin_ok_tn}value={$i.head.mz_admin_ok_tn}{/if}>
+			{else}
+			{if $i.head.mz_admin_ok eq 1}{$i.head.mz_admin_ok_name}<br>{$i.head.mz_rep_d_lu}{/if}
+			{/if}
+		</td>
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="ras[{$i.head.dt}][text]" size=50 value="{$i.head.text|escape}">{else}{$i.text|escape}{/if}</td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold;text-align:center">
+		<td>ИТОГО</td>
+		{foreach key=key item=item from=$mz_rep_ras.total}
+		<td>{$item.val|default:0|num:2}</td>
+		{/foreach}
+	</tr>
+</table>
+
+

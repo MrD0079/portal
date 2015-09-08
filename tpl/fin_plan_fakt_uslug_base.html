@@ -1,0 +1,42 @@
+<form target="_self" method="POST" name=selector id=selector>
+{if not $smarty.request.print}
+	<table width=100% cellpadding=5 cellspacing=0 style="text-align:center" border=0>
+		<tr>
+			<td style="background-color:rgb(204,255,255)">
+				<h2>ѕлан/факт объема продаж по сети, тыс. {$valuta}:</h2>
+				<table cellpadding=5 cellspacing=0 width=100% border=1>
+					<tr>
+						<td style="font-weight:bold">ѕлан:</td>
+						<td>{$npf.plan|default:0|num:2}</td>
+						<td style="font-weight:bold">‘акт:</td>
+						<td>{$npf.fakt|default:0|num:2}</td>
+						<td style="font-weight:bold">% выполнени€:</td>
+						<td>{if $npf.plan neq 0}{$npf.fakt/$npf.plan*100|num:2}{else}{0|num:2}{/if}%</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				&nbsp
+			</td>
+			<td style="background-color:rgb(255,255,204)">
+				<h2>Ѕаза расчета бонусов:</h2>
+				<table cellpadding=5 cellspacing=0 width=100% border=1>
+					<tr>
+						<td><input {$disabled} type=radio value=0 name=db_type id=db_type onClick="$('#db_sum').attr('disabled',true);"> от объема продаж сети за мес€ц</td>
+						<td><input {$disabled} type=radio value=1 name=db_type id=db_type onClick="$('#db_sum').attr('disabled',false);"> от суммы возврата денежных средств тыс.{$valuta}.</td>
+						<td><input {$disabled} name=db_sum id=db_sum size=10 value="{$db.bonus_sum}"></td>
+						<script>$("input[name=sort][value='{$smarty.request.sort}']").attr('checked',true);</script>
+						<script>
+							{if $db.bonus_base eq 0}$('#db_sum').attr('disabled',true);{/if}
+							$("input[name=db_type][value='{$db.bonus_base}']").attr('checked',true);
+						</script>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	{if $enabled}
+	<input type=submit name=save value="—охранить и пересчитать">
+	{/if}
+{/if}
+</form>

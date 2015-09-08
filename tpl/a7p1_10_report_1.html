@@ -1,0 +1,227 @@
+{if not $smarty.request.print}
+
+<!--<h1>Условие 1</h1>-->
+
+<input type=submit name=save id=save class=save value="Сохранить">
+<br>
+
+{if $is_traid}
+{literal}
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+{/literal}
+{/if}
+
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>№<br>п/п</td>
+		<td>ФИО руководителя</td>
+		<td>ФИО ТС</td>
+		<td>ФИО ЭТА</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Дата накладной</td>
+		<td>Номер накладной</td>
+		<td>Сумма по накладной, {$valuta}.</td>
+		<td>Сумма продаж весовых конфет в накладной, {$valuta}</td>
+		<td>Количество ящиков весовых конфет в накладной</td>
+<!--		<td>Количество  бонусных ящиков</td>-->
+		<td>Сумма бонуса, {$valuta}.</td>
+		<td>Комментарий</td>
+		<td>Имя, телефон ЛПР</td>
+		<td>Запрет ВСТМ</td>
+		<td>Комментарий ВСТМ</td>
+		<td>Бонус выдан</td>
+		<td>Выдачу бонуса подтверждаю</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	<tr {if $list_item.action_nakl neq 1}style="background-color:red"{/if} bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$smarty.foreach.list.iteration}</td>
+		<td>{$list_item.parent_fio}</td>
+		<td>{$list_item.fio_ts}</td>
+		<td>{$list_item.fio_eta}</td>
+		<td>{$list_item.tp_ur}</td>
+		<td>{$list_item.tp_addr}</td>
+		<td>{$list_item.data}</td>
+		<td>{$list_item.nakl}</td>
+		<td style="text-align:right">{$list_item.summa|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.summnds_pg|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.action_qt_ya|default:0}</td>
+<!--		<td style="text-align:right">{$list_item.fakt_ya|default:0|num:0}</td>-->
+		<td style="text-align:right">{$list_item.bonus|default:0|num:2}</td>
+		<td>{$list_item.text|escape}</td>
+		<td>{$list_item.contact_lpr|escape}</td>
+		<td style="text-align:center" {if $list_item.ok_traid eq '1'}bgcolor="#00ff00"{/if}>
+{if not $smarty.request.print}
+			<input
+				class="chk_all"
+				name="cb_traid[]"
+				type=checkbox
+				onclick="javascript:check_item('ok1',{$list_item.tp_kod},'{$list_item.nakl}','ok_traid',this.checked)"
+				{if $list_item.ok_traid eq 1}checked{/if}
+				{if not $is_traid or $list_item.ok_ts eq 1 or $list_item.ok_chief eq 1}disabled{/if}
+			>
+			{if $list_item.ok_traid eq 1}да{/if}{if $list_item.ok_traid eq '0'}нет{/if}
+{else}
+	{if $list_item.ok_traid eq 1}да{/if}
+{/if}
+		</td>
+		<td style="text-align:center">
+{if not $smarty.request.print}
+			<input name=text1[text_traid][{$list_item.tp_kod}][{$list_item.nakl}]
+			{if not $is_traid or $list_item.ok_ts eq 1 or $list_item.ok_chief eq 1}disabled{/if}
+			value="{$list_item.text_traid}"
+			>
+{else}
+	{$list_item.text_traid}
+{/if}
+		</td>
+		<td {if $list_item.ok_ts eq 1}bgcolor="#00ff00"{/if}>
+{if not $smarty.request.print}
+			<input type="checkbox"
+			onclick="javascript:check_item('ok1',{$list_item.tp_kod},'{$list_item.nakl}','ok_ts',this.checked,'ok_ts_date','date1')"
+			{if $list_item.ok_ts eq 1}checked{/if}
+			{if not $list_item.ok_traid neq 1 or not $is_ts or $list_item.tn neq $tn or $list_item.ok_chief eq 1}disabled{/if}
+			>
+			Дата
+			<input class="datepicker" name=date1[ok_ts_date][{$list_item.tp_kod}][{$list_item.nakl}] size=11
+			{if not $list_item.ok_ts or not $list_item.ok_traid neq 1 or not $is_ts or $list_item.tn neq $tn or $list_item.ok_chief eq 1}disabled{/if}
+			required value="{$list_item.ok_ts_date}"
+			>
+{else}
+	{if $list_item.ok_ts eq 1}да{/if} {$list_item.ok_ts_date}
+{/if}
+		</td>
+		<td>
+{if not $smarty.request.print}
+			<input type="checkbox"
+			onclick="javascript:check_item('ok1',{$list_item.tp_kod},'{$list_item.nakl}','ok_chief',this.checked)"
+			{if $list_item.ok_chief eq 1}checked{/if}
+			{if not $list_item.ok_traid neq 1 or $list_item.ok_ts neq 1 or $list_item.parent_tn neq $tn}disabled{/if}
+			>
+			{$list_item.parent_fio}
+{else}
+	{if $list_item.ok_chief eq 1}да{/if} {$list_item.parent_fio}
+{/if}
+		</td>
+{if not $smarty.request.print}
+		<input type=hidden name=ok1[ok_traid][{$list_item.tp_kod}][{$list_item.nakl}]>
+		<input type=hidden name=ok1[ok_ts][{$list_item.tp_kod}][{$list_item.nakl}]>
+		<input type=hidden name=ok1[ok_chief][{$list_item.tp_kod}][{$list_item.nakl}]>
+{/if}
+	</tr>
+	{/foreach}
+	{foreach key=list_key item=list_item from=$list_total name=list_total}
+	<tr style="font-weight:bold">
+		<td colspan=8>ИТОГО акционных накладных: {$list_item.c1|default:0}, участвовало ТП: {$list_item.tp_kod|default:0}</td>
+		<td style="text-align:right">{$list_item.summa|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.summnds_pg|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.action_qt_ya_avg|default:0|num:2} (среднее)</td>
+<!--		<td style="text-align:right">{$list_item.fakt_ya|default:0}</td>-->
+		<td style="text-align:right">{$list_item.bonus|default:0|num:2}</td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right">{$list_item.ok_traid|default:0}</td>
+		<td></td>
+		<td style="text-align:right">{$list_item.ok_ts|default:0}</td>
+		<td style="text-align:right">{$list_item.ok_chief|default:0}</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+{if not $smarty.request.print}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+
+<h2>Итоги акции</h2>
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>Всего ТП</td>
+		<td>Сумма по акционным накладным, {$valuta}</td>
+		<td>Сумма продаж акционного ассортимента, {$valuta}</td>
+		<td>Количество ящиков акционной продукции</td>
+<!--		<td>Количество бонусных ящиков НА ВЫДАЧУ</td>-->
+		<td>Сумма бонуса, грн.</td>
+		<td>Затраты на акцию, %</td>
+
+	</tr>
+	{foreach key=list_key item=list_item from=$list_total_itogi name=list_total_itogi}
+	<tr>
+		<td style="text-align:right">{$list_item.tp_kod|default:0}</td>
+		<td style="text-align:right">{$list_item.summa|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.summnds_pg|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.action_qt_ya_sum|default:0|num:2}</td>
+<!--		<td style="text-align:right">{$list_item.fakt_ya|default:0|num:2}</td>-->
+		<td style="text-align:right">{$list_item.bonus|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.zat_perc|default:0|num:2}</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+<h2>Сканкопии подтверждающих документов</h2>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>ФИО ТС</td>
+		<td>Название файла-сканкопии</td>
+		<td>Сумма к компенсации дистрибутору, {$valuta}</td>
+		<td>Подтверждено ВСТМ</td>
+		<td>Комментарий ВСТМ</td>
+	</tr>
+	{foreach key=key item=item from=$file_list}
+	{foreach key=file_list_key item=file_list_item from=$item.data}
+	<tr style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:left">{$file_list_item.fio_ts}</td>
+		<td>
+{if not $smarty.request.print}
+			<a target=_blank href="a7p1_10_files/{$file_list_item.tn}/{$file_list_item.fn}">{$file_list_item.fn}</a>
+{else}
+	{$file_list_item.fn}
+{/if}
+		</td>
+		<td style="text-align:right">{$file_list_item.bonus|default:0}</td>
+		<td style="text-align:center" {if $file_list_item.ok_traid eq '1'}bgcolor="#00ff00"{/if}>
+{if not $smarty.request.print}
+			<input
+				name="cb_traid[]"
+				type=checkbox
+				onclick="javascript:check_item('ok_files',{$file_list_item.id},'{$file_list_item.id}','ok_traid',this.checked)"
+				{if $file_list_item.ok_traid eq 1}checked{/if}
+				{if not $is_traid or $file_list_item.ok_ts eq 1 or $file_list_item.ok_chief eq 1}disabled{/if}
+			>
+			{if $file_list_item.ok_traid eq 1}да{/if}{if $file_list_item.ok_traid eq '0'}нет{/if}
+			<input type=hidden name=ok_files[ok_traid][{$file_list_item.id}][{$file_list_item.id}]>
+{else}
+	{if $file_list_item.ok_traid eq 1}да{/if}{if $file_list_item.ok_traid eq '0'}нет{/if}
+{/if}
+		</td>
+		<td style="text-align:center">
+{if not $smarty.request.print}
+			<input name=text_files[text_traid][{$file_list_item.id}][{$file_list_item.id}]
+			{if not $is_traid or $file_list_item.ok_ts eq 1 or $file_list_item.ok_chief eq 1}disabled{/if}
+			value="{$file_list_item.text_traid}"
+			>
+{else}
+	{$file_list_item.text_traid}
+{/if}
+		</td>
+	</tr>
+	{/foreach}
+
+	<tr style="text-align:center;font-weight:bold" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:left" colspan=5>Итого: {$item.data_total.summa}</td>
+	</tr>
+
+
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold" bgcolor="green">
+		<td style="text-align:left" colspan=5>Итого по всем ТС: {$file_list_total}</td>
+	</tr>
+</table>
+

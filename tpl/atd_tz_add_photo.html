@@ -1,0 +1,22 @@
+<div id="uploadOutput{$smarty.request.id}" style="display: inline;">
+<form action="index.php" method="POST" name="form_{$smarty.request.id}" id="form_{$smarty.request.id}" enctype="multipart/form-data">
+<input type=hidden name="action" value="atd_tz_files">
+<input type=hidden name="nohead" value="1">
+<input type=hidden name="id" value="{$smarty.request.id}">
+<input type=hidden name="tz" value="{$smarty.request.tz}">
+
+<nobr>
+<a href="javascript:void(0);" onclick="$('#{$smarty.request.id}').remove();">[x]</a>
+<input required name="fio">
+<input required name="fotoreport" type="file">
+<a href="javascript:void(0);" onclick="$('#form_{$smarty.request.id}').submit();">Сохранить</a>
+</nobr>
+
+</form>
+<script>
+$a1 = '{$smarty.request.id}';
+{literal}
+	$(document).ready(function() {var options = {target: '#uploadOutput'+$a1};$('#form_'+$a1).ajaxForm(options);}); 
+{/literal}
+</script> 
+</div>

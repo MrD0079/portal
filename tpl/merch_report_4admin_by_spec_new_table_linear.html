@@ -1,0 +1,137 @@
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+    <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+      <td>Дата</td>
+      <td>Область<br>      </td>
+      <td>Город</td>
+      <td>Сеть</td>
+      <td>Юридическое название ТЗ<br></td>
+      <td>Адрес ТЗ<br></td>
+      <td>СВ МС<br></td>
+      <td>Артикул</td>
+      <td>Название</td>
+      <td>Марка</td>
+      <td>Ед. измерения</td>
+      <td>Вес, кг</td>
+      <td>Код</td>
+	{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+	<td>{$item1.text}</td>
+	{/foreach}
+    </tr>
+{foreach key=k item=i from=$d name=d}
+	{assign var=s value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s value=`$s+1`}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s value=`$s+1`}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s value=`$s+1`}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s value=`$s+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s value=`$s+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s value=`$s+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+	{/foreach}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s1 value=0}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s1 value=`$s1+1`}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s1 value=`$s1+1`}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s1 value=`$s1+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s1 value=`$s1+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s1 value=`$s1+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s2 value=0}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s2 value=`$s2+1`}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s2 value=`$s2+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s2 value=`$s2+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s2 value=`$s2+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s3 value=0}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s3 value=`$s3+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s3 value=`$s3+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s3 value=`$s3+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s4 value=0}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s4 value=`$s4+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s4 value=`$s4+1`}
+						{/foreach}
+					{/foreach}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s5 value=0}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s5 value=`$s5+1`}
+						{/foreach}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							<tr bgcolor="{$color}">
+							<td>{$k}</td>
+							<td>{$k1}</td>
+							<td>{$k2}</td>
+							<td>{$k3}</td>
+							<td>{$k4}</td>
+							<td>{$k5}</td>
+							<td>{$i6.svms_name}</td>
+							<td>{$i6.msb_art}</td>
+							<td>{$i6.msb_name}</td>
+							<td>{$i6.msb_brand}</td>
+							<td>{$i6.msb_izm}</td>
+							<td style="text-align:right">{$i6.msb_weight|num:2}</td>
+							<td>{$i6.msb_kod}</td>
+							{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+							<td style="text-align:center;background-color: rgb(204, 255, 255)">
+							{assign var="field_name" value="msr_`$item1.name`"}
+							{if $item1.tip eq 'float'}{$i6.$field_name|num:2}{/if}
+							{if $item1.tip eq 'text'}{$i6.$field_name|escape}{/if}
+							{if $item1.tip eq 'bool'}{$i6.$field_name}{/if}
+							</td>
+							{/foreach}
+							</tr>
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+	{/foreach}
+{/foreach}
+	<tr style="text-align: center;font-weight:bold">
+		<td colspan="13" style="">ИТОГО</td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td style="text-align:center;background-color: rgb(204, 255, 255)">
+{assign var="field_name" value="msr_`$item1.name`"}
+{if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
+{if $item1.tip eq 'text'}{$rb_total.$field_name|escape}{/if}
+{if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}
+</td>
+{/foreach}
+	</tr>
+</table><br>

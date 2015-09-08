@@ -1,0 +1,44 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№</td>
+		<td>Код ТП</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Расположение</td>
+		<td>Тип ТП</td>
+		<td>Контактное лицо</td>
+		<td>Контактный телефон</td>
+		<td>Стеллажи</td>
+		<td>Тумбы</td>
+		<td>НТО</td>
+		<td>GPS координаты</td>
+	</tr>
+	{assign var=z value=0}
+	{foreach key=list_detail_key item=list_detail_item from=$list_detail name=list_detail}
+		{if $list_item.day eq $list_detail_item.day and $list_item.h_eta eq $list_detail_item.h_eta and $list_item.ts eq $list_detail_item.ts}
+			{assign var=z value=`$z+1`}
+			<tr
+				{if $list_detail_item.color eq 2}style="background-color: #FF4500;"{/if}
+				{if $list_detail_item.color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+				{if $list_detail_item.color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+			>
+				<td><!--{$list_detail_item.tp_route_num}-->{$z}</td>
+				<td>{$list_detail_item.tp_kod}</td>
+				<td>{$list_detail_item.tp_name}</td>
+				<td>{$list_detail_item.address}</td>
+				<td>{$list_detail_item.tp_place}</td>
+				<td>{$list_detail_item.tp_type}</td>
+				<td>{$list_detail_item.contact_fio}</td>
+				<td>{$list_detail_item.contact_tel}</td>
+				<td>{$list_detail_item.stelag}</td>
+				<td>{$list_detail_item.tumb}</td>
+				<td>{$list_detail_item.nto}</td>
+				<td style="text-align:center">
+					{if $list_detail_item.latitude and $list_detail_item.longitude}
+						<a target=_blank href="https://www.google.com/maps/place/{$list_detail_item.latitude}+{$list_detail_item.longitude}/@{$list_detail_item.latitude},{$list_detail_item.longitude},19z">{$list_detail_item.latitude} {$list_detail_item.longitude}</a>
+					{/if}
+				</td>
+			</tr>
+		{/if}
+	{/foreach}
+</table>

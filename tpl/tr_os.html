@@ -1,0 +1,87 @@
+
+<h1>Обратная связь по тренингу и тестирование</h1>
+
+{if $d}
+
+Уважаемый участник тренинга!<br>
+<br>
+В ходе своей работы команда "Корпоративного университета" постоянно<br>
+улучшает и совершенствует обучающие программы и методическую базу.<br>
+Поэтому для нас принципиально важно получить от Вас обратную связь по<br>
+качеству тренинга, работе тренера и самим учебным материалам.<br>
+<br>
+Просим заполнить информацию в таблице ниже. От того, насколько полной и<br>
+качественной будет ваша ОС, зависит дальнейшее развитие системы обучения в компании.<br>
+После заполнения ОС Вы сможете перейти к тестированию. Успехов!<br>
+
+<hr style="width: 100%; height: 2px;">
+
+Тренинг: {$h.name}<br>
+Тренер: {$h.fio}<br>
+Дата начала тренинга: {$h.dt_start_t}<br>
+
+<form target="_self" method="POST" name=form_tr id=form_tr enctype="multipart/form-data">
+
+
+<p><input name="saveOS" value="Сохранить ОС" type="submit"></p>
+
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="vertical-align: top; text-align: center; font-weight: bold;">
+      <td>Критерии оценки<br>
+      </td>
+      <td>Работа тренера<br>
+      </td>
+      <td>Материалы тренинга<br>
+      </td>
+      <td>Организация тренинга<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color: rgb(51, 255, 51); text-align: center; font-weight: bold;">Сильные стороны</td>
+      <td><textarea cols="40" required rows="5" name="os[s_cj]">{$d.s_cj|escape}</textarea></td>
+      <td><textarea cols="40" required rows="5" name="os[s_tm]">{$d.s_tm|escape}</textarea></td>
+      <td><textarea cols="40" required rows="5" name="os[s_to]">{$d.s_to|escape}</textarea></td>
+    </tr>
+    <tr>
+      <td style="background-color: red; text-align: center; font-weight: bold;">Моменты к улучшению</td>
+      <td><textarea cols="40" required rows="5" name="os[w_cj]">{$d.w_cj|escape}</textarea></td>
+      <td><textarea cols="40" required rows="5" name="os[w_tm]">{$d.w_tm|escape}</textarea></td>
+      <td><textarea cols="40" required rows="5" name="os[w_to]">{$d.w_to|escape}</textarea></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><input name="saveOS" value="Сохранить ОС" type="submit"></p>
+
+
+</form>
+
+
+{if
+$d.s_cj
+and
+$d.s_tm
+and
+$d.s_to
+and
+$d.w_cj
+and
+$d.w_tm
+and
+$d.w_to
+}
+<a href="?action=tr_test"><img style="width: 353px; height: 80px;" alt="Перейти к тестированию" src="design/testButton.png"></a>
+{/if}
+
+
+
+
+<p>Внимание! Переход к тестированию возможен только после заполнения всех полей ОС по тренингу!</p>
+
+{else}
+
+<h1 style="color:red">В данный момент нет тренингов, по которым Вы должны оставить ОС и пройти тестирование</h1>
+
+{/if}

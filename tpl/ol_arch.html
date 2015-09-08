@@ -1,0 +1,194 @@
+{if not $smarty.request.print}
+
+<h1>Архив обходных листов</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+
+
+
+
+
+	<p>
+		<input type=radio name=date_between value='accept_data' onClick="f_accept_data('accept_data','datauvol')">
+		Дата формирования ОЛ с/по
+			<input size=10 class="datepicker accept_data" name=dates_list1 id=dates_list1>
+			<input size=10 class="datepicker accept_data" name=dates_list2 id=dates_list2>
+			<script>
+				$('#dates_list1').val('{$smarty.request.dates_list1}');
+				$('#dates_list2').val('{$smarty.request.dates_list2}');
+			</script>
+	</p>
+
+
+	<p>
+		<input type=radio name=date_between value='datauvol' onClick="f_accept_data('datauvol','accept_data')">
+		Дата увольнения с/по
+			<input size=10 class="datepicker datauvol" name=du1 id=du1>
+			<input size=10 class="datepicker datauvol" name=du2 id=du2>
+			<script>
+				$('#du1').val('{$smarty.request.du1}');
+				$('#du2').val('{$smarty.request.du2}');
+			</script>
+	</p>
+
+<script>
+//$("input[name=date_between][value={$smarty.request.date_between}]").attr('checked',true);
+$("input[name=date_between][value={$smarty.request.date_between}]").attr('checked',true);
+$("input[name=date_between][value={$smarty.request.date_between}]").click();
+{literal}
+function f_accept_data (p_new,p_old)
+{
+$("."+p_new).attr('disabled',false);
+$("."+p_old).attr('disabled',true);
+}
+{/literal}
+</script>
+
+<p>
+<input checked="checked" name="not_accepted" id="not_accepted" value="0" type="radio"> все
+<input name="not_accepted" id="not_accepted" value="1" type="radio"> согласованы
+<input name="not_accepted" id="not_accepted" value="2" type="radio"> не согласованы
+<script>$("input[name=not_accepted][value={$smarty.request.not_accepted}]").attr('checked',true);</script>
+</p>
+
+
+
+
+
+{if $is_ts neq 1}
+
+<p>
+По руководителю:
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> <!-- - {$item.emp_pos}--> - {$item.dpt_name} {if $item.datauvol}- уволен {$item.datauvol}{/if}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+По уволенному:
+<select name=staff_list id=staff_list>
+<option value=0></option>
+{foreach key=key item=item from=$staff_list}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> <!-- - {$item.emp_pos}--> - {$item.dpt_name} {if $item.datauvol}- уволен {$item.datauvol}{/if}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+<input name="select" value="Выбрать" type="submit">
+</p>
+
+
+<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+<script>$('#staff_list option[value="{$smarty.request.staff_list}"]').prop('selected', true);</script>
+
+{/if}
+
+
+<hr>
+
+{/if}
+
+{foreach key=k item=i from=$ol_arch}
+
+
+{if $smarty.request.ol_arch_id eq 0 or $smarty.request.ol_arch_id eq $i.id}
+
+	<h3>{$i.fio} ({$i.dpt_name})</h3>
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="?action=ol_arch&print=1&excel=1&select=1&filename=Обходной лист - {$i.fio}&ol_arch_id={$i.id}">Экспорт в Excel</a>
+<a target=_blank href="?action=ol_arch&print=1&pdf=1&select=1&filename=Обходной лист - {$i.fio}&ol_arch_id={$i.id}">Экспорт в PDF</a>
+</p>
+{/if}
+
+
+<table {if $smarty.request.pdf}style="font-size:8px;"{/if}>
+<tr><td style="text-align:right;vertical-align:top">Должность</td><td style="text-align:left;vertical-align:top"><b>{$i.pos_name}</b><br>
+<tr><td style="text-align:right;vertical-align:top">Дата начала работы в компании</td><td style="text-align:left;vertical-align:top"><b>{$i.start_company}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата начала работы в должности</td><td style="text-align:left;vertical-align:top"><b>{$i.start_pos}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата увольнения</td><td style="text-align:left;vertical-align:top"><b>{$i.datauvol}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Категория сотрудника</td><td style="text-align:left;vertical-align:top"><b>{$i.oplatakat}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Причина увольнения</td><td style="text-align:left;vertical-align:top"><b>{$i.seat}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Комментарии</td><td style="text-align:left;vertical-align:top;width:300px"><b>{$i.params}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Руководитель увольняемого сотрудника</td><td style="text-align:left;vertical-align:top"><b>{$i.chief_fio}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата формирования обходного листа</td><td style="text-align:left;vertical-align:top"><b>{$i.accept_data}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Срок рассмотрения (дней)</td><td><b>{$i.srok}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Группа, которая сейчас подтверждает</td><td><b>{$i.gruppa}. {$i.gr_name}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">№ СЗ на увольнение</td><td><b><a target=_blank href="?action=sz_reestr&sz_id={$i.sz_id}&select=1">{$i.sz_id}</a></b></td></tr>
+</table>
+
+
+
+
+
+	<table {if $smarty.request.pdf}style="width:700px; font-size:8px;"{/if} border=1 cellspacing=0 cellpadding=0>
+	<tr style="text-align: center">
+		<td style="vertical-align: top; text-align: center;">Категория</td>
+		<td style="vertical-align: top; text-align: center;">ФИО<br>сотрудника</td>
+		<td style="vertical-align: top; text-align: center;">Сумма<br>удержания</td>
+		<td style="vertical-align: top; text-align: center;">Сумма<br>доплаты</td>
+		<td style="vertical-align: top; text-align: center; width:400px;">Комментарии</td>
+		{if not $smarty.request.print}<td style="vertical-align: top; text-align: center;">Прилагаемые<br>файлы</td>{/if}
+		<td style="vertical-align: top; text-align: center;">Подтверждаю</td>
+		<td style="vertical-align: top; text-align: center;">Срок<br>рассмотрения<br>(дней)</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.body}
+	<tr style="text-align: left">
+		<td style="">{$i1.cat}</td>
+		<td style="">{$i1.fio}</td>
+		<td style="text-align: center;">{$i1.sum_plus|num:2}</td>
+		<td style="text-align: center;">{$i1.sum_minus|num:2}</td>
+		<td style="text-align: left;">{if $is_do and $i.not_accepted_cnt > 0}<textarea id="text{$i1.id}" onChange="save({$i1.id},'text',this.value);" cols="30" rows="5" name="data[{$i1.id}][text]">{$i1.text}</textarea>{else}{$i1.text|nl2br}{/if}</td>
+		{if not $smarty.request.print}
+		<td style="">
+			{foreach key=k2 item=i2 from=$i1.fl}
+				<a target=_blank href="ol_files/{$i1.id}/{$i2}">{$i2}</a><br>
+			{/foreach}
+		</td>
+		{/if}
+		<td style="text-align: center;">{$i1.accepted_log|nl2br}</td>
+		<td style="text-align: center;">{$i1.srok}</td>
+	</tr>
+	{/foreach}
+	<tr align="center">
+		<td colspan="8" rowspan="1" style="vertical-align: top;"><big><span style="font-weight: bold;">Итоговая сумма к удержанию: {$i.summa|default:0|num:2}</span></big></td>
+	</tr>
+	</table>
+{/if}
+{/foreach}
+
+{if not $smarty.request.print}
+</form>
+
+{literal}
+<script>
+function save(id,field,val)
+{
+	$('#text'+id).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=ol_arch_save&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			//alert(data);
+			$('#text'+id).css('background-color','white');
+		}
+	});
+}
+</script>
+{/literal}
+
+{/if}

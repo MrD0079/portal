@@ -1,0 +1,223 @@
+<h1>{$act_head.val_string} - {$act_head.fil} {$act_head.mt} {$act_head.y}</h1>
+
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+{/if}
+
+{if $z_head}
+<!--
+{include file="akcii_local_report_z.html"}
+<hr>
+-->
+{/if}
+
+{if not $smarty.request.print}
+{include file="akcii_local_report_select.html"}
+{/if}
+
+{if $smarty.request.generate}
+
+<h3>Итоги акции:</h3>
+
+<div id=total style="display: inline;">
+{include file="akcii_local_report_total.html"}
+</div>
+
+<h3>Детализация акции:</h3>
+
+<table style="text-align: left;" cellpadding="0" cellspacing="0" border="1">
+    <tr>
+      <td style="vertical-align: top; text-align: center;">№</td>
+      <td style="vertical-align: top; text-align: center;">ФИО ТС</td>
+      <td style="vertical-align: top; text-align: center;">ФИО ЭТА</td>
+      <td style="vertical-align: top; text-align: center;">Код ТП</td>
+      <td style="vertical-align: top; text-align: center;">Название ТП / Адрес ТП</td>
+      <td style="vertical-align: top; text-align: center;">Расположение</td>
+      <td style="vertical-align: top; text-align: center;">Тип</td>
+      <td style="vertical-align: top; text-align: center;">Контактное лицо</td>
+      <td style="vertical-align: top; text-align: center;">Контактный телефон</td>
+      <td style="vertical-align: top; text-align: center;">Продажи {$period}, {$valuta}</td>
+      <td style="vertical-align: top; text-align: center;">Участвует</td>
+      <td style="vertical-align: top; text-align: center;">Сумма бонуса, {$valuta}</td>
+      <td style="vertical-align: top; text-align: center;">Затраты, %</td>
+    </tr>
+{foreach key=k item=i from=$sales name=sales}
+    <tr>
+      <td style="vertical-align: top;">{$smarty.foreach.sales.iteration}</td>
+      <td style="vertical-align: top;">{$i.ts}</td>
+      <td style="vertical-align: top;">{$i.eta}</td>
+      <td style="vertical-align: top;">{$i.tp_kod}</td>
+      <td style="vertical-align: top;">{$i.tp_name} / {$i.address}</td>
+      <td style="vertical-align: top;">{$i.tp_place}</td>
+      <td style="vertical-align: top;">{$i.tp_type}</td>
+      <td style="vertical-align: top;">{$i.contact_fio}</td>
+      <td style="vertical-align: top;">{$i.contact_tel}</td>
+      <td style="vertical-align: top; text-align:right;">{$i.summa|num:3}</td>
+      <td style="vertical-align: top; text-align: center;" id="d_{$i.tp_kod}_tp_kod">
+{if not $smarty.request.print and ($is_db or $has_parent_db) and not $act_head.ok_db_tn}
+		<input
+			name="selected[{$i.tp_kod}]"
+			id="selected_{$i.tp_kod}" type="checkbox"
+			onChange="
+				this.checked?null:$('#bonus_sum_{$i.tp_kod}').val('');
+				$('#bonus_sum_{$i.tp_kod}').attr('disabled',!this.checked);
+				save_tp({$i.tp_kod},'tp_kod',this.checked?1:0,'{$i.summa}');
+			"
+		>
+		<script>
+			$('#selected_{$i.tp_kod}').prop('checked','{$i.selected}'==1?true:false);
+		</script>
+{else}
+{if $i.selected}да{/if}
+{/if}
+	</td>
+      <td style="vertical-align: top; text-align: right;" id="d_{$i.tp_kod}_bonus_sum">
+{if not $smarty.request.print and ($is_db or $has_parent_db) and not $act_head.ok_db_tn}
+		<input class="number" size="10" name="bonus_sum[{$i.tp_kod}]" id="bonus_sum_{$i.tp_kod}" onChange="save_tp({$i.tp_kod},'bonus_sum',this.value,'{$i.summa}');">
+		<script>
+			$('#bonus_sum_{$i.tp_kod}').val({$i.bonus_sum});
+			$('#bonus_sum_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+		</script>
+{else}
+{$i.bonus_sum|num:3}
+{/if}
+	</td>
+      <td style="vertical-align: top; text-align:right" id="ok_{$i.tp_kod}">{$i.zat|num:2}</td>
+    </tr>
+{/foreach}
+</table>
+{/if}
+
+
+{if not $smarty.request.print}
+</form>
+{/if}
+
+
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form2 id=form2 enctype="multipart/form-data">
+	<h3>Загрузка сканкопий реестра накладных на бонусную продукцию (размер одного файла - не более 3 MВ)</h3>
+	<p id="td">
+		{if ($is_db or $has_parent_db) and not $act_head.ok_db_tn}
+		<input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+		Загрузить файл с реестром <input type=file name="files" id="files">
+		Сумма к компенсации дистрибутору согласно данному реестру, {$valuta} <input class="number" name=bonus id=bonus>
+		<a href="javascript:void(0);" onClick="send_file();" class="send_file_button">Добавить файлы</a>
+		<br>
+		{/if}
+		<div id="files_list" style="display: inline;">
+		{include file="akcii_local_report_files.html"}
+		</div>
+	</p>
+	</form>
+{/if}
+
+
+
+{if not $smarty.request.print}
+
+<script>
+z_id={$smarty.request.z_id};
+eta_list='{$smarty.request.eta_list}';
+ok_selected={$smarty.request.ok_selected};
+exp_list_without_ts={$smarty.request.exp_list_without_ts};
+exp_list_only_ts={$smarty.request.exp_list_only_ts};
+
+{literal}
+function save_tp(tp_kod,field,val,sales)
+{
+	//alert(z_id+' '+tp_kod+' '+field+' '+val);
+	$('#d_'+tp_kod+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('z_id', z_id);
+fd.append('tp_kod', tp_kod);
+fd.append('field', field);
+fd.append('sales', sales);
+fd.append('val', val);
+$.ajax({
+  type: 'POST',
+  url: '?action=akcii_local_report_save&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+})
+.done(function(data) {
+	$('#d_'+tp_kod+'_'+field).css('background-color','white');
+	$('#ok_'+tp_kod).html(data);
+	zzz();
+});
+}
+
+
+function del_file(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=akcii_local_report_f_del&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false
+}).done( function(data) {
+   $('#trf_'+id).remove();
+   $('#ok').html(data);
+  });
+}
+
+function send_file()
+{
+$('#td').css('background-color','red');
+var fd = new FormData();
+fd.append('z_id', z_id);
+fd.append('exp_list_without_ts', exp_list_without_ts);
+fd.append('exp_list_only_ts', exp_list_only_ts);
+fd.append('bonus', $('#bonus').val());
+fd.append('file', $('#files')[0].files[0]);
+$.ajax({
+  type: 'POST',
+  url: '?action=akcii_local_report_f_save&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false
+}).done( function(data) {
+    $('#files_list').html(data);
+$('#td').css('background-color','white');
+$('#form2').trigger('reset');
+  }).fail( function(data) {
+    $('#files_list').html(data);
+$('#td').css('background-color','white');
+  })
+;
+}
+
+$(function() {
+//zzz();
+}
+);
+
+function zzz()
+{
+var fd = new FormData();
+fd.append('z_id', z_id);
+fd.append('eta_list', eta_list);
+fd.append('ok_selected', ok_selected);
+fd.append('exp_list_without_ts', exp_list_without_ts);
+fd.append('exp_list_only_ts', exp_list_only_ts);
+$.ajax({
+  type: 'POST',
+  url: '?action=akcii_local_report_total&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false
+}).done( function(data) {
+   $('#total').html(data);
+  })
+;
+}
+
+{/literal}
+</script>
+
+
+{/if}

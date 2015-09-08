@@ -1,0 +1,209 @@
+<h2>Реестр административных мер</h2>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
+
+	<p>
+		<input type=radio name=date_between value='mz' onClick="dt_switch('mz','cr')">
+	месяц отнесения
+	<select required="true" name=smz id=smz class="mz">
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<select required="true" name=emz id=emz class="mz">
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$('#smz option[value="{$smarty.request.smz}"]').prop('selected', true);</script>
+	<script>$('#emz option[value="{$smarty.request.emz}"]').prop('selected', true);</script>
+	</p>
+
+
+	<p>
+		<input type=radio name=date_between value='cr' onClick="dt_switch('cr','mz')">
+		период завершения согласования с/по
+			<input size=10 class="datepicker cr" name=scr id=scr>
+			<input size=10 class="datepicker cr" name=ecr id=ecr>
+			<script>
+				$('#scr').val('{$smarty.request.scr}');
+				$('#ecr').val('{$smarty.request.ecr}');
+			</script>
+	</p>
+
+<script>
+$("input[name=date_between][value={$smarty.request.date_between}]").attr('checked',true);
+$("input[name=date_between][value={$smarty.request.date_between}]").click();
+{literal}
+function dt_switch (p_new,p_old)
+{
+$("."+p_new).attr('disabled',false);
+$("."+p_old).attr('disabled',true);
+}
+{/literal}
+</script>
+
+
+
+
+
+
+
+
+
+
+	{if $is_ts neq 1 and $is_eta neq 1}
+		По руководителю:
+		<br>
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+		По супервайзеру:
+		<br>
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+<script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value='{$smarty.request.exp_list_only_ts}']").prop('selected', true);</script>
+
+	{/if}
+	{if $is_eta neq 1}
+		По ЭТА:
+		<br>
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.id}">{$item.fio}</option>
+			{/foreach}
+		</select>
+		<script>
+		$('#eta_list').val('{$smarty.request.eta_list}');
+		</script>
+		<br>
+	{/if}
+		Регион<br>
+		<select name=region_name id=region_name>
+			<option value=0></option>
+			{foreach key=key item=item from=$region_list}
+			<option value="{$item.region_name}">{$item.region_name}</option>
+			{/foreach}
+		</select>
+		<script>
+		$('#region_name').val('{$smarty.request.region_name}');
+		</script>
+		<br>
+		Административная меры
+		<a href="javascript:void(0);" onClick="$('.bst').prop('checked',true);">[+]</a>
+		<a href="javascript:void(0);" onClick="$('.bst').prop('checked',false);">[-]</a>
+		<table border=0>
+			<tr>
+				{foreach key=k item=i from=$bonus_types}
+					{if $i.level eq 1}
+					</tr>
+					<tr>
+						<td><b>{$i.name}</b></td>
+					{/if}
+					{if $i.level eq 2}
+					<td>
+						<input
+							class="bst"
+							type=checkbox
+							id="bst_{$i.id}"
+							name="bst[{$i.id}]"
+							value="{$i.id}"
+						>{$i.name}
+					</td>
+					{/if}
+				{/foreach}
+			</tr>
+		</table>
+
+<script>
+{foreach key=k item=i from=$smarty.request.bst}
+$('#bst_{$i}').attr('checked',true);
+{/foreach}
+</script>
+
+
+
+<p>
+	<input type="submit" name="select" id="select" value="Отобразить реестр">
+	{if $is_do}
+		<input type="submit" name="save" id="save" value="Сохранить">
+	{/if}
+</p>
+
+
+
+</form>
+
+{/if}
+
+{if $smarty.request.select}
+
+
+{if not $smarty.request.print}
+<p><a href="?action=bonus_reestr&print=1&excel=1&select=1&filename=Реестр административных мер">Экспорт в Excel</a></p>
+{/if}
+
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>№ п/п</td>
+		<td>Т.н.</td>
+		<td>ФИО</td>
+		<td>Должность</td>
+		<td>ФИО ПР</td>
+		<td>Регион</td>
+		<td>Подразделение</td>
+		<td>Административная мера</td>
+		<td>Детализация</td>
+		<td>Месяц отнесения</td>
+		<td style="background-color: rgb(255, 204, 153);">Сумма</td>
+		<td>СЗ</td>
+		<td>Дата создания</td>
+		<td>Заявка</td>
+	</tr>
+	{foreach key=k item=i from=$bonus name=bonus}
+	{if $i.sz_status_id eq 464260}{assign var=color value="#FFFF66"}{/if}
+	{if $i.sz_status_id eq 464261}{assign var=color value="#66FF66"}{/if}
+	{if $i.sz_status_id eq 464262}{assign var=color value="#FFCC99"}{/if}
+	<tr {if $i.sz_status_id}style="background-color:{$color}"{/if}>
+		<td>{$smarty.foreach.bonus.iteration}</td>
+		<td>{$i.tab_num}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.chief_fio}</td>
+		<td>{$i.region}</td>
+		<td>{$i.department}</td>
+		<td>{$i.bt_name} {$i.bst_name}</td>
+		<td>{$i.text}</td>
+		<td>{$i.y} {$i.mt}</td>
+		<td style="background-color: rgb(255, 204, 153);text-align:right">{if $i.koef eq 1}+{else}-{/if}{$i.summa|num:2} {$i.cur_name}</td>
+		<td><a target=_blank href="?action=sz_reestr&sz_id={$i.sz_id}&select=1">{$i.sz_id}</a></td>
+		<td>{$i.created}</td>
+		<td style="text-align:center"><a target=_blank href="?action=bonus_create&id={$i.bonus_id}">{if $i.sz_not_seen}ред.{else}см.{/if}</a></td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold">
+		<td colspan=10></td>
+		<td style="background-color: rgb(255, 204, 153);text-align:right">{$total.summa_val|num:2}</td>
+	</tr>
+</table>
+
+{/if}
+
+
+
+
+

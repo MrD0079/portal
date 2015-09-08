@@ -1,0 +1,83 @@
+
+{if not $smarty.request.print}
+
+
+
+{if $is_ts}
+<h2>Загрузка сканкопий реестра накладных на бонусную продукцию (размер одного файла - не более 3 MВ)</h2>
+<input type="hidden" name="MAX_FILE_SIZE" value="3000000">
+Загрузить файл с реестром <input type=file name=new_fn>
+Сумма компенсации дистрибутору согласно реестру, {$valuta}  <input class="number" name=new[bonus]>
+<input type=submit name=save id=save value="Добавить">
+{/if}
+ 
+
+{/if}
+
+
+
+<h2>Сканкопии подтверждающих документов</h2>
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+{if not $smarty.request.print}
+		<td><a href="javascript:void(0)" onclick="javascript:form_report.submit()">[x]</a></td>
+{/if}
+		<td>ФИО ТС</td>
+		<td>Название файла-сканкопии</td>
+		<td>Сумма компенсации дистрибутору согласно реестру, {$valuta}</td>
+		<td>Подтверждено ВСТМ</td>
+		<td>Комментарий ВСТМ</td>
+	</tr>
+	{foreach key=key item=item from=$file_list}
+	{foreach key=file_list_key item=file_list_item from=$item.data}
+	<tr style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+{if not $smarty.request.print}
+		<td><input {if not $is_ts or $file_list_item.ok_traid eq 1}disabled{/if} type=checkbox name=del_file[{$file_list_item.id}]></td>
+{/if}
+		<td style="text-align:left">{$file_list_item.fio_ts}</td>
+		<td>
+{if not $smarty.request.print}
+			<a target=_blank href="val_vesna_files/{$file_list_item.m}/{$file_list_item.tn}/{$file_list_item.fn}">{$file_list_item.fn}</a>
+{else}
+			{$file_list_item.fn}
+{/if}
+		</td>
+		<td style="text-align:right">{$file_list_item.bonus|default:0}</td>
+		<td style="text-align:center" {if $file_list_item.ok_traid eq '1'}bgcolor="#00ff00"{/if}>
+{if not $smarty.request.print}
+			<input
+				name="cb_traid[]"
+				type=checkbox
+				onclick="javascript:check_item('ok_files',{$file_list_item.id},'ok_traid',this.checked)"
+				{if $file_list_item.ok_traid eq 1}checked{/if}
+				{if not $is_traid or $file_list_item.ok_ts eq 1 or $file_list_item.ok_chief eq 1}disabled{/if}
+			>
+			{if $file_list_item.ok_traid eq 1}да{/if}{if $file_list_item.ok_traid eq '0'}нет{/if}
+			<input type=hidden name=ok_files[ok_traid][{$file_list_item.id}]>
+{else}
+			{if $file_list_item.ok_traid eq 1}да{/if}
+{/if}
+		</td>
+		<td>
+			{if not $smarty.request.print and $is_traid}
+			<input name=text_files[text_traid][{$file_list_item.id}] id=text_traid_files_{$file_list_item.id} {if not $is_traid}disabled{/if} value="{$file_list_item.text_traid|escape}">
+			{else}
+				{$file_list_item.text_traid|escape}
+			{/if}
+		</td>
+	</tr>
+	{/foreach}
+
+	<tr style="text-align:center;font-weight:bold" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:left" colspan=6>Итого: {$item.data_total.summa}</td>
+	</tr>
+
+
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold; background-color: rgb(51, 255, 51)">
+		<td style="text-align:left" colspan=6>Итого по всем ТС: {$file_list_total}</td>
+	</tr>
+</table>

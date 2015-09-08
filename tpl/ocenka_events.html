@@ -1,0 +1,14 @@
+{if not $smarty.request.print}
+<p>
+<form name=form id=form target=_self method=post>
+Выбор периода оценки
+<select name=event id=event onchange="javascript:this.form.submit()">
+	<option value=0></option>
+	{foreach key=key item=event from=$events}
+		<option value={$event.year}>{$event.name}</option>
+	{/foreach}
+</select>
+<script>$('#event option[value="{$smarty.request.event}"]').prop('selected', true);</script>
+</form>
+</p>
+{/if}

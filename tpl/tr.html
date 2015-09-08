@@ -1,0 +1,62 @@
+<h1>Тренинги (список)</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+	{foreach key=key item=item from=$tr}
+	<tr>
+		<td>
+			&nbsp&nbsp&nbsp<input name=del[{$item.id}] type=checkbox>&nbsp&nbsp&nbsp
+		</td>
+		<td>
+			название<br>
+			<input name=data[{$item.id}][name] size=50 value="{$item.name|escape}"><br>
+			код<br>
+			<input name=data[{$item.id}][kod] size=5 value="{$item.kod}" class="number_int"><br>
+			максимальное количество слушателей<br>
+			<input name=data[{$item.id}][max_stud] size=5 value="{$item.max_stud}" class="number_int"><br>
+			продолжительность, дней<br>
+			<input name=data[{$item.id}][days] size=5 value="{$item.days}" class="number_int"><br>
+			продолжительность теста, сек<br>
+			<input name=data[{$item.id}][test_len] size=5 value="{$item.test_len}" class="number_int"><br>
+			для ЭТА<br>
+			<select name=data[{$item.id}][for_eta]>
+			<option value=0 {if $item.for_eta eq 0}selected{/if}>нет</option>
+			<option value=1 {if $item.for_eta eq 1}selected{/if}>да</option>
+			</select>
+		</td>
+		<td>
+			текст<br>
+			<textarea name=data[{$item.id}][text] rows=10 cols=100>{$item.text|escape}</textarea>
+		</td>
+	</tr>
+	{/foreach}
+	<tr>
+		<td>
+		</td>
+		<td>
+			название<br>
+			<input size=50 name=new_name><br>
+			код<br>
+			<input size=5 name=new_kod class="number_int"><br>
+			максимальное количество слушателей<br>
+			<input size=5 name=new_max_stud class="number_int"><br>
+			продолжительность, дней<br>
+			<input size=5 name=new_days class="number_int"><br>
+			продолжительность теста, сек<br>
+			<input size=5 name=new_test_len class="number_int"><br>
+			для ЭТА<br>
+			<select name=new_for_eta>
+			<option value=0>нет</option>
+			<option value=1>да</option>
+			</select>
+		</td>
+		<td>
+			текст<br>
+			<textarea rows=10 cols=100 name=new_text></textarea>
+			<br>
+			<input type=submit name=new value="Добавить запись">
+		</td>
+	</tr>
+</table>
+
+</form>

@@ -1,0 +1,160 @@
+<script>
+a=0;
+</script>
+
+<h3>Предлагаемый состав группы, максимум участников - 6</h3>
+
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+	<tr>
+		<td style="text-align: center;">т.н.</td>
+		<td style="text-align: center;">ФИО участника</td>
+		<td style="text-align: center;">Должность</td>
+		<td style="text-align: center;">Работает<br>в должности</td>
+		<td style="text-align: center;">Работает<br>в компании</td>
+		<td style="text-align: center;">Игнор</td>
+	</tr>
+	{foreach key=k item=i from=$tru name=tru}
+	<tr {if $i.dc_ok eq 1}style="background-color:#00ff00;"{/if}>
+		<td>{$i.tn}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td style="text-align:center">{$i.start_pos}</td>
+		<td style="text-align:center">{$i.start_company}</td>
+		<td style="text-align:center">
+			<!--<a id="a_{$i.tn}" class="table_a" href="javascript:void(0);" onclick="a--;$(this).parent().parent().remove();">Удалить</a>-->
+			<input id="a_{$i.tn}" class="table_a" type=submit value="Удалить" onclick="
+				a--;
+				$(this).addClass('deleted');
+				$(this).parent().parent().find('input[class=table_manual]').val(-1);
+				$(this).parent().parent().hide();
+				return false;
+			">
+			<input class="table_tn" id="tn_{$i.tn}" type=hidden value={$i.tn} name="table[{$i.tn}][tn]">
+			<input class="table_manual" id="manual_{$i.tn}" type=hidden value=0 name="table[{$i.tn}][manual]">
+		</td>
+	</tr>
+	<script>
+		{if $smarty.foreach.tru.iteration > 6}
+			$('#a_{$i.tn}').parent().parent().hide();
+			$('#tn_{$i.tn}').attr('disabled',true);
+			$('#manual_{$i.tn}').attr('disabled',true);
+		{else}
+			a++;
+		{/if}
+	</script>
+	{/foreach}
+
+
+
+	{foreach key=k item=i from=$trua name=trua}
+	<tr {if $i.dc_ok eq 1}style="background-color:#00ff00;"{/if}>
+		<td>{$i.tn}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td style="text-align:center">{$i.start_pos}</td>
+		<td style="text-align:center">{$i.start_company}</td>
+		<td style="text-align:center">
+			<input id="b_{$i.tn}" class="table_b" type=submit value="Удалить" onclick="
+				a--;
+				$(this).addClass('deleted');
+				$(this).parent().parent().find('input[class=table_manual]').val(-1);
+				$(this).parent().parent().hide();
+				return false;
+			">
+			<input class="table_tn" id="b_tn_{$i.tn}" type=hidden value={$i.tn} name="table[{$i.tn}][tn]">
+			<input class="table_manual" id="b_manual_{$i.tn}" type=hidden value=0 name="table[{$i.tn}][manual]">
+		</td>
+	</tr>
+	<script>
+			$('#b_{$i.tn}').parent().parent().hide();
+			$('#b_tn_{$i.tn}').attr('disabled',true);
+			$('#b_manual_{$i.tn}').attr('disabled',true);
+	</script>
+	{/foreach}
+
+	{foreach key=k item=i from=$trub name=trub}
+	<tr {if $i.dc_ok eq 1}style="background-color:#00ff00;"{/if}>
+		<td>{$i.tn}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td style="text-align:center">{$i.start_pos}</td>
+		<td style="text-align:center">{$i.start_company}</td>
+		<td style="text-align:center">
+			<input id="b_{$i.tn}" class="table_b" type=submit value="Удалить" onclick="
+				a--;
+				$(this).addClass('deleted');
+				$(this).parent().parent().find('input[class=table_manual]').val(-1);
+				$(this).parent().parent().hide();
+				return false;
+			">
+			<input class="table_tn" id="b_tn_{$i.tn}" type=hidden value={$i.tn} name="table[{$i.tn}][tn]">
+			<input class="table_manual" id="b_manual_{$i.tn}" type=hidden value=0 name="table[{$i.tn}][manual]">
+		</td>
+	</tr>
+	<script>
+			$('#b_{$i.tn}').parent().parent().hide();
+			$('#b_tn_{$i.tn}').attr('disabled',true);
+			$('#b_manual_{$i.tn}').attr('disabled',true);
+	</script>
+	{/foreach}
+
+
+</table>
+
+<p>
+<input type=submit value="Заполнить участниками до максимума" onclick="showMore(6); return false;">
+</p>
+
+<p>
+
+Согласившиеся участвовать в ДЦ
+<select>
+	{foreach key=key item=item from=$trua}
+		<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<input type=submit value="Добавить участника" onclick="
+	a++;
+	$('#b_'+$(this).prev().val()).parent().parent().show();
+	$('#b_tn_'+$(this).prev().val()).attr('disabled',false);
+	$('#b_manual_'+$(this).prev().val()).attr('disabled',false);
+	$('#b_manual_'+$(this).prev().val()).val(1);
+	return false;
+	"
+>
+
+Прочие
+<select>
+	{foreach key=key item=item from=$trub}
+		<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<input type=submit value="Добавить участника" onclick="
+	a++;
+	$('#b_'+$(this).prev().val()).parent().parent().show();
+	$('#b_tn_'+$(this).prev().val()).attr('disabled',false);
+	$('#b_manual_'+$(this).prev().val()).attr('disabled',false);
+	$('#b_manual_'+$(this).prev().val()).val(1);
+	return false;
+	"
+>
+
+</p>
+
+{literal}
+<script>
+function showMore(v)
+{
+	$(".table_a:hidden:not(.deleted)").each(function()
+	{
+		if (a<v)
+		{
+			$(this).parent().parent().show();
+			$(this).parent().parent().find('input[class=table_tn]').attr('disabled',false);
+			$(this).parent().parent().find('input[class=table_manual]').attr('disabled',false);
+			a++;
+		}
+	})
+}
+</script>
+{/literal}

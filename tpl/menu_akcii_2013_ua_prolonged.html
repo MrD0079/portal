@@ -1,0 +1,177 @@
+
+<li><a href="javascript:void(0);"><span class="dir">Весь мир для тебя с АВК</span></a>
+<ul>
+	{if $is_admin or $is_traid}
+	<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+	<ul>
+		<li><a href="?action=w4u_admin_vp">Выбор продуктов</a></li>
+		<li><a href="?action=w4u_admin_vp1">Выбор продуктов (с апреля 2013)</a></li>
+		<li><a href="?action=w4u_admin_pb">Перенос базы</a></li>
+		<li><a href="?action=w4u_admin_pb1">Перенос базы (с апреля 2013)</a></li>
+	</ul>
+	</li>
+	{/if}
+	<li><a href="?action=w4u">Условия акции</a></li>
+	<li><a href="?action=w4u_help">Инструкция по ведению акции</a></li>
+	<li><a href="javascript:void(0);"><span class="dir">Ход акции</span></a>
+	<ul>
+		<li><a href="?action=w4u_process&dt=01.02.2013&m=02&y=2013&page=ts&ver=">февраль</a></li>
+		<li><a href="?action=w4u_process&dt=01.03.2013&m=03&y=2013&page=ts&ver=">март</a></li>
+		<li><a href="?action=w4u_process&dt=01.04.2013&m=04&y=2013&page=ts&ver=1">апрель</a></li>
+		<li><a href="?action=w4u_process&dt=01.05.2013&m=05&y=2013&page=ts&ver=1">май</a></li>
+		<li><a href="?action=w4u_process&dt=01.06.2013&m=06&y=2013&page=ts&ver=1">июнь</a></li>
+		<li><a href="?action=w4u_process&dt=01.07.2013&m=07&y=2013&page=ts&ver=1">июль</a></li>
+		<li><a href="?action=w4u_process&dt=01.08.2013&m=08&y=2013&page=ts&ver=1">август</a></li>
+		<li><a href="?action=w4u_process&dt=01.09.2013&m=09&y=2013&page=ts&ver=1">сентябрь</a></li>
+		<li><a href="?action=w4u_process&dt=01.10.2013&m=10&y=2013&page=ts&ver=1">октябрь</a></li>
+		<li><a href="?action=w4u_process&dt=01.11.2013&m=11&y=2013&page=ts&ver=1">ноябрь</a></li>
+		<li><a href="?action=w4u_process&dt=01.12.2013&m=12&y=2013&page=ts&ver=1">декабрь</a></li>
+	</ul>
+	</li>
+	<li><a href="?action=w4u_report&q=01.01.2013&ver=">Сводный отчет по акции</a></li>
+	<li><a href="?action=w4u_report&q=01.04.2013&ver=1">Сводный отчет по акции (с апреля 2013)</a></li>
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Волшебная осень с АВК</span></a>
+<ul>
+	<li><a href="?action=a13_vo">Условия акции</a></li>
+	<li><a href="javascript:void(0);"><span class="dir">Октябрь</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=a13_vo_tp_select&month=10">Выбор ТП для участия в акции</a></li>
+		{/if}
+		<li><a href="?action=a13_vo_process&month=10">Отчет по акции</a></li>
+	</ul>
+	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Ноябрь</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=a13_vo_tp_select&month=11">Выбор ТП для участия в акции</a></li>
+		{/if}
+		<li><a href="?action=a13_vo_process&month=11">Отчет по акции</a></li>
+	</ul>
+	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Декабрь</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=a13_vo_tp_select&month=12">Выбор ТП для участия в акции</a></li>
+		{/if}
+		<li><a href="?action=a13_vo_process&month=12">Отчет по акции</a></li>
+	</ul>
+	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Накопительная</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=a13_vo_tp_select&month=13">Выбор ТП для участия в акции (накопительная)</a></li>
+		{/if}
+		<li><a href="?action=a13_vo_process&month=13">Отчет по акции (накопительная)</a></li>
+	</ul>
+	</li>
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Коробка с шоколадом</span></a>
+<ul>
+	<li><a href="?action=choco">Условия акции</a></li>
+	<li><a href="?action=choco_help">Инструкция по ведению акции</a></li>
+	{if $is_ts}
+	<li><a href="?action=choco_tp_select">Выбор ТП для участия в акции</a></li>
+	<li><a href="?action=choco_process">Ход акции</a></li>
+	{/if}
+	<li><a href="?action=choco_report">Отчет по акции</a></li>
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Дегустация Труфалье</span></a>
+<ul>
+	{if $is_admin or $is_traid_kk}
+	<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+	<ul>
+		<li><a href="?action=atd_contr_avk">Контролеры АВК</a></li>
+		<li><a href="?action=atd_contr_ag">Контролеры агентства</a></li>
+		<li><a href="?action=atd_ocenka_params">Параметры для оценки</a></li>
+		<li><a href="?action=atd_city">Города</a></li>
+		<li><a href="?action=atd_nets">Сети</a></li>
+		<li><a href="?action=atd_diviz">Дивизии</a></li>
+		<li><a href="?action=atd_tz">Торговые залы</a></li>
+	</ul>
+	</li>
+	{/if}
+	<li><a href="?action=atd_report">Отчет по акции</a></li>
+	<li><a href="?action=atd_total_report">Сводный отчет</a></li>
+	{if $is_atd_super}
+	<li><a href="?action=atd_visits">Посещаемость</a></li>
+	{/if}
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">КримЧерри</span></a>
+<ul>
+	<li><a href="?action=creamcherry">Условия акции</a></li>
+	<li><a href="?action=creamcherry_help">Инструкция по ведению акции</a></li>
+	{if $is_ts}
+	<li><a href="?action=creamcherry_tp_select">Выбор ТП для участия в акции</a></li>
+	<li><a href="?action=creamcherry_process">Ход акции</a></li>
+	{/if}
+	<li><a href="?action=creamcherry_report">Отчет по акции</a></li>
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">ВАЛ Весна идет</span></a>
+<ul>
+	<li><a href="?action=val_vesna">Условия акции</a></li>
+	<li><a href="?action=val_vesna_help">Инструкция по ведению акции</a></li>
+	<li><a href="javascript:void(0);"><span class="dir">Февраль</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=val_vesna_tp_select&month=2">Выбор ТП для участия в акции</a></li>
+		{/if}
+		<li><a href="?action=val_vesna_process&month=2">Отчет по акции</a></li>
+	</ul>
+	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Март</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=val_vesna_tp_select&month=3">Выбор ТП для участия в акции</a></li>
+		{/if}
+		<li><a href="?action=val_vesna_process&month=3">Отчет по акции</a></li>
+	</ul>
+	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Апрель</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=val_vesna_tp_select&month=4">Выбор ТП для участия в акции</a></li>
+		{/if}
+		<li><a href="?action=val_vesna_process&month=4">Отчет по акции</a></li>
+	</ul>
+	</li>
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Фартук</span></a>
+<ul>
+	{if $is_tm}
+	<li><a href="?action=fartuk_ua_form">Заполнить отчет</a></li>
+	{/if}
+	{if $is_super or $is_admin or $is_traid or $is_kpr}
+	<li><a href="?action=fartuk_ua_report">Сводный отчет</a></li>
+	{/if}
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Дегустация Жувиленд</span></a>
+<ul>
+	{if $is_admin or $is_traid_kk}
+	<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+	<ul>
+		<li><a href="?action=azl_contr_avk">Контролеры АВК</a></li>
+		<li><a href="?action=azl_contr_ag">Контролеры агентства</a></li>
+		<li><a href="?action=azl_ocenka_params">Параметры для оценки</a></li>
+		<li><a href="?action=azl_city">Города</a></li>
+		<li><a href="?action=azl_nets">Сети</a></li>
+		<li><a href="?action=azl_diviz">Дивизии</a></li>
+		<li><a href="?action=azl_tz">Торговые залы</a></li>
+	</ul>
+	</li>
+	{/if}
+	<li><a href="?action=azl_report">Отчет по акции</a></li>
+	<li><a href="?action=azl_total_report">Сводный отчет</a></li>
+	{if $is_azl_super}
+	<li><a href="?action=azl_visits">Посещаемость</a></li>
+	{/if}
+</ul>
+</li>

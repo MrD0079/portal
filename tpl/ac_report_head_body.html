@@ -1,0 +1,208 @@
+<script>
+{literal}
+function save_head_body(id,field,val)
+{
+	$('#hb_'+field).css('background-color','red');
+	$('#ok').load('?action=ac_report_head_body_save&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	get_hb_val(id,'ok_accept_fio');
+	get_hb_val(id,'ok_accept_lu');
+	$('#hb_'+field).css('background-color','white');
+	});
+	
+}
+function get_hb_val(id,field)
+{
+	$('#hb_'+field).load('?action=ac_report_head_body_get_val&nohead=1',
+	{
+		id: id,
+		field: field
+	});
+}
+function save_golos(id,comm,mk,field,val)
+{
+	$('#golos_td_'+comm+'_'+mk).css('background-color','red');
+	$('#ok').load('?action=ac_report_golos_save&nohead=1',
+	{
+		id: id,
+		comm: comm,
+		mk: mk,
+		field: field,
+		val: val
+	},
+	function() {
+	get_golos(id,mk);
+	$('#golos_td_'+comm+'_'+mk).css('background-color','white');
+	});
+	
+}
+function get_golos(id,mk)
+{
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('mk',  mk);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=ac_report_golos_get&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			if (data=='1')
+			{
+				$('#golos_tdt_'+mk).html('да');
+				$('#golos_tdt_'+mk).css('background-color','rgb(51, 255, 51)');
+			}
+			else
+			{
+				$('#golos_tdt_'+mk).html('нет');
+				$('#golos_tdt_'+mk).css('background-color','red');
+			}
+		}
+	});
+	
+}
+{/literal}
+</script>
+
+<div id=ok style="display: inline;"></div>
+
+<table border=1>
+<tr><td>Дата проведения</td><td>{$ac_report_head.dt}</td></tr>
+<tr><td>ФИО сотрудника, инициирующего проведение АЦ</td><td>{$ac_report_head.init}</td></tr>
+<tr><td>Место проведения</td><td>{$ac_report_head.place}</td></tr>
+<tr><td>Тема для презентации</td><td>{$ac_report_head.head}</td></tr>
+<tr><td>Вакантная позиция 1 (должность, территория, с какой даты)</td><td>{$ac_report_head.vac1_pos}, {$ac_report_head.vac1}</td></tr>
+<tr><td>Вакантная позиция 2 (должность, территория, с какой даты)</td><td>{$ac_report_head.vac2_pos}, {$ac_report_head.vac2}</td></tr>
+<tr><td>Вакантная позиция 3 (должность, территория, с какой даты)</td><td>{$ac_report_head.vac3_pos}, {$ac_report_head.vac3}</td></tr>
+</table>
+
+
+
+<p>
+</p>
+
+
+<table border=1 style="text-align:center">
+
+<tr><td colspan=999><b>Таблица с результатами:</b> балл / max / место</td></tr>
+
+<tr>
+	<td><b>Блок</b></td>
+	{foreach key=k item=i from=$memb}
+	<td>
+		<a target=_blank href="?action=os_ac&y=2014&ac_id={$smarty.request.id}&memb_id={$k}">{$i.fio}</a>
+		<br>
+		{$i.iet}
+	</td>
+	{/foreach}
+</tr>
+{foreach key=k item=i from=$bl}
+<tr>
+	<td>{$i.name}</td>
+	{foreach key=mk item=mi from=$memb}
+	<td>
+		{$t1[$mk][$k].en|default:0}
+		/
+		{$t1[$mk][$k].c1}
+		/
+		<b>{$t11[$k].places[$mk]}</b>
+	</td>
+	{/foreach}
+</tr>
+{/foreach}
+<tr style="font-weight:bold;">
+	<td>ИТОГО</td>
+	{foreach key=mk item=mi from=$memb}
+	<td style="background-color:{$t11.total.colors[$mk]}">
+		{$t11.total.scores[$mk]}
+		/
+		{$t1[$mk].total.c1}
+		/
+		{$t11.total.places[$mk]}
+	</td>
+	{/foreach}
+</tr>
+<tr><td colspan=999><b>Панельное голосование</b></td></tr>
+
+
+
+{foreach key=k item=i from=$comm}
+<tr>
+	<td>{$i.comm_fio}</td>
+	{foreach key=mk item=mi from=$memb}
+	<td id=golos_td_{$k}_{$mk}>
+		<!-- $i.comm_tn eq $tn --!>
+		{if not $ac_report_head.ok_accept_tn}
+			<select
+				id=golos_select_{$k}_{$mk}
+				onChange="save_golos({$smarty.request.id},{$k},{$mk},'res_id',this.value);"
+			>
+			<option></option>
+			{foreach key=gk item=gi from=$ac_golos_res}
+			<option value={$gi.id}>{$gi.name}</option>
+			{/foreach}
+			</select>
+			<script>
+			$('#golos_select_{$k}_{$mk}').val({$ac_report_golos[$k][$mk].res_id});
+			</script>
+		{else}
+			{$ac_report_golos[$k][$mk].res_name}
+		{/if}
+	</td>
+	{/foreach}
+</tr>
+{/foreach}
+<tr style="font-weight:bold">
+	<td>ИТОГО</td>
+	{foreach key=mk item=mi from=$memb}
+	<td id=golos_tdt_{$mk}></td>
+	<script>
+		get_golos({$smarty.request.id},{$mk});
+	</script>
+	{/foreach}
+</tr>
+
+</table>
+
+<p>
+</p>
+
+<table><tr><td id='zxc'>
+	Результаты подтверждаю:
+	{if $parameters.ac_accept.val_number eq $tn} 
+	<input
+		type=checkbox
+		name="accept"
+		id="hb_valid"
+		{if $ac_report_head.ok_accept_tn}checked{/if}
+		onChange="
+		save_head_body({$smarty.request.id},'ok_accept_tn',this.checked?{$tn}:null);
+		this.checked?$('#zxc').css('background-color','rgb(51, 255, 51)'):$('#zxc').css('background-color','white');
+		"
+	>
+	{/if}
+	<div id="hb_ok_accept_fio" style="display: inline;"></div>
+	<div id="hb_ok_accept_lu" style="display: inline;"></div>
+
+</td></tr></table>
+
+<p>
+</p>
+
+<script>
+id={$smarty.request.id};
+{literal}
+$(function() {
+	get_hb_val(id,'ok_accept_fio');
+	get_hb_val(id,'ok_accept_lu');
+}
+);
+{/literal}
+</script>

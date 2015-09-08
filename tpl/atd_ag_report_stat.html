@@ -1,0 +1,178 @@
+<h1>Статистика по акции "Дегустация Труфалье Делюкс"</h1>
+
+<!--{$id}-->
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form1 id=form1>
+
+<table style="text-align: left; " cellpadding="2" cellspacing="2" border=0>
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center; font-weight: bold; text-decoration: underline;"><a href="?action=atd_ag_report">Заполнить отчет</a><br>      </td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold; text-decoration: underline;"><a href="?action=atd_ag_report_stat">Статистика</a><br>      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">Торговый зал<br>      </td>
+      <td style="vertical-align: top; text-align: center;">Дата отчета<br>      </td>
+<td>Дивизия</td>
+<td>Сеть</td>
+<td>Город</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">
+      <select name="tz" id='tz'>
+	<option value=0></option>
+	{foreach key=k item=i from=$atd_tz}
+	<option value={$i.id}>{$i.name} - {$i.addr}</option>
+	{/foreach}
+      </select>
+	<script>$('#tz').val({$smarty.request.tz});</script>
+      </td>
+      <td style="vertical-align: top; text-align: center;">
+      <input class="datepicker" name="sdt" id='sdt'>
+      <input class="datepicker" name="edt" id='edt'>
+	<script>$('#sdt').val('{$smarty.request.sdt}');</script>
+	<script>$('#edt').val('{$smarty.request.edt}');</script>
+      </td>
+<td>
+<select name=diviz id=diviz>
+<option value=0></option>
+{foreach key=key item=item from=$atd_diviz}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+</td>
+<td>
+<select name=nets id=nets>
+<option value=0></option>
+{foreach key=key item=item from=$atd_nets}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+</td>
+<td>
+<select name=city id=city>
+<option value=0></option>
+{foreach key=key item=item from=$atd_city}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+</td>
+<script>$('#diviz').val({$smarty.request.diviz});</script>
+<script>$('#nets').val({$smarty.request.nets});</script>
+<script>$('#city').val({$smarty.request.city});</script>
+    </tr>
+  </tbody>
+</table>
+
+<p><input name="show_report" value="Построить отчет" type="submit"></p>
+
+</form>
+
+
+<hr style=" height: 2px;">
+
+
+
+{/if}
+
+{foreach key=ak item=ai from=$atd_head}
+
+{if not $smarty.request.print}
+<a href="?action=atd_ag_report_stat&print=1&tz={$ai.id}&excel=1&filename=Статистика по акции 'Дегустация Труфалье Делюкс'">Экспорт в Excel</a>
+{/if}
+
+
+{assign var=cnt_files value=0}
+{assign var=cnt_text value=0}
+
+<table style="text-align: left; margin-left: 0px; margin-right: 0px;" border="1" cellpadding="2" cellspacing="0">
+  <tbody align="left">
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">Дивизия<br>      </td>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">{$ai.diviz_name}<br>      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">Город</td>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">{$ai.city_name}</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">Сеть</td>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">{$ai.nets_name}</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">Адрес</td>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">{$ai.addr}</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">Контактное лицо "АВК"<br>      </td>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">{$ai.cont_avk_fio} {$ai.cont_avk_phone}<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">Контактное лицо агентство<br>      </td>
+      <td style="vertical-align: top; background-color: rgb(255, 255, 204);">{$ai.cag_fio} {$ai.cag_phone}<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr>
+      <td style="font-weight: bold; text-align: center;">Дата отчета<br>      </td>
+      <td style="font-weight: bold; text-align: center;">Время визита на ТП<br>      </td>
+      <td style="font-weight: bold; text-align: center;">Количество покупателей ТЗ, купивших продукт после пробы, чел.<br>      </td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">Остаток дегустационного материала в начале дня, шт. коробок<br>      </td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">Остаток дегустационного материала на конец дня, шт. коробок<br>      </td>
+      <td style="vertical-align: top; text-align: center; font-weight: bold;">Остаток продукта на полке на конец дня, шт. коробок<br>      </td>
+      <td style="font-weight: bold; text-align: center;">Комментарии</td>
+{if not $smarty.request.print}
+      <td style="font-weight: bold; text-align: center;">Фотоотчет<br>      </td>
+{/if}
+    </tr>
+	{foreach key=kd1 item=id1 from=$ai.detail name=detail}
+    <tr>
+      <td style="text-align: center;">{$id1.dt}</td>
+      <td style="text-align: center;">{$id1.rep_tm}</td>
+      <td style="text-align: center;">{$id1.count_byu}</td>
+      <td style="text-align: center;">{$id1.stock_start}</td>
+      <td style="text-align: center;">{$id1.stock_finish}</td>
+      <td style="text-align: center;">{$id1.stock_shelf}</td>
+      <td style=";">{$id1.text|nl2br}</td>
+
+	{if $id1.text neq ''}
+	{assign var=cnt_text value=$cnt_text+1}
+	{/if}
+
+
+{if not $smarty.request.print}
+	<td style="vertical-align: top; text-align:center">
+	{foreach key=fk item=fi from=$id1.files name=files}
+		<a target=_blank href="atd_ag_report_photo/{$fi.fn}"><img height=50px src="atd_ag_report_photo/{$fi.fn}"></a>
+	{/foreach}
+	{assign var=cnt_files value=$cnt_files+$smarty.foreach.files.total}
+	</td>
+{/if}
+    </tr>
+	{/foreach}
+<tr>
+      <td colspan="2" rowspan="1" style="vertical-align: middle; text-align: center;"><span style="font-weight: bold;">{$ai.detail_total.c}</span></td>
+      <td style="text-align: center;">{$ai.detail_total.count_byu}</td>
+      <td style="text-align: center;">{$ai.detail_total.stock_start}</td>
+      <td style="text-align: center;">{$ai.detail_total.stock_finish}</td>
+      <td style="text-align: center;">{$ai.detail_total.stock_shelf}</td>
+      <td style="text-align: center;">{$ai.detail_total.text}</td>
+{if not $smarty.request.print}
+      <td style="vertical-align: middle; font-weight: bold; text-align: center;">{$cnt_files}</td>
+{/if}
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+{/foreach}

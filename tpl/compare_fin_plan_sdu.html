@@ -1,0 +1,123 @@
+<h1>Сравнение финансового/договорного планирования и СДУ</h1>
+
+
+
+
+
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Вид планирования
+				<br>
+				<select name=plan_type id=plan_type>
+					<option></option>
+					{foreach key=key item=item from=$plan_type}
+					<option value={$item.id}>{$item.name}</option>
+					{/foreach}
+				</select>
+				<script>$('#plan_type option[value="{$smarty.request.plan_type}"]').prop('selected', true);</script>
+			</td>
+{if not $is_mkk}
+			<td>
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+{/if}
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{if $smarty.request.calendar_years and $smarty.request.plan_type}
+<table border=1 cellspacing=0 cellpadding=3>
+	{foreach key=compare_fin_plan_sdu_key item=compare_fin_plan_sdu_item from=$compare_fin_plan_sdu name=compare_fin_plan_sdu}
+
+
+	{if $compare_fin_plan_sdu_item.draw_head eq 1}
+	<tr style="font-weight:bold;text-align:center">
+
+
+		<td>№ п/п</td>
+		<td>ФИО РМКК</td>
+		<td>ФИО МКК</td>
+		<td>Факт. назв.сети</td>
+		<td>Сеть<br>рабо-<br>тает<br>без<br>бюджета</td>
+		<td>План продаж, тыс.{$valuta}.</td>
+		<td style="background-color:rgb(255, 204, 153);">Бюджет по фин. плану, тыс.{$valuta}.</td>
+		<td style="background-color:rgb(255, 204, 153);">Бюджет ПЕРВАЯ версия СДУ, тыс.{$valuta}.</td>
+		<td style="background-color:rgb(255, 204, 153);">Разница, тыс.{$valuta}.</td>
+		<td style="background-color:rgb(204, 255, 255);">Бюджет по дог. плану, тыс.{$valuta}.</td>
+		<td style="background-color:rgb(204, 255, 255);">Бюджет ПОСЛЕДНЯЯ версия СДУ, тыс.{$valuta}.</td>
+		<td style="background-color:rgb(204, 255, 255);">Разница, тыс.{$valuta}.</td>
+
+	</tr>
+	{/if}
+
+
+
+
+
+	<tr style="{if $compare_fin_plan_sdu_item.no_budget eq 'да'};background-color:yellow{/if}">
+		<td>{$smarty.foreach.compare_fin_plan_sdu.iteration}</td>
+		<td>{$compare_fin_plan_sdu_item.rmkk}</td>
+		<td>{$compare_fin_plan_sdu_item.mkk}</td>
+		<td>{$compare_fin_plan_sdu_item.net_name}</td>
+		<td>{$compare_fin_plan_sdu_item.no_budget}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item.year_plan|default:0|num:3}</td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);">{$compare_fin_plan_sdu_item.budget_fin_plan|default:0|num:3}</td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);">{$compare_fin_plan_sdu_item.budget_sdu|default:0|num:3}</td>
+		<td style="text-align:right;background-color:{if $compare_fin_plan_sdu_item.delta_fin_perc > 1.0}red{else}rgb(255, 204, 153){/if}">
+			{$compare_fin_plan_sdu_item.budget_delta_fin|default:0|num:3}
+		</td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);">{$compare_fin_plan_sdu_item.budget_dog_plan|default:0|num:3}</td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);">{$compare_fin_plan_sdu_item.budget_sdu_last|default:0|num:3}</td>
+		<td style="text-align:right;background-color:{if $compare_fin_plan_sdu_item.delta_dog_perc > 1.0}red{else}rgb(204, 255, 255){/if}">
+			{$compare_fin_plan_sdu_item.budget_delta_dog|default:0|num:3}
+		</td>
+	</tr>
+	{/foreach}
+	{foreach key=compare_fin_plan_sdu_key_total item=compare_fin_plan_sdu_item_total from=$compare_fin_plan_sdu_total name=compare_fin_plan_sdu_total}
+	<tr style="font-weight:bold">
+		<td colspan=4>Итого</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.no_budget}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.year_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.budget_fin_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.budget_sdu|default:0|num:3}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.budget_delta_fin|default:0|num:3}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.budget_dog_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.budget_sdu_last|default:0|num:3}</td>
+		<td style="text-align:right">{$compare_fin_plan_sdu_item_total.budget_delta_dog|default:0|num:3}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

@@ -1,0 +1,179 @@
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО руководителя</td>
+		<td>ФИО ТС<br></td>
+		<td>ФИО ЭТА<br></td>
+		<td>Название ТП<br></td>
+		<td>Адрес ТП<br></td>
+		<td>Дата<br>установки<br>НТО<br>
+			{if $is_ts and not $smarty.request.print}
+			{literal}
+			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+			{/literal}
+			{/if}
+		</td>
+		<td>Количество<br>установленных<br>единиц<br>НТО,<br>шт</td>
+		<td>Фотоотчет</td>
+		<td>Подтверждение<br>рук-ля<br>
+			{if not $smarty.request.print}
+			{literal}
+			<a href="javascript:void(0);" onclick="$('.chk_all1:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+			<a href="javascript:void(0);" onclick="$('.chk_all1:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+			{/literal}
+			{/if}
+		</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}"
+		{if $list_item.fakt_bonus > $list_item.bonus_plan}style="background-color: red"{/if}
+		{if $list_item.is_act eq 1}style="background-color: rgb(51, 255, 51)"{/if}
+	>
+		<td>{$smarty.foreach.list.iteration}</td>
+		<td>{$list_item.parent_fio}</td>
+		<td>{$list_item.ts_fio}</td>
+		<td>{$list_item.eta}</td>
+		<td>{$list_item.tp_kod} {$list_item.tp_name}</td>
+		<td>{$list_item.address}</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print and $is_ts and and not $list_item.ok_chief_ln}
+				<input
+				class="chk_all" type=checkbox
+				id=bonus_dt1_cb_{$list_item.tp_kod}
+				{if $list_item.bonus_dt1}checked{/if}
+				onclick="
+					$('#bonus_dt1{$list_item.tp_kod}').attr('disabled',!this.checked);
+					$('#data{$list_item.tp_kod}bonus_sum').attr('disabled',!this.checked);
+					(!this.checked)?$('#bonus_dt1_val{$list_item.tp_kod}').val(''):$('#bonus_dt1_val{$list_item.tp_kod}').val($('#bonus_dt1{$list_item.tp_kod}').val());
+				"
+			>
+			<input required
+				{if not $list_item.bonus_dt1}disabled{/if}
+				class="datepicker"
+				size=10
+				id=bonus_dt1{$list_item.tp_kod} value="{$list_item.bonus_dt1}"
+				onchange="
+					$('#bonus_dt1_val{$list_item.tp_kod}').val($('#bonus_dt1{$list_item.tp_kod}').val());
+				"
+			>
+			<input
+				type=hidden
+				name=data[{$list_item.tp_kod}][bonus_dt1] id=bonus_dt1_val{$list_item.tp_kod} value="{$list_item.bonus_dt1}"
+			>
+			{else}
+			{$list_item.bonus_dt1}
+			{/if}
+		</td>
+		<td>
+			{if not $smarty.request.print and $is_ts and not $list_item.ok_chief_ln}
+			<input
+				{if not $list_item.bonus_dt1}disabled{/if}
+				name=data[{$list_item.tp_kod}][bonus_sum1]
+				id=data{$list_item.tp_kod}bonus_sum
+				class=number_int
+				size=10
+			>
+			<script>
+			$('#data{$list_item.tp_kod}bonus_sum').val("{$list_item.bonus_sum1}");
+			</script>
+			{else}
+			{$list_item.bonus_sum1}
+			{/if}
+		</td>
+		<td>
+			{if not $smarty.request.print and $is_ts and not $list_item.ok_chief_ln}
+			{foreach key=k item=i from=$list_item.files}
+			<div id="uploadOutput_{$k}" style="display: inline;">
+			<nobr>
+			<a href="javascript:void(0);" onclick="
+				$('#uploadOutput_{$k}').load('?action=a1407nto_report_a_files&nohead=1&fn={$i}');
+				$('#uploadOutput_{$k}').remove();
+			">[x]</a>
+			<a target=_blank href="a1407nto_files/{$i}"><img height=50px src="a1407nto_files/{$i}"></a>
+			</nobr>
+			</div>
+			{/foreach}
+			<div style="display: inline;" id=photo_list_{$list_item.tp_kod}></div>
+			<p>
+				<a
+				href="javascript:void(0);"
+				onclick="
+					$iterator++;
+					$('#photo_list_{$list_item.tp_kod}').append(
+						$('<div id='+$iterator+'>').load(
+							'?action=a1407nto_report_a_add_photo&nohead=1&id='+$iterator+'&tp_kod={$list_item.tp_kod}'
+						)
+					);
+					$('#'+$iterator).css('display','inline');
+					
+				"
+				>
+				<nobr>Добавить фото</nobr>
+				</a>
+			</p>
+			{else}
+			{foreach key=k item=i from=$list_item.files}
+			<a target=_blank href="a1407nto_files/{$i}"><img height=50px src="a1407nto_files/{$i}"></a>
+			{/foreach}
+			{/if}
+		</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print and $list_item.parent_tn eq $tn}
+				<input
+				class="chk_all1" type=checkbox
+				id=ok_chief_ln_cb_{$list_item.tp_kod}
+				{if $list_item.ok_chief_ln}checked{/if}
+				onclick="
+					(!this.checked)
+					?
+					$('#ok_chief_ln_val{$list_item.tp_kod}').val('')
+					:
+					$('#ok_chief_ln_val{$list_item.tp_kod}').val({$tn})
+					;
+				"
+			>
+			<input
+				type=hidden
+				name=data[{$list_item.tp_kod}][ok_chief_ln] id=ok_chief_ln_val{$list_item.tp_kod} value="{$list_item.ok_chief_ln}"
+			>
+			{/if}
+			{$list_item.ok_chief_ln_lu} {$list_item.ok_chief_ln_fio}
+		</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:right;font-weight:bold">
+		<td colspan=6 style='text-align:center'>ИТОГО ТП: {$itogi.cnt}</td>
+		<td>{$itogi.bonus_dt1}</td>
+		<td>{$itogi.bonus_sum1}</td>
+		<td></td>
+		<td>{$itogi.ok_chief_ln}</td>
+	</tr>
+</table>
+
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+
+
+<script>
+{literal}
+var currentTime = new Date() 
+var minDate = new Date(2014, 6, 1);
+var maxDate =  new Date(2014, 7, 31);
+$( ".datepicker" ).datepicker({ 
+minDate: minDate, 
+maxDate: maxDate 
+});
+{/literal}
+</script>
+

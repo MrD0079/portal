@@ -1,0 +1,153 @@
+{if not $smarty.request.print}
+<form name=form id=form target=_self method=post>
+
+<p>
+Период оценки
+<select name=event id=event>
+	<option></option>
+	{foreach key=key item=event from=$events}
+		<option value={$event.year}>{$event.name}</option>
+	{/foreach}
+</select>
+<script>$('#event option[value="{$smarty.request.event}"]').prop('selected', true);</script>
+</p>
+
+<p>
+Руководитель
+<select name=parent id=parent>
+<option value=0></option>
+{foreach key=key item=item from=$parents}
+<option value={$item.tn}>{$item.fio}</option>
+{/foreach}
+</select>
+<script>$('#parent option[value="{$smarty.request.parent}"]').prop('selected', true);</script>
+</p>
+
+
+<p>
+Сотрудник
+<select name=spd id=spd>
+<option value=0></option>
+{foreach key=key item=item from=$spd_list}
+<option value={$item.tn}>{$item.fio}</option>
+{/foreach}
+</select>
+<script>$('#spd option[value="{$smarty.request.spd}"]').prop('selected', true);</script>
+</p>
+
+<p>
+Должность
+<select name=pos id=pos>
+<option value=0></option>
+{foreach key=key item=item from=$pos}
+<option value={$item.pos_id}>{$item.pos_name}</option>
+{/foreach}
+</select>
+<script>$('#pos option[value="{$smarty.request.pos}"]').prop('selected', true);</script>
+</p>
+
+
+<input onchange="javascript:this.form.submit()" type=submit name=generate value="Построить отчет">
+</form>
+{/if}
+
+
+
+{if $smarty.request.generate}
+
+<h1>Итог оценки</h1>
+
+
+{if not $smarty.request.print}
+<a href="?action=ocenka_report&print=1&excel=1&generate=1&filename=Итог оценки">экспорт в Excel</a>
+<br>
+<br>
+{/if}
+
+<table border=1 cellpadding=3 cellspacing=0>
+  <tr style="font-weight:bold;text-align:center">
+    <td rowspan=3>ИНН</td>
+    <td rowspan=3>ФИО</td>
+    <td rowspan=3>Должность</td>
+    <td rowspan=2>Само оцен ка</td>
+    <td rowspan=2>Оцен ка ру ково дите ля</td>
+    <td rowspan=2>Оцен ка экспер тов (сред няя)</td>
+    <td rowspan=2>Сред няя оцен ка (экс пер ты + ру ко во ди тель)</td>
+    <td rowspan=2>Оцен ка за тест</td>
+    <td rowspan=2>Ито го вая оцен ка</td>
+    <td colspan=3>Учас тие в ДЦ</td>
+    <td rowspan=3>Ошибки в ответах</td>
+    <td rowspan=3>Комментарии экспертов</td>
+  </tr>
+  <tr style="font-weight:bold;text-align:center">
+    <td rowspan=2>Оце нива емый</td>
+    <td rowspan=2>Ру ко во ди тель</td>
+    <td rowspan=2>Окон ча тель ное ре ше ние</td>
+  </tr>
+  <tr style="font-weight:bold;text-align:center">
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+    <td>4 (сред нее меж ду 2 и 3)</td>
+    <td>5</td>
+    <td>4+5</td>
+  </tr>
+  {foreach key=report_key item=report from=$report}
+  <tr>
+    <td align=left>{$report.emp_tn}</td>
+    <td align=left>
+	{$report.fio}
+	<br>
+	<a target=_blank href="?action=ocenka_report_self&emp_tn={$report.emp_tn}&event={$smarty.request.event}">Отчет по оценке</a>
+	<br>
+	<a target=_blank href="?action=razv_plan&tn={$report.emp_tn}&razv_event={$smarty.request.event}">План развития</a>
+    </td>
+    <td align=left>{$report.pos_name}</td>
+    <td align=right>{$report.self_score|default:'0'|num:2}</td>
+    <td align=right>{$report.chief_score|default:'0'|num:2}</td>
+    <td align=right>{$report.exp_avg_score|default:'0'|num:2}</td>
+    <td align=right>{$report.chief_plus_exp_avg_score|default:'0'|num:2}</td>
+    <td align=right>{$report.test_score|default:'0'|num:2}</td>
+    <td align=right>{$report.total_score|default:'0'|num:2}</td>
+    <td align=center>{$report.dev_emp}</td>
+    <td align=center>{$report.dev_chief}</td>
+    <td align=center>{$report.dev_sol}</td>
+    <td align=left valign=top width=1000>
+	{if count($test_errors[$report.rownum]) neq 0}
+		<b>неправильно ответил или не ответил на следующие вопросы:</b><br>
+		{foreach key=test_errors_key item=test_errors_item name=test_errors from=$test_errors[$report.rownum]}
+			<b>{$test_errors_item[0]}</b> {$test_errors_item[1]} <nobr><b>- {if $test_errors_item[2] neq ''}неправильный ответ{else}нет ответа{/if}</b></nobr><br>
+		{/foreach}
+	{else}
+		&nbsp
+	{/if}
+    </td>
+    <td align=left valign=top width=50>
+	{if count($exp_comm[$report.rownum]) neq 0}
+		{foreach key=exp_comm_key item=exp_comm_item name=exp_comm from=$exp_comm[$report.rownum]}
+			<b>{$exp_comm_item[0]} -</b> {$exp_comm_item[1]}<br>
+		{/foreach}
+	{else}
+		&nbsp
+	{/if}
+    </td>
+  </tr>
+  {/foreach}
+  <tr>
+    <td align=left></td>
+    <td align=left>{$report_total.c}</td>
+    <td align=left></td>
+    <td align=right>{$report_total.self_score|default:'0'|num:2}</td>
+    <td align=right>{$report_total.chief_score|default:'0'|num:2}</td>
+    <td align=right>{$report_total.exp_avg_score|default:'0'|num:2}</td>
+    <td align=right>{$report_total.chief_plus_exp_avg_score|default:'0'|num:2}</td>
+    <td align=right>{$report_total.test_score|default:'0'|num:2}</td>
+    <td align=right>{$report_total.total_score|default:'0'|num:2}</td>
+    <td align=center>{$report_total.dev_emp}</td>
+    <td align=center>{$report_total.dev_chief}</td>
+    <td align=center>{$report_total.dev_sol}</td>
+  </tr>
+</table>
+
+
+{/if}

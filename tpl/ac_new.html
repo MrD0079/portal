@@ -1,0 +1,196 @@
+{literal}
+<script type='text/javascript'>
+$a=1;
+$cnt=0;
+$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>{/if}{/foreach}{literal}";
+$ac_test="<option></option>{/literal}{foreach key=key item=item from=$ac_test}<option value={$item.id}>{$item.name|escape}</option>{/foreach}{literal}";
+/*
+function check_required(increment)
+{
+	$cnt=$cnt+increment;
+	$cnt>0 ? $("#acc").val($cnt) : $("#acc").val(null);
+	$cnt>0 ? $("#save").attr('disabled',false) : $("#save").attr('disabled',true);
+}
+*/
+function add_comm(id)
+{
+	$("<div id=\"div_ac_comm_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#ac_comm_new"+$a+"').val(null);$('#ac_comm_new"+$a+"').attr('disabled',true);$('#div_ac_comm_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#exe_comm"));
+	$("#div_ac_comm_new"+$a).append($("<select required name=\"ac_comm[]\" id=\"ac_comm_new"+$a+"\">"+$s+"</select>"));
+	$("#ac_comm_new"+$a).val(id);
+	$a++;
+}
+function add_memb_int(id,idl,idm)
+{
+	$("<div id=\"div_ac_memb_int_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#ac_memb_int_new"+$a+"').val(null);$('#ac_memb_int_new"+$a+"').attr('disabled',true);$('#div_ac_memb_int_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#exe_memb_int"));
+	$("#div_ac_memb_int_new"+$a).append($("<font>&nbspкандидат&nbsp</font><select required name=\"ac_memb_int["+$a+"][tn]\" id=\"ac_memb_int_new"+$a+"\">"+$s+"</select>"));
+	$("#ac_memb_int_new"+$a).val(id);
+	$("#div_ac_memb_int_new"+$a).append($("<font>&nbspтест&nbspлогика&nbsp</font><select required name=\"ac_memb_int["+$a+"][ac_test_logic]\" id=\"ac_memb_int_new_ac_test_logic"+$a+"\">"+$ac_test+"</select>"));
+	$("#div_ac_memb_int_new"+$a).append($("<font>&nbspтест&nbspматематика&nbsp</font><select required name=\"ac_memb_int["+$a+"][ac_test_math]\" id=\"ac_memb_int_new_ac_test_math"+$a+"\">"+$ac_test+"</select>"));
+	$("#ac_memb_int_new_ac_test_logic"+$a).val(idl);
+	$("#ac_memb_int_new_ac_test_math"+$a).val(idm);
+	$a++;
+}
+function add_memb_ext(/*id1,id2,id3*/)
+{
+	$("<p><div style='display: inline;' id=\"div_ac_memb_ext_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#ac_memb_ext_new"+$a+"').val(null);$('#ac_memb_ext_new"+$a+"').attr('disabled',true);$('#div_ac_memb_ext_new"+$a+"').hide();\">[X]</a></div></p>").insertBefore(
+		$("#exe_memb_ext")
+	);
+	x="";
+	x=x+"<font>&nbspФамилия&nbsp</font><input required name=\"ac_memb_ext["+$a+"][fam]\" id=\"ac_memb_ext_new_fam"+$a+"\">";
+	x=x+"<font>&nbspИмя&nbsp</font><input required name=\"ac_memb_ext["+$a+"][im]\" id=\"ac_memb_ext_new_im"+$a+"\">";
+	x=x+"<font>&nbspОтчество&nbsp</font><input required name=\"ac_memb_ext["+$a+"][otch]\" id=\"ac_memb_ext_new_otch"+$a+"\">";
+	x=x+"<br>";
+	x=x+"<font>&nbspадрес эл.почты&nbsp</font><input required name=\"ac_memb_ext["+$a+"][email]\" id=\"ac_memb_ext_new_email"+$a+"\">";
+	x=x+"<font>&nbspрезюме&nbsp</font><input required name=\"ac_memb_ext["+$a+"]\" id=\"ac_memb_ext_new_resume"+$a+"\" type=file>";
+	x=x+"<br>";
+	x=x+"<font>&nbspтест&nbspлогика&nbsp</font><select required name=\"ac_memb_ext["+$a+"][ac_test_logic]\" id=\"ac_memb_ext_new_ac_test_logic"+$a+"\">"+$ac_test+"</select>";
+	x=x+"<font>&nbspтест&nbspматематика&nbsp</font><select required name=\"ac_memb_ext["+$a+"][ac_test_math]\" id=\"ac_memb_ext_new_ac_test_math"+$a+"\">"+$ac_test+"</select>";
+	$("#div_ac_memb_ext_new"+$a).append($(x));
+	/*$("#ac_memb_ext_new_fio"+$a).val(id1);
+	$("#ac_memb_ext_new_email"+$a).val(id2);
+	$("#ac_memb_ext_new_resume"+$a).val(id3);*/
+	$a++;
+}
+/*
+function add_file(id)
+{
+	$("<div id=\"div_ac_fn_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#ac_fn_new"+$a+"').val(null);$('#div_ac_fn_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#save"));
+	$("#div_ac_fn_new"+$a).append($("<input type=file name=\""+$a+"\" id=\"ac_fn_new"+$a+"\">"));
+	$a++;
+}
+*/
+</script>
+{/literal}
+
+<h1>
+Заявка на проведение АЦ
+</h1>
+
+{if $smarty.request.save}
+<p>Ваша заявка на проведение АЦ добавлена в реестр и ожидает подтверждения следующими сотрудниками:</p>
+{foreach key=key item=item from=$acceptors}
+<p>{$item.acceptor}</p>
+{/foreach}
+
+<p>
+<b>Результат обработки заявки</b>
+<table>
+{foreach key=key item=item from=$result}
+<tr>
+<td style="text-align:left">
+{$item.text}
+</td>
+{/foreach}
+</table>
+</p>
+
+
+{else}
+<form target="_self" method="POST" name=form_ac id=form_ac enctype="multipart/form-data">
+<input type=hidden name="ac[tn]" value="{$smarty.request.ac.tn}">
+<h3>Создатель: {if $smarty.request.id}{$smarty.request.ac.creator}{else}{$fio}{/if}</h3>
+
+
+<table>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">Дата проведения</td>
+		<td><input class="datepicker" size=10 required name="ac[dt]" id="ac_dt"></td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">ФИО сотрудника, инициирующего проведение АЦ</td>
+		<td id="exe_init_tn"></td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">Место проведения</td>
+		<td><textarea required cols="50" rows="3" name="ac[place]" id="ac_place"></textarea></td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">Тема для презентации</td>
+		<td><textarea required cols="50" rows="3" name="ac[head]" id="ac_head"></textarea></td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">Вакантная позиция 1 (должность, территория, с какой даты)</td>
+		<td>
+			<select name="ac[vac1_pos]" id="ac_vac1_pos">
+				<option></option>
+				{foreach key=key item=item from=$pos_list}
+				<option value={$item.pos_id}>{$item.pos_name}</option>
+				{/foreach}
+			</select>
+			<br>
+			<textarea required cols="50" rows="3" name="ac[vac1]" id="ac_vac1"></textarea>
+		</td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">Вакантная позиция 2 (должность, территория, с какой даты)</td>
+		<td>
+			<select name="ac[vac2_pos]" id="ac_vac2_pos">
+				<option></option>
+				{foreach key=key item=item from=$pos_list}
+				<option value={$item.pos_id}>{$item.pos_name}</option>
+				{/foreach}
+			</select>
+			<br>
+			<textarea required cols="50" rows="3" name="ac[vac2]" id="ac_vac2"></textarea>
+		</td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td style="text-align:right">Вакантная позиция 3 (должность, территория, с какой даты)</td>
+		<td>
+			<select name="ac[vac3_pos]" id="ac_vac3_pos">
+				<option></option>
+				{foreach key=key item=item from=$pos_list}
+				<option value={$item.pos_id}>{$item.pos_name}</option>
+				{/foreach}
+			</select>
+			<br>
+			<textarea required cols="50" rows="3" name="ac[vac3]" id="ac_vac3"></textarea>
+		</td>
+	</tr>
+</table>
+
+<script>
+$('#exe_init_tn').append($('<select required name="ac[init_tn]" id="ac_init_tn">'+$s+'</select>'));
+/*$('#ac_dt').val('{$smarty.request.ac.dt}');
+$('#ac_init_tn').val('{$smarty.request.ac.init_tn}');
+$('#ac_place').val('{$smarty.request.ac.place}');
+$('#ac_head').val('{$smarty.request.ac.head}');
+$('#ac_vac1').val('{$smarty.request.ac.vac1}');
+$('#ac_vac2').val('{$smarty.request.ac.vac2}');
+$('#ac_vac3').val('{$smarty.request.ac.vac3}');*/
+</script>
+
+<p><a id="add_exec" href="javascript:void(0)" onclick="javascript:add_comm();">Добавить ЧОК</a></p>
+<input type=hidden id="exe_comm"/>
+<script>{foreach from=$smarty.request.ac_comm key=k item=i name=acc}add_comm({$i});{/foreach}</script>
+
+<p><a id="add_exec" href="javascript:void(0)" onclick="javascript:add_memb_int();">Добавить внутреннего кандидата в состав участников АЦ</a></p>
+<input type=hidden id="exe_memb_int"/>
+<script>{foreach from=$smarty.request.ac_memb_int key=k item=i name=acc}add_memb_int({$i});{/foreach}</script>
+
+<p><a id="add_exec" href="javascript:void(0)" onclick="javascript:add_memb_ext();">Добавить внешнего кандидата в состав участников АЦ</a></p>
+<input type=hidden id="exe_memb_ext"/>
+<script>
+/*
+{foreach from=$smarty.request.ac_memb_ext key=k item=i name=acc}add_memb_ext("{$i.fio}","{$i.email}","{$i.resume}");{/foreach}
+*/
+</script>
+
+<!--
+{foreach from=$smarty.request.ac_files key=k item=i name=fl}
+{/foreach}
+{if $smarty.foreach.fl.total > 0 }
+<p>Отметить файлы для удаления</p>
+{/if}
+{foreach from=$smarty.request.ac_files key=k item=i name=fl}
+<input type=checkbox name="ac_files_del[]" value={$i.fn}><a target=_blank href="ac_files/{$i.fn}">{$i.fn}</a><br>
+{/foreach}
+<p><a id="add_file" href="javascript:void(0)" onclick="javascript:add_file();">добавить файл</a></p>
+-->
+
+
+<p><input type=submit value="Сохранить" name="save" id="save"/></p>
+
+</form>
+
+{/if}

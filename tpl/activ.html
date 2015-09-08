@@ -1,0 +1,119 @@
+<h1>Отчет - "Виды активностей"</h1>
+
+<form name=form_activ id=form_activ target=_self method=post>
+
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_activ').submit();
+}
+</script>
+{/literal}
+
+
+
+
+Период:
+
+<br>
+
+<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+
+
+<br>
+<br>
+
+Должность: 
+
+<br>
+
+<select name=dolgn_list id=dolgn_list onchange="javascript:fn_submit('dolgn_list');">
+<option value=0></option>
+{foreach key=key item=item from=$dolgn_list}
+<option value={$key}>{$item}</option>
+{/foreach}
+</select>
+<script>$('#dolgn_list option[value="{$smarty.request.dolgn_list}"]').prop('selected', true);</script>
+
+<br>
+<br>
+
+<table border=1 cellspacing=0 cellpadding=3>
+<tr align=center>
+<td></td>
+<td colspan=3>Вид активности</td>
+{foreach key=key_at item=item_at from=$activ_types}
+<td>{$item_at}</td>
+{/foreach}
+</tr>
+
+
+{foreach key=key1 item=item1 from=$activ name=activ}
+{foreach name=weeks_count key=key2 item=item2 from=$item1.week}{/foreach}
+	<tr align=center>
+		<td rowspan={$smarty.foreach.weeks_count.total*2}>
+			{$smarty.foreach.activ.iteration}
+		</td>
+		<td rowspan={$smarty.foreach.weeks_count.total*2}>
+			<b>{$item1.emp_name}</b>
+			<br>
+			{$item1.emp_dolgn}
+		</td>
+		{foreach name=weeks key=key2 item=item2 from=$item1.week}
+		{if $smarty.foreach.weeks.iteration eq 1}
+		<td rowspan=2>неделя {$key2}</td>
+		<td>план</td>
+
+		{foreach key=key3 item=item3 from=$item2.active}
+		<td>{$item3.plan|default:"&nbsp"}</td>
+		{/foreach}
+
+		{/if}
+		{/foreach}
+	</tr>
+	<tr align=center>
+		<td>факт</td>
+		{foreach name=weeks key=key2 item=item2 from=$item1.week}
+		{if $smarty.foreach.weeks.iteration eq 1}
+		{foreach key=key3 item=item3 from=$item2.active}
+		<td>{$item3.fakt|default:"&nbsp"}</td>
+		{/foreach}
+		{/if}
+		{/foreach}
+	</tr align=center>
+	{foreach name=weeks key=key2 item=item2 from=$item1.week}
+	{if $smarty.foreach.weeks.iteration neq 1}
+	<tr align=center>
+		<td rowspan=2>
+			неделя {$key2}
+		</td>
+		<td>план</td>
+		{foreach key=key3 item=item3 from=$item2.active}
+		<td>{$item3.plan|default:"&nbsp"}</td>
+		{/foreach}
+	</tr>
+	<tr align=center>
+		<td>факт</td>
+		{foreach key=key3 item=item3 from=$item2.active}
+		<td>{$item3.fakt|default:"&nbsp"}</td>
+		{/foreach}
+	</tr>
+	{/if}
+	{/foreach}
+
+
+{/foreach}
+</table>
+
+
+</form>

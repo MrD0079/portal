@@ -1,0 +1,13 @@
+<h1>Создание заявки на проведение Девелопмент-центра</h1>
+
+{if not $smarty.request.save}
+	<form target="_self" method="POST" name=form_tr id=form_tr enctype="multipart/form-data">
+	{include file="dc_order_filters.html"}
+	{if $smarty.request.form_list}
+		{include file="dc_order_table.html"}
+		<p>
+			<input name="SendNBT" value="Сохранить заявку" type="submit">
+		</p>
+	{/if}
+	</form>
+{/if}

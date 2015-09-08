@@ -1,0 +1,76 @@
+<h1>Бегунок - формирование маршрутов</h1>
+
+<p>
+Выберите дату маршрута <input id=dt name=dt class="datepicker" value="{$smarty.request.dt}" size=8 onChange="load_tp_list();load_days_list();">
+</p>
+
+<p id=days_list></p>
+
+
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td>
+			ТС
+		</td>
+		<td>
+			ЭТА
+		</td>
+		<td>
+			ТП
+		</td>
+	</tr>
+	<tr style="vertical-align:top">
+		<td>
+			{foreach key=key item=item from=$ts_list}
+			<input id=ts_list name="ts_list[]" class="ts_list" type=checkbox value={$item.tn} onClick="load_tp_list();">{$item.fio} ({$item.pos_name})<br>
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=key item=item from=$eta_list}
+			<input id=eta_list name="eta_list[]" class="eta_list" type=checkbox value="'{$item.h_eta}'" onClick="load_tp_list();">{$item.eta}<br>
+			{/foreach}
+		</td>
+		<td id=tp_list>
+		</td>
+	</tr>
+</table>
+
+{literal}
+<script>
+function load_tp_list()
+{
+	$('#dt').attr('disabled',true);
+	$('.ts_list').attr('disabled',true);
+	$('.eta_list').attr('disabled',true);
+	var ts_list = [-1];
+	var eta_list = ["'-1'"];
+	$(".ts_list:checked").each(function() {
+		ts_list.push(this.value);
+	});
+	$(".eta_list:checked").each(function() {
+		eta_list.push(this.value);
+	});
+	$('#tp_list').load('?action=beg_routes_tp_list&nohead=1&dt='+$('#dt').val()+'&ts_list='+ts_list+'&eta_list='+eta_list,function() {
+		
+		$('#dt').attr('disabled',false);
+		$('.ts_list').attr('disabled',false);
+		$('.eta_list').attr('disabled',false);
+	});
+	
+}
+function load_days_list()
+{
+	$('#days_list').load('?action=beg_routes_days_list&nohead=1&dt='+$('#dt').val(),function() {
+		
+	});
+	
+}
+</script>
+{/literal}
+
+
+
+<script>
+load_tp_list();
+load_days_list();
+</script>

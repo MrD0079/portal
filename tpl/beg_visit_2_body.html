@@ -1,0 +1,87 @@
+<div id=ok style="display: inline;"></div>
+
+<table style="text-align: left;" border="0">
+	<tr>
+		<td>Общее количество SKU {$grupname} ВСЕГО в ТП</td>
+		<td><input size="10" id="sku_total" class="number_int" value="{$grup.sku_total}" onChange="save_grup({$smarty.request.head},'{$smarty.request.grup}','sku_total',this.value);"></td>
+	</tr>
+	<tr>
+		<td>Общее количество SKU {$grupname} АВК в ТП</td>
+		<td><input size="10" id="sku_avk" class="number_int" value="{$grup.sku_avk}" onChange="save_grup({$smarty.request.head},'{$smarty.request.grup}','sku_avk',this.value);"></td>
+	</tr>
+	<tr>
+		<td>Длина полки {$grupname} ВСЕГО, м</td>
+		<td><input size="10" id="shelf_len_total" class="number" value="{$grup.shelf_len_total}" onChange="save_grup({$smarty.request.head},'{$smarty.request.grup}','shelf_len_total',this.value);"></td>
+	</tr>
+	<tr>
+		<td>Длина полки {$grupname} АВК, м</td>
+		<td><input size="10" id="shelf_len_avk" class="number" value="{$grup.shelf_len_avk}" onChange="save_grup({$smarty.request.head},'{$smarty.request.grup}','shelf_len_avk',this.value);"></td>
+	</tr>
+</table>
+
+<table style="text-align: left;" border="1">
+	<tr style="text-align: center;">
+		<td>SKU категории {$grupname}</td>
+		<td>Наличие в ТП</td>
+		<td>Цена, ден.ед</td>
+		<td>Комментарии</td>
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+	<tr>
+		<td>{$smarty.foreach.list.iteration} из {$smarty.foreach.list.total} {$grupname} {$i.product_name_avk}</td>
+		<td style="text-align:center">
+			<input
+			class="ispresent"
+			id="ispresent_{$i.sku}"
+			type="checkbox"
+			{if $i.ispresent}checked{/if}
+			onClick="
+			!this.checked?$('#price_{$i.sku}').val(''):null;
+			!this.checked?$('#comments_{$i.sku}').val(''):null;
+			$('#total_sku').text($('.ispresent:checked').length);
+			$('#price_{$i.sku}').attr('disabled',!this.checked);
+			$('#comments_{$i.sku}').attr('disabled',!this.checked);
+			save_sku({$smarty.request.head},'{$i.sku}','ispresent',this.checked?1:0);
+			">
+		</td>
+		<td><input {if not $i.ispresent}disabled{/if} id="price_{$i.sku}" onChange="save_sku({$smarty.request.head},'{$i.sku}','price',this.value);" size="15" value="{$i.price}" class="number"></td>
+		<td><input {if not $i.ispresent}disabled{/if} id="comments_{$i.sku}" onChange="save_sku({$smarty.request.head},'{$i.sku}','comments',this.value);" size="50" value="{$i.comments}"></td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight: bold;">
+		<td>ИТОГО</td>
+		<td style="text-align:center"><div id="total_sku">0</div></td>
+	</tr>
+</table>
+
+
+
+{literal}
+<script>
+//$('#save').hide();
+$('#total_sku').text($('.ispresent:checked').length);
+function save_grup(head,grup,field,val)
+{
+	$('#'+field).css('background-color','red');
+	$('#ok').load('?action=beg_visit_2_body_save_grup&nohead=1&head='+head+'&grup='+grup+'&field='+field+'&val='+val,function() {
+	$('#'+field).css('background-color','white');
+	});
+	
+}
+function save_sku(head,sku,field,val)
+{
+	$('#'+field+'_'+sku).css('background-color','red');
+	$('#ok').load('?action=beg_visit_2_body_save_sku&nohead=1',
+	{
+		head: head,
+		sku: sku,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#'+field+'_'+sku).css('background-color','white');
+	});
+	
+}
+</script>
+{/literal}

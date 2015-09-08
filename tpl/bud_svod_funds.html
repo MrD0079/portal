@@ -1,0 +1,138 @@
+<form name=bud_svod id=bud_svod target=_self method=post enctype="multipart/form-data">
+
+<h1>Свод: Фонды</h1>
+
+{if not $smarty.request.print}
+<p>
+	Отчетный месяц
+	<select required="true" name=sd id=sd>
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<select required="true" name=ed id=ed>
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
+	<script>$('#ed option[value="{$smarty.request.ed}"]').prop('selected', true);</script>
+</p>
+<p>
+	По руководителю:
+	<select name=exp_list_without_ts id=exp_list_without_ts>
+		<option value=0></option>
+		{foreach key=key item=item from=$exp_list_without_ts}
+		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+</p>
+<p>
+	По ДБ:
+	<select name=db id=db>
+		<option value=0></option>
+		{foreach key=key item=item from=$db}
+		<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<script>$('#db option[value="{$smarty.request.db}"]').prop('selected', true);</script>
+</p>
+<p>
+	По супервайзеру:
+	<select name=exp_list_only_ts id=exp_list_only_ts>
+		<option value=0></option>
+		{foreach key=key item=item from=$exp_list_only_ts}
+		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<script>$('#exp_list_only_ts option[value="{$smarty.request.exp_list_only_ts}"]').prop('selected', true);</script>
+</p>
+<p>
+	По ЭТА:
+	<select name=eta_list id=eta_list>
+		<option value=""></option>
+		{foreach key=key item=item from=$eta_list}
+		<option value="{$item.h_eta}">{$item.eta}</option>
+		{/foreach}
+	</select>
+	<script>$('#eta_list option[value="{$smarty.request.eta_list}"]').prop('selected', true);</script>
+</p>
+<p>
+	По филиалу:
+	<select name=fil id=fil>
+		<option value=0></option>
+		{foreach key=key item=item from=$fil}
+		<option value="{$item.id}">{$item.name}</option>
+		{/foreach}
+	</select>
+	<script>$('#fil option[value="{$smarty.request.fil}"]').prop('selected', true);</script>
+</p>
+<p>
+	Кластер
+	<select name=clusters id=clusters>
+		<option value=0></option>
+		{foreach key=key item=item from=$clusters}
+		<option value="{$item.id}">{$item.name}</option>
+		{/foreach}
+	</select>
+	<script>$('#clusters option[value="{$smarty.request.clusters}"]').prop('selected', true);</script>
+</p>
+<p>
+	Фонд
+	<select name=funds id=funds>
+		{foreach key=key item=item from=$funds}
+		<option value="{$item.id}">{$item.name}</option>
+		{/foreach}
+	</select>
+	<script>$('#funds option[value="{$smarty.request.funds}"]').prop('selected', true);</script>
+</p>
+<p>
+	Статья затрат
+	<select name=st id=st>
+		<option value=0></option>
+		{foreach key=key item=item from=$st}
+		{if $item.parent eq 0}<option value={$item.id}>{$item.name}</option>{/if}
+		{/foreach}
+	</select>
+	<script>$('#st option[value="{$smarty.request.st}"]').prop('selected', true);</script>
+</p>
+{/if}
+
+
+
+
+<p><a href="javascript:void(0);" onClick="load_list();">Показать данные</a></p>
+
+<div id="tp" style="display: inline;"></div>
+
+</form>
+
+<script>
+{literal}
+function load_list()
+{
+x=loadwait_show('tp');
+$('#tp').load('?action=bud_svod_funds_list&nohead=1',
+{
+	eta_list: $('#eta_list').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	exp_list_only_ts: $('#exp_list_only_ts').val(),
+	clusters: $('#clusters').val(),
+	fil: $('#fil').val(),
+	funds: $('#funds').val(),
+	sd: $('#sd').val(),
+	ed: $('#ed').val(),
+	db: $('#db').val(),
+	st: $('#st').val(),
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+{/literal}
+</script>
+

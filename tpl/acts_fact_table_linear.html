@@ -1,0 +1,45 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold">
+	<td rowspan=2 style="text-align: center;">№ счета</td>
+	<td rowspan=2 style="text-align: center;">Дата счета</td>
+	<td rowspan=2 style="text-align: center;">Сумма счета<br>(выставленная),<br>тыс.{$valuta}.</td>
+	<td rowspan=2 style="text-align: center;">Сеть</td>
+	<td rowspan=2 style="text-align: center;">ФИО РМ КК </td>
+	<td rowspan=2 style="text-align: center;">ФИО МКК </td>
+	<td colspan=5 style="text-align: center;">Статьи затрат</td>
+	<td rowspan=2 style="text-align: center;">Плательщик</td>
+	<td rowspan=2 style="text-align: center;">Месяц проведения акта</td>
+	<td rowspan=2 style="text-align: center;">Сумма по акту, тыс.{$valuta}.</td>
+</tr>
+<tr style="font-weight:bold;text-align: center;">
+	<td>Месяц / год услуги</td>
+	<td>Наименование группы</td>
+	<td>Статья затрат</td>
+	<td>Количество единиц</td>
+	<td>Итоговая сумма, {$valuta}</td>
+</tr>
+{foreach key=key item=item from=$invoice name=invoice}
+	{foreach key=key1 item=item1 from=$item.detail name=detail}
+	{cycle assign=bgcolor values="#ccffff,#ffffcc"}
+	<tr bgcolor="{$bgcolor}">
+		<td style="text-align: center;">{$item.num}</td>
+		<td>{$item.data_t}</td>
+		<td style="text-align:right">{$item.summa|default:0|num:3}</td>
+		<td>{$item.net_name}</td>
+		<td>{$item.rmkk}</td>
+		<td>{$item.mkk}</td>
+		<td>{$item1.month_name} {$item1.year}</td>
+		<td>{$item1.groupp}</td>
+		<td>{$item1.statya}</td>
+		<td style="text-align:right">{$item1.cnt|default:0|num:3}</td>
+		<td style="text-align:right">{$item1.total|default:0|num:3}</td>
+		<td>{$item.payer_name}</td>
+		<td>{$i.act_prov_month}{$item.act_prov_month}</td>
+		<td style="text-align:right">{$item.act_sum|num:2}</td>
+	</tr>
+	{/foreach}
+{/foreach}
+</tbody>
+</table>
+

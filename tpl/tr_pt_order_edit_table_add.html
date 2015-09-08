@@ -1,0 +1,23 @@
+<tr class="h1" {if $trua.tr_ok eq 1}style="background-color:#00ff00;"{/if}>
+	<td>{$trua.h_eta}</td>
+	<td>{$trua.fio}</td>
+	<td>{$trua.pos_name}</td>
+	<td style="text-align:center">{$trua.start_pos}</td>
+	<td style="text-align:center">{$trua.start_company}</td>
+	<td style="text-align:center">{if $trua.tr_ok eq 1}{$trua.max_dt_start_this_tr}{/if}</td>
+	<td style="text-align:center">{$trua.max_dt_start_old}</td>
+	<td style="text-align:center">
+		<input id="b_{$trua.h_eta}" class="table_b" type=submit value="Удалить" onclick="
+			a--;
+			$(this).parent().parent().remove();
+			return false;
+		">
+		<input class="d1 table_h_eta" id="b_h_eta_{$trua.h_eta}" type=hidden value={$trua.h_eta} name="table[{$trua.h_eta}][h_eta]">
+		<input class="d1 table_manual" id="b_manual_{$trua.h_eta}" type=hidden value={if $completed}2{else}1{/if} name="table[{$trua.h_eta}][manual]">
+	</td>
+	{if $completed}
+	<td>
+		<textarea cols="50" rows="5" class="d1 table_os" id="b_os_{$trua.h_eta}" type=hidden value=0 name="table[{$trua.h_eta}][os]"></textarea>
+	</td>
+	{/if}
+</tr>

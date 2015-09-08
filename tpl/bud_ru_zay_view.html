@@ -1,0 +1,66 @@
+<table border=0 cellpadding=5 cellspacing=0 width=100%>
+	<tr style="text-align:center;">
+		<td colspan=2>
+			<p><img src="design/logo.png" border="0"/></p>
+			<h2>
+			ДИРЕКЦИЯ ПО ПРОДАЖАМ ООО "АВК КОНФЕКШИНЭРИ"
+			</h2>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:left;">№{$smarty.request.id} от {$d.head.created_dt}</td>
+		<td style="text-align:right;">{$d.head.recipient_pos}<br>{$d.head.recipient}</td>
+	</tr>
+	<tr style="text-align:center;">
+		<td colspan=2>
+			<h3>
+			Заявка на проведение активности
+			</h3>
+		</td>
+	</tr>
+</table>
+
+
+
+{if $d.head.net_name}
+<p style="text-align:left;font-size:8pt">
+	Сеть:<b>{$d.head.net_name}</b>
+	Форма оплаты:<b>{$d.head.payment_type_name}</b>
+	Статья затрат:<b>{$d.head.statya_name}</b>
+	Возмещение дистрибутору:<b>{if $d.head.distr_compensation eq 1}да{else}нет{/if}</b>
+</p>
+{/if}
+
+
+
+<p style="text-align:left;font-size:8pt">
+	{foreach key=k1 item=i1 from=$d.ff}
+		{if $i1.type neq 'file'}
+			{$i1.name}: <b>
+{$i1.val_formula|num:3}
+{$i1.val_list_name}
+{$i1.val_string}
+{$i1.val_textarea}
+{$i1.val_number_int|num:0}
+{$i1.val_number|num:5}
+{$i1.val_datepicker}
+{if $i1.type eq 'bool'}{if $i1.val_bool eq 1}да{else}нет{/if}{/if}
+</b><br>
+		{/if}
+	{/foreach}
+</p>
+<table border=0 cellpadding=5 cellspacing=0 width=100%>
+	<tr>
+		<td style="text-align:left;"><img src="bud_ru_zay_files/chart{$smarty.request.id}.png"/></td>
+		<td style="text-align:right;">{$d.head.creator_pos}<br>{$d.head.creator}</td>
+	</tr>
+</table>
+<p>Комментарии/уточнения:</p>
+<p style="text-align:left;font-size:8pt">
+{foreach key=k1 item=i1 from=$d.chat}
+	<font style="color:red">{$i1.chat_time}</font>
+	{$i1.pos_name}, {$i1.department_name}, <font style="color:green">{$i1.chater}:</font>
+	<font style="color:blue">{$i1.text}</font>
+	<br>
+{/foreach}
+</p>

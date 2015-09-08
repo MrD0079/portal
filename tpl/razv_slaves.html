@@ -1,0 +1,51 @@
+<h1>Планы развития подчиненных</h1>
+
+<table border=1 cellspacing=0 cellpadding=1>
+
+
+<tr style="font-weight:bold">
+<td>
+Прямые
+</td>
+<td>
+Непрямые
+</td>
+</tr>
+
+
+<tr align=left valign=top>
+
+<td>
+<table border=0 cellspacing=0 cellpadding=1>
+{assign var=rownum value=0}
+{foreach key=key1 item=item1 from=$razv_slaves_full_1}
+{assign var=rownum value=`$rownum+1`}
+<tr align=left>
+<td>
+{$rownum}
+<a target=_blank href="?action=razv_plan&tn={$item1.emp_tn}">{$item1.emp_name}</a>
+{$item1.dolgn}
+</td>
+</tr>
+{/foreach}
+</table>
+</td>
+
+<td>
+<table border=0 cellspacing=0 cellpadding=1>
+{assign var=rownum value=0}
+{foreach key=key1 item=item1 from=$razv_slaves_full_0}
+{assign var=rownum value=`$rownum+1`}
+<tr align=left>
+<td>
+{$rownum}
+<a target=_blank href="?action=razv_plan&tn={$item1.emp_tn}">{$item1.emp_name}</a>
+{$item1.dolgn}
+</td>
+</tr>
+{/foreach}
+</table>
+</td>
+
+</tr>
+</table>

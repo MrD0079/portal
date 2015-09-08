@@ -1,0 +1,50 @@
+<form name=form id=form target=_self method=post>
+<input type=submit name=save align=middle value="Создать адаптационную программу">
+<br>
+Период наставничества
+<br>
+с
+<br>
+<input class="datepicker" name=data[data_start]>
+<br>
+по
+<br>
+<input class="datepicker" name=data[data_end]>
+<br>
+Осуществляющий поддержку
+<br>
+<select name=tn[inst_tn] id=tn[inst_tn]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<br>
+Бизнес-тренер
+<br>
+<select name=tn[chief_tn] id=tn[chief_tn]>
+	<option></option>
+	{foreach key=key item=item from=$trener_list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<br>
+Вышестоящий руководитель
+<br>
+<select name=tn[dir_tn] id=tn[dir_tn]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<br>
+Новый сотрудник
+<br>
+<select name=tn[prob_tn] id=tn[prob_tn]>
+	<option></option>
+	{foreach key=key item=item from=$prob_list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+</form>
+

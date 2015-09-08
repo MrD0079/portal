@@ -1,0 +1,141 @@
+{if $zp_ag_total.fil_null}<p style="color:red;">Не привязаны к филиалам {$zp_ag_total.fil_null} агентов(-а)</p>{/if}
+
+<h3>
+ГСМ
+</h3>
+
+<table id=mytable style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold;text-align: center;">
+<td>№ п/п</td>
+<td>несписочный</td>
+<td>ФИО</td>
+<td>т.н.</td>
+<td>Пробег<br>за<br>месяц,<br>км</td>
+<td>Установлено<br>ГБО</td>
+<td>ГБО - прогрев,<br>{$valuta}</td>
+<td>Затраты<br>топливо,<br>{$valuta}</td>
+<td>Амортизация,<br>{$valuta}</td>
+<td>Амортизация,<br>%</td>
+<td>ИТОГО</td>
+<td>Дистрибьютор/филиал</td>
+<td>Продажи<br>за<br>месяц,<br>{$valuta}</td>
+<td>%<br>затрат<br>ГСМ</td>
+</tr>
+
+{foreach key=k item=i from=$ag name=ag}
+<tr id=tr_{$i.id}>
+			<td style="text-align:center">{$smarty.foreach.ag.iteration}</td>
+			<td style="text-align:center">{if $i.unscheduled}да{/if}</td>
+			<td style=" text-align:left;" id="d_{$i.id}_fio">{$i.eta}</td>
+			<td style=" text-align:right;" id="d_{$i.id}_eta_tab_number">{$i.eta_tab_number}</td>
+			<td style=" text-align:right;" id="d_{$i.id}_probeg">
+				{if not $is_ts or $i.ok_db_tn}
+					{$i.probeg|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="probeg[{$i.id}]"
+						id="probeg_{$i.id}"
+						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'probeg',this.value);"
+					>
+					<script>
+						$('#probeg_{$i.id}').val({$i.probeg});
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:center;" id="d_{$i.id}_gbo">
+				{if not $is_ts or $i.ok_db_tn}
+					{if $i.gbo}да{/if}
+				{else}
+					<input
+						type="checkbox"
+						name="gbo[{$i.id}]"
+						id="gbo_{$i.id}"
+						onChange="
+						save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'gbo',this.checked?1:0);
+						$('#gbo_warmup_{$i.id}').attr('disabled',!this.checked);
+						"
+					>
+					<script>
+						$("#gbo_{$i.id}").attr('checked','{$i.gbo}'=='1'?true:false);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.id}_gbo_warmup">
+				{if not $is_ts or $i.ok_db_tn}
+					{$i.gbo_warmup|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="gbo_warmup[{$i.id}]"
+						id="gbo_warmup_{$i.id}"
+						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'gbo_warmup',this.value);"
+					>
+					<script>
+						$('#gbo_warmup_{$i.id}').val({$i.gbo_warmup});
+						$('#gbo_warmup_{$i.id}').attr('disabled','{$i.gbo}'=='1'?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.id}_fal_payment">
+				{if not $is_ts or $i.ok_db_tn}
+					{$i.fal_payment|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="fal_payment[{$i.id}]"
+						id="fal_payment_{$i.id}"
+						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'fal_payment',this.value);"
+					>
+					<script>
+						$('#fal_payment_{$i.id}').val({$i.fal_payment});
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.id}_amort">
+				{if not $is_ts or $i.ok_db_tn}
+					{$i.amort|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="amort[{$i.id}]"
+						id="amort_{$i.id}"
+						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'amort',this.value);"
+					>
+					<script>
+						$('#amort_{$i.id}').val({$i.amort});
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right" id="d_{$i.id}_amort_perc">{$i.amort_perc|num:2}</td>
+			<td style=" text-align:right" id="d_{$i.id}_total1">{$i.total1|num:2}</td>
+			<td style=" text-align:left" id="d_{$i.id}_fil_name">{$i.fil_name}</td>
+			<td style=" text-align:right" id="d_{$i.id}_sales">{$i.sales|num:2}</td>
+			<td style=" text-align:right; background-color: #FFCC99; font-weight: bold;" id="d_{$i.id}_perc_zat">{$i.perc_zat|num:2}</td>
+</tr>
+{/foreach}
+<tr id="total" style="font-weight: bold;"></tr>
+</tbody>
+</table>
+
+<div id="ok" style="display: inline;"></div>
+
+<script>
+{literal}
+$(function() {
+load_ag_total();
+}
+);
+{/literal}
+
+</script>
+
+
+
+
+

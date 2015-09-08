@@ -1,0 +1,50 @@
+<h1>Реестр принятых сотрудников</h1>
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+Период с:  
+<input class="datepicker" name=sd id=sd>
+<script>$('#sd').val("{if $smarty.request.sd}{$smarty.request.sd}{else}{$smarty.request.month_list}{/if}");</script>
+<br>
+Период до:  
+<input class="datepicker" name=ed id=ed>
+<script>$('#ed').val("{if $smarty.request.ed}{$smarty.request.ed}{else}{$smarty.request.month_list}{/if}");</script>
+<br>
+По должности:
+<select name="pos" id="pos">
+<option value=0></option>
+{foreach key=key item=item from=$dolgn_list_all}
+<option value={$item.pos_id}>{$item.pos_name}</option>
+{/foreach}
+</select>
+<script>$('#pos option[value="{$smarty.request.pos}"]').prop('selected', true);</script>
+<br>
+<input type=submit value="Отобразить реестр принятых" name="generate">
+
+{if $smarty.request.generate}
+
+<table cellpadding=3 border=1>
+	<tr>
+		<td>Ф.И.О. нового сотрудника</td>
+		<td>Должность нового сотрудника</td>
+		<td>Дата начала работы в компании</td>
+		<td>Территория</td>
+		<td>ФИО сотрудника, сделавшего заявку</td>
+		<td>Дата заявки</td>
+		<td>Дата подтверждения заявки</td>
+	</tr>
+	{foreach key=key1 item=item1 from=$new_staff}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$item1.fam|escape} {$item1.im|escape} {$item1.otch|escape}</td>
+		<td>{$item1.pos_name}</td>
+		<td>{$item1.datastart}</td>
+		<td></td>
+		<td>{$item1.creator_name}</td>
+		<td>{$item1.created}</td>
+		<td>{$item1.accept_data}</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+</form>

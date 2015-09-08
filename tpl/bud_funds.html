@@ -1,0 +1,46 @@
+<h1>Фонды</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>название</td>
+<td>Планируемый</td>
+<td>Норма, %</td>
+</tr>
+{foreach key=key item=item from=$bud_funds}
+<tr>
+<td><input name=del[{$item.id}] type=checkbox></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
+<td><input id=cb_{$item.id}_planned type=checkbox onChange="$('#val_{$item.id}_planned').val(this.checked?1:'');"></td>
+<td><input name=data[{$item.id}][norm] size=10 class="number" value="{$item.norm}"></td>
+<input type=hidden id=val_{$item.id}_planned name=data[{$item.id}][planned]>
+<script>
+$("#cb_{$item.id}_planned").attr('checked','{$item.planned}'=='1'?true:false);
+$("#val_{$item.id}_planned").val({$item.planned});
+</script>
+</tr>
+{/foreach}
+</table>
+Название
+<br>
+<input size=80 name=new_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>
+
+<p>Лог</p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>фонд</td>
+<td>период</td>
+<td>норма, %</td>
+</tr>
+{foreach key=k item=i from=$bud_funds_norm_log}
+<tr>
+<td>{$i.name}</td>
+<td>{$i.period}</td>
+<td>{$i.norm}</td>
+</tr>
+{/foreach}
+</table>

@@ -1,0 +1,132 @@
+<h1>Мои отпуска</h1>
+
+<h3>Заявка на отпуск</h3>
+
+
+{if $smarty.request.add and $vacation}
+<p style="color:red">Заявка на отпуск добавлена и находится на рассмотрении</p>
+{/if}
+
+
+{literal}
+<script>
+function fn_change_by_id(id)
+{
+$('#vac_id').attr('disabled',false);
+$('#vac_id').val(id);
+$.get('vacation_get_val.php?id='+id+'&val=replacement', function(result){$('#replacement').val(result);});
+$.get('vacation_get_val.php?id='+id+'&val=replacement_h_eta', function(result){$('#replacement_h_eta').val(result);});
+$.get('vacation_get_val.php?id='+id+'&val=replacement_mob', function(result){$('#mob').val(result);});
+$.get('vacation_get_val.php?id='+id+'&val=replacement_mail', function(result){$('#mail').val(result);});
+$.get('vacation_get_val.php?id='+id+'&val=v_from&dt=1', function(result){$('#dates_list1').val(result);});
+$.get('vacation_get_val.php?id='+id+'&val=v_to&dt=1', function(result){$('#dates_list2').val(result);});
+$.get('vacation_get_val.php?id='+id+'&val=planned', function(result){$('input:radio[name="new_vacation[planned]"][value="'+result+'"]').attr('checked',true);});
+$.get('vacation_get_val.php?id='+id+'&val=paided', function(result){$('input:radio[name="new_vacation[paided]"][value="'+result+'"]').attr('checked',true);});
+$('#body').load('?action=vacation_create_load_parts&nohead=1&id='+id,function() {});
+}
+</script>
+{/literal}
+
+
+<form target="_self" method="POST" name=form_sz_accept id=form_sz_accept enctype="multipart/form-data">
+<input name=new_vacation[tn] value={$tn} type=hidden>
+<input name=new_vacation[id] id=vac_id type=hidden disabled>
+
+
+{if not ($is_ts and $pos_id neq 76) and not $is_mkk}
+{literal}<script>function fn_change(v){(v=='')?$('#mail').val(''):$.get('vacation_get_mail.php?tn='+v, function(result){$('#mail').val(result);});}</script>{/literal}
+{/if}
+
+
+<table>
+	<tr>
+		<td style="text-align:right">Даты начала/окончания отпуска</td>
+		<td><input required size=10 class="datepicker" name=new_vacation[v_from] id=dates_list1> - <input required size=10 class="datepicker" name=new_vacation[v_to] id=dates_list2></td>
+	</tr>
+	{if $vac_spd or $vac_eta}
+	<tr>
+		<td style="text-align:right">Исполняющий обязанности на период отпуска</td>
+		<td>
+			{if $vac_spd}
+			<input type=radio name=r1 value=1 onclick="$('#replacement').attr('disabled',false);$('#replacement_h_eta').attr('disabled','disabled')">
+			Менеджер
+			<select required name=new_vacation[replacement] id=replacement onChange="fn_change(this.value);">
+			<option></option>
+			{foreach key=key item=item from=$vacation_replacement}
+			<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+			{/foreach}
+			</select>
+			<script>$('#replacement').attr('disabled','disabled');</script>
+			<script>$('input:radio[name=r1][value=1]').click();</script>
+			<br>
+			{/if}
+
+			{if $vac_eta}
+			<input type=radio name=r1 value=2 onclick="$('#replacement').attr('disabled','disabled');$('#replacement_h_eta').attr('disabled',false)">
+			ЕТА
+			<select required name=new_vacation[replacement_h_eta] id=replacement_h_eta>
+			<option></option>
+			{foreach key=key item=item from=$vacation_replacement_h_eta}
+			<option value={$item.h_eta}>{$item.eta}</option>
+			{/foreach}
+			</select>
+			<script>$('#replacement_h_eta').attr('disabled','disabled');</script>
+			<script>$('input:radio[name=r1][value=2]').click();</script>
+			<br>
+			{/if}
+		</td>
+	</tr>
+	{/if}
+	<tr>
+		<td style="text-align:right">Мобильный телефон исполняющего обязанности</td>
+		<td><input required size=30 name=new_vacation[replacement_mob] id=mob></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Адрес электронной почты исполняющего обязанности</td>
+		<td><input required size=30 name=new_vacation[replacement_mail] id=mail></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Плановость</td>
+		<td>
+			{foreach key=k item=i from=$planned}
+			<input {if $i.def_val eq 1}checked="checked"{/if} name="new_vacation[planned]" value="{$i.id}" type="radio"> {$i.name}
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Оплачивается</td>
+		<td>
+			{foreach key=k item=i from=$paided}
+			<input {if $i.def_val eq 1}checked="checked"{/if} name="new_vacation[paided]" value="{$i.id}" type="radio"> {$i.name}
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Автозамена СЗ</td>
+		<td>
+			<input checked="checked" name="new_vacation[auto_sz]" value=1 type="radio"> вкл
+			<input name="new_vacation[auto_sz]" value=2 type="radio"> выкл
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Автозамена ТМА</td>
+		<td>
+			<input checked="checked" name="new_vacation[auto_tma]" value=1 type="radio"> вкл
+			<input name="new_vacation[auto_tma]" value=2 type="radio"> выкл
+		</td>
+	</tr>
+</table>
+
+<p><input type="submit" name="add" id="add" value="Добавить заявку"></p>
+
+{if $vac_spd or $vac_eta}
+{include file="vacation_create_add_task.html"}
+{include file="vacation_create_help.html"}
+{/if}
+{include file="vacation_create_on_accept.html"}
+
+</form>
+
+<form target="_self" method="POST" name=form_refresh>
+<p><input type="submit" name="refresh" value="Обновить"></p>
+</form>

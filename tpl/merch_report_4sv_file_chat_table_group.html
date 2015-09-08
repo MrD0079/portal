@@ -1,0 +1,93 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+	<td></td>
+	<td>Заказчик</td>
+	<td>Фотоотчет</td>
+	<td>Задачи по залу</td>
+	<!--<td>Претензия/задача заказчика<br>Ответ/комментарий М-Сервис</td>-->
+</tr>
+{foreach key=k item=i from=$d name=d}
+	{assign var=s1 value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s1 value=`$s1+1`}
+	{/foreach}
+	<tr style="vertical-align:top;">
+	<td rowspan={$s1+1}>
+		Дата <b>{$i.head.dt}</b><br>
+		<!--СВ МС <b>{$i.head.svms_name}</b><br>
+		Маршрут <b>{$i.head.num}</b><br>
+		Ф.И.О. отв. <b>{$i.head.fio_otv}</b><br>-->
+		Область <b>{$i.head.tz_oblast}</b><br>
+		Город <b>{$i.head.city}</b><br>
+		Сеть <b>{$i.head.net_name}</b><br>
+		Юридическое название ТЗ <b>{$i.head.ur_tz_name}</b><br>
+		Адрес ТЗ <b>{$i.head.tz_address}</b>
+	</td>
+	<td colspan=3></td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+
+			<tr style="vertical-align:top;">
+			<td>{$i1.head.ag_name}</td>
+			<td>
+				{foreach key=key item=item from=$i1.data.file_list}
+								<table>
+									<tr style="vertical-align:top;">
+										<td>
+											<div class="pics">
+												<a target=_blank href="/merch_spec_report_files/{$i.head.dt}/{$i1.head.ag_id}/{$i.head.kodtp}/{$item.fn}">
+													<img src="/merch_spec_report_files/{$i.head.dt}/{$i1.head.ag_id}/{$i.head.kodtp}/{$item.fn}" height=50px>
+												</a>
+												<img src="/merch_spec_report_files/{$i.head.dt}/{$i1.head.ag_id}/{$i.head.kodtp}/{$item.fn}" class="hov">
+											</div>
+										</td>
+										<td style="width:300px;text-align:left">
+											<a
+											id="load_comments_{$item.msr_file_id}"
+											href="javascript:void(0);"
+											onclick="
+												$('#div_comments_{$item.msr_file_id}').load(
+												'?action=merch_report_4sv_by_spec_new_file_chat&nohead=1&id={$item.msr_file_id}&chat_closed={$item.chat_closed}'
+												);
+												
+											"
+											>Задачи {if $item.c > 0}<font
+												{if $item.last_is_spd eq 1}style="color:green"{/if}
+												{if $item.last_is_spd eq -1}style="color:red"{/if}
+											>({$item.c})</font>{if $item.chat_closed eq 1} - задача закрыта{/if}{/if}</a>
+											<br>
+											<div style="display: inline;" id=div_comments_{$item.msr_file_id}></div>
+										</td>
+									</tr>
+								</table>
+								<hr>
+
+
+
+
+
+				{/foreach}
+			</td>
+										<td style="width:300px;text-align:left">
+											<a
+											id="load_comments_{$i.head.dt1}_{$i1.head.ag_id}_{$i.head.kodtp}"
+											href="javascript:void(0);"
+											onclick="
+												$('#div_comments_{$i.head.dt1}_{$i1.head.ag_id}_{$i.head.kodtp}').load(
+												'?action=merch_chat&nohead=1&dt={$i.head.dt}&ag_id={$i1.head.ag_id}&kod_tp={$i.head.kodtp}&chat_closed={$i1.head.mc_closed}'
+												);
+												
+											"
+											>Задачи {if $i1.head.mc_c > 0}<font
+												{if $i1.head.mc_last_is_spd eq 1}style="color:green"{/if}
+												{if $i1.head.mc_last_is_spd eq -1}style="color:red"{/if}
+											>({$i1.head.mc_c})</font>{if $i1.head.mc_closed eq 1} - задача закрыта{/if}{/if}</a>
+											<br>
+											<div style="display: inline;" id=div_comments_{$i.head.dt1}_{$i1.head.ag_id}_{$i.head.kodtp}></div>
+										</td>
+			</tr>
+
+	{/foreach}
+{/foreach}
+</table>
+<br>

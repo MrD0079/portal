@@ -1,0 +1,26 @@
+{if not $smarty.request.print}
+<table style="text-align: center; " border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center; vertical-align: top;">
+		<td>Количество ТП всего</td>
+		<td>Количество акционных накладных</td>
+		<td>Сумма продаж по акционным накладным, {$valuta}</td>
+		<td>Бонус выдан</td>
+		<td>Подтверждено руководителем</td>
+		<td style="background-color: rgb(153, 255, 153);">Количество бонусных коробок "На десерт" 100 гр.</td>
+		<td style="background-color: rgb(153, 255, 153);">Сумма бонуса (в протокольных ценах), {$valuta}</td>
+		<td style="background-color: rgb(255, 255, 204);">Сумма по реестрам, подтвержденным ВСТМ</td>
+		<td style="background-color: rgb(204, 255, 255);">Затраты на акцию, %</td>
+	</tr>
+	<tr>
+		<td>{$itogi.cnt_tp|default:0}</td>
+		<td>{$itogi.cnt_nakl|default:0}</td>
+		<td>{$itogi.summa|default:0|num:2}</td>
+		<td>{$itogi.bonus_cnt|default:0|num:0}</td>
+		<td>{$itogi.ok_chief|default:0|num:0}<br></td>
+		<td style="background-color: rgb(153, 255, 153);">{$itogi.bonus_sum|default:0|num:0}</td>
+		<td style="background-color: rgb(153, 255, 153);">{$itogi.bonus_sum_price|default:0|num:2}</td>
+		<td style="background-color: rgb(255, 255, 204);">{$itogi.files_bonus|default:0|num:2}</td>
+		<td style="background-color: rgb(204, 255, 255);">{$itogi.zat|default:0|num:2}</td>
+	</tr>
+</table>
+{/if}

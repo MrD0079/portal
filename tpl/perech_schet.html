@@ -1,0 +1,228 @@
+{literal}
+<style type="text/css">
+.schet {
+FONT-WEIGHT:normal;
+FONT-SIZE:6pt;
+/*  COLOR:rgb(118,21,0);*/
+FONT-STYLE:normal;
+FONT-FAMILY:Verdana,Helvetica,sans-serif;
+TEXT-ALIGN:left;
+}
+</style>
+{/literal}
+
+<script src="js/sum_prop.js"></script>
+
+<table rules=rows width=580 class=schet border=1 cellspacing=0>
+
+ <tr>
+  <td width=85% colspan=6>
+   <br>
+   Поставщик ФЛП <b><big>{$s.fio}</big></b><br><br>
+   Банк <b><big>{$s.bankname}</big></b><br><br>
+   МФО <b><big>{$s.rekvmfo}</big></b><br><br>
+   ОКПО <b><big>{$s.rekvokpo}</big></b><br><br>
+   ИНН <b><big>{$s.tn}</big></b><br><br>
+   текущий счет <b><big>{$s.rekvrs}</big></b><br><br>
+   назначение платежа <b><big>{$s.rekvplat}</big></b><br>
+   &nbsp
+  </td>
+  <td width=15% valign=top style="text-align:right">
+   Типовая ф. № 94<br>
+   №{$s.z1_id} ({$s.z2_kod})
+  </td>
+ </tr>
+
+ <tr>
+  <td colspan=7>
+   <br>
+   Грузоотправитель и адрес<br>
+   &nbsp
+  </td>
+ </tr>
+
+</table>
+
+<table frame=vsides rules=all width=580 class=schet border=1 cellspacing=0>
+
+ <tr>
+  <td width=61% colspan=4>
+   Грузополучатель и адрес
+  </td>
+  <td width=39% colspan=3>
+   К платежному требованию<br>
+   №<br>
+   от
+  </td>
+ </tr>
+
+</table>
+
+<table rules=none width=580 class=schet border=1 cellspacing=0>
+
+ <tr>
+  <td width=17%>
+   Заказ №
+   <hr>
+   Наряд
+  </td>
+  <td width=27% colspan=2>
+   От
+  </td>
+  <td width=17%>
+   {$s.y} г.
+  </td>
+  <td width=13%>
+   СЧЕТ №
+  </td>
+  <td width=11%>
+   б/н
+  </td>
+  <td width=15%>
+   От <b>{$s.data_p} г.</b>
+  </td>
+ </tr>
+
+</table>
+
+<table frame=vsides rules=groups width=580 class=schet border=1 cellspacing=0>
+
+ <colgroup span=4>
+ <colgroup>
+ <colgroup span=2>
+
+ <tr>
+  <td width=17% valign=top>
+   <br>
+   Плательщик<br>
+   и его адрес<br><br>
+   Банк<br><br>
+   Заказчик
+  </td>
+  <td width=17% valign=top>
+   <br>
+   <b>ЧАО "АВК"</b><br><br>
+   Расч. счет №
+  </td>
+  <td width=27% colspan=2>
+   гор.
+  </td>
+  <td width=13% align=center>
+   Сумма счета
+  </td>
+  <td width=26% colspan=2 valign=top>
+   По расчетной цене<br><br>
+   Разн. тресту или объед.<br><br>
+   Отчисления МФ<br><br>
+   <br><br>
+   Всего продажная<br>
+   &nbsp
+  </td>
+ </tr>
+
+</table>
+
+<table rules=none width=580 class=schet border=1 cellspacing=0>
+
+ <tr>
+  <td width=17%>
+   <br>
+   На ст.<br><br>
+   Дата отпр.<br><br>
+   Упаковка<br>
+   &nbsp
+  </td>
+  <td width=27% colspan=2>
+   {$s.y} г.
+  </td>
+  <td width=41% colspan=3>
+   <br>
+   Со ст.<br><br>
+   Способ отпр.<br><br>
+   число мест<br>
+   &nbsp
+  </td>
+  <td width=15%>
+   <br><br>
+   Квит. накл. №<br><br>
+   вес<br>
+   &nbsp
+  </td>
+ </tr>
+
+</table>
+
+<table frame=vsides rules=none width=580 class=schet border=1 cellspacing=0>
+
+ <tr>
+  <td colspan=7>
+   <br>
+   Дополнение
+   <br>
+   &nbsp
+  </td>
+ </tr>
+
+</table>
+
+<table rules=all width=580 class=schet border=1 cellspacing=0>
+
+ <tr align=center>
+  <td width=17%>
+   <br>
+   Наименование
+   <br>
+   &nbsp
+  </td width=17%>
+  <td>
+   Един. изм.
+  </td>
+  <td width=10%>
+   К-во
+  </td>
+  <td width=17%>
+   Цена
+  </td>
+  <td width=39% colspan=3>
+   Сумма
+  </td>
+ </tr>
+
+ <tr>
+  <td><b><font size=2>{$s.dogovoruslugi}</font></b></td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td colspan=3><b><font size=2>{$s.summa_p|default:0|num:2} {$valuta}.</font></b></td>
+ </tr>
+
+ <tr>
+  <td><b><font size=2>Договор № {$s.dogovornum}</font></b></td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td colspan=3><b><font size=1><i>(<script>document.write(SP({$s.summa_p}));</script>)</i></font></b></td>
+ </tr>
+
+ <tr>
+  <td><b><font size=2>от {$s.dogovordata_p}</font></b></td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td colspan=3><b><font size=2>без НДС</font></b></td>
+ </tr>
+
+ <tr>
+  <td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td colspan=3>&nbsp</td>
+ </tr>
+
+ <tr>
+  <td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td colspan=3>&nbsp</td>
+ </tr>
+
+<!--
+ <tr>
+  <td width=17%></td>
+  <td width=17%></td>
+  <td width=10%></td>
+  <td width=17%></td>
+  <td width=13%></td>
+  <td width=11%></td>
+  <td width=15%></td>
+ </tr>
+-->
+
+</table>
+
+<?
+}
+
+?>

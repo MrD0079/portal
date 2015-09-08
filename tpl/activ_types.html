@@ -1,0 +1,18 @@
+<h1>Виды активностей</h1>
+<form name=form_activ_types id=form_activ_types target=_self method=post>
+<table border=0 cellspacing=0 cellpadding=1>
+{foreach key=key item=item from=$activ_types}
+<tr>
+<td>{$key}</td>
+<td><input type=checkbox name="del[{$key}]"></td>
+<td><input size=50 name="item[{$key}]" value="{$item|escape}"</td>
+</tr>
+{/foreach}
+</table>
+<input type=submit name=delete value="Удалить отмеченные">
+<input type=submit name=save value="Сохранить">
+<br>
+<input name=new_item>
+<br>
+<input type=submit name=add value="Добавить">
+</form>

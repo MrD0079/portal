@@ -1,0 +1,6 @@
+<select name=tp id=tp>
+<option value=0></option>
+{foreach key=k item=i from=$tp name=tp}
+<option value={$i.kodtp}>{$i.tz_oblast} - {$i.net_name} - {$i.ur_tz_name} - {$i.tz_address}</option>
+{/foreach}
+</select>

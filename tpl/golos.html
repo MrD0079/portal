@@ -1,0 +1,170 @@
+{literal}
+<style type="text/css">
+<!--
+.centre {
+	text-align: center;
+}
+.centre h1 {
+	color: #F30;
+}
+.centre table tr td h2 {
+	color: #8C002F;
+}
+-->
+</style>
+{/literal}
+
+<script type="text/javascript" src="js/golos.js"></script>
+
+<body class="centre" onload="MM_preloadImages('design/golos/4_3.png','design/golos/4_2.png','design/golos/3_3.png','design/golos/3_2.png','design/golos/2_3.png','design/golos/2_2.png','design/golos/1_3.png','design/golos/1_2.png','design/golos/Confirm2.png','design/golos/5_3.png','design/golos/5_2.png')">
+
+<div style="text-align:center; margin-left: auto; margin-right: auto; border: 0px dotted red;" width=800px>
+
+<table align=center border="0" width=800px cellspacing=0 cellpadding=0>
+	<tr>
+		<td valign=top width=150px><img src="design/logo.png" width="145" height="70" alt="Logo" /></td>
+
+		{if $smarty.request.g_action eq ''}
+		<td align="center"><h1>Ваши оценки для команд</h1></td>
+		<td width="375" align="center">
+			<a href="javascript:$('#form').submit();"
+				onmouseout="MM_swapImgRestore()"
+				onmouseover="MM_swapImage('Vote','','design/golos/Confirm2.png',1)">
+				<img src="design/golos/Confirm1.png" alt="Vote here!" name="Vote" width="372" height="76" border="0" id="Vote" />
+			</a>
+		</td>
+		{/if}
+
+			{if $smarty.request.g_action eq 'cmds'}
+			<td align="center" width=400px><h1>Названия команд (если название пустое команда в списке голосования не выводится)</h1></td>
+			{/if}
+
+			{if $smarty.request.g_action eq 'report'}
+				{if $smarty.request.r eq 1}
+					{if $smarty.request.id > 0}
+						<td align="center" width=400px><img src="golos_image_2.php?id={$smarty.request.id}"></td>
+					{else}
+						<td align="center" width=400px><img src="golos_image_1.php"></td>
+					{/if}
+				{/if}
+				{if $smarty.request.r eq 2}
+					<td align="center" width=400px><img src="golos_image.php"></td>
+				{/if}
+			{/if}
+	</tr>
+</table>
+
+{if $smarty.request.g_action eq ''}
+	<form name=form id=form target=_self method=post>
+	<table border=0 width=700px style="text-align:center; margin-left: auto; margin-right: auto; border: 0px dotted red;" cellspacing=0 cellpadding=0>
+		<tr style="font-weight:bold">
+		{foreach item=item from=$cmds name=cmds}
+			{if $item.name neq ''}
+				{assign var=w1 value=$smarty.foreach.cmds.total}
+				{assign var=w2 value=100}
+				{assign var=w3 value=`$w2/$w1`}
+				<td style="color: #3F0;" width={$w3}%><h2>{$item.name|escape}</h2></td>
+			{/if}
+		{/foreach}
+		</tr>
+
+		{foreach item=citem from=$cicle}
+        	<tr>
+		{foreach item=item from=$cmds}
+			<td>
+				<a href="javascript:;" target="_top"
+				onClick="MM_nbGroup('down','group{$item.id}','i{$item.id}{$citem}','design/golos/{$citem}_3.png',{$citem},{$item.id})"
+				onMouseOver="MM_nbGroup('over','i{$item.id}{$citem}','design/golos/{$citem}_2.png','',{$citem})"
+				onMouseOut="MM_nbGroup('out')">
+				<img name="i{$item.id}{$citem}" src="design/golos/{$citem}_1.png" border="0" alt="" onLoad="" />
+				</a>
+			</td>
+		{/foreach}
+		</tr>
+
+		{/foreach}
+
+	</table>
+
+
+
+
+	{foreach item=item from=$cmds}
+	<input type=hidden name=golos[{$item.id}] id=golos[{$item.id}] value=
+	{foreach item=item1 from=$golos_result}
+		{if $item1.cmd_id eq $item.id}{$item1.cmd_val}{/if}
+	{/foreach}
+	>
+	{/foreach}
+
+	<script>
+	{foreach item=item from=$cmds}
+	{foreach item=item1 from=$golos_result}
+	{if $item1.cmd_id eq $item.id}
+	MM_nbGroup('over','i{$item.id}{$item1.cmd_val}','design/golos/{$item1.cmd_val}_2.png','',{$item1.cmd_val});
+	MM_nbGroup('down','group{$item.id}','i{$item.id}{$item1.cmd_val}','design/golos/{$item1.cmd_val}_3.png',{$item1.cmd_val},{$item.id});
+	MM_nbGroup('out');
+	{/if}
+	{/foreach}
+	{/foreach}
+	</script>
+
+	<input type=hidden name="save_golos" value="save_golos">
+	</form>
+
+{/if}
+
+{if $is_admin}
+
+	{if $smarty.request.g_action eq 'cmds'}
+	<form name=form id=form target=_self method=post>
+		<table border=0 width=400px style="text-align:center; margin-left: auto; margin-right: auto; border: 0px dotted red;">
+		{foreach item=item from=$cmds_full}
+			<tr>
+				<td>
+					{if $item.name neq ''}
+						<a target=_blank href="?g_action=report&r=1&id={$item.id}">{$item.id}</a>
+					{else}
+						{$item.id}
+					{/if}
+				</td>
+				<td><input size=50 id=names[{$item.id}] name=names[{$item.id}] value="{$item.name|escape}"></td>
+			</tr>
+		{/foreach}
+		</table>
+		<input type=submit name="save_cmds" value="Сохранить">
+		<input type=submit name="clear_result" value="Очистить результаты">
+	</form>
+	{/if}
+
+	{if $smarty.request.g_action eq 'report'}
+	<script>
+		InitializeTimer();
+	</script>
+	{/if}
+
+	{if $smarty.request.g_action neq 'report'}
+	<a href="?">Голосование</a>
+	&nbsp&nbsp&nbsp
+	<a href="?g_action=cmds">Список команд</a>
+	&nbsp&nbsp&nbsp
+	<a target=_blank href="?g_action=report&r=1">Результаты голосования (по оценкам)</a>
+	&nbsp&nbsp&nbsp
+	<a target=_blank href="?g_action=report&r=2">Результаты голосования (итого)</a>
+	{/if}
+
+{/if}
+
+
+{if $smarty.request.g_action neq 'report'}
+<!--
+<form method=post name=form1 id=form1>
+<input type=hidden value=logout name=action>
+<a href="javascript:void(0)" onclick="javascript:$('#form1').submit()">Выход</a>
+</form>
+-->
+{/if}
+
+</div>
+
+

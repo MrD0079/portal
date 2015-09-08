@@ -1,0 +1,22 @@
+<div style="height:100px;overflow-y:auto;">
+{foreach key=key item=item from=$os_ac_list_dt}
+<a href="javascript:void(0);" onclick="load_list_memb({$item.id})">{$item.dt} {$item.fio}</a><br>
+{/foreach}
+</div>
+
+{literal}
+<script>
+function load_list_memb(id,ac_id,memb_id)
+{
+	$('#select_memb').html('');
+	$('#select_memb').load('?action=os_ac_list_memb&nohead=1&id='+id+'&ac_id='+ac_id+'&memb_id='+memb_id,function() {});
+	$('#os_ac_head_body').html('');
+}
+</script>
+{/literal}
+
+{if $smarty.request.ac_id > 0}
+<script>
+load_list_memb({$smarty.request.ac_id},{$smarty.request.ac_id},{$smarty.request.memb_id});
+</script>
+{/if}

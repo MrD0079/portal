@@ -1,0 +1,54 @@
+<h1>Лестница тренингов</h1>
+
+
+<form target="_self" method="POST" name=form_tr_pos>
+
+Должность
+<select name=add[pos_id]>
+	<option></option>
+	{foreach key=key item=item from=$tr_pos_list}
+	<option value={$item.pos_id}>{$item.pos_name}</option>
+	{/foreach}
+</select>
+
+Тренинг
+<select name=add[tr_id]>
+	<option></option>
+	{foreach key=key item=item from=$tr}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+
+
+Порядок
+
+<input name=add[sort] class="number_int">
+
+<input type=submit name=new value="Добавить">
+<br>
+<br>
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td><a href="javascript:void(0)" onclick="javascript:form_tr_pos.submit()">[X]</a></td>
+<td>Должность</td>
+<td>Тренинг</td>
+<td>Порядок</td>
+<td>Добавлено</td>
+</tr>
+{foreach key=tr_pos_key item=tr_pos_item from=$tr_pos name=tr_pos}
+<tr>
+<td>
+<input type=checkbox name=del[{$tr_pos_key}] value="{$tr_pos_item.pos_id},{$tr_pos_item.tr_id}">
+{$smarty.foreach.tr_pos.iteration}
+</td>
+<td>{$tr_pos_item.pos_name}</td>
+<td>{$tr_pos_item.tr_name}</td>
+<td>{$tr_pos_item.sort}</td>
+<td>{$tr_pos_item.lu_txt}</td>
+</tr>
+{/foreach}
+</table>
+</form>

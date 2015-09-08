@@ -1,0 +1,45 @@
+<h3>Статистика расходов на авто</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+    <tr style="text-align: center;">
+      <td></td>
+      <td>Расходы на автомобиль, {$valuta}</td>
+      <td>Командировочные расходы, {$valuta}</td>
+      <td>Прочие расходы, {$valuta}</td>
+      <td>Заправлено, л.</td>
+      <td>Пробег, км.</td>
+      <td>Средний расход, л/100 км</td>
+      <td>Средняя стоимость топлива, {$valuta}</td>
+      <td>Количество заправок</td>
+      <td>Замена масла, {$valuta}</td>
+      <td>Кантовары, {$valuta}</td>
+    </tr>
+    <tr style="text-align: center; font-weight: bold; background-color: rgb(153, 255, 153);">
+      <td>Лимит</td>
+      <td>{$limits_current.limittrans|num:2}</td>
+      <td>{$limits_current.limitkom|num:2}</td>
+      <td></td>
+      <td>{$limits_current.limit_car_vol|num:2}</td>
+      <td>{$limits_current.limit_car_vol*10|num:2}</td>
+      <td>{10|num:2}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{$limits_current.limitkanc|num:2}</td>
+    </tr>
+{foreach key=k item=i from=$zat}
+    <tr style="text-align: center;">
+      <td>{$i.mt} {$i.y}</td>
+      <td {if $i.total_c >$limits_current.limittrans}style="background-color: red;"{/if}>{$i.total_c|num:2}</td>
+      <td {if $i.total_t >$limits_current.limitkom}style="background-color: red;"{/if}>{$i.total_t|num:2}</td>
+      <td>{$i.total_m|num:2}</td>
+      <td {if $i.pet_vol >$limits_current.limit_car_vol}style="background-color: red;"{/if}>{$i.pet_vol|num:2}</td>
+      <td {if $i.odometr_delta >$limits_current.limit_car_vol*10}style="background-color: red;"{/if}>{$i.odometr_delta|num:2}</td>
+      <td {if $i.rashod_fakt > 10}style="background-color: red;"{/if}>{$i.rashod_fakt|num:2}</td>
+      <td>{$i.pet_price|num:2}</td>
+      <td>{$i.pet_cnt|num:0}</td>
+      <td>{$i.oil_sum|num:2}</td>
+      <td {if $i.stationery >$limits_current.limitkanc}style="background-color: red;"{/if}>{$i.stationery|num:2}</td>
+    </tr>
+{/foreach}
+</table>

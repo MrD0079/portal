@@ -1,0 +1,31 @@
+<p>
+По ЭТА:
+<br>
+<select name=eta_list id=eta_list>
+<option value=""></option>
+{foreach key=k item=i from=$eta_list}
+<option value="{$i.h_merchname}">{$i.merchname}</option>
+{/foreach}
+</select>
+</p>
+
+<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+
+<p>
+Выберите ТП:
+<select name=selected_tp id=selected_tp>
+	<option></option>
+	{foreach key=tp_key item=tp_item from=$tp name=tp}
+	<option value="{$tp_item.h_custcode_kodtt}">{$tp_item.kod_tt} {$tp_item.jur_nazv} ({$tp_item.addr})</option>
+	{/foreach}
+</select>
+</p>
+
+<script>$('#selected_tp').val('{$smarty.request.selected_tp}');</script>
+
+<p>
+<input type=submit name=refresh id=refresh value="Выбрать ТП">
+</p>
+
+

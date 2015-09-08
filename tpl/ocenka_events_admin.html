@@ -1,0 +1,73 @@
+<div id=ok style="display: inline;"></div>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+	<tr style="font-weight:bold">
+		<td>[x]</td>
+		<td>год</td>
+		<td>название</td>
+		<td>закрыто<br>для<br>изменения</td>
+		<td>копирование</td>
+	</tr>
+	{foreach key=key item=item from=$ocenka_events}
+	<tr>
+		<td><input name=del[{$item.year}] type=checkbox></td>
+		<td>{$item.year}</td>
+		<td><input name=data[{$item.year}][name] size=50 value="{$item.name}"></td>
+		<td>
+			<select id=data_{$item.year} name=data[{$item.year}][disabled]>
+				<option value=1>Да
+				<option value=0>Нет
+			</select>
+			<script>$('#data_{$item.year}').val({$item.disabled});</script>
+		</td>
+		<td id=td_{$item.year}>
+			{if $item.disabled neq 1}
+			<select id=cp_{$item.year}>
+				<option>
+				{foreach key=k1 item=i1 from=$ocenka_events}
+	{if $item.year neq $i1.year}
+				<option value={$i1.year}>{$i1.name}
+	{/if}
+				{/foreach}
+			</select>
+			<a href="javascript:void(0);" onclick="copy_event($('#cp_{$item.year}').val(),{$item.year});">
+			<br>
+			Скопировать из выбранного периода</a>
+			{/if}
+		</td>
+	</tr>
+	{/foreach}
+</table>
+название
+<br>
+<input name=new_name>
+<br>
+год
+<br>
+<input name=new_year>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>
+
+{literal}
+<script>
+function copy_event(y_from,y_to)
+{
+	$('#td_'+y_to).css('background-color','red');
+	$('#ok').load('?action=ocenka_events_admin&nohead=1',
+	{
+		y_from:y_from,
+		y_to:y_to,
+		copy_event:1
+	},
+	function() {
+	$('#td_'+y_to).css('background-color','white');
+	});
+}
+
+
+
+
+</script>
+{/literal}

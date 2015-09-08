@@ -1,0 +1,269 @@
+<h1>План активности</h1>
+{literal}
+<style type="text/css">
+.top {
+    border-top:thin solid;
+    border-color:black;
+}
+
+.bottom {
+    border-bottom:thin solid;
+    border-color:black;
+}
+
+.left {
+    border-left:thin solid;
+    border-color:black;
+}
+
+.right {
+    border-right:thin solid;
+    border-color:black;
+}
+</style>
+{/literal}
+
+
+{if $error eq 1}
+<br><font style="color:rgb(255,0,0);"><b>Ошибка при сохранении, возможно неправильные данные: {$error_text}</b></font><br><br>
+{/if}
+
+<form
+enctype="multipart/form-data"
+name=form_plan_activ
+id=form_plan_activ
+target=_self
+method=post
+>
+
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_plan_activ').submit();
+}
+</script>
+{/literal}
+
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+	<td>
+		Ф.И.О.: <b>{$emp_fio}</b>
+	</td>
+	<td>
+		Месяц
+		{if $smarty.request.print neq 1}
+			<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+		{else}
+			<b>
+			{foreach key=key item=item from=$month_list}
+				{if $item.sd_c eq $smarty.request.month_list}
+					{$item.my}
+				{/if}
+			{/foreach}
+			</b>
+		{/if}
+	</td>
+	<td>
+		План утвержден:
+		{if not $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1}
+			<select name="plan_monthly[plan_ok]" id="plan_monthly_plan_ok"><option value=0>нет</option><option value=1>да</option></select>
+			<script>$('#plan_monthly_plan_ok option[value="{$plan_monthly[1][0]}"]').prop('selected', true);</script>
+		{else}
+			<b>
+			{if $plan_monthly[1][0] eq 1}да{else}нет{/if}
+			</b>
+		{/if}
+	</td>
+	{if not $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1}
+	<td>
+		Текст сообщения:
+		<br>
+		<!--<textarea cols=20 rows=3 name=msg>{$plan_monthly[1][1]|escape}</textarea>-->
+		<textarea cols=20 rows=3 name=msg></textarea>
+		<br>
+		<input type=submit name=send_msg value="Отправить сообщение">
+	</td>
+	{/if}
+	</tr>
+</table>
+
+{if $activ_plan_monthly_chat}
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+	<td>
+		{foreach key=k item=i from=$activ_plan_monthly_chat}
+			<font style="color:red">{$i.lu_txt}</font>
+			<font style="color:green">{$i.lu_fio}:</font>
+			<br>
+			<font style="color:blue">{$i.msg|nl2br}</font>
+			<br>
+		{/foreach}
+	</td>
+	</tr>
+</table>
+{/if}
+
+
+{if $smarty.request.print neq 1 and $smarty.request.readonly neq 1}
+<p>
+	<input type=submit name=save value="Сохранить">
+</p>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr align=center>
+		<td rowspan=2>№ Нед.</td>
+		<td rowspan=2>&nbsp</td>
+		{foreach name=week_days_list key=key item=item from=$week_days_list}{/foreach} <!-- for count total-->
+		<td bgcolor="#00ff00" colspan={$smarty.foreach.week_days_list.total}>Дни недели</td>
+		{if $smarty.request.print neq 1}
+		<td bgcolor="#ffff00" rowspan=2>Виды активности</td>
+		{/if}
+	</tr>
+	<tr align=center>
+		{foreach key=key item=item from=$week_days_list}
+		<td width=150px bgcolor="#00ff00">{$item}</td>
+		{/foreach}
+	</tr>
+	{foreach key=key item=item from=$calendar}
+	<tr align=center>
+		<td rowspan=4>{$key}</td>
+		<td bgcolor="#00ffff">Дата</td>
+		{foreach key=key1 item=item1 from=$item}
+		<td bgcolor="#00ffff">
+			{if isset($item1.data)}
+				{$item1.data}
+			{/if}
+		</td>
+		{/foreach}
+		{if $smarty.request.print neq 1}
+		<td bgcolor="#ffff00" rowspan=3>
+			<table width=1px border=1 cellspacing=0 cellpadding=1>
+				<tr align=center>
+					<td></td>
+					{foreach key=key3 item=item3 from=$activ_types}
+					<td>{$item3}</td>
+					{/foreach}
+				</tr>
+				<tr align=center>
+					<td>План</td>
+					{foreach key=key3 item=item3 from=$activ_types}
+					<td>
+						{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $plan_monthly[1][0] neq 1}<input name="plan_weekly[{$key}][{$key3}][plan]" size=5 value="{$plan_weekly[$key][$key3].plan}" class="number_int">{else}{$plan_weekly[$key][$key3].plan}{/if}
+					</td>
+					{/foreach}
+				</tr>
+				<tr align=center>
+					<td>Факт</td>
+					{foreach key=key3 item=item3 from=$activ_types}
+					<td>
+						{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1}<input name="plan_weekly[{$key}][{$key3}][fakt]" size=5 value="{$plan_weekly[$key][$key3].fakt}" class="number_int">{else}{$plan_weekly[$key][$key3].fakt}{/if}
+					</td>
+					{/foreach}
+				</tr>
+			</table>
+		</td>
+		{/if}
+	</tr>
+	<tr align=center>
+		<td>Город</td>
+		{foreach key=key1 item=item1 from=$item}
+		<td>
+			{if isset($item1.data)}
+			{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $plan_monthly[1][0] neq 1}
+			<textarea name="plan_daily[{$item1.data}][city]" rows=1 cols=15>{$plan_daily[$item1.data].city|escape}</textarea>
+			{else}
+			{$plan_daily[$item1.data].city}
+			{/if}
+			{/if}
+		</td>
+		{/foreach}
+	</tr>
+	<tr align=center>
+		<td>План<br>акт.</td>
+		{foreach key=key1 item=item1 from=$item}
+		<td>
+			{if isset($item1.data)}
+
+			{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $plan_monthly[1][0] neq 1}
+			<textarea name="plan_daily[{$item1.data}][plan]" rows=6 cols=15>{$plan_daily[$item1.data].plan|escape}</textarea>
+			{else}
+			{$plan_daily[$item1.data].plan}
+			{/if}
+			{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1}
+				<input type=file name="doc[{$item1.data}]">
+			{/if}
+			{if $smarty.request.print neq 1}
+				<a target=_blank href="plan_activ_files/{$plan_daily[$item1.data].doc}">{$plan_daily[$item1.data].doc}</a>
+			{/if}
+
+			{/if}
+
+		</td>
+		{/foreach}
+	</tr>
+	<tr align=center>
+		<td>Факт<br>акт.</td>
+		{foreach key=key1 item=item1 from=$item}
+		<td>
+			{if isset($item1.data)}
+				{foreach key=keyf item=itemf from=$plan_daily[$item1.data].fakt}
+					<p>
+					ПР: <b>{$itemf.name}</b><br>
+					Кол-во ТП: <b>{$itemf.tp_qty}</b><br>
+					ЭТА: <b>{$itemf.fio_eta}</b><br>
+					<a target=_blank href="{$itemf.h_link}"><b>Ссылка</b></a>
+					</p>
+				{/foreach}
+			{/if}
+		</td>
+		{/foreach}
+	</tr>
+	{/foreach}
+	{if $smarty.request.print neq 1}
+	<tr>
+		<td colspan=8 align=center>Итого</td>
+		<td bgcolor="#ffff00" align=center>
+			<table width=1px border=1 cellspacing=0 cellpadding=1>
+				<tr align=center>
+					<td></td>
+					{foreach key=key3 item=item3 from=$activ_types}
+					<td>{$item3}</td>
+					{/foreach}
+				</tr>
+				<tr align=center>
+					<td>План</td>
+					{foreach key=key3 item=item3 from=$activ_types}
+					<td>{$plan_weekly_total[$key3].plan}</td>
+					{/foreach}
+				</tr>
+				<tr align=center>
+					<td>Факт</td>
+					{foreach key=key3 item=item3 from=$activ_types}
+					<td>{$plan_weekly_total[$key3].fakt}</td>
+					{/foreach}
+				</tr>
+			</table>
+		</td>
+	</tr>
+	{/if}
+</table>
+{if $smarty.request.print neq 1}
+<p>
+<a target=_blank href="?action=plan_activ&emp_tn={$emp_tn}&print=1&month_list={$smarty.request.month_list}">Версия для печати</a>
+</p>
+
+<p style="font-weight:bold">Максимальный размер загружаемого файла - 400 килобайт. Если на одну дату нужно загрузить несколько файлов - создавайте архив.</p>
+
+{/if}
+</form>

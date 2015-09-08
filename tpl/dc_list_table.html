@@ -1,0 +1,56 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td rowspan=2>
+			Дата начала / Локация
+		</td>
+		<td colspan=3>
+			Участники
+		</td>
+	</tr>
+	<tr style="font-weight:bold; text-align:center">
+		<td>
+			ФИО
+		</td>
+		<td>
+			Должность
+		</td>
+		<td>
+			Статус
+		</td>
+	</tr>
+
+	{foreach key=k item=i from=$d}
+		<tr>
+			{foreach key=k1 item=i1 from=$i.body name=body}{/foreach}
+			<td rowspan={$smarty.foreach.body.total+1} style="vertical-align:top">
+				<b>Дата начала:</b> {$i.head.dt_start_t}<br>
+				<b>Локация:</b> {$i.head.loc_name}<br>
+				<b>Участников:</b> {$i.head.stud_cnt}<br>
+				{if $i.head.readonly neq 1 and ($is_admin or $pos_id eq 63)}
+				<p><input type=checkbox name=del[] value={$i.head.id}>выбрать для удаления</p>
+				<p><a target=_blank href="?action=dc_order_edit&id={$i.head.id}">Редактировать</a></p>
+				<p><input type=submit name=ok_primary_retry value="Повторно оповестить" onClick="javascript:$('#form_tr').find('input[class=ok_primary_retry_id]').val({$i.head.id});$('#form_tr').submit();"></p>
+				<input type=hidden name=ok_primary_retry_id class=ok_primary_retry_id>
+				{/if}
+				<b>Комментарий:</b><br>{$i.head.text|nl2br}<br>
+			</td>
+		</tr>
+		{foreach key=k1 item=i1 from=$i.body}
+			<tr>
+				<td>
+					{$i1.stud_fio}
+				</td>
+				<td>
+					{$i1.stud_pos}
+				</td>
+				<td
+					{if $i1.manual eq -1}bgcolor="#ff0000"{/if}
+					{if $i1.manual eq 1}bgcolor="#ffff00"{/if}
+				>
+					{if $i1.manual eq -1}Удален{/if}
+					{if $i1.manual eq 1}Добавлен{/if}
+				</td>
+			</tr>
+		{/foreach}
+	{/foreach}
+</table>

@@ -1,0 +1,43 @@
+<p><input name="save_record" value="Сохранить" type="submit"></p>
+
+<table border=1>
+<tr style="font-weight:bold; text-align:center">
+<td rowspan=2>Участвует</td>
+<td rowspan=2>Статья расхода</td>
+<td rowspan=2>ПЛАН, тыс. ден.ед.</td>
+<td rowspan=2>ФАКТ, тыс. ден.ед.</td>
+<td rowspan=2>Комментарии</td>
+<td colspan=2>Затраты дистрибутора</td>
+</tr>
+<tr style="font-weight:bold; text-align:center">
+<td>ФАКТ, тыс. ден.ед.</td>
+<td>Комментарии</td>
+</tr>
+	{foreach key=k item=i from=$body}
+	<tr>
+	{if $i.parent eq 0}
+		<td></td>
+		<td style="font-weight:bold;">{$i.name}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	{else}
+		<td>
+			<input type=checkbox onclick="$('#enabled{$i.st}').val(this.checked?1:0);$('.i{$i.st}').attr('disabled',!this.checked);" {if $i.id}checked{/if}>
+			<input type=hidden id=enabled{$i.st} name=enabled[{$i.st}] value="{if $i.id}1{else}0{/if}">
+			<input type=hidden name=body[{$i.st}][st] value="{$i.st}">
+		</td>
+		<td>{$i.name}</td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st} number3" name=body[{$i.st}][plan] value="{$i.plan}" required></td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st} number3" name=body[{$i.st}][fakt] value="{$i.fakt}" required></td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st}" name=body[{$i.st}][text] value="{$i.text}" size=50></td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st} number3" name=body[{$i.st}][zd_fakt] value="{$i.zd_fakt}"></td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st}" name=body[{$i.st}][zd_text] value="{$i.zd_text}" size=50></td>
+	{/if}
+	</tr>
+	{/foreach}
+</table>
+
+<p><input name="save_record" value="Сохранить" type="submit"></p>

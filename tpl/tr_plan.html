@@ -1,0 +1,51 @@
+<h1>Мой план обучения</h1>
+
+<table border=1 cellpadding=3 cellspacing=0 width=1000px>
+	<tr style="text-align:center; font-weight:bold">
+		<td width=700px>
+			Тренинг
+		</td>
+		<td width=100px>
+			Статус прохождения
+		</td>
+		<td width=200px>
+			Дата ближайшего участия в тренинге
+		</td>
+	</tr>
+	{foreach key=k item=i from=$tr_plan}
+	<tr style="vertical-align:top">
+		<td bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<h3><a href="javascript:void(0)" onclick="javascript:show1('text_{$i.id}')">{$i.name|escape}</a></h3>
+			<div class="tr_plan_text"  id=text_{$i.id}>{$i.text|nl2br}</div>
+			<script>$('#text_{$i.id}').hide();</script>
+		</td>
+		<td style="text-align:center">
+			{if $i.u_tn}
+				<img width=90px src="design/yes.png">
+				<br>
+				<b>Дата прохождения:</b>
+				<br>
+				{$i.datanob} - {$i.datakob}
+				<br>
+				<b>Результат теста:</b>
+				<br>
+				{$i.test_ball} / {$i.test_perc} %
+			{else}
+				<img width=90px src="design/no.png">
+			{/if}
+		</td>
+		<td style="
+				text-align:center;
+				{if $i.min_dt_start}background-color: rgb(255, 204, 153){/if}
+			">
+			<big><big><big><big><span style="font-weight: bold;">{$i.min_dt_start}</span></big></big></big></big>
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+{literal}
+<script>
+function show1(el){$(".tr_plan_text").each(function(){$(this).attr('id')==el?$(this).toggle():$(this).hide();});}
+</script>
+{/literal}

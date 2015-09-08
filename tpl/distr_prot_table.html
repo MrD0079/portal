@@ -1,0 +1,129 @@
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>Удал.</td>
+<td>Загрузил</td>
+<td>Название</td>
+<td>Нацио-<br>нальное<br>подраз-<br>деление</td>
+<td>Список ДБ</td>
+{if not $smarty.request.print}
+<td>Файл протокола</td>
+<td>Паспорт</td>
+{/if}
+<td>Комментарии</td>
+<td>Установил статус</td>
+<td>категория</td>
+<td>контрольный вопрос</td>
+<td>Результат</td>
+<td>Подтвердил<br>рук-ль</td>
+<td>Подтвердил<br>НМ/НМКК</td>
+<td>Подтвердил<br>ДП</td>
+</tr>
+{foreach key=k item=i from=$distr_prot}
+<tr style="text-align:center;{if $i.deleted}background-color:grey;{/if}" id="tr_{$i.id}">
+<td>
+	{$i.id}
+	{if ($is_admin or $is_do) and not $smarty.request.print and not $i.deleted}
+		<a href="javascript:void(0);" onClick="del_prot({$i.id});">[x]</a>
+	{else}
+		{$i.deleted_fio}<br>{$i.deleted_lu}
+	{/if}
+</td>
+<td style="text-align:left">{$i.lu_fio}<br>{$i.lu_t}</td>
+<td style="text-align:left">{$i.name|escape}</td>
+<td>{$i.name_nd}</td>
+<td style="text-align:left">{$i.db_list}</td>
+{if not $smarty.request.print}
+<td style="text-align:left">
+	{foreach key=k1 item=i1 from=$i.files name=files}
+		<b>{$smarty.foreach.files.iteration}.</b> <a target=_blank href="distr_prot_files/{$i1.fn}">{$i1.fn}</a><br>
+	{/foreach}
+</td>
+<td><a target=_blank href="?action=bud_fil_passport_get&nohead=1&id={$i.fil_id}&print=1">паспорт</a></td>
+{/if}
+<td style="text-align:left">{$i.comm}</td>
+<td style="text-align:left;background-color:{$i.status_color};">
+	{if (($i.def_val and ($is_db or ($has_parent_db and $is_assist))) or $is_admin or $is_do) and not $smarty.request.print and not $i.deleted}
+	<form target="_self" method="POST" name=form_{$i.id} id=form_{$i.id}>
+	<select
+	id=d_{$i.id}_status_id
+	name=d[{$i.id}][status_id]
+	onChange="save_prot({$i.id},'status_id',this.value);save_prot({$i.id},'status_fio','{$fio}');"
+	>
+	{foreach key=k1 item=i1 from=$da_st}
+	<option value="{$i1.id}">{$i1.name}</option>
+	{/foreach}
+	</select>
+	<script>$("[name='d[{$i.id}][status_id]']").val('{$i.status_id}');</script>
+	</form>
+	{else}
+	<b>{$i.status}</b>
+	{/if}
+	<div id=d_{$i.id}_status_fio>{$i.status_fio}</div>
+	<div id=d_{$i.id}_status_lu>{$i.status_lu}</div>
+</td>
+<td style="text-align:center">{$i.cat}</td>
+<td style="text-align:center">{$i.conq}</td>
+<td style="text-align:center;background-color:{$i.result_color};">{$i.result}</td>
+<td style="text-align:center;background-color:{$i.color};">
+	{if $tn eq $i.chief_tn and not $smarty.request.print and not $i.deleted}
+	<form target="_self" method="POST" name=form_{$i.id} id=form_{$i.id}>
+	<select
+	id=d_{$i.id}_ok_chief
+	name=d[{$i.id}][ok_chief]
+	onChange="save_prot({$i.id},'ok_chief',this.value);save_prot({$i.id},'ok_chief_fio','{$fio}, {$pos_name}, {$department_name}');"
+	>
+	{foreach key=k1 item=i1 from=$da_ok_chief}
+	<option value="{$i1.id}">{$i1.name}</option>
+	{/foreach}
+	</select>
+	<script>$("[name='d[{$i.id}][ok_chief]']").val('{$i.ok_chief}');</script>
+	</form>
+	{else}
+	<b>{$i.ok_chief_name}</b>
+	{/if}
+	<div style="display:inline" id=d_{$i.id}_ok_chief_fio>{$i.ok_chief_fio}</div>
+	<div style="display:inline" id=d_{$i.id}_ok_chief_lu>{$i.ok_chief_lu}</div>
+</td>
+<td style="text-align:center;background-color:{$i.ok_nm_color};">
+	{if $is_nm and not $smarty.request.print and not $i.deleted}
+	<form target="_self" method="POST" name=form_{$i.id} id=form_{$i.id}>
+	<select
+	id=d_{$i.id}_ok_nm
+	name=d[{$i.id}][ok_nm]
+	onChange="save_prot({$i.id},'ok_nm',this.value);save_prot({$i.id},'ok_nm_fio','{$fio}, {$pos_name}, {$department_name}');"
+	>
+	{foreach key=k1 item=i1 from=$da_ok_chief}
+	<option value="{$i1.id}">{$i1.name}</option>
+	{/foreach}
+	</select>
+	<script>$("[name='d[{$i.id}][ok_nm]']").val('{$i.ok_nm}');</script>
+	</form>
+	{else}
+	<b>{$i.ok_nm_name}</b>
+	{/if}
+	<div style="display:inline" id=d_{$i.id}_ok_nm_fio>{$i.ok_nm_fio}</div>
+	<div style="display:inline" id=d_{$i.id}_ok_nm_lu>{$i.ok_nm_lu}</div>
+</td>
+<td style="text-align:center;background-color:{$i.ok_dpu_color};">
+	{if $is_dpu and not $smarty.request.print and not $i.deleted}
+	<form target="_self" method="POST" name=form_{$i.id} id=form_{$i.id}>
+	<select
+	id=d_{$i.id}_ok_dpu
+	name=d[{$i.id}][ok_dpu]
+	onChange="save_prot({$i.id},'ok_dpu',this.value);save_prot({$i.id},'ok_dpu_fio','{$fio}, {$pos_name}, {$department_name}');"
+	>
+	{foreach key=k1 item=i1 from=$da_ok_chief}
+	<option value="{$i1.id}">{$i1.name}</option>
+	{/foreach}
+	</select>
+	<script>$("[name='d[{$i.id}][ok_dpu]']").val('{$i.ok_dpu}');</script>
+	</form>
+	{else}
+	<b>{$i.ok_dpu_name}</b>
+	{/if}
+	<div style="display:inline" id=d_{$i.id}_ok_dpu_fio>{$i.ok_dpu_fio}</div>
+	<div style="display:inline" id=d_{$i.id}_ok_dpu_lu>{$i.ok_dpu_lu}</div>
+</td>
+</tr>
+{/foreach}
+</table>

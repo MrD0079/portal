@@ -1,0 +1,19 @@
+<p>
+Выберите ТП:
+<select name=selected_tp id=selected_tp>
+	<option></option>
+	{foreach key=tp_key item=tp_item from=$tp name=tp}
+	<option value="{$tp_item.tp_kod_key}">{$tp_item.tp_kod_key} {$tp_item.tp_ur} ({$tp_item.tp_addr})</option>
+	{/foreach}
+</select>
+</p>
+
+<script>
+	$('#selected_tp').val({$smarty.request.selected_tp});
+</script>
+
+<p>
+<input type=submit name=generate value="Выбрать ТП">
+</p>
+
+

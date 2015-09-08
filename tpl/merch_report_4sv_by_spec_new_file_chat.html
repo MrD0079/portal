@@ -1,0 +1,81 @@
+{foreach key=k item=i from=$chat}
+<p>
+<font style="color:red">{$i.lu}</font>
+<font style="color:green">{$i.fio}</font>
+<font style="color:blue">{$i.text}</font>
+</p>
+<p>
+{foreach key=k1 item=i1 from=$chat_f}
+{if $i.id eq $i1.chat_id}
+<div class="pics">
+<a target=_blank href="/merch_spec_report_files_chat_files/{$i1.fn}"><img src="/merch_spec_report_files_chat_files/{$i1.fn}" height=50px></a>
+<img src="/merch_spec_report_files_chat_files/{$i1.fn}" class="hov">
+</div>
+{/if}
+{/foreach}
+</p>
+{/foreach}
+
+
+{if $smarty.request.chat_closed neq 1}
+
+<!--
+<div id="uploadOutput{$smarty.request.id}" style="display: inline;">
+</div>
+-->
+
+<form
+target="_self"
+action="index.php"
+method="POST"
+id="form_add_comment_{$smarty.request.id}"
+name="form_add_comment[{$smarty.request.id}]"
+enctype="multipart/form-data"
+>
+<input type=hidden name="action" value="merch_report_4sv_by_spec_new_file_chat">
+<input type=hidden name="nohead" value="1">
+<input type=hidden name="id" value="{$smarty.request.id}">
+<input type=hidden name="close_comment" value="1" disabled id="close_comment">
+
+<textarea
+rows=5
+cols=15
+name="add_comment"
+></textarea>
+
+<br>
+
+Приложить файлы
+<br>
+<input type=file name=files[] multiple>
+
+
+</form>
+
+<a href="javascript:void(0);" onclick="
+$('#form_add_comment_{$smarty.request.id}').submit();
+">Добавить задачу</a>
+
+{if $is_admin or $is_ma}
+<a href="javascript:void(0);" onclick="
+$('#close_comment').attr('disabled',false);
+$('#form_add_comment_{$smarty.request.id}').submit();
+">Закрыть задачу</a>
+{/if}
+
+<script>
+$a1 = '{$smarty.request.id}';
+{literal}
+	$(document).ready(function() {
+		var options = {
+			/*target: '#uploadOutput'+$a1,*/
+			success: function() {
+			$('#load_comments_'+$a1).click();
+			}
+		};
+		$('#form_add_comment_'+$a1).ajaxForm(options);
+	}); 
+{/literal}
+</script> 
+
+{/if}

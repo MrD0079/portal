@@ -1,0 +1,52 @@
+<h1>Отчет по "Ассессмент-центру"</h1>
+
+<form target="_self" method="PosT" name="form3" id="form3" enctype="multipart/form-data">
+
+{if not $is_dc or $os_ac_head.ok_zgdp}
+{assign var=disabled value='disabled'}
+{/if}
+
+{if not $is_dc}
+{assign var=disabled1 value='disabled'}
+{/if}
+
+<table border=0 cellpadding=3>
+	<tr style="text-align:left;vertical-align:top">
+		<td>Год</td>
+		<td>Дата/Инициатор</td>
+	</tr>
+	<tr style="text-align:left;vertical-align:top">
+		<td>
+			{foreach key=key item=item from=$calendar_years}
+				<a href="javascript:void(0);" onclick="load_list_dt({$item.y})">{$item.y}</a><br>
+			{/foreach}
+		</td>
+		<td><div id=select_date></div></td>
+	</tr>
+</table>
+
+<div id=ac_report_head_body></div>
+
+</form>
+
+{literal}
+<script>
+function load_list_dt(y,ac_id)
+{
+	$('#select_date').html('');
+	$('#select_date').load('?action=ac_report_list_dt&nohead=1&y='+y+'&ac_id='+ac_id,function() {});
+	$('#ac_report_head_body').html('');
+}
+
+
+
+
+</script>
+{/literal}
+
+
+{if $smarty.request.ac_id > 0}
+<script>
+load_list_dt({$smarty.request.y},{$smarty.request.ac_id});
+</script>
+{/if}

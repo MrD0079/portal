@@ -1,0 +1,139 @@
+<table border=1 style="width:300px">
+<tr style="font-weight:bold; text-align:center">
+<td>Дистрибутор / филиал</td>
+<td>Объем продаж</td>
+<td>{$x.funds.zp.fund_name}</td>
+<td>{$x.funds.gbo.fund_name}</td>
+<td>{$x.funds.svs.fund_name}</td>
+<td>{$x.funds.prm.fund_name}</td>
+<td style="background-color: rgb(153, 255, 153);">Сумма удержания / компенсации</td>
+<td style="background-color: rgb(204, 255, 255);">Затраты через ДБ</td>
+</tr>
+{foreach key=k item=i from=$x.data}
+<tr>
+<td><nobr>{$i.head.fil_name}</nobr></td>
+<td style="text-align:right">{$i.svs.sales_fact|num:2}</td>
+<td style="text-align:right">{$i.zp.zp_total|num:2}</td>
+<td style="text-align:right">{$i.gbo.gsm_total|num:2}</td>
+<td style="text-align:right">{$i.svs.svs_total|num:2}</td>
+<td style="text-align:right">{$i.prm.promo_total|num:2}</td>
+<td style="text-align:right; background-color: rgb(153, 255, 153);">{$i.total|num:2}</td>
+<td style="text-align:right; background-color: rgb(204, 255, 255);">{$i.prm.zay_compens_db|num:2}</td>
+<tr>
+{/foreach}
+<tr style="font-weight:bold; text-align:center">
+<td>ИТОГО</td>
+<td style="text-align:right">{$xt.sales_fact|num:2}</td>
+<td style="text-align:right">{$xt.zp_total|num:2}</td>
+<td style="text-align:right">{$xt.gsm_total|num:2}</td>
+<td style="text-align:right">{$xt.svs_total|num:2}</td>
+<td style="text-align:right">{$xt.promo_total|num:2}</td>
+<td style="text-align:right;background-color: rgb(153, 255, 153);">{$xt.total|num:2}</td>
+<td style="text-align:right;background-color: rgb(204, 255, 255);">{$xt.zay_compens_db|num:2}</td>
+</tr>
+</table>
+
+{foreach key=k item=i from=$x.data}
+
+<h1>{$i.head.fil_name}</h1>
+
+<h3><a target=_blank href="?action=bud_svod&dt={$smarty.request.dt}&page=zp">{$i.zp.fund_name}</a></h3>
+
+<table style="text-align: left;width:300px" border="1">
+<tbody>
+<tr style="text-align:center">
+<td>Продажи ФАКТ, {$valuta}</td>
+<td>{$i.zp.norm|num:2}% от объема продаж, {$valuta}</td>
+<td>Факт заработная плата "на руки", {$valuta}</td>
+<td>Заявки на активность, {$valuta}</td>
+<td>ИТОГО</td>
+</tr>
+<tr style="text-align:right">
+<td>{$i.zp.sales_fact|num:2}</td>
+<td>{$i.zp.sales_fact_perc_norm|num:2}</td>
+<td>{$i.zp.sum_zp|num:2}</td>
+<td>{$i.zp.zay_compens_distr|num:2}</td>
+<td>{$i.zp.zp_total|num:2}</td>
+</tr>  
+</tbody>
+</table>
+
+<h3><a target=_blank href="?action=bud_svod&dt={$smarty.request.dt}&page=gsm">{$i.gbo.fund_name}</a></h3>
+
+<table style="text-align: left;width:300px" border="1">
+<tbody>
+<tr style="text-align:center">
+<td>Продажи ФАКТ, {$valuta}</td>
+<td>({$i.gbo.norm|num:2}-0,5)% от объема продаж, {$valuta}</td>
+<td>0,5% от объема продаж, {$valuta}</td>
+<td>Сумма затрат на ГСМ, {$valuta}</td>
+<td>Заявки на активность, {$valuta}</td>
+<td>Код расчета</td>
+<td>ИТОГО</td>
+</tr>
+<tr style="text-align:right">
+<td>{$i.gbo.sales_fact|num:2}</td>
+<td>{$i.gbo.sales_fact_perc_norm05|num:2}</td>
+<td>{$i.gbo.sales_fact_perc_05|num:2}</td>
+<td>{$i.gbo.gsm_total1|num:2}</td>
+<td>{$i.gbo.zay_compens_distr|num:2}</td>
+<td>{$i.gbo.gsm}</td>
+<td>{$i.gbo.gsm_total|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+<h3><a target=_blank href="?action=bud_svod&dt={$smarty.request.dt}&page=tus">{$i.svs.fund_name}</a></h3>
+
+<table style="text-align: left;width:300px" border="1">
+<tbody>
+<tr style="text-align:center">
+<td>Продажи ФАКТ, {$valuta}</td>
+<td>Продажи ПРАЙС, {$valuta}</td>
+<td>Скидка / наценка, %</td>
+<td>Продажи {$i.svs.norm|num:2}%, {$valuta}</td>
+<td>Доп. заработок, {$valuta}</td>
+<td>Торговые условия, {$valuta}</td>
+<td>Нац. акции, {$valuta}</td>
+<td>Лок. акции, {$valuta}</td>
+<td>Заявки на активность, {$valuta}</td>
+<td style=" ">ИТОГО, {$valuta}</td>
+</tr>
+<tr style="text-align:right">
+<td>{$i.svs.sales_fact|num:2}</td>
+<td>{$i.svs.sales_price|num:2}</td>
+<td>{$i.svs.skid_nacenka|num:2}</td>
+<td>{$i.svs.sales_2_5|num:2}</td>
+<td>{$i.svs.dop_zarobotok|num:2}</td>
+<td>{$i.svs.svs_compens_distr|num:2}</td>
+<td>{$i.svs.act_compens_distr|num:2}</td>
+<td>{$i.svs.act_local_compens_distr|num:2}</td>
+<td>{$i.svs.zay_compens_distr|num:2}</td>
+<td>{$i.svs.svs_total|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+<h3><a target=_blank href="?action=bud_svod&dt={$smarty.request.dt}&page=promo">{$i.prm.fund_name}</a></h3>
+
+<table style="text-align: left;width:300px" border="1">
+<tbody>
+<tr style="text-align:center">
+<td>Нац. акции</td>
+<td>Лок. акции</td>
+<td>Заявки на активность - через дистрибутора, {$valuta}</td>
+<td>ИТОГО</td>
+<td style="background-color: rgb(204, 255, 255); ">Заявки на активность - через ДБ, {$valuta}</td>
+</tr>
+<tr style="text-align:right">
+<td>{$i.prm.act_compens_distr|num:2}</td>
+<td>{$i.prm.act_local_compens_distr|num:2}</td>
+<td>{$i.prm.zay_compens_distr|num:2}</td>
+<td>{$i.prm.promo_total|num:2}</td>
+<td style="background-color: rgb(204, 255, 255);">{$i.prm.zay_compens_db|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+
+{/foreach}

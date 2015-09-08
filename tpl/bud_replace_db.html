@@ -1,0 +1,99 @@
+<h1>Замена ДБ в бюджетах</h1>
+<form target="_self" method="POST" name=form_db_replace id=form_db_replace>
+
+<p>
+ДБ
+<select onchange="load_fil_list();" required name=from id=from>
+	<option></option>
+	{foreach key=key item=item from=$list}
+	<option value={$item.tn}>{$item.fio}{if $item.datauvol} - уволен {$item.datauvol}{/if}</option>
+	{/foreach}
+</select>
+Филиал (если нужен)
+<select id="fil" name=fil></select>
+=>
+ДБ
+<select required name=to id=to>
+	<option></option>
+	{foreach key=key item=item from=$list_actual}
+	<option value={$item.tn}>{$item.fio}</option>
+	{/foreach}
+</select>
+</p>
+
+<script>
+{literal}
+function load_fil_list()
+{
+$('#fil').load('?action=bud_replace_db_fil_list&nohead=1&tn='+$('#from').val());
+}
+{/literal}
+</script>
+
+<p><input type=submit name=replace id=replace value="Заменить"></p>
+
+<p>Замена ДБ будет произведена в следующих таблицах:</p>
+
+<p>
+<table border=1>
+<tr style="font-weight:bold">
+<td>описание</td>
+<td>таблица</td>
+<td>поле ДБ</td>
+<td>поле филиала</td>
+</tr>
+{foreach key=k item=i from=$bud_replace_db}
+<tr>
+<td>{$i.action_name}</td>
+<td>{$i.table_name}</td>
+<td>{$i.field_name}</td>
+<td>{$i.fil_field_name}</td>
+</tr>
+{/foreach}
+</table>
+</p>
+
+</form>
+
+<h1>Замена согласователей в заявках/отчетах по бюджетам</h1>
+
+<form target="_self" method="POST" name=form_accept_replace id=form_accept_replace>
+
+<p>
+<select name=from_accept id=from_accept>
+	<option></option>
+	{foreach key=key item=item from=$emp}
+	<option value="{$item.tn}">{$item.fio}{if $item.datauvol} - уволен {$item.datauvol}{/if}</option>
+	{/foreach}
+</select>
+=>
+<select name=to_accept id=to_accept>
+	<option></option>
+	{foreach key=key item=item from=$emp_actual}
+	<option value="{$item.tn}">{$item.fio}</option>
+	{/foreach}
+</select>
+</p>
+
+<p><input type=submit name=replace_accept id=replace_accept value="Заменить согласователей"></p>
+
+</form>
+
+
+
+
+
+<div style="display: inline;" id=div1></div>
+
+
+
+
+
+
+<script>
+{literal}
+	$(document).ready(function() {
+		$('#div1').load('?action=log&prg=bud_replace_db&select=1&nohead=1&dates_list1=01.01.2000&dates_list2=31.12.2100');
+	}); 
+{/literal}
+</script> 

@@ -1,0 +1,199 @@
+{include file="server_is_down.html"}
+
+<form target="_self" method="POST" name=form1 id=form1>
+<h1>Внесение данных в отчет. Маршрут: {$route.num} Ответственный: {$route.fio_otv}</h1>
+{if $route.svms_ok eq 1}
+	{assign var=disabled value='disabled'}
+	<h2>Отчет подтвержден СВМС {$route.svms_ok_date}. Внесение данных запрещено</h2>
+{/if}
+
+<p>
+Дата
+<select name=dates_list id=dates_list onchange="javascript:fn_submit('dates_list');">
+{foreach key=key item=item from=$dates_list}
+<option value="{$item.data_c}">{$item.data_c}</option>
+{/foreach}
+</select>
+<script>$("#dates_list option[value='{$smarty.request.dates_list}']").prop('selected', true);</script>
+
+<input value="Выбрать" name="select_month" type="submit"><br>
+</p>
+
+<table style="text-align: left; " border="1">
+<tbody>
+<tr>
+<td style="vertical-align: top; text-align: center;">Заполнен полностью<br></td>
+<td style="vertical-align: top; text-align: center;">Соответствует GPS<br></td>
+<td style="vertical-align: top; text-align: center;">Принят СВ МС<br></td>
+</tr>
+<tr>
+<td style="vertical-align: top; text-align: center; background-color: {if $rb_total.zapolnen}rgb(51, 255, 51){else}red{/if};">{if $rb_total.zapolnen}да{else}нет{/if}</td>
+<td style="vertical-align: top; text-align: center; background-color: {if $rb_total.is_red}red{else}rgb(51, 255, 51){/if};">{if $rb_total.is_red}нет{else}да{/if}</td>
+<td style="vertical-align: top; text-align: center; background-color: {if $route.svms_ok}rgb(51, 255, 51){else}red{/if};">{if $route.svms_ok}да {$route.svms_ok_date}{else}нет{/if}</td>
+</tr>
+</tbody>
+</table>
+
+
+<p><input {$disabled} name="save" value="Сохранить" type="submit"></p>
+
+<table style="text-align: left;" border="1" cellpadding=0 cellspacing=0>
+    <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+      <td>Область<br>Сеть<br>Юридическое название ТЗ<br>Адрес ТЗ</td>
+      <td>Заказчик</td>
+      <td>Работа<br>по<br>специи</td>
+      <td colspan=6>Отчетность</td>
+      <td style="background-color: rgb(204, 255, 255);">План<br>по МР,<br>мин</td>
+      <td style="background-color: rgb(204, 255, 255);">Факт<br>по МР,<br>мин</td>
+      <td style="background-color: rgb(204, 255, 255);">Отклонение<br>МР,<br>мин</td>
+      <td style="background-color: rgb(204, 255, 255);">Комментарии<br>по отклонению МР</td>
+<!--      <td style="background-color: rgb(255, 255, 204);">План по Ф, мин<br></td>-->
+<!--      <td style="background-color: rgb(255, 255, 204);">Факт по Ф, мин<br></td>-->
+<!--      <td style="background-color: rgb(255, 255, 204);">Отклонение Ф, мин<br></td>-->
+<!--      <td style="background-color: rgb(255, 255, 204);">Комментарии по отклонению Ф<br></td>-->
+<!--      <td style="background-color: rgb(255, 204, 255);">Расфас. ВК+ВП, ящ.<br></td>-->
+<!--      <td style="background-color: rgb(255, 204, 255);">Комментарии по отклонению расфас<br></td>-->
+      <td>GPS</td>
+    </tr>
+{foreach key=k item=i from=$d name=d}
+	{assign var=s1 value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s1 value=`$s1+1`}
+	{/foreach}
+	<tr>
+		<td rowspan={$s1+1}>{$smarty.foreach.d.iteration}.<br>{$i.head.tz_oblast}<br>{$i.head.net_name}<br>{$i.head.ur_tz_name}<br>{$i.head.tz_address}</td>
+		<td colspan=12 style="height:0px"></td>
+		<td rowspan={$s1+1} {if $i.total.is_red}bgcolor="red"{else}style="background-color: rgb(153, 255, 153);"{/if}>
+			{if $i.total.plan >10}
+				{if $i.head.in_out}
+					<nobr>Код агента: {$i.head.kod_ag}</nobr>
+					<nobr>Вход/выход: {$i.head.in_out}</nobr>
+				{/if}
+				<nobr>Отклонение: {$i.total.gps_delta|num:-1} мин.</nobr>
+			{else}
+				В анализе не учитывается
+			{/if}
+		</td>
+	</tr>
+		{foreach key=k1 item=i1 from=$i.data name=i}
+		<tr>
+			<td>{$smarty.foreach.i.iteration}. {$i1.ag_name}</td>
+			<td>{if $i1.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dates_list}&spec_id={$i1.spec_id}">Специя</a>{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep1}height:36px;width:36px;background-color:{$i1.reminders.rep1.color};{/if}">{if $i1.reminders.rep1}<img style="height:30px;width:30px;" src="design/mrc1.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep2}height:36px;width:36px;background-color:{$i1.reminders.rep2.color};{/if}">{if $i1.reminders.rep2}<img style="height:30px;width:30px;" src="design/mrc2.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep3}height:36px;width:36px;background-color:{$i1.reminders.rep3.color};{/if}">{if $i1.reminders.rep3}<img style="height:30px;width:30px;" src="design/mrc3.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep4}height:36px;width:36px;background-color:{$i1.reminders.rep4.color};{/if}">{if $i1.reminders.rep4}<img style="height:30px;width:30px;" src="design/mrc4.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep5}height:36px;width:36px;background-color:{$i1.reminders.rep5.color};{/if}">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="design/mrc5.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep6}height:36px;width:36px;background-color:{$i1.reminders.rep6.color};{/if}">
+				{if $i1.reminders.rep6}
+
+				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i1.spec_id}').show();">
+					<img style="height:29px;width:29px;" src="design/mrc6.png">
+				</div>
+				<div style="display:none;width:300px;" id="text_{$i1.spec_id}">{$i1.reminders.rep6.text}</div>
+				<script>
+				/*$('#div{$i1.spec_id}').hide();*/
+				</script>
+
+					<!--<span title="{$i1.reminders.rep6.text}"><img src="design/mrc6.png"></span>-->
+				{/if}
+			</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i1.vv eq 1}внеплановый визит{/if}{$i1.day_time_mr}</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;"><input {$disabled} size="7" name="rb[mr_fakt][{$i1.id}]" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_fakt}" class="number_int"></td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i1.mr_delta}</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">
+				<select {$disabled} onchange="$('#rb_mr_text_{$i1.id}').val(this.value);">
+					<option></option>
+					{foreach key=key item=item from=$routes_text}
+					<option value="{$item.name|escape}">{$item.name|escape}</option>
+					{/foreach}
+				</select>
+				<br>
+				<input {$disabled} size="35" name="rb[mr_text][{$i1.id}]" id="rb_mr_text_{$i1.id}" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_text|escape}">
+			</td>
+<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i1.vv eq 1}внеплановый визит{/if}{$i1.day_time_f}</td>-->
+<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;"><input {$disabled} size="7" name="rb[f_fakt][{$i1.id}]" {if $i1.day_enabled_f neq 1} disabled {/if} value="{$i1.f_fakt}" class="number_int"></td>-->
+<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i1.f_delta}</td>-->
+<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;"><input {$disabled} size="20" name="rb[f_text][{$i1.id}]" {if $i1.day_enabled_f neq 1} disabled {/if} value="{$i1.f_text|escape}"></td>-->
+<!--			<td style="background-color: rgb(255, 204, 255);text-align: center;"><input {$disabled} size="7" name="rb[ras][{$i1.id}]" value="{$i1.ras}" class="number_int"></td>-->
+<!--			<td style="background-color: rgb(255, 204, 255);text-align: center;"><input {$disabled} size="20" name="rb[ras_text][{$i1.id}]" value="{$i1.ras_text|escape}"></td>-->
+		</tr>
+		{/foreach}
+{/foreach}
+    <tr style="text-align: center;font-weight:bold">
+      <td colspan=9>ИТОГО</td>
+      <td>{$rb_total.day_time_mr}</td>
+      <td>{$rb_total.mr_fakt}</td>
+      <td>{$rb_total.mr_delta}</td>
+      <!--<td></td>
+      <td>{$rb_total.day_time_f}</td>
+      <td>{$rb_total.f_fakt}</td>
+      <td>{$rb_total.f_delta}</td>
+      <td></td>
+      <td>{$rb_total.ras}</td>-->
+    </tr>
+</table><br>
+<input {$disabled} name="save" value="Сохранить" type="submit">
+
+</form>
+
+<hr>
+
+<form target="_self" method="POST" name=form11 id=form11>
+
+<h1>Добавление внепланового визита</h1>
+
+<table id=vvt>
+<tbody>
+<tr>
+<td>
+<a href="javascript:void(0);" onClick="VVAdd('{$smarty.request.dates_list}');">[+]</a>
+</td>
+<td>
+ТЗ (Область, сеть, название, адрес)
+</td>
+<td>
+Заказчик
+</td>
+</tr>
+</tbody>
+</table>
+
+<input {$disabled} name="add_vv" value="Добавить" type="submit">
+
+
+
+
+</form>
+
+
+<script>
+{literal}
+function VVAdd(dates_list)
+{
+	var fd = new FormData();
+	fd.append('dates_list', dates_list);
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_new_vv&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#vvt > tbody:last').append(''+data+'');
+		}
+	});
+}
+{/literal}
+</script>
+
+<h1>Дополнительные отчеты</h1>
+
+<p>
+<a target=_blank href="?action=merch_report_sb&dt={$smarty.request.dates_list}">Сроки/браки</a>
+&nbsp&nbsp&nbsp
+Торговое оборудование
+&nbsp&nbsp&nbsp
+Соответствие договорным условиям
+</p>
+

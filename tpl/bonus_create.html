@@ -1,0 +1,94 @@
+<h3>Заявка на применение административных мер</h3>
+{if $smarty.request.add and $smarty.request.head and $smarty.request.data}
+	<p style="color:red">Заявка на применение административных мер добавлена и находится на рассмотрении</p>
+{else}
+	<form target="_self" method="POST" name=form_sz_accept id=form_sz_accept enctype="multipart/form-data">
+	{if $smarty.request.id}
+		<input type=hidden name=head[id] value={$smarty.request.id}>
+	{/if}
+	<p>
+	Административная мера<br>
+	{if $bonus_h.sz_not_seen or not $smarty.request.id}
+		<select required name=head[bonus_subtype] id=head_bonus_subtype>
+		<option></option>
+		{foreach item=i from=$bonus_types}
+		<option {if $i.level eq 1}disabled{/if} value={$i.id}>{if $i.level eq 2}&nbsp&nbsp&nbsp{/if}{$i.name}</option>
+		{/foreach}
+		</select>
+	{else}
+		{foreach item=i from=$bonus_types}
+			{if $bonus_h.bonus_subtype eq $i.id}{$i.name}{/if}
+		{/foreach}
+	{/if}
+	</p>
+	<p>
+	Детализация / описание (не более 1000 символов)<br>
+	{if $bonus_h.sz_not_seen or not $smarty.request.id}
+		<textarea cols=80 rows=5 name=head[text] id=head_text>{$bonus_h.text}</textarea>
+	{else}
+		{$bonus_h.text}
+	{/if}
+	</p>
+	{if $bonus_h.sz_not_seen or not $smarty.request.id}
+		<a href='javascript:void(0);' onclick="add_item('tn',0);">добавить менеджера</a>
+		&nbsp
+		<a href='javascript:void(0);' onclick="add_item('h_eta',0);">добавить агента</a>
+	{/if}
+	<table id=items border=0 cellpadding=3 cellspacing=0><tbody></tbody></table>
+	<p>
+	Приложения
+	{foreach key=k item=i from=$bonus_f}
+		<nobr><a target="_blank" href="sz_files/{$i.fn}">{$i.fn}</a></nobr>&nbsp;
+	{/foreach}
+	</p>
+	{if $bonus_h.sz_not_seen or not $smarty.request.id}
+		<p>Выбрать файлы <input type=file multiple name=files[]></p>
+		<p><input type="submit" name="add" id="add" value="Добавить заявку"></p>
+	{/if}
+	</form>
+	{literal}
+	<script>
+		function add_item(type,id,key,summa,cur_id,mz,ro)
+		{
+			var fd = new FormData();
+			fd.append('type', type);
+			fd.append('id', id);
+			fd.append('key', key);
+			fd.append('summa', summa);
+			fd.append('cur_id', cur_id);
+			fd.append('mz', mz);
+			fd.append('ro', ro);
+			$.ajax
+			(
+				{
+					type: 'POST',
+					url: '?action=bonus_create_list&nohead=1',
+					data: fd,
+					processData: false,
+					contentType: false,
+					success: function(data)
+					{
+						$('#items>tbody:last').append(''+data+'');
+						$('#data_'+id+'_'+type+' option[value="'+key+'"]').prop('selected', true);
+						$('#data_'+id+'_summa').val(summa);
+						$('#data_'+id+'_cur_id option[value="'+cur_id+'"]').prop('selected', true);
+						$('#data_'+id+'_mz option[value="'+mz+'"]').prop('selected', true);
+					}
+				}
+			);
+		}
+		function del_item(id)
+		{
+			$('#list_'+id).remove();
+		}
+	</script>
+	{/literal}
+	<script>
+		$('#head_bonus_subtype option[value="{$bonus_h.bonus_subtype}"]').prop('selected', true);
+		{foreach key=k item=i from=$bonus_b}
+			{if $i.tn}add_item('tn',{$i.id},'{$i.tn}','{$i.summa}','{$i.cur_id}','{$i.mz}'{if $bonus_h.sz_not_seen or not $smarty.request.id}{else},1{/if});{/if}
+			{if $i.h_eta}add_item('h_eta','{$i.id}','{$i.h_eta}','{$i.summa}','{$i.cur_id}','{$i.mz}'{if $bonus_h.sz_not_seen or not $smarty.request.id}{else},1{/if});{/if}
+		{/foreach}
+	</script>
+{/if}
+	

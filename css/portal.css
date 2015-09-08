@@ -1,0 +1,33 @@
+td.bg-broun {background-color: rgb(255, 255, 204);}
+td.bg-green {background-color: #00ff00;}
+td.bg-yellow {background-color: yellow;}
+td.bg-l-blue {background-color: rgb(204, 255, 255);}
+td.bg-red {background-color: red;}
+td.bg-f {background-color: #FFCC99;}
+td.bg-d {background-color: #CCFFFF;}
+td.bg-o {background-color: #FFFFCC;}
+td.bg-u {background-color: lightblue;}
+body {background-attachment: fixed;font-size: 12px;}
+table,select,input,textarea {font-size: 12px;}
+table {border-collapse:collapse;}
+table.main_works td {border-width: 1px;border-style: dotted;border-color: grey;}
+.top_right_dotted {border-top: 1px dotted grey;border-right: 1px dotted grey;}
+form input[type="submit"] {padding:12px;clear:left;font-size:12px;font-weight:normal;padding:0 0 0;margin:5;}
+.link{cursor:pointer;}
+
+#head-back-div {margin-left: auto;margin-right: auto;text-align: center;background-color: #F5E3BF;height: 75px;position: absolute;left: 0px;top: 0px;right: 0px;}
+#left-div {margin-left: 0;text-align: center;background-color: #F5E3BF;border: 0px dotted red; position: absolute;left: 0px;top: 0px;}
+#right-div {margin-right: 0;text-align: right;background-color: #F5E3BF;border: 0px dotted red; width: 200px;position: absolute;right: 10px;top: 10px;font-weight: bold;}
+#center-div {margin-left: auto;margin-right: auto;text-align: center;background-color: #F5E3BF;position: absolute;left: 50%;top: 0px;width:0px;margin-left: 0px;margin-top: 0px;}
+#bottom-div {margin-left: auto;margin-right: auto;text-align: center;background-color: #8C002F;position: absolute;color: #FFFFCC;font-weight: bold;left: 0px;right: 0px;padding-top: 5px;padding-bottom: 5px;}
+#content-div {margin-left: auto;margin-right: auto;position:absolute;left: 0px;right: 0px;top: 75px}
+
+/* show popup pict */
+.pics { position:relative; top:0px; left:0px; display:inline-block;}
+.pics img { display:block;}
+.hov { z-index:999; position:absolute; top:60px; left:-200px; visibility:hidden;}
+
+#toTop{position:fixed;right:15px;top:45%;width:44px;height:44px;background:url('/design/butt_up.png') no-repeat 0 0;display:none;z-index:50}
+/*.lt-ie7 #toTop{display:none!important;visibility:hidden!important}*/
+a#toTop:hover{opacity:.7}
+a#toTop:active{}

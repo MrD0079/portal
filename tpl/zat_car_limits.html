@@ -1,0 +1,67 @@
+<h3>Авто и лимиты</h3>
+
+<form name=form_zat_car id=form_zat_car target=_self method=post enctype="multipart/form-data">
+{if $is_admin or $self or $is_acceptor or $is_do}
+{assign var=disabled value=''}
+{else}
+{assign var=disabled value='disabled'}
+{/if}
+<p><input type=submit name=save_car {$disabled} value="Сохранить параметры авто"></p>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="text-align: center;">
+		<td>Марка авто</td>
+		<td>Расход по паспорту</td>
+	</tr>
+	<tr style="text-align: center;">
+		<td><input {$disabled} size=30 name=car[car_brand] value="{$car_brand}"></td>
+		<td><input {$disabled} class="number" size=10 name=car[car_rashod] value="{$car_rashod}"></td>
+	</tr>
+</table>
+</form>
+
+{if $is_admin or $is_acceptor or $is_do}
+{assign var=disabled value=''}
+{else}
+{assign var=disabled value='disabled'}
+{/if}
+
+<form name=form_zat_car_limits id=form_zat_car_limits target=_self method=post enctype="multipart/form-data">
+<p><input type=submit name=save_limits {$disabled} value="Изменить лимиты"></p>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="text-align: center;">
+		<td>Командировочные, {$valuta}</td>
+		<td>Транспортные, {$valuta}</td>
+		<td>Лимит топлива, л.</td>
+		<td>Питание, {$valuta}</td>
+		<td>Представительские, {$valuta}</td>
+		<td>Канцтовары, {$valuta}</td>
+		<td>Моб. связь, {$valuta}</td>
+		<td>На основе СЗ №</td>
+		<td>Кто и когда изменил</td>
+	</tr>
+	<tr style="text-align: center; font-weight: bold; background-color: rgb(153, 255, 153);">
+		<td><input {$disabled} class="number" size=10 name=limits[limitkom] value="{$limits_current.limitkom}"></td>
+		<td><input {$disabled} class="number" size=10 name=limits[limittrans] value="{$limits_current.limittrans}"></td>
+		<td><input {$disabled} class="number" size=10 name=limits[limit_car_vol] value="{$limits_current.limit_car_vol}"></td>
+		<td><input {$disabled} class="number" size=10 name=limits[limitpit] value="{$limits_current.limitpit}"></td>
+		<td><input {$disabled} class="number" size=10 name=limits[limitpred] value="{$limits_current.limitpred}"></td>
+		<td><input {$disabled} class="number" size=10 name=limits[limitkanc] value="{$limits_current.limitkanc}"></td>
+		<td><input {$disabled} class="number" size=10 name=limits[limitmob] value="{$limits_current.limitmob}"></td>
+		<td><input {$disabled} class="number_int" size=10 name=limits[sz_id] required></td>
+		<td><input {$disabled} type=hidden name=limits[lu_tn] value="{$exp_tn}"></td>
+	</tr>
+	{foreach key=k item=i from=$limits}
+	<tr style="text-align: center;">
+		<td>{$i.limitkom}</td>
+		<td>{$i.limittrans}</td>
+		<td>{$i.limit_car_vol}</td>
+		<td>{$i.limitpit}</td>
+		<td>{$i.limitpred}</td>
+		<td>{$i.limitkanc}</td>
+		<td>{$i.limitmob}</td>
+		<td><a target=_blank href="?action=sz_reestr&sz_id={$i.sz_id}">{$i.sz_id}</a></td>
+		<td>{$i.lu_fio} {$i.lu_txt}</td>
+	</tr>
+	{/foreach}
+</table>
+</form>

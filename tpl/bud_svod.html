@@ -1,0 +1,79 @@
+
+<form name=bud_svod id=bud_svod target=_self method=post enctype="multipart/form-data">
+
+<h1>
+Отчет по фондам
+{if $smarty.request.print}
+-
+{foreach key=key item=item from=$dt}{if $item.sd_c eq $smarty.request.dt}{$item.my}{/if}{/foreach}
+&nbsp
+-
+{if $smarty.request.page eq 'zp'}Заработная плата{/if}
+{if $smarty.request.page eq 'gsm'}ГСМ{/if}
+{if $smarty.request.page eq 'tus'}СВС{/if}
+{if $smarty.request.page eq 'promo'}Промо{/if}
+{/if}
+</h1>
+
+{if not $smarty.request.print}
+<p>
+Отчетный месяц
+<select
+	required="true"
+	name=dt
+	id=dt
+	onChange="
+	load_page();
+	"
+>
+	{foreach key=key item=item from=$dt}
+		<option {if $item.sd_c eq $smarty.request.dt}selected{/if} value="{$item.sd_c}">{$item.my}</option>
+	{/foreach}
+</select>
+</p>
+{else}
+<input name=dt id=dt type=hidden value="{$smarty.request.dt}">
+{/if}
+
+{if not $smarty.request.print}
+<table cellpadding=5>
+<tr>
+<td><a id=a_zp class=a_page href="javascript:void(0);" onClick="load_page('zp');">Заработная плата</a></td>
+<td><a id=a_gsm class=a_page href="javascript:void(0);" onClick="load_page('gsm');">ГСМ</a></td>
+<td><a id=a_tus class=a_page href="javascript:void(0);" onClick="load_page('tus');">СВС</a></td>
+<td><a id=a_promo class=a_page href="javascript:void(0);" onClick="load_page('promo');">Промо</a></td>
+</tr>
+</table>
+{/if}
+
+<p>
+<div id=page style="display: inline;">
+</div>
+</p>
+
+<script>
+{literal}
+v_page='zp';
+function load_page(p_page)
+{
+x=loadwait_show('page');
+(p_page==null)?p_page=v_page:null;
+v_page=p_page;
+$('.a_page').css('font-weight','');
+$('#a_'+p_page).css('font-weight','bold');
+$('#page').load('?action=bud_svod_'+p_page+'&nohead=1',{page:p_page,dt:$('#dt').val()},function(){loadwait_hide(x);});
+}
+
+{/literal}
+
+{if $smarty.request.page}load_page('{$smarty.request.page}');{/if}
+
+</script>
+
+
+
+
+
+</form>
+
+

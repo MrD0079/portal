@@ -1,0 +1,30 @@
+<br>
+
+<font style="color:red">
+Данный сотрудник является держателем бюджета (ДБ).<br>
+Необходимо указать, на кого будут перенесены данные.<br>
+Данные нельзя переносить на уже работающего ДБ</font>
+
+<br>
+
+<select required
+{if $smarty.request.id}
+name="free_staff[{$smarty.request.id}][tn_new_db]"
+id="free_staff_{$smarty.request.id}_tn_new_db"
+{else}
+name="free_staff[tn_new_db]"
+id="free_staff_tn_new_db"
+{/if}
+>
+	<option></option>
+	{foreach key=k item=i from=$my_emp_all}
+	<option value="{$i.tn}">{$i.fio}</option>
+	{/foreach}
+</select>
+
+{if $smarty.request.id}
+<script>
+$('#free_staff_{$smarty.request.id}_tn_new_db').val({$smarty.request.db});
+</script>
+{/if}
+

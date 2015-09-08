@@ -1,0 +1,193 @@
+
+
+{include file="ocenka_events.html"}
+
+{if $smarty.request.event > 0}
+
+{if $test_enabled eq 1}
+	<div style="text-align:left">&nbsp&nbsp&nbsp<a href="?action=ocenka_test">Пройти тест</a>&nbsp&nbsp&nbsp</div>
+{/if}
+
+<h1>Список оцениваемых Вами сотрудников:</h1>
+
+{if $error eq 1}
+	<p><font style="color:rgb(255,0,0);"><b>Ошибка при сохранении, возможно неправильные данные: {$error_text}</b></font></p>
+{/if}
+
+<h3>Прямые подчиненные</h3>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>Т.Н.</td>
+		<td>Ф.И.О.</td>
+		<td>Должность</td>
+		<td>Самооценка</td>
+		<td>Оценка руководителя</td>
+		<td>Оценка экспертов (средняя)</td>
+		<td>Оценка за тест</td>
+		<td>Итого</td>
+		<td>Участие в ДЦ</td>
+		<td>Отчет</td>
+	</tr>
+	{foreach key=key item=emp_list_item from=$emp_list}
+	{if $emp_list_item.full eq 1 or $emp_list_item.full eq -2}
+	<tr>
+		<td align=right>{$emp_list_item.emp_tn}</td>
+		<td><a href="?action=ocenka&full={$emp_list_item.full}&emp_tn={$emp_list_item.emp_tn}&event={$smarty.request.event}"><b>{$emp_list_item.emp_fio}</b></a></td>
+		<td>{$emp_list_item.proff}</td>
+		<td align=right>{$emp_list_item.self_score_t|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.chief_score_t|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.exp_avg_score_t|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.test_result|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.score_t+$emp_list_item.test_result|default:'0,00'|num:2}</td>
+		<td align=center {if $emp_list_item.dc eq 1}style="background-color:rgb(153, 255, 153);"{/if}>{if $emp_list_item.dc eq 1}да{/if}</td>
+		<td><a target=_blank href="?action=ocenka_report_self&emp_tn={$emp_list_item.emp_tn}&event={$smarty.request.event}">отчет</a></td>
+	</tr>
+	{/if}
+	{/foreach}
+</table>
+
+<h3>Непрямые подчиненные</h3>
+
+<p><a href="javascript:void(0)" onclick="javascript:$('#slaves_0').toggle();">Показать/скрыть</a></p>
+
+<div id="slaves_0">
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>Т.Н.</td>
+		<td>Ф.И.О.</td>
+		<td>Должность</td>
+		<td>Самооценка</td>
+		<td>Оценка руководителя</td>
+		<td>Оценка экспертов (средняя)</td>
+		<td>Оценка за тест</td>
+		<td>Итого</td>
+		<td>Участие в ДЦ</td>
+		<td>Отчет</td>
+	</tr>
+	{foreach key=key item=emp_list_item from=$emp_list}
+	{if $emp_list_item.full eq 0}
+	<tr>
+		<td align=right>{$emp_list_item.emp_tn}</td>
+		<td>
+			{if $emp_list_item.ocenka eq 1}
+				<a href="?action=ocenka&full={$emp_list_item.full}&emp_tn={$emp_list_item.emp_tn}&event={$smarty.request.event}"><b>{$emp_list_item.emp_fio}</b></a>
+			{else}
+				{$emp_list_item.emp_fio}
+			{/if}
+		</td>
+		<td>{$emp_list_item.proff}</td>
+		<td align=right>{$emp_list_item.self_score_t|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.chief_score_t|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.exp_avg_score_t|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.test_result|default:'0,00'|num:2}</td>
+		<td align=right>{$emp_list_item.score_t+$emp_list_item.test_result|default:'0,00'|num:2}</td>
+		<td align=center {if $emp_list_item.dc eq 1}style="background-color:rgb(153, 255, 153);"{/if}>{if $emp_list_item.dc eq 1}да{/if}</td>
+		<td><a target=_blank href="?action=ocenka_report_self&emp_tn={$emp_list_item.emp_tn}&event={$smarty.request.event}">отчет</a></td>
+	</tr>
+	{/if}
+	{/foreach}
+</table>
+
+</div>
+
+<script>$('#slaves_0').hide();</script>
+
+<hr>
+
+{if $smarty.request.emp_tn neq 0}
+<form name=form target=_self method=post>
+	<input {$disabled} type=hidden name=otdel value="{$smarty.request.otdel}">
+	<input {$disabled} type=hidden name=emp_tn value="{$smarty.request.emp_tn}">
+	<h3>Для оценки выбран следующий сотрудник: {$emp_fio}</h3>
+	<p><b>Критерии оценки:</b></p>
+	<table border=1 cellpadding=3 cellspacing=0>
+		<tr style="font-weight:bold;text-align:center">
+			<td>Название (комментарий)</td>
+			<td>Вес</td>
+			<td>Оценка эксперта</td>
+			<td>Итог</td>
+		</tr>
+		{foreach key=key item=emp_crit from=$emp_crit}
+		<tr>
+			<td style="text-align:left"><b>{$emp_crit.name|nl2br}</b><br>{$emp_crit.description|nl2br}</td>
+			<td style="text-align:center">{$emp_crit.weight|num:2}</td>
+			<td style="text-align:center" width=60>
+				<input {$disabled} required size=5 maxlength=4 class="number_int_03" name="crit[{$emp_crit.id_num}]" value={$emp_crit.score|default:'0'}>
+			</td>
+			<td style="text-align:center">{$emp_crit.total|num:2}</td>
+		</tr>
+		{/foreach}
+	</table>
+	<script>{literal}$(function(){$('.number_int_03').autoNumeric('init',{aSep: '',mDec: 0,vMin: 0,vMax: 3});});{/literal}</script>
+
+	<p>
+	<b>
+	{if $smarty.request.emp_tn eq $smarty.session._authsession.data.tn}
+	Перечислите наиболее значимые с Вашей точки зрения предложения,<br>внесенные Вами в отчетном периоде по повышению эффективности деятельности подразделения, компании
+	{elseif $smarty.request.full eq 1}
+	Выводы руководителя для оценочной комиссии
+	{else}
+	Комментарий эксперта
+	{/if}
+	(не более 3000 символов):
+	</b>
+	</p>
+
+	<p><textarea {$disabled} ROWS=3 COLS=80 maxlength=3000 name=comm>{$comm}</textarea></p>
+
+	<p><b>Участие в девелопмент-центре:</b></p>
+
+	<table border=1 cellspacing=0 cellpadding=3>
+		<tr align=center>
+			<td>1. Оцениваемый</td>
+			<td>2. Непосредственный руководитель</td>
+			<td>3. Принятое решение</td>
+		</tr>
+		<tr align=center>
+			<td>Я принял решение участвовать в девелопмент-центре</td>
+			<td>Согласен направить подчиненного в девелопмент-центр</td>
+			<td>Сотрудник направляется в девелопмент-центр</td>
+		</tr>
+		<tr align=center>
+			<td {if $dev_emp eq 1}style="background-color:green"{/if}>
+				{if $smarty.request.emp_tn eq $smarty.session._authsession.data.tn}
+					<input {$disabled} type=radio name=exp_comment[dev_emp] value=1>да
+					<br>
+					<input {$disabled} type=radio name=exp_comment[dev_emp] value=0>нет
+					<script>$("input[name='exp_comment[dev_emp]'][value='{1-$dev_emp}']").attr('checked',true);</script>
+				{else}
+					{if $dev_emp eq 1}да{else}нет{/if}
+				{/if}
+			</td>
+			<td {if $dev_chief eq 1}style="background-color:green"{/if}>
+				{if $smarty.request.emp_tn neq $smarty.session._authsession.data.tn and $smarty.request.full eq 1}
+					<input {$disabled} type=radio name=exp_comment[dev_chief] value=1>да
+					<br>
+					<input {$disabled} type=radio name=exp_comment[dev_chief] value=0>нет
+					<script>$("input[name='exp_comment[dev_chief]'][value='{1-$dev_chief}']").attr('checked',true);</script>
+				{else}
+					{if $dev_chief eq 1}да{else}нет{/if}
+				{/if}
+			</td>
+			<td {if $dev_sol eq 1}style="background-color:green"{/if}>
+				{if $smarty.request.emp_tn neq $smarty.session._authsession.data.tn and $smarty.request.full eq 1}
+					<input {$disabled} type=radio name=exp_comment[dev_sol] value=1>да
+					<br>
+					<input {$disabled} type=radio name=exp_comment[dev_sol] value=0>нет
+					<script>$("input[name='exp_comment[dev_sol]'][value='{1-$dev_sol}']").attr('checked',true);</script>
+				{else}
+					{if $dev_sol eq 1}да{else}нет{/if}
+				{/if}
+			</td>
+		</tr>
+	</table>
+
+	<p><input {$disabled} type=submit name=save id=save value=Сохранить></p>
+
+</form>
+
+{/if}
+
+{/if}

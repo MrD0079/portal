@@ -1,0 +1,174 @@
+<h3>Реестр ТМЦ</h3>
+
+<form target="_self" method="POST" name=form_tmc_reestr id=form_tmc_reestr>
+
+{if not $smarty.request.print}
+
+
+<table>
+	<tr>
+		<td style="text-align:right">Дата выдачи с/по</td>
+		<td>
+			<input size=10 class="datepicker" name=dates_list_t_1 id=dates_list_t_1>
+			<input size=10 class="datepicker" name=dates_list_t_2 id=dates_list_t_2>
+			<script>
+				$('#dates_list_t_1').val('{$smarty.request.dates_list_t_1}');
+				$('#dates_list_t_2').val('{$smarty.request.dates_list_t_2}');
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Сотрудник</td>
+		<td>
+<select name=owner id=owner>
+	<option value=0></option>
+	{foreach key=key item=item from=$owners_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<script>$("#owner option[value='{$smarty.request.owner}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Страна</td>
+		<td>
+	<select name=country id=country>
+	<option value='0'></option>
+	{foreach key=key item=item from=$countries}
+	{if $item.checked eq 1}
+	<option value='{$item.cnt_kod}'>{$item.cnt_name}</option>
+	{/if}
+	{/foreach}
+	</select>
+	<script>
+	{if $smarty.request.country neq ''}
+		$("#country option[value='{$smarty.request.country}']").prop('selected', true);
+	{else}
+		$("#country option[value='{$cnt_kod}']").prop('selected', true);
+	{/if}
+	</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Должность</td>
+		<td>
+<select name=tmc_pos_id id=tmc_pos_id>
+	<option value=0></option>
+	{foreach key=key item=item from=$pos_list}
+	<option value={$item.pos_id}>{$item.pos_name}</option>
+	{/foreach}
+</select>
+<script>$("#tmc_pos_id option[value='{$smarty.request.tmc_pos_id}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Регион</td>
+		<td>
+<select name=region_name id=region_name>
+	<option value=0></option>
+	{foreach key=key item=item from=$region_list}
+	<option value="{$item.region_name}">{$item.region_name}</option>
+	{/foreach}
+</select>
+<script>$("#region_name option[value='{$smarty.request.region_name}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Подразделение</td>
+		<td>
+<select name=department_name id=department_name>
+	<option value=0></option>
+	{foreach key=key item=item from=$department_list}
+	<option value="{$item.department_name}">{$item.department_name}</option>
+	{/foreach}
+</select>
+<script>$("#department_name option[value='{$smarty.request.department_name}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">серийный номер</td>
+		<td>
+			<input name=sn id=sn>
+			<script>$('#sn').val("{$smarty.request.sn}");</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right"></td>
+		<td>
+			<input checked="checked" name="removed" id="removed" value="0" type="radio">на подотчете
+			<input name="removed" id="removed" value="1" type="radio">снятые
+			<input name="removed" id="removed" value="2" type="radio">списанные
+			<input name="removed" id="removed" value="3" type="radio">все
+			<script>$("input[name=removed][value={$smarty.request.removed}]").attr('checked',true);</script>
+		</td>
+	</tr>
+</table>
+
+<p>
+	<input type="submit" name="select" id="select" value="Отобразить реестр">
+	{if $is_do}
+		<input type="submit" name="save" id="save" value="Сохранить">
+	{/if}
+
+	<a href="?action=tmc_reestr&select=1&print=1&excel=1&filename=Реестр ТМЦ">Экспорт в Excel</a>
+
+</p>
+
+{/if}
+
+
+
+{if $smarty.request.select or $smarty.request.tmc_id}
+
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>ФИО сотрудника</td>
+		<td>Должность сотрудника</td>
+		<td>Тип ТМЦ</td>
+		<td>Наименование / модель</td>
+		<td>Серийный номер</td>
+		<td>Инвентарный номер АВК</td>
+		<td>Состояние при выдаче</td>
+		<td>Дата выдачи</td>
+		<td>Внесение записи о выдаче</td>
+		<td>Сотрудник подтвердил</td>
+		<td>Закупочная стоимость</td>
+		<td>Дата закупки</td>
+		<td>Дата закрепления в бух. учете</td>
+		<td>Комментарий</td>
+		<td style="background-color: rgb(204, 255, 255);">Снято с сотрудника</td>
+		<td style="background-color: rgb(204, 255, 255);">Состояние при снятии</td>
+		<td style="background-color: rgb(204, 255, 255);">Дата снятия</td>
+		<td style="background-color: rgb(204, 255, 255);">Перенесено на сотрудника</td>
+		<td style="background-color: rgb(204, 255, 255);">Внесение записи о снятии</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td style="text-align:center">{$i.tmcs}</td>
+		<td>{$i.name}</td>
+		<td style="text-align:center;{if not $i.sn}background-color:red;{/if}">{$i.sn}</td>
+		<td style="text-align:center">{$i.num_avk}</td>
+		<td style="text-align:center">{$i.state}</td>
+		<td style="text-align:center">{$i.dtv}</td>
+		<td>{$i.add_fio} {$i.add_lu}</td>
+		<td style="text-align:center">{$i.accepted_lu}</td>
+		<td>{$i.zakup_price}</td>
+		<td>{$i.zakup_dt}</td>
+		<td>{$i.buh_dt}</td>
+		<td>{$i.comm|nl2br}</td>
+		<td style="background-color: rgb(204, 255, 255); text-align:center">{if $i.removed}да{/if}</td>
+		<td style="background-color: rgb(204, 255, 255); text-align:center">{$i.state_removed}</td>
+		<td style="background-color: rgb(204, 255, 255); text-align:center">{$i.dtr}</td>
+		<td style="background-color: rgb(204, 255, 255);">{$i.moved_fio}</td>
+		<td style="background-color: rgb(204, 255, 255);">{$i.removed_fio} {$i.removed_lu}</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:left;font-weight:bold"><td>ИТОГО: {$d1}</td></tr>
+</table>
+
+{/if}
+
+</form>

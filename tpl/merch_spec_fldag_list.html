@@ -1,0 +1,29 @@
+<b>Отображаемые поля в отчетах</b>
+<br>
+	{assign var=s value=0}
+	{foreach key=key item=item from=$merch_spec_fld_ag name=d}
+	{if $item.checked}
+	{assign var=s value=`$s+1`}
+	{/if}
+	{/foreach}
+	{foreach key=key item=item from=$merch_spec_fld_ag name=d}
+		<input
+		name=head_agents[{$item.id}]
+		type=checkbox
+		value="{$item.id}"
+		{if $item.checked or $s eq 0}checked{/if}
+		onclick="$('#selected_changed_{$item.id}').val(this.checked?'on':'off')"
+		>
+		<input
+			type=hidden
+			value=""
+			name=selected_changed[{$item.id}]
+			id=selected_changed_{$item.id}
+		>
+		{if $s eq 0}
+		<script>
+			$('#selected_changed_{$item.id}').val('on');
+		</script>
+		{/if}
+		{$item.text|escape}
+	{/foreach}

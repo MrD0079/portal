@@ -1,0 +1,152 @@
+<h1>Поля заявки/отчета</h1>
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+<p><input type=submit value="сохранить"></p>
+
+<p style="color:red">
+пример формулы: $переменная1 + $переменная2 - $переменная3 * $переменная4 / $переменная5
+<br>
+названия переменных указываются в полях "переменная заявки" и "переменная отчета" без значка доллара
+<br>
+в формуле могут быть задействованы только числовые поля
+</p>
+
+<p>новое поле <input name=new[0][name] size=40><input type=hidden name=new[0][dpt_id] value="{$dpt_id}"></p>
+<table border=1 cellspacing=5 cellpadding=5 style="width:600px">
+	{foreach key=key item=item from=$bud_ru_ff name=ff}
+	{if $smarty.foreach.ff.iteration%5 eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2>удалить / порядок / тип / Admin_Id / Var1</td>
+		<td rowspan=2>
+			<div style="background-color:#80FFFF;display:inline">название поля заявки / обязательное поле заявки / выводить в реестре</div>
+			<br>
+			<div style="background-color:#FFFF80;display:inline">название поля отчета / обязательное поле отчета / выводить в отчете</div>
+		</td>
+		{foreach key=key1 item=item1 from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}{/foreach}
+		<td colspan="{$smarty.foreach.bud_ru_ff_st_ras.total}">cтатьи расходов</td>
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+	{foreach key=key1 item=item1 from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
+		<td>{$item1.name}</td>
+	{/foreach}
+	</tr>
+	{/if}
+
+	{cycle assign='bgcolor' values="#FFB7B7,#D8AAAA"}
+
+	<tr style="text-align:center;background-color:{$bgcolor}">
+		<td rowspan=2>
+			<input type=checkbox name=delete[{$item.id}] value="{$item.path|escape}">
+			<input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=2>
+			<select name=update[{$item.id}][type] id=update_{$item.id}_type
+				onChange="
+				this.value=='list'?$('#subtype_{$item.id}_select').show():$('#subtype_{$item.id}_select').hide();
+				$('#subtype_{$item.id}_select').val(0);
+				this.value=='formula'?$('#update_{$item.id}_formula').show():$('#update_{$item.id}_formula').hide();
+				this.value=='formula'?$('#update_{$item.id}_rep_formula').show():$('#update_{$item.id}_rep_formula').hide();
+				"
+			>
+				<option value="string">Строка</option>
+				<option value="textarea">Текст</option>
+				<option value="number_int">Целое число</option>
+				<option value="number">Дробное число</option>
+				<option value="datepicker">Дата</option>
+				<option value="file">Файл</option>
+				<option value="list">Список</option>
+				<option value="formula">Формула</option>
+				<option value="bool">Булево</option>
+			</select>
+			<select name=update[{$item.id}][subtype] id="subtype_{$item.id}_select">
+				<option></option>
+				{foreach key=key1 item=item1 from=$bud_ru_ff_subtypes}
+				<option value={$item1.id}>{$item1.name}</option>
+				{/foreach}
+			</select>
+			<input name=update[{$item.id}][formula] id=update_{$item.id}_formula value="{$item.formula}" size=30>
+			<input name=update[{$item.id}][rep_formula] id=update_{$item.id}_rep_formula value="{$item.rep_formula}" size=30>
+			<script>
+				$('#update_{$item.id}_type').val("{$item.type}"==""?"string":"{$item.type}");
+				$('#subtype_{$item.id}_select').val({$item.subtype});
+				"{$item.type}"!="list"?$('#subtype_{$item.id}_select').hide():null;
+				"{$item.type}"!="formula"?$('#update_{$item.id}_formula').hide():null;
+				"{$item.type}"!="formula"?$('#update_{$item.id}_rep_formula').hide():null;
+			</script>
+			<nobr>admin_id<input {if not $is_admin}disabled{/if} name=update[{$item.id}][admin_id] size=1 value="{$item.admin_id}"></nobr>
+			<nobr>var1<input {if not $is_admin}disabled{/if} name=update[{$item.id}][var1] size=1 value="{$item.var1}"></nobr>
+			{if $item.type eq 'number' or $item.type eq 'number_int'}
+			<nobr>переменная заявки<input {if not $is_admin}disabled{/if} name=update[{$item.id}][var_name] size=5 value="{$item.var_name}"></nobr>
+			<nobr>переменная отчета<input {if not $is_admin}disabled{/if} name=update[{$item.id}][rep_var_name] size=5 value="{$item.rep_var_name}"></nobr>
+			{/if}
+		</td>
+		<td style="background-color:#80FFFF">
+			<nobr>
+			<textarea style="background-color:#80FFFF" name=update[{$item.id}][name]>{$item.name|escape}</textarea>
+			<input
+				type=checkbox
+				id=chk_{$item.id}_required
+				onclick="
+					$('#update_{$item.id}_required').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_required').prop('checked','{$item.required}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][required] id=update_{$item.id}_required value="{$item.required}">
+			<input
+				type=checkbox
+				id=chk_{$item.id}_r_visible
+				onclick="
+					$('#update_{$item.id}_r_visible').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_r_visible').prop('checked','{$item.r_visible}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][r_visible] id=update_{$item.id}_r_visible value="{$item.r_visible}">
+			</nobr>
+		</td>
+		{foreach key=bk item=bi from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
+			{assign var="x" value="0"}
+			{foreach key=sk item=si from=$bud_ru_ff_st name=bud_ru_ff_st}
+				{if $si.ff eq $item.id and $si.st eq $bi.id}
+					{assign var="x" value="1"}
+				{/if}
+			{/foreach}
+			<td rowspan=2>
+			<div {if $x eq 1}style="background-color:#26FF00"{/if}>
+				<input
+					type=checkbox
+					id=chk_ff_{$bi.id}_{$item.id}
+					onclick="
+						$('#update_ff_{$bi.id}_{$item.id}').val(this.checked?1:0);
+					"
+				>
+			</div>
+			<script>$('#chk_ff_{$bi.id}_{$item.id}').prop('checked','{$x}'=='1'?true:false);</script>
+			<input type=hidden name=update_ff[{$bi.id}][{$item.id}] id=update_ff_{$bi.id}_{$item.id} value="{$x}">
+			</td>
+		{/foreach}
+	</tr>
+	<tr style="text-align:center">
+		<td style="background-color:#FFFF80">
+			<nobr>
+			<textarea style="background-color:#FFFF80" name=update[{$item.id}][rep_name]>{$item.rep_name|escape}</textarea>
+			<input
+				type=checkbox
+				id=chk_{$item.id}_rep_required
+				onclick="
+					$('#update_{$item.id}_rep_required').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_rep_required').prop('checked','{$item.rep_required}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][rep_required] id=update_{$item.id}_rep_required value="{$item.rep_required}">
+			<input
+				type=checkbox
+				id=chk_{$item.id}_rep_r_visible
+				onclick="
+					$('#update_{$item.id}_rep_r_visible').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_rep_r_visible').prop('checked','{$item.rep_r_visible}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][rep_r_visible] id=update_{$item.id}_rep_r_visible value="{$item.rep_r_visible}">
+			</nobr>
+		</td>
+	</tr>
+	{/foreach}
+</table>
+</form>

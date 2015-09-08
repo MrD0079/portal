@@ -1,0 +1,85 @@
+<h3>Приложение к акту выполненных работ</h3>
+<h3>СПД МС - {$spd_fio}, {$period}</h3>
+
+{if not $smarty.request.print}
+	<p><a target=_blank href="?action=rep_spdms_body&month_list={$smarty.request.month_list}&tn={$smarty.request.tn}&print=1">Для печати</a></p>
+{/if}
+
+
+{if not $smarty.request.print}
+	<p><a target=_blank href="?action=rep_spdms_body&month_list={$smarty.request.month_list}&tn={$smarty.request.tn}&print=1&excel=1&filename=Приложение к акту выполненных работ - {$spd_fio} - {$period}">Excel</a></p>
+{/if}
+
+{if not $smarty.request.print}
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>День<br>визита</td>
+		<td>Название ТП</td>
+		<td>Заказчик</td>
+		<td>Плановое<br>время,<br>мин</td>
+		<td>Фактическое<br>время,<br>мин</td>
+		<td>OOS</td>
+		<td>Коментарии</td>
+		<td>Список<br>задач</td>
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+		{foreach key=k1 item=i1 from=$i.agents name=agents}
+		{/foreach}
+		<tr>
+			<td style="text-align:center" rowspan={$smarty.foreach.agents.total+1}>
+				{$i.visitdate_txt}
+			</td>
+			<td rowspan={$smarty.foreach.agents.total+1}>
+				Область {$i.obl}, Город {$i.city}, Сеть {$i.net_name}
+				<br>
+				Юридическое название ТЗ {$i.tp_ur}
+				<br>
+				Адрес ТЗ {$i.tp_addr}
+			</td>
+			<td colspan=6></td>
+		</tr>
+
+			{foreach key=k1 item=i1 from=$i.agents}
+		<tr>
+			<td>{$i1.ag_name}</td>
+			<td style="text-align:right">{$i1.plan}</td>
+			<td style="text-align:right">{$i1.fakt}</td>
+			<td style="text-align:right">{$i1.oos}</td>
+			<td>{$i1.comm}</td>
+			<td>{$i1.tasks|nl2br}</td>
+		</tr>
+			{/foreach}
+	{/foreach}
+</table>
+{else}
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>День<br>визита</td>
+		<td>Название ТП</td>
+		<td>Заказчик</td>
+		<td>Плановое<br>время,<br>мин</td>
+		<td>Фактическое<br>время,<br>мин</td>
+		<td>OOS</td>
+		<td>Коментарии</td>
+		<td>Список<br>задач</td>
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+		{foreach key=k1 item=i1 from=$i.agents}
+		<tr>
+			<td style="text-align:center" rowspan={$smarty.foreach.agents.total+1}>
+				{$i.visitdate_txt}
+			</td>
+			<td rowspan={$smarty.foreach.agents.total+1}>
+				Область {$i.obl}, Город {$i.city}, Сеть {$i.net_name}, Юридическое название ТЗ {$i.tp_ur}, Адрес ТЗ {$i.tp_addr}
+			</td>
+			<td>{$i1.ag_name}</td>
+			<td style="text-align:right">{$i1.plan}</td>
+			<td style="text-align:right">{$i1.fakt}</td>
+			<td style="text-align:right">{$i1.oos}</td>
+			<td>{$i1.comm}</td>
+			<td>{$i1.tasks|nl2br}</td>
+		</tr>
+		{/foreach}
+	{/foreach}
+</table>
+{/if}

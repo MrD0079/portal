@@ -1,0 +1,284 @@
+<h1>ОС по участнику "Девелопмент-центра"</h1>
+
+
+
+
+
+{if not $smarty.request.print}
+<form target="_self" method="POST" name="form3" id="form3" enctype="multipart/form-data">
+{/if}
+
+{if not $is_dc or $os_head.ok_zgdp}
+{assign var=disabled value='disabled'}
+{/if}
+
+{if not $is_dc}
+{assign var=disabled1 value='disabled'}
+{/if}
+
+
+
+
+
+<table style="text-align:center">
+<tr>
+<td>
+{include file="os_select.html"}
+</td>
+{if $os_dc}
+<td>
+<p>Сегодня в ДЦ участвуют:</p>
+{foreach key=key item=item from=$os_dc}
+<a href="?action=os&k[tn]={$item.stud_tn}&k[y]={$now_year}">{$item.stud_fio}</a><br>
+{/foreach}
+</td>
+{/if}
+</tr>
+</table>
+
+
+<hr>
+
+
+
+
+{if $smarty.request.k.tn and $smarty.request.k.y}
+
+<p>Категория сотрудника - <b>{$oplatakat}</b></p>
+
+<input type=hidden value={$os_head.id} name=head_id>
+
+<table>
+<tr>
+<td>
+Дата участия в "Девелопмент-центре"
+</td>
+<td>
+{if not $smarty.request.print}
+<input {$disabled} class="datepicker" name=d[data] size=60 value={$os_head.data_t}>
+{else}
+<b>{$os_head.data_t}</b>
+{/if}
+</td>
+</tr>
+<tr>
+<td>
+Должность участника ДЦ
+</td>
+<td>
+{if not $smarty.request.print}
+<select {$disabled} name=d[pos] id=pos>
+	<option></option>
+	{foreach key=key item=item from=$pos_list_actual}
+	<option value={$item.pos_id}>{$item.pos_name}</option>
+	{/foreach}
+</select>
+<script>$('#pos option[value="{$os_head.pos}"]').prop('selected', true);</script>
+{else}
+	{foreach key=key item=item from=$pos_list_actual}
+	{if $os_head.pos eq $item.pos_id}<b>{$item.pos_name}</b>{/if}
+	{/foreach}
+{/if}
+</td>
+</tr>
+<tr>
+<td>
+Тема презентации
+</td>
+<td>
+{if not $smarty.request.print}
+<input {$disabled} name=d[subj] size=60 value="{$os_head.subj|escape}">
+{else}
+<b>{$os_head.subj|nl2br}</b>
+{/if}
+</td>
+</tr>
+<tr>
+<td>
+Название бизнес-кейса
+</td>
+<td>
+{if not $smarty.request.print}
+<input {$disabled} name=d[case_name] size=60 value="{$os_head.case_name|escape}">
+{else}
+<b>{$os_head.case_name|nl2br}</b>
+{/if}
+</td>
+</tr>
+<tr>
+<td>
+Цели участника на ДЦ
+</td>
+<td>
+{if not $smarty.request.print}
+<input {$disabled} name=d[goal] size=60 value="{$os_head.goal|escape}">
+{else}
+<b>{$os_head.goal|nl2br}</b>
+{/if}
+</td>
+</tr>
+{if not $smarty.request.print}
+<tr>
+<td>
+Файлы презентации
+</td>
+<td>
+{foreach key=key item=item from=$file_list}
+{if not $disabled}
+<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}/{$item.file}');">[X]</a>
+{/if}
+<a target=_blank href="{$item.path}/{$item.file}">{$item.file}</a><br>
+{/foreach}
+<br>
+<input {$disabled} name=fn type=file>
+</td>
+</tr>
+{/if}
+</table>
+
+{if not $smarty.request.print}
+{literal}
+<script>
+function del_file(rid)
+{
+	$("#form3").append($('<input type=hidden name=del_file id=del_file value='+rid+'>'));
+	$("#form3").submit();
+}
+</script>
+{/literal}
+{/if}
+
+
+
+
+{if not $smarty.request.print}
+<input type=submit {$disabled1} value=Сохранить name=save>
+{/if}
+
+<hr>
+
+
+{include file="os_ocenka.html"}
+
+
+<hr>
+
+
+
+
+<table border=0 cellpadding=0 cellspacing=0>
+{foreach key=k item=i from=$os_body name=body}
+
+{if $i.level eq 2}
+<tr>
+<td style="border: 1px solid black" rowspan={$i.c+1}>{$i.name}</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по компетенции</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold">{$i.en|default:0} из {$i.c}</td>
+</tr>
+{/if}
+
+{if $i.level eq 3}
+<tr>
+<td style="border: 1px solid black">{$i.name}</td>
+<td style="border: 1px solid black; text-align:center; {if $i.v_int eq 1}background-color:rgb(153, 255, 153){/if}">
+	{if not $smarty.request.print}
+		<input onclick="$('#body_v_int_{$i.id}').val(this.checked?1:0);" {$disabled} type=checkbox {if $i.v_int eq 1}checked{/if}>
+		<input type=hidden name=body[{$i.id}][v_int] id=body_v_int_{$i.id} value={$i.v_int}>
+	{else}
+		{if $i.v_int eq 1}да{/if}
+	{/if}
+</td>
+</tr>
+{/if}
+
+{if $i.level eq 1}
+<tr>
+<td style="text-align:right" colspan=4><h3>Блок "{$i.name}"</h3></td>
+</tr>
+
+<tr style="text-align:center;font-weight:bold">
+<td style="border: 1px solid black">Компетенция</td>
+<td style="border: 1px solid black">Индикаторы</td>
+<td style="border: 1px solid black">Проявление</td>
+<td style="border: 1px solid black">Выводы по блоку</td>
+</tr>
+<tr>
+<td colspan=2 style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по блоку</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold">{$i.en|default:0} из {$i.c1}</td>
+<td style="border: 1px solid black; text-align:center" rowspan={$i.c+1}>
+	{if not $smarty.request.print}
+		<textarea {$disabled} name=body[{$i.id}][v_text] rows={$i.c} cols=20>{$i.v_text|escape}</textarea><br><input type=submit {$disabled} value=Сохранить name=save>
+	{else}
+		{$i.v_text|nl2br}
+	{/if}
+</td>
+</tr>
+{/if}
+
+{/foreach}
+</table>
+
+
+<hr>
+
+<table style="text-align:center">
+<tr>
+<td>
+<h3>Решение оценочной комиссии</h3>
+	{if not $smarty.request.print}
+		<textarea {$disabled1} cols=50 rows=10 class="datepicker" name=d[findings]>{$os_head.findings|escape}</textarea>
+	{else}
+		{$os_head.findings|nl2br}
+	{/if}
+</td>
+<td>
+<h3>ОС участнику ДЦ</h3>
+	{if not $smarty.request.print}
+		<textarea cols=50 rows=10 class="datepicker" name=d[os]>{$os_head.os|escape}</textarea>
+	{else}
+		{$os_head.os|nl2br}
+	{/if}
+</td>
+</tr>
+</table>
+
+
+<h3>Цель участника на ДЦ</h3>
+
+
+{if not $smarty.request.print}
+
+<p>
+{foreach key=key item=item from=$os_goal}
+	<input {$disabled} id="goal_res" name=d[goal_res] value={$item.id} type="radio">{$item.name}
+{/foreach}
+</p>
+
+<script>$("input[name='d[goal_res]'][value={$os_head.goal_res|default:199233}]").attr('checked',true);</script>
+{else}
+	{foreach key=key item=item from=$os_goal}
+	{if ($os_head.goal_res eq $item.id) or (not $os_head.goal_res and $item.id eq 199233)}{$item.name}{/if}
+	{/foreach}
+{/if}
+
+
+
+
+
+
+
+
+{if not $smarty.request.print}
+<input type=submit {$disabled1} value=Сохранить name=save>
+{/if}
+
+{/if}
+
+
+
+
+
+{if not $smarty.request.print}
+</form>
+{/if}
+

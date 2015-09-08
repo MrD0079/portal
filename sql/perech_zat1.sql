@@ -1,0 +1,1 @@
+select * from perech_zat1 order by name

@@ -1,0 +1,14 @@
+<h1>Тестирование</h1>
+{if $smarty.request.test_end}
+	{include file="tr_test_end.html"}
+{else}
+	{if $d}
+		{if $smarty.request.process}
+			{include file="tr_test_process.html"}
+		{else}
+			{include file="tr_test_start.html"}
+		{/if}
+	{else}
+		<h1 style="color:red">В данный момент нет тренингов, по которым Вы должны пройти тестирование</h1>
+	{/if}
+{/if}

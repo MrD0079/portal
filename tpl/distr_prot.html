@@ -1,0 +1,174 @@
+<h1>ѕротоколы встреч</h1>
+
+{if not $smarty.request.print}
+	{include file="distr_prot_filters.html"}
+{/if}
+
+{if $smarty.request.refresh}
+	{if not $smarty.request.print}
+		<p><a href="?action=distr_prot&print=1&refresh=1&excel=1&filename=ѕротоколы встреч">Ёкспорт в Excel</a></p>
+	{/if}
+	{include file="distr_prot_table.html"}
+	<div id=ok style="display: inline;"></div>
+	<div id=detail style="display: inline;"></div>
+{/if}
+
+{if not $smarty.request.print}
+	{include file="distr_prot_new.html"}
+{/if}
+
+<script>
+v_conq='{$smarty.request.da_conq}';
+{literal}
+
+function load_detail()
+{
+if ($('#da_conq').val()==0) {return;}
+var fd = new FormData();
+fd.append('conq',  $('#da_conq').val());
+fd.append('sd',  $('#da_sd').val());
+fd.append('ed',  $('#da_ed').val());
+$.ajax({
+  type: 'POST',
+  url: '?action=distr_prot_detail&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+   $('#detail').html(data);
+  }
+});
+}
+
+function load_conq_list()
+{
+var fd = new FormData();
+fd.append('cat',  $('#da_cat').val());
+$.ajax({
+  type: 'POST',
+  url: '?action=distr_prot_conq_filter&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+   $('#da_conq').html(data);
+//   $('#da_conq').val(v_conq);
+   $('#da_conq option[value='+v_conq+']').prop('selected', true);
+   load_detail();
+  }
+});
+}
+
+$(function() {
+load_conq_list();
+}
+);
+
+function cat_q ($val)
+{
+$val>0?$('#cat_q').load('?action=distr_prot_get_cat_q&nohead=1&id='+$val):null;
+}
+
+function conq_q ($val)
+{
+$val>0?$('#conq_q').load('?action=distr_prot_get_conq_q&nohead=1&id='+$val):null;
+}
+
+function save_prot(id,field,val,fio)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=distr_prot_save&nohead=1',
+	{
+		id: id,
+		field: field,
+		/*fio: fio,*/
+		val: val
+	},
+	function() {
+	get_val(id,'status_lu');
+	get_val(id,'status_fio');
+	get_val(id,'ok_chief_lu');
+	get_val(id,'ok_chief_fio');
+	get_val(id,'ok_dpu_lu');
+	get_val(id,'ok_dpu_fio');
+	get_val(id,'ok_nm_lu');
+	get_val(id,'ok_nm_fio');
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function get_val(id,field)
+{
+	$('#d_'+id+'_'+field).load('?action=distr_prot_get_val&nohead=1',
+	{
+		id: id,
+		field: field
+	});
+}
+
+function send_file()
+{
+
+var x=0;
+$(".new_prot:required").each(
+function(){
+if (!$(this).val())
+x=x+1;
+}
+);
+if (x>0)
+{
+alert('не все об€зательные пол€ заполнены');
+return;
+}
+
+$('#td').css('background-color','red');
+var fd = new FormData();
+fd.append('distr', $('#distr').val());
+fd.append('comm', $('#comm').val());
+fd.append('cat', $('#cat').val());
+fd.append('conq', $('#conq').val());
+fd.append('result', $('#result').val());
+jQuery.each($('#files')[0].files, function(i, file) {
+fd.append('img['+i+']', file);
+});
+$.ajax({
+  type: 'POST',
+  url: '?action=distr_prot_f_save&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+    $('#files_list').html(data);
+    $('#td').css('background-color','white');
+    //$('#form2').trigger('reset');
+    //$('#refresh').click();
+  },
+  error: function(data) {
+    $('#files_list').html(data);
+    $('#td').css('background-color','white');
+  }
+});
+}
+
+function del_prot(id)
+{
+	var fd = new FormData();
+	fd.append('del', id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=distr_prot_f_save&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#tr_'+id).remove();
+		}
+	});
+}
+
+$( ".new_prot" ).change(function(){
+$('#files_list').html('');
+});
+
+{/literal}
+</script>

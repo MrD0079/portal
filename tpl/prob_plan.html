@@ -1,0 +1,156 @@
+{if ($ok_employee eq 1 or $plan.inst_name eq null) and ($ok_teacher eq 1 or $plan.chief_name eq null) and ($ok_chief eq 1 or $plan.dir_name eq null)}
+	{assign var=disabled value='disabled'}
+{/if}
+
+<form name=form id=form target=_self method=post>
+	<table width=100% border=0 cellpadding=10 cellspacing=10 style="text-align:left">
+		<tr>
+			<td>
+				<h1>План адаптации сотрудника {$prob_fio}</h1>
+				<h2>
+					Период наставничества - с {$plan.data_start_t} по {$plan.data_end_t}
+					{if $is_admin and $smarty.request.print neq 1 and not $disabled}
+					, заменить на
+					<input class="datepicker" name=replace_data[data_start]>
+					<input class="datepicker" name=replace_data[data_end]>
+					{/if}
+				</h2>
+				Статус плана:
+				{if $smarty.request.print neq 1 and ($inst or $chief or $dir) and not $disabled}
+					<select name=p_plan[status] id=p_plan_status>
+						{foreach key=key item=item from=$prob_plan_status}
+							<option value={$item.id}>{$item.name}</option>
+						{/foreach}
+					</select>
+					<script>$('#p_plan_status option[value="{$status}"]').prop('selected', true);</script>
+				{else}
+					{foreach key=key item=item from=$prob_plan_status}
+						<b>{if $item.id eq $status}[{$item.name}]{/if}</b>
+					{/foreach}
+				{/if}
+				{if $smarty.request.print neq 1}
+					{if $self}
+						<a target=_blank href="?action=prob_plan&print=1">Версия для печати</a>
+					{else}
+						<a target=_blank href="?action=prob_plan&print=1&tn={$smarty.request.tn}">Версия для печати</a>
+					{/if}
+				{/if}
+				Тест:
+				{if $smarty.request.print neq 1 and ($inst or $chief or $dir) and not $disabled}
+					<select name=p_plan[test_id] id=p_plan_test_id>
+						<option></option>
+						{foreach key=key item=item from=$prob_plan_test}
+							<option value={$item.id}>{$item.name}</option>
+						{/foreach}
+					</select>
+					<script>
+						$('#p_plan_test_id').val({$test_id});
+					</script>
+				{else}
+					{foreach key=key item=item from=$prob_plan_test}
+						<b>{if $item.id eq $test_id}[{$item.name}]{/if}</b>
+					{/foreach}
+				{/if}
+			</td>
+		</tr>
+		{if $smarty.request.print neq 1 and not $disabled}
+		<tr>
+			<td>
+				<input type=submit name=save align=middle value="сохранить">
+			</td>
+		</tr>
+		{/if}
+		<tr>
+			<td>
+				<table border=0 cellpadding=5 cellspacing=0>
+				<tr><td><b>Сотрудник</b></td><td>Должность</td><td>Ф.И.О.</td>{if $is_admin and $smarty.request.print neq 1 and not $disabled}<td>Заменить на</td>{/if}</tr>
+				<tr><td><b>Осуществляющий поддержку</b></td><td>{$plan.inst_dolgn}</td><td>{$plan.inst_name}</td>{if $is_admin and $smarty.request.print neq 1 and not $disabled}<td>
+				<select name=replace_exp[inst_tn] id=replace_exp[inst_tn]>
+					<option></option>
+					{foreach key=key item=item from=$spd_list}
+					<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+					{/foreach}
+				</select>
+				</td>{/if}</tr>
+				<tr><td><b>Бизнес-тренер</b></td><td>{$plan.chief_dolgn}</td><td>{$plan.chief_name}</td>{if $is_admin and $smarty.request.print neq 1 and not $disabled}<td>
+				<select name=replace_exp[chief_tn] id=replace_exp[chief_tn]>
+					<option></option>
+					{foreach key=key item=item from=$spd_list}
+					<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+					{/foreach}
+				</select>
+				</td>{/if}</tr>
+				<tr><td><b>Вышестоящий руководитель</b></td><td>{$plan.dir_dolgn}</td><td>{$plan.dir_name}</td>{if $is_admin and $smarty.request.print neq 1 and not $disabled}<td>
+				<select name=replace_exp[dir_tn] id=replace_exp[dir_tn]>
+					<option></option>
+					{foreach key=key item=item from=$spd_list}
+					<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+					{/foreach}
+				</select>
+				</td>{/if}</tr>
+				<tr><td><b>Новый сотрудник</td><td>{$plan.prob_dolgn}</td><td>{$plan.prob_name}</b></td></tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{include file="prob_plan_r1.html"}
+				{include file="prob_plan_r2.html"}
+			</td>
+		</tr>
+		{if $smarty.request.print neq 1 and not $disabled}
+		<tr>
+			<td>
+				<input type=submit name=save align=middle value="сохранить">
+			</td>
+		</tr>
+		{/if}
+		{if $smarty.request.print neq 1}
+		<tr>
+			<td>
+				{if $is_admin}
+				<input type=submit name=clear_checkboxes align=middle value="сбросить подтверждения заключений">
+				{/if}
+			</td>
+		</tr>
+		{/if}
+		<tr>
+			<td>
+				<table border=1>
+				<tr style="font-weight:bold">
+				<td>Дата прохождения теста</td>
+				<td>результат (балл / макс / %)</td>
+				</tr>
+				<tr
+					style="background-color:{if $test_result.perc < 75}red{elseif $test_result.perc >= 85}lightgreen{else}yellow{/if}"
+				>
+				<td>{$test_result.test_lu}</td>
+				<td>{$test_result.test_ball} / {$test_result.max_ball} / {$test_result.perc|num:2}</td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</form>
+
+
+{literal}
+<script>
+function submit_val(name,p1,v1)
+{
+	var e = document.createElement('input');
+	e.name=name;
+	e.type="hidden";
+	$("#form").append(e);
+	if (p1)
+	{
+	var e = document.createElement('input');
+	e.name=p1;
+	e.value=v1;
+	e.type="hidden";
+	$("#form").append(e);
+	}
+	$("#form").submit();
+}
+</script>
+{/literal}

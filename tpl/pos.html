@@ -1,0 +1,38 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="text-align:center;font-weight:bold">
+<td>[x]</td>
+<td>название</td>
+<td>ЭТА<br>могут быть и.о.<br>на период отпуска</td>
+<td>СПД<br>могут быть и.о.<br>на период отпуска</td>
+</tr>
+{foreach key=key item=item from=$pos}
+<tr>
+	<td><input name=del[{$item.pos_id}] type=checkbox></td>
+	<td><input name=data[{$item.pos_id}][pos_name] size=80 value="{$item.pos_name}"></td>
+	<td style="text-align:center" id=td_vac_eta_{$item.pos_id}>
+		<input type=checkbox id=cb_vac_eta_{$item.pos_id} onClick="$('#data_vac_eta_{$item.pos_id}').val(this.checked?1:0);">
+		<input type=hidden id=data_vac_eta_{$item.pos_id} name=data[{$item.pos_id}][vac_eta] value="{$item.vac_eta}">
+		<script>
+			$('#cb_vac_eta_{$item.pos_id}').prop('checked',{$item.vac_eta}==1?true:false);
+			$('#td_vac_eta_{$item.pos_id}').css('background-color',{$item.vac_eta}==1?'rgb(153, 255, 153)':'white');
+		</script>
+	</td>
+	<td style="text-align:center" id=td_vac_spd_{$item.pos_id}>
+		<input type=checkbox id=cb_vac_spd_{$item.pos_id} onClick="$('#data_vac_spd_{$item.pos_id}').val(this.checked?1:0);">
+		<input type=hidden id=data_vac_spd_{$item.pos_id} name=data[{$item.pos_id}][vac_spd] value="{$item.vac_spd}">
+		<script>
+			$('#cb_vac_spd_{$item.pos_id}').prop('checked',{$item.vac_spd}==1?true:false);
+			$('#td_vac_spd_{$item.pos_id}').css('background-color',{$item.vac_spd}==1?'rgb(153, 255, 153)':'white');
+		</script>
+	</td>
+</tr>
+{/foreach}
+</table>
+Должность
+<br>
+<input size=80 name=new_pos_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>

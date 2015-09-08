@@ -1,0 +1,53 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<h1>Пароли заказчиков</h1>
+<input name="save" value="Обновить пароли для отмеченных логинов" type="submit">
+<input name="save_data" value="Сохранить" type="submit">
+<br>
+<br>
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>Заказчик</td>
+		<td>№ п/п</td>
+		<td>Логин</td>
+		<td>Пароль</td>
+		<td>Супер</td>
+		<td>Обновить<br>пароль</td>
+		<td>Комментарий</td>
+		<td>Адрес E-Mail</td>
+		<td>Привязка областей</td>
+		<td>Привязка сетей</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	<tr style="font-weight:bold">
+		<td rowspan={$i.head.c+1} style="text-align:center">{$smarty.foreach.d.iteration}</td>
+		<td rowspan={$i.head.c+1} style="text-align:center">{$i.head.name}</td>
+		<td colspan=6><input type=submit value="Добавить логин/пароль" name=new[{$i.head.id}]></td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data name=i}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:center">{$smarty.foreach.i.iteration}</td>
+		<td style="text-align:center">{$i1.login}</td>
+		<td style="text-align:center">{$i1.password}</td>
+		<td style="text-align:center;{if $i1.is_super eq 1}background-color:green{/if}">
+			<input {if $i1.is_super eq 1}checked{/if} type=checkbox onclick="
+				$('#is_super_{$i1.login}').attr('disabled',false);
+				$('#is_super_{$i1.login}').val(this.checked?1:0)
+			">
+			<input disabled type=hidden name=is_super[{$i1.login}] id=is_super_{$i1.login}>
+		</td>
+		<td style="text-align:center"><input type=checkbox name=pwd[{$i1.login}]></td>
+		<td style="text-align:center"><input name=comm[{$i1.login}] size=50 value="{$i1.comm|escape}"></td>
+		<td style="text-align:center"><input name=email[{$i1.login}] size=50 value="{$i1.email|escape}"></td>
+		<td style="text-align:left"><a target=_blank href="?action=routes_logins_oblast&login={$i1.login}">Привязка областей</a></td>
+		<td style="text-align:left"><a target=_blank href="?action=routes_logins_nets&login={$i1.login}">Привязка сетей</a></td>
+	</tr>
+	{/foreach}
+	{/foreach}
+</table>
+<br>
+<input name="save" value="Обновить пароли для отмеченных логинов" type="submit">
+<br>
+</form>
+
+

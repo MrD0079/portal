@@ -1,0 +1,269 @@
+{if
+		$cnt_kod neq "nr"
+}
+
+<li><a href="javascript:void(0);"><span class="dir">Бюджеты</span></a>
+	<ul>
+		<li><a href="files/ua/INSTRUKTSIYA_BYUDZHETI.pdf">Начало работы</a></li>
+
+		{if
+			($is_kk or $is_admin or $is_super or $is_fin_man)
+			and
+			($cnt_kod eq "ua" or $cnt_kod eq "md")
+			and
+			$without_kk neq 1
+		}
+		
+		<li><a href="javascript:void(0);"><span class="dir">Ключевые клиенты</span></a>
+			<ul>
+				<li>
+					<a href="?action=kk">Начало работы</a>
+				</li>
+                
+				{if $is_admin}
+		
+				<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+					<ul>
+						<li><a href="?action=statyas">Группы / статьи затрат</a></li>
+					</ul>
+				</li>
+		
+				{/if}
+                
+				<li>
+					<a href="javascript:void(0);"><span class="dir">Планирование</span></a>
+					<ul>
+						<li><a href="?action=fin_plan&plan_type=1">Финансовое</a></li>
+						<li><a href="?action=fin_plan&plan_type=2">Договорное</a></li>
+						<li><a href="?action=fin_plan&plan_type=3">Оперативное</a></li>
+						<li><a href="?action=fin_dog_accept">Согласование финансового / договорного планирования</a></li>
+						<li><a href="?action=oper_accept">Согласование оперативного планирования</a></li>
+						<li><a href="?action=zakaz_nal&plan_type=3">Заказ промобюджета</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0);"><span class="dir">Договорная кампания</span></a>
+					<ul>
+						<li>
+							<a href="javascript:void(0);"><span class="dir">Система договорных условий</span></a>
+							<ul>
+								<li><a href="?action=sdu&plan_type=1">Цели на переговоры</a></li>
+							</ul>
+						</li>
+						<li><a href="?action=meetings&plan_type=1">Встречи с клиентом</a></li>
+						<li><a href="?action=negot_proc&plan_type=1">Ход договорной кампании</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0);"><span class="dir">Факт оказанных услуг</a>
+					<ul>
+						<li><a href="?action=fin_plan&plan_type=4">Внести факт ОУ</a></li>
+						<li><a href="?action=fu_accept">Подтверждение факта ОУ</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0);"><span class="dir">Документарное сопровождение</span></a>
+					<ul>
+						<li><a href="?action=invoice_reestr">Реестр счетов</a></li>
+						<li><a href="?action=invoice_pay">Оплата счетов</a></li>
+						<li><a href="?action=invoicep_reestr">Реестр промо</a></li>
+						<li><a href="?action=acts_fact">Факт актов</a></li>
+						<li><a href="?action=urlic">Юр.Лица</a></li>
+						<li><a href="?action=urlic_net">Привязка Юр.Лиц</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
+					<ul>
+						<li>
+							<a href="javascript:void(0);"><span class="dir">Планирование</span></a>
+							<ul>
+								<li><a href="?action=fin_report">Финансовое / договорное планирование</a></li>
+								<li><a href="?action=fin_plan_detail">Детализация затрат при планировании</a></li>
+								<li><a href="?action=budget_gruppa">Бюджет по группам затрат</a></li>
+								<li><a href="?action=budget_statya">Бюджет по статьям затрат</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="javascript:void(0);"><span class="dir">Сравнение</span></a>
+							<ul>
+								<li><a href="?action=compare_fin_plan_sdu">Сравнение финансового / договорного планирования и СДУ</a></li>
+								<li><a href="?action=rep_compare_nets">Сравнение по видам планирования - СЕТИ</a></li>
+								<li><a href="?action=rep_compare_statya">Сравнение по видам планирования - СТАТЬИ ЗАТРАТ</a></li>
+								<li><a href="?action=plan_fact_uslug">План/факт оказанных услуг</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="javascript:void(0);"><span class="dir">Анализ</span></a>
+							<ul>
+								<li><a href="?action=year_kpr">Годовые КПР</a></li>
+								<li><a href="?action=saleskk">Продажи по сетям</a></li>
+								<li><a href="?action=dolya_polki">Доля полочного пространства</a></li>
+							</ul>
+						</li>
+						<li><a href="?action=outlets">Торговые залы</a></li>
+						<li><a href="?action=zakaz_nal_report">Заказ промобюджета</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0);"><span class="dir">Фильтры</span></a>
+					<ul>
+						<li><a href="?action=kk_flt_nets">По сетям</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+                
+		{/if}
+
+		<li><a href="?action=sc">Торговые условия работы с ТП</a></li>
+		<li><a href="javascript:void(0);"><span class="dir">Заявка на активность</span></a>
+			<ul>
+
+				{if $is_db}
+
+				<li><a href="?action=bud_ru_zay_create">Создание</a></li>
+
+				{/if}
+
+				<li><a href="?action=bud_ru_zay_accept">Согласование</a></li>
+				<li><a href="?action=bud_ru_zay_reestr">Реестр</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);"><span class="dir">Подтверждение затрат</span></a>
+			<ul>
+				<li><a href="?action=bud_ru_zay_report_accept">Согласование отчетов по активностям</a></li>
+				<li><a href="?action=bud_ru_zay_report">Реестр отчетов по активностям</a></li>
+			</ul>
+		</li>
+		<li><a href="?action=bud_svod">Отчет по фондам</a></li>
+		<li><a href="javascript:void(0);"><span class="dir">Аналитика</span></a>
+			<ul>
+				{if $is_traid or $is_traid_kk or $is_super or $is_admin}
+				<li><a href="?action=bud_funds_limits&kk=0">Лимит по фондам ЛР</a></li>
+				<li><a href="?action=bud_funds_limits&kk=1">Лимит по фондам КК</a></li>
+				{/if}
+				<li><a href="?action=bud_svod_act">Свод: Акции</a></li>
+				<li><a href="?action=bud_svod_funds">Свод: Фонды</a></li>
+				<li><a href="?action=bud_svod_zatd">Свод: Затраты дистрибутора</a></li>
+				<li><a href="?action=bud_svod_zat_tp">Свод: Затраты по ТП</a></li>
+				<li><a href="?action=bud_svod_ta">ТИТУЛ: Подтверждение отчета</a></li>
+				<li><a href="?action=to_money">ТО за деньги</a></li>
+			</ul>
+		</li>
+
+		{if $cnt_kod eq "exp" and ($is_admin or $super or $is_bud_admin)}
+
+		<li><a href="javascript:void(0);"><span class="dir">Учет ФРТ</span></a>
+			<ul>
+				<li><a href="?action=bud_ru_cash_in">Поступление ДС</a></li>
+				<li><a href="?action=bud_ru_cash_out">Расход ДС</a></li>
+				<li><a href="?action=bud_ru_cash_rep">Сводный отчет</a></li>
+			</ul>
+		</li>
+
+		{/if}
+
+		{if $is_admin or $is_bud_admin}
+
+		<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+			<ul>
+				<li><a href="?action=bud_st">Статьи затрат</a></li>
+				<li><a href="?action=bud_doc">Подтверждающие документы</a></li>
+				<li><a href="?action=bud_pay">Формы оплаты</a></li>
+				<li><a href="?action=bud_nd">Национальные подразделения</a></li>
+				<li><a href="?action=bud_funds">Фонды</a></li>
+				<li><a href="?action=bud_replace_ts">Замена ТС</a></li>
+				<li><a href="?action=bud_replace_db">Замена ДБ</a></li>
+				<li><a href="?action=bud_fil">Дистрибуторы/Филиалы</a></li>
+				<li><a href="?action=bud_tn_fil">Привязка ДБ к дистрибуторам/филиалам</a></li>
+				<li><a href="?action=bud_ru_st_ras">Статьи расходов</a></li>
+				<li><a href="?action=bud_ru_st_pri">Статьи приходов</a></li>
+				<li><a href="?action=bud_ru_ff">Поля заявки/отчета</a></li>
+				<li><a href="?action=bud_db">ДБ</a></li>
+				<li><a href="?action=nets_list&activ=1">Сети</a></li>
+				<li><a href="?action=lists">Списки</a></li>
+				<li><a href="?action=bud_fil_contacts_dolgn">Обязательные контакты дистрибьюторов</a></li>
+			</ul>
+		</li>
+
+		{/if}
+
+	</ul>
+</li>
+
+{/if}
+
+<li><a href="javascript:void(0);"><span class="dir">Отчет о затратах</span></a>
+	<ul>
+
+		<li><a href="?action=zat">Мой отчет</a></li>
+		<li><a href="?action=zat_slaves">Отчеты подчиненных для принятия</a></li>
+		<li><a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
+			<ul>
+				<li><a href="?action=zat_reports">Сводные данные по отчетам о затратах</a></li>
+
+				{if $is_admin or $is_super}
+
+				<li><a href="?action=log&prg=zat">Журнал посещений</a></li>
+				<li><a href="?action=zat_all">Заполнение отчета</a></li>
+
+				{/if}
+
+				{if $is_acceptor}
+
+				<li><a href="?action=zat_all">Департамент оплаты</a></li>
+
+				{/if}
+
+			</ul>
+		</li>
+		<li><a href="?action=zat_help">Инструкция</a></li>
+	</ul>
+</li>
+
+{if ($is_admin or $is_acceptor) and $cnt_kod eq "ua"}
+
+<li><a href="?action=perech">Перечисления СПД</a></li>
+
+{/if}
+
+{if ($is_dpu or $is_acceptor or $is_ndp or $is_admin) and $cnt_kod neq "nr"}
+
+<li><a href="?action=kc">КПР тренеров</a></li>
+
+{/if}
+
+{if ($is_mz or $is_mz_admin or $is_mz_buh) and $cnt_kod neq "nr"}
+
+<li><a href="javascript:void(0);"><span class="dir">Музей шоколада</span></a>
+	<ul>
+		<li><a href="?action=mz_help">Инструкция</a></li>
+		<li><a href="?action=mz_rep&arc=0">Заполнить отчет</a></li>
+		<li><a href="?action=mz_rep_svod">Итоги работы музея</a></li>
+		<li><a href="?action=mz_rep&arc=1">Архив</a></li>
+	</ul>
+</li>
+
+{/if}
+
+{if $cnt_kod eq "nr"}
+
+<li><a href="javascript:void(0);"><span class="dir">Бюджет ДПНР</span></a>
+	<ul>
+		<li><a href="?action=dpnr_budjet">Бюджет</a></li>
+		<li><a href="?action=dpnr_budjet_report">Сводный отчет</a></li>
+		{if $is_test_admin or $is_admin}
+		<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+			<ul>
+				<li><a href="?action=dpnr_statyas">Группы/Статьи затрат</a></li>
+				<li><a href="?action=dpnr_markets">Рынки</a></li>
+				<li><a href="?action=dpnr_compensations">Компенсации</a></li>
+				<li><a href="?action=dpnr_market_tn">Привязка к рынкам</a></li>
+			</ul>
+		</li>
+		{/if}
+	</ul>
+</li>
+
+{/if}

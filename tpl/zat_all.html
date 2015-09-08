@@ -1,0 +1,160 @@
+<h1>{if $is_acceptor}Департамент оплаты{else}Заполнение отчета{/if}</h1>
+<form name=form_zat id=form_zat target=_self method=post>
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_zat').submit();
+}
+</script>
+{/literal}
+	Период:
+	<br>
+	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+		{foreach key=key item=item from=$month_list}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+	<br>
+	<br>
+	<a target=_blank href="?action=zat_total&month_list={$smarty.request.month_list}">Общие затраты команды для начисления ЗП</a>
+	<br>
+	<br>
+	<table border=1 cellspacing=0 cellpadding=5>
+		<tr align=center>
+			<td><b>ОТЧЕТ 1 (незаполненные отчеты)</b></td>
+			<td><b>ОТЧЕТ 2 (непринятые отчеты)</b></td>
+			{if $is_acceptor eq 1}<td><b>ОТЧЕТ 3 (необработанные отчеты)</b></td>{/if}
+		</tr>
+		<tr>
+			<td valign=top align=left>
+				Должность: 
+				<br>
+				<select name=dolgn_list id=dolgn_list onchange="javascript:fn_submit('dolgn_list');">
+					<option value=0></option>
+					{foreach key=key item=item from=$dolgn_list}
+						<option value={$key}>{$item}</option>
+					{/foreach}
+				</select>
+				<br>
+				<table width=200px>
+					<tr>
+						<td valign=top align=left>
+							Показывать сотрудников:
+							<br>
+							<input type=radio onchange="javascript:fn_submit('exist_daily_zat_count');" name=exist_daily_zat_count id=exist_daily_zat_count value=0>Всех
+							<br>
+							<input type=radio onchange="javascript:fn_submit('exist_daily_zat_count');" name=exist_daily_zat_count id=exist_daily_zat_count value=1>Только заполнивших отчеты
+							<br>
+							<input type=radio onchange="javascript:fn_submit('exist_daily_zat_count');" name=exist_daily_zat_count id=exist_daily_zat_count value=-1>Только незаполнивших отчеты
+						</td>
+					</tr>
+				</table>
+				<br>
+				{foreach key=key1 item=item1 from=$zat}
+					{$item1.rownum}
+					<a target=_blank href="?action=zat&emp_tn={$item1.emp_tn}&month_list={$smarty.request.month_list}&readonly=1">{$item1.emp_name}</a>
+					{$item1.emp_dolgn}
+					{if $item1.datauvol}
+						<font style="font-weight:bold;color:#8FFFFF"> уволен {$item1.datauvol}</font>
+					{/if}
+					<br>
+				{/foreach}
+			</td>
+			<td valign=top align=left>
+				Рук-ль/Эксперт:
+				<br>
+				<select name=exp_list_accepted id=exp_list_accepted onchange="javascript:fn_submit('exp_list_accepted');">
+					<option value=0></option>
+					{foreach key=key item=item from=$exp_list}
+						<option value={$key}>{$item}</option>
+					{/foreach}
+				</select>
+				<br>
+				<table width=200px>
+					<tr>
+						<td valign=top align=left>
+							Показывать сотрудников, у которых статус отчета:
+							<br>
+							<input type=radio onchange="javascript:fn_submit('is_accepted');" name=is_accepted id=is_accepted value=10>Любой
+							<br>
+							<input type=radio onchange="javascript:fn_submit('is_accepted');" name=is_accepted id=is_accepted value=1>Принят
+							<br>
+							<input type=radio onchange="javascript:fn_submit('is_accepted');" name=is_accepted id=is_accepted value=0>Не принят
+						</td>
+					</tr>
+				</table>
+				<br>
+				{foreach key=key1 item=item1 from=$zat_accepted}
+					{$item1.rownum}
+					<a target=_blank href="?action=zat&emp_tn={$item1.emp_tn}&month_list={$item1.rep_date}&readonly=1">{$item1.emp_name}</a>
+					{$item1.emp_dolgn}
+					{if $item1.rep_date neq $smarty.request.month_list and $item1.rep_date neq null}
+						<font style="font-weight:bold;color:orange"> отчет за {$item1.rep_date}</font>
+					{/if}
+					{if $item1.datauvol}
+						<font style="font-weight:bold;color:#8FFFFF"> уволен {$item1.datauvol}</font>
+					{/if}
+					<br>
+				{/foreach}
+			</td>
+			{if $is_acceptor eq 1}
+			<td valign=top align=left>
+				Рук-ль/Эксперт:
+				<br>
+				<select name=exp_list_processed id=exp_list_processed onchange="javascript:fn_submit('exp_list_processed');">
+					<option value=0></option>
+					{foreach key=key item=item from=$exp_list}
+						<option value={$key}>{$item}</option>
+					{/foreach}
+				</select>
+				<br>
+				<table width=200px>
+					<tr>
+						<td valign=top align=left>
+							Показывать сотрудников, у которых статус отчета:
+							<br>
+							<input type=radio onchange="javascript:fn_submit('is_processed');" name=is_processed id=is_processed value=10>Любой
+							<br>
+							<input type=radio onchange="javascript:fn_submit('is_processed');" name=is_processed id=is_processed value=1>Обработан
+							<br>
+							<input type=radio onchange="javascript:fn_submit('is_processed');" name=is_processed id=is_processed value=0>Не обработан
+						</td>
+					</tr>
+				</table>
+				<br>
+				{foreach key=key1 item=item1 from=$zat_processed}
+					{$item1.rownum}
+					<a target=_blank href="?action=zat&emp_tn={$item1.emp_tn}&month_list={$item1.rep_date}&readonly=1">{$item1.emp_name}</a>
+					{$item1.emp_dolgn}
+					{if $item1.rep_date neq $smarty.request.month_list and $item1.rep_date neq null}
+						<font style="font-weight:bold;color:orange"> отчет за {$item1.rep_date}</font>
+					{/if}
+					{if $item1.datauvol}
+						<font style="font-weight:bold;color:#8FFFFF"> уволен {$item1.datauvol}</font>
+					{/if}
+					<br>
+				{/foreach}
+			</td>
+			{/if}
+		</tr>
+	</table>
+</form>
+
+
+
+<script>$("#dolgn_list option[value='{$smarty.request.dolgn_list}']").prop('selected', true);</script>
+<script>$("#exp_list_accepted option[value='{$smarty.request.exp_list_accepted}']").prop('selected', true);</script>
+{if $is_acceptor eq 1}
+<script>$("#exp_list_processed option[value='{$smarty.request.exp_list_processed}']").prop('selected', true);</script>
+{/if}
+<script>$("input[name=exist_daily_zat_count][value={$smarty.request.exist_daily_zat_count}]").attr('checked',true);</script>
+<script>$("input[name=is_accepted][value={$smarty.request.is_accepted}]").attr('checked',true);</script>
+{if $is_acceptor eq 1}
+<script>$("input[name=is_processed][value={$smarty.request.is_processed}]").attr('checked',true);</script>
+{/if}

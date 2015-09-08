@@ -1,0 +1,220 @@
+<h1>Перечисления СПД с {$smarty.request.dates_list1} по {$smarty.request.dates_list2}</h1>
+
+
+{if $smarty.request.print neq 1}
+
+<form name=form_select id=form_select target=_self method=post>
+
+Дата
+с
+<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+по
+<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+
+<input type="submit" name="save" value="Выбрать">
+
+</form>
+
+
+
+<form name=form_perech id=form_perech target=_self method=post>
+
+
+
+<input type=hidden name=dates_list1 value={$smarty.request.dates_list1}>
+<input type=hidden name=dates_list2 value={$smarty.request.dates_list2}>
+
+
+
+
+
+
+<table border=0 cellspacing=0 cellpadding=3>
+	<tr>
+		<td style="font-weight:bold;text-align:right">От АВК</td>
+		<td><input name=new[avk] checked type=checkbox value=1></td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Ф.И.О.</td>
+		<td>
+			<select required name=new[tn] id=new[tn]>
+				<option></option>
+				{foreach key=key item=item from=$spd_list}
+				<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Сумма</td>
+		<td><input name=new[summa] required value={$i.summa}></td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">% банка</td>
+		<td><input name=new[perc] required size=3 value=1></td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Дата перечисления</td>
+		<td><input name=new[data] required size=10 class="datepicker" value="{$smarty.request.dates_list}"></td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Назначение платежа</td>
+		<td><input name=new[dest] required size=50></td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Кодировка отнесения затрат по денежным потокам (уровень 1)</td>
+		<td>
+			<select name=new[zat1] required id=new[zat1]>
+				<option></option>
+				{foreach key=key item=item from=$perech_zat1}
+				<option value={$item.id}>{$item.name}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Кодировка отнесения затрат по денежным потокам (уровень 2)</td>
+		<td>
+			<select name=new[zat2] required id=new[zat2]>
+				<option></option>
+				{foreach key=key item=item from=$perech_zat2}
+				<option value={$item.id}>{$item.name} ({$item.kod})</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight:bold;text-align:right">Срочный</td>
+		<td><input name=new[sroch] type=checkbox value=1></td>
+	</tr>
+</table>
+
+<input type=submit name=add value="Добавить">
+
+<br>
+<br>
+
+
+<a target=_blank href="?action=perech&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&print=1">Для печати</a>
+&nbsp
+&nbsp
+&nbsp
+<a target=_blank href="?action=perech&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=перечисления">экспорт в Excel</a>
+
+<br>
+<br>
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№<br>п/п</td>
+		<td><a href="javascript:void(0)" onclick="javascript:form_perech.submit()">[x]</a></td>
+		<td>От<br>АВК</td>
+		<td>Ф.И.О.</td>
+		<td>Сумма</td>
+		<td>% банка</td>
+		<td>Сумма на<br>перечисление</td>
+		<td>Дата<br>перечисления</td>
+		<td>Назначение<br>платежа</td>
+		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 1)</td>
+		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 2)</td>
+		<td>Подразделение<br>для учета<br>в факте бюджета</td>
+		<td>Счет из л.к.</td>
+		<td>Счет из п.</td>
+		<td>Срочный</td>
+		<td>Всего перечислено за выбранный период</td>
+		<td>Лимит</td>
+	</tr>
+	{foreach key=k item=i from=$perech name=perech}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$smarty.foreach.perech.iteration}</td>
+		<td><input type=checkbox name=del[{$i.id}]></td>
+		<td style="text-align:center">{if $i.avk eq 1}да{/if}</td>
+		<td>{$i.fio|escape}</td>
+		<td style="text-align:right">{$i.summa|default:0|num:2}</td>
+		<td style="text-align:right">{$i.perc|default:0|num:2}</td>
+		<td style="text-align:right">{$i.summa_p|default:0|num:2}</td>
+		<td>{$i.data}</td>
+		<td>{$i.dest|escape}</td>
+		<td>{$i.z1_name}</td>
+		<td>{$i.z2_name} ({$i.z2_kod})</td>
+		<td>{$i.rekvdpt}</td>
+		<td>{$i.rekvschet}</td>
+		<td><a onClick="javascript:this.style.color='red';" target=_blank href="?action=perech_schet&id={$i.id}&print=1">Счет</a></td>
+		<td style="text-align:center">{if $i.sroch eq 1}да{/if}</td>
+		<td {if $i.total_per > $i.limitper}bgcolor="red"{/if}>{$i.total_per}</td>
+		<td>{$i.limitper}</td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold">
+		<td></td>
+		<td></td>
+		<td style="text-align:right">{$perech_total.avk|default:0}</td>
+		<td></td>
+		<td style="text-align:right">{$perech_total.summa|default:0|num:2}</td>
+		<td> </td>
+		<td style="text-align:right">{$perech_total.summa_p|default:0|num:2}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right">{$perech_total.sroch|default:0}</td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+
+
+
+
+
+
+
+</form>
+
+
+{/if}
+
+
+{if $smarty.request.print eq 1}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№<br>п/п</td>
+		<td>Ф.И.О.</td>
+		<td>Сумма на<br>перечисление</td>
+		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 1)</td>
+		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 2)</td>
+	</tr>
+	{foreach key=k item=i from=$perech name=perech}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$smarty.foreach.perech.iteration}</td>
+		<td>{$i.fio|escape}</td>
+		<td style="text-align:right">{$i.summa_p|default:0|num:2}</td>
+		<td>№{$i.z1_id}</td>
+		<td>{$i.z2_name} ({$i.z2_kod})</td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold">
+		<td></td>
+		<td></td>
+		<td style="text-align:right">{$perech_total.summa_p|default:0|num:2}</td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+
+<br>
+<br>
+Реестр передал_________
+
+{/if}

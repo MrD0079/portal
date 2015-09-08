@@ -1,0 +1,34 @@
+<h1>Сводный отчет М-Сервис по спецификации для СВ за {$smarty.request.dates_list2}</h1>
+
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+{include file="merch_report_4sv_by_spec_new_select.html"}
+
+
+<input type=submit name=select value="Построить отчет">
+
+<hr>
+
+{if $smarty.request.select}
+
+<a target=_blank href="?action=merch_report_4sv_by_spec_new&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Сводный отчет М-Сервис по спецификации за {$smarty.request.dates_list2}&select=1&tpl=1">экспорт в Excel</a>
+<br>
+<br>
+
+{/if}
+
+{/if}
+
+{if $smarty.request.select}
+	{if $smarty.request.tpl}
+		{include file="merch_report_4sv_by_spec_new_table_linear.html"}
+	{else}
+		{include file="merch_report_4sv_by_spec_new_table_group.html"}
+	{/if}
+{/if}
+
+{if not $smarty.request.print}
+</form>
+{/if}

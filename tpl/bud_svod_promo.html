@@ -1,0 +1,38 @@
+{include file="bud_svod_filter.html"}
+{include file="bud_svod_filter_fil.html"}
+{include file="bud_svod_filter_cluster.html"}
+
+<p><a href="javascript:void(0);" onClick="load_list();">Показать данные</a></p>
+
+<div id="tp" style="display: inline;"></div>
+<div id="ok" style="display: inline;"></div>
+
+<script>
+
+v_dt='{$smarty.request.dt}';
+
+{literal}
+
+function load_list()
+{
+x=loadwait_show('tp');
+$('#tp').load('?action=bud_svod_promo_list&nohead=1',
+{
+	eta_list: $('#eta_list').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	exp_list_only_ts: $('#exp_list_only_ts').val(),
+	fil: $('#fil').val(),
+	clusters: $('#clusters').val(),
+	dt: v_dt
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+
+{/literal}
+
+</script>

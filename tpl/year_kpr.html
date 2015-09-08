@@ -1,0 +1,242 @@
+<h1>Годовые КПР</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+			</td>
+			<td>
+				Выберите сеть из списка
+				<br>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+{if not $is_mkk}
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+{/if}
+			</td>
+			<td>
+{if not $is_mkk}
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Форма оплаты
+				<br>
+				<select name="payment_type" id="payment_type">
+					<option value=0></option>
+					{foreach key=key item=item from=$payment_type}
+					<option value={$item.id}>{$item.pay_type}</option>
+					{/foreach}
+				<script>$('#payment_type option[value="{$smarty.request.payment_type}"]').prop('selected', true);</script>
+				</select>
+			</td>
+			<td>
+				Статья затрат
+				<br>
+				<select required name="statya_list" id="statya_list">
+					<option value=0></option>
+					{foreach key=key item=item from=$statya_list}
+					<option {if $item.parent eq 0}disabled{/if} value={$item.id}>{if $item.parent neq 0}&nbsp&nbsp&nbsp{/if}{$item.cost_item}</option>
+					{/foreach}
+				</select>
+				<script>$('#statya_list option[value="{$smarty.request.statya_list}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Группа затрат
+				<br>
+				<!--
+				<select required name="groupp" id="groupp">
+					<option value=0></option>
+					{foreach key=key item=item from=$groups}
+					<option value={$item.id}>{$item.gr_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#groupp option[value="{$smarty.request.groupp}"]').prop('selected', true);</script>
+				<br>
+				-->
+				{foreach key=key item=item from=$groups}
+				<input type=checkbox id=groups_{$item.id} name=groups[{$item.id}] value={$item.id}>{$item.gr_name}
+				<br>
+				{/foreach}
+				<script>
+				{if not $smarty.request.generate}
+					{foreach key=key item=item from=$groups}
+						$("#groups_{$item.id}").prop('checked',true);
+					{/foreach}
+				{/if}
+				{foreach key=key item=item from=$groups}
+					{if $smarty.request.groups[$item.id]}
+						$("#groups_{$item.id}").prop('checked',true);
+					{/if}
+				{/foreach}
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				По фильтру сетей:
+				<br>
+				<select name=flt_id id=flt_id>
+					<option value=0></option>
+					{foreach key=key item=item from=$kk_flt_nets}
+					<option value={$item.id}>{$item.name|escape}</option>
+					{/foreach}
+				</select>
+				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+	</table>
+<br>
+
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{/if}
+
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+<a href="?action=year_kpr&calendar_years={$smarty.request.calendar_years}&print=1&excel=1&filename=Бюджет по статьям затрат">Экспорт в Excel</a>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>критерий</td>
+		<td>вид планирования</td>
+		{foreach key=key item=item from=$calendar_months}
+		<td>{$item.mt}</td>
+		{/foreach}
+		<td>ИТОГО</td>
+	</tr>
+	<tr style="background-color: rgb(204, 255, 255);">
+		<td>План продаж, тыс.{$valuta}.</td>
+		<td><table>{foreach key=plan_name_key item=plan_name_item from=$year_kpr_pfb.plan_name}<tr><td>{$plan_name_item}</td></tr>{/foreach}</table></td>
+		{foreach key=key1 item=item1 from=$year_kpr_pfb.plan}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key2 item=item2 from=$item1}
+				<tr>
+					<td style="text-align:right">{$item2|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		{/foreach}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key1 item=item1 from=$year_kpr_pfb_total.plan}
+				<tr>
+					<td style="text-align:right">{$item1|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+	</tr>
+	<tr style="background-color: rgb(255, 255, 204);">
+		<td colspan=2>Факт продаж, тыс.{$valuta}.</td>
+		{foreach key=key1 item=item1 from=$year_kpr_pfb.fakt}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key2 item=item2 from=$item1}
+				<tr>
+					<td style="text-align:right">{$item2|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		{/foreach}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key1 item=item1 from=$year_kpr_pfb_total.fakt}
+				<tr>
+					<td style="text-align:right">{$item1|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+	</tr>
+	<tr style="background-color: rgb(255, 255, 204);">
+		<td>План бюджет, тыс.{$valuta}.</td>
+		<td><table>{foreach key=plan_name_key item=plan_name_item from=$year_kpr_pfb.plan_name}<tr><td>{$plan_name_item}</td></tr>{/foreach}</table></td>
+		{foreach key=key1 item=item1 from=$year_kpr_pfb.budget}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key2 item=item2 from=$item1}
+				<tr>
+					<td style="text-align:right">{$item2|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		{/foreach}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key1 item=item1 from=$year_kpr_pfb_total.budget}
+				<tr>
+					<td style="text-align:right">{$item1|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+	</tr>
+	<tr style="background-color: rgb(204, 255, 255);">
+		<td colspan=2>Факт бюджет, тыс.{$valuta}. (на основе оказанных услуг)</td>
+		{foreach key=key1 item=item1 from=$year_kpr_fou}
+			<td style="text-align:right">{$item1.total|default:0|num:2}</td>
+		{/foreach}
+		<td style="text-align:right">{$year_kpr_fou_total|default:0|num:2}</td>
+	</tr>
+	<tr style="background-color: rgb(255, 255, 204);">
+		<td colspan=2>Факт бюджет, тыс.{$valuta}. (на основе оплаченных счетов)</td>
+		{foreach key=key1 item=item1 from=$year_kpr_fos}
+			<td style="text-align:right">{$item1.total|default:0|num:2}</td>
+		{/foreach}
+		<td style="text-align:right">{$year_kpr_fos_total|default:0|num:2}</td>
+	</tr>
+	<tr style="background-color: rgb(255, 255, 204);">
+		<td colspan=2>Сумма выставленных счетов, тыс.{$valuta}.</td>
+		{foreach key=key1 item=item1 from=$year_kpr_svs}
+			<td style="text-align:right">{$item1.total|default:0|num:2}</td>
+		{/foreach}
+		<td style="text-align:right">{$year_kpr_svs_total|default:0|num:2}</td>
+	</tr>
+</table>
+{/if}

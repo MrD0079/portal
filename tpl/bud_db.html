@@ -1,0 +1,46 @@
+{if not $smarty.request.print}
+
+<h1>Список ДБ (
+{if $smarty.request.all eq 0}Все{/if}
+{if $smarty.request.all eq 1}Работающие{/if}
+{if $smarty.request.all eq -1}Уволенные{/if}
+)</h1>
+
+
+<p>
+<a href="?action=bud_db&all=0">Все</a>
+&nbsp&nbsp&nbsp
+<a href="?action=bud_db&all=1">Работающие</a>
+&nbsp&nbsp&nbsp
+<a href="?action=bud_db&all=-1">Уволенные</a>
+</p>
+
+
+{/if}
+
+
+
+
+
+
+
+
+<form target="_self" method="POST" name=form_bud_db>
+<table border=1 cellspacing=0 cellpadding=2>
+	{foreach key=k item=i from=$bud_db name=bud_db}
+	{if $i.draw_head eq 1}
+	<tr style="font-weight:bold;">
+		<td>№ п/п</td>
+		<td>Сотрудник</td>
+		<td align=center>ДБ<br><a href="javascript:void(0)" onclick="javascript:form_bud_db.submit()">+</a></td>
+	</tr>
+	{/if}
+	<tr style="text-align:center">
+		<td>{$smarty.foreach.bud_db.iteration}</td>
+		<td style="text-align:left">{$i.fio}</td>
+		<td {if $i.is_db eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p11_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_db eq 1}checked{/if}>			<input type=hidden id=p11_{$i.tn} name=ds[spdtree][svideninn][is_db][{$i.tn}]>			</td>
+	</tr>
+	{/foreach}
+</table>
+<input type=submit name=admin_length_save id=admin_length_save value="Сохранить">
+</form>

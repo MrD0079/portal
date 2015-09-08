@@ -1,0 +1,16 @@
+<h1>Новый сотрудник</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+<table cellpadding=3 border=0>
+	<tr>
+		<td>Ф.И.О. нового сотрудника</td>
+		<td><input required name="new_spd[fam]" size=15><input required name="new_spd[im]" size=15><input required name="new_spd[otch]" size=15></td>
+	</tr>
+	<tr>
+		<td>ИНН</td>
+		<td><input required name="new_spd[svideninn]" size=30></td>
+		<input type=hidden name="new_spd[dpt_id]" value={$smarty.session.dpt_id}></td>
+	</tr>
+</table>
+<input type=submit value="Добавить сотрудника">
+</form>

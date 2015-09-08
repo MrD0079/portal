@@ -1,0 +1,53 @@
+<h3>Приложение к акту выполненных работ</h3>
+<h3>СПД - {$spd_fio}, {$period}</h3>
+
+{if not $smarty.request.print}
+	<p><a target=_blank href="?action=rep_spd_body&month_list={$smarty.request.month_list}&tn={$smarty.request.tn}&print=1">Для печати</a></p>
+{/if}
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ визита</td>
+		<td>День визита</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Расположение</td>
+		<td>Тип ТП</td>
+		<td>Стеллажи</td>
+		<td>Тумбы</td>
+		<td>НТО</td>
+		{if not $smarty.request.print}
+		<td>GPS координаты</td>
+		<td>Фото</td>
+		{/if}
+		<td>Задачи по итогам визита</td>
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+		<tr>
+			<td>{$smarty.foreach.list.iteration}</td>
+			<td>{$i.visitdate_txt}</td>
+			<td>{$i.tp_ur}</td>
+			<td>{$i.tp_addr}</td>
+			<td>{$i.tp_place}</td>
+			<td>{$i.tp_type}</td>
+			<td>{$i.stelag}</td>
+			<td>{$i.tumb}</td>
+			<td>{$i.nto}</td>
+			{if not $smarty.request.print}
+			<td style="text-align:center">
+				{if $i.latitude and $i.longitude}
+					<a target="_blank" href="https://www.google.com/maps/place/{$i.latitude}+{$i.longitude}/@{$i.latitude},{$i.longitude},19z">{$i.latitude} {$i.longitude}</a>
+				{/if}
+			</td>
+			<td style="text-align:center">
+			{foreach key=k1 item=i1 from=$i.urls name=photos}
+					<nobr><a target="_blank" href="{$i1.url}">Фото {$smarty.foreach.photos.iteration}</a></nobr>
+			{/foreach}
+			</td>
+			{/if}
+			<td>{$i.task|nl2br}</td>
+		</tr>
+	{/foreach}
+</table>

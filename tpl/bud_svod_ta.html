@@ -1,0 +1,202 @@
+<form name=bud_svod id=bud_svod target=_self method=post enctype="multipart/form-data">
+
+<h1>ТИТУЛ: Подтверждение отчета</h1>
+
+{if not $smarty.request.print}
+<table>
+	<tr>
+		<td>
+			Отчетный месяц
+		</td>
+		<td>
+			<select required="true" name=dt id=dt>
+				{foreach key=key item=item from=$dt}
+					<option value="{$item.sd_c}">{$item.my}</option>
+				{/foreach}
+			</select>
+			<script>$('#dt option[value="{$smarty.request.dt}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			По руководителю:
+		</td>
+		<td>
+			<select name=exp_list_without_ts id=exp_list_without_ts>
+				<option value=0></option>
+				{foreach key=key item=item from=$exp_list_without_ts}
+				<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+				{/foreach}
+			</select>
+			<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			По ДБ:
+		</td>
+		<td>
+			<select name=db id=db>
+				<option value=0></option>
+				{foreach key=key item=item from=$db}
+				<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+				{/foreach}
+			</select>
+			<script>$('#db option[value="{$smarty.request.db}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			По филиалу:
+		</td>
+		<td>
+			<select name=fil id=fil>
+				<option value=0></option>
+				{foreach key=key item=item from=$fil}
+				<option value="{$item.id}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#fil option[value="{$smarty.request.fil}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Кластер
+		</td>
+		<td>
+			<select name=clusters id=clusters>
+				<option value=0></option>
+				{foreach key=key item=item from=$clusters}
+				<option value="{$item.id}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#clusters option[value="{$smarty.request.clusters}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<input onClick="$('#ok_db').val(this.value)" type=radio name="ok_db" value=1 checked>все
+			<input onClick="$('#ok_db').val(this.value)" type=radio name="ok_db" value=2>подтверждено ДБ
+			<input onClick="$('#ok_db').val(this.value)" type=radio name="ok_db" value=3>не подтверждено ДБ
+			<script>
+				$("input[name=ok_db][value={$smarty.request.ok_db}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=1 checked>все
+			<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=2>подтверждено ПР ДБ
+			<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=3>не подтверждено ПР ДБ
+			<script>
+				$("input[name=ok_pr][value={$smarty.request.ok_pr}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<input onClick="$('#ok_t1').val(this.value)" type=radio name="ok_t1" value=1 checked>все
+			<input onClick="$('#ok_t1').val(this.value)" type=radio name="ok_t1" value=2>подтверждено ВСТМ 1й этап
+			<input onClick="$('#ok_t1').val(this.value)" type=radio name="ok_t1" value=3>не подтверждено ВСТМ 1й этап
+			<script>
+				$("input[name=ok_t1][value={$smarty.request.ok_t1}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<input onClick="$('#ok_t2').val(this.value)" type=radio name="ok_t2" value=1 checked>все
+			<input onClick="$('#ok_t2').val(this.value)" type=radio name="ok_t2" value=2>подтверждено ВСТМ 2й этап
+			<input onClick="$('#ok_t2').val(this.value)" type=radio name="ok_t2" value=3>не подтверждено ВСТМ 2й этап
+			<script>
+				$("input[name=ok_t2][value={$smarty.request.ok_t2}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+</table>
+
+
+{/if}
+
+
+
+
+{if not $smarty.request.print}
+
+<p><a href="javascript:void(0);" onClick="load_list();">Показать данные</a></p>
+
+<div id="tp" style="display: inline;"></div>
+
+{/if}
+
+</form>
+
+<script>
+{literal}
+function load_list()
+{
+x=loadwait_show('tp');
+$('#tp').load('?action=bud_svod_ta_list&nohead=1',
+{
+	eta_list: $('#eta_list').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	clusters: $('#clusters').val(),
+	fil: $('#fil').val(),
+	funds: $('#funds').val(),
+	db: $('#db').val(),
+	dt: $('#dt').val(),
+	ok_db: $('input[name=ok_db]:checked').val(),
+	ok_t1: $('input[name=ok_t1]:checked').val(),
+	ok_pr: $('input[name=ok_pr]:checked').val(),
+	ok_t2: $('input[name=ok_t2]:checked').val(),
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+
+function save(dt,table,field,val,key2)
+{
+	$('#td_'+field+key2).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('key2',  key2);
+	fd.append('table',  table);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	if (field=='prot_db')
+	{
+		fd.append('file', $('#fn_'+field+key2)[0].files[0]);
+	}
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_svod_ta_save&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_'+field+key2).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+{/literal}
+
+{if $smarty.request.select}
+load_list();
+{/if}
+
+</script>
+
+<div id=ok></div>

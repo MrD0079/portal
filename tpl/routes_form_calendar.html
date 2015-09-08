@@ -1,0 +1,148 @@
+<form
+action="index.php"
+method="POST"
+id="form_{$smarty.request.tp}_{$smarty.request.ag}"
+name="form_{$smarty.request.tp}_{$smarty.request.ag}"
+enctype="multipart/form-data"
+>
+<input type=hidden name="action" value="routes_form_calendar">
+<input type=hidden name="nohead" value="1">
+<input type=hidden name="save" value="1">
+
+<input type=hidden value=false id="FormChanged">
+
+<input type=hidden name="select_route_numb" value="{$smarty.request.select_route_numb}">
+<input type=hidden name="tp" value="{$smarty.request.tp}">
+<input type=hidden name="ag" value="{$smarty.request.ag}">
+
+<table style="border: 1px dotted; text-align:center">
+	<tr>
+		{foreach key=rbck item=rbci from=$rbc}
+		<td style="border: 1px dotted; background-color:#FFCC33;"><b>{$rbci.dwt}</b></td>
+		{/foreach}
+	</tr>
+	<tr>
+		{foreach key=k2 item=i2 from=$d name=i1}
+			{if $i2.dm eq 1}
+			{section name=foo start=1 loop=$i2.dw step=1}
+			<td style="border: 1px dotted;">
+			</td>
+			{/section}
+			{/if}
+			<td style="border: 1px dotted; text-align: right">
+				<table style="text-align:left" border=0>
+					<tr>
+						<td rowspan=3 style="width:30px; text-align:center"><b>{$i2.dm}</b>
+						</td>
+						<td>
+						</td>
+					</tr>
+					<tr>
+						<td style="{if $i2.day_enabled_mr eq 1}background-color:green;{/if}">
+							<nobr>
+								<input
+									{if $i2.day_enabled_mr eq 1}checked{/if}
+									type="checkbox"
+									onClick="
+									$('#rbday_enabled_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').attr('disabled',false);
+									$('#rbday_enabled_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').val(this.checked?1:0);
+									$('#rbday_time_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').attr('disabled',!this.checked);
+									!this.checked?$('#rbday_time_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').val(''):null;
+									$('#FormChanged').val(true);
+									$('#save_link_{$smarty.request.tp}_{$smarty.request.ag}').show();
+									"
+								>
+								<input
+									{if $i2.day_enabled_mr neq 1}disabled{/if}
+									type=hidden
+									value="{$i2.day_enabled_mr}"
+									id="rbday_enabled_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}"
+									name="rb[day_enabled_mr][{$smarty.request.tp}][{$smarty.request.ag}][{$i2.dm}]"
+								>
+								<input
+									{if $i2.day_enabled_mr neq 1}disabled{/if}
+									size=3
+									class="number_int"
+									value="{$i2.day_time_mr}"
+									id="rbday_time_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}"
+									name="rb[day_time_mr][{$smarty.request.tp}][{$smarty.request.ag}][{$i2.dm}]"
+									onChange="$('#FormChanged').val(true);$('#save_link_{$smarty.request.tp}_{$smarty.request.ag}').show();"
+								>
+								<!--МР-->
+							</nobr>
+						</td>
+					</tr>
+					<!--<tr>
+						<td style="{if $i2.day_enabled_f eq 1}background-color:green;{/if}">
+							<nobr>
+								<input
+									{if $i2.day_enabled_f eq 1}checked{/if}
+									type="checkbox"
+									onClick="
+									$('#rbday_enabled_f_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').attr('disabled',false);
+									$('#rbday_enabled_f_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').val(this.checked?1:0);
+									$('#rbday_time_f_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').attr('disabled',!this.checked);
+									!this.checked?$('#rbday_time_f_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}').val(''):null;
+									$('#FormChanged').val(true);
+									$('#save_link_{$smarty.request.tp}_{$smarty.request.ag}').show();
+									"
+								>
+								<input
+									{if $i2.day_enabled_f neq 1}disabled{/if}
+									type=hidden
+									value="{$i2.day_enabled_f}"
+									id="rbday_enabled_f_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}"
+									name="rb[day_enabled_f][{$smarty.request.tp}][{$smarty.request.ag}][{$i2.dm}]"
+								>
+								<input
+									{if $i2.day_enabled_f neq 1}disabled{/if}
+									size=3
+									class="number_int"
+									value="{$i2.day_time_f}"
+									id="rbday_time_f_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}"
+									name="rb[day_time_f][{$smarty.request.tp}][{$smarty.request.ag}][{$i2.dm}]"
+									onChange="$('#FormChanged').val(true);$('#save_link_{$smarty.request.tp}_{$smarty.request.ag}').show();"
+								>
+								Ф
+							</nobr>
+						</td>
+					</tr>-->
+				</table>
+			</td>
+		{if $i2.dw eq 7}
+		</tr>
+		<tr>
+		{/if}
+		{/foreach}
+	</tr>
+</table>
+
+<script>
+$tp='{$smarty.request.tp}';
+$ag='{$smarty.request.ag}';
+
+{literal}
+
+function x()
+{
+	$('#FormChanged').val(false);
+	$('#form_'+$tp+'_'+$ag).submit();
+}
+
+$(document).ready(function() {
+	$(window).on('beforeunload', function(){if ($('#FormChanged').val()=='true'){return 'Имеются несохраненные изменения, забить на них?';}});
+	var options = {
+		target: '#uploadOutput_'+$tp+'_'+$ag,
+		success: function() {
+		$('#save_link_'+$tp+'_'+$ag).hide();
+		}
+	};
+	$('#form_'+$tp+'_'+$ag).ajaxForm(options);
+});
+
+
+{/literal}
+
+</script> 
+
+</form>

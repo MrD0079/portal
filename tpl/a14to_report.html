@@ -1,0 +1,189 @@
+<h1>Вечерний отчет</h1>
+
+<form target="_self" method="POST" name=form_report id=form_report>
+
+<p>
+Дата: <input id=dt name=dt class=datepicker value='{$smarty.request.dt}'>
+
+<script>
+var now='{$now}';
+var yesterday='{$yesterday}';
+{literal}
+//$(function(){$('#dt').datepicker('option','minDate',-1);$('#dt').datepicker('option','maxDate',0);})
+$('#dt').datepicker();
+$('#dt').change(function(){
+//$('#dt').val()<yesterday?$('#dt').val(yesterday):null;
+//$('#dt').val()>now?$('#dt').val(now):null;
+});
+{/literal}
+</script>
+
+ЭТА:
+<select name=eta_list id=eta_list>
+<option value=''></option>
+{foreach key=key item=item from=$eta_list}
+<option value="{$item.h_eta}">{$item.eta}</option>
+{/foreach}
+</select>
+<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+</p>
+
+<p>
+	<table border=0>
+		<tr>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=1>все</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=2>есть фото</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=3>нет фото</td>
+		</tr>
+		<script>$("input[name=ok_photo][value={$smarty.request.ok_photo}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=1>все</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=2>был визит</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=3>не было визита</td>
+		</tr>
+		<script>$("input[name=ok_visit][value={$smarty.request.ok_visit}]").attr('checked',true);</script>
+	</table>
+</p>
+
+<p>
+<input type=submit name=generate id=generate value="Построить отчет">
+</p>
+
+
+<p id=perc_ts>
+% стандарта за текущий день - <b>{$perc_ts|num:2}</b>
+</p>
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2>№ п/п</td>
+		<td rowspan=2>ЭТА</td>
+		<td rowspan=2>Код ТП</td>
+		<td rowspan=2>Название/Адрес ТП</td>
+		<td rowspan=2>Расположение</td>
+		<td rowspan=2>Тип ТП</td>
+		<td rowspan=2>Стеллажи</td>
+		<td rowspan=2>Витрины</td>
+		<td rowspan=2>Визит</td>
+		<td rowspan=2>Фото</td>
+		<td colspan=3>Выполнение стандарта ТО</td>
+		<td colspan=2>Задачи</td>
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td>ТС</td>
+		<td>Аудит</td>
+		<td>Коммент ТС</td>
+		<td>ассортимент</td>
+		<td>мерчандайзинг</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+			<tr>
+				<td rowspan={$i.urls+1}>{$smarty.foreach.d.iteration}</td>
+				<td rowspan={$i.urls+1}>{$i.fio_eta}</td>
+				<td rowspan={$i.urls+1}>{$i.tp_kod_key}</td>
+				<td rowspan={$i.urls+1}>{$i.tp_ur} / {$i.tp_addr}</td>
+				<td rowspan={$i.urls+1}>{$i.tp_place}</td>
+				<td rowspan={$i.urls+1}>{$i.tp_type}</td>
+				<td rowspan={$i.urls+1} style="text-align:center">{$i.stelag}</td>
+				<td rowspan={$i.urls+1} style="text-align:center">{$i.tumb}</td>
+				<td rowspan={$i.urls+1} style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
+				<td colspan=6 {if $i.urls eq 0}bgcolor="red"{/if}></td>
+				<!--<td rowspan={$i.urls+1}><textarea></textarea></td>-->
+			</tr>
+			{foreach key=k1 item=i1 from=$i.photos name=photos}
+			<tr>
+				<td>
+					<nobr><a target="_blank" href="{$i1.url}">Фото {$smarty.foreach.photos.iteration}</a></nobr>
+				</td>
+				<td
+					id=td_{$i1.h_url}_ts
+					{if $i1.ts eq 1}bgcolor="lightgreen"{/if}
+					{if $i1.ts eq 2}bgcolor="red"{/if}
+				>
+					{if not $i1.auditor}
+						<nobr><input type=radio id="ts{$i1.h_url}" name="ts{$i1.h_url}" value=1 onClick="save('{$i1.h_url}','ts',this.value)">соответствует</nobr>
+						<br>
+						<nobr><input type=radio id="ts{$i1.h_url}" name="ts{$i1.h_url}" value=2 onClick="save('{$i1.h_url}','ts',this.value)">не соответствует</nobr>
+						<script>$("input[name=ts{$i1.h_url}][value={$i1.ts}]").attr('checked',true);</script>
+					{else}
+						{if $i1.ts eq 1}соответствует{/if}
+						{if $i1.ts eq 2}не соответствует{/if}
+					{/if}
+				</td>
+				<td
+					id=td_{$i1.h_url}_auditor
+					{if $i1.auditor eq 1}bgcolor="lightgreen"{/if}
+					{if $i1.auditor eq 2}bgcolor="red"{/if}
+				>
+					{if $i1.auditor eq 1}соответствует{/if}
+					{if $i1.auditor eq 2}не соответствует{/if}
+				</td>
+				<td id=td_{$i1.h_url}_ts_comm>
+					{if not $i1.auditor}
+					<textarea id="ts_comm{$i1.h_url}" name="ts_comm{$i1.h_url}" onChange="save('{$i1.h_url}','ts_comm',this.value)">{$i1.ts_comm}</textarea>
+					{else}
+					{$i1.ts_comm|escape}
+					{/if}
+				</td>
+				<td id=td_{$i1.h_url}_tasks_assort>
+					{if not $i1.auditor}
+					<textarea id="tasks_assort{$i1.h_url}" name="tasks_assort{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>
+					{else}
+					{$i1.tasks_assort|escape}
+					{/if}
+				</td>
+				<td id=td_{$i1.h_url}_tasks_mr>
+					{if not $i1.auditor}
+					<textarea id="tasks_mr{$i1.h_url}" name="tasks_mr{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>
+					{else}
+					{$i1.tasks_mr|escape}
+					{/if}
+				</td>
+			</tr>
+			{/foreach}
+	{/foreach}
+	<tr style="font-weight:bold;text-align:center">
+		<td colspan=6>ИТОГО</td>
+		<td>{$t.stelag}</td>
+		<td>{$t.tumb}</td>
+		<td>{$t.visit}</td>
+		<td>{$t.urls}</td>
+		<td>{$t.ts}</td>
+		<td>{$t.auditor}</td>
+	</tr>
+</table>
+</form>
+
+<script>
+{literal}
+function save(id,field,val)
+{
+$('#td_'+id+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('id',  id);
+fd.append('field',  field);
+fd.append('val',  val);
+$.ajax({
+  type: 'POST',
+  url: '?action=a14to_report&save=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+	$('#perc_ts').load('?action=a14to_report_perc&nohead=1&dt='+$('#dt').val()+'&eta_list='+$('#eta_list').val());
+   if (field=='ts')
+   {
+    (val==1) ? $('#td_'+id+'_'+field).css('background-color','lightgreen') : null;
+    (val==2) ? $('#td_'+id+'_'+field).css('background-color','red') : null;
+   }
+   else
+   {
+    $('#td_'+id+'_'+field).css('background-color','white');
+   }
+  }
+});
+}
+{/literal}
+</script>

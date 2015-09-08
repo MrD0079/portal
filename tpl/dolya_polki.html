@@ -1,0 +1,217 @@
+<h1>Доля полочного пространства</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+{if not $is_mkk}
+			<td>
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+{/if}
+			<td>
+				Выберите сеть из списка
+				<br>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+	</table>
+
+Сортировать по:
+<input type=radio id=orderby name=orderby value=0> названию сети
+<input type=radio id=orderby name=orderby value=1> доле сети в продажах (по убыванию)
+
+<script>$("input[name=orderby][value={$smarty.request.orderby|default:0}]").attr('checked',true);</script>
+
+<br>
+
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{/if}
+
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+<a href="?action=dolya_polki&print=1&excel=1&filename=Доля полочного пространства">Экспорт в Excel</a>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="text-align:center">
+		<td>№ п/п</td>
+		<td>Сеть</td>
+		<td>Год</td>
+		<td>Доля сети<br>в продажах,<br><!--тыс.{$valuta} - -->%</td>
+		{foreach key=key item=item from=$h}
+		<td>{$item}</td>
+		{/foreach}
+	</tr>
+	{foreach key=dolya_polki_key item=dolya_polki_item from=$dolya_polki name=dolya_polki}
+	{math assign="color" equation='x-y' x=1 y=$smarty.foreach.dolya_polki.iteration%2} 
+	<tr
+		{if $color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+		{if $color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+	>
+		<td>{$smarty.foreach.dolya_polki.iteration}</td>
+		<td>{$dolya_polki_item.net_name}</td>
+		<td><table>{foreach key=key1 item=item1 from=$dolya_polki_item.data_y}<tr><td>{$key1}</td></tr>{/foreach}</table></td>
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key1 item=item1 from=$dolya_polki_item.data_sales}
+				<tr>
+					<!--
+					<td style="text-align:right">{$item1|default:0|num:2}</td>
+					<td style="text-align:right">-</td>
+					-->
+					<td style="text-align:right">{if $d2_total[$key1] neq 0}{$item1/$d2_total[$key1]*100|num:2}{else}{0|num:2}{/if}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		{foreach key=key1 item=item1 from=$dolya_polki_item.data_prop}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key2 item=item2 from=$item1.data}
+				<tr>
+<!--
+{if $d2_total[$key2] neq 0}
+	<td style="text-align:right">{$item2/100*$dolya_polki_item.data_sales[$key2]/$d2_total[$key2]|default:0|num:4}</td>
+{else}
+	<td style="text-align:right">{0|num:4}</td>
+{/if}
+-->
+					<td style="text-align:right">{$item2|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		{/foreach}
+	</tr>
+	{/foreach}
+<!--
+	<tr>
+		<td></td>
+		<td>Итого план продаж, тыс.{$valuta}</td>
+		<td><table>{foreach key=key1 item=item1 from=$d2_total}<tr><td>{$key1}</td></tr>{/foreach}</table></td>
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key1 item=item1 from=$d2_total}
+				<tr>
+					<td style="text-align:right">{$item1|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+	</tr>
+-->
+
+
+
+	<tr>
+		<td></td>
+		<td>Среднеарифметическая доля, %</td>
+		<td><table>{foreach key=key1 item=item1 from=$d1_total.data_y}<tr><td>{$key1}</td></tr>{/foreach}</table></td>
+		<td></td>
+		{foreach key=key1 item=item1 from=$d1_total.data_perc}
+		<td>
+			<table border=0 width=100%>
+				{foreach key=key2 item=item2 from=$item1}
+				<tr>
+					<td style="text-align:right">{$item2|default:0|num:2}</td>
+				</tr>
+				{/foreach}
+			</table>
+		</td>
+		{/foreach}
+	</tr>
+
+
+
+
+	<tr>
+		<td></td>
+		<td>Средневзвешенная доля, %</td>
+		<td><table>{foreach key=key1 item=item1 from=$d1_total.data_y}<tr><td>{$key1}</td></tr>{/foreach}</table></td>
+		<td></td>
+		{foreach key=key item=item from=$d3_total}
+		<td>
+			<table border=0 width=100%>
+		{foreach key=key1 item=item1 from=$item}
+				<tr>
+					<td style="text-align:right">
+
+<!--*{$d2_total[$key1]}*-->
+
+<!--<br>-->
+
+
+{assign var=s value=0}
+
+
+
+				{foreach key=key2 item=item2 from=$item1}
+					<!--{$item2}- -->
+
+
+{if $d2_total[$key1] neq 0}
+	<!--{$item2/100*$dolya_polki[$key2].data_sales[$key1]/$d2_total[$key1]|default:0|num:4}-->
+
+	{assign var=s value=`$s+$item2/100*$dolya_polki[$key2].data_sales[$key1]/$d2_total[$key1]`}
+{/if}
+<!--<br>-->
+
+
+
+
+
+				{/foreach}
+{$s*100|num:2}
+					</td>
+				</tr>
+		{/foreach}
+			</table>
+		</td>
+		{/foreach}
+	</tr>
+
+
+
+
+
+</table>
+{/if}

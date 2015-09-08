@@ -1,0 +1,74 @@
+<table>
+<tbody>
+<tr>
+	<td>Год</td>
+	<td>
+		<select name=calendar_years id=calendar_years>
+			<option></option>
+			{foreach key=key item=item from=$calendar_years}
+			<option value={$item.y}>{$item.y}</option>
+			{/foreach}
+		</select>
+		<script>$('#calendar_years option[value={$smarty.request.calendar_years}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Месяц</td>
+	<td>
+		<select name="calendar_months" id="calendar_months">
+			<option value=0></option>
+			{foreach key=key item=item from=$calendar_months}
+			<option value={$item.my}>{$item.mt}</option>
+			{/foreach}
+		</select>
+		<script>$('#calendar_months option[value={$smarty.request.calendar_months}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Ответственный РМ КК</td>
+	<td>
+		<select name=tn_rmkk id=tn_rmkk>
+			<option value=0></option>
+			{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+			<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+			{/foreach}
+		</select>
+		<script>$('#tn_rmkk option[value={$smarty.request.tn_rmkk}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Ответственный МКК</td>
+	<td>
+		<select name=tn_mkk id=tn_mkk>
+			<option value=0></option>
+			{foreach key=mkk_key item=mkk_item from=$list_mkk}
+			<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+			{/foreach}
+		</select>
+		<script>$('#tn_mkk option[value={$smarty.request.tn_mkk}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Сеть</td>
+	<td>
+		<select name="nets" id="nets">
+			<option value=0></option>
+			{foreach key=key item=item from=$nets}
+				<option value={$item.id_net}>{$item.net_name}</option>
+			{/foreach}
+		</select>
+		<script>$('#nets option[value={$smarty.request.nets}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Наличие акта</td>
+	<td>
+		<input checked="checked" name="okact" id="okact" value="all" type="radio"> все
+		<input name="okact" id="okact" value="no" type="radio"> нет акта
+		<input name="okact" id="okact" value="ok" type="radio"> есть акт
+		<script>$("input[name=okact][value={$smarty.request.okact}]").attr('checked',true);</script>
+	</td>
+</tr>
+</tbody>
+</table>
+<input name="generate" value="Отобразить реестр" type="submit">

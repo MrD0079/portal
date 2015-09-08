@@ -1,0 +1,67 @@
+{foreach key=k item=i from=$list}
+<h1>{$i.name}</h1>
+<p>{$i.db_list}</p>
+<h3>Национальные акции</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold; text-align:center">
+      <td>Название акции</td>
+      <td>Кол-во<br>ТП</td>
+      <td>Объем<br>продаж,<br>{$valuta}</td>
+      <td>Сумма<br>бонуса<br>ФАКТИЧЕСКАЯ,<br>{$valuta}</td>
+      <td width=100px>Компенсация дистрибутору с учетом скидки филиала и логистики, {$valuta}</td>
+    </tr>
+{foreach key=k1 item=i1 from=$i.act}
+    <tr>
+      <td><a target=_blank href="?action={$i1.act}_report_a&month={$i1.month}">{$i1.act_name}</a></td>
+      <td style="text-align:right">{$i1.tp}</td>
+      <td style="text-align:right">{$i1.sales|num:2}</td>
+      <td style="text-align:right">{$i1.bonus|num:2}</td>
+      <td style="text-align:right">{$i1.compens_distr|num:3}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td>ИТОГО</td>
+      <td style="text-align:right">{$i.act_total.tp}</td>
+      <td style="text-align:right">{$i.act_total.sales|num:2}</td>
+      <td style="text-align:right">{$i.act_total.bonus|num:2}</td>
+      <td style="text-align:right">{$i.act_total.compens_distr|num:3}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Локальные акции</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold;text-align:center">
+      <td>Название акции</td>
+      <td>Кол-во<br>ТП</td>
+      <td>Объем<br>продаж,<br>{$valuta}</td>
+      <td>Сумма<br>бонуса<br>ФАКТИЧЕСКАЯ,<br>{$valuta}</td>
+      <td width=100px>Компенсация дистрибутору с учетом скидки филиала и логистики, {$valuta}</td>
+    </tr>
+{foreach key=k1 item=i1 from=$i.act_local}
+    <tr>
+      <td>
+	<a target=_blank href="?action=bud_ru_zay_report&z_id={$i1.id}&select=1">{$i1.id}</a>
+	<a target=_blank href="?action=akcii_local_report&z_id={$i1.id}&ok_selected=2">{$i1.val_string}</a>
+      </td>
+      <td style="text-align:right">{$i1.c}</td>
+      <td style="text-align:right">{$i1.summa|num:2}</td>
+      <td style="text-align:right">{$i1.bonus_sum|num:2}</td>
+      <td style="text-align:right">{$i1.compens_distr|num:3}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td>ИТОГО</td>
+      <td style="text-align:right">{$i.act_local_total.c}</td>
+      <td style="text-align:right">{$i.act_local_total.summa|num:2}</td>
+      <td style="text-align:right">{$i.act_local_total.bonus_sum|num:2}</td>
+      <td style="text-align:right">{$i.act_local_total.compens_distr|num:3}</td>
+    </tr>
+  </tbody>
+</table>
+
+{/foreach}

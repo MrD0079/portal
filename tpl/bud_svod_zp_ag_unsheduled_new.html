@@ -1,0 +1,71 @@
+<tr id="tr_{$id}">
+	<td style="text-align:center">{$id}</td>
+	<td style="text-align:center">да <a href='javascript:void(0);' onClick="del_unscheduled({$id});">[X]</a></td>
+	<td style=" text-align:left;" id="d_{$id}_fio">
+		<input
+			size="15"
+			name="fio[{$id}]"
+			id="fio_{$id}"
+			onChange="save_ag('{$id}','',1,'fio',this.value);"
+		>
+	</td>
+	<td style=" text-align:right;" id="d_{$id}_eta_tab_number">
+		<input
+			class="number_int"
+			size="10"
+			name="eta_tab_number[{$id}]"
+			id="eta_tab_number_{$id}"
+			onChange="save_ag('{$id}','',1,'eta_tab_number',this.value);"
+		>
+	</td>
+	<td style="text-align:center"></td>
+	<td style="text-align:center"></td>
+	<td id="d_{$id}_fil">
+		<select id="fil_{$id}" onChange="save_ag('{$id}','',1,'fil',this.value);">
+			<option></option>
+			{foreach key=k1 item=i1 from=$fil_list}
+			<option value="{$i1.id}">{$i1.name}</option>
+			{/foreach}
+		</select>
+	</td>
+	<td style=" text-align:right;" id="d_{$id}_sales">
+		<input
+			class="number"
+			size="10"
+			name="sales[{$id}]"
+			id="sales_{$id}"
+			onChange="save_ag('{$id}','',1,'sales',this.value);"
+		>
+	</td>
+	<td style=" text-align:right;" id="d_{$id}_dz_return">
+		<input
+			class="number"
+			size="10"
+			name="dz_return[{$id}]"
+			id="dz_return_{$id}"
+			onChange="save_ag('{$id}','',1,'dz_return',this.value);"
+		>
+	</td>
+	<td style=" text-align:right" id="d_{$id}_dz_return_norm"></td>
+	<td style=" text-align:right;" id="d_{$id}_akb_penalty">
+		<input
+			class="number"
+			size="10"
+			name="akb_penalty[{$id}]"
+			id="akb_penalty_{$id}"
+			onChange="save_ag('{$id}','',1,'akb_penalty',this.value);"
+		>
+	</td>
+	<td style=" text-align:right" id="d_{$id}_zp_plan"></td>
+	<td style=" text-align:right;" id="d_{$id}_zp_fakt">
+		<input
+			class="number"
+			size="10"
+			name="zp_fakt[{$id}]"
+			id="zp_fakt_{$id}"
+			onChange="save_ag('{$id}','',1,'zp_fakt',this.value);"
+		>
+	</td>
+	<td style=" text-align:right" id="d_{$id}_dz_return_norm03"></td>
+	<td style=" text-align:right; background-color: #FFCC99" id="d_{$id}_sales_perc"></td>
+</tr>

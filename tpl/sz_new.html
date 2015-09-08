@@ -1,0 +1,168 @@
+<h1>
+{if $smarty.request.save}
+Новая СЗ
+{else}
+Редактирование СЗ
+{/if}
+</h1>
+
+{if $smarty.request.save}
+Ваша СЗ добавлена в реестр и ожидает подтверждения следующими сотрудниками:
+<br>
+<br>
+{foreach key=key item=item from=$acceptors}
+{$item.acceptor}<br>
+{/foreach}
+<br>
+{else}
+<form target="_self" method="POST" name=form_sz id=form_sz enctype="multipart/form-data">
+<input type=hidden name="sz[tn]" value="{$smarty.request.sz.tn}">
+<h3>Создатель: {if $smarty.request.id}{$smarty.request.sz.creator}{else}{$fio}{/if}</h3>
+
+
+{literal}
+<script type='text/javascript'>
+$a=1;
+$cnt=0;
+$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>{/if}{/foreach}{literal}";
+function add_acceptor(id)
+{
+	$("<div id=\"div_sz_acceptors_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"check_required(-1);$('#sz_acceptors_new"+$a+"').val(null);$('#sz_acceptors_new"+$a+"').attr('disabled',true);$('#div_sz_acceptors_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#ac1"));
+	$("#div_sz_acceptors_new"+$a).append($("<select required name=\"sz_acceptors[]\" id=\"sz_acceptors_new"+$a+"\">"+$s+"</select>"));
+	$("#sz_acceptors_new"+$a).val(id);
+	$a++;
+	check_required(1);
+}
+function check_required(increment)
+{
+	$cnt=$cnt+increment;
+	$cnt>0 ? $("#acc").val($cnt) : $("#acc").val(null);
+	$cnt>0 ? $("#save").attr('disabled',false) : $("#save").attr('disabled',true);
+}
+function add_executor(id)
+{
+	$("<div id=\"div_sz_executors_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#sz_executors_new"+$a+"').val(null);$('#sz_executors_new"+$a+"').attr('disabled',true);$('#div_sz_executors_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#exe1"));
+	$("#div_sz_executors_new"+$a).append($("<select required name=\"sz_executors[]\" id=\"sz_executors_new"+$a+"\">"+$s+"</select>"));
+	$("#sz_executors_new"+$a).val(id);
+	$a++;
+}
+function fn_select_shablon($e1,$e2,$v)
+{
+	var e1 = document.forms["form_sz"].elements[$e1];
+	e1.disabled=!$v;
+}
+function add_file(id)
+{
+	$("<div id=\"div_sz_fn_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#sz_fn_new"+$a+"').val(null);$('#div_sz_fn_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#save"));
+	$("#div_sz_fn_new"+$a).append($("<input type=file name=\""+$a+"\" id=\"sz_fn_new"+$a+"\">"));
+	$a++;
+}
+</script>
+{/literal}
+
+
+<h3>Согласователи. (Последний согласователь будет назначен адресатом СЗ)</h3>
+<div style="color:red" id=cat_hint></div>
+<p><a id="add_file1" href="javascript:void(0)" onclick="javascript:add_acceptor();">Добавить согласователя</a></p>
+<input id="acc" type=hidden required>
+<input type=hidden id="ac1"/>
+<script>{foreach from=$smarty.request.sz_acceptors key=k item=i name=acc}add_acceptor({$i});{/foreach}</script>
+
+
+<p>
+<input type=checkbox onclick="javascript:fn_select_shablon('select_shablon','select_shablon_submit',this.checked);">
+Вставить текст из шаблона
+<select name=select_shablon id=select_shablon disabled onChange="
+$('#sz_head').attr('required',false);
+$('#sz_body').attr('required',false);
+$('#sz_cat').attr('required',false);
+">
+	<option value=0></option>
+	{foreach key=key item=item from=$sz_tpl}
+	<option value={$item.id}>{$item.head|escape}</option>
+	{/foreach}
+</select>
+<script>$("#select_shablon option[value='{$smarty.request.select_shablon}']").prop('selected', true);</script>
+<input type=submit value="Вставить шаблон" name=select_shablon_submit id=select_shablon_submit>
+</p>
+
+
+{literal}
+<script>
+
+function cat ($val)
+{
+if ($val>0)
+{
+$('#cat_hint').load('?action=sz_new_get_cat_hint&nohead=1&id='+$val);
+}
+}
+</script>
+{/literal}
+
+
+
+
+Категория СЗ
+<br>
+
+<select name=sz[cat] id=sz_cat required onchange="javascript:cat(this.value);">
+	<option></option>
+	{foreach key=key item=item from=$sz_cat}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+
+<script>$("#sz_cat option[value='{$smarty.request.sz.cat}']").prop('selected', true);</script>
+<script>cat({$smarty.request.sz.cat});</script>
+
+
+
+
+
+
+<br>
+Тема СЗ
+<br>
+<textarea required cols="120" rows="1" name="sz[head]" id="sz_head">
+{foreach key=key item=item from=$sz_tpl}{if $item.id eq $smarty.request.select_shablon}{$item.head}{/if}{/foreach}
+{if not $smarty.request.select_shablon>0}{if $smarty.request.sz.head}{$smarty.request.sz.head}{/if}{/if}
+</textarea>
+<br>
+Содержание СЗ
+<br>
+<textarea required cols="120" rows="10" name="sz[body]" id="sz_body">
+{foreach key=key item=item from=$sz_tpl}{if $item.id eq $smarty.request.select_shablon}{$item.text}{/if}{/foreach}
+{if not $smarty.request.select_shablon>0}{if $smarty.request.sz.body}{$smarty.request.sz.body}{/if}{/if}
+</textarea>
+<br>
+
+
+<p><a id="add_exec" href="javascript:void(0)" onclick="javascript:add_executor();">Добавить исполнителя</a></p>
+<input type=hidden id="exe1"/>
+<script>{foreach from=$smarty.request.sz_executors key=k item=i name=acc}add_executor({$i});{/foreach}</script>
+
+
+
+{foreach from=$smarty.request.sz_files key=k item=i name=fl}
+{/foreach}
+
+{if $smarty.foreach.fl.total > 0 }
+<p>Отметить файлы для удаления</p>
+{/if}
+
+{foreach from=$smarty.request.sz_files key=k item=i name=fl}
+<input type=checkbox name="sz_files_del[]" value={$i.fn}><a target=_blank href="sz_files/{$i.fn}">{$i.fn}</a><br>
+{/foreach}
+
+
+<p><a id="add_file" href="javascript:void(0)" onclick="javascript:add_file();">добавить файл</a></p>
+
+<p><input type=submit value="Сохранить" name="save" id="save"/></p>
+
+</form>
+
+{/if}
+
+
+

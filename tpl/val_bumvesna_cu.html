@@ -1,0 +1,30 @@
+<h1>Частота участия по акции "Весенний БУМ"</h1>
+
+{if not $smarty.request.print}
+<p><a href="?action=val_bumvesna_cu&print=1&excel=1&generate=1&filename=Частота участия по акции Весенний БУМ">Экспорт в Excel</a></p>
+{/if}
+
+
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td style="vertical-align: top; text-align: center;">ТС</td>
+		<td style="vertical-align: top; text-align: center;">ЭТА</td>
+		<td style="vertical-align: top; text-align: center;">Название ТП</td>
+		<td style="vertical-align: top; text-align: center;">Адрес ТП</td>
+		<td style="vertical-align: top; text-align: center;">Сумма по накладным, {$valuta}</td>
+		<td style="vertical-align: top; text-align: center;">Сумма бонуса, {$valuta}</td>
+		<td style="vertical-align: top; text-align: center;">Частота участия</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:left">{$i.fio}</td>
+		<td style="text-align:left">{$i.fio_eta}</td>
+		<td style="text-align:left">{$i.tp_ur}</td>
+		<td style="text-align:left">{$i.tp_addr}</td>
+		<td style="text-align:right">{$i.summa|default:0|num:2}<br></td>
+		<td style="text-align:right">{$i.bonus_sum|default:0|num:2}</td>
+		<td style="text-align:right">{$i.c|default:0|num:0}</td>
+	</tr>
+	{/foreach}
+</table>
+

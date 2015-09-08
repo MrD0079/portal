@@ -1,0 +1,1 @@
+select * from payment_type order by pay_type

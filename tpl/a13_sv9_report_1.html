@@ -1,0 +1,38 @@
+{if not $smarty.request.print}
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td>Количество ТП всего<br></td>
+		<td>Количество акционных накладных<br></td>
+		<td>Количество акционных накладных по условию 1<br></td>
+		<td>Количество акционных накладных по условию 2<br></td>
+		<td>Количество акционных накладных по условию 3<br></td>
+		<td>Сумма продаж по акционным накладным, {$valuta}<br></td>
+		<td>Подтверждено руководителем<br></td>
+		<td>Подтверждено ВСТМ<br></td>
+		<td style="background-color: rgb(153, 255, 153);">Сумма бонуса по условию 1</td>
+		<td style="background-color: rgb(153, 255, 153);">Сумма бонуса по условию 2</td>
+		<td style="background-color: rgb(153, 255, 153);">Сумма бонуса по условию 3</td>
+		<td style="background-color: rgb(153, 255, 153); font-weight: bold;">Сумма бонуса ИТОГО, {$valuta}</td>
+		<!--<td style="background-color: rgb(255, 255, 204);">Количество коробок "Самое вкусное" по реестрам, подтвержденным ВСТМ</td>-->
+		<td style="background-color: rgb(255, 255, 204);">Сумма по реестрам, подтвержденным ВСТМ, {$valuta}</td>
+		<td style="background-color: rgb(204, 255, 255); font-weight: bold;">Затраты на акцию, %<br></td>
+	</tr>
+	<tr style="text-align:center">
+		<td>{$itogi.cnt_tp|default:0}</td>
+		<td>{$itogi.cnt_nakl|default:0}</td>
+		<td>{$itogi.cnt_nakl1|default:0}</td>
+		<td>{$itogi.cnt_nakl2|default:0}</td>
+		<td>{$itogi.cnt_nakl3|default:0}</td>
+		<td>{$itogi.summa|default:0|num:2}</td>
+		<td>{$itogi.ok_chief|default:0|num:0}<br></td>
+		<td>{$itogi.ok_traid|default:0|num:0}<br></td>
+		<td>{$itogi.bonus_sum_c1|default:0|num:2}</td>
+		<td>{$itogi.bonus_sum_c2|default:0|num:2}</td>
+		<td>{$itogi.bonus_sum_c3|default:0|num:2}</td>
+		<td>{$itogi.bonus_sum_all|default:0|num:2}</td>
+		<!--<td style="background-color: rgb(255, 255, 204);">{$itogi_files.cnt|default:0|num:2}</td>-->
+		<td style="background-color: rgb(255, 255, 204);">{$itogi_files.bonus|default:0|num:2}</td>
+		<td style="background-color: rgb(204, 255, 255); font-weight: bold;">{$itogi.zat|default:0|num:2}</td>
+	</tr>
+</table>
+{/if}

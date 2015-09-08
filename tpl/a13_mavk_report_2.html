@@ -1,0 +1,204 @@
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО руководителя</td>
+		<td>ФИО ТС<br></td>
+		<td>ФИО ЭТА<br></td>
+		<td>Название ТП<br></td>
+		<td>Адрес ТП<br></td>
+		<td>Дата<br>накладной<br></td>
+		<td>Номер<br>накладной<br></td>
+		<td>Продажи апреля, {$valuta}</td>
+		<td>Сумма по накладной, {$valuta}</td>
+		<td>Сумма продаж весовых конфет, {$valuta}</td>
+		<td>Сумма продаж весового печенья, {$valuta}</td>
+		<td>Условие акции</td>
+		<td>Запрет ВСТМ</td>
+		<td>Бонус выдан</td>
+		<td>Тип бонуса</td>
+		<td>Сумма бонуса, {$valuta}</td>
+		<td>Подтверждение<br>рук-ля</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}"
+		{if $list_item.fakt_bonus > $list_item.bonus_plan}style="background-color: red"{/if}
+		{if $list_item.is_act eq 1}style="background-color: rgb(51, 255, 51)"{/if}
+	>
+		<td>{$smarty.foreach.list.iteration}</td>
+		<td>{$list_item.parent_fio}</td>
+
+		<td>{$list_item.ts_fio}</td>
+		<td>{$list_item.fio_eta}</td>
+		<td>{$list_item.tp_kod} {$list_item.tp_ur}</td>
+		<td>{$list_item.tp_addr}</td>
+		<td>{$list_item.data}</td>
+		<td>{$list_item.nakl}</td>
+
+		<td style="text-align:right">{$list_item.sales_aprel|default:0|num:2}</td>
+
+		<td style="text-align:right">{$list_item.summa|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.summshokves|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.summpechves|default:0|num:2}</td>
+		<td style="text-align:center">{$list_item.condition}</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print}
+			<input
+				{if not $is_traid or $list_item.ok_chief eq 1 or $list_item.bonus_dt}disabled{/if}
+				{if $list_item.ok_traid}checked{/if}
+				type="checkbox"
+				onclick="
+				$('#ok_traid{$list_item.h_tp_kod_data_nakl}').val(this.checked?1:0);
+				$('#ok_traid_tn{$list_item.h_tp_kod_data_nakl}').val(this.checked?{$tn}:0);
+				"
+			>
+			<input type=hidden name=data[{$list_item.h_tp_kod_data_nakl}][ok_traid] id=ok_traid{$list_item.h_tp_kod_data_nakl} value="{$list_item.ok_traid}">
+			<input type=hidden name=data[{$list_item.h_tp_kod_data_nakl}][ok_traid_tn] id=ok_traid_tn{$list_item.h_tp_kod_data_nakl} value="{$list_item.ok_traid_tn}">
+			{else}
+				{if $list_item.ok_traid eq 1}да{/if}
+			{/if}
+			{if $list_item.ok_traid eq 1}{$list_item.traid_fio} {$list_item.ok_traid_date}{/if}
+		</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print}
+			<input
+				{if not $is_ts or $list_item.ok_chief eq 1 or $list_item.ok_traid eq 1}disabled{/if}
+				{if $list_item.bonus_dt}checked{/if}
+				type="checkbox"
+				onclick="
+				$('#input_bonus_dt{$list_item.h_tp_kod_data_nakl}').attr('disabled',!this.checked);
+				$('#input_bonus_dt{$list_item.h_tp_kod_data_nakl}').val(!this.checked?'':null);
+				$('#bonus_dt{$list_item.h_tp_kod_data_nakl}').val($('#input_bonus_dt{$list_item.h_tp_kod_data_nakl}').val());
+
+				$('#input_bonus_type{$list_item.h_tp_kod_data_nakl}').attr('disabled',!this.checked);
+				$('#input_bonus_type{$list_item.h_tp_kod_data_nakl}').val(!this.checked?'':null);
+				$('#val_bonus_type{$list_item.h_tp_kod_data_nakl}').val($('#input_bonus_type{$list_item.h_tp_kod_data_nakl}').val());
+
+				$('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').attr('disabled',!this.checked);
+				$('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').val(!this.checked?'':null);
+				$('#bonus_sum{$list_item.h_tp_kod_data_nakl}').val($('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').val());
+				"
+			>
+			<input required
+				{if not $is_ts or $list_item.ok_chief eq 1 or $list_item.ok_traid eq 1 or not $list_item.bonus_dt}disabled{/if}
+				class="datepicker"
+				size=10
+				id=input_bonus_dt{$list_item.h_tp_kod_data_nakl} value="{$list_item.bonus_dt}"
+				onChange="
+				$('#bonus_dt{$list_item.h_tp_kod_data_nakl}').val($('#input_bonus_dt{$list_item.h_tp_kod_data_nakl}').val());
+				"
+			>
+			<input type=hidden name=data[{$list_item.h_tp_kod_data_nakl}][bonus_dt] id=bonus_dt{$list_item.h_tp_kod_data_nakl} value="{$list_item.bonus_dt}">
+			{else}
+				{$list_item.bonus_dt}
+			{/if}
+		</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print}
+			<select
+				required
+				{if not $is_ts or $list_item.ok_chief eq 1 or $list_item.ok_traid eq 1 or not $list_item.bonus_dt}disabled{/if}
+				id="input_bonus_type{$list_item.h_tp_kod_data_nakl}"
+				name="val_bonus_type{$list_item.h_tp_kod_data_nakl}"
+				onChange="
+				$('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').val(0.0);
+				$('#bonus_sum{$list_item.h_tp_kod_data_nakl}').val(0.0);
+				$('#val_bonus_type{$list_item.h_tp_kod_data_nakl}').val($('#input_bonus_type{$list_item.h_tp_kod_data_nakl}').val());
+				$('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').removeClass('number_60 number_120 number_200 number_250 number_800');
+				$('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').addClass('number_'+f1($('#input_bonus_type{$list_item.h_tp_kod_data_nakl}').val(),{$list_item.max_bonus_2},{$list_item.max_bonus_3}));
+				
+				"
+				>
+				<option value=2 {if $list_item.bonus_type eq 2}selected{/if}>продукция</option>
+				<option value=3 {if $list_item.bonus_type eq 3}selected{/if}>пополнение</option>
+			</select>
+			<input
+				type=hidden
+				name=data[{$list_item.h_tp_kod_data_nakl}][bonus_type]
+				id=val_bonus_type{$list_item.h_tp_kod_data_nakl}
+				value="{if $list_item.bonus_type > 0}{$list_item.bonus_type}{else}2{/if}"
+			>
+			{else}
+				{if $list_item.bonus_type eq 2}продукция{/if}
+				{if $list_item.bonus_type eq 3}пополнение{/if}
+			{/if}
+		</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print}
+			<input required
+				{if not $is_ts or $list_item.ok_chief eq 1 or $list_item.ok_traid eq 1 or not $list_item.bonus_dt}disabled{/if}
+				class="number_{if $list_item.bonus_type eq 3}{$list_item.max_bonus_3}{else}{$list_item.max_bonus_2}{/if}"
+				size=10
+				id=input_bonus_sum{$list_item.h_tp_kod_data_nakl} value="{$list_item.bonus_sum}"
+				onChange="
+				$('#bonus_sum{$list_item.h_tp_kod_data_nakl}').val($('#input_bonus_sum{$list_item.h_tp_kod_data_nakl}').val());
+				"
+			>
+			<input type=hidden name=data[{$list_item.h_tp_kod_data_nakl}][bonus_sum] id=bonus_sum{$list_item.h_tp_kod_data_nakl} value="{$list_item.bonus_sum}">
+			{else}
+				{$list_item.bonus_sum|default:0|num:2}
+			{/if}
+		</td>
+		<td>
+			{if not $smarty.request.print}
+			<input type="checkbox"
+			onclick="
+			$('#ok_chief_{$list_item.id}').attr('disabled',false);
+			$('#ok_chief_{$list_item.id}').val(this.checked?1:0);
+			"
+			{if $list_item.ok_chief eq 1}checked{/if}
+			{if $list_item.parent_tn neq $tn or not $list_item.bonus_dt}disabled{/if}
+			>
+			{if $list_item.ok_chief eq 1}{$list_item.parent_fio} {$list_item.ok_chief_date}{/if}
+			{else}
+				{if $list_item.ok_chief eq 1}да {$list_item.parent_fio} {$list_item.ok_chief_date}{/if}
+			{/if}
+		</td>
+		{if not $smarty.request.print}
+			<input type=hidden name=data[{$list_item.h_tp_kod_data_nakl}][ok_chief] id=ok_chief_{$list_item.id} disabled>
+		{/if}
+	</tr>
+	{/foreach}
+</table>
+
+<script>{literal}$(function(){$('.number_0').autoNumeric('init',{aSep: '',mDec: 2,vMin: 0.0,vMax: 0.0});});{/literal}</script>
+<script>{literal}$(function(){$('.number_60').autoNumeric('init',{aSep: '',mDec: 2,vMin: 0.0,vMax: 60.0});});{/literal}</script>
+<script>{literal}$(function(){$('.number_120').autoNumeric('init',{aSep: '',mDec: 2,vMin: 0.0,vMax: 120.0});});{/literal}</script>
+<script>{literal}$(function(){$('.number_200').autoNumeric('init',{aSep: '',mDec: 2,vMin: 0.0,vMax: 200.0});});{/literal}</script>
+<script>{literal}$(function(){$('.number_250').autoNumeric('init',{aSep: '',mDec: 2,vMin: 0.0,vMax: 250.0});});{/literal}</script>
+<script>{literal}$(function(){$('.number_800').autoNumeric('init',{aSep: '',mDec: 2,vMin: 0.0,vMax: 800.0});});{/literal}</script>
+
+{if not $smarty.request.print}
+
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+{literal}
+<script>
+function f1(bonus_type,max_bonus_2,max_bonus_3)
+{
+	if (bonus_type==2)
+	{
+		return max_bonus_2;
+	}
+	if (bonus_type==3)
+	{
+		return max_bonus_3;
+	}
+	return 0;
+}
+</script>
+{/literal}
+
+
+{/if}
+
+

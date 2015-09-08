@@ -1,0 +1,40 @@
+<h1>Привязка - логин заказчика - сеть</h1>
+<form name=form target=_self method=post>
+<table>
+<tr>
+<td style="text-align:left">
+
+{if $smarty.request.login}
+
+<h2>{$login_info.name} - {$login_info.comm} - {$smarty.request.login}</h2>
+
+<table border=0>
+<tr style="font-weight:bold">
+<td><a href="javascript:void(0);" onclick="$('.obl_add').attr('checked',true);">[+]</a></td>
+<td>Сеть</td>
+<td><a href="javascript:void(0);" onclick="$('.obl_del').attr('checked',true);">[-]</a></td>
+</tr>
+{foreach key=key item=item from=$nets_list}
+<tr>
+<td><input type=checkbox class=obl_add name=obl_add[] value="{$item.id_net}" {if $item.login}checked disabled{/if}></td>
+<td {if $item.login}style="background-color:rgb(204,204,204)"{/if}>
+	<span title="Закрепленные логины заказчиков:{foreach key=key1 item=item1 from=$routes_logins_nets}{if $item1.net_name eq $item.net_name}&#13;{$item1.name} - {$item1.login} - {$item1.comm}{/if}{/foreach}">{$item.net_name}</span>
+</td>
+<td><input type=checkbox class=obl_del name=obl_del[] value="{$item.id_net}" {if not $item.login}checked disabled{/if}></td>
+</tr>
+{/foreach}
+</table>
+<input type=submit name=save value=Сохранить>
+{/if}
+
+
+
+
+
+
+
+
+</td>
+</tr>
+</table>
+</form>

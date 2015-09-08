@@ -1,0 +1,213 @@
+<h1>Отчет о работе "Музея шоколада"{if $smarty.request.arc eq 1}(АРХИВ){/if}</h1>
+
+
+{if
+	$smarty.request.table eq 'mz_rep_ras'
+	or
+	$smarty.request.table eq 'mz_rep_pri'
+	or
+	$smarty.request.table eq 'mz_rep_vis'
+	or
+	$smarty.request.table eq 'mz_rep_pds'
+}
+	{if not $is_mz_admin and not $is_mz}
+		{assign var=disabled_edit value='disabled'}
+	{/if}
+	{if not $is_mz_buh}
+		{assign var=disabled_ok value='disabled'}
+	{/if}
+{/if}
+
+
+
+
+
+
+{if
+	$smarty.request.table eq 'mz_rep_inv'
+	or
+	$smarty.request.table eq 'mz_rep_rss'
+}
+	{if not $is_mz_buh}
+		{assign var=disabled_edit value='disabled'}
+	{/if}
+{/if}
+
+
+
+
+
+{if $smarty.request.arc eq 1}
+	{assign var=disabled_buh value='disabled'}
+	{assign var=disabled_ok value='disabled'}
+	{assign var=disabled_edit value='disabled'}
+	{assign var=disabled value='disabled'}
+	{assign var=disabled_all value='disabled'}
+{/if}
+
+
+<!--
+<p>disabled_edit <b>{$disabled_edit}</b></p>
+<p>disabled_ok <b>{$disabled_ok}</b></p>
+<p>disabled_buh <b>{$disabled_buh}</b></p>
+<p>disabled_all <b>{$disabled_all}</b></p>
+<p>disabled <b>{$disabled}</b></p>
+-->
+
+
+
+{if not $smarty.request.print}
+<form name=form_mz id=form_mz target=_self method=post enctype="multipart/form-data">
+{/if}
+
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+		<td>
+			Месяц
+			{if not $smarty.request.print}
+				<select name=month_list id=month_list>
+				{foreach key=key item=item from=$month_list}
+					<option value="{$item.sd_c}">{$item.my}</option>
+				{/foreach}
+				</select>
+				<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+			{else}
+				{foreach key=key item=item from=$month_list}
+					{if $smarty.request.month_list eq $item.sd_c}<b>{$item.my}</b>{/if}
+				{/foreach}
+			{/if}
+		</td>
+		<td>
+			Музей
+			{if not $smarty.request.print}
+				<select name=mz_list id=mz_list>
+				<option value=0></option>
+				{foreach key=key item=item from=$mz_list}
+					<option value="{$item.id}">{$item.name} {if $smarty.request.arc eq 1}(закрыт {$item.dataz_t}){/if}</option>
+				{/foreach}
+				</select>
+				<script>$('#mz_list option[value="{$smarty.request.mz_list}"]').prop('selected', true);</script>
+			{else}
+				{foreach key=key item=item from=$mz_list}
+					{if $smarty.request.mz_list eq $item.id}<b>{$item.name}</b>{/if}
+				{/foreach}
+			{/if}
+		</td>
+		{if not $smarty.request.print}
+		<td>
+			<input type=submit name=select value="Показать">
+			{if $smarty.request.mz_list >0}<input {$disabled_all} type=submit name=save value="Сохранить">{/if}
+			{if $smarty.request.table}
+				<a href="?action=mz_rep&arc={$smarty.request.arc}&print=1&select=1&excel=1&filename=Отчет о работе музея шоколада&table={$smarty.request.table}">Экспорт в Excel выбранной страницы</a>
+			{/if}
+		</td>
+		{/if}
+	</tr>
+</table>
+
+{if ($smarty.request.select or $smarty.request.save or $smarty.request.add_pds) and $smarty.request.mz_list >0}
+
+
+{if not $smarty.request.print}
+<table>
+	<tr style="text-align:center; font-weight:bold">
+		<td colspan=4 style="background-color: rgb(255, 255, 204);">
+			Информацию вносит администратор музея
+		</td>
+		<td colspan=2 style="background-color: rgb(204, 255, 255);">
+			Информацию вносит бухгалтерия АВК-Киев
+		</td>
+	</tr>
+	<tr style="text-align:center;">
+		<td style="background-color: rgb(255, 255, 204);">
+			<a href="?action=mz_rep&arc={$smarty.request.arc}&select=1&table=mz_rep_ras">Расходы</a>&nbsp&nbsp&nbsp
+		</td>
+		<td style="background-color: rgb(255, 255, 204);">
+			<a href="?action=mz_rep&arc={$smarty.request.arc}&select=1&table=mz_rep_pri">Приходы</a>&nbsp&nbsp&nbsp
+		</td>
+		<td style="background-color: rgb(255, 255, 204);">
+			<a href="?action=mz_rep&arc={$smarty.request.arc}&select=1&table=mz_rep_vis">Посещаемость</a>&nbsp&nbsp&nbsp
+		</td>
+		<td style="background-color: rgb(255, 255, 204);">
+			<a href="?action=mz_rep&arc={$smarty.request.arc}&select=1&table=mz_rep_pds">Перевод на спецсчет</a>&nbsp&nbsp&nbsp
+		</td>
+		<td style="background-color: rgb(204, 255, 255);">
+			<a href="?action=mz_rep&arc={$smarty.request.arc}&select=1&table=mz_rep_inv">Инвестиции</a>
+		</td>
+		<td style="background-color: rgb(204, 255, 255);">
+			<a href="?action=mz_rep&arc={$smarty.request.arc}&select=1&table=mz_rep_rss">Расходы со спецсчета</a>&nbsp&nbsp&nbsp
+		</td>
+	</tr>
+</table>
+
+
+
+
+
+<table style="font-size:8pt" border="1" cellpadding="2" cellspacing="0">
+
+<tr style="font-weight:bold">
+<td>Расходы</td>
+<td>Приходы</td>
+<td>Посещаемость</td>
+<td>Перевод на спецсчет</td>
+<td>Инвестиции</td>
+</tr>
+
+
+
+<tr style="text-align:right">
+<td>{$stat.ras_m+$stat.rss_m}</td>
+<td>{$stat.pri_m}</td>
+<td>{$stat.vis_m}</td>
+<td>{$stat.pds_m}</td>
+<td>{$stat.inv_m}</td>
+</tr>
+
+
+
+</table>
+
+
+
+
+
+
+
+
+<hr>
+{/if}
+
+
+
+{if $smarty.request.table}
+	{assign var=fn value=`$smarty.request.table`.html'}
+	{include file=$fn}
+{/if}
+
+{/if}
+
+{if not $smarty.request.print}
+{literal}
+<script>
+function del_file(rid,prefix)
+{
+	$("#form_mz").append($('<input type=hidden name=del_file_'+prefix+' id=del_file_'+prefix+' value='+rid+'>'));
+	$("#form_mz").append($('<input type=hidden name=save value=save>'));
+	$("#form_mz").submit();
+}
+function del_rec(rid)
+{
+	$("#form_mz").append($('<input type=hidden name=del_rec id=del_rec value='+rid+'>'));
+	$("#form_mz").append($('<input type=hidden name=save value=save>'));
+	$("#form_mz").submit();
+}
+</script>
+{/literal}
+{/if}
+
+{if not $smarty.request.print}
+</form>
+{/if}
+

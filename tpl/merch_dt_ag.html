@@ -1,0 +1,64 @@
+<h1>Стоимость SKU</h1>
+
+<div id=ok></div>
+
+Месяц
+<form name=fkc id=fkc target=_self method=post enctype="multipart/form-data">
+<select name=sd id=sd onchange="$('#fkc').submit();">
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#sd').val('{$smarty.request.sd}');</script>
+</form>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight: bold;">
+<td>Заказчик</td>
+<td>Стоимость СКЮ, {$valuta}</td>
+<td>последнее обновление</td>
+</tr>
+{foreach key=k item=i from=$tbl}
+<tr>
+<td>{$i.ag_name}</td>
+<td id=td_sku_price_{$i.ag_id} style="text-align:right">
+	<input
+		class="number"
+		size=8
+		value="{$i.sku_price}" onChange="save('{$smarty.request.sd}',{$i.ag_id},'sku_price',this.value);"
+	>
+</td>
+<td>{$i.lu} {$i.lu_fio}</td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+<script>
+{literal}
+
+function save(dt,ag,field,val)
+{
+	$('#td_'+field+'_'+ag).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('ag',  ag);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_dt_ag&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_'+field+'_'+ag).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+
+
+{/literal}
+</script>

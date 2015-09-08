@@ -1,0 +1,236 @@
+<h1>Заявка на активность, создание (шаг 1)</h1>
+
+{if $is_db}
+{if not $bud_ru_zay_report}
+
+<form target="_self" method="POST" name=form1 id=form1 action="?action=bud_ru_zay_create_2">
+
+<table style="text-align: left;">
+	<tr>
+		<td style="text-align: right;">Дата создания заявки</td>
+		<td>{$now}</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Дата начала проведения активности</td>
+		<td>
+			<input
+				required
+				class="datepicker"
+				id="master"
+				value="{if $smarty.request.new.dt_start}{$smarty.request.new.dt_start}{else}{$now}{/if}"
+				name=new[dt_start]
+				onchange="load_fils({$smarty.request.new.fil});"
+			>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Дата окончания проведения активности</td>
+		<td>
+			<input
+				required
+				id="slave"
+				class="datepicker"
+				value="{if $smarty.request.new.dt_start}{$smarty.request.new.dt_end}{else}{$now}{/if}"
+				name=new[dt_end]
+			>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Статья/Категория затрат</td>
+		<td>
+			<select name=new[kat] id=new_kat
+				required
+			>
+			<option></option>
+			{foreach key=key item=item from=$bud_ru_st_ras}
+				<option
+					{if $item.parent eq 0}disabled style="background-color: rgb(200, 200, 200);"{/if}
+					value="{$item.id}"
+				>{$item.name|escape}</option>
+			{/foreach}
+			</select>
+			<script>$('#new_kat option[value="{$smarty.request.new.kat}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Дистрибутор</td>
+		<td>
+			<select name=new[fil] id=new_fil
+				required
+			>
+			<option></option>
+			{foreach key=key item=item from=$fil}
+				<option value="{$item.bud_id}">{$item.bud_name|escape}</option>
+			{/foreach}
+			</select>
+			<script>$('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Фонд</td>
+		<td>
+			<select name=new[funds] id=new_funds
+				required
+			>
+			<option></option>
+			{foreach key=key item=item from=$funds}
+				<option value="{$item.id}">{$item.name|escape}</option>
+			{/foreach}
+			</select>
+			<script>$('#new_funds option[value="{$smarty.request.new.funds}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Для КК</td>
+		<td>
+			<input name=for_kk
+				{if $smarty.request.new.id_net}checked{/if}
+				type=checkbox onclick="
+						$('#distr_compensation_cb').prop('checked',this.checked);
+						$('#distr_compensation_cb').attr('disabled',!this.checked);
+						$('#distr_compensation').attr('disabled',!this.checked);
+						$('#distr_compensation').val(!this.checked?0:1);
+						$('#net').attr('disabled',!this.checked);
+						$('#payment_type').attr('disabled',!this.checked);
+						$('#statya').attr('disabled',!this.checked);
+				"
+			>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Возмещение дистрибутору</td>
+		<td>
+			<input
+				type=checkbox
+				id=distr_compensation_cb
+				{if not $smarty.request.new.distr_compensation}disabled{/if}
+				{if $smarty.request.new.distr_compensation}checked{/if}
+				onchange="$('#distr_compensation').val(this.checked?1:0);"
+			>
+			<input
+				type=hidden
+				name=new[distr_compensation]
+				id=distr_compensation
+				{if not $smarty.request.new.distr_compensation}disabled{/if}
+				{if $smarty.request.new.distr_compensation}value=1{/if}
+			>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Сеть</td>
+		<td>
+			<select {if not $smarty.request.new.id_net}disabled{/if} name=new[id_net] id=net
+				required
+			>
+			<option></option>
+			{foreach key=key item=item from=$nets}
+				<option value="{$item.id_net}">{$item.net_name|escape}</option>
+			{/foreach}
+			</select>
+			<script>$('#net option[value="{$smarty.request.new.id_net}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Форма оплаты</td>
+		<td>
+			<select {if not $smarty.request.new.id_net}disabled{/if} name=new[payment_type] id=payment_type
+				required
+			>
+				<option value=0></option>
+				{foreach key=key item=item from=$payment_type}
+				<option value={$item.id}>{$item.pay_type}</option>
+				{/foreach}
+			</select>
+			<script>$('#payment_type option[value="{$smarty.request.new.payment_type}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: right;">Статья затрат</td>
+		<td>
+			<select {if not $smarty.request.new.id_net}disabled{/if} name=new[statya] id=statya
+				required
+			>
+				<option value=0></option>
+				{foreach key=key item=item from=$statya_list}
+				<option {if $item.parent eq 0}disabled{/if} value={$item.id}>{if $item.parent neq 0}&nbsp&nbsp&nbsp{/if}{$item.cost_item}</option>
+				{/foreach}
+			</select>
+			<script>$('#statya option[value="{$smarty.request.new.statya}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+</table>
+
+<script>
+{literal}
+$(
+	function()
+	{
+		//$('#master').datepicker('option', 'minDate', -154);
+		$('#master').datepicker('option', 'minDate', '01.01.2015');
+		//$('#master').datepicker('option', 'minDate', -5);
+		$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+	}
+)
+DPInit();
+$('#master').change(
+	function()
+	{
+		$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+		$('#slave').val($('#master').val());
+	}
+);
+
+function load_fils(fil)
+{
+	$('#new_fil').load('?action=bud_ru_zay_create_fils&nohead=1&dt='+$('#master').val(),function() {
+		init_form();
+		$('#new_fil option[value="'+fil+'"]').prop('selected', true);
+	});
+}
+
+{/literal}
+
+load_fils({$smarty.request.new.fil});
+
+</script>
+
+
+<p><input type=submit name=next value="Далее"></p>
+
+</form>
+
+{else}
+
+<h3>Заявка не может быть создана, так как вышел срок подачи отчета по ранее согласованным заявкам:</h3>
+
+<table border=1 cellpadding=5 cellspacing=0>
+	<tr style="text-align:center;font-weight:bold">
+		<td>№ Заявки</td>
+		<td>Дата создания</td>
+		<td>Срок подачи отчета</td>
+		<td>Статья/Категория затрат</td>
+		<td>Фонд</td>
+		<td>Дистрибутор (филиал)</td>
+	</tr>
+	{foreach key=k item=i from=$bud_ru_zay_report}
+	<tr style="text-align:center;">
+		<td>{$i.id}</td>
+		<td>{$i.created}</td>
+		<td>{$i.report_data}</td>
+		<td>{$i.st_name} / {$i.kat_name}</td>
+		<td>{$i.funds_name}</td>
+		<td>{$i.fil_name}</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+
+{/if}
+{else}
+<p style="color:red; font-weihgt:bold">
+Благодарим вас за обнаружение очередной бреши в системе безопасности портала.
+<br>
+С вашей зарплаты будет удержана некоторая сумма для обеспечения мер по улучшению безопасности портала.
+</p>
+{/if}

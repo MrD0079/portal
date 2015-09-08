@@ -1,0 +1,36 @@
+<h1>Т.О. (отображение в отчете)</h1>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+<input type=submit value="сохранить">
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>название</td>
+		<td>порядок</td>
+		<td>показывать в отчете</td>
+<input type=hidden name=new[0][dpt_id] value="{$dpt_id}">
+		<td>Рекомендуемый порядок согласования</td>
+	</tr>
+	{foreach key=key item=item from=$beg_to}
+	<tr {if $item.parent eq 0}style="background-color: rgb(150, 150, 150);"{/if}>
+		<td>{$item.name|escape}</td>
+		<td>{$item.sort}</td>
+<td>
+{if $item.parent neq 0}
+<input type=checkbox {if $item.rep_show}checked{/if} onclick="$('#rep_show_{$item.id}').attr('disabled',false);$('#rep_show_{$item.id}').val(this.checked?1:null);">
+<input type=hidden disabled name=update[{$item.id}][rep_show] id=rep_show_{$item.id}>
+{/if}
+</td>
+{if $item.parent eq 0}
+<td>{$item.hint|escape}</td>
+{/if}
+
+
+	</tr>
+	{/foreach}
+</table>
+
+</form>

@@ -1,0 +1,254 @@
+<table class="main_works" style="text-align: center; width:300px" cellpadding="1" cellspacing="1">
+    <tr style="font-weight:bold;background-color: #F5E3BF">
+      <td style="width:120px" rowspan=2>Статусы</td>
+      <td style="width:30px" rowspan=2>Я</td>
+      <td style="width:150px" colspan=2>Подчиненные</td>
+    </tr>
+    <tr style="font-weight:bold;background-color: #F5E3BF">
+      <td style="width:75px">Прямые</td>
+      <td style="width:75px">Непрямые</td>
+    </tr>
+    <tr style="background-color: rgb(204, 255, 255);">
+      <td>Всего сотр.</td>
+      <td><!--{foreach item=i key=k from=$pr_count}{if $i.full eq -2}{$i.c}{/if}{/foreach}-->1</td>
+      <td>{foreach item=i key=k from=$pr_count}{if $i.full eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$pr_count}{if $i.full eq 0}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(255, 255, 204);">
+      <td style="font-weight:bold" colspan="4" rowspan="1"><a href="?action=my_slaves&month_list={$pa_date.d}">План активности на {$pa_date.t}</a></td>
+    </tr>
+    <tr style="background-color: rgb(255, 255, 204);">
+      <td>Заполнен</td>
+      <td>{foreach item=i key=k from=$pa_zapolnen}{if $i.full eq -2 and $i.e eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$pa_zapolnen}{if $i.full eq 1 and $i.e eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$pa_zapolnen}{if $i.full eq 0 and $i.e eq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(255, 255, 204);">
+      <td>Принят</td>
+      <td>{foreach item=i key=k from=$pa_prinyat}{if $i.full eq -2 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$pa_prinyat}{if $i.full eq 1 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$pa_prinyat}{if $i.full eq 0 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(153, 255, 153);">
+      <td style="font-weight:bold" colspan="4" rowspan="1"><a href="?action=zat_slaves&month_list={$zat_date.d}">Отчет о затратах за {$zat_date.t}</a></td>
+    </tr>
+    <tr style="background-color: rgb(153, 255, 153);">
+      <td>Заполнен</td>
+      <td>{foreach item=i key=k from=$zat_zapolnen}{if $i.pr eq -2 and $i.e eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$zat_zapolnen}{if $i.pr eq 1 and $i.e eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$zat_zapolnen}{if $i.pr eq 0 and $i.e eq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(153, 255, 153);">
+      <td>Принят</td>
+      <td>{foreach item=i key=k from=$zat_prinyat}{if $i.pr eq -2 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$zat_prinyat}{if $i.pr eq 1 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$zat_prinyat}{if $i.pr eq 0 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(153, 255, 153);">
+      <td>Подтвержден</td>
+      <td>{foreach item=i key=k from=$zat_utverjden}{if $i.pr eq -2 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$zat_utverjden}{if $i.pr eq 1 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$zat_utverjden}{if $i.pr eq 0 and $i.ok eq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(255, 204, 153);">
+      <td style="font-weight:bold" colspan="4" rowspan="1"><a href="?action=probs_my&ad_completed=2">Открытые адаптационные программы</a></td>
+    </tr>
+    <tr style="background-color: rgb(255, 204, 153);">
+      <td>Cогласно сроку</td>
+      <td>{foreach item=i key=k from=$probs}{if $i.full eq -2 and $i.period_ended neq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$probs}{if $i.full eq 1 and $i.period_ended neq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$probs}{if $i.full eq 0 and $i.period_ended neq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(255, 204, 153);">
+      <td>Срок вышел</td>
+      <td>{foreach item=i key=k from=$probs}{if $i.full eq -2 and $i.period_ended eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$probs}{if $i.full eq 1 and $i.period_ended eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$probs}{if $i.full eq 0 and $i.period_ended eq 1}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td style="font-weight:bold" colspan="4" rowspan="1">Документы на подтверждение</td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Участие в ДЦ</td>
+      <td>{foreach item=i key=k from=$dc}{if $i.full eq -2}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$dc}{if $i.full eq 1}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$dc}{if $i.full eq 0}{$i.c}{/if}{/foreach}</td>
+    </tr>
+{if $is_dc}
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Не предоставлена ОС</td>
+      <td colspan="3" {if $reestr_dc_os > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=reestr_dc&dates_list1={$year_start}&dates_list2={$year_end}&zgdp=0&os=2&pos=0">{$reestr_dc_os}</a></td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Результаты ДЦ</td>
+      <td colspan="3" {if $reestr_dc > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=reestr_dc&dates_list1={$year_start}&dates_list2={$year_end}&zgdp=2&os=0&pos=0">{$reestr_dc}</a></td>
+    </tr>
+{/if}
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Поощрения</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Штрафы</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>СЗ</td>
+      <td><a href="?action=sz_accept">{$sz_my_creator.c}</a></td>
+      <td colspan=2 {if $sz_my_acceptor.c > 0}style="background-color:red"{/if}><a href="?action=sz_accept">{$sz_my_acceptor.c}</a></td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Собеседования</td>
+      <td colspan="3" {if $iv_cnt > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=iv_accept">{$iv_cnt}</a></td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Обходные листы</td>
+      <td colspan="3" {if $ol_staff > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=ol_staff">{$ol_staff}</a></td>
+    </tr>
+    <tr style="background-color: rgb(204, 204, 255);">
+      <td>Протоколы</td>
+      <td colspan="3" {if $distr_prot > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=distr_prot&refresh=1
+&da_deleted=0
+&da_db=0
+&da_di=0
+&da_result=0
+&da_re=0
+&da_de=0
+&da_st=44769046
+&da_ok_chief=0
+&da_ok_nm=0
+&da_ok_dpu=0
+&da_sd=01.01.2000
+&da_ed=31.12.2050
+&da_cat=0
+&da_conq=0
+&da_full=1
+">{$distr_prot}</a></td>
+    </tr>
+
+
+    <tr style="background-color: rgb(153, 255, 153)">
+      <td style="font-weight:bold" colspan="4" rowspan="1">Бюджеты</td>
+    </tr>
+	<tr style="background-color: rgb(153, 255, 153);">
+		<td>Согласование заявки</td>
+		<td colspan=3 {if $bud_ru_zay_accept_total.c > 0}style="background-color:red"{/if}><a href="?action=bud_ru_zay_accept&wait4myaccept=0">{$bud_ru_zay_accept_total.c}</a></td>
+	</tr>
+	{if $is_traid or $is_traid_kk}
+	{/if}
+	<tr style="background-color: rgb(153, 255, 153);">
+		<td>Нет срока подачи отчета</td>
+		<td {if $bud_ru_zay_reestr_total_i.c > 0}style="background-color:red"{/if}>           <a href="?action=bud_ru_zay_reestr&status=1&report_data=2&who=1&select=1&dates_list1={$bud_ru_zay_reestr_total_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_reestr_total_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_reestr_total_i.full2|default:0}</a></td>
+		<td {if $bud_ru_zay_reestr_total_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_reestr&status=1&report_data=2&who=2&select=1&dates_list1={$bud_ru_zay_reestr_total_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_reestr_total_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_reestr_total_o.full01|default:0}</a></td>
+	</tr>
+	{if $is_db}
+	{/if}
+	<tr style="background-color: rgb(153, 255, 153);">
+		<td>Ожидают отчета</td>
+		<td {if $bud_ru_zay_report_total1_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=0&who=1&select=1&dates_list1={$bud_ru_zay_report_total1_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_i.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total1_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total1_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_o.c|default:0}</a></td>
+	</tr>
+	<tr style="background-color: rgb(153, 255, 153);">
+		<td>Отчет просрочен</td>
+		<td {if $bud_ru_zay_report_total3_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=2&who=1&select=1&dates_list1={$bud_ru_zay_report_total3_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_i.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total3_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=2&who=2&select=1&dates_list1={$bud_ru_zay_report_total3_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_o.c|default:0}</a></td>
+	</tr>
+	<!--<tr style="background-color: rgb(153, 255, 153);">
+		<td>Согласование отчета</td>
+		<td {if $bud_ru_zay_report_total2_o.c > 0}style="background-color:red"{/if} colspan=3><a href="?action=bud_ru_zay_report&wait4myaccept=0&status=2&report_done_flt=1&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total2_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total2_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total2_o.c|default:0}</a></td>
+	</tr>-->
+	<tr style="background-color: rgb(153, 255, 153);">
+		<td>Согласование отчета</td>
+		<td {if $bud_ru_zay_report_accept_total.c > 0}style="background-color:red"{/if} colspan=3><a href="?action=bud_ru_zay_report_accept&wait4myaccept=0&select=1">{$bud_ru_zay_report_accept_total.c|default:0}</a></td>
+	</tr>
+    <tr style="background-color: #FFCCFF;">
+      <td style="font-weight:bold" colspan="4" rowspan="1">Реализация задач</td>
+    </tr>
+<!--
+    <tr style="background-color: #FFCCFF;">
+      <td>Задачи</td>
+      <td>{if $project_my neq 0}<a href="?action=project_my">{$project_my}</a>{else}0{/if}</td>
+      <td>{if $project_slaves neq 0}<a href="?action=project_slaves">{$project_slaves}</a>{else}0{/if}</td>
+      <td>{if $project_report neq 0}<a href="?action=project_report">{$project_report}</a>{else}0{/if}</td>
+    </tr>
+
+    <tr style="background-color: #FFCCFF;">
+      <td>Контроль</td>
+      <td colspan=3>{if $project_report_chk neq 0}<a href="?action=project_report">{$project_report_chk}</a>{else}0{/if}</td>
+    </tr>
+-->
+    <tr style="background-color: #FFCCFF;">
+      <td>Отпуск рук-ля</td>
+      <td colspan=3><a href="?action=vacation_report">{$main_vacation_report}</a></td>
+    </tr>
+
+
+    <tr style="background-color: #FFCCFF;">
+      <td>Отчет по отпуску</td>
+      <td {if $main_vacation_reestr.val_8  > 0}style="background-color:red"{/if}><a href="?action=vacation_reestr&dates_list1={$year_start}&dates_list2={$year_end}&select=1&full=1&replacement=0&creator=0&vac_pos_id=0&region_name=0&department_name=0&parent_list=0&in_vac=1&vac_finished=0">{$main_vacation_reestr.val_8} </a></td>
+      <td {if $main_vacation_reestr.val_11 > 0}style="background-color:red"{/if}><a href="?action=vacation_reestr&dates_list1={$year_start}&dates_list2={$year_end}&select=1&full=2&replacement=0&creator=0&vac_pos_id=0&region_name=0&department_name=0&parent_list=0&in_vac=1&vac_finished=0">{$main_vacation_reestr.val_11}</a></td>
+      <td {if $main_vacation_reestr.val_10 > 0}style="background-color:red"{/if}><a href="?action=vacation_reestr&dates_list1={$year_start}&dates_list2={$year_end}&select=1&full=3&replacement=0&creator=0&vac_pos_id=0&region_name=0&department_name=0&parent_list=0&in_vac=1&vac_finished=0">{$main_vacation_reestr.val_10}</a></td>
+    </tr>
+
+
+
+
+
+
+
+
+
+
+    <tr style="background-color: #CCCCCC;">
+      <td style="font-weight:bold" colspan="4" rowspan="1"><a href="?action=tr_shed&month_list={$now1}">Аудиторное обучение {$now_month} {$now_year}</a></td>
+    </tr>
+    <tr style="background-color: #CCCCCC;">
+      <td>Тренинги</td>
+      <td>{foreach item=i key=k from=$tr}{if $i.full eq -2}{$i.tr}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$tr}{if $i.full eq 1}{$i.tr}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$tr}{if $i.full eq 0}{$i.tr}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: #CCCCCC;">
+      <td>Сотрудники</td>
+      <td>{foreach item=i key=k from=$tr_tn}{if $i.full eq -2}{$i.tn}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$tr_tn}{if $i.full eq 1}{$i.tn}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$tr_tn}{if $i.full eq 0}{$i.tn}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: #FFCC33;">
+      <td style="font-weight:bold" colspan="4" rowspan="1"><a href="?action=fw&month_list={$now1}">Полевая работа {$now_month} {$now_year}</a></td>
+    </tr>
+    <tr style="background-color: #FFCC33;">
+      <td>Совм. работа</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq -2 and $i.h_name eq 'dd31def55e7bcb7280f73022f3a06db1'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 1 and $i.h_name eq 'dd31def55e7bcb7280f73022f3a06db1'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 0 and $i.h_name eq 'dd31def55e7bcb7280f73022f3a06db1'}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: #FFCC33;">
+      <td>Полевое обучение ЭТА</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq -2 and $i.h_name eq '906ddcc9699f8d8e7e483e6e994b3c21'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 1 and $i.h_name eq '906ddcc9699f8d8e7e483e6e994b3c21'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 0 and $i.h_name eq '906ddcc9699f8d8e7e483e6e994b3c21'}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: #FFCC33;">
+      <td>Полевое обучение М</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq -2 and $i.h_name eq '6d203e1b756394c3cab42bfc816e1174'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 1 and $i.h_name eq '6d203e1b756394c3cab42bfc816e1174'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 0 and $i.h_name eq '6d203e1b756394c3cab42bfc816e1174'}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: #FFCC33;">
+      <td>Сторчек</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq -2 and $i.h_name eq '135de00c180c976827c8ef536390c00a'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 1 and $i.h_name eq '135de00c180c976827c8ef536390c00a'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 0 and $i.h_name eq '135de00c180c976827c8ef536390c00a'}{$i.c}{/if}{/foreach}</td>
+    </tr>
+    <tr style="background-color: #FFCC33;">
+      <td>Индивидуальная работа</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq -2 and $i.h_name eq '556c7ad111fac91a0bcb29b4bad4c6c9'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 1 and $i.h_name eq '556c7ad111fac91a0bcb29b4bad4c6c9'}{$i.c}{/if}{/foreach}</td>
+      <td>{foreach item=i key=k from=$fw_count}{if $i.full eq 0 and $i.h_name eq '556c7ad111fac91a0bcb29b4bad4c6c9'}{$i.c}{/if}{/foreach}</td>
+    </tr>
+</table>

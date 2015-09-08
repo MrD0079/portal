@@ -1,0 +1,88 @@
+<h1>Назначение прав</h1>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+<select name=prj_id id=prj_id>
+<option value=0></option>
+{foreach key=k item=i from=$project_grant_heads}
+<option value={$i.id}>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#prj_id').val({$smarty.request.prj_id});</script>
+<input type=submit value="выбрать">
+</p>
+
+{if $smarty.request.prj_id neq 0}
+
+<p><input type=submit name=blablabla value="оповестить"></p>
+<p><input type=submit name=save value="сохранить"></p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>раздел/подраздел</td>
+		<td>ответственный</td>
+		<td>контроль</td>
+	</tr>
+	{foreach key=k item=i from=$project_grant}
+	<tr style="vertical-align:top">
+		<td>{$i.head.name|escape}</td>
+		<td>
+			<p><a href="javascript:void(0)" onclick="javascript:add_grant('tn','otv','{$i.head.id}');">Добавить Ф.И.О.</a></p>			<div id="tn_otv{$i.head.id}"></div>
+			{foreach key=k1 item=i1 from=$i.data.tn.otv}
+				<input type=checkbox name=del_grant[{$i1.grant_id}]>
+				{$i1.fio_otv}
+				<br>
+			{/foreach}
+			<p><a href="javascript:void(0)" onclick="javascript:add_grant('pos','otv','{$i.head.id}');">Добавить должность</a></p>			<div id="pos_otv{$i.head.id}"></div>
+			{foreach key=k1 item=i1 from=$i.data.pos.otv}
+				<input type=checkbox name=del_grant[{$i1.grant_id}]>
+				{$i1.pos_otv}
+				<br>
+			{/foreach}
+		</td>
+		<td>
+			<p><a href="javascript:void(0)" onclick="javascript:add_grant('tn','chk','{$i.head.id}');">Добавить Ф.И.О.</a></p>			<div id="tn_chk{$i.head.id}"></div>
+			{foreach key=k1 item=i1 from=$i.data.tn.chk}
+				<input type=checkbox name=del_grant[{$i1.grant_id}]>
+				{$i1.fio_chk}
+				<br>
+			{/foreach}
+			<p><a href="javascript:void(0)" onclick="javascript:add_grant('pos','chk','{$i.head.id}');">Добавить должность</a></p>			<div id="pos_chk{$i.head.id}"></div>
+			{foreach key=k1 item=i1 from=$i.data.pos.chk}
+				<input type=checkbox name=del_grant[{$i1.grant_id}]>
+				{$i1.pos_chk}
+				<br>
+			{/foreach}
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+</form>
+
+{literal}
+<script>
+
+function add_grant(type,val,id)
+{
+var fd = new FormData();
+fd.append('type',  type);
+fd.append('val',  val);
+fd.append('id',  id);
+$.ajax({
+	type: 'POST',
+	url: '?action=project_grant_get_list&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+		$('#'+type+'_'+val+id).append(''+data+'');
+		$('#'+type+'_'+val+id).append('<br>');
+	}
+});
+}
+</script>
+{/literal}

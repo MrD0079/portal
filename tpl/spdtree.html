@@ -1,0 +1,193 @@
+{if not $smarty.request.print}
+
+<h1>Личные карточки СПД (
+{if $smarty.request.all eq 0}Все{/if}
+{if $smarty.request.all eq 1}Работающие{/if}
+{if $smarty.request.all eq -1}Уволенные{/if}
+)</h1>
+
+
+<a href="?action=spdtree&all=0">Все</a>
+&nbsp&nbsp&nbsp
+<a href="?action=spdtree&all=1">Работающие</a>
+&nbsp&nbsp&nbsp
+<a href="?action=spdtree&all=-1">Уволенные</a>
+
+<br>
+<br>
+
+
+<a href="?action=spdtree&all={$smarty.request.all}&print=1&excel=1&filename=spdtree">экспорт в Excel</a>
+
+<br>
+<br>
+
+
+
+{/if}
+
+
+<table cellspacing=0 cellpadding=3 align=center border=1>
+
+{foreach key=key item=item from=$spdtree name=spdtree}
+
+
+	{math assign="color" equation='y' y=$smarty.foreach.spdtree.iteration%10} 
+	{if $color eq 1}
+
+
+<tr style="font-weight:bold;background-color: rgb(204, 255, 255);">
+
+<td rowspan=2>                                        </td>
+<td rowspan=2>Ф.И.О.                                  </td>
+<td rowspan=2>Адрес                                   </td>
+<td rowspan=2>Должность</td>                          </td>
+<td rowspan=2>Дата рожд.                              </td>
+<td rowspan=2>адрес E-MAIL                            </td>
+<td rowspan=2>Дата факт. прист. к работе              </td>
+<td rowspan=2>Дата перевода                           </td>
+<td rowspan=2>Дата увольнения                         </td>
+<td rowspan=2>Дата начала действия карточки           </td>
+<td rowspan=2>№ Телефона                              </td>
+<td colspan=4>Договор</td>
+<td colspan=3>Свидетельство о регистрации</td>
+<td colspan=4>Свидетельство о ЕН</td>
+<td colspan=5>Реквизиты для перечисления</td>
+<td colspan=3>Оплата</td>
+<td colspan=8>Лимиты</td>
+<td colspan=8>Прочее</td>
+
+</tr>
+<tr style="font-weight:bold;background-color: rgb(204, 255, 255);">
+
+<td>№                                       </td>
+<td>Дата                                    </td>
+<td>Оплата в час                            </td>
+<td>Услуги                                  </td>
+
+<td>№                                       </td>
+<td>Дата                                    </td>
+<td>Кем выдано                              </td>
+
+<td>№                                       </td>
+<td>Дата регистрации                        </td>
+<!--<td>Дата окончания действия регистрации     </td>-->
+<td>ИНН                                     </td>
+<td>Место осуществления деятельности        </td>
+
+<td>Банк                                    </td>
+<td>МФО                                     </td>
+<td>ОКПО (ИНН)                              </td>
+<td>Р/С                                     </td>
+<td>Назначение платежа                      </td>
+
+<td>Категория                               </td>
+<td>Ставка                                  </td>
+<td>Бонус                                   </td>
+
+<td>Командировочные расходы                 </td>
+<td>Транспортные расходы                    </td>
+<td>Питание                                 </td>
+<td>Представительские расходы               </td>
+<td>Канцтовары                              </td>
+<td>Мобильная связь                         </td>
+<td>Лимит топлива на авто, л                </td>
+<td>Лимит перечислений                      </td>
+
+<td>Аванс                                   </td>
+<td>Амортизация                             </td>
+<td>Марка автомобиля                        </td>
+<td>Расход топлива, л/100км                 </td>
+<td>Таб. номер                              </td>
+<td>Страна                                  </td>
+<td>Подразделение                             </td>
+<td>Регион                             </td>
+
+
+</tr>
+
+
+
+	{/if}
+
+
+
+
+
+
+
+
+
+<tr>
+
+<td>
+{if not $smarty.request.print}
+<a target=_blank href="?action=spdtree_edit&id={$item.id}">ред.</a>
+{/if}
+</td>                    
+
+
+<td>{$item.fam} {$item.im} {$item.otch}</td>
+<td>{$item.address}</td>            
+<td>{$item.dolgn}</td>                
+<td>{$item.birthday}</td>          
+<td>{$item.email}</td>                
+<td>{$item.fdata}</td>                
+<td>{$item.dataper}</td>            
+<td>{$item.datauvol}</td>          
+<td>{$item.datastart}</td>        
+<td>{$item.phone}</td>                
+                                                        
+                                                        
+<td>{$item.dogovornum}</td>      
+<td>{$item.dogovordata}</td>    
+<td>{$item.dogovoropl}</td>      
+<td>{$item.dogovoruslugi}</td>
+                                                        
+                                                        
+<td>{$item.svidregnum}</td>      
+<td>{$item.svidregdata}</td>    
+<td>{$item.svidregvid}</td>      
+                                                        
+                                                        
+<td>{$item.svidennum}</td>        
+<td>{$item.svidendata}</td>      
+<!--<td>{$item.svidendataend}</td>   -->
+<td>{$item.svideninn}</td>        
+<td>{$item.svidenplace}</td>    
+                                                        
+                                                        
+<td>{$item.bankname}</td>          
+<td>{$item.rekvmfo}</td>            
+<td>{$item.rekvokpo}</td>          
+<td>{$item.rekvrs}</td>              
+<td>{$item.rekvplat}</td>          
+                                                        
+                                                        
+<td>{$item.oplatakat}</td>        
+<td>{$item.oplatastavka}</td>  
+<td>{$item.oplatabonus}</td>    
+                                                        
+                                                        
+<td>{$item.limitkom}</td>          
+<td>{$item.limittrans}</td>      
+<td>{$item.limitpit}</td>          
+<td>{$item.limitpred}</td>        
+<td>{$item.limitkanc}</td>        
+<td>{$item.limitmob}</td>          
+<td>{$item.limit_car_vol}</td>
+<td>{$item.limitper}</td>
+                                                        
+                                                        
+<td>{$item.avans}</td>                
+<td>{$item.amort}</td>                
+<td>{$item.car_brand}</td>        
+<td>{$item.car_rashod}</td>      
+<td>{$item.tab_num}</td>            
+<td>{$item.cnt_name}</td>            
+<td>{$item.department_name}</td>            
+<td>{$item.region_name}</td>            
+
+</tr>
+{/foreach}
+</table>

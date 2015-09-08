@@ -1,0 +1,46 @@
+<h1>Бегунок - Поле - Шаг 2. Отчет по визиту</h1>
+
+<form name=f1 id=f1 target=_self method=post enctype="multipart/form-data">
+
+<p><b>Дата визита</b> {$smarty.request.dt}, <b>Название ТП</b> {$tpname.tp_name}, <b>Адрес ТП</b> {$tpname.address}, <b>Тип ТП</b> {$tpname.tp_type}, <b>ФИО ЭТА</b> {$tpname.eta}</p>
+
+<p>
+
+<a style="font-weight:bold" href="javascript:void(0);" onclick="load_head('{$smarty.request.dt}',{$smarty.request.tp_kod},{$head})">Заголовок</a>
+
+{foreach key=k item=i from=$gr_list}
+<a href="javascript:void(0);" onclick="load_body('{$i.h_altgroup}','{$smarty.request.dt}',{$smarty.request.tp_kod},{$head})">{$i.altgroup}</a>
+{/foreach}
+
+<a style="font-weight:bold" href="javascript:void(0);" onclick="load_to('{$smarty.request.dt}',{$smarty.request.tp_kod},{$head})">Торговое оборудование</a>
+
+</p>
+
+<p>
+<div id=body>
+</div>
+</p>
+
+</form>
+
+
+<script>
+{literal}
+
+function load_head(dt,tp_kod,head)
+{
+	$('#body').load('?action=beg_visit_2_head&nohead=1&dt='+dt+'&tp_kod='+tp_kod+'&head='+head,function() {});
+}
+
+function load_body(grup,dt,tp_kod,head)
+{
+	$('#body').load('?action=beg_visit_2_body&nohead=1&grup='+grup+'&dt='+dt+'&tp_kod='+tp_kod+'&head='+head,function() {});
+}
+
+function load_to(dt,tp_kod,head)
+{
+	$('#body').load('?action=beg_visit_2_to&nohead=1&dt='+dt+'&tp_kod='+tp_kod+'&head='+head,function() {});
+}
+
+{/literal}
+</script>

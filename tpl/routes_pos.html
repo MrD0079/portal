@@ -1,0 +1,21 @@
+<h1>Должности М-Сервис</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>название</td>
+</tr>
+{foreach key=key item=item from=$routes_pos}
+<tr>
+<td><input name=del[{$item.id}] type=checkbox></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
+</tr>
+{/foreach}
+</table>
+Должность
+<br>
+<input size=80 name=new_agent_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>

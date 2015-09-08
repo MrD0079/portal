@@ -1,0 +1,79 @@
+{if
+	($is_mkk and $nets_plan_year.ok_sdu_rmkk_tmkk neq 1)
+	or
+	($is_rmkk and $nets_plan_year.ok_sdu_nmkk neq 1 and $nets_plan_year.ok_sdu_dpu neq 1)
+}
+	{assign var=enabled value='enabled'}
+{else}
+	{assign var=disabled value='disabled'}
+{/if}
+
+{if $is_mkk or $is_rmkk}
+	{assign var=enabled value='enabled'}
+{else}
+	{assign var=disabled value='disabled'}
+{/if}
+
+<!--
+enabled: {$enabled}.
+<br>
+disabled: {$disabled}.
+<br>
+{if $enabled}enabled{/if}
+{if $disabled}disabled{/if}
+-->
+
+<h1>Цели на переговоры</h1>
+{literal}
+<script>
+function z()
+{
+	var e = document.forms["form"].elements["pay_type"];
+	var e1 = document.forms["form"].elements["pay_detail"];
+	//alert(e.value);
+	if (e.value == 1)
+	{
+		e1.innerHTML="";
+		e1.disabled=true;
+	}
+	else
+	{
+		e1.disabled=false;
+	}
+}
+</script>
+{/literal}
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+	<table>
+		<tr>
+			<td>Выберите сеть из списка</td>
+			<td>
+				<select name="nets" id="nets" onChange="$('#form').submit();">
+					<option></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Планируемый год</td>
+			<td>
+				<select name="calendar_years" id="calendar_years" onChange="$('#form').submit();">
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+						<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+	</table>
+	<script>$("#nets option[value='{$smarty.request.nets}']").prop('selected', true);</script>
+	<script>$("#calendar_years option[value='{$smarty.request.calendar_years}']").prop('selected', true);</script>
+	<hr>
+	{if $smarty.request.nets and $smarty.request.calendar_years}
+		{include file="sdu_terms.html"}
+		{include file="sdu_terms_detail.html"}
+		{include file="sdu_terms_other.html"}
+	{/if}
+</form>

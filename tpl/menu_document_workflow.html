@@ -1,0 +1,35 @@
+
+<li><a href="javascript:void(0);"><span class="dir">Служебные записки</span></a>
+	<ul>
+		<li><a href="files/ua/Instruktsiya po rabote so sluzhebnimi zapiskami na portale 2014.pdf">Инструкция</a></li>
+		<li><a href="?action=sz_new">Создать СЗ</a></li>
+		<li><a href="?action=sz_accept">Согласование СЗ</a></li>
+		<li><a href="?action=sz_reestr">Реестр СЗ</a></li>
+	</ul>
+</li>
+
+{if $cnt_kod neq "nr"}
+
+<!--
+<li><a href="javascript:void(0);"><span class="dir">Задачи</span></a>
+	<ul>
+		<li><a href="?action=project_help">Инструкция</a></li>
+		<li><a href="?action=project_my">Мои задачи</a></li>
+		<li><a href="?action=project_slaves">Задачи подчиненных</a></li>
+		<li><a href="?action=project_report">Сводный отчет по задачам</a></li>
+	</ul>
+</li>
+-->
+
+{/if}
+
+{if $is_test_admin or $is_admin}
+
+<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+	<ul>
+		<li><a href="?action=files">Управление документами раздела "Надо знать"</a></li>
+		<li><a href="?action=news_admin">Редактор новостей</a></li>
+	</ul>
+</li>
+
+{/if}

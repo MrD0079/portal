@@ -1,0 +1,1 @@
+select * from pos order by pos_name

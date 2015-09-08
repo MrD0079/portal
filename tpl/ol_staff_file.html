@@ -1,0 +1,55 @@
+{if $smarty.request.add}
+
+<div id="uploadOutput_{$smarty.request.sid}_{$smarty.request.id}" style="display: inline;">
+<form action="index.php" method="POST" name="form_{$smarty.request.sid}_{$smarty.request.id}" id="form_{$smarty.request.sid}_{$smarty.request.id}" enctype="multipart/form-data">
+<input type=hidden name="action" value="ol_staff_file">
+<input type=hidden name="nohead" value="1">
+<input type=hidden name="id" value="{$smarty.request.id}">
+<input type=hidden name="sid" value="{$smarty.request.sid}">
+<input type=hidden name="save" value="1">
+
+<nobr>
+<a href="javascript:void(0);" onclick="$('#uploadOutput_{$smarty.request.sid}_{$smarty.request.id}').remove();">[x]</a>
+<input name="filereport" type="file">
+<a href="javascript:void(0);" onclick="$('#form_{$smarty.request.sid}_{$smarty.request.id}').submit();">Сохранить</a>
+</nobr>
+
+</form>
+<script>
+$a1 = '{$smarty.request.sid}';
+$a2 = '{$smarty.request.id}';
+{literal}
+	$(document).ready(function() {var options = {target: '#uploadOutput_'+$a1+'_'+$a2};$('#form_'+$a1+'_'+$a2).ajaxForm(options);}); 
+{/literal}
+</script> 
+</div>
+
+{/if}
+
+
+
+
+
+
+
+{if $smarty.request.save}
+
+<nobr>
+<a href="javascript:void(0);" onclick="
+	$('#uploadOutput_{$smarty.request.sid}_{$smarty.request.id}').load('?action=ol_staff_file&del=1&nohead=1&file_id={$id}');
+	$('#uploadOutput_{$smarty.request.sid}_{$smarty.request.id}').remove();
+">[x]</a>
+<a target=_blank href="ol_files/{$smarty.request.sid}/{$fn}">{$fn}</a>
+</nobr>
+<br>
+
+{/if}
+
+
+
+{if $smarty.request.save}
+
+
+{$smarty.request.fn}
+
+{/if}

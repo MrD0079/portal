@@ -1,0 +1,34 @@
+<h2>Итоги акции</h2>
+
+<table border=1 cellspacing=0 cellpadding=3>
+    <tr style="font-weight:bold; text-align:center">
+      <td style="">Количество ТП всего</td>
+      <td style="">Не выполнили условия акции</td>
+      <td style="background-color: rgb(51, 255, 51);">Выполнили условия акции</td>
+      <td>Продажи июль 2013, {$valuta}</td>
+      <td>Продажи август 2013, {$valuta}</td>
+      <td style="">Прирост, %</td>
+      <td style="">Бонус расчетный, грн</td>
+      <td style="">Бонус фактический, грн</td>
+      <td style="">Бонус выдан</td>
+      <td style="">Подтверждено руководителем</td>
+      <td style="">Сумма по всем загруженным реестрам</td>
+      <td style="">Сумма по реестрам, подтвержденным ВСТМ</td>
+      <td style="background-color: rgb(204, 255, 255);">Затраты на акцию, %</td>
+    </tr>
+	<tr style="font-weight:bold">
+		<td style="text-align:right">{$itogi.c|default:0}</td>
+		<td style="text-align:right">{$itogi.is_not_act|default:0}</td>
+		<td style="text-align:right">{$itogi.is_act|default:0}</td>
+		<td style="text-align:right">{$itogi.sum07|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.sum08|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.rost_perc|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.bonus_plan|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.fakt_bonus|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.ok_ts|default:0}</td>
+		<td style="text-align:right">{$itogi.ok_chief|default:0}</td>
+		<td style="text-align:right">{$itogi.files_bonus_total|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.files_bonus_traid|default:0|num:2}</td>
+		<td style="text-align:right">{$itogi.act_uah|default:0|num:2}</td>
+	</tr>
+</table>

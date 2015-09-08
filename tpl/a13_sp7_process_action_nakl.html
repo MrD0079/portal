@@ -1,0 +1,65 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align: center;">
+		<td rowspan=2><a href="javascript:void(0)" onclick="javascript:form_tp.submit()">[x]</a></td>
+		<td rowspan=2>ФИО ТС<br></td>
+		<td rowspan=2>ФИО ЭТА<br></td>
+		<td rowspan=2>Название ТП<br></td>
+		<td rowspan=2>Адрес ТП<br></td>
+		<td rowspan=2>Дата<br>накладной<br></td>
+		<td rowspan=2>Номер<br>накладной<br></td>
+		<td rowspan=2>Сумма по накладной, {$valuta}</td>
+		<td colspan=3>Пшеничное со сливками</td>
+		<td colspan=3>К чаю с молоком</td>
+		<td colspan=3>Артек от "АВК"</td>
+	</tr>
+	<tr style="font-weight:bold;text-align: center;">
+		<td>Были отгрузки с 1 по 14 июля</td>
+		<td>Факт отгрузок с 15 по 31 июля, ящиков</td>
+		<td>Бонус для ТП в количестве коробок "На десерт" 100 гр.</td>
+		<td>Были отгрузки с 1 по 14 июля</td>
+		<td>Факт отгрузок с 15 по 31 июля, ящиков</td>
+		<td>Бонус для ТП в количестве коробок "На десерт" 100 гр.</td>
+		<td>Были отгрузки с 1 по 14 июля</td>
+		<td>Факт отгрузок с 15 по 31 июля, ящиков</td>
+		<td>Бонус для ТП в количестве коробок "На десерт" 100 гр.</td>
+	</tr>
+	{foreach key=nakl_list_all_key item=nakl_list_all_item from=$nakl_list_all name=nakl_list_all}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td><input {if not $nakl_list_all_item.ok_traid neq 1 or $nakl_list_all_item.ok_chief eq 1}disabled{/if} type=checkbox name=del[{$nakl_list_all_item.h_tp_kod_data_nakl}]></td>
+		<td>{$nakl_list_all_item.fio_ts}</td>
+		<td>{$nakl_list_all_item.fio_eta}</td>
+		<td>{$nakl_list_all_item.tp_kod} {$nakl_list_all_item.tp_ur}</td>
+		<td>{$nakl_list_all_item.tp_addr}</td>
+		<td>{$nakl_list_all_item.data}</td>
+		<td>{$nakl_list_all_item.nakl}</td>
+		<td style="text-align:right">{$nakl_list_all_item.summa|default:0|num:2}</td>
+
+		<td style="text-align:center">{if $nakl_list_all_item.s1_1 neq 0}да{/if}</td>
+		<td style="text-align:center">{$nakl_list_all_item.q2_1}</td>
+		<td style="text-align:center">{$nakl_list_all_item.selected_if1}</td>
+
+		<td style="text-align:center">{if $nakl_list_all_item.s1_2 neq 0}да{/if}</td>
+		<td style="text-align:center">{$nakl_list_all_item.q2_2}</td>
+		<td style="text-align:center">{$nakl_list_all_item.selected_if2}</td>
+
+		<td style="text-align:center">{if $nakl_list_all_item.s1_3 neq 0}да{/if}</td>
+		<td style="text-align:center">{$nakl_list_all_item.q2_3}</td>
+		<td style="text-align:center">{$nakl_list_all_item.selected_if3}</td>
+
+
+	</tr>
+	{/foreach}
+	<tr>
+		<td colspan=7>ИТОГО накладных: {$nakl_list_all_total.c1|default:0}</td>
+		<td style="text-align:right">{$nakl_list_all_total.summa|default:0|num:2}</td>
+		<td style="text-align:center">{$nakl_list_all_total.s1_1|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.q2_1|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.if1|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.s1_2|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.q2_2|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.if2|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.s1_3|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.q2_3|default:0|num:0}</td>
+		<td style="text-align:center">{$nakl_list_all_total.if3|default:0|num:0}</td>
+	</tr>
+</table>

@@ -1,0 +1,149 @@
+<h1>Отчет по финансовому/договорному планированию</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Вид планирования
+				<br>
+				<select name=plan_type id=plan_type>
+					<option></option>
+					{foreach key=key item=item from=$plan_type}
+					<option value={$item.id}>{$item.name}</option>
+					{/foreach}
+				</select>
+				<script>$('#plan_type option[value="{$smarty.request.plan_type}"]').prop('selected', true);</script>
+			</td>
+{if not $is_mkk}
+			<td>
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+{/if}
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{/if}
+{if $smarty.request.calendar_years and $smarty.request.plan_type}
+
+
+{if not $smarty.request.print}
+<a href="?action=fin_report&calendar_years={$smarty.request.calendar_years}&plan_type={$smarty.request.plan_type}&print=1&excel=1&filename=Отчет по финансовому/договорному планированию">Экспорт в Excel</a>
+{/if}
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	{foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
+
+
+	{if $fin_report_item.draw_head eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО РМКК</td>
+		<td>ФИО МКК</td>
+		<td>Факт. назв.сети</td>
+		<td>Сеть<br>рабо-<br>тает<br>без<br>бюджета</td>
+		<td>Факт продаж пред. года, тыс. {$valuta}</td>
+		<td>План продаж, тыс.{$valuta}</td>
+		<td>% прироста продаж</td>
+		<td>Бюджет пред. года, тыс.{$valuta}.</td>
+		<td>Бюджет, тыс.{$valuta}.</td>
+		<td>% прироста бюджета</td>
+		<td>% затрат</td>
+		<td>Согл. РМ КК</td>
+		<td>Пров. фин. менеджер</td>
+		<td>Утв. ЗГДП</td>
+
+	</tr>
+	{/if}
+
+
+
+
+
+	<tr
+		{if $fin_report_item.no_budget eq 'да'}style="background-color: yellow;"{/if}
+		{
+		if $fin_report_item.no_budget eq ''
+		and $fin_report_item.year_plan eq 0
+		and $fin_report_item.budget eq 0
+		and $fin_report_item.ok_rmkk_tmkk eq ''
+		}style="background-color: red;"{/if}
+
+		{
+		if $fin_report_item.budget_rost > $fin_report_item.perc_rost
+		}style="background-color: #8FFFFF;"{/if}
+
+
+
+
+
+	>
+		<td>{$smarty.foreach.fin_report.iteration}</td>
+		<td>{$fin_report_item.rmkk}</td>
+		<td>{$fin_report_item.mkk}</td>
+		<td>{$fin_report_item.net_name}</td>
+		<td>{$fin_report_item.no_budget}</td>
+		<td style="text-align:right">{$fin_report_item.prev_year_fakt|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.year_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.perc_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item.prev_year_budget|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.budget|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.budget_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item.perc_zatr|default:0|num:2}</td>
+
+		<td {if $fin_report_item.ok_rmkk_tmkk}bgcolor="#00ff00"{/if} style="text-align:center">{$fin_report_item.ok_rmkk_tmkk}</td>
+		<td {if $fin_report_item.ok_fin_man}bgcolor="#00ff00"{/if} style="text-align:center">{$fin_report_item.ok_fin_man}</td>
+		<td {if $fin_report_item.ok_dpu}bgcolor="#00ff00"{/if} style="text-align:center">{$fin_report_item.ok_dpu}</td>
+	</tr>
+	{/foreach}
+	{foreach key=fin_report_key_total item=fin_report_item_total from=$fin_report_total name=fin_report_total}
+	<tr style="font-weight:bold">
+		<td colspan=4>Итого</td>
+		<td style="text-align:right">{$fin_report_item_total.no_budget}</td>
+		<td style="text-align:right">{$fin_report_item_total.prev_year_fakt|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.year_plan|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.prev_year_budget|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_rmkk_tmkk}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_fin_man}</td>
+		<td style="text-align:right">{$fin_report_item_total.ok_dpu}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

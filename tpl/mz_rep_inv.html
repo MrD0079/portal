@@ -1,0 +1,59 @@
+<h3>Инвестиции</h3>
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>Дата</td>
+		{foreach key=key item=item from=$mz_spr_inv}
+		<td>{$item.name|escape}</td>
+		{/foreach}
+		<td>ИТОГО</td>
+		<td>Комментарий</td>
+	</tr>
+	{foreach key=k item=i from=$mz_rep_inv.data}
+	<tr align=center {if $i.head.is_wd eq 0}bgcolor="#FFCC99"{/if}>
+		<td style="text-align:center">{$i.head.dm}<br>{$i.head.dwt}</td>
+		{assign var="kk_h" value=0}
+		{foreach key=k1 item=i1 from=$i.spr}
+		<td>{if not $smarty.request.print}<input {$disabled_edit} name="inv[{$i.head.dt}][spr][{$k1}][val]" class="number" size=7 value="{$i1.val}">{else}{$i1.val|default:0|num:2}{/if}</td>
+		{assign var="kk_h" value=`$kk_h+$i1.val`}
+		{/foreach}
+		<td>{$kk_h}</td>
+		<td>{if not $smarty.request.print}<input {$disabled_edit} name="inv[{$i.head.dt}][text]" size=50 value="{$i.head.text|escape}">{else}{$i.head.text|escape}{/if}</td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold;text-align:center">
+		<td>ИТОГО</td>
+		{foreach key=key item=item from=$mz_rep_inv.total}
+		<td>{$item.val|default:0|num:2}</td>
+		{/foreach}
+	</tr>
+</table>
+
+
+
+
+<h3>Итоги</h3>
+
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+ <tbody>
+ <tr>
+ <td style="text-align: center; background-color: rgb(153, 255, 153);">Результаты инвентаризации за {foreach key=key item=item from=$month_list}{if $smarty.request.month_list eq $item.sd_c}{$item.my}{/if}{/foreach}, грн.</td>
+ <td style="text-align: center; background-color: rgb(153, 255, 153);">{if not $smarty.request.print}<input {$disabled_edit} size="10" class="number" name="rep_m[invent]" value={$rep_m.invent}>{else}{$rep_m.invent|default:0|num:2}{/if}</td>
+ </tr>
+ <tr>
+ <td style="text-align: center; background-color: rgb(255, 204, 255);">Валовая прибыль, грн.</td>
+ <td style="text-align: center; background-color: rgb(255, 204, 255);">{if not $smarty.request.print}<input {$disabled_edit} size="10" class="number" name="rep_m[nsv]" value={$rep_m.nsv}>{else}{$rep_m.nsv|default:0|num:2}{/if}</td>
+ </tr>
+ <tr>
+ <td style="text-align: center; background-color: rgb(204, 204, 204);">Остаток денег в кассе на последнее число месяца, грн.</td>
+ <td style="text-align: center; background-color: rgb(204, 204, 204);">{if not $smarty.request.print}<input {$disabled_edit} size="10" class="number" name="rep_m[ld_ost]" value={$rep_m.ld_ost}>{else}{$rep_m.ld_ost|default:0|num:2}{/if}</td>
+ </tr>
+ <tr>
+ <td style="text-align: center; background-color: rgb(153, 255, 153);">Поступление продукции для реализации за {foreach key=key item=item from=$month_list}{if $smarty.request.month_list eq $item.sd_c}{$item.my}{/if}{/foreach} (в отпускных ценах), грн.</td>
+ <td style="text-align: center; background-color: rgb(153, 255, 153);">{if not $smarty.request.print}<input {$disabled_edit} size="10" class="number" name="rep_m[ppr]" value={$rep_m.ppr}>{else}{$rep_m.ppr|default:0|num:2}{/if}</td>
+ </tr>
+ <tr>
+ <td style="text-align: center; background-color: rgb(153, 255, 153);">Поступление продукции для дегустации за {foreach key=key item=item from=$month_list}{if $smarty.request.month_list eq $item.sd_c}{$item.my}{/if}{/foreach} (в отпускных ценах), грн.</td>
+ <td style="text-align: center; background-color: rgb(153, 255, 153);">{if not $smarty.request.print}<input {$disabled_edit} size="10" class="number" name="rep_m[ppd]" value={$rep_m.ppd}>{else}{$rep_m.ppd|default:0|num:2}{/if}</td>
+ </tr>
+ </tbody>
+</table>

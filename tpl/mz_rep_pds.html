@@ -1,0 +1,64 @@
+<h3>Перевод на спецсчет</h3>
+{if not $smarty.request.print}
+Дата
+<input {$disabled_edit} class="datepicker" name=new_pds[pds_dt]>
+Сумма перевода
+<input {$disabled_edit} class="number" name=new_pds[pds_sum]>
+<input {$disabled_edit} type=submit name=add_pds value="Добавить запись">
+{/if}
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr style="text-align:center;font-weight:bold">
+		{if not $smarty.request.print}
+		<td>[x]</td>
+		{/if}
+		<td>Дата</td>
+		<td>Сумма</td>
+		<td>Подтверждаю</td>
+		<td>Комментарий</td>
+	</tr>
+	{foreach key=k item=i from=$mz_rep_pds}
+	{if $i.mz_admin_ok eq 1}
+		{assign var=disabled value='disabled'}
+	{else}
+		{assign var=disabled value=''}
+	{/if}
+	<tr align=center>
+		{if not $smarty.request.print}
+		<td>
+			{if not $disabled and not $disabled_edit}
+			<a href="javascript:void(0);" onClick="javascript:del_rec({$i.id});">[x]</a>
+			{/if}
+		</td>
+		{/if}
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="pds[{$i.id}][pds_dt]" class="datepicker" value="{$i.pds_dt}">{else}{$i.pds_dt}{/if}</td>
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="pds[{$i.id}][pds_sum]" class="number" value="{$i.pds_sum}">{else}{$i.pds_sum|default:0|num:2}{/if}</td>
+		<td>
+			{if not $smarty.request.print}
+			<input
+				type=checkbox
+				onclick="$('#pds_{$i.id}_mz_admin_ok'.val(this.checked?1:0);$('#pds_{$i.id}_mz_admin_ok_tn'.val(this.checked?{$tn}:0);"
+				{if $i.mz_admin_ok eq 1}checked{/if}
+				{if not $is_mz_buh}disabled{/if}
+				{$disabled_buh}
+			>
+			<input {$disabled_buh} type=hidden name=pds[{$i.id}][mz_admin_ok] name=pds_{$i.id}_mz_admin_ok {if $i.mz_admin_ok}value={$i.mz_admin_ok}{/if}>
+			{if $i.mz_admin_ok eq 1}{$i.mz_admin_ok_name}<br>{$i.lu}{/if}
+			<input {$disabled_buh} type=hidden name=pds[{$i.id}][mz_admin_ok_tn] name=pds_{$i.id}_mz_admin_ok_tn {if $i.mz_admin_ok_tn}value={$i.mz_admin_ok_tn}{/if}>
+			{else}
+			{if $i.mz_admin_ok eq 1}{$i.mz_admin_ok_name}<br>{$i.lu}{/if}
+			{/if}
+		</td>
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="pds[{$i.id}][text]" size=50 value="{$i.text|escape}">{else}{$i.text|escape}{/if}</td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold;text-align:center">
+		<td>ИТОГО</td>
+		{if not $smarty.request.print}
+		<td></td>
+		{/if}
+		<td>{$pds_total|default:0|num:2}</td>
+	</tr>
+</table>
+
+
+

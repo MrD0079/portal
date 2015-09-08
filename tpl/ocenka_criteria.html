@@ -1,0 +1,115 @@
+
+{if $smarty.request.type eq 4 or $smarty.request.type eq 5}
+{include file="ocenka_events.html"}
+{/if}
+
+<h1>
+{if $smarty.request.type eq 4}Критерии по должностям{/if}
+{if $smarty.request.type eq 5}Вопросы теста{/if}
+{if $smarty.request.type eq 6}Варианты ответов на вопрос{/if}
+</h1>
+
+<form target="_self" method="POST" name=form_criteria id=form_criteria>
+<input {$disabled} type=hidden name=add[type] value={$smarty.request.type}>
+
+
+
+{if not $disabled}
+
+<p style="font-weight:bold;">
+	<td colspan=6>
+	{if $smarty.request.type eq 4}Должность<br>{/if}
+	{if $smarty.request.type eq 4}<select name=add[pos] id=add_pos>{foreach key=key item=item from=$pos_list}<option value={$item.pos_id}>{$item.pos_name}</option>{/foreach}</select><br>{/if}
+	{if $smarty.request.type neq 4}<input {$disabled} type=hidden name=add[pos] id=add_pos>{/if}
+	{if $smarty.request.type eq 5}Текст<br>{else}Название<br>{/if}
+	{if $smarty.request.type eq 5 or $smarty.request.type eq 6}<input {$disabled} type=hidden name=add[pos]>{/if}
+	<textarea {$disabled} cols=20 rows=3 name=add[name] id=add[name]>{if $smarty.request.edit}{$edit.name}{/if}</textarea><br>
+	Описание<br>
+	<textarea {$disabled} cols=40 rows=7 name=add[description] id=add[description]>{if $smarty.request.edit}{$edit.description}{/if}</textarea><br>
+	Порядок<br>
+	<input {$disabled} size=5 type=text name=add[num] id=add_num><br>
+	{if $smarty.request.type eq 4}Вес<br>{/if}
+	{if $smarty.request.type eq 4}<input {$disabled} size=5 type=text name=add[weight] id=add_weight><br>{/if}
+	{if $smarty.request.type eq 5}Варианты ответов<br>{/if}
+	{if $smarty.request.type eq 6}Правильный<br>{/if}
+	{if $smarty.request.type eq 6}<select {$disabled} name=add[weight] id=add_weight><option value=0>нет</option><option value=1>да</option></select><br>{/if}
+	{if $smarty.request.type eq 5}<input {$disabled} type=hidden name=add[weight] id=add_weight>{/if}
+	{if $smarty.request.type eq 6}<input {$disabled} type=hidden name=add[parent] id=add_parent value={$smarty.request.id}>{/if}
+	{if $smarty.request.type neq 6}<input {$disabled} type=hidden name=add[parent] id=add_parent>{/if}
+	{if $smarty.request.edit}
+		<input {$disabled} type=submit name=upd value="Сохранить">
+	{else}
+		<input {$disabled} type=submit name=new value="Добавить">
+	{/if}
+	</td>
+</p>
+
+{/if}
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font:bold;">
+	<td>
+		{if not $disabled}
+		<a href="$('#form_criteria').submit();">x</a>
+		{/if}
+	</td>
+	{if $smarty.request.type eq 4}<td>Должность</td>{/if}
+	{if $smarty.request.type eq 5}<td>Текст</td>{else}<td>Название</td>{/if}
+	<td>Описание</td>
+	<td>Порядок</td>
+	{if $smarty.request.type eq 4}<td>Вес</td>{/if}
+	{if $smarty.request.type eq 5}<td>Варианты ответов</td>{/if}
+	{if $smarty.request.type eq 6}<td>Правильный</td>{/if}
+</tr>
+
+{foreach key=criteria_key item=criteria_item from=$criteria}
+<tr>
+	<td>
+		{if not $disabled}
+		<input {$disabled} type=checkbox name=del[{$criteria_item.id_num}]>
+		<a href="javascript:void(0);" onClick="javascript:edit('{$criteria_item.id_num}');">[ред.]</a>
+		{/if}
+	</td>
+	{if $smarty.request.type eq 4}<td>{$criteria_item.pos_name}</td>{/if}
+	<td>{$criteria_item.name|nl2br}</td>
+	<td>{$criteria_item.description|nl2br}</td>
+	<td>{$criteria_item.num}</td>
+	{if $smarty.request.type eq 4}<td>{$criteria_item.weight}</td>{/if}
+	{if $smarty.request.type eq 5}<td><a target=_blank href="?action=ocenka_criteria&type=6&id={$criteria_item.id_num}">варианты ответов</a></td>{/if}
+	{if $smarty.request.type eq 6}<td>{$criteria_item.ans}</td>{/if}
+</tr>
+{/foreach}
+
+</table>
+
+{if $smarty.request.edit}
+<input {$disabled} type=hidden name=add[id_num] value={$smarty.request.edit}>
+{/if}
+<input {$disabled} type=hidden name=add[event] value={$smarty.request.event}>
+
+
+
+{literal}
+<script>
+function edit(id)
+{
+	$("#form_criteria").append($('<input type=hidden name=edit id=edit value='+id+'>'));
+	$("#form_criteria").submit();
+}
+</script>
+{/literal}
+
+
+
+
+{if $smarty.request.edit}
+<script>
+$('#add_pos').value="{$edit.pos}";
+$('#add_num').value="{$edit.num}";
+$('#add_weight').value="{$edit.weight}";
+$('#add_parent').value="{$edit.parent}";
+</script>
+{/if}
+
+</form>

@@ -1,0 +1,134 @@
+<h1>Торговые залы</h1>
+<form target="_self" method="POST" name=form_cpp id=form_cpp>
+
+<a href="javascript:void(0)" onclick="javascript:s(0);">Добавить ТЗ</a>
+<br>
+<br>
+
+
+
+Область
+	<select name=flt_tz_oblast id=flt_tz_oblast>
+		<option value=""></option>
+		{foreach key=k item=i from=$oblast}
+		<option value="{$i.tz_oblast}">{$i.tz_oblast}</option>
+		{/foreach}
+	</select>
+	<script>document.form_cpp["flt_tz_oblast"].value="{$smarty.request.flt_tz_oblast}";</script>
+Сеть
+	<select name=flt_id_net id=flt_id_net>
+		<option value=0></option>
+		{foreach key=k item=i from=$nets}
+		<option value={$i.id_net}>{$i.net_name}</option>
+		{/foreach}
+	</select>
+	<script>document.form_cpp["flt_id_net"].value={$smarty.request.flt_id_net};</script>
+	<input type=submit name=filter id=filter value="Отфильтровать">
+
+<br>
+<br>
+
+
+
+{if $smarty.request.id > 0}
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;">
+		<td>Область</td>
+		<td>Название</td>
+		<td>Адрес</td>
+		<td>Код ТП</td>
+		<td>Сеть</td>
+		<td>Город</td>
+		<td>Учитывать в отчете GPS</td>
+	</tr>
+	{foreach key=cpp_key item=cpp_item from=$cpp_all}
+			{if $cpp_item.id eq $smarty.request.id}
+				<input type=hidden name=edit_id value="{$smarty.request.id}">
+				<tr>
+					<td>
+						<select name=edit[tz_oblast] id=edit[tz_oblast]>
+							<option></option>
+							{foreach key=k item=i from=$oblast}
+							<option value="{$i.tz_oblast}">{$i.tz_oblast}</option>
+							{/foreach}
+						</select>
+						<script>document.form_cpp["edit[tz_oblast]"].value="{$cpp_item.tz_oblast}";</script>
+					</td>
+					<td><input size=30 name=edit[ur_tz_name] value="{$cpp_item.ur_tz_name}"></td>
+					<td><input size=30 name=edit[tz_address] value="{$cpp_item.tz_address}"></td>
+					<td><input size=30 name=edit[kodtp] value="{$cpp_item.kodtp}"></td>
+					<td>
+						<select name=edit[id_net] id=edit[id_net]>
+							<option></option>
+							{foreach key=k item=i from=$nets}
+							<option value={$i.id_net}>{$i.net_name}</option>
+							{/foreach}
+						</select>
+						<script>document.form_cpp["edit[id_net]"].value={$cpp_item.id_net};</script>
+					</td>
+					<td><input size=30 name=edit[city] value="{$cpp_item.city}"></td>
+					<td>
+						<select name=edit[gps] id=edit[gps]>
+							<option value=1>да</option>
+							<option value=0>нет</option>
+						</select>
+						<script>document.form_cpp["edit[gps]"].value={$cpp_item.gps};</script>
+					</td>
+				</tr>
+
+			{/if}
+	{/foreach}
+</table>
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;">
+		<td><font style="color:red">Уникальный ID</font></td>
+		<td><a href="javascript:void(0)" onclick="javascript:form_cpp.submit()">[x]</a></td>
+		<td>ред.</td>
+		<td>Область</td>
+		<td>Название</td>
+		<td>Адрес</td>
+		<td>Код ТП</td>
+		<td>Сеть</td>
+		<td>Город</td>
+		<td>Учитывать в отчете GPS</td>
+	</tr>
+	{foreach key=cpp_key item=cpp_item from=$cpp}
+		<tr>
+			<td style="text-align:right">{$cpp_item.id}</td>
+			<td><input type=checkbox name=del[] value={$cpp_item.id}></td>
+			<td><a href="javascript:void(0)" onclick="javascript:s({$cpp_item.id});">ред.</a></td>
+			<td>{$cpp_item.tz_oblast}</td>
+			<td>{$cpp_item.ur_tz_name}</td>
+			<td>{$cpp_item.tz_address}</td>
+			<td>{$cpp_item.kodtp}</td>
+			<td>{$cpp_item.net_name}</td>
+			<td>{$cpp_item.city}</td>
+			<td>{if $cpp_item.gps eq 1}да{/if}</td>
+		</tr>
+	{/foreach}
+</table>
+<input type=submit name=save id=save class=save value="Сохранить">
+</form>
+
+<br>
+
+
+
+
+
+{literal}
+<script>
+function s(id)
+{
+	$("#form_cpp").append($('<input type=hidden name=id id=id value='+id+'>'));
+	$('#form_cpp').submit();
+}
+
+</script>
+{/literal}

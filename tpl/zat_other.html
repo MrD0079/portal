@@ -1,0 +1,140 @@
+<h3>Прочие расходы</h3>
+
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr align=left>
+		<td>Представительские расходы</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[present_cost]" value={$zat_monthly.present_cost}>
+			{else}
+				{$zat_monthly.present_cost|default:0|num:2}
+			{/if}
+		</td>
+		<td>Канцелярия</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[stationery]" value={$zat_monthly.stationery}>
+			{else}
+				{$zat_monthly.stationery|default:0|num:2}
+			{/if}
+		</td>
+	</tr>
+	<tr align=left>
+		<td>Объявления в СМИ</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[media_advert]" value={$zat_monthly.media_advert}>
+			{else}
+				{$zat_monthly.media_advert|default:0|num:2}
+			{/if}
+		</td>
+		<td>Почта</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[mail]" value={$zat_monthly.mail}>
+			{else}
+				{$zat_monthly.mail|default:0|num:2}
+			{/if}
+		</td>
+	</tr>
+	<tr align=left>
+		<td>Конференцзал</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[conference]" value={$zat_monthly.conference}>
+			{else}
+				{$zat_monthly.conference|default:0|num:2}
+			{/if}
+		</td>
+		<td>Питание участников тренинга</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[training_food]" value={$zat_monthly.training_food}>
+			{else}
+				{$zat_monthly.training_food|default:0|num:2}
+			{/if}
+		</td>
+	</tr>
+	<tr align=left>
+		<td>ЕСВ</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[esv]" value={$zat_monthly.esv}>
+			{else}
+				{$zat_monthly.esv|default:0|num:2}
+			{/if}
+		</td>
+		<td>Единый налог</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[single_tax]" value={$zat_monthly.single_tax}>
+			{else}
+				{$zat_monthly.single_tax|default:0|num:2}
+			{/if}
+		</td>
+	</tr>
+	<tr align=left>
+		<td>Оплата услуг ведения счета</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[account_payments]" value={$zat_monthly.account_payments}>
+			{else}
+				{$zat_monthly.account_payments|default:0|num:2}
+			{/if}
+		</td>
+		<td>Мобильная связь</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[mobile]" value={$zat_monthly.mobile}>
+			{else}
+				{$zat_monthly.mobile|default:0|num:2}
+			{/if}
+		</td>
+	</tr>
+	<tr align=center align=center style="font-weight:bold">
+		<td colspan=3>ИТОГО</td>
+		<td>{$zat_monthly.other_total}</td>
+	</tr>
+</table>
+
+
+
+
+
+
+
+<h3>Итоги</h3>
+
+<table width=400px border=1 cellspacing=0 cellpadding=1>
+	<tr align=center>
+		<td>Средняя стоимость бензина, {$valuta}/л</td>
+		<td>{$pet_price|default:0|num:2}</td>
+	</tr>
+	<tr align=center>
+		<td>Кол-во квитанций, шт</td>
+		<td>
+			{if $zat_enabled}
+				<input size=5 class="number" name="zat_monthly[tickets]" value={$zat_monthly.tickets}>
+			{else}
+				{$zat_monthly.tickets|default:0}
+			{/if}
+		</td>
+	</tr>
+	<tr align=center style="font-weight:bold">
+		<td>Всего (Сумма табл. 1,2,3)</td>
+		<td colspan=2>
+
+	{assign var=sum_total value=0}
+	{foreach key=key item=item from=$zat_daily_total}
+	{assign var=sum_total value=`$sum_total+$item.zc_total+$zat_monthly.amort`}
+	{/foreach}
+	{foreach key=key item=item from=$zat_daily_total}
+	{assign var=sum_total value=`$sum_total+$item.zt_total`}
+	{/foreach}
+	{assign var=sum_total value=`$sum_total+$zat_monthly.other_total`}
+
+
+			{$sum_total|default:0|num:2}
+		</td>
+	</tr>
+</table>

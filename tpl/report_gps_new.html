@@ -1,0 +1,82 @@
+<h1>Сводный отчет по GPS с {$smarty.request.dates_list1} по {$smarty.request.dates_list2}</h1>
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+<p>
+<b>
+с
+<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+по
+<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+</b>
+</p>
+
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+
+<p>
+<b>СВ МС</b>
+<select name=svms_list id=svms_list>
+<option value=0></option>
+{foreach key=key item=item from=$svms_list}
+	<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+{/foreach}
+</select>
+<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+</p>
+
+<p>
+<b>Ф.И.О. ответственного</b>
+<select name=otv_list id=otv_list>
+<option value="0"></option>
+{foreach key=key item=item from=$otv_list}
+	<option value="{$item.fio_otv}">{$item.fio_otv}</option>
+{/foreach}
+</select>
+<script>$("#otv_list option[value='{$smarty.request.otv_list}']").prop('selected', true);</script>
+</p>
+
+<p>
+<b>Маршрут</b>
+<select name=num_list id=num_list>
+<option value="0"></option>
+{foreach key=key item=item from=$num_list}
+	<option value="{$item.num}">{$item.num}</option>
+{/foreach}
+</select>
+<script>$("#num_list option[value='{$smarty.request.num_list}']").prop('selected', true);</script>
+</p>
+
+<p>
+<a href="?action=report_gps_new&select=1&report_gps_new_page=period">За период</a>
+<a href="?action=report_gps_new&select=1&report_gps_new_page=days">По дням</a>
+</p>
+
+<p>
+<input type=submit name=select value="Построить отчет">
+</p>
+
+{if $smarty.request.select}
+<p>
+<a target=_blank href="?action=report_gps_new&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Сводный отчет GPS с {$smarty.request.dates_list1} по {$smarty.request.dates_list2}&select=1">экспорт в Excel</a>
+</p>
+{/if}
+
+{/if}
+
+{if $smarty.request.select}
+	{include file="report_gps_new_linear.html"}
+{/if}
+
+{if not $smarty.request.print}
+
+</form>
+
+{/if}
+
+
+
+

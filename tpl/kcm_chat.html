@@ -1,0 +1,13 @@
+<table border=0 cellspacing=0 cellpadding=0>
+	<tr>
+	<td>
+		{foreach key=k item=i from=$chat}
+			<font style="color:red">{$i.lu_txt}</font>
+			<font style="color:green">{$i.lu_fio}:</font>
+			<br>
+			<font style="color:blue">{$i.msg|nl2br}</font>
+			<br>
+		{/foreach}
+	</td>
+	</tr>
+</table>

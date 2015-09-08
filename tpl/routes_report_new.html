@@ -1,0 +1,124 @@
+<form target="_self" method="POST" name=form1 id=form1>
+
+{if not $smarty.request.print}
+
+<h1>Маршрутный лист</h1>
+<table style="text-align: left; height: 34px; width: 100px;" border="0" cellpadding="5" cellspacing="5">
+  <tbody>
+    <tr>
+      <td style=" width: 100px; text-align: left;">Месяц 
+	<select name=month_list id=month_list>
+	{foreach key=key item=item from=$month_list}
+		<option value="{$item.sd_c}">{$item.my}</option>
+	{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+	<input value="Выбрать" name="select" type="submit"><br>
+      </td>
+      <td style=" width: 100px; text-align: left;">СВ МС
+	<select name=svms_list id=svms_list>
+	<option value=0></option>
+	{foreach key=key item=item from=$svms_list}
+		<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+	{/foreach}
+	</select>
+	<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+	<input value="Выбрать" name="select" type="submit"><br>
+      </td>
+      <td style=" width: 100px; text-align: left;">Маршрут
+	<select name="select_route_numb" id="select_route_numb">
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head}
+		<option value="{$item.id}">{$item.fio} - {$item.num} - {$item.fio_otv}</option>
+	{/foreach}
+	</select>
+	<script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>
+	<input value="Выбрать" name="select" type="submit"><br>
+      </td>
+      <td style=" width: 100px; text-align: left;">
+	<input value="Отобразить маршрут" name="show" type="submit"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+{/if}
+
+{if $smarty.request.show}
+
+
+{if not $smarty.request.print}
+<a target=_blank href="?action=routes_report_new&show=1&print=1">Версия для печати</a>
+<a href="?action=routes_report_new&show=1&print=1&excel=1&filename=Маршрутный лист">Экспорт в Excel</a>
+<br>
+<br>
+{/if}
+
+
+<h3>{$head.mt} {$head.y}; {$head.fio}; {$head.num}; {$head.fio_otv}</h3>
+
+
+<table style="text-align: left; width: 1000px;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold;text-align: center;">
+		<td>День<br>недели</td>
+		<td>№ п/п</td>
+		<td>Область<br>      </td>
+		<td>Сеть</td>
+		<td>Юридическое название ТЗ</td>
+		<td>Адрес ТЗ</td>
+		<td>№ п/п</td>
+		<td>Заказчик</td>
+		<td>Время<br>визита<br>МР, мин<br></td>
+		<!--<td>Время<br>визита<br>Ф, мин<br></td>-->
+	</tr>
+	{foreach key=k item=i from=$routes name=routes}
+
+		{assign var="x" value=0}
+		{foreach key=k1 item=i1 from=$i.body name=body}
+			{assign var="x" value=`$x+1`}
+			{foreach key=k2 item=i2 from=$i1.agents name=agent}
+				{assign var="x" value=`$x+1`}
+			{/foreach}
+		{/foreach}
+
+
+
+			<tr bgcolor="#ffccff" style="text-align: center;font-weight:bold">
+				<td rowspan="{$x+1}">{$i.dwt}<br>{$i.data}</td>
+				<td colspan=9>Визитов: {$i.total.visits}, Общее время работы: МР - {$i.total.day_time_mr} мин.<!--, Ф - {$i.total.day_time_f} мин.--></td>
+			</tr>
+		{foreach key=k1 item=i1 from=$i.body name=body}
+			{foreach key=k2 item=i2 from=$i1.agents name=agent}
+			{/foreach}
+				<tr bgcolor="#ffffcc">
+					<td rowspan="{$smarty.foreach.agent.total+1}">{$smarty.foreach.body.iteration}</td>
+					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.tz_oblast}</td>
+					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.net_name}</td>
+					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.ur_tz_name}</td>
+					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.tz_address}</td>
+					<td colspan=4></td>
+				</tr>
+			{foreach key=k2 item=i2 from=$i1.agents name=agent}
+				<tr bgcolor="#ccffff">
+					<td>{$smarty.foreach.agent.iteration}</td>
+					<td>{$k2}</td>
+					<td style="text-align: center;">{$i2.day_time_mr}</td>
+					<!--<td style="text-align: center;">{$i2.day_time_f}</td>-->
+				</tr>
+			{/foreach}
+		{/foreach}
+
+	{/foreach}
+</table>
+
+{/if}
+
+</form>
+
+
+
+
+
+

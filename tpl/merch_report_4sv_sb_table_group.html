@@ -1,0 +1,82 @@
+<table style="text-align: left;" border="1">
+	<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+	<td>Дата</td>
+	<td>Область</td>
+	<td>Город</td>
+	<td>Сеть</td>
+	<td>Адрес ТЗ</td>
+	<td>СВ МС</td>
+	<td>Продукт</td>
+	<td>Количество</td>
+	<td>Коммент</td>
+	<td>Окончание срока годности</td>
+	<td>Подтверждение КК</td>
+	<td>Подтверждение МС</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+		{foreach key=k1 item=i1 from=$i.products name=products}
+		{/foreach}
+		<tr style="vertical-align:top;" bgcolor="{$color}">
+		<td rowspan={$smarty.foreach.products.total+1}>{$i.sb_dt}</td>
+		<td rowspan={$smarty.foreach.products.total+1}>{$i.cpp1_tz_oblast}</td>
+		<td rowspan={$smarty.foreach.products.total+1}>{$i.cpp1_city}</td>
+		<td rowspan={$smarty.foreach.products.total+1}>{$i.n_net_name}</td>
+		<td rowspan={$smarty.foreach.products.total+1}>{$i.cpp1_tz_address}</td>
+		<td rowspan={$smarty.foreach.products.total+1}>{$i.svms_name}</td>
+		<td colspan=4></td>
+		<td id=valok_kk{$i.id} rowspan={$smarty.foreach.products.total+1}>
+			{if not $smarty.request.print and $i.kk_can_ok and (not $i.ok_kk or $is_admin)}
+				<input {if $i.ok_kk}checked{/if} type=checkbox onClick="HeadSave({$i.id},'ok_kk',this.checked?1:'');HeadSave({$i.id},'ok_kk_fio',this.checked?'{$fio}':'');">
+			{/if}
+			{$i.ok_kk_fio}
+			{$i.ok_kk_lu}
+		</td>
+		<td id=valok_ms{$i.id} rowspan={$smarty.foreach.products.total+1}>
+			{if not $smarty.request.print and $i.rh_tn eq $tn and $i.ok_kk and (not $i.ok_ms or $is_admin)}
+				<input {if $i.ok_ms}checked{/if} type=checkbox onClick="HeadSave({$i.id},'ok_ms',this.checked?1:'');HeadSave({$i.id},'ok_ms_fio',this.checked?'{$fio}':'');">
+			{/if}
+			{$i.ok_ms_fio}
+			{$i.ok_ms_lu}
+		</td>
+		</tr>
+		{foreach key=k1 item=i1 from=$i.products}
+		<tr style="vertical-align:top;">
+			<td>
+				{$i1.product_name_sw}
+			</td>
+			<td>
+				{$i1.qty}
+			</td>
+			<td>
+				{$i1.comm_name}
+			</td>
+			<td>
+				{$i1.srok_god}
+			</td>
+		</tr>
+		{/foreach}
+	{/foreach}
+</table>
+
+<script>
+{literal}
+function HeadSave(id,field,val)
+{
+$('#val'+field+id).css('background-color','red');
+var fd = new FormData();
+fd.append('id', id);
+fd.append('field', field);
+fd.append('val', val);
+$.ajax({
+	type: 'POST',
+	url: '?action=merch_report_sb_head_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+		$('#val'+field+id).css('background-color','white');
+	}
+});
+}
+{/literal}
+</script>

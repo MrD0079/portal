@@ -1,0 +1,1 @@
+select distinct dw,dwt from calendar /*where dw<>7*/ order by dw

@@ -1,0 +1,104 @@
+<h1>Продажи по сетям</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+{if not $is_mkk}
+		<tr>
+			<td>
+				Ответственный НМКК
+			</td>
+			<td>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Ответственный ТМКК
+			</td>
+			<td>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+{/if}
+		<tr>
+			<td>
+				Выберите сеть из списка
+			</td>
+			<td>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Период
+			</td>
+			<td>
+				с
+				<select name=sd id=sd>
+				{foreach key=key item=item from=$month_list}
+					<option value="{$item.sd_c}">{$item.my}</option>
+				{/foreach}
+				</select>
+				<script>$('#sd').val('{$smarty.request.sd}');</script>
+				по
+				<select name=ed id=ed>
+				{foreach key=key item=item from=$month_list}
+					<option value="{$item.sd_c}">{$item.my}</option>
+				{/foreach}
+				</select>
+				<script>$('#ed').val('{$smarty.request.ed}');</script>
+			</td>
+		</tr>
+	</table>
+<br>
+
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{/if}
+
+{if $smarty.request.generate}
+
+{if not $smarty.request.print}
+<a href="?action=saleskk&generate=1&print=1&excel=1&filename=Продажи по сетям">Экспорт в Excel</a>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>Критерий</td>
+		<td>НМ КК</td>
+		<td>ТМ КК</td>
+		<td>Сеть</td>
+		<td>Период</td>
+		<td style="text-align:right">Сумма продаж, {$valuta}</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr>
+		<td>{$i.name}</td>
+		<td>{$i.rmkk}</td>
+		<td>{$i.mkk}</td>
+		<td>{$i.net_name}</td>
+		<td>{$i.period}</td>
+		<td style="text-align:right">{$i.sales|num:2}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

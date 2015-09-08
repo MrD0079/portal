@@ -1,0 +1,179 @@
+<form target="_self" method="POST" name=form_test id=form_test>
+
+<input type=hidden name=head value={$h.id}>
+<input type=hidden name=test_end value=true>
+<input type=hidden id=time_out name=time_out value=true disabled>
+
+
+<div style="text-align: center;">
+<div style="text-align: left;">
+
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+<tr>
+<td style="vertical-align: top; font-weight: bold;"><big>Тест к тренингу: {$h.name}</big></td>
+<td style="vertical-align: top; text-align: right;"><big><span style="font-weight: bold;"><div id="Timer" name="Timer"></div></span></big><br></td>
+</tr>
+</table>
+
+<hr style="width: 100%; height: 2px;">
+
+<p style="text-align: center;">
+Вы не ответили на вопросы:
+{foreach key=k item=i from=$qa name=q}
+<span class="a" id="a_{$i.head.id_num}">
+&nbsp;
+<span style="text-decoration: underline;"><a href="javascript:void({$i.head.id_num})" onclick="show1('q_{$i.head.id_num}')">{$smarty.foreach.q.iteration}</a></span>
+</span>
+{/foreach}
+</p>
+
+<p style="text-align: center;">
+Вы ответили на вопросы:
+{foreach key=k item=i from=$qa name=q}
+<span class="a1" id="a1_{$i.head.id_num}">
+&nbsp;
+<span style="text-decoration: underline;"><a href="javascript:void({$i.head.id_num})" onclick="show1('q_{$i.head.id_num}')">{$smarty.foreach.q.iteration}</a></span>
+</span>
+<script>$('#a1_{$i.head.id_num}').hide();</script>
+{/foreach}
+</p>
+
+
+
+<hr style="width: 100%; height: 2px;">
+
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+	<tr>
+		<td style="vertical-align: top; text-align: center;"><img class="link" onclick="show_prev();" alt="Предыдущий вопрос" src="design/prev.png"></td>
+		<td style="vertical-align: top; text-align: center;">
+		{foreach key=k item=i from=$qa name=q}
+
+
+
+
+
+
+
+		<div class="q" id=q_{$i.head.id_num}>
+			<p style="font-weight: bold;">Вопрос №{$smarty.foreach.q.iteration}:</p>
+			<p>{$i.head.name}</p>
+			<p style="font-weight: bold;">Варианты ответов:</p>
+			<p>
+			{foreach key=k1 item=i1 from=$i.data name=a}
+				<input class="answer_{$i.head.id_num}" name="answer[{$i.head.id_num}][{$i1.id_num}]" type="checkbox" onclick="show2('{$i.head.id_num}');">{$i1.name|nl2br}<br>
+			{/foreach}
+			</p>
+		</div>
+
+
+
+
+
+
+		<script>$('#q_{$i.head.id_num}').hide();</script>
+
+
+
+
+
+		{/foreach}
+		</td>
+		<td style="vertical-align: top; text-align: center;"><img class="link" onclick="show_next();" alt="Следующий вопрос" src="design/next.png"></td>
+	</tr>
+</table>
+
+
+{literal}
+<script>
+function show1(el){
+	$(".q").each(function(){
+		$(this).attr('id')==el?$(this).show():$(this).hide();
+	});
+}
+function show2(el){
+	$("#a_"+el).show();
+	$("#a1_"+el).hide();
+	$(".answer_"+el).each(function(){
+		$(this).prop('checked') ? $("#a_"+el).hide() : null;
+		$(this).prop('checked') ? $("#a1_"+el).show() : null;
+	});
+}
+function show_next(){
+	id = $(".q:visible").attr("id");
+	next_div = 0;
+	$(".q").each(function(){
+		next_div == 1 ? show1($(this).attr("id")) : null;
+		next_div = 0;
+		id == $(this).attr("id") ? next_div = 1 : null;
+	})
+}
+
+jQuery.fn.reverse = [].reverse;
+
+function show_prev(){
+	id = $(".q:visible").attr("id");
+	prev_div = 0;
+	$(".q").reverse().each(function(){
+		prev_div == 1 ? show1($(this).attr("id")) : null;
+		prev_div = 0;
+		id == $(this).attr("id") ? prev_div = 1 : null;
+	})
+}
+
+
+</script>
+{/literal}
+
+<p style="text-align: center;">
+<img class="link" onclick="$('#form_test').submit();" style="width: 390px; height: 80px;" alt="Сохранить и закончить тест" src="design/finishTest.png">
+</p>
+
+</div>
+</div>
+
+{literal}
+<SCRIPT LANGUAGE = "JavaScript">
+var secs
+var timerID = null
+var timerRunning = false
+var delay = 1000
+function InitializeTimer()
+{
+    secs = {/literal}{$h.test_len}{literal}
+    StopTheClock()
+    StartTheTimer()
+}
+function StopTheClock()
+{
+    if(timerRunning)
+        clearTimeout(timerID)
+    timerRunning = false
+}
+function Sec2Str(s)
+{
+	min=Math.floor(s/60)
+	sec=s-min*60
+	return "Оставшееся время: "+min+'мин. '+sec+'сек.'
+}
+function StartTheTimer()
+{
+    if (secs==0)
+    {
+        StopTheClock();
+	$('#time_out').attr('disabled',false);
+	$('#form_test').submit();
+    }
+    else
+    {
+	$('#Timer').innerHTML=Sec2Str(secs)
+        secs = secs - 1
+        timerRunning = true
+        timerID = self.setTimeout("StartTheTimer()", delay)
+    }
+}
+InitializeTimer();
+</SCRIPT>
+{/literal}
+
+
+</form>

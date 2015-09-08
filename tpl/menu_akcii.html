@@ -1,0 +1,45 @@
+{if $tn neq 2885600038}
+{if $cnt_kod eq "ua" and not $is_eta}
+<li><a href="javascript:void(0);"><span class="dir">2012</span></a>
+<ul>
+	{include file="menu_akcii_2012.html"}
+</ul>
+</li>
+{/if}
+<li><a href="javascript:void(0);"><span class="dir">2013</span></a>
+<ul>
+	{if $cnt_kod eq "ua"}
+	{if not $is_eta}
+	<li><a href="javascript:void(0);"><span class="dir">Продолжительные</span></a>
+	<ul>
+		{include file="menu_akcii_2013_ua_prolonged.html"}
+	</ul>
+	</li>
+	{/if}
+	{include file="menu_akcii_2013_ua.html"}
+	{/if}
+	{if $cnt_kod eq "exp"}
+	{include file="menu_akcii_2013_exp.html"}
+	{/if}
+</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">2014</span></a>
+<ul>
+	{if $cnt_kod eq "ua"}
+	<li><a href="javascript:void(0);"><span class="dir">Продолжительные</span></a>
+	<ul>
+		{include file="menu_akcii_2014_ua_prolonged.html"}
+	</ul>
+	</li>
+	{include file="menu_akcii_2014_ua.html"}
+	{/if}
+</ul>
+</li>
+{/if}
+<li><a href="javascript:void(0);"><span class="dir">2015</span></a>
+<ul>
+	{if $cnt_kod eq "ua"}
+	{include file="menu_akcii_2015_ua.html"}
+	{/if}
+</ul>
+</li>

@@ -1,0 +1,79 @@
+<h1>Тест</h1>
+<br>
+{if $smarty.request.timeout neq 1 and $test_enabled neq 0}
+<br>
+<div id="Timer" name="Timer"></div>
+<br>
+<form target="_self" method="POST" name=form_test id=form_test>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font:bold;">
+<td>Текст(Описание)</td>
+</tr>
+{foreach key=test_key item=test_item from=$test}
+<tr>
+<td>
+<b>{$test_item.name|nl2br}</b>
+<br>
+{$test_item.description|nl2br}
+<br>
+Варианты ответов:
+<br>
+<table border=0 cellpadding=3 cellspacing=0>
+{foreach key=test_ans_key item=test_ans_item from=$test_item.ans}
+<tr>
+<td><input type=radio name=ans[{$test_item.id_num}] value={$test_ans_item.id_num}><b>{$test_ans_item.name|nl2br}</b>&nbsp{$test_ans_item.description|nl2br}</td>
+</tr>
+{/foreach}
+</table>
+</td>
+</tr>
+{/foreach}
+</table>
+<input type="submit" id="save" name="save" value="Сохранить" onClick="javascript:form_test.submit();">
+<input type="hidden" id="timeout" name="timeout" value=1>
+</form>
+{literal}
+<SCRIPT LANGUAGE = "JavaScript">
+var secs
+var timerID = null
+var timerRunning = false
+var delay = 1000
+function InitializeTimer()
+{
+    secs = {/literal}{$test_length}{literal}
+    StopTheClock()
+    StartTheTimer()
+}
+function StopTheClock()
+{
+    if(timerRunning)
+        clearTimeout(timerID)
+    timerRunning = false
+}
+function Sec2Str(s)
+{
+	min=Math.floor(s/60)
+	sec=s-min*60
+	return "До окончания теста осталось "+min+'мин. '+sec+'сек.'
+}
+function StartTheTimer()
+{
+    if (secs==0)
+    {
+        StopTheClock();
+	$('#form_test').submit();
+    }
+    else
+    {
+	$('#Timer').innerHTML=Sec2Str(secs)
+        secs = secs - 1
+        timerRunning = true
+        timerID = self.setTimeout("StartTheTimer()", delay)
+    }
+}
+InitializeTimer();
+</SCRIPT>
+{/literal}
+{else}
+Тестирование окончено
+{/if}

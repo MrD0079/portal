@@ -1,0 +1,122 @@
+<h1>График обучения</h1>
+
+<form name=form_tr_shed id=form_tr_shed target=_self method=post>
+
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+	<td>
+		Месяц
+		<br>
+		{if $smarty.request.print neq 1}
+			<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+		{else}
+			<b>
+			{foreach key=key item=item from=$month_list}
+				{if $item.sd_c eq $smarty.request.month_list}
+					{$item.my}
+				{/if}
+			{/foreach}
+			</b>
+		{/if}
+	</td>
+	<td>
+		<input type=radio id="tr_flt" name="tr_flt" value=1>мои тренинги<br>
+		<input type=radio id="tr_flt" name="tr_flt" value=2>тренинги прямых подчиненных<br>
+		<input type=radio id="tr_flt" name="tr_flt" value=3>тренинги непрямых подчиненных<br>
+		<input type=radio id="tr_flt" name="tr_flt" value=4>все тренинги<br>
+		<script>$("input[name=tr_flt][value={$smarty.request.tr_flt|default:1}]").attr('checked',true);</script>
+	</td>
+	<td>
+		<input type="submit" name="select" value="Показать">
+	</td>
+	</tr>
+</table>
+
+
+
+
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_tr_shed').submit();
+}
+</script>
+{/literal}
+
+
+
+
+
+
+
+</form>
+
+
+{assign var=a value=0}
+
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr align=center>
+		<td rowspan=2>№ Нед.</td>
+		<td rowspan=2>&nbsp</td>
+		{foreach name=week_days_list key=key item=item from=$week_days_list}{/foreach} <!-- for count total-->
+		<td bgcolor="#00ff00" colspan={$smarty.foreach.week_days_list.total}>Дни недели</td>
+	</tr>
+	<tr align=center>
+		{foreach key=key item=item from=$week_days_list}
+		<td bgcolor="#00ff00">{$item}</td>
+		{/foreach}
+	</tr>
+	{foreach key=key item=item from=$calendar}
+	<tr align=center>
+		<td rowspan=2>{$key}</td>
+		<td bgcolor="#00ffff">Дата</td>
+		{foreach key=key1 item=item1 from=$item}
+		<td bgcolor="#00ffff">
+			{if isset($item1.data)}{$item1.data}{/if}
+		</td>
+		{/foreach}
+	</tr>
+	<tr align=center>
+		<td>Тренинги</td>
+		{foreach key=key1 item=item1 from=$item}
+		<td style="text-align:left; vertical-align:top">
+			{if isset($item1.data)}
+			{foreach key=k2 item=i2 from=$tr_shed[$item1.data].data}
+			{assign var=a value=$a+1}
+			<b>Тренер:</b> {$i2.head.fio}<br>
+			<b>Тренинг:</b> {$i2.head.name}<br>
+			<b>Локация:</b> {$i2.head.loc_name}<br>
+			<b>Период проведения:</b> {$i2.head.tr_start} - {$i2.head.tr_end}<br>
+			<b>Участников:</b> <a href="javascript:void(0)" onclick="javascript:show1('text_{$a}')">{$i2.head.stud_cnt}</a><br>
+			<div class="tr_plan_text" class="text_{$a}"  id=text_{$a}>
+				{foreach key=k3 item=i3 from=$i2.data name=f3}
+					{$smarty.foreach.f3.iteration}. {$i3.st_fio} - {$i3.st_pos}<br>
+				{/foreach}
+			</div>
+			<script>$("#text_{$a}").hide();</script>
+			<b>Результаты:</b><a target=_blank href="?action=tr_shed_rep_detail&tr_id={$i2.head.id}">{$i2.head.stud_cnt_ok}</a>
+			<hr>
+			{/foreach}
+			{/if}
+		</td>
+		{/foreach}
+	</tr>
+	{/foreach}
+</table>
+
+
+{literal}
+<script>
+function show1(el){$(".tr_plan_text").each(function(){$(this).attr('id')==el?$(this).toggle():$(this).hide();});}
+</script>
+{/literal}

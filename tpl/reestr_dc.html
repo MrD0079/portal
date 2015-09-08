@@ -1,0 +1,177 @@
+<h1>Реестр ДЦ с {$smarty.request.dates_list1} по {$smarty.request.dates_list2}</h1>
+
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+
+Дата
+с
+<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+по
+<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+
+<br>
+
+Должность участника ДЦ
+</td>
+<td>
+<select name=pos id=pos>
+	<option value=0></option>
+	{foreach key=key item=item from=$pos_list_reestr_dc}
+	<option value={$item.pos_id}>{$item.pos_name}</option>
+	{/foreach}
+</select>
+<script>$("#pos option[value='{$smarty.request.pos}']").prop('selected', true);</script>
+
+<br>
+
+Подтверждено ЗГДП:
+
+<input checked="checked" name="zgdp" id="zgdp" value="0" type="radio"> все
+<input name="zgdp" id="zgdp" value="1" type="radio"> подтверждено
+<input name="zgdp" id="zgdp" value="2" type="radio"> не подтверждено
+
+<script>$("input[name=zgdp][value={$smarty.request.zgdp}]").attr('checked',true);</script>
+
+
+<br>
+
+Предоставлена ОС:
+
+<input checked="checked" name="os" id="os" value="0" type="radio"> все
+<input name="os" id="os" value="1" type="radio"> предоставлена
+<input name="os" id="os" value="2" type="radio"> не предоставлена
+
+<script>$("input[name=os][value={$smarty.request.os}]").attr('checked',true);</script>
+
+
+<br>
+
+Достижение цели на ДЦ:
+
+<input checked="checked" id="goal_res" name=goal_res value=0 type="radio">Все
+{foreach key=key item=item from=$os_goal name=os_goal}
+	<input id="goal_res" name=goal_res value={$item.id} type="radio">{$item.name}
+{/foreach}
+<script>$("input[name=goal_res][value={$smarty.request.goal_res}]").attr('checked',true);</script>
+
+<br>
+
+<input type=submit name=select value="Выбрать">
+
+<hr>
+
+<input type=submit name=save value="Сохранить">
+
+<br>
+<br>
+
+<a target=_blank href="?action=reestr_dc&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Реестр ДЦ с {$smarty.request.dates_list1} по {$smarty.request.dates_list2}">экспорт в Excel</a>
+
+<br>
+<br>
+
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	{foreach key=k item=i from=$reestr_dc name=d}
+	{math assign="color" equation='y' y=$smarty.foreach.d.iteration%10} 
+	{if $color eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td>№</td>
+		<td>Дата участия</td>
+		<td>ФИО участника</td>
+		<td>Должность участника</td>
+		<td>Цель на ДЦ</td>
+		<td>Решение ОК</td>
+		<td>Цель участника на ДЦ</td>
+		<td>Подтверждено ЗГДП</td>
+		<td>Предоставлена ОС</td>
+		{if not $smarty.request.print}
+		<td>Отчет</td>
+		<td>Динамика</td>
+		{/if}
+	</tr>
+	{/if}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:center">{$smarty.foreach.d.iteration}</td>
+		<td style="text-align:center">{$i.data_t}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.goal|nl2br}</td>
+		<td>{$i.findings|nl2br}</td>
+		<td style="text-align:center;background-color:{$i.color}">{$i.goal_name}</td>
+		<td style="text-align:center">
+			{if $smarty.request.print}
+				{if $i.ok_zgdp eq 1}да{/if}
+			{else}
+				<input
+					onclick="
+						$('#ok_zgdp_{$i.id}').attr('disabled',false);
+						$('#ok_zgdp_{$i.id}').val(this.checked?1:0)
+					"
+					{if $i.ok_zgdp eq 1}checked{/if}
+					{if not $is_admin and not $is_dpu}disabled{/if}
+					{if $is_dpu and $i.ok_zgdp eq 1}disabled{/if}
+					type="checkbox"
+				>
+				<input
+					type=hidden
+					disabled
+					name=data[{$i.id}][ok_zgdp]
+					id=ok_zgdp_{$i.id}
+					value="{$i.ok_zgdp}"
+				>
+			{/if}
+		</td>
+		<td style="text-align:center">
+			{if $smarty.request.print}
+				{if $i.os_provided eq 1}
+					{$i.os_lu}
+				{/if}
+			{else}
+				<input {if $i.os_provided eq 1}checked{/if} type="checkbox" onclick="
+						$('#os_provided_{$i.id}').attr('disabled',false);
+						$('#os_provided_{$i.id}').val(this.checked?1:0)
+						$('#os_lu_{$i.id}').attr('disabled',!this.checked);
+						$('#os_fio_{$i.id}').attr('disabled',!this.checked);
+						"
+				>
+				<input {if $i.os_provided neq 1}disabled{/if} required class="datepicker" size=10 id=os_lu_{$i.id} name=data[{$i.id}][os_lu] value="{$i.os_lu}">
+				<input
+					type=hidden
+					disabled
+					name=data[{$i.id}][os_provided]
+					id=os_provided_{$i.id}
+					value="{$i.os_provided}"
+				>
+				<input
+					type=hidden
+					disabled
+					name=data[{$i.id}][os_fio]
+					id=os_fio_{$i.id}
+					value="{$fio}"
+				>
+			{/if}
+			<br>
+			{$i.os_fio}
+		</td>
+		{if not $smarty.request.print}
+		<td style="text-align:center"><a target=_blank href="?action=os&k[tn]={$i.tn}&k[y]={$i.y}">Отчет</a></td>
+		<td style="text-align:center"><a target=_blank href="?action=dyn_dc&k[tn]={$i.tn}&k[y]={$i.y}">Динамика</a></td>
+		{/if}
+	</tr>
+	{/foreach}
+	<tr>
+		<td style="font-weight:bold" colspan=11>
+			ИТОГО: {$reestr_dc_total.c}
+		</td>
+	</tr>
+</table>
+</form>

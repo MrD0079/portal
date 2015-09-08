@@ -1,0 +1,150 @@
+<h1>Подтверждение новичков</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+<input type=submit value="Сохранить" name="save">
+
+{foreach key=key1 item=item1 from=$new_staff}
+<hr>
+<table cellpadding=3 border=0>
+	<tr>
+		<td>
+			<table cellpadding=3 border=0>
+				<tr>
+					<td>Ф.И.О. нового сотрудника</td>
+					<td>
+						<input required name="new_staff[{$item1.id}][fam]" size=10 value="{$item1.fam|escape}">
+						<input required name="new_staff[{$item1.id}][im]" size=10 value="{$item1.im|escape}">
+						<input required name="new_staff[{$item1.id}][otch]" size=10 value="{$item1.otch|escape}">
+					</td>
+				</tr>
+				<tr>
+					<td>Должность нового сотрудника</td>
+					<td>
+						<select required name="new_staff[{$item1.id}][pos_id]" id="new_staff_{$item1.id}_pos_id">
+							<option></option>
+							{foreach key=key item=item from=$dolgn_list_all}
+								<option value={$item.pos_id}>{$item.pos_name}</option>
+							{/foreach}
+						</select>
+						<script>$('#new_staff_{$item1.id}_pos_id option[value="{$item1.pos_id}"]').prop('selected', true);</script>
+					</td>
+				</tr>
+				<tr>
+					<td>Дата начала работы в данной должности</td>
+					<td><input required name="new_staff[{$item1.id}][datastart]" class="datepicker" value="{$item1.datastart_t}"></td>
+				</tr>
+				<tr>
+					<td>ИНН</td>
+					<td><input required class="number_int" name="new_staff[{$item1.id}][svideninn]" size=30 value="{$item1.svideninn|escape}"></td>
+				</tr>
+				<tr>
+					<td>Электронный адрес (корпоративный)</td>
+					<td><input required name="new_staff[{$item1.id}][email]" size=30 value="{$item1.email|escape}"></td>
+				</tr>
+				<tr>
+					<td>ФИО бизнес-тренера</td>
+					<td>
+						<select name="new_staff[{$item1.id}][bt]" id="new_staff_{$item1.id}_bt">
+							<option></option>
+							{foreach key=key item=item from=$bt_list}
+								<option value={$item.tn}>{$item.fio}</option>
+							{/foreach}
+						</select>
+						<script>$('#new_staff_{$item1.id}_bt option[value="{$item1.bt}"]').prop('selected', true);</script>
+					</td>
+				</tr>
+				<tr>
+					<td>Марка авто</td>
+					<td><input required name="new_staff[{$item1.id}][car_brand]" size=30 value="{$item1.car_brand|escape}"></td>
+				</tr>
+				<tr>
+					<td>Лимит транспортый (литры)</td>
+					<td><input class="number" required name="new_staff[{$item1.id}][limit_car_vol]" size=30 value="{$item1.limit_car_vol|escape}"></td>
+				</tr>
+				<tr>
+					<td>Лимит транспортый общий ({$valuta}.)</td>
+					<td><input class="number" required name="new_staff[{$item1.id}][limittrans]" size=30 value="{$item1.limittrans|escape}"></td>
+				</tr>
+				<tr>
+					<td>Лимит командировочный ({$valuta}.)</td>
+					<td><input class="number" required name="new_staff[{$item1.id}][limitkom]" size=30 value="{$item1.limitkom|escape}"></td>
+				</tr>
+				<tr>
+					<td>Личная карточка</td>
+					<td><a target=_blank href="new_staff_files/{$item1.fn}">{$item1.fn}</a></td>
+				</tr>
+				<tr>
+					<td>Фотография</td>
+					<td><img width=200px src="new_staff_files/{$item1.fn1}" alt="{$item1.fn1}"></td>
+				</tr>
+				<tr>
+					<td>ФИО сотрудника, сделавшего заявку</td>
+					<td>{$item1.creator_name}</td>
+				</tr>
+				<tr>
+					<td colspan=2><hr></td>
+				</tr>
+				<tr>
+					<td>Прямые подчиненные нового сотрудника</td>
+					<td>
+						{foreach key=k1 item=i1 from=$item1.childs}
+							<input type=checkbox checked onClick="$('#new_staff_{$item1.id}_childs_{$i1.id}').val(this.checked?1:null)">{$i1.fio}<br>
+							<input type=hidden value=1 id=new_staff_{$item1.id}_childs_{$i1.id} name=new_staff_detail[{$item1.id}][childs][{$i1.id}]>
+						{/foreach}
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2><hr></td>
+				</tr>
+				<tr>
+					<td>Статусы</td>
+					<td>
+						<input type=checkbox {if $item1.is_mservice eq 1}checked{/if} onClick="$('#new_staff_{$item1.id}_is_mservice').val(this.checked?1:null)">МС<br>
+						<input type=checkbox {if $item1.is_mz eq 1}checked{/if}       onClick="$('#new_staff_{$item1.id}_is_mz').val(this.checked?1:null)">МШ<br>
+						<input type=checkbox {if $item1.is_coach eq 1}checked{/if}    onClick="$('#new_staff_{$item1.id}_is_coach').val(this.checked?1:null)">Тренер<br>
+						<input type=checkbox {if $item1.is_db eq 1}checked{/if}       onClick="
+															$('#new_staff_{$item1.id}_is_db').val(this.checked?1:null);
+															!this.checked?$('.all_{$item1.id}').prop('checked',true):null;
+															!this.checked?$('.all_{$item1.id}').click():null;
+															$('.all_{$item1.id}').attr('disabled',this.checked?false:true);
+															">ДБ<br>
+
+
+						<input type=hidden {if $item1.is_mservice eq 1}value=1{/if} id=new_staff_{$item1.id}_is_mservice name=new_staff[{$item1.id}][is_mservice]>
+						<input type=hidden {if $item1.is_mz eq 1}value=1{/if}       id=new_staff_{$item1.id}_is_mz       name=new_staff[{$item1.id}][is_mz]>
+						<input type=hidden {if $item1.is_coach eq 1}value=1{/if}    id=new_staff_{$item1.id}_is_coach    name=new_staff[{$item1.id}][is_coach]>
+						<input type=hidden {if $item1.is_db eq 1}value=1{/if}       id=new_staff_{$item1.id}_is_db       name=new_staff[{$item1.id}][is_db]>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2><hr></td>
+				</tr>
+				<tr>
+					<td>Филиалы</td>
+					<td>
+						{foreach key=k1 item=i1 from=$item1.bud_fil name=bud_fil}
+							<input {if $item1.is_db neq 1}disabled{/if} class="all_{$item1.id}" type=checkbox {if $i1.enabled}checked{/if} onClick="$('#new_staff_{$item1.id}_bud_fil_{$i1.id}').val(this.checked?{$i1.id}:null)">{$i1.name}
+							<input class="all_hidden_{$item1.id}" type=hidden {if $i1.enabled}value={$i1.id}{/if} id=new_staff_{$item1.id}_bud_fil_{$i1.id} name=new_staff_detail[{$item1.id}][bud_fil][{$i1.id}]>
+							{if ($smarty.foreach.bud_fil.iteration+1)%5 eq 1}<br>{/if}
+						{/foreach}
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<input onClick="$('#comment_{$item1.id}').attr('disabled',true)" type=radio name="r[{$item1.id}]" value=1>Подтвердить
+			<input onClick="$('#comment_{$item1.id}').attr('disabled',false)" type=radio name="r[{$item1.id}]" value=0>Удалить
+			<textarea disabled name="comment[{$item1.id}]" id="comment_{$item1.id}"></textarea>
+		</td>
+	</tr>
+</table>
+
+
+{/foreach}
+
+<hr>
+
+<input type=submit value="Сохранить" name="save">
+
+</form>

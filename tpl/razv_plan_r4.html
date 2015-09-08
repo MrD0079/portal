@@ -1,0 +1,174 @@
+<h2>Раздел 4. Работа с ОС по результатам ДЦ</h2>
+
+{if $smarty.request.print neq 1 and $self}
+<b><a href="javascript:void(0);" onClick="javascript:submit_val('new_os');">Добавить новую область развития</a></b>
+{/if}
+
+
+  {foreach key=os_key item=os_item from=$oss}
+<h3>Раздел 4.{$os_key+1}</h3>
+<table border=1 cellpadding=0 cellspacing=0 style="text-align:center; background-color: rgb(255,204,255)">
+  <tr style="text-align:center; background-color: rgb(204,255,255)">
+    <td style="font-weight:bold;">[удал.]</td>
+    <td><b>Область развития</b><br>(на основе ОС по результатам ДЦ)</td>
+    <td><b>Цель развития / ожидаемый результат</b><br>(Что будет результатом развития?)</td>
+    <td><b>Самооценка</b></td>
+    <td><b>Оценка<br>руководителя</b></td>
+    <td colspan=2><b>Комментарий<br>руководителя</b></td>
+  </tr>
+  <tr>
+    <td>{if $smarty.request.print neq 1 and $self}<input type=checkbox name=del[r_os][os_id][{$os_item.os_id}] value={$os_item.os_id}>{/if}</td>
+    <td>
+      {if $smarty.request.print neq 1 and $self}
+		<textarea wrap="virtual" cols="40" rows="5" name=r_os[{$os_item.os_id}][os]>{$os_item.os}</textarea>
+      {else}
+		{$os_item.os|nl2br}
+      {/if}
+    </td>
+    <td>
+      {if $smarty.request.print neq 1 and $self}
+		<textarea wrap="virtual" cols="40" rows="5" name=r_os[{$os_item.os_id}][target]>{$os_item.target}</textarea>
+      {else}
+		{$os_item.target|nl2br}
+      {/if}
+    </td>
+    <td style="text-align:left">
+      {if $smarty.request.print neq 1 and $self}
+      <nobr><input value=0 type=radio name=r_os[{$os_item.os_id}][self_appraisal] checked> Не определено</nobr><br>
+      <nobr><input value=1 type=radio name=r_os[{$os_item.os_id}][self_appraisal]> Нет прогресса</nobr><br>
+      <nobr><input value=2 type=radio name=r_os[{$os_item.os_id}][self_appraisal]> Частично достигнута</nobr><br>
+      <nobr><input value=3 type=radio name=r_os[{$os_item.os_id}][self_appraisal]> Достигнута</nobr><br>
+      <nobr><input value=4 type=radio name=r_os[{$os_item.os_id}][self_appraisal]> Достигнута с превышением</nobr><br>
+      {else}
+      {if $os_item.self_appraisal eq 0}<nobr>Не определено</nobr>{/if}
+      {if $os_item.self_appraisal eq 1}<nobr>Нет прогресса</nobr>{/if}
+      {if $os_item.self_appraisal eq 2}<nobr>Частично достигнута</nobr>{/if}
+      {if $os_item.self_appraisal eq 3}<nobr>Достигнута</nobr>{/if}
+      {if $os_item.self_appraisal eq 4}<nobr>Достигнута с превышением</nobr>{/if}
+      {/if}
+    </td>
+    <td style="text-align:left">
+      {if $smarty.request.print neq 1 and $teacher}
+      <nobr><input value=0 type=radio name=r_os[{$os_item.os_id}][teacher_appraisal] checked> Не определено</nobr><br>
+      <nobr><input value=1 type=radio name=r_os[{$os_item.os_id}][teacher_appraisal]> Нет прогресса</nobr><br>
+      <nobr><input value=2 type=radio name=r_os[{$os_item.os_id}][teacher_appraisal]> Частично достигнута</nobr><br>
+      <nobr><input value=3 type=radio name=r_os[{$os_item.os_id}][teacher_appraisal]> Достигнута</nobr><br>
+      <nobr><input value=4 type=radio name=r_os[{$os_item.os_id}][teacher_appraisal]> Достигнута с превышением</nobr><br>
+      {else}
+      {if $os_item.teacher_appraisal eq 0}<nobr>Не определено</nobr>{/if}
+      {if $os_item.teacher_appraisal eq 1}<nobr>Нет прогресса</nobr>{/if}
+      {if $os_item.teacher_appraisal eq 2}<nobr>Частично достигнута</nobr>{/if}
+      {if $os_item.teacher_appraisal eq 3}<nobr>Достигнута</nobr>{/if}
+      {if $os_item.teacher_appraisal eq 4}<nobr>Достигнута с превышением</nobr>{/if}
+      {/if}
+    </td>
+    <td colspan=2 style="text-align:left">
+      {if $smarty.request.print neq 1 and $teacher}
+         <textarea wrap="virtual" cols="40" rows="5" name=r_os[{$os_item.os_id}][teacher_comment]>{$os_item.teacher_comment}</textarea>
+      {else}
+         {$os_item.teacher_comment}
+      {/if}
+   </td>
+  </tr>
+  {if $smarty.request.print neq 1}
+  <script>
+	{if $self}$("input[name='r_os[{$os_item.os_id}][self_appraisal]'][value={$os_item.self_appraisal}]").attr('checked',true);{/if}
+	{if $teacher}$("input[name='r_os[{$os_item.os_id}][teacher_appraisal]'][value={$os_item.teacher_appraisal}]").attr('checked',true);{/if}
+  </script>
+  {/if}
+        {if $smarty.request.print neq 1 and $self}
+        <tr>
+		<td colspan=7 style="text-align:left">
+		<br>
+		&nbsp&nbsp&nbsp<b><a href="javascript:void(0);" onClick="javascript:submit_val('new_os_movement','r','{$os_item.os_id}');">Добавить новое развивающее действие в раздел 2.{$os_key+1}.</a></b>
+		<br><br>
+		</td>
+	</tr>
+        {/if}
+        <tr>
+		<td colspan=7 style="text-align:left"><br><b>Развивающие действия</b><br><br></td>
+	</tr>
+        <tr valign=top>
+	<td style="font-weight:bold;">[удал.]</td>
+          <td>
+		<b>Развивающие действия</b><br>
+		(выполнение новых, более сложных производственных задач;<br>
+		обучающие мероприятия; самообразование; обратная связь;<br>
+		участие в совещаниях; расширение зоны ответственности;<br>
+		стажировки и др.)
+	</td>
+          <td><b>Поддержка</b><br>(чья поддержка вам необходима)</td>
+          <td><b>Самооценка</b></td>
+          <td><b>Оценка<br>руководителя</b></td>
+          <td><b>Комментарий<br>руководителя</b></td>
+          <td><b>Срок завершения</b></td>
+        </tr>
+        {foreach key=os_movement_key item=os_movement_item from=$os_item.os_movements}
+        <tr>
+          <td align=center>
+            {if $smarty.request.print neq 1 and $self}<input type=checkbox name=del[r_os_movement][movement_id][{$os_movement_item.movement_id}] value={$os_movement_item.movement_id}>{/if}
+          </td>
+          <td>
+            {if $smarty.request.print neq 1 and $self}
+            <textarea wrap="virtual" cols="40" rows="5" name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][movement]>{$os_movement_item.movement}</textarea>
+            {else}
+            {$os_movement_item.movement|nl2br}
+            {/if}
+          </td>
+          {if $smarty.request.print neq 1 and $self}
+          <td><textarea wrap="virtual" cols="40" rows="5" name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][support]>{$os_movement_item.support}</textarea></td>
+          {else}
+          <td>{$os_movement_item.support|nl2br}</td>
+          {/if}
+          <td style="text-align:left">
+            {if $smarty.request.print neq 1 and $self}
+            <nobr><input value=0 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][self_appraisal] checked> Не определено</nobr><br>
+            <nobr><input value=1 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][self_appraisal]> Нет прогресса</nobr><br>
+            <nobr><input value=2 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][self_appraisal]> Частично достигнута</nobr><br>
+            <nobr><input value=3 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][self_appraisal]> Достигнута</nobr><br>
+            <nobr><input value=4 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][self_appraisal]> Достигнута с превышением</nobr><br>
+            {else}
+            {if $os_movement_item.self_appraisal eq 0}<nobr>Не определено</nobr>{/if}
+            {if $os_movement_item.self_appraisal eq 1}<nobr>Нет прогресса</nobr>{/if}
+            {if $os_movement_item.self_appraisal eq 2}<nobr>Частично достигнута</nobr>{/if}
+            {if $os_movement_item.self_appraisal eq 3}<nobr>Достигнута</nobr>{/if}
+            {if $os_movement_item.self_appraisal eq 4}<nobr>Достигнута с превышением</nobr>{/if}
+            {/if}
+          </td>
+          <td style="text-align:left">
+            {if $smarty.request.print neq 1 and $teacher}
+            <nobr><input value=0 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_appraisal] checked> Не определено</nobr><br>
+            <nobr><input value=1 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_appraisal]> Нет прогресса</nobr><br>
+            <nobr><input value=2 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_appraisal]> Частично достигнута</nobr><br>
+            <nobr><input value=3 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_appraisal]> Достигнута</nobr><br>
+            <nobr><input value=4 type=radio name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_appraisal]> Достигнута с превышением</nobr><br>
+            {else}
+            {if $os_movement_item.teacher_appraisal eq 0}<nobr>Не определено</nobr>{/if}
+            {if $os_movement_item.teacher_appraisal eq 1}<nobr>Нет прогресса</nobr>{/if}
+            {if $os_movement_item.teacher_appraisal eq 2}<nobr>Частично достигнута</nobr>{/if}
+            {if $os_movement_item.teacher_appraisal eq 3}<nobr>Достигнута</nobr>{/if}
+            {if $os_movement_item.teacher_appraisal eq 4}<nobr>Достигнута с превышением</nobr>{/if}
+            {/if}
+          </td>
+          <td>
+            {if $smarty.request.print neq 1 and $teacher}
+            <textarea wrap="virtual" cols="40" rows="5" name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_comment]>{$os_movement_item.teacher_comment}</textarea>
+            {else}
+            &nbsp{$os_movement_item.teacher_comment|nl2br}
+            {/if}
+          </td>
+          {if $smarty.request.print neq 1 and $self}
+          <td><input class="datepicker" value="{$os_movement_item.period}" name=r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][period]></td>
+          {else}
+          <td>{$os_movement_item.period|nl2br}</td>
+          {/if}
+        </tr>
+        {if $smarty.request.print neq 1}
+        <script>
+	{if $self}$("input[name='r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][self_appraisal]'][value={$os_movement_item.self_appraisal}]").attr('checked',true);{/if}
+	{if $teacher}$("input[name='r_os_movement[{$os_item.os_id}][{$os_movement_item.movement_id}][teacher_appraisal]'][value={$os_movement_item.teacher_appraisal}]").attr('checked',true);{/if}
+        </script>
+        {/if}
+        {/foreach}
+</table>
+  {/foreach}

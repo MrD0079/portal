@@ -1,0 +1,26 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>название параметра</td>
+<td>значение типа число</td>
+<td>значение типа строка</td>
+<td>значение типа дата</td>
+</tr>
+{foreach key=key item=item from=$parameters}
+<tr>
+<td><input name=del[{$item.id}] type=checkbox></td>
+<td><input name=data[{$item.id}][param_name] size=30 value="{$item.param_name}"></td>
+<td><input name=data[{$item.id}][val_number] class="number" value="{$item.val_number}"></td>
+<td><input name=data[{$item.id}][val_string] size=70 value="{$item.val_string|escape}"></td>
+<td><input name=data[{$item.id}][val_date] value="{$item.val_date}" class="datepicker"></td>
+</tr>
+{/foreach}
+</table>
+название параметра
+<br>
+<input name=new_param_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>

@@ -1,0 +1,110 @@
+<h1>Расход денежных средств</h1>
+
+<form name=bud_ru_cash_out id=bud_ru_cash_out target=_self method=post enctype="multipart/form-data">
+
+<input type=hidden name=head_id id=head_id disabled value="{$smarty.request.head_id}">
+<input type=hidden name=head[fil] id=h_fil value="{$smarty.request.head.fil}">
+<input type=hidden name=head[dt] id=h_dt value="{$smarty.request.head.dt}">
+<input type=hidden name=head[db] id=h_db value="{$smarty.request.head.db}">
+<input type=hidden name=head[lu_tn] id=lu_tn value={$tn}>
+
+<table style="text-align: left; width: 100%; margin-left: auto; margin-right: auto;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153); text-align: center;"><big><span style="font-weight: bold;">Заполнение отчета</span></big><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table style="text-align: left;" cellpadding="2" cellspacing="2">
+<tr>
+<td style="vertical-align: top;">Отчетный месяц </td>
+<td style="vertical-align: top;">
+			<select name=head[dt] id=dt onChange="fn_change();fn_load_db();fn_load_detail();">
+			{foreach key=key item=item from=$dt}
+				<option {if $item.selected eq 1}checked{/if} value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top;">Дистрибьютор </td>
+<td style="vertical-align: top;">
+			<select {if $smarty.request.upd_record}disabled{/if} name=head[fil] id=fil onChange="$('#db').val();fn_change();fn_load_db();">
+			<option></option>
+			{foreach key=key item=item from=$fil}
+				<option value="{$item.id}">{$item.name}</option>
+			{/foreach}
+			</select>
+</td>
+</tr>
+<tr>
+<td style="vertical-align: top;">ДБ </td>
+<td style="vertical-align: top;">
+			<select {if $smarty.request.upd_record}disabled{/if} name=head[db] id=db onChange="fn_change();"></select>
+</td>
+</tr>
+</table>
+
+{literal}
+<script>
+function fn_load_detail()
+{
+$('#detail').text('');
+$('#dt').val()?$('#detail').load('?action=bud_ru_cash_out_detail&nohead=1&dt='+$('#dt').val(),function() {}):null;
+}
+function fn_change()
+{
+$('#head_id').attr('disabled',true);
+$('#body').text('');
+$('#fil').val()&&$('#db').val()?$('#body').load('?action=bud_ru_cash_out_body&nohead=1&head[dt]='+$('#dt').val()+'&head[fil]='+$('#fil').val()+'&head[db]='+$('#db').val(),function() {}):$('#body').html('');
+}
+function fn_load_db()
+{
+$('#fil').val()?$('#db').load('?action=bud_ru_cash_db&nohead=1&fil='+$('#fil').val(),function() {$('#db').val('{/literal}{$smarty.request.head.db}{literal}');fn_change();}):$('#body').html('');
+}
+function fn_change_by_id(id)
+{
+$('#head_id').attr('disabled',false);
+$('#head_id').val(id);
+$('#fil').attr('disabled',true);
+$('#db').attr('disabled',true);
+$('#dt').attr('disabled',true);
+$('#h_fil').attr('disabled',true);
+$('#h_db').attr('disabled',true);
+$('#h_dt').attr('disabled',true);
+//$('#lu_tn').attr('disabled',true);
+$('#body').load('?action=bud_ru_cash_out_body&nohead=1&head_id='+id+'&upd_record1=1',function()
+	{
+	
+	//$('#ok_fil').attr('disabled',true);
+	//$('#ok_fil_text').attr('disabled',true);
+	});
+}
+</script>
+{/literal}
+
+<p><div id="body" style="display: inline;"></div></p>
+
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center; background-color: rgb(255, 204, 153);"><big><span style="font-weight: bold;">Внесенная информация</span></big><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><div id="detail" style="display: inline;"></div></p>
+
+<script>
+$('#dt').val('{$smarty.request.head.dt}');
+fn_load_detail();
+$('#fil').val('{$smarty.request.head.fil}');
+fn_load_db();
+$('#db').val('{$smarty.request.head.db}');
+fn_change();
+</script>
+
+</form>

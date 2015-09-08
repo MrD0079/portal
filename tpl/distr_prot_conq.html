@@ -1,0 +1,105 @@
+<h1>Контрольные вопросы протоколов</h1>
+
+<form target="_self" method="POST" name=form1 id=form1>
+Контрольный вопрос
+<input size=50 name=new_distr_prot_conq_name>
+<input type=submit name=new value="Добавить запись">
+</form>
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>активный/название/текст</td>
+</tr>
+
+{foreach key=key item=item from=$distr_prot_conq}
+<tr id="conq_{$item.id}" style="vertical-align:top">
+
+<td>
+<a href="javascript:void(0);" onclick="del_conq({$item.id});">[x]</a>
+</td>
+
+<td>
+<input id="div_{$item.id}_activ" onclick="save_conq({$item.id},'activ',this.checked?1:0);" {if $item.activ}checked{/if} type=checkbox>
+<input id="div_{$item.id}_name" onChange="save_conq({$item.id},'name',this.value);" name=data[{$item.id}][name] size=50 value="{$item.name|escape}">
+<br>
+<textarea id="div_{$item.id}_q" onChange="save_conq({$item.id},'q',this.value);" name=data[{$item.id}][q]>{$item.q|escape}</textarea>
+<br>
+Филиалы
+<a href='javascript:void(0);' onClick="show_fils({$item.id})">[показать]</a>
+<a href='javascript:void(0);' onClick="$('#fil_list_{$item.id}').html('')">[спрятать]</a>
+</td>
+
+<td id=fil_list_{$item.id}></td>
+
+</tr>
+{/foreach}
+
+</table>
+
+<script>
+{literal}
+
+function show_fils(id)
+{
+var fd = new FormData();
+fd.append('conq_id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=distr_prot_conq_show_fils&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+   $('#fil_list_'+id).html(data);
+  }
+});
+}
+
+function save_fil(conq_id,fil_id,val)
+{
+var fd = new FormData();
+fd.append('conq_id', conq_id);
+fd.append('fil_id', fil_id);
+fd.append('val', val);
+$.ajax({
+  type: 'POST',
+  url: '?action=distr_prot_conq_show_fils_save_fil&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+   val==1?$('#div_'+conq_id+'_'+fil_id).css('background-color','green'):$('#div_'+conq_id+'_'+fil_id).css('background-color','white');
+  }
+});
+}
+
+function save_conq(conq_id,field,val)
+{
+$('#div_'+conq_id+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('id', conq_id);
+fd.append('field', field);
+fd.append('val', val);
+$.ajax({
+  type: 'POST',
+  url: '?action=distr_prot_conq_save&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+   $('#div_'+conq_id+'_'+field).css('background-color','white');
+  }
+});
+}
+
+function del_conq(id)
+{
+save_conq(id,'id',id);
+$('#conq_'+id).remove();
+}
+
+{/literal}
+</script>

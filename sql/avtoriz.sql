@@ -1,0 +1,1 @@
+select rownum, us.* from t_users us where login=:login and passw=:password

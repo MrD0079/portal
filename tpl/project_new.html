@@ -1,0 +1,109 @@
+<h1>‘ормирование задачи</h1>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+нова€ задача
+<input name=new_prj_name>
+<input type=submit name=save value="сохранить">
+</p>
+
+
+<p>
+<select name=prj_id id=prj_id>
+<option value=0></option>
+{foreach key=k item=i from=$project_new_heads}
+<option value={$i.id}>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#prj_id option[value="{$smarty.request.prj_id}"]').prop('selected', true);</script>
+<input type=submit value="выбрать">
+<input type=submit value="удалить" name="del_prj">
+</p>
+
+
+{if $smarty.request.prj_id neq 0}
+
+
+
+
+<p>
+новый раздел <input name=new[0][name] size=60>
+пор€док <input name=new[0][sort] size=5>
+<input type=hidden name=new[0][parent] value={$smarty.request.prj_id}>
+</p>
+
+
+<p>
+<input type=submit name=save value="сохранить">
+</p>
+
+
+<table border=0 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>[x]/раздел/подраздел</td>
+		<td>добавление новых подразделов</td>
+	</tr>
+	{foreach key=key item=item from=$project_new}
+	<tr
+	{if $item.level eq 1}style="background-color:#cccccc"{/if}
+	{if $item.level eq 2}style="background-color:#dddddd"{/if}
+	>
+		<td>
+			<nobr>
+			{if $item.level eq 1}раздел{/if}
+			{if $item.level eq 2}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp подраздел{/if}
+			<input type=checkbox name=delete[{$item.id}]>
+			<input name=update[{$item.id}][name] size=60 value="{$item.name|escape}">
+			пор€док
+			<input name=update[{$item.id}][sort] size=5 value="{$item.sort}">
+			{if $item.level eq 2}
+			<br>
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			ƒата начала
+			<input name=update[{$item.id}][dt_start] class="datepicker" value="{$item.dt_start}">
+			<br>
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			ƒата завершени€
+			<input name=update[{$item.id}][dt_end] class="datepicker" value="{$item.dt_end}">
+			<br>
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			ƒата финализации
+			<input name=update[{$item.id}][dt_fin] class="datepicker" value="{$item.dt_fin}">
+			{/if}
+			</nobr>
+		</td>
+		{if $item.level eq 1}
+		<td>
+			новый подраздел
+			<input name=new[{$item.id}][name] size=60>
+			пор€док
+			<input name=new[{$item.id}][sort] size=5>
+			<br>
+			ƒата начала
+			<input name=new[{$item.id}][dt_start] class="datepicker">
+			<br>
+			ƒата завершени€
+			<input name=new[{$item.id}][dt_end] class="datepicker">
+			<br>
+			ƒата финализации
+			<input name=new[{$item.id}][dt_fin] class="datepicker">
+			<input type=hidden name=new[{$item.id}][parent] value={$item.id}>
+		</td>
+		{/if}
+	</tr>
+	{/foreach}
+</table>
+
+
+<p>
+<input type=submit name=save value="сохранить">
+</p>
+
+
+{/if}
+
+</form>

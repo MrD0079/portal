@@ -1,0 +1,115 @@
+<form target="_self" method="POST" name=nets_dog_plan_one_month id=nets_dog_plan_one_month>
+	<input type=hidden name=nets value="{$smarty.request.nets}">
+	<input type=hidden name=calendar_years value="{$smarty.request.calendar_years}">
+	{if $enabled}
+		<h2>
+			{if $smarty.request.plan_type eq 4}
+				Заявленные статьи затрат (согласно оперативному плану):
+			{else}
+				Статьи затрат на выбранный месяц согласно договорному планированию:
+			{/if}
+		</h2>
+		<br>
+		<table border=1 cellpadding=3 cellspacing=0>
+			<tr style="font-weight:bold">
+				<td>Месяц</td>
+				<td>Формат оплаты</td>
+				<td>Наименование группы</td>
+				<td>Статья затрат</td>
+				<td>Описание активности</td>
+				<td>Форма оплаты</td>
+				<td>Кол-во единиц</td>
+				<td>Цена</td>
+				<td>Бонус,%</td>
+				<td>Итоговая сумма, тыс. {$valuta}</td>
+				<td>МКК территории</td>
+				<td>плательщик</td>
+				{if $smarty.request.plan_type eq 4}
+					<td>Услуга состоялась</td>
+				{else}
+					<td>Подтвердить статью</td>
+				{/if}
+			</tr>
+			{assign var=sum_total value=0}
+			{foreach key=key item=item from=$nets_dog_plan_one_month}
+			{assign var=sum_total value=`$sum_total+$item.total`}
+			{/foreach}
+			<tr style="font-weight:bold">
+				{if $smarty.request.plan_type eq 4}
+					<td colspan=10>Итого % затрат (от оперативного плана на сеть): {if $npf.plan neq 0}{$sum_total/$npf.plan*100|num:2}{else}0.00{/if}%</td>
+				{else}
+					<td colspan=10>Итого % затрат: {if $sales_cur_year neq 0}{$sum_total/$sales_cur_year*100|num:2}{else}0.00{/if}%</td>
+				{/if}
+				<td align=right>{$sum_total|num:3}</td>
+				<td></td>
+			</tr>
+			{assign var=sum_total value=0}
+			{foreach key=key item=item from=$nets_dog_plan_one_month}
+			{assign var=sum_total value=`$sum_total+$item.total`}
+			<tr {if $item.bud_z_id}style="background-color: yellow;"{/if}>
+				<td>{$item.month_name}</td>
+				<td><nobr>{$item.pay_format}</nobr></td>
+				<td>{$item.groupp}</td>
+				<td>{$item.statya}</td>
+				<td>{$item.descript}</td>
+				<td><nobr>{$item.pay_type}</nobr></td>
+				<td align=right>{$item.cnt|default:0|num:0}</td>
+				<td align=right>{if $item.pf_id eq 2}{$item.price|default:0|num:3}{/if}</td>
+				<td align=right>{if $item.pf_id eq 1}{$item.bonus|default:0|num:3}{/if}</td>
+				<td align=right>{$item.total|default:0|num:3}</td>
+				<td>{$item.mkk_name}</td>
+				<td>{$item.payer_name}</td>
+				<td align=center {if $item.ok eq 1}style="background-color:rgb(51,255,51)"{/if}>
+					{if not $item.bud_z_id}
+						<input
+						{$disabled}
+						{if $item.ok eq 1}checked disabled {/if}
+						{foreach from=$fin_plan_month_ok key=okey item=oitem}
+							{if
+								$smarty.request.plan_type eq 3
+								and
+								$oitem.my eq $item.month
+								and
+								(
+									$oitem.ok_rmkk_tmkk eq 1
+									or
+									$oitem.ok_nmkk eq 1
+									or
+									$oitem.ok_dpu eq 1
+								)
+							}
+								disabled
+							{/if}
+							{if
+								$smarty.request.plan_type eq 4
+								and
+								$oitem.my eq $item.month
+								and
+								$oitem.ok_fm eq 1
+							}
+								disabled
+							{/if}
+						{/foreach}
+						type=checkbox name=st[] value="{$item.rid}">
+					{/if}
+				</td>
+			</tr>
+			{/foreach}
+			<tr style="font-weight:bold">
+				{if $smarty.request.plan_type eq 4}
+					<td colspan=10>Итого % затрат (от оперативного плана на сеть): {if $npf.plan neq 0}{$sum_total/$npf.plan*100|num:2}{else}0.00{/if}%</td>
+				{else}
+					<td colspan=10>Итого % затрат: {if $sales_cur_year neq 0}{$sum_total/$sales_cur_year*100|num:2}{else}0.00{/if}%</td>
+				{/if}
+				<td align=right>{$sum_total|num:3}</td>
+				<td></td>
+			</tr>
+		</table>
+		{if $smarty.request.plan_type eq 4}
+			<input type=submit name=add_st value="Сохранить и пересчитать">
+		{else}
+			<input name="add_st" type="submit" value="Добавить выбранные статьи в план месяца">
+		{/if}
+	{/if}
+</form>
+<hr><br>

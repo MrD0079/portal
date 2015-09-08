@@ -1,0 +1,37 @@
+<h1>Обходные листы - группы</h1>
+
+<p>
+<a href="javascript:void(0);" onClick="$('#ok').load('?action=pr_ol_staff_recreate&nohead=1&dpt_id={$dpt_id}');">Обновить ОЛ страны: <b>{$dpt_name}</b></a>
+<div style="color:red" id=ok></div>
+</p>
+
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>название</td>
+<td>порядок</td>
+</tr>
+{foreach key=key item=item from=$ol_gr}
+{if $item.id eq 0}
+<tr style="background-color:gray">
+<td></td>
+<td>{$item.name|escape}</td>
+<td>{$item.gr}</td>
+</tr>
+{else}
+<tr>
+<td><input name=del[{$item.id}] type=checkbox></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
+<td><input name=data[{$item.id}][gr] size=5 class="number_int" value="{$item.gr}"></td>
+</tr>
+{/if}
+{/foreach}
+</table>
+Группа
+<br>
+<input name=new_gr_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>

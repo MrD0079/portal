@@ -1,0 +1,122 @@
+<form target="_self" method="POST" name=form1 id=form1>
+
+
+<h1>Формирование маршрутов</h1>
+
+
+	Выберите месяц
+	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+	{foreach key=key item=item from=$month_list}
+		<option value="{$item.sd_c}">{$item.my}</option>
+		{if $item.sd_c eq $smarty.request.month_list}
+			{assign var=routes_enabled value=$item.routes_enabled}
+		{/if}
+	{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+	<input value="Выбрать" name="select_month" type="submit"><br>
+<br>
+
+
+
+
+
+
+
+
+Сформировать маршрут: 
+
+<select name="select_route_numb" id="select_route_numb">
+	<option></option>
+	{foreach key=key item=item from=$routes_head}
+		<option value="{$item.id}">{$item.fio|escape} - маршрут:</font> {$item.num} - ФИО отв. сотр.: {$item.fio_otv}</option>
+	{/foreach}
+</select>
+<script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>
+<input value="Выбрать" name="select" type="submit">
+ 
+{if $is_super or $is_nmms or $is_mservice or $is_admin}
+
+
+<br>
+<br>
+<b>Заказчики</b>
+
+
+	{assign var=s value=0}
+	{foreach key=key item=item from=$routes_head_agents name=d}
+	{if $item.checked}
+	{assign var=s value=`$s+1`}
+	{/if}
+	{/foreach}
+
+	{foreach key=key item=item from=$routes_head_agents name=d}
+		{math assign="color" equation='y' y=$smarty.foreach.d.iteration%4} 
+		{if $color eq 1}<br>{/if}
+		<input
+		name=head_agents[{$item.id}]
+		type=checkbox
+		value="{$item.id}"
+		{if $item.checked or $s eq 0}checked{/if}
+		onclick="$('#selected_changed_{$item.id}').val(this.checked?'on':'off')"
+		>
+		<input type=hidden value="" name=selected_changed[{$item.id}] id=selected_changed_{$item.id}>
+
+		{if $s eq 0}
+		<script>$('#selected_changed_{$item.id}').val('on');</script>
+		{/if}
+
+
+		{$item.name|escape}
+	{/foreach}
+
+{/if}
+
+<p>
+<input {if not $routes_enabled}disabled{/if} name="save" value="Сохранить список заказчиков" type="submit">
+</p>
+
+</form>
+
+
+<table border=1>
+
+
+
+{foreach key=k item=i from=$d name=d}
+	{math assign="color" equation='y' y=$smarty.foreach.d.iteration%3} 
+	{if $color eq 1}
+	{/if}
+	<tr style="background-color:rgb(153, 255, 153);">
+		<td colspan=2><b>Область:</b> {$i.head.tz_oblast} <b>Сеть:</b> {$i.head.net_name} <b>Юридическое название ТЗ:</b> {$i.head.ur_tz_name} <b>Адрес ТЗ:</b> {$i.head.tz_address}</td>
+	</tr>
+		{foreach key=k1 item=i1 from=$i.data name=i}
+		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<td style="text-align:center">
+				<a
+				href="javascript:void(0);"
+				onclick="
+					$('.cal').text('');
+					$('#div_calendar_{$k}_{$k1}').show();
+					$('#div_calendar_{$k}_{$k1}').load(
+					'?action=routes_form_calendar&nohead=1&select_route_numb={$smarty.request.select_route_numb}&tp={$k}&ag={$k1}',function() {literal}{{/literal}{literal}}{/literal}
+					);
+				"
+				>{$i1.head.ag_name}</a>
+				<a
+					id="save_link_{$k}_{$k1}"
+					href="javascript:void(0)"
+					onClick="javascript:x({$k},{$k1})"
+				><p style="color:red;font-weight:bold">[Сохранить]</p></a>
+				<div style="display: inline;" id=uploadOutput_{$k}_{$k1}></div>
+				<script>
+					$('#save_link_{$k}_{$k1}').hide();
+				</script>
+				<div id=div_calendar_{$k}_{$k1} class="cal"></div>
+			</td>
+		</tr>
+		{/foreach}
+{/foreach}
+</table>
+

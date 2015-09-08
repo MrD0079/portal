@@ -1,0 +1,74 @@
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form_apvd12_lead id=form_apvd12_lead>
+{/if}
+
+<table style="text-align:center">
+<tr>
+<td>
+{if not $smarty.request.excel}<img src="html/apvd12_lead.files/left.png">{/if}
+</td>
+<td>
+<h1>Лидеры<br>акции<br>"Поездка выходного дня" (декабрь)</h1>
+{if not $smarty.request.print}
+
+<p><input type=radio id="type" name="type" value=1>По декабрю</p>
+<p><input type=radio id="type" name="type" value=2>Итоговый балл</p>
+<script>$("input[name=type][value={$smarty.request.type|default:1}]").attr('checked',true);</script>
+<p><input type=submit value="Построить отчет"></p>
+
+{/if}
+</td>
+<td>
+{if not $smarty.request.excel}<img src="html/apvd12_lead.files/right.png">{/if}
+</td>
+</tr>
+</table>
+
+{foreach key=k item=i from=$d}
+{if not $smarty.request.print}
+<p><a target=_blank href="?action=apvd12_lead&print=1&excel=1&filename=Лидеры акции Поездка выходного дня&rm={$i.head.tn}">Экспорт в Excel</a></p>
+{/if}
+
+{if not $smarty.request.print or ($smarty.request.print and $smarty.request.rm eq $i.head.tn)}
+
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr style="font-weight:bold;">
+		<td>Должность</td>
+		<td>ФИО</td>
+		<td>Балл</td>
+	</tr>
+	<tr style="text-align:center; background-color: rgb(204, 255, 255)">
+		<td style="text-align:left">{$i.head.pos_name}</td>
+		<td style="text-align:left">{$i.head.fio}</td>
+		<td style="text-align:left">{$i.head.ball}</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data_tm}
+	<tr style="text-align:center; background-color: rgb(255, 204, 153)">
+		<td style="text-align:left">{$i1.pos_name}</td>
+		<td style="text-align:left">{$i1.fio}</td>
+		<td style="text-align:left">{$i1.ball}</td>
+	</tr>
+	{/foreach}
+	{foreach key=k2 item=i2 from=$i.data_ts}
+	<tr style="text-align:center; background-color: rgb(204, 204, 255)">
+		<td style="text-align:left">{$i2.pos_name}</td>
+		<td style="text-align:left">{$i2.fio}</td>
+		<td style="text-align:left">{$i2.ball}</td>
+	</tr>
+	{/foreach}
+	{foreach key=k3 item=i3 from=$i.data_eta}
+	<tr {if $i3.akb eq 0 or $i3.a11_akb eq 0}style="background-color: red"{/if} style="text-align:center; background-color: rgb(153, 255, 153)">
+		<td style="text-align:left">Эксклюзивный торговый агент</td>
+		<td style="text-align:left">{$i3.fio_eta}</td>
+		<td style="text-align:left">{$i3.ball}</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+{/foreach}
+
+{if not $smarty.request.print}
+</form>
+{/if}

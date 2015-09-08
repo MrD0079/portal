@@ -1,0 +1,202 @@
+{if
+	($is_mkk)
+	or
+	($is_rmkk)
+}
+{assign var=enabled value='enabled'}
+{/if}
+{if not (
+		($is_mkk)
+		or
+		($is_rmkk)
+	)
+}
+{assign var=disabled value='disabled'}
+{/if}
+<!--
+enabled: {$enabled}.
+<br>
+disabled: {$disabled}.
+<br>
+{if $enabled}enabled{/if}
+{if $disabled}disabled{/if}
+-->
+
+<h1>Встречи с клиентом</h1>
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+	<table>
+		<tr>
+			<td>Выберите сеть из списка</td>
+			<td>
+				<select name="nets" id="nets" onChange="$('#form').submit();">
+					<option></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Планируемый год</td>
+			<td>
+				<select name="calendar_years" id="calendar_years" onChange="$('#form').submit();">
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+						<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+	</table>
+
+	<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+	<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+
+	<hr>
+
+	{if $smarty.request.nets and $smarty.request.calendar_years}
+
+	{foreach key=key item=item from=$nets}
+		{if $smarty.request.nets eq $item.id_net}
+			Ответственный РМ КК: {$item.rmkk_name}
+			<br>
+			Ответственный МКК: {$item.mkk_name}
+		{/if}
+	{/foreach}
+
+	<br>
+
+
+	<h2>Итоги договорной кампании</h2>
+
+
+<table border=1 cellpadding=10>
+	<tr height=50px>
+		<td>План продаж, тыс.{$valuta}.: {$sdu_budjet_last_ver.plan_cur_year|default:0|num:3}</td>
+		<td rowspan=3>
+			<h2>Договорная кампания {$smarty.request.calendar_years}<br>завершена</h2>
+			<input
+				{$disabled} type=checkbox
+				{if $nets_plan_year.du_complete eq 1}checked{/if}
+				onclick="$('#du_complete').val(this.checked?1:0);$('#du_complete_date').attr('disabled',!this.checked);"
+			>
+			<input type=hidden name=du_complete value="">
+			Дата
+			<input
+				{$disabled} class="datepicker" name=du_complete_date size=11
+				value="{$nets_plan_year.du_complete_date}"
+				{if $nets_plan_year.du_complete neq 1}disabled{/if}
+				required
+			>
+			<br>
+			<input type=submit value="Сохранить" name=save>
+		</td>
+	</tr>
+	<tr height=50px>
+		<td>Бюджет, тыс.{$valuta}.: {$sdu_budjet_last_ver.b_total|default:0|num:3}</td>
+	</tr>
+	<tr height=50px>
+		<td>Затраты, %: {$sdu_budjet_last_ver.b_total_perc|default:0|num:2}</td>
+	</tr>
+</table>
+
+<br>
+Документ с условиями сотрудничества
+
+<select {$disabled} name="dus_type" id="dus_type" onchange="javascript:z();">
+	<option></option>
+	{foreach key=key item=item from=$nets_dus_types}
+		<option value={$item.id}>{$item.dus_type_name}</option>
+	{/foreach}
+</select>
+
+<script>$('#dus_type option[value="{$nets_plan_year.dus_type}"]').prop('selected', true);</script>
+
+
+<br>
+
+{foreach key=key item=item from=$file_list_dus}
+{if $enabled}<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}{$item.file}');">[X]</a>{/if} <a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+{/foreach}
+<br>
+Добавить файл <input {$disabled} name="file_dus" type="file">
+
+<br>
+<input type=submit value="Сохранить" name=save>
+
+<hr>
+
+
+
+
+<h2>Встречи</h2>
+
+<h3>Хронология встреч с клиентом</h3>
+
+<table border=1>
+	<tr style="font-weight:bold;text-align:center">
+		<td>Х</td>
+		<td>№</td>
+		<td>Дата встречи</td>
+		<td>Протокол встречи</td>
+		<td>Дата следующей встречи</td>
+		<td>Менеджер</td>
+	</tr>
+	{foreach key=key item=item from=$nets_meetings_year name=nets_meetings_year}
+	<tr
+		{if $item.color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+		{if $item.color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+	>
+		<td>{if $enabled}<a href="javascript:void(0);" onClick="javascript:del_meeting({$item.id},'{$item.meet_file}');">[X]</a>{/if}</td>
+		<td>{$smarty.foreach.nets_meetings_year.iteration}</td>
+		<td>{$item.meet_date}</td>
+		<td><a target=_blank href="{$item.meet_file}">{$item.meet_file_name}</a></td>
+		<td>{$item.meet_date_next}</td>
+		<td>{$item.manager_fio}</td>
+	</tr>
+	{/foreach}
+</table>
+
+</form>
+
+<form target="_self" method="POST" name=form_new id=form_new enctype="multipart/form-data">
+
+<h3>Новая встреча</h3>
+
+<table border=1>
+	<tr style="font-weight:bold;text-align:center">
+		<td>Дата встречи</td>
+		<td>Загрузить протокол встречи</td>
+		<td>Дата следующей встречи (планируемая)</td>
+	</tr>
+	<tr>
+		<td><input {$disabled} required class="datepicker" name=meet_date></td>
+		<td><input {$disabled} required name="meet_file" type="file"></td>
+		<td><input {$disabled} required class="datepicker" name=meet_date_next></td>
+	</tr>
+</table>
+
+
+<input {$disabled} type=submit value="Добавить встречу" name=save_new>
+
+{/if}
+
+
+</form>
+
+
+{literal}
+<script>
+function del_file(rid)
+{
+	$("#form").append($('<input type=hidden name=del_file id=del_file value='+rid+'>'));
+	$("#form").submit();
+}
+function del_meeting(id,file)
+{
+	$("#form").append($('<input type=hidden name=del_meeting id=del_meeting value='+id+'>'));
+	$("#form").append($('<input type=hidden name=del_file id=del_file value='+file+'>'));
+	$("#form").submit();
+}
+</script>
+{/literal}

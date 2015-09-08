@@ -1,0 +1,37 @@
+<h1>Спецификация</h1>
+Заказчик: <b>{$ag_name}</b>
+&nbsp&nbsp&nbsp
+Сеть: <b>{$net_name}</b>
+&nbsp&nbsp&nbsp
+ТЗ: <b>{$tz_name}</b>
+&nbsp&nbsp&nbsp
+Позиций: <b>{$merch_spec_body_total.count}</b>
+&nbsp&nbsp&nbsp
+Вес: <b>{$merch_spec_body_total.weight|default:0|num:2}</b>
+
+<br>
+<br>
+<table border=1 cellspacing=0 cellpadding=3>
+<tr style="font-weight:bold">
+<td>№</td>
+<td>Артикул</td>
+<td>Название</td>
+<td>Марка</td>
+<td>Ед. измерения</td>
+<td>Вес, кг</td>
+<td>Код</td>
+</tr>
+{foreach key=key item=item from=$merch_spec_body}
+<tr>
+<td style="text-align:right">{$item.sort}</td>
+<td>{$item.art}</td>
+<td>{$item.name}</td>
+<td>{$item.brand}</td>
+<td style="text-align:center">{$item.izm}</td>
+<td style="text-align:right">{$item.weight|default:0|num:2}</td>
+<td>{$item.kod}</td>
+</tr>
+{/foreach}
+</table>
+
+

@@ -1,0 +1,21 @@
+<h1>Род деятельности</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold">
+<td>[x]</td>
+<td>название</td>
+</tr>
+{foreach key=key item=item from=$d}
+<tr>
+<td>{$item.id}<input name=del[{$item.id}] type=checkbox></td>
+<td>
+<input name=data[{$item.id}][name] size=50 value="{$item.name|escape}">
+</td>
+</tr>
+{/foreach}
+</table>
+<input size=50 name=new_name>
+<br>
+<input type=submit name=new value="Добавить запись">
+</form>

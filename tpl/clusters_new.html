@@ -1,0 +1,8 @@
+<tr id=cluster_{$id}>
+	<td>
+		<a href='javascript:void(0);' onClick="del_cluster({$id})">[x]</a>
+		<input id=d_{$id}_name size=50 value="{$name}" onChange="save_cluster({$id},'name',this.value);">
+		<a href='javascript:void(0);' onClick="show_fils_items({$id})">Развернуть</a>
+		<div style="margin-left:50px" id=detail_{$id}></div>
+	</td>
+</tr>

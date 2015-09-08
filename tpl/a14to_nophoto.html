@@ -1,0 +1,110 @@
+<h1>Стандарт ТО - нет фото</h1>
+
+{if not $smarty.request.print}
+
+	<form target="_self" method="POST" name=form_report id=form_report>
+	<p>
+	Дата
+	с
+	<input id=sd name=sd class=datepicker value='{$smarty.request.sd}'>
+	по
+	<input id=ed name=ed class=datepicker value='{$smarty.request.ed}'>
+	</p>
+
+	{if $is_ts neq 1 and $is_eta neq 1}
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+		</p>
+		<p>
+		По региону:
+		<select name=region_list id=region_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$region_list}
+			<option value="{$item.region_name}">{$item.region_name}</option>
+			{/foreach}
+		</select>
+		<script>$('#region_list').val('{$smarty.request.region_list}');</script>
+		</p>
+	{/if}
+	{if $is_eta neq 1}
+		<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+		</p>
+	{/if}
+	<p>
+	<table border=0>
+		<tr>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=1>все</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=2>был визит</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=3>не было визита</td>
+		</tr>
+		<script>$("input[name=ok_visit][value={$smarty.request.ok_visit}]").attr('checked',true);</script>
+	</table>
+	</p>
+	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+{/if}
+
+<table style="text-align: center;" border=1>
+<tbody>
+<tr style="font-weight:bold;text-align:center">
+	<td>№ п/п</td>
+	<td>ФИО ЭТА</td>
+	<td>ФИО ТС</td>
+	<td>ФИО ТМ</td>
+	<td>Регион</td>
+	<td>Код ТП</td>
+	<td>Название/Адрес ТП</td>
+	<td>Расположение</td>
+	<td>Тип ТП</td>
+	<td>Стеллажи</td>
+	<td>Витрины</td>
+	<td>Визит</td>
+</tr>
+{foreach key=k item=i from=$t name=t}
+<tr>
+	<td>{$smarty.foreach.t.iteration}</td>
+	<td style="text-align: left;"><nobr>{$i.fio_eta}</nobr></td>
+	<td style="text-align: left;"><nobr>{$i.fio_ts}</nobr></td>
+	<td style="text-align: left;"><nobr>{$i.parent_fio}</nobr></td>
+	<td style="text-align: left;">{$i.region_name}</td>
+	<td style="text-align:center">{$i.tp_kod_key}</td>
+	<td style="text-align: left;">{$i.tp_ur} / {$i.tp_addr}</td>
+	<td style="text-align: left;">{$i.tp_place}</td>
+	<td style="text-align: left;">{$i.tp_type}</td>
+	<td style="text-align:center">{$i.stelag}</td>
+	<td style="text-align:center">{$i.tumb}</td>
+	<td style="text-align:center">{if $i.visit}да{/if}</td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+{if not $smarty.request.print}
+</form>
+{/if}

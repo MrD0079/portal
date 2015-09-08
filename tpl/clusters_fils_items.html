@@ -1,0 +1,20 @@
+<table id=tclusters_{$smarty.request.id} border=0 cellpadding=3 cellspacing=0>
+	<tbody>
+		<tr>
+			<td>
+			{foreach key=k item=i from=$clusters_fils}
+				<div id=d_{$i.id}_{$smarty.request.id} style="display: inline;">
+					<nobr>
+						<input id=cb_{$i.id}_{$smarty.request.id} type=checkbox onClick="save_cluster_fils({$i.id},{$smarty.request.id},this.checked?1:0);">
+						{$i.name} (<div id=t_{$i.id}_{$smarty.request.id} style="display: inline; font-weight:bold">{$i.clusters_list}</div>)
+						<script>
+							$("#cb_{$i.id}_{$smarty.request.id}").attr('checked','{$i.selected}'=='1'?true:false);
+							'{$i.selected}'=='1'?$('#d_{$i.id}_{$smarty.request.id}').css('background-color','rgb(153, 255, 153)'):null;
+						</script>
+					</nobr>
+				</div>
+			{/foreach}
+			</td>
+		</tr>
+	</tbody>
+</table>

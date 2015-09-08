@@ -1,0 +1,102 @@
+<h1>Замена исполнителей/согласователей СЗ</h1>
+
+
+
+
+
+
+{if $smarty.request.replace_executors}<p style="color:red">исполнитель заменен</p>{/if}
+{if $smarty.request.replace_acceptors}<p style="color:red">согласователь заменен</p>{/if}
+
+
+
+
+<h2>Замена исполнителей СЗ</h2>
+
+<form target="_self" method="POST" name=form_replaceexecutors id=form_replaceexecutors>
+
+
+<p>
+Замена
+</p>
+<p>
+<select required name=executors_from>
+	<option></option>
+	{foreach key=key item=item from=$executors_from}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+</p>
+<p>
+на
+</p>
+<p>
+<select required name=executors_to>
+	<option></option>
+	{foreach key=key item=item from=$executors_to}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+</p>
+<p>
+<input type=submit name=replace_executors id=replace_executors value="Заменить">
+</p>
+
+
+
+</form>
+
+<h2>Замена согласователей СЗ</h2>
+
+<h3>в служебках, которые находятся на согласовании, и которые ассептор еще не рассматривал</h3>
+
+<form target="_self" method="POST" name=form_replaceacceptors id=form_replaceacceptors>
+
+<p>
+Замена
+</p>
+<p>
+<select required name=acceptors_from>
+	<option></option>
+	{foreach key=key item=item from=$acceptors_from}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+</p>
+<p>
+на
+</p>
+<p>
+<select required name=acceptors_to>
+	<option></option>
+	{foreach key=key item=item from=$acceptors_to}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+</p>
+<p>
+за период с <input required name="dt_from" class="datepicker" size=10> по <input required name="dt_to" class="datepicker" size=10>
+</p>
+<p>
+<input type=submit name=replace_acceptors id=replace_acceptors value="Заменить">
+</p>
+
+
+
+
+
+</form>
+
+
+
+<p><div id="log" style="display: inline;"></div></p>
+
+
+
+{literal}
+<script>
+$('#log').load('?action=log&prg=sz_change&dates_list1=01.01.2000&dates_list2=31.12.2099&select=1&nohead=1',function() {});
+</script>
+{/literal}
+
+

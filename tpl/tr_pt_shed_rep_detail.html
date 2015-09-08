@@ -1,0 +1,42 @@
+<h3>Детализация по тренингу ЭТА</h3>
+
+{if not $smarty.request.print}
+<p><a href="?action=tr_pt_shed_rep_detail&print=1&excel=1&filename=Детализация по тренингам">Экспорт в Excel</a></p>
+{/if}
+
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td rowspan=2 style="text-align: center;">№ п/п</td>
+      <td rowspan=2 style="text-align: center;">Название тренинга</td>
+      <td rowspan=2 style="text-align: center;">Дата проведения</td>
+      <td rowspan=2 style="text-align: center;">Место проведения</td>
+      <td rowspan=2 style="text-align: center;">ФИО тренера</td>
+      <td rowspan=2 style="text-align: center;">Должность участника</td>
+      <td rowspan=2 style="text-align: center;">ФИО сотрудника</td>
+      <td rowspan=2 style="text-align: center;">Выводы тренера</td>
+      <td colspan=4 style="text-align: center;">Результат теста</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">балл</td>
+      <td style="vertical-align: top; text-align: center;">%</td>
+      <td style="vertical-align: top; text-align: center;">max</td>
+      <td style="vertical-align: top; text-align: center;">дата</td>
+    </tr>
+{foreach key=k item=i from=$d name=d}
+    <tr>
+      <td style="text-align: center;">{$smarty.foreach.d.iteration}</td>
+      <td style="">{$i.tr_pt_name}</td>
+      <td style="text-align: center;">{$i.dt_start}</td>
+      <td style="">{$i.loc_name}</td>
+      <td style="">{$i.coach_fio}</td>
+      <td style="">{$i.participant_pos_name}</td>
+      <td style="">{$i.participant_fio}</td>
+      <td style="">{$i.os}</td>
+      <td style="text-align: center;">{$i.test_ball}</td>
+      <td style="text-align: center;">{$i.test_perc}</td>
+      <td style="text-align: center;">{$i.test_max}</td>
+      <td style="text-align: center;"><nobr>{$i.test_lu}</nobr></td>
+    </tr>
+{/foreach}
+
+</table>

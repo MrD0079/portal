@@ -1,0 +1,94 @@
+<h2>Раздел 2. Заключения</h2>
+<table width=600px border=1 cellpadding=5 cellspacing=0 style="text-align:center; background-color: rgb(204,204,204)">
+	<tr style="font-weight:bold">
+		<td width=200px>
+			Заключение сотрудника о завершении адаптации
+		</td>
+		<td>
+			Выводы
+			<br>
+			(Оценка прогресса в адаптации и рекомендации на будущий период)
+		</td>
+	</tr>
+{if $plan.inst_name neq null}
+	<tr>
+		<td>
+			Осуществляющий поддержку
+			<br>
+			{if $smarty.request.print neq 1 and ($inst or $is_admin) and $ok_employee neq 1 and not $disabled}
+			<input type=checkbox name=p_plan[ok_employee] value=1 onclick="this.checked?$('#employee_summary').attr('required','true'):$('#employee_summary').removeAttr('required');">
+			<br>
+			{else}
+			{$stamp_employee_t}
+			{/if}
+			<input type=hidden name=clear_plan[ok_employee]>
+		</td>
+		<td>
+			{if $smarty.request.print neq 1 and ($inst or $is_admin) and $ok_employee neq 1 and not $disabled}
+			<textarea wrap="virtual" cols="50" rows="5" id=employee_summary name=p_plan[employee_summary]>{$employee_summary}</textarea>
+			{else}
+			{$employee_summary|nl2br}
+			{/if}
+		</td>
+	</tr>
+{/if}
+{if $plan.chief_name neq null}
+	<tr>
+		<td>
+			Бизнес-тренер
+			<br>
+			{if $smarty.request.print neq 1 and ($chief or $is_admin) and $ok_teacher neq 1 and not $disabled}
+			<input type=checkbox name=p_plan[ok_teacher] value=1 onclick="this.checked?$('#teacher_comment').attr('required','true'):$('#teacher_comment').removeAttr('required');">
+			<br>
+			{else}
+			{$stamp_teacher_t}
+			{/if}
+			<input type=hidden name=clear_plan[ok_teacher]>
+		</td>
+		<td>
+			{if $smarty.request.print neq 1 and ($chief or $is_admin) and $ok_teacher neq 1 and not $disabled}
+			<textarea wrap="virtual" cols="50" rows="5" id=teacher_comment name=p_plan[teacher_comment]>{$teacher_comment}</textarea>
+			{else}
+			{$teacher_comment}
+			{/if}
+		</td>
+	</tr>
+{/if}
+{if $plan.dir_name neq null}
+	<tr>
+		<td>
+			Вышестоящий руководитель
+			<br>
+			{if $smarty.request.print neq 1 and ($dir or $is_admin) and $ok_chief neq 1 and not $disabled}
+			<input type=checkbox name=p_plan[ok_chief] value=1 onclick="this.checked?$('#chief_comment').attr('required','true'):$('#chief_comment').removeAttr('required');">
+			<br>
+			{else}
+			{$stamp_chief_t}
+			{/if}
+			<input type=hidden name=clear_plan[ok_chief]>
+		</td>
+		<td>
+			{if $smarty.request.print neq 1 and ($dir or $is_admin) and $ok_chief neq 1 and not $disabled}
+			<textarea wrap="virtual" cols="50" rows="5" id=chief_comment name=p_plan[chief_comment]>{$chief_comment}</textarea>
+			{else}
+			{$chief_comment}
+			{/if}
+		</td>
+	</tr>
+{/if}
+	<tr>
+		<td colspan=2
+			{if ($ok_employee eq 1 or $plan.inst_tn eq null) and ($ok_teacher eq 1 or $plan.chief_tn eq null) and ($ok_chief eq 1 or $plan.dir_tn eq null)}
+				style="background-color:#00FF00"
+			{else}
+				style="background-color:#FF0000"
+			{/if}
+		>
+			{if ($ok_employee eq 1 or $plan.inst_tn eq null) and ($ok_teacher eq 1 or $plan.chief_tn eq null) and ($ok_chief eq 1 or $plan.dir_tn eq null)}
+				Адаптация завершена
+			{else}
+				Адаптационная программа открыта
+			{/if}
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,79 @@
+{if not $smarty.request.print}
+
+<h1>Статистика подтверждений обходных листов</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+
+	<p>
+		Дата с/по
+			<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+			<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+			<script>
+				$('#dates_list1').val('{$smarty.request.dates_list1}');
+				$('#dates_list2').val('{$smarty.request.dates_list2}');
+			</script>
+	</p>
+
+
+{if $is_ts neq 1}
+
+<p>
+ФИО согласующего обходной лист:
+<select name=acceptor_list id=acceptor_list>
+<option value=0></option>
+{foreach key=key item=item from=$acceptor_list}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> <!-- - {$item.emp_pos}--> - {$item.dpt_name} {if $item.datauvol}- уволен {$item.datauvol}{/if}</option>
+{/foreach}
+</select>
+</p>
+
+<p>
+<input name="select" value="Выбрать" type="submit">
+</p>
+
+
+<script>$('#acceptor_list option[value="{$smarty.request.acceptor_list}"]').prop('selected', true);</script>
+
+{/if}
+
+
+<hr>
+
+{/if}
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+
+
+	<tr>
+	<td>Дата увольнения</td>
+	<td>ФИО увольняющегося</td>
+	<td>Должность увольняющегося</td>
+	<td>Категория подтверждающего</td>
+	<td>Группа подтверждающего</td>
+	<td>ФИО подтверждающего</td>
+	<td>Дата создания обходного листа</td>
+	<td>Период согласования, дни</td>
+	<td>Дата завершения согласования, дни</td>
+	<td>Общий период согласования, дни</td>
+	</tr>
+
+{foreach key=k item=i from=$ol_stat}
+	<tr>
+	<td>{$i.datauvol}</td>
+	<td>{$i.fio}</td>
+	<td>{$i.pos_name}</td>
+	<td>{$i.cat}</td>
+	<td>{$i.gr_name}</td>
+	<td>{$i.acceptor_fio}</td>
+	<td>{$i.accept_data}</td>
+	<td>{$i.srok_det}</td>
+	<td>{$i.accepted_dt}</td>
+	<td>{$i.srok}</td>
+	</tr>
+{/foreach}
+</table>
+
+{if not $smarty.request.print}
+</form>
+{/if}

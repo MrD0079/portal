@@ -1,0 +1,28 @@
+<h3>Задвоенные ТМЦ</h3>
+
+{if not $smarty.request.print}
+
+<p><a href="?action=tmc_doubled&select=1&print=1&excel=1&filename=Задвоенные ТМЦ">Экспорт в Excel</a></p>
+
+{/if}
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>ФИО сотрудника</td>
+		<td>Тип ТМЦ</td>
+		<td>Наименование / модель</td>
+		<td>Серийный номер</td>
+		<td>Инвентарный номер АВК</td>
+		<td>Дата выдачи</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr>
+		<td>{$i.fio}</td>
+		<td style="text-align:center">{$i.tmcs}</td>
+		<td>{$i.name}</td>
+		<td style="text-align:center">{$i.sn}</td>
+		<td style="text-align:center">{$i.num_avk}</td>
+		<td style="text-align:center">{$i.dtv}</td>
+	</tr>
+	{/foreach}
+</table>

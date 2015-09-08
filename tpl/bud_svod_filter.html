@@ -1,0 +1,31 @@
+<p>
+	По руководителю:
+	<select name=exp_list_without_ts id=exp_list_without_ts>
+		<option value=0></option>
+		{foreach key=key item=item from=$exp_list_without_ts}
+		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+</p>
+<p>
+	По супервайзеру:
+	<select name=exp_list_only_ts id=exp_list_only_ts>
+		<option value=0></option>
+		{foreach key=key item=item from=$exp_list_only_ts}
+		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<script>$('#exp_list_only_ts option[value="{$smarty.request.exp_list_only_ts}"]').prop('selected', true);</script>
+</p>
+<p>
+	По ЭТА:
+	<select name=eta_list id=eta_list>
+		<option value=""></option>
+		{foreach key=key item=item from=$eta_list}
+		<option value="{$item.h_eta}">{$item.eta}</option>
+		{/foreach}
+	</select>
+	<script>$('#eta_list option[value="{$smarty.request.eta_list}"]').prop('selected', true);</script>
+</p>
+<input type="hidden" name="form_submit">

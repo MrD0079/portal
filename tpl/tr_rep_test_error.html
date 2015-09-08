@@ -1,0 +1,55 @@
+<h3>Ошибки в тестах</h3>
+
+<form target="_self" method="POST" name=form_tr_rep_test_error id=form_tr_rep_test_error>
+
+<p>
+	<b>Дата с</b>
+	<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+	<b>по</b>
+	<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+	<script>
+		$('#dates_list1').val('{$smarty.request.dates_list1}');
+		$('#dates_list2').val('{$smarty.request.dates_list2}');
+	</script>
+</p>
+
+<p>
+Тренинг
+<select required name="tr">
+	<option></option>
+	{foreach key=key item=item from=$tr}
+		<option value={$item.id}>{$item.name|escape}</option>
+	{/foreach}
+</select>
+<script>$('[name=tr]').val({$smarty.request.tr});</script>
+</p>
+
+<p>
+<input type="submit" name="select" id="select" value="Построить отчет">
+</p>
+
+{if $smarty.request.select}
+
+<table border=1>
+
+	<tr style="text-align:center">
+		<td>№<br>п/п</td>
+		<td>Текст<br>вопроса</td>
+		<td>Количество<br>ошибочных<br>ответов</td>
+		<td>Всего<br>ответов</td>
+		<td>%<br>ошибок</td>
+	</tr>
+	{foreach key=k item=i from=$tbl name=tbl}
+	<tr>
+		<td style="text-align:center">{$smarty.foreach.tbl.iteration}</td>
+		<td>{$i.q_name}</td>
+		<td style="text-align:center">{if $i.q_bad_cnt > 0}<a target=_blank href="?action=tr_rep_test_error_detail&tr={$smarty.request.tr}&q_id={$i.q_id}">{$i.q_bad_cnt}</a>{else}нет{/if}</td>
+		<td style="text-align:center">{$i.q_all_cnt}</td>
+		<td style="text-align:right">{if $i.perc_bad > 0}{$i.perc_bad|num:2}{/if}</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+
+</form>

@@ -1,0 +1,35 @@
+1CC1DE0B3DC8
+1C:C1:DE:0B:3D:C8
+
+radio:
+<input type=radio id="ok_bonus" name="ok_bonus" value=1 checked>все ТП с торговыми условиями<br>
+<input type=radio id="ok_bonus" name="ok_bonus" value=2>планируется выдача бонуса<br>
+set radio:
+<script>$("input[name=ok_bonus][value={$smarty.request.ok_bonus}]").attr('checked',true);</script>
+get radio:
+$('input[name=ok_bonus]:checked').val()
+
+select:
+<select name="select_route_numb" id="select_route_numb">
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head}
+		<option value="{$item.id}">{$item.fio|escape} - маршрут: {$item.num} - ФИО отв. сотр.: {$item.fio_otv}</option>
+	{/foreach}
+</select>
+set select:
+<script>
+$('#select_route_numb option[value={$smarty.request.select_route_numb}]').prop('selected', true);
+</script>
+get select:
+$('#exp_list_without_ts').val()
+
+checkbox:
+<input id=cb_{$i.id}_{$smarty.request.id} type=checkbox onClick="save_cluster_fils({$i.id},{$smarty.request.id},this.checked?1:0);">
+set checkbox:
+$("#cb_{$i.id}_{$smarty.request.id}").prop('checked','{$i.selected}'=='1'?true:false);
+set multiple checkboxes
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+get checkbox:
+$('#cb_{$i.id}_{$smarty.request.id}').val()
+

@@ -1,0 +1,127 @@
+<script>
+a=0;
+</script>
+
+{foreach key=key item=item from=$tr name=x1}{if $smarty.request.tr eq $item.id}{assign var=tr_index value=`$smarty.foreach.x1.iteration-1`}{/if}{/foreach}
+
+<!--
+{$tr.$tr_index.name}
+{$tr.$tr_index.max_stud}
+-->
+
+
+<!--<h3>Предлагаемый состав группы на тренинг "{$tr.$tr_index.name}", дата проведения {$smarty.request.dt}, максимум участников {$tr.$tr_index.max_stud}</h3>-->
+<h3>Предлагаемый состав группы, максимум участников - {$tr.$tr_index.max_stud}</h3>
+
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+	<tr>
+		<td style="text-align: center;">ФИО участника</td>
+		<td style="text-align: center;">Должность</td>
+		<td style="text-align: center;">Рук-ль</td>
+		<td style="text-align: center;">Слушал<br>данный<br>тренинг</td>
+		<td style="text-align: center;">Слушал<br>последний<br>тренинг</td>
+		<td style="text-align: center;">Игнор</td>
+	</tr>
+	{foreach key=k item=i from=$tru name=tru}
+	<tr id="tr_{$i.h_eta}" {if $i.tr_ok eq 1}style="background-color:#00ff00;"{/if}>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.chief_fio}</td>
+		<td style="text-align:center">{if $i.tr_ok eq 1}{$i.max_dt_start_this_tr}{/if}</td>
+		<td style="text-align:center">{$i.max_dt_start_old}</td>
+		<td style="text-align:center">
+			<!--<a id="a_{$i.h_eta}" class="table_a" href="javascript:void(0);" onclick="a--;$(this).parent().parent().remove();">Удалить</a>-->
+			<input id="a_{$i.h_eta}" class="table_a" type=submit value="Удалить" onclick="
+				a--;
+				$(this).addClass('deleted');
+				$(this).parent().parent().find('input[class=table_manual]').val(-1);
+				$(this).parent().parent().hide();
+				return false;
+			">
+			<input class="table_h_eta" id="h_eta_{$i.h_eta}" type=hidden value={$i.h_eta} name="table[{$i.h_eta}][h_eta]">
+			<input class="table_manual" id="manual_{$i.h_eta}" type=hidden value=0 name="table[{$i.h_eta}][manual]">
+		</td>
+	</tr>
+	<script>
+		{if $smarty.foreach.tru.iteration > $tr.$tr_index.max_stud}
+			$('#tr_{$i.h_eta}').hide();
+			//$('#a_{$i.h_eta}').parent().parent().hide();
+			$('#h_eta_{$i.h_eta}').attr('disabled',true);
+			$('#manual_{$i.h_eta}').attr('disabled',true);
+		{else}
+			a++;
+		{/if}
+	</script>
+	{/foreach}
+
+
+
+	{foreach key=k item=i from=$trua name=trua}
+	<tr id="tra_{$i.h_eta}" {if $i.tr_ok eq 1}style="background-color:#00ff00;"{/if}>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.chief_fio}</td>
+		<td style="text-align:center">{if $i.tr_ok eq 1}{$i.max_dt_start_this_tr}{/if}</td>
+		<td style="text-align:center">{$i.max_dt_start_old}</td>
+		<td style="text-align:center">
+			<input id="b_{$i.h_eta}" class="table_b" type=submit value="Удалить" onclick="
+				a--;
+				$(this).addClass('deleted');
+				$(this).parent().parent().find('input[class=table_manual]').val(-1);
+				$(this).parent().parent().hide();
+				return false;
+			">
+			<input class="table_h_eta" id="b_h_eta_{$i.h_eta}" type=hidden value={$i.h_eta} name="table[{$i.h_eta}][h_eta]">
+			<input class="table_manual" id="b_manual_{$i.h_eta}" type=hidden value=0 name="table[{$i.h_eta}][manual]">
+		</td>
+	</tr>
+	<script>
+			$('#tra_{$i.h_eta}').hide();
+			//$('#b_{$i.h_eta}').parent().parent().hide();
+			$('#b_h_eta_{$i.h_eta}').attr('disabled',true);
+			$('#b_manual_{$i.h_eta}').attr('disabled',true);
+	</script>
+	{/foreach}
+
+
+
+</table>
+
+<p>
+<input type=submit value="Заполнить участниками до максимума" onclick="showMore({$tr.$tr_index.max_stud}); return false;">
+</p>
+
+<p>
+<select>
+	{foreach key=key item=item from=$trua}
+		<option value={$item.h_eta}>{$item.fio} - {$item.dpt_name} - {$item.chief_fio}</option>
+	{/foreach}
+</select>
+<input type=submit value="Добавить участника" onclick="
+	a++;
+	$('#b_'+$(this).prev().val()).parent().parent().show();
+	$('#b_h_eta_'+$(this).prev().val()).attr('disabled',false);
+	$('#b_manual_'+$(this).prev().val()).attr('disabled',false);
+	$('#b_manual_'+$(this).prev().val()).val(1);
+	return false;
+	"
+>
+</p>
+
+{literal}
+<script>
+function showMore(v)
+{
+	$(".table_a:hidden:not(.deleted)").each(function()
+	{
+		if (a<v)
+		{
+			$(this).parent().parent().show();
+			$(this).parent().parent().find('input[class=table_h_eta]').attr('disabled',false);
+			$(this).parent().parent().find('input[class=table_manual]').attr('disabled',false);
+			a++;
+		}
+	})
+}
+</script>
+{/literal}

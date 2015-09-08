@@ -1,0 +1,265 @@
+<h1>Затраты</h1>
+
+{if
+	(
+		(
+			$self
+			and
+			$smarty.request.readonly neq 1
+			and
+			$zat_monthly.is_accepted neq 1
+		)
+		or
+		(
+			$is_acceptor
+			and
+			$zat_monthly.is_accepted eq 1
+		)
+	)
+	and
+	$smarty.request.print neq 1
+	and
+	$zat_monthly.is_processed neq 1
+}
+{assign var=zat_enabled value=1}
+{else}
+{assign var=zat_disabled value='disabled'}
+{/if}
+
+
+
+{if $error eq 1}
+<br><font style="color:rgb(255,0,0);"><b>{$error_text}</b></font><br><br>
+{/if}
+
+
+
+		Месяц
+		{if $smarty.request.print neq 1}
+			<form name=form_zat_month id=form_zat_month target=_self method=post enctype="multipart/form-data">
+			<select name=month_list id=month_list onchange="$('#form_zat_month').submit();">
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+			</form>
+		{else}
+			<b>
+			{foreach key=key item=item from=$month_list}
+				{if $item.sd_c eq $smarty.request.month_list}
+					{$item.my}
+				{/if}
+			{/foreach}
+			</b>
+		{/if}
+
+
+<form name=form_zat id=form_zat target=_self method=post enctype="multipart/form-data">
+
+<input type=hidden name=month_list id=month_list_hidden value='{$smarty.request.month_list}'>
+
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+	<td>
+		Ф.И.О.: <b>{$emp_fio}</b>
+		<br>
+		Должность: <b>{$pos}</b>
+		<br>
+		Подразделение: <b>{$department}</b>
+		<br>
+		Отчет принят:
+		{if not $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $zat_monthly.is_processed neq 1 and $is_acceptor neq 1}
+			<select name="zat_monthly[is_accepted]" id="zat_monthly_is_accepted"><option value=0>нет</option><option value=1>да</option></select>
+			<script>$("#zat_monthly_is_accepted option[value='{$zat_monthly.is_accepted}']").prop('selected', true);</script>
+		{else}
+			<b>
+			{if $zat_monthly.is_accepted eq 1}да{else}нет{/if}
+			</b>
+		{/if}
+		<br>
+		Отчет обработан:
+		{if not $self and $smarty.request.print neq 1 and $zat_monthly.is_accepted eq 1 and $is_acceptor eq 1}
+			<select name="zat_monthly[is_processed]" id="zat_monthly_is_processed"><option value=0>нет</option><option value=1>да</option></select>
+			<script>$("#zat_monthly_is_processed option[value='{$zat_monthly.is_processed}']").prop('selected', true);</script>
+		{else}
+			<b>
+			{if $zat_monthly.is_processed eq 1}да{else}нет{/if}
+			</b>
+		{/if}
+	</td>
+	{if ($smarty.request.print neq 1 and $smarty.request.readonly neq 1) or ($is_acceptor eq 1 and $smarty.request.print neq 1)}
+	{if $self and $zat_monthly.is_processed neq 1 and $zat_monthly.is_accepted neq 1}
+	<td>
+		<input type=submit name=copy_city value="Скопировать города тр.=>ком.">
+	</td>
+	{/if}
+	{/if}
+	{if $smarty.request.print neq 1 and ($self or $smarty.request.readonly neq 1 or $is_acceptor) and $zat_monthly.is_accepted neq 1}
+	<td>
+		Текст сообщения:
+		<br>
+		<!--<textarea cols=20 rows=3 name=msg>{$zat_monthly.msg|escape}</textarea>-->
+		<textarea cols=20 rows=3 name=msg></textarea>
+		<br>
+		<input type=submit name=send_msg value="Отправить сообщение">
+	</td>
+	{/if}
+	<td>
+		Валюта отчета:
+		<br>
+		{if
+			$smarty.request.print neq 1
+			and
+			((
+			$smarty.request.readonly neq 1
+			and
+			$self
+			and
+			$zat_monthly.is_accepted neq 1
+			and
+			$zat_monthly.is_processed neq 1
+			)
+			or
+			(
+			$is_acceptor
+			and
+			$zat_monthly.is_accepted eq 1
+			and
+			$zat_monthly.is_processed neq 1
+			))
+		}
+			<select id="zat_monthly_cur_id" name="zat_monthly[cur_id]">
+				<option></option>
+				{foreach key=k1 item=i1 from=$currencies}
+				<option value={$i1.id}>{$i1.name}</option>
+				{/foreach}
+			</select>
+			<script>
+				{if $zat_monthly.cur_id}
+				$('#zat_monthly_cur_id').val({$zat_monthly.cur_id});
+				{else}
+				$('#zat_monthly_cur_id').val({$cur_id});
+				{/if}
+			</script>
+		{else}
+			{$zat_monthly.valuta}
+		{/if}
+	</td>
+	</tr>
+</table>
+
+{if $zat_monthly_chat}
+<table border=0 cellspacing=0 cellpadding=10>
+	<tr>
+	<td>
+		{foreach key=k item=i from=$zat_monthly_chat}
+			<font style="color:red">{$i.lu_txt}</font>
+			<font style="color:green">{$i.lu_fio}:</font>
+			<br>
+			<font style="color:blue">{$i.msg|nl2br}</font>
+			<br>
+		{/foreach}
+	</td>
+	</tr>
+</table>
+{/if}
+
+
+{if ($smarty.request.print neq 1 and $smarty.request.readonly neq 1) or ($is_acceptor eq 1 and $smarty.request.print neq 1)}
+<p><input type=submit name=save value="Сохранить"></p>
+{/if}
+
+{include file="zat_car.html"}
+{include file="zat_trip.html"}
+{include file="zat_other.html"}
+
+{if $smarty.request.print neq 1}
+<input type="hidden" name="MAX_FILE_SIZE" value="512000">
+<h3>Сканкопии подтверждающих документов (формат pdf или jpg, размер одного файла - не более 400 КВ)</h3>
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr style="text-align:center">
+		<td>1. Расходы на автомобиль</td>
+		<td>2. Командировочные расходы</td>
+		<td>3. Прочие расходы</td>
+	</tr>
+	<tr style="text-align:left">
+		<td>
+			{if $zat_enabled}
+			<p>Загрузить файл(ы)<br>(можно выбрать сразу несколько файлов)<br><input {$disabled} name="car[]" type="file" multiple></p>
+			{/if}
+			{foreach key=key item=item from=$file_list_car}
+			{if $zat_enabled}
+			<input type=checkbox name=del_file[] value="{$item.path}{$item.file}">
+			{/if}
+			<a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+			{/foreach}
+		</td>
+		<td>
+			{if $zat_enabled}
+			<p>Загрузить файл(ы)<br>(можно выбрать сразу несколько файлов)<br><input {$disabled} name="trip[]" type="file" multiple></p>
+			{/if}
+			{foreach key=key item=item from=$file_list_trip}
+			{if $zat_enabled}
+			<input type=checkbox name=del_file[] value="{$item.path}{$item.file}">
+			{/if}
+			<a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+			{/foreach}
+		</td>
+		<td>
+			{if $zat_enabled}
+			<p>Загрузить файл(ы)<br>(можно выбрать сразу несколько файлов)<br><input {$disabled} name="other[]" type="file" multiple></p>
+			{/if}
+			{foreach key=key item=item from=$file_list_other}
+			{if $zat_enabled}
+			<input type=checkbox name=del_file[] value="{$item.path}{$item.file}">
+			{/if}
+			<a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:center" colspan=3>для удаления отметить чекбоксы</td>
+	</tr>
+</table>
+{/if}
+
+{if ($smarty.request.print neq 1 and $smarty.request.readonly neq 1) or ($is_acceptor eq 1 and $smarty.request.print neq 1)}
+<p><input type=submit name=save value="Сохранить"></p>
+{/if}
+
+{if $smarty.request.print neq 1}
+<p>
+<a target=_blank href="?action=zat&emp_tn={$emp_tn}&print=1&month_list={$smarty.request.month_list}">Версия для печати</a>
+&nbsp&nbsp&nbsp
+<a target=_blank href="?action=zat&emp_tn={$emp_tn}&print=1&month_list={$smarty.request.month_list}&excel=1&filename=Отчет о затратах">экспорт в Excel</a>
+</p>
+{/if}
+
+{if $smarty.request.print neq 1}
+{include file="zat_car_stat.html"}
+{/if}
+
+{if $smarty.request.print neq 1}
+{if $is_acceptor eq 1}
+<p>Cообщение об ошибке в отчете:</p>
+<textarea rows=5 cols=50 name=txt id=txt>{$smarty.request.txt}</textarea>
+<p><input type=submit name=error value="Отправить сообщение"></p>
+<p><input type=submit name=error_stat value="Отправить сообщение с изменением статуса"></p>
+{/if}
+{/if}
+
+{if $smarty.request.print eq 1}
+Дата: <b>{$now}</b>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+Ф.И.О.: <b>{$emp_fio}</b>
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+Подпись: ________________
+{/if}
+
+</form>
+
+{if $smarty.request.print neq 1}
+{include file="zat_car_limits.html"}
+{/if}
+

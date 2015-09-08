@@ -1,0 +1,49 @@
+<h1>План активности ПРЯМЫХ подчиненных на {$smarty.request.dates_list}</h1>
+<table border=1 cellspacing=0 cellpadding=1>
+
+
+<tr align=center style="font-weight:bold;">
+<td border=1 align=left valign=top>
+Ф.И.О.
+</td>
+<td border=1 align=left valign=top>
+Должность
+</td>
+<td border=1 align=left valign=top>
+Город
+</td>
+<td border=1 align=left valign=top>
+План
+</td>
+</tr>
+
+
+
+
+
+{foreach key=key1 item=item1 from=$my_slaves_plans_data}
+<tr align=center>
+<td border=1 align=left valign=top>
+<nobr>{$item1.emp_name}</nobr>
+</td>
+<td border=1 align=left valign=top>
+<nobr>{$item1.emp_dolgn}</nobr>
+</td>
+<td border=1 align=left valign=top>
+{$item1.daily_plans_city}
+</td>
+<td border=1 align=left valign=top>
+{$item1.daily_plans_plan}
+</td>
+</tr>
+{/foreach}
+</table>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,80 @@
+<h1>Перевод сотрудника</h1>
+
+{if $smarty.request.move_staff}<p>Ваша заявка успешно добавлена на рассмотрение. В течение нескольких часов Вам на корпоративную почту придет сообщение о результате</p>{/if}
+
+{if $error}<p style="color:red">Ваша заявка не добавлена, т.к. сотрудник с таким ИНН уже есть в базе</p>{/if}
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+<p><input type=submit value="Отправить запрос на подтверждение"></p>
+
+<table cellpadding=3 border=0>
+	<tr>
+		<td>ФИО переводимого сотрудника</td>
+		<td>
+			<select required name="move_staff[tn]" onChange="this.value!=''?$('#uploadOutput').load('?action=move_staff_my_emp_all&nohead=1&tn='+this.value):$('#uploadOutput').text('');">
+				<option></option>
+				{foreach from=$my_emp key=k item=i}
+					<option value={$i.tn}>{$i.fio} - ({$i.pos_name})</option>
+				{/foreach}
+			</select>
+			<div id="uploadOutput" style="display: inline;">
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>Новая должность</td>
+		<td>
+				<select required name="move_staff[pos_id]">
+					<option></option>
+					{foreach key=key item=item from=$dolgn_list_all}
+						<option value={$item.pos_id}>{$item.pos_name}</option>
+					{/foreach}
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Дата перевода</td>
+		<td><input required name="move_staff[datamove]" class="datepicker"></td>
+	</tr>
+	<tr>
+		<td>Условия перевода<br>(дорабатывает до...)<br>(Достигнута договоренность...) и т.д.</td>
+		<td><textarea required cols="60" rows="5" name="move_staff[params]"></textarea></td>
+	</tr>
+	<tr>
+		<td style="">ФИО, должность сотрудника, принимающего территорию<br>(или кто будет исполнять обязанности):</td>
+		<td style=""><input required size="50" id=f1 name="move_staff[fio_new]"></td>
+	</tr>
+	<tr>
+		<td>Акт приема-передачи</td>
+		<td><input name="fn" type="file"></td>
+	</tr>
+	<tr>
+		<td colspan=2><hr></td>
+	</tr>
+	<tr>
+		<td>Статусы</td>
+		<td>
+			<input type=checkbox value=1 name=move_staff[is_mservice]>МС<br>
+			<input type=checkbox value=1 name=move_staff[is_mz]>МШ<br>
+			<input type=checkbox value=1 name=move_staff[is_coach]>Тренер<br>
+			{literal}<input type=checkbox value=1 name=move_staff[is_db] onclick="$('.all').attr('disabled',this.checked?false:true);">ДБ<br>{/literal}
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2><hr></td>
+	</tr>
+	<tr>
+		<td>Филиалы</td>
+		<td>
+			{foreach key=k item=i from=$bud_fil name=bud_fil}
+				<input disabled class="all" type=checkbox value="{$i.id}" name=bud_fil[]>{$i.name}
+				{if ($smarty.foreach.bud_fil.iteration+1)%5 eq 1}<br>{/if}
+			{/foreach}
+		</td>
+	</tr>
+</table>
+
+<p><input type=submit value="Отправить запрос на подтверждение"></p>
+
+</form>

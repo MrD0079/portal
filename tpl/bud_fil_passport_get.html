@@ -1,0 +1,195 @@
+<h1>Паспорт дистрибутора/филиала {$p.name}</h1>
+
+{if not $smarty.request.print}
+<p>Скопировать информацию с другого филиала/дистрибутора
+<br>
+<select id=from>
+<option></option>
+{foreach key=k item=i from=$bud_fil}
+<option value="{$i.id}">{$i.name}</option>
+{/foreach}
+</select>
+<br>
+<a href="javascript:void(0);" onclick="copy_passport($('#from').val(),{$p.id});">Скопировать</a>
+</p>
+{/if}
+
+<h3>Общая информация</h3>
+
+<table border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>Юридическое наименование дистрибутора/филиала</td>
+<td {if not $p.uname}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_uname" onChange="save_fil({$p.id},'uname',this.value);" size="50" value="{$p.uname}">{else}{$p.uname}{/if}</td>
+</tr>
+<tr>
+<td>Форма собственности</td>
+<td {if not $p.ownership}style="background-color:red"{/if}>
+{if not $smarty.request.print}
+<select id="div_{$p.id}_ownership" onchange="save_fil({$p.id},'ownership',this.value);">
+<option></option>
+{foreach key=k item=i from=$ownership}
+<option value="{$i.id}">{$i.name}</option>
+{/foreach}
+</select>
+<script>$("#div_{$p.id}_ownership").val("{$p.ownership}");</script>
+{else}{$p.ownership_name}{/if}
+</td>
+</tr>
+<tr>
+<td>Год образования</td>
+<td {if not $p.data_start}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_data_start" onchange="save_fil({$p.id},'data_start',this.value);" class="datepicker" size="8" value="{$p.data_start}">{else}{$p.data_start}{/if}</td>
+</tr>
+<tr>
+<td>Дата начала сотрудничества с "АВК"</td>
+<td {if not $p.data_start_avk}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_data_start_avk" onchange="save_fil({$p.id},'data_start_avk',this.value);" class="datepicker" size="8" value="{$p.data_start_avk}">{else}{$p.data_start_avk}{/if}</td>
+</tr>
+<tr>
+<td>Род деятельности</td>
+<td {if not $p.activity}style="background-color:red"{/if}>
+{if not $smarty.request.print}
+<select id="div_{$p.id}_activity" onchange="save_fil({$p.id},'activity',this.value);">
+<option></option>
+{foreach key=k item=i from=$activity}
+<option value="{$i.id}">{$i.name}</option>
+{/foreach}
+</select>
+<script>$("#div_{$p.id}_activity").val("{$p.activity}");</script>
+{else}{$p.activity_name}{/if}
+</td>
+</tr>
+<tr>
+<td>Портфель дистрибутора (торговые марки)</td>
+<td {if not $p.portfolio}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_portfolio" onChange="save_fil({$p.id},'portfolio',this.value);">{$p.portfolio|escape}</textarea>{else}{$p.portfolio}{/if}</td>
+</tr>
+<tr>
+<td>Перечень обслуживаемых территорий</td>
+<td {if not $p.areas}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_areas" onChange="save_fil({$p.id},'areas',this.value);">{$p.areas|escape}</textarea>{else}{$p.areas}{/if}</td>
+</tr>
+<tr>
+<td>Фактический адрес</td>
+<td {if not $p.address_fakt}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_address_fakt" onChange="save_fil({$p.id},'address_fakt',this.value);">{$p.address_fakt|escape}</textarea>{else}{$p.address_fakt}{/if}</td>
+</tr>
+<tr>
+<td>Юридический адрес</td>
+<td {if not $p.address_ur}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_address_ur" onChange="save_fil({$p.id},'address_ur',this.value);">{$p.address_ur|escape}</textarea>{else}{$p.address_ur}{/if}</td>
+</tr>
+<tr>
+<td>Реквизиты</td>
+<td {if not $p.props}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_props" onChange="save_fil({$p.id},'props',this.value);">{$p.props|escape}</textarea>{else}{$p.props}{/if}</td>
+</tr>
+<tr>
+<td>Площадь склада, м2</td>
+<td {if not $p.wsarea}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_wsarea" onChange="save_fil({$p.id},'wsarea',this.value);" size="50" value="{$p.wsarea}" class="number_int">{else}{$p.wsarea}{/if}</td>
+</tr>
+<tr>
+<td>Фактический адрес склада</td>
+<td {if not $p.ws_addres_fakt}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_ws_addres_fakt" onChange="save_fil({$p.id},'ws_addres_fakt',this.value);">{$p.ws_addres_fakt|escape}</textarea>{else}{$p.ws_addres_fakt}{/if}</td>
+</tr>
+<tr>
+<td>Транспорт на развозке продукции - собственный, кол-во машин</td>
+<td {if not $p.transport_own}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_transport_own" onChange="save_fil({$p.id},'transport_own',this.value);" size="50" value="{$p.transport_own}" class="number_int">{else}{$p.transport_own}{/if}</td>
+</tr>
+<tr>
+<td>Транспорт на развозке продукции - нанятый, кол-во машин</td>
+<td {if not $p.transport_hired}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_transport_hired" onChange="save_fil({$p.id},'transport_hired',this.value);" size="50" value="{$p.transport_hired}" class="number_int">{else}{$p.transport_hired}{/if}</td>
+</tr>
+<tr>
+<td>Обслуживаемая база ТП (общая)</td>
+<td {if not $p.tpbase}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_tpbase" onChange="save_fil({$p.id},'tpbase',this.value);" size="50" value="{$p.tpbase}" class="number_int">{else}{$p.tpbase}{/if}</td>
+</tr>
+<tr>
+<td>Есть ли банковская гарантия</td>
+<td {if not $p.warranty}style="background-color:red"{/if}>
+{if not $smarty.request.print}
+<input id="div_{$p.id}_warranty" onclick="save_fil({$p.id},'warranty',this.checked?1:0);" type="checkbox">
+<script>
+$("#div_{$p.id}_warranty").attr('checked','{$p.warranty}'=='1'?true:false);
+</script>
+{else}{if $p.warranty}да{/if}{/if}
+</td>
+</tr>
+<tr>
+<td>Есть ли собственная розничная сеть</td>
+<td {if not $p.retailer}style="background-color:red"{/if}>
+{if not $smarty.request.print}
+<input id="div_{$p.id}_retailer" onclick="save_fil({$p.id},'retailer',this.checked?1:0);" type="checkbox">
+<script>
+$("#div_{$p.id}_retailer").attr('checked','{$p.retailer}'=='1'?true:false);
+</script>
+{else}{if $p.retailer}да{/if}{/if}
+</td>
+</tr>
+<tr>
+<td>Вэб-сайт дистрибутора</td>
+<td {if not $p.web}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_web" onChange="save_fil({$p.id},'web',this.value);" size="50" value="{$p.web}">{else}{$p.web}{/if}</td>
+</tr>
+<tr>
+<td>Прочая информация</td>
+<td {if not $p.other}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_other" onChange="save_fil({$p.id},'other',this.value);">{$p.other|escape}</textarea>{else}{$p.other}{/if}</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Контактная информация</h3>
+
+{if not $smarty.request.print}
+<a href="javascript:void(0);" onClick="add_contact({$smarty.request.id});">Добавить контактное лицо</a>
+{/if}
+
+<table border="0" cellpadding="2" cellspacing="2" id="tcontacts_{$smarty.request.id}">
+<tbody>
+<tr style="font-weight:bold">
+{if not $smarty.request.print}
+<td>[x]</td>
+{/if}
+<td>Должность</td>
+<td>ФИО</td>
+<td>Телефон</td>
+<td>e-mail</td>
+<td>skype</td>
+<td>Дата рожд.</td>
+<td>Комментарий</td>
+<td>Рассылка</td>
+</tr>
+{foreach key=k item=i from=$contacts}
+<tr id=trc_{$i.id}>
+{if not $smarty.request.print}
+<td>{if not $i.required}<a href="javascript:void(0);" onclick="del_contact({$i.id});">[x]</a>{/if}</td>
+{/if}
+<td style="font-weight:bold">{if not $smarty.request.print}<input id="divc_{$i.id}_dolgn" {if $i.required}disabled{/if} onChange="save_contact({$i.id},'dolgn',this.value);" size="30" value="{$i.dolgn}">{else}{$i.dolgn}{/if}</td>
+<td {if $i.required and not $i.fio}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_fio" onChange="save_contact({$i.id},'fio',this.value);" size="30" value="{$i.fio}">{else}{$i.fio}{/if}</td>
+<td {if $i.required and not $i.phone}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_phone" onChange="save_contact({$i.id},'phone',this.value);" size="20" value="{$i.phone}">{else}{$i.phone}{/if}</td>
+<td {if $i.required and not $i.mail}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_mail" onChange="save_contact({$i.id},'mail',this.value);" size="20" value="{$i.mail}">{else}{$i.mail}{/if}</td>
+<td {if $i.required and not $i.skype}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_skype" onChange="save_contact({$i.id},'skype',this.value);" size="20" value="{$i.skype}">{else}{$i.skype}{/if}</td>
+<td {if $i.required and not $i.birthday}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_birthday" onchange="save_contact({$i.id},'birthday',this.value);" size="8" value="{$i.birthday}" class="datepicker">{else}{$i.birthday}{/if}</td>
+<td {if $i.required and not $i.comm}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_comm" onChange="save_contact({$i.id},'comm',this.value);" size="30" value="{$i.comm}">{else}{$i.comm}{/if}</td>
+<td {if $i.required and not $i.delivery}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="divc_{$i.id}_delivery" onChange="save_contact({$i.id},'delivery',this.checked?1:0);" type="checkbox"><script>$("#divc_{$i.id}_delivery").attr('checked','{$i.delivery}'=='1'?true:false);</script>{else}{if $i.delivery}да{/if}{/if}</td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+<h3>Действующие договора</h3>
+
+<table border="0" cellpadding="2" cellspacing="2" id="tcontracts_{$smarty.request.id}">
+<tbody>
+{foreach key=k item=i from=$contracts}
+<tr id=trcr_{$i.id}>
+{if not $smarty.request.print}<td><a href="javascript:void(0);" onclick="del_contract({$i.id});">[x]</a></td>{/if}
+<td><a target="_blank" href="bud_fil_files/{$i.fn}">{$i.fn}</a></td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+{if not $smarty.request.print}
+<a href="javascript:void(0);" onClick="add_contract({$smarty.request.id});">Добавить файлы</a>
+<form>
+<input type=file multiple id="fn_{$smarty.request.id}">
+</form>
+{/if}
+
+
+
+

@@ -1,0 +1,110 @@
+<h1>Мои задачи</h1>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+<select name=prj_id id=prj_id>
+<option value=0></option>
+{foreach key=k item=i from=$project_my_heads}
+<option value={$i.id}>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#prj_id option[value="{$smarty.request.prj_id}"]').prop('selected', true);</script>
+<input type=submit value="развернуть">
+</p>
+
+
+{if $smarty.request.prj_id neq 0}
+
+<p>
+<input name=save type=submit value="сохранить">
+</p>
+
+
+<table border=1 cellspacing=0 cellpadding=3 width=1000>
+	<tr style="font-weight:bold">
+		<td>Раздел / Подраздел</td>
+		<td>Дата начала</td>
+		<td>Установленная дата завершения</td>
+		<td>Отметка о выполнении</td>
+		<td>Подтверждение руководителя</td>
+		<td>Комментарии (при необходимости)</td>
+	</tr>
+	{foreach key=key item=item from=$project_my}
+	<tr
+	{if $item.level eq 1}style="background-color:#cccccc;font-weight:bold"{/if}
+	{if $item.level eq 2}style="background-color:#dddddd"{/if}
+	>
+		<td {if $item.level eq 1}colspan=6{/if}>{$item.name|escape}</td>
+		{if $item.level eq 2}
+		<td>{$item.dt_start}</td>
+		<td>{$item.dt_end}</td>
+		<td>
+			<input
+				onclick="$('#z_{$item.id}_completed_tn).val(this.checked?{$tn}:0)"
+				type=checkbox
+				{if $item.completed_tn}checked{/if}
+				{if $item.ok_chief_tn}disabled{/if}
+			>
+			<input type=hidden name=z[{$item.id}][completed_tn] id=z_{$item.id}_completed_tn value="{$item.completed_tn}">
+			<br>{$item.completed_dt}
+			<br>{$item.completed_fio}
+		</td>
+		<td>
+			<input
+				onclick="$('#z_{$item.id}_ok_chief_tn).val(this.checked?{$tn}:0)"
+				type=checkbox
+				{if $item.ok_chief_tn}checked{/if}
+				disabled
+			>
+			<input type=hidden name=z[{$item.id}][ok_chief_tn] id=z_{$item.id}_ok_chief_tn value="{$item.ok_chief_tn}">
+			<br>{$item.ok_chief_dt}
+			<br>{$item.ok_chief_fio}
+		</td>
+		<td>
+			<textarea rows=3 cols=30 {if $item.ok_chief_tn}disabled{/if} name=z[{$item.id}][text]>{$item.text|escape}</textarea>
+		</td>
+		{/if}
+	</tr>
+	{/foreach}
+</table>
+
+
+<p>
+<input name=save type=submit value="сохранить">
+</p>
+
+
+<h3>Текущие итоги</h3>
+
+
+<table border=1 cellspacing=0 cellpadding=3 width=1000>
+    <tr style="font-weight:bold;text-align: center;">
+      <td>ВСЕГО запланировано действий</td>
+      <td>ВСЕГО завершено</td>
+      <td>% завершения</td>
+      <td>Завершено в срок</td>
+      <td>Завершение просрочено</td>
+      <td>Не завершено</td>
+      <td>Подтверждено руководителем</td>
+    </tr>
+    <tr style="text-align: center;">
+      <td>{$project_my_total.total}</td>
+      <td>{$project_my_total.completed}</td>
+      <td>{$project_my_total.perc|default:0|num:2}</td>
+      <td>{$project_my_total.vsrok}</td>
+      <td>{$project_my_total.prosroch}</td>
+      <td>{$project_my_total.no_completed}</td>
+      <td>{$project_my_total.ok_chief}</td>
+      </td>
+    </tr>
+</table>
+
+
+
+
+
+{/if}
+
+</form>
+

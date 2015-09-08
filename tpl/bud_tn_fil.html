@@ -1,0 +1,89 @@
+<h1>Привязка Филиалы(UA)/Дистрибуторы(RU) - ДБ</h1>
+
+
+<p>
+<a id=a22 class=apage href="?action=bud_tn_fil&fil_activ=2&kk=2">Все</a>
+&nbsp&nbsp&nbsp
+<a id=a20 class=apage href="?action=bud_tn_fil&fil_activ=2&kk=0">Все ЛР</a>
+&nbsp&nbsp&nbsp
+<a id=a21 class=apage href="?action=bud_tn_fil&fil_activ=2&kk=1">Все КК</a>
+&nbsp&nbsp&nbsp
+<a id=a12 class=apage href="?action=bud_tn_fil&fil_activ=1&kk=2">Активные</a>
+&nbsp&nbsp&nbsp
+<a id=a10 class=apage href="?action=bud_tn_fil&fil_activ=1&kk=0">Активные ЛР</a>
+&nbsp&nbsp&nbsp
+<a id=a11 class=apage href="?action=bud_tn_fil&fil_activ=1&kk=1">Активные КК</a>
+&nbsp&nbsp&nbsp
+<a id=a02 class=apage href="?action=bud_tn_fil&fil_activ=0&kk=2">Закрытые</a>
+&nbsp&nbsp&nbsp
+<a id=a00 class=apage href="?action=bud_tn_fil&fil_activ=0&kk=0">Закрытые ЛР</a>
+&nbsp&nbsp&nbsp
+<a id=a01 class=apage href="?action=bud_tn_fil&fil_activ=0&kk=1">Закрытые КК</a>
+</p>
+
+
+<script>
+$('.apage').css('font-weight','');
+$('#a{$smarty.request.fil_activ}{$smarty.request.kk}').css('font-weight','bold');
+</script>
+
+
+<form target="_self" method="POST" name=form_emp_exp>
+
+
+Филиал(UA)/Дистрибутор(RU)
+<select required name=add[bud_id]>
+	<option></option>
+	{foreach key=key item=item from=$bud_fil}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+<br>
+
+ДБ
+<select required name=add[tn]>
+	<option></option>
+	{foreach key=key item=item from=$bud_tn}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+
+
+<input type=submit name=new value="Добавить">
+<br>
+<br>
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td rowspan=2><a href="javascript:void(0)" onclick="javascript:form_emp_exp.submit()">[X]</a></td>
+<td rowspan=2>Филиал(UA)/Дистрибутор(RU)</td>
+<td colspan=5>ДБ</td>
+</tr>
+<tr style="font-weight:bold;text-align:center">
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Департамент</td>
+<td>Подразделение</td>
+<td>Регион</td>
+<td>Добавлено</td>
+</tr>
+{foreach key=emp_exp_key item=emp_exp_item from=$emp_exp name=emp_exp}
+<tr>
+<td>
+<input type=checkbox name=del[{$emp_exp_key}] value="{$emp_exp_item.tn},{$emp_exp_item.bud_id}">
+{$smarty.foreach.emp_exp.iteration}
+</td>
+<td>{$emp_exp_item.bud_name}</td>
+<td>{$emp_exp_item.tn}</td>
+<td>{$emp_exp_item.emp_name}</td>
+<td>{$emp_exp_item.dpt_name}</td>
+<td>{$emp_exp_item.department_name}</td>
+<td>{$emp_exp_item.region_name}</td>
+<td>{$emp_exp_item.lu_txt}</td>
+</tr>
+{/foreach}
+</table>
+</form>

@@ -1,0 +1,1 @@
+SELECT seq_files.NEXTVAL FROM DUAL

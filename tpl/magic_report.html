@@ -1,0 +1,137 @@
+<h1>Отчет по акции "Январское волшебство"</h1>
+
+{foreach key=er_tp_key item=er_tp_item from=$er_tp name=er_tp}
+{/foreach}
+{if $smarty.foreach.er_tp.total > 0}
+<p style="color:red;font-style:bold">Некоторые из выбранных ТП не удовлетворяют условиям акции</p>
+{/if}
+
+
+<form target="_self" method="POST" name=form_report id=form_report>
+
+
+{if $is_ts neq 1}
+
+<input type="hidden" name="form_submit">
+
+
+По руководителю:
+<br>
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+
+<br>
+
+По супервайзеру:
+<br>
+<select name=exp_list_only_ts id=exp_list_only_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_only_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+
+
+
+<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+
+{/if}
+
+
+
+
+	<br>
+	<br>
+
+
+
+	<input type=submit name=save id=save class=save value="Сохранить">
+	<br>
+	<br>
+	<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold; text-align:center">
+			<td>№ п/п</td>
+			<td>ТС</td>
+			<td>ФИО ЭТА</td>
+			<td>Название ТП</td>
+			<td>Адрес ТП</td>
+
+			<td>Среднемесячные<br>продажи<br>июль-декабрь<br>2011,<br>{$valuta}.</td>
+			<td>Минимальный<br>план<br>продаж<br>января,<br>{$valuta}.</td>
+			<td>Факт<br>продаж<br>января,<br>{$valuta}.</td>
+			<td>Выставленный<br>ТС-ом<br>план<br>января,<br>{$valuta}.</td>
+			<td>Контактный<br>номер ЛПР, имя</td>
+			<td>Подтверждаю<br>ВСТМ</td>
+
+		</tr>
+		{foreach key=tp_key item=tp_item from=$tp name=tp}
+		<tr
+
+{foreach key=er_tp_key item=er_tp_item from=$er_tp name=er_tp}
+
+			{if $tp_item.kod_tp eq $er_tp_key}
+				style="font-weight:bold;color:red"
+			{/if}
+
+{/foreach}
+
+		>
+			<td>{$smarty.foreach.tp.iteration}</td>
+			<td>{$tp_item.ts}</td>
+			<td>{$tp_item.eta}</td>
+			<td>{$tp_item.tp_name}</td>
+			<td>{$tp_item.address}</td>
+			<td style="text-align:right">{$tp_item.avg6|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.december|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.january|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.jan_plan|default:0|num:2}</td>
+			<td>{$tp_item.contact_lpr|escape}</td>
+			<td {if $tp_item.ok_traid eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
+				<input
+					onclick="javascript:check_item({$tp_item.kod_tp},this.checked)"
+					type=checkbox
+					{if $tp_item.ok_traid eq 1}checked{/if}
+					{if not $is_traid eq 1}disabled{/if}
+					value="{$tp_item.kod_tp}"
+				>
+				{if $tp_item.ok_traid eq '1'}да{/if}
+				{if $tp_item.ok_traid eq '0'}нет{/if}
+				<input type=hidden name=ok_traid_changed[{$tp_item.kod_tp}] value="">
+			</td>
+		</tr>
+		{/foreach}
+		<tr style="font-weight:bold; text-align:center">
+			<td colspan=5>Итого</td>
+			{foreach key=tp_key item=tp_item from=$tp_total}
+			<td style="text-align:right">{$tp_item.avg6|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.december|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.january|default:0|num:2}</td>
+			<td style="text-align:right">{$tp_item.jan_plan|default:0|num:2}</td>
+			<td></td>
+			<td style="text-align:right">{$tp_item.ok_traid|default:0}</td>
+			{/foreach}
+		</tr>
+	</table>
+	<br>
+	<input type=submit name=save id=save class=save value="Сохранить">
+	<br>
+	<br>
+</form>
+
+{literal}
+<script>
+function check_item($v,chk)
+{
+	var cbs2 = document.forms["form_report"].elements["ok_traid_changed["+$v+"]"];
+	if (chk) { cbs2.value='on'; } else { cbs2.value=$v; }
+}
+</script>
+{/literal}

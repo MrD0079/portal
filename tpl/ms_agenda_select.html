@@ -1,0 +1,106 @@
+<table>
+
+<tr>
+<td>
+Период
+</td>
+<td>
+	<input type=radio name=period value=1 onClick="$('#per_day').attr('disabled',false);$('#week_list').attr('disabled',true);$('#dates_list2').attr('disabled',true);">день
+	<input name=dates_list2 id=per_day class="datepicker datepicker_prev1" size=10>
+	<input type=radio name=period value=2 onClick="$('#per_day').attr('disabled',true);$('#week_list').attr('disabled',false);$('#dates_list2').attr('disabled',true);">неделя
+	<select name=dates_list2 id=week_list>
+	{foreach key=key item=item from=$week_list}
+		{if $item.ms_agenda_enabled}<option value="{$item.w_start}">№ {$item.wy} - {$item.w_start} - {$item.w_end}</option>{/if}
+	{/foreach}
+	</select>
+	<input type=radio name=period value=3 onClick="$('#per_day').attr('disabled',true);$('#week_list').attr('disabled',true);$('#dates_list2').attr('disabled',false);">месяц
+	<select name=dates_list2 id=dates_list2>
+	{foreach key=key item=item from=$month_list}
+		{if $item.ms_agenda_enabled}<option value="{$item.sd_c}">{$item.my}</option>{/if}
+	{/foreach}
+	</select>
+	<script>
+		$("#week_list option[value='{$smarty.request.dates_list2}']").prop('selected', true);
+		$("#dates_list2 option[value='{$smarty.request.dates_list2}']").prop('selected', true);
+		$("#per_day").val('{$smarty.request.dates_list2}');
+		$("input[name=period][value={$smarty.request.period}]").attr('checked',true);
+		$("input[name=period][value={$smarty.request.period}]").click();
+	</script>
+</td>
+</tr>
+
+<tr>
+<td>Область
+</td>
+<td>
+<select name=oblast id=oblast>
+	<option value=0></option>
+	{foreach key=key item=item from=$oblast}
+	<option value="{$item.oblast}">{$item.oblast}</option>
+	{/foreach}
+</select>
+<script>
+$("#oblast option[value='{$smarty.request.oblast}']").prop('selected', true);
+</script>
+</td>
+</tr>
+
+<tr>
+<td>Город
+</td>
+<td>
+<select name="city" id="city">
+	<option value=0></option>
+	{foreach key=key item=item from=$city}
+	<option value="{$item.city|escape}">{$item.city|escape}</option>
+	{/foreach}
+</select>
+<script>
+$("#city option[value='{$smarty.request.city}']").prop('selected', true);
+</script>
+</td>
+</tr>
+
+<tr>
+<td>Сеть</td>
+<td>
+<select name=nets id=nets>
+	<option value=0></option>
+	{foreach key=key item=item from=$nets}
+	<option value="{$item.id_net}">{$item.net_name}</option>
+	{/foreach}
+</select>
+<script>
+$("#nets option[value={$smarty.request.nets}]").prop('selected', true);
+</script>
+</td>
+</tr>
+
+<tr><td>СВ МС</td>
+<td>
+<select name=svms_list id=svms_list>
+	<option value=0></option>
+	{foreach key=key item=item from=$svms_list}
+	<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<script>
+$("#svms_list option[value={$smarty.request.svms_list}]").prop('selected', true);
+</script>
+</td>
+</tr>
+<tr><td>Заказчик</td>
+<td>
+<select name=agent id=agent>
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head_agents}
+	<option value="{$item.id}">{$item.name|escape}</option>
+	{/foreach}
+</select>
+<script>
+$("#agent option[value={$smarty.request.agent}]").prop('selected', true);
+</script>
+</td>
+</tr>
+
+</table>

@@ -1,0 +1,199 @@
+<h1>Сравнение по видам планирования - СЕТИ</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Месяц
+				<br>
+				<select required name="month" id="month">
+					<option value=0></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#month option[value="{$smarty.request.month}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Выберите сеть из списка
+				<br>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+{if not $is_mkk}
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+{/if}
+			</td>
+			<td>
+{if not $is_mkk}
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Форма оплаты
+				<br>
+				<select name="payment_type" id="payment_type">
+					<option value=0></option>
+					{foreach key=key item=item from=$payment_type}
+					<option value={$item.id}>{$item.pay_type}</option>
+					{/foreach}
+				<script>$('#payment_type option[value="{$smarty.request.payment_type}"]').prop('selected', true);</script>
+				</select>
+			</td>
+			<td>
+			</td>
+			<td>
+				Группа затрат
+				<br>
+				<!--
+				<select required name="groupp" id="groupp">
+					<option value=0></option>
+					{foreach key=key item=item from=$groups}
+					<option value={$item.id}>{$item.gr_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#groupp option[value="{$smarty.request.groupp}"]').prop('selected', true);</script>
+				<br>
+				-->
+				{foreach key=key item=item from=$groups}
+				<input type=checkbox id=groups_{$item.id} name=groups[{$item.id}] value={$item.id}>{$item.gr_name}
+				<br>
+				{/foreach}
+				<script>
+				{if not $smarty.request.generate}
+					{foreach key=key item=item from=$groups}
+						$("#groups_{$item.id}").prop('checked',true);
+					{/foreach}
+				{/if}
+				{foreach key=key item=item from=$groups}
+					{if $smarty.request.groups[$item.id]}
+						$("#groups_{$item.id}").prop('checked',true);
+					{/if}
+				{/foreach}
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				По фильтру сетей:
+				<br>
+				<select name=flt_id id=flt_id>
+					<option value=0></option>
+					{foreach key=key item=item from=$kk_flt_nets}
+					<option value={$item.id}>{$item.name|escape}</option>
+					{/foreach}
+				</select>
+				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+	</table>
+
+Сортировать по:
+
+<input type=radio id=orderby name=orderby value=0>названию сети
+<input type=radio id=orderby name=orderby value=1>фин. бюджету (по убыванию)
+<input type=radio id=orderby name=orderby value=2>дог. бюджету (по убыванию)
+<input type=radio id=orderby name=orderby value=3>опер. бюджету (по убыванию)
+
+
+
+
+<script>$("input[name=orderby][value={$smarty.request.orderby|default:0}]").attr('checked',true);</script>
+
+<br>
+
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{/if}
+
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+<a href="?action=rep_compare_nets&calendar_years={$smarty.request.calendar_years}&print=1&excel=1&filename=Сравнение по видам планирования">Экспорт в Excel</a>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	{foreach key=rep_compare_nets_key item=rep_compare_nets_item from=$rep_compare_nets name=rep_compare_nets}
+
+
+	{if $rep_compare_nets_item.draw_head eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО РМКК</td>
+		<td>ФИО МКК</td>
+		<td>Факт. назв.сети</td>
+		<td>Сеть работает без бюджета</td>
+		<td>Бюджет по финансовому планированию, тыс.{$valuta}.</td>
+		<td>Бюджет по договорному планированию, тыс.{$valuta}.</td>
+		<td>Бюджет по оперативному планированию, тыс.{$valuta}.</td>
+ 
+
+	</tr>
+	{/if}
+		<tr
+			{if $rep_compare_nets_item.no_budget eq 'да'}
+				style="background-color: yellow;"
+			{else}
+				{if $rep_compare_nets_item.color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+				{if $rep_compare_nets_item.color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+			{/if}
+		>
+		<td>{$smarty.foreach.rep_compare_nets.iteration}</td>
+		<td>{$rep_compare_nets_item.rmkk}</td>
+		<td>{$rep_compare_nets_item.mkk}</td>
+		<td>{$rep_compare_nets_item.net_name}</td>
+		<td>{$rep_compare_nets_item.no_budget}</td>
+		<td style="text-align:right">{$rep_compare_nets_item.year_budget_fin|default:0|num:3}</td>
+		<td style="text-align:right">{$rep_compare_nets_item.year_budget_dog|default:0|num:3}</td>
+		<td style="text-align:right">{$rep_compare_nets_item.year_budget_oper|default:0|num:3}</td>
+	</tr>
+	{/foreach}
+	{foreach key=rep_compare_nets_key_total item=rep_compare_nets_item_total from=$rep_compare_nets_total name=rep_compare_nets_total}
+	<tr style="font-weight:bold">
+		<td colspan=4>Итого</td>
+		<td style="text-align:right">{$rep_compare_nets_item_total.no_budget|default:0}</td>
+		<td style="text-align:right">{$rep_compare_nets_item_total.year_budget_fin|default:0|num:3}</td>
+		<td style="text-align:right">{$rep_compare_nets_item_total.year_budget_dog|default:0|num:3}</td>
+		<td style="text-align:right">{$rep_compare_nets_item_total.year_budget_oper|default:0|num:3}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

@@ -1,0 +1,28 @@
+<tr id=tr_{$id}>
+	{if not $smarty.request.disabled}
+		<td>
+			<a href="javascript:void(0);" onclick="del_task({$id});">[-]</a>
+		</td>
+		<td id=td_text{$smarty.request.coach}{$id}>
+			<textarea onChange="save('{$smarty.request.dt}','ct','text',this.value,{$smarty.request.coach},{$id});">{$task.text}</textarea>
+		</td>
+		<td id=td_perc{$smarty.request.coach}{$id}>
+			<input class="number_int" onChange="save('{$smarty.request.dt}','ct','perc',this.value,{$smarty.request.coach},{$id});" value="{$task.perc}">
+		</td>
+		<td id=td_comm{$smarty.request.coach}{$id}>
+			<textarea onChange="save('{$smarty.request.dt}','ct','comm',this.value,{$smarty.request.coach},{$id});">{$task.comm}</textarea>
+		</td>
+	{else}
+		<td>
+		</td>
+		<td id=td_text{$smarty.request.coach}{$id}>
+			{$task.text|nl2br}
+		</td>
+		<td id=td_perc{$smarty.request.coach}{$id}>
+			{$task.perc}
+		</td>
+		<td id=td_comm{$smarty.request.coach}{$id}>
+			{$task.comm|nl2br}
+		</td>
+	{/if}
+</tr>

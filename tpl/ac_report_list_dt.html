@@ -1,0 +1,20 @@
+{foreach key=key item=item from=$ac_report_list_dt}
+<a href="javascript:void(0);" onclick="load_ac_report_head_body({$item.id})">{$item.dt} {$item.fio}</a><br>
+{/foreach}
+
+{literal}
+<script>
+function load_ac_report_head_body(id)
+{
+	$('#ac_report_head_body').html('');
+	$('#ac_report_head_body').load('?action=ac_report_head_body&nohead=1&id='+id,function() {});
+}
+</script>
+{/literal}
+
+
+{if $smarty.request.ac_id > 0}
+<script>
+load_ac_report_head_body({$smarty.request.ac_id});
+</script>
+{/if}

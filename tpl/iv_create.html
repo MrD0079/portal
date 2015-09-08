@@ -1,0 +1,235 @@
+<h3>Представление-рекомендация кандидата на должность</h3>
+{if $smarty.request.add and $smarty.request.head and $smarty.request.data}
+	<p style="color:red">Представление-рекомендация кандидата на должность добавлена</p>
+{else}
+	<form target="_self" method="POST" name=form_sz_accept id=form_sz_accept enctype="multipart/form-data">
+	{if $smarty.request.id}
+		<input type=hidden name=head[id] value={$smarty.request.id}>
+	{/if}
+	<table border=1>
+		<tr>
+			<td>Фамилия</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[fam] id=head_fam>
+				{else}
+					{$iv_h.fam}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Имя</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[im] id=head_im>
+				{else}
+					{$iv_h.im}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Отчество</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[ot] id=head_ot>
+				{else}
+					{$iv_h.ot}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Дата рождения</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input class="datepicker" required name=head[birthday] id=head_birthday>
+				{else}
+					{$iv_h.birthday}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Претендует на должность</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<select required name=head[pos] id=head_pos>
+						<option></option>
+						{foreach key=key item=item from=$pos_list}
+						<option value={$item.pos_id}>{$item.pos_name}</option>
+						{/foreach}
+					</select>
+				{else}
+					{foreach item=i from=$list}
+						{if $iv_h.mentor eq $i.id}{$i.fio}{/if}
+					{/foreach}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Территория</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[territory] id=head_territory>
+				{else}
+					{$iv_h.territory}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Планируемая дата выхода на работу</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input class="datepicker" required name=head[planned_start] id=head_planned_start>
+				{else}
+					{$iv_h.planned_start}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Испытательный срок: "с"</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input class="datepicker" required name=head[prob_period_start] id=head_prob_period_start>
+				{else}
+					{$iv_h.prob_period_start}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Испытательный срок: "по"</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input class="datepicker" required name=head[prob_period_end] id=head_prob_period_end>
+				{else}
+					{$iv_h.prob_period_end}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Категория на период ИС</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[cat_on_prob] id=head_cat_on_prob>
+				{else}
+					{$iv_h.cat_on_prob}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Категория после прохождения ИС</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[cat_after_prob] id=head_cat_after_prob>
+				{else}
+					{$iv_h.cat_after_prob}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Наставник</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<select required name=head[mentor] id=head_mentor>
+						<option></option>
+						{foreach key=key item=item from=$list}
+						<option value={$item.id}>{$item.fio}</option>
+						{/foreach}
+					</select>
+				{else}
+					{foreach item=i from=$list}
+						{if $iv_h.mentor eq $i.id}{$i.fio}{/if}
+					{/foreach}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Резюме</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input type=file required name=resume id=head_resume>
+				{else}
+					<a target=blank_ href="iv_files/{$iv_h.resume}">{$iv_h.resume}</a>
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Адрес электронной почты (личный)</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[email_private] id=head_email_private>
+				{else}
+					{$iv_h.email_private}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>Имя и фамилия латиницей (как в загранпаспорте)</td>
+			<td>
+				{if $iv_h.sz_not_seen or not $smarty.request.id}
+					<input required name=head[fio_zpassport] id=head_fio_zpassport>
+				{else}
+					{$iv_h.fio_zpassport}
+				{/if}
+			</td>
+		</tr>
+	</table>
+	<p></p>
+	{if $iv_h.sz_not_seen or not $smarty.request.id}
+		<a href='javascript:void(0);' onclick="add_item(0,0);">добавить интервьюера</a>
+	{/if}
+	<table id=items border=1 cellpadding=3 cellspacing=0>
+		<tbody>
+			<tr style="font-weight:bold">
+				<td>Ф.И.О.</td>
+				<td>Сильные стороны кандидата</td>
+				<td>На развитие</td>
+				<td>Решение</td>
+			</tr>
+		</tbody>
+	</table>
+	{if $smarty.request.id}
+		<p><input type="submit" name="save" id="save" value="Сохранить"></p>
+	{else}
+		<p><input type="submit" name="add" id="add" value="Добавить"></p>
+	{/if}
+	</form>
+	{literal}
+	<script>
+		function add_item(id,tn)
+		{
+			var fd = new FormData();
+			fd.append('id', id);
+			fd.append('tn', tn);
+			//fd.append('ro', ro);
+			$.ajax
+			(
+				{
+					type: 'POST',
+					url: '?action=iv_create_list&nohead=1',
+					data: fd,
+					processData: false,
+					contentType: false,
+					success: function(data)
+					{
+						$('#items>tbody:last').append(''+data+'');
+						//$('#data_'+id+'_'++' option[value="'+key+'"]').prop('selected', true);
+					}
+				}
+			);
+		}
+		function del_item(id)
+		{
+			$('#list_'+id).remove();
+		}
+	</script>
+	{/literal}
+	<script>
+		//$('#head_iv_subtype option[value="{$iv_h.iv_subtype}"]').prop('selected', true);
+		{foreach key=k item=i from=$iv_b}
+			add_item({$i.id},{$i.tn});
+		{/foreach}
+		{if not $smarty.request.id}
+			add_item(0,{$tn});
+		{/if}
+	</script>
+{/if}
+	

@@ -1,0 +1,127 @@
+<h3>Согласование заявок на проведение АЦ</h3>
+
+
+<p>Вашего согласования ожидают следующие заявки на проведение АЦ:</p>
+
+
+<form target="_self" method="POST" name=form_ac_accept id=form_ac_accept>
+
+<p>
+<input checked="checked" name="wait4myaccept" id="wait4myaccept" value="0" type="radio"> ожидают моего согласования
+<input name="wait4myaccept" id="wait4myaccept" value="1" type="radio"> все
+<script>$("input[name=wait4myaccept][value={$smarty.request.wait4myaccept}]").attr('checked',true);</script>
+</p>
+
+
+<p>
+<input type="submit" name="save" id="save" value="Сохранить">
+<input type="submit" name="refresh" id="refresh" value="Обновить страницу">
+</p>
+
+
+<table border=1 cellpadding=5 cellspacing=0>
+	<tr style="text-align:center;font-weight:bold">
+		<td rowspan=2>Заголовок</td>
+		<td colspan=3>Блок согласования</td>
+	</tr>
+	<tr style="text-align:center;font-weight:bold">
+		<td width=200px>
+				Должность, подразделение, <font style="color:red">согласователь</font>
+				<font style="color:green">статус</font>
+				<font style="color:blue">дата</font>
+		</td>
+		<td width=200px>Мое согласование</td>
+		<td width=200px>Комментарии / Уточнения</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	{if $i.head.current_status eq 464260}{assign var=color value="#FFFF66"}{/if}
+	{if $i.head.current_status eq 464261}{assign var=color value="#66FF66"}{/if}
+	{if $i.head.current_status eq 464262}{assign var=color value="#FFCC99"}{/if}
+	<tr style="background-color:{$color}">
+		<td>
+			<b>Номер:</b> {$i.head.id}<br>
+			<b>Дата создания:</b> {$i.head.created}<br>
+			<b>Создатель:</b> {$i.head.creator_pos_name}, {$i.head.creator_department_name}, <font style="color:red">{$i.head.creator}</font><br>
+			<b>Дата проведения:</b> {$i.head.dt}<br>
+			<b>Место проведения:</b> {$i.head.place|nl2br}<br>
+			<b>Инициатор/Исполнитель:</b> {$i.head.init_pos_name}, {$i.head.init_department_name}, <font style="color:red">{$i.head.init}</font><br>
+			<b>Адресат:</b> {$i.head.recipient_pos_name}, {$i.head.recipient_department_name}, <font style="color:red">{$i.head.recipient}</font><br>
+			<b>Тема:</b> {$i.head.head|nl2br}<br>
+
+			<b>Вакантная позиция 1:</b> {$i.head.vac1_pos}, {$i.head.vac1}<br>
+			<b>Вакантная позиция 2:</b> {$i.head.vac2_pos}, {$i.head.vac2}<br>
+			<b>Вакантная позиция 3:</b> {$i.head.vac3_pos}, {$i.head.vac3}<br>
+
+			<b>ЧОК:</b><br>
+			{foreach key=k1 item=i1 from=$i.comm name=comm}
+				{if $i1.uc_fio neq null}
+				<b>{$smarty.foreach.comm.iteration}.</b> {$i1.uc_fio}<br>
+				{/if}
+			{/foreach}
+
+			<b>Внутренние кандидаты:</b><br>
+			{foreach key=k1 item=i1 from=$i.int name=int}
+				{if $i1.umi_fio neq null}
+				<b>{$smarty.foreach.int.iteration}.</b> {$i1.umi_fio} <b>тест логика:</b> {$i1.mi_logic} <b>тест математика:</b> {$i1.mi_math}<br>
+				{/if}
+			{/foreach}
+
+			<b>Внешние кандидаты:</b><br>
+			{foreach key=k1 item=i1 from=$i.ext name=ext}
+				{if $i1.me_fio neq null}
+				<b>{$smarty.foreach.ext.iteration}.</b> {$i1.me_fio} {$i1.email} <nobr><a target=_blank href="ac_files/{$i1.resume}">{$i1.resume}</a></nobr> <b>тест логика:</b> {$i1.me_logic} <b>тест математика:</b> {$i1.me_math}<br>
+				{/if}
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.data name=rn}
+				<b>{$smarty.foreach.rn.iteration}.</b> {$i1.acceptor_pos_name}, {$i1.acceptor_department_name}, <font style="color:red">{$i1.acceptor_name}</font>
+				<font style="color:green; font-weight:bold">{$i1.accepted_name}</font>
+				{if $i1.accepted_date}<font style="color:blue">{$i1.accepted_date}</font>{/if}
+				<br>
+			{/foreach}
+		</td>
+		<td>
+			{if $i.head.allow_status_change eq 1}
+			<hr>
+			Мое согласование:<br>
+			{foreach key=k2 item=i2 from=$acat}
+				<nobr><input
+					type=radio
+					name="ac_accept[{$i.head.current_accept_id}][accepted]"
+					onclick="
+						$('#ac_accept_failure_{$i.head.current_accept_id}').attr('disabled',{$i2.id}==464262?false:true);
+						{$i2.id}==464262?null:$('#ac_accept_failure_{$i.head.current_accept_id}').val('');
+						"
+					value={$i2.id}
+				>{$i2.name}</nobr><br>
+			{/foreach}
+			<textarea rows=5 cols=20 disabled required name="ac_accept[{$i.head.current_accept_id}][failure]" id="ac_accept_failure_{$i.head.current_accept_id}"></textarea>
+			<script>$("input[name='ac_accept[{$i.head.current_accept_id}][accepted]'][value=464260]").attr('checked',true);</script>
+			<br>
+			<input type="submit" name="save" id="save" value="Сохранить">
+			{/if}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.chat}
+				<font style="color:red">{$i1.chat_time}</font>
+				<font style="color:green">{$i1.chater}:</font>
+				<br>
+				<font style="color:blue">{$i1.text}</font>
+				<br>
+			{/foreach}
+			<textarea rows=5 cols=20 name="ac_accept_chat[{$i.head.id}]"></textarea>
+			<br>
+			<input type="submit" name="add_chat" id="add_chat" value="Добавить">
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+<p>
+<input type="submit" name="save" id="save" value="Сохранить">
+<input type="submit" name="refresh" id="refresh" value="Обновить страницу">
+</p>
+
+</form>
+

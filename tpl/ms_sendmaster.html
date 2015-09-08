@@ -1,0 +1,134 @@
+<h1>Мастер рассылок М-Сервис</h1>
+
+<a href="javascript:void(0);" onclick="add_send_item();">добавить рассылку</a>
+
+<table border=1>
+	<tr style="font-weight:bold">
+		<td rowspan=2>[x]</td>
+		<td rowspan=2>заказчик</td>
+		<td rowspan=2>адресат</td>
+		<td rowspan=2>вид отчета</td>
+		<td colspan=7>частота</td>
+		<td rowspan=2>время</td>
+	</tr>
+	<tr style="font-weight:bold">
+		{foreach key=k item=i from=$week_days}
+		<td>{$i.dwtc}</td>
+		{/foreach}
+	</tr>
+	{foreach key=k item=i from=$list}
+	<tr id="tr_{$i.id}">
+		<td><a href="javascript:void(0);" onclick="del_send_item({$i.id});">[x]</a></td>
+		<td id=td_{$i.id}_ag_id>
+			<select id="ag_id_{$i.id}" onChange="save_item({$i.id},'ag_id',this.value,null,'ms_sendmaster');load_login_list({$i.id});">
+				<option value=0></option>
+				{foreach key=k1 item=i1 from=$list_ag}
+				<option value="{$i1.id}">{$i1.name}</option>
+				{/foreach}
+			</select>
+			<script>$("#ag_id_{$i.id} option[value={$i.ag_id}]").prop('selected', true);</script>
+		</td>
+		<td id=td_{$i.id}_login>
+			<select id="login_{$i.id}" onChange="save_item({$i.id},'login',this.value,null,'ms_sendmaster')">
+				<option value=0></option>
+				{foreach key=k1 item=i1 from=$i.login_list}
+				<option value="{$i1.login}">{$i1.comm}</option>
+				{/foreach}
+			</select>
+			<script>$("#login_{$i.id} option[value='{$i.login}']").prop('selected', true);</script>
+		</td>
+		<td id=td_{$i.id}_report_id>
+			<select id="report_id_{$i.id}" onChange="save_item({$i.id},'report_id',this.value,null,'ms_sendmaster')">
+				<option value=0></option>
+				{foreach key=k1 item=i1 from=$list_rep}
+				<option value="{$i1.id}">{$i1.name}</option>
+				{/foreach}
+			</select>
+			<script>$("#report_id_{$i.id} option[value={$i.report_id}]").prop('selected', true);</script>
+		</td>
+		{foreach key=k1 item=i1 from=$i.days}
+		<td>
+			<div
+				id=td_{$i1.id}_day
+				style="display:inline;"
+			>
+			<input
+				type=checkbox
+				id="day_{$i1.id}"
+				onchange="save_item({$i1.id},'day',(this.checked?{$i1.dw}:null),{$i.id},'ms_sendmaster_days')"
+			>
+			</div>
+			<script>
+				$("#day_{$i1.id}").attr('checked','{$i1.day}'=='{$i1.dw}'?true:false);
+				/*'{$i1.day}'=='{$i1.dw}'?$("#td_{$i1.id}_day").css('background-color','green'):null;*/
+			</script>
+		</td>
+		{/foreach}
+		<td id=td_{$i.id}_time>
+			<select
+				id="time_{$i.id}"
+				onchange="save_item({$i.id},'time',this.value,null,'ms_sendmaster')"
+			>
+				<option></option>
+				{foreach key=kt item=ki from=$times}
+				<option value='{$ki}'>{$ki}</option>
+				{/foreach}
+			</select>
+			<script>$("#time_{$i.id} option[value='{$i.time}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+<script>
+{literal}
+
+function del_send_item(id)
+{
+	save_item(id,'id',id,null,'ms_sendmaster')
+	$('#tr_'+id).remove();
+}
+
+function add_send_item()
+{
+	save_item(null,'id',null,null,'ms_sendmaster',1)
+}
+
+function load_login_list(id)
+{
+	$('#login_'+id).load('?action=ms_sendmaster_login_list&nohead=1&ag='+$('#ag_id_'+id).val());
+}
+
+function save_item(id,field,val,parent,table,reload)
+{
+	$('#td_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	fd.append('table',  table);
+	fd.append('parent',  parent);
+	$.ajax({
+		type: 'POST',
+		url: '?action=ms_sendmaster_save&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			if (reload==1)
+			{
+				location.reload();
+			}
+			else
+			{
+				$('#td_'+id+'_'+field).css('background-color','white');
+			}
+		}
+	});
+}
+
+{/literal}
+</script>
+
+
+

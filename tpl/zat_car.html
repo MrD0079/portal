@@ -1,0 +1,107 @@
+<h3>Расходы на автомобиль</h3>
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr align=center>
+		<td rowspan=2>Дата</td>
+		<td rowspan=2>Место работы</td>
+		<td rowspan=2>Город<br>согласно<br>плану<br>активности</td>
+		<td colspan=2>Кол-во литров</td>
+		<td colspan=2>Общая стоимость</td>
+		<td rowspan=2>Мойка</td>
+		<td rowspan=2>Автосервис</td>
+		<td rowspan=2>Расходы на стоянку</td>
+		<td rowspan=2>Всего расходов</td>
+		<td rowspan=2>Подтверждающий документ</td>
+	</tr>
+	<tr align=center>
+		<td>бензин</td>
+		<td>масло</td>
+		<td>бензин</td>
+		<td>масло</td>
+	</tr>
+	{foreach key=key item=item from=$zat_daily}
+	<tr align=center {if $item.vac_data}bgcolor="yellow"{elseif $item.dw eq 6 or $item.dw eq 7}bgcolor="#ff0000"{/if}>
+		<td>{$item.dm}</td>
+		{if $zat_enabled}
+		<td><input size=15 name="zat_daily_car[{$item.data}][city]" value="{$item.zc_city|escape}"></td>
+		<td>{$item.p_city}</td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][pet_vol]" value="{$item.pet_vol}"></td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][oil_vol]" value="{$item.oil_vol}"></td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][pet_sum]" value="{$item.pet_sum}"></td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][oil_sum]" value="{$item.oil_sum}"></td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][wash]" value="{$item.wash}"></td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][service]" value="{$item.service}"></td>
+		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][parking]" value="{$item.parking}"></td>
+		{else}
+		<td>{$item.zc_city}</td>
+		<td>{$item.p_city}</td>
+		<td>{$item.pet_vol}</td>
+		<td>{$item.oil_vol}</td>
+		<td>{$item.pet_sum}</td>
+		<td>{$item.oil_sum}</td>
+		<td>{$item.wash}</td>
+		<td>{$item.service}</td>
+		<td>{$item.parking}</td>
+		{/if}
+		<td>{$item.zc_total}</td>
+		<td><a target=_blank href="plan_activ_files/{$item.doc}">{$item.doc}</a></td>
+		{assign var=sum_car value=`$sum_car+$item.zc_total`}
+	</tr>
+	{/foreach}
+	<tr align=center>
+		<td colspan=10>Амортизация - {if $amort eq 0}нет{else}да - {$amort*100}%{/if}</td>
+		<td>
+			{$zat_monthly.amort}
+		</td>
+	</tr>
+	{foreach key=key item=item from=$zat_daily_total}
+	{assign var=sum_total value=`$sum_total+$item.zc_total+$zat_monthly.amort`}
+	{if $item.pet_vol neq 0}{assign var=pet_price value=`$item.pet_sum/$item.pet_vol`}{else}{assign var=pet_price value=0}{/if}
+	<tr align=center style="font-weight:bold">
+		<td colspan=3>Итого</td>
+		<td>{$item.pet_vol}</td>
+		<td>{$item.oil_vol}</td>
+		<td>{$item.pet_sum}</td>
+		<td>{$item.oil_sum}</td>
+		<td>{$item.wash}</td>
+		<td>{$item.service}</td>
+		<td>{$item.parking}</td>
+		<td>{$sum_total}</td>
+	</tr>
+	{/foreach}
+	<tr align=center>
+		<td colspan=13>
+			Марка авто: {$car_brand}
+			<br>
+			Расход по паспорту: {$car_rashod}
+			<br>
+			Километраж
+			{if $zat_enabled}
+			Начало
+			<input required class="number_int" size=5 name="zat_monthly[odometr_start]" value={$zat_monthly.odometr_start}>
+			Конец
+			<input required class="number_int" size=5 name="zat_monthly[odometr_end]" value={$zat_monthly.odometr_end}>
+			Разница
+			{$zat_monthly.odometr_delta|default:0}
+			{else}
+			Начало
+				{$zat_monthly.odometr_start|default:0}
+			Конец
+				{$zat_monthly.odometr_end|default:0}
+			Разница
+			{$zat_monthly.odometr_delta|default:0}
+			{/if}
+			<br>
+			Расход фактический, л/100 км: {if $zat_monthly.odometr_delta > 0}{$item.pet_vol/$zat_monthly.odometr_delta*100|num:2}{/if}
+		</td>
+	</tr>
+	<tr align=center>
+		<td colspan=4>Лимит на бензин, л</td>
+		<td>
+			{$limits_current.limit_car_vol}
+		</td>
+		<td colspan=5>Лимит на транспортные расходы</td>
+		<td>
+			{$limits_current.limittrans}
+		</td>
+	</tr>
+</table>

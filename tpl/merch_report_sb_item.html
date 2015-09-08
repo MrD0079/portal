@@ -1,0 +1,46 @@
+<tr id="Product{$smarty.request.id}">
+	{if $sb_item.ok_kk or $sb_item.ok_ms}
+	<td>
+	</td>
+	<td>
+		{$sb_item.product_name_sw}
+	</td>
+	<td>
+		{$sb_item.qty}
+	</td>
+	<td>
+		{$sb_item.comm_name}
+	</td>
+	<td>
+		{$sb_item.srok_god}
+	</td>
+	{else}
+	<td>
+		<a href="javascript:void(0);" onClick="ProductDel({$smarty.request.id});">[x]</a>
+	</td>
+	<td>
+		<select id="valproduct{$smarty.request.id}" onChange="ProductSave({$smarty.request.id},'product',this.value);">
+			<option></option>
+			{foreach key=k item=i from=$products}
+			<option value="{$i.product_id}">{$i.product_name_sw}</option>
+			{/foreach}
+		</select>
+		<script>$('#valproduct{$smarty.request.id} option[value={$sb_item.product}]').prop('selected', true);</script>
+	</td>
+	<td>
+		<input id="valqty{$smarty.request.id}" onChange="ProductSave({$smarty.request.id},'qty',this.value);" size=8 class="number" value="{$sb_item.qty}">
+	</td>
+	<td>
+		<select id="valcomm{$smarty.request.id}" onChange="ProductSave({$smarty.request.id},'comm',this.value);">
+			<option></option>
+			{foreach key=k item=i from=$comm}
+			<option value="{$i.id}">{$i.name}</option>
+			{/foreach}
+		</select>
+		<script>$('#valcomm{$smarty.request.id} option[value={$sb_item.comm}]').prop('selected', true);</script>
+	</td>
+	<td>
+		<input id="valsrok_god{$smarty.request.id}" onChange="ProductSave({$smarty.request.id},'srok_god',this.value);" size=8 class="datepicker" value="{$sb_item.srok_god}">
+	</td>
+	{/if}
+</tr>

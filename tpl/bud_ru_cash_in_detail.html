@@ -1,0 +1,64 @@
+<h3>Отчетный месяц:
+{foreach key=key item=item from=$dt}
+{if $item.sd_c eq $smarty.request.head.dt}{$item.my}{/if}
+{/foreach}
+</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+
+<tr style="font-weight:bold;text-align: center;">
+<td><a href="javascript:void(0)" onclick="javascript:$('#bud_ru_cash_in').submit();">[x]</a></td>
+<td>ред.</td>
+<td>Подразделение</td>
+<td>Дистрибутор</td>
+<td>Регион</td>
+<td>ДБ</td>
+<td>Статья</td>
+<td>ПЛАН, тыс. ден. ед.</td>
+<td>ФАКТ, тыс. ден. ед.</td>
+<td>Комментарии</td>
+<td>Изменено</td>
+<td>Согласовано с дистрибутором</td>
+<td>Комментарий</td>
+</tr>
+
+{foreach key=k item=i from=$pd}
+	{foreach key=k1 item=i1 from=$i.body name=body}{/foreach}
+	{cycle assign='bgcolor' values="#ccffff,#ffffcc"}
+	<tr bgcolor="{$bgcolor}">
+		<td rowspan="{$smarty.foreach.body.total+1}"><input {if $i.ok_db_tn}disabled{/if} name="del_heads[{$i.id}]" type="checkbox"></td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{if not $i.ok_db_tn}<a href="javascript:void(0)" onclick="javascript:fn_change_by_id({$i.id});">ред.</a>{/if}</td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.nd}</td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.fil_name}</td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.db_region}</td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.db_fio}</td>
+		<td style="font-weight:bold">ИТОГО</td>
+		<td style="font-weight:bold">{$i.plan|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i.fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.lu} {$i.lu_fio}</td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.ok_fil_lu}</td>
+		<td rowspan="{$smarty.foreach.body.total+1}">{$i.ok_fil_text}</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.body name=body}
+	<tr bgcolor="{$bgcolor}">
+		<td>{$i1.name}</td>
+		<td>{$i1.plan|default:0|num:3}</td>
+		<td>{$i1.fakt|default:0|num:3}</td>
+		<td>{$i1.text}</td>
+	</tr>
+	{/foreach}
+{/foreach}
+
+<tr style="font-weight: bold;">
+	<td colspan=6 rowspan="1"></td>
+	<td>ИТОГО</td>
+	<td>{$pdt.plan|default:0|num:3}</td>
+	<td>{$pdt.fakt|default:0|num:3}</td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+
+</table>

@@ -1,0 +1,42 @@
+<form target="_self" method="POST" name=fin_plan_year_ok id=fin_plan_year_ok>
+	<input type=hidden name=nets value="{$smarty.request.nets}">
+	<input type=hidden name=calendar_years value="{$smarty.request.calendar_years}">
+	<h2>Согласование</h2>
+	<table>
+		{if $smarty.request.plan_type eq 1}
+		<tr>
+			<td>План по сети согласован: НМ КК</td>
+			<td>
+				<select {if not $is_rmkk}disabled{/if} name="ok_rmkk_tmkk" id="ok_rmkk_tmkk">
+					<option value=0>нет</option><option value=1>да</option>
+				</select>
+			</td>
+		</tr>
+		{/if}
+		<tr>
+			<td>Корректность данных проверена: ФМ</td>
+			<td>
+				<select {if not $is_fin_man}disabled{/if} name="ok_fin_man" id="ok_fin_man">
+					<option value=0>нет</option><option value=1>да</option>
+				</select>
+			</td>
+		</tr>
+		{if $smarty.request.plan_type eq 1}
+		<tr>
+			<td>Утвержден: ЗГДП</td>
+			<td>
+				<select {if not $is_dpu}disabled{/if} name="ok_dpu" id="ok_dpu">
+					<option value=0>нет</option><option value=1>да</option>
+				</select>
+			</td>
+		</tr>
+		{/if}
+	</table>
+	{if $smarty.request.plan_type eq 1}
+	<script>$('#ok_rmkk_tmkk option[value="{$nets_plan_year.ok_rmkk_tmkk}"]').prop('selected', true);</script>
+	<script>$('#ok_dpu option[value="{$nets_plan_year.ok_dpu}"]').prop('selected', true);</script>
+	{/if}
+	<script>$('#ok_fin_man option[value="{$nets_plan_year.ok_fin_man}"]').prop('selected', true);</script>
+	<input value="Сохранить" name="save_year" type="submit">
+</form>
+<hr><br>

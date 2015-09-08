@@ -1,0 +1,174 @@
+<h1>Торговые залы</h1>
+
+
+
+{if not $smarty.request.print}
+
+<a href="?action=akr_tz&print=1&excel=1&filename=Торговые залы">Экспорт в Excel</a>
+
+<form target="_self" method="POST" name=form1 id=form1>
+{if $smarty.request.id}
+<input name=edit_id value={$smarty.request.id}>
+<p><input type=submit name=save value="Сохранить запись"></p>
+{else}
+<p><input type=submit name=add value="Добавить запись"></p>
+{/if}
+<!--
+type=hidden 
+-->
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>Дивизия</td>
+<td>Сеть</td>
+<td>Город</td>
+<td>Адрес</td>
+<td>Контролер от АВК</td>
+<td>Контактное лицо АВК</td>
+<td>Контролер от агенства</td>
+</tr>
+<tr>
+<td>
+<select required name=new[diviz] id=new_diviz>
+<option></option>
+{foreach key=key item=item from=$akr_diviz}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+<script>$('#new_diviz').val({$akr_tz_edit.diviz})</script>
+</td>
+<td>
+<select required name=new[nets] id=new_nets>
+<option></option>
+{foreach key=key item=item from=$akr_nets}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+<script>$('#new_nets').val({$akr_tz_edit.nets})</script>
+</td>
+<td>
+<select required name=new[city] id=new_city>
+<option></option>
+{foreach key=key item=item from=$akr_city}
+<option value={$item.id}>{$item.name}</option>
+{/foreach}
+</select>
+<script>$('#new_city').val({$akr_tz_edit.city})</script>
+</td>
+<td><input name=new[addr] size=70 id=new_addr value="{$akr_tz_edit.addr|escape}"></td>
+<td>
+<select required name=new[contr_avk] id=new_contr_avk>
+<option></option>
+{foreach key=key item=item from=$akr_contr_avk}
+<option value={$item.id}>{$item.fio}</option>
+{/foreach}
+</select>
+<script>$('#new_contr_avk').val({$akr_tz_edit.contr_avk})</script>
+</td>
+<td>
+<select required name=new[cont_avk] id=new_cont_avk>
+<option></option>
+{foreach key=key item=item from=$akr_cont_avk}
+<option value={$item.tn}>{$item.fio}</option>
+{/foreach}
+</select>
+<script>$('#new_cont_avk').val({$akr_tz_edit.cont_avk})</script>
+</td>
+<td>
+<select name=new[contr_ag] id=new_contr_ag>
+<option></option>
+{foreach key=key item=item from=$akr_contr_ag}
+<option value={$item.id}>{$item.fio}</option>
+{/foreach}
+</select>
+<script>$('#new_contr_ag').val({$akr_tz_edit.contr_ag})</script>
+</td>
+</tr>
+</table>
+</form>
+
+<form target="_self" method="POST" name=form_d id=form_d>
+<input type=hidden id=del name=del>
+</form>
+
+<form target="_self" method="POST" name=form_e id=form_e>
+<input type=hidden id=id name=id>
+</form>
+
+
+<form target="_self" method="POST" name=form2 id=form2>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>[x]</td>
+<td>[ред.]</td>
+<td>Дивизия</td>
+<td>Сеть</td>
+<td>Город</td>
+<td>Адрес</td>
+<td>Контролер от АВК</td>
+<td>Контактное лицо АВК</td>
+<td>Контролер от агенства</td>
+<td>Промоутер</td>
+</tr>
+{foreach key=key item=item from=$akr_tz}
+<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+<td><a href="javascript:$('#del').val({$item.id});$('#form_d').submit();">[x]</a></td>
+<td><a href="javascript:$('#id').val({$item.id});$('#form_e').submit();">[ред.]</a></td>
+<td>{$item.diviz_name|escape}</td>
+<td>{$item.nets_name|escape}</td>
+<td>{$item.city_name|escape}</td>
+<td>{$item.addr|escape}</td>
+<td>{$item.cavk_fio|escape}</td>
+<td>{$item.cont_avk_fio|escape}</td>
+<td>{$item.cag_fio|escape}</td>
+<td>
+
+{foreach key=k item=i from=$item.files}
+<div id="uploadOutput_{$i.id}" style="display: inline;">
+<nobr>
+<a href="javascript:void(0);" onclick="
+	$('#uploadOutput_{$i.id}').load('?action=akr_tz_files&nohead=1&fn={$i.fn}');
+	$('#uploadOutput_{$i.id}').remove();
+">[x]</a>
+{$i.fio}
+<a target=_blank href="akr_promo_photo/{$i.fn}"><img height=50px src="akr_promo_photo/{$i.fn}"></a>
+</nobr>
+</div>
+{/foreach}
+<div style="display: inline;" id=photo_list_{$item.id}></div>
+<p><a href="javascript:void(0);" onclick="$iterator++;$('#photo_list_{$item.id}').append($('<div id='+$iterator+'>').load('?action=akr_tz_add_photo&nohead=1&id='+$iterator+'&tz='+'{$item.id}'));$('#'+$iterator).css('display','inline');"><nobr>Добавить фото</nobr></a></p>
+
+
+</td>
+</tr>
+{/foreach}
+</table>
+
+</form>
+
+
+{else}
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>Дивизия</td>
+<td>Сеть</td>
+<td>Город</td>
+<td>Адрес</td>
+<td>Контролер от АВК</td>
+<td>Контактное лицо АВК</td>
+<td>Контролер от агенства</td>
+</tr>
+{foreach key=key item=item from=$akr_tz}
+<tr>
+<td>{$item.diviz_name|escape}</td>
+<td>{$item.nets_name|escape}</td>
+<td>{$item.city_name|escape}</td>
+<td>{$item.addr|escape}</td>
+<td>{$item.cavk_fio|escape}</td>
+<td>{$item.cont_avk_fio|escape}</td>
+<td>{$item.cag_fio|escape}</td>
+</tr>
+{/foreach}
+</table>
+
+{/if}

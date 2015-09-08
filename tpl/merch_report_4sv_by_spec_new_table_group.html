@@ -1,0 +1,213 @@
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+<td></td>
+
+
+<td></td>
+
+<td>Заказчик</td>
+
+
+
+      <td>Артикул</td>
+      <td>Название</td>
+      <td>Марка</td>
+      <td>Ед. измерения</td>
+      <td>Вес, кг</td>
+      <td>Код</td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td>{$item1.text}</td>
+{/foreach}
+	{if not $smarty.request.print}
+      <td>Фотоотчет</td>
+      <td>Задачи по залу</td>
+	{/if}
+<!--<td>Претензия/задача заказчика<br>Ответ/Задача М-Сервис</td>-->
+
+</tr>
+
+
+
+
+{foreach key=k item=i from=$d name=d}
+	{assign var=s1 value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s1 value=`$s1+1`}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s1 value=`$s1+1`}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s1 value=`$s1+1`}
+			{/foreach}
+		{/foreach}
+	{/foreach}
+	<tr style="vertical-align:top;">
+
+
+
+	<td rowspan={$s1+1}>
+		Дата <b>{$i1.head.dt}</b><br>
+		СВ МС <b>{$i1.head.svms_name}</b><br>
+		Маршрут <b>{$i1.head.num}</b><br>
+		Ф.И.О. отв. <b>{$i1.head.fio_otv}</b>
+	</td>
+
+	<td colspan={$smarty.foreach.fields.total+13}></td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+
+
+		{assign var=s2 value=0}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s2 value=`$s2+1`}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s2 value=`$s2+1`}
+			{/foreach}
+		{/foreach}
+
+		{cycle assign=bgcolor values="#ccffff,#ffffcc"}
+
+		<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
+
+		<td rowspan={$s2+1}>
+		Область <b>{$i2.head.tz_oblast}</b><br>
+		Город <b>{$i2.head.city}</b><br>
+		Сеть <b>{$i2.head.net_name}</b><br>
+		Юридическое название ТЗ <b>{$i2.head.ur_tz_name}</b><br>
+		Адрес ТЗ <b>{$i2.head.tz_address}</b>
+		</td>
+
+
+
+
+
+
+
+		<td colspan={$smarty.foreach.fields.total+9} style="text-align:right">
+				{if $i2.head.file_list}
+				{if not $smarty.request.print}
+				<a href="{$i1.head.archive}">Фотоархив</a>
+				{/if}
+				{/if}
+		</td>
+			<!--<td rowspan={$s2+1}>
+			{$i2.head.chat}
+			<textarea rows=5 cols=20 name="chat[{$i1.head.dt}][{$i2.head.kodtp}]"></textarea>
+			<br>
+			<input type=submit name=save value='Добавить Задача'>
+			</td>-->
+		</tr>
+
+
+
+		{assign var=s1 value=0}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+
+			{assign var=s3 value=0}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s3 value=`$s3+1`}
+			{/foreach}
+
+			<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
+			<td rowspan={$s3+1}>{$i3.ag_name}</td>
+			<td colspan={$smarty.foreach.fields.total+6}></td>
+				{if not $smarty.request.print}
+			<td rowspan={$s3+1} style="width:300px;text-align:left">
+				{foreach key=key item=item from=$i2.head.file_list}
+<!--
+				<a target=_blank href="/merch_spec_report_files/{$item.path}/{$item.fn}"><img height=50px src="/merch_spec_report_files/{$item.path}/{$item.fn}"></a><br>
+-->
+
+
+								<table>
+									<tr style="vertical-align:top;">
+										<td>
+											<div class="pics">
+												<a target=_blank href="/merch_spec_report_files/{$item.path}/{$item.fn}">
+													<img src="/merch_spec_report_files/{$item.path}/{$item.fn}" height=50px>
+												</a>
+												<img src="/merch_spec_report_files/{$item.path}/{$item.fn}" class="hov">
+											</div>
+										</td>
+										<td style="width:300px;text-align:left">
+											<a
+											id="load_comments_{$item.msr_file_id}"
+											href="javascript:void(0);"
+											onclick="
+												$('#div_comments_{$item.msr_file_id}').load(
+												'?action=merch_report_4sv_by_spec_new_file_chat&nohead=1&id={$item.msr_file_id}&chat_closed={$item.chat_closed}'
+												);
+												
+											"
+											>Задачи {if $item.c > 0}<font
+												{if $item.last_is_spd eq 1}style="color:green"{/if}
+												{if $item.last_is_spd eq -1}style="color:red"{/if}
+											>({$item.c})</font>{if $item.chat_closed eq 1} - задача закрыта{/if}{/if}</a>
+											<br>
+											<div style="display: inline;" id=div_comments_{$item.msr_file_id}></div>
+										</td>
+									</tr>
+								</table>
+								<hr>
+
+
+
+
+
+				{/foreach}
+			</td>
+										<td rowspan={$s3+1} style="width:300px;text-align:left">
+											<a
+											id="load_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i.head.kodtp}"
+											href="javascript:void(0);"
+											onclick="
+												$('#div_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i.head.kodtp}').load(
+												'?action=merch_chat&nohead=1&dt={$i.head.dt}&ag_id={$i2.head.ag_id}&kod_tp={$i.head.kodtp}&chat_closed={$i2.head.mc_closed}'
+												);
+												
+											"
+											>Задачи {if $i2.head.mc_c > 0}<font
+												{if $i2.head.mc_last_is_spd eq 1}style="color:green"{/if}
+												{if $i2.head.mc_last_is_spd eq -1}style="color:red"{/if}
+											>({$i2.head.mc_c})</font>{if $i2.head.mc_closed eq 1} - задача закрыта{/if}{/if}</a>
+											<br>
+											<div style="display: inline;" id=div_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i.head.kodtp}></div>
+										</td>
+				{/if}
+			</tr>
+
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
+				<td>{$i3.msb_art}</td>
+				<td>{$i3.msb_name}</td>
+				<td>{$i3.msb_brand}</td>
+				<td>{$i3.msb_izm}</td>
+				<td style="text-align:right">{$i3.msb_weight|default:0|num:2}</td>
+				<td>{$i3.msb_kod}</td>
+				{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+				<td style="text-align:center;background-color: rgb(204, 255, 255)">
+				{assign var="field_name" value="msr_`$item1.name`"}
+				{if $item1.tip eq 'float'}{$i3.$field_name|num:2}{/if}
+				{if $item1.tip eq 'text'}{$i3.$field_name|escape}{/if}
+				{if $item1.tip eq 'bool'}{$i3.$field_name}{/if}
+				</td>
+				{/foreach}
+				</tr>
+			{/foreach}
+		{/foreach}
+	{/foreach}
+{/foreach}
+	<tr style="text-align: center;font-weight:bold">
+		<td colspan="7" style="">ИТОГО</td>
+		<td style="text-align:right">{$rb_total.msb_weight|default:0|num:2}</td>
+		<td></td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td style="text-align:center">
+{assign var="field_name" value="msr_`$item1.name`"}
+{if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
+{if $item1.tip eq 'text'}{$rb_total.$field_name|escape}{/if}
+{if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}
+</td>
+{/foreach}
+	</tr>
+</table>
+<br>

@@ -1,0 +1,27 @@
+<table id=tprob_test_{$smarty.request.id} border=1 cellpadding=3 cellspacing=0>
+	<tbody>
+		{if $smarty.request.id eq 0}
+		{/if}
+		<tr>
+			<td>
+				название <input size=50 id=name_{$smarty.request.id}>
+				длительность,сек <input size=8 class="number_int" id=test_len_{$smarty.request.id}>
+				комментарий <textarea id=comm_{$smarty.request.id}></textarea>
+				<a href="javascript:void(0);" onClick="add_prob_test({$smarty.request.id});">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$prob_test}
+			<tr id=prob_test_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_prob_test({$i.id})">[x]</a>
+					название <input id=d_{$i.id}_name size=50 value="{$i.name}" onChange="save_prob_test({$i.id},'name',this.value);">
+					длительность,сек <input id=d_{$i.id}_test_len size=8 class="number_int" value="{$i.test_len}" onChange="save_prob_test({$i.id},'test_len',this.value);">
+					комментарий <textarea id=d_{$i.id}_comm onChange="save_prob_test({$i.id},'comm',this.value);">{$i.comm|escape}</textarea>
+					<a href='javascript:void(0);' onClick="show_q_items({$i.id})">Вопросы теста</a>
+					<a href='javascript:void(0);' onClick="copy_prob_test({$i.id},{$smarty.request.id})">Создать копию</a>
+					<div style="margin-left:50px" id=detail_{$i.id}></div>
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>

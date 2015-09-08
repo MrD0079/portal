@@ -1,0 +1,96 @@
+<h1>Отчет по анкете - ЯЗЫКИ</h1>
+
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form_report id=form_report>
+
+Уровни владения:
+<a href="javascript:void(0);" onClick="$('.lang_level').prop('checked',true);">[+]</a>
+<a href="javascript:void(0);" onClick="$('.lang_level').prop('checked',false);">[-]</a>
+<table border=0>
+	<tr style="vertical-align:top">
+		{foreach key=k item=i from=$anketa_lang_level}
+			<td>
+				<input
+					class="lang_level"
+					type=checkbox
+					id="lang_level_{$i.id}"
+					name="lang_level[{$i.id}]"
+					value="{$i.id}"
+				>{$i.name}
+			</td>
+		{/foreach}
+	</tr>
+</table>
+
+<script>
+{foreach key=k item=i from=$smarty.request.lang_level}
+$('#lang_level_{$i}').attr('checked',true);
+{/foreach}
+</script>
+
+Языки:
+<a href="javascript:void(0);" onClick="$('.lang').prop('checked',true);">[+]</a>
+<a href="javascript:void(0);" onClick="$('.lang').prop('checked',false);">[-]</a>
+
+<table border=0>
+	<tr style="vertical-align:top">
+		{foreach key=k item=i from=$lang name=lang}
+			<td>
+				<input
+					class="lang"
+					type=checkbox
+					id="lang_{$i.id}"
+					name="lang[{$i.id}]"
+					value="{$i.id}"
+				>{$i.name}
+			</td>
+			{if $smarty.foreach.lang.iteration%4 eq 0}</tr><tr>{/if}
+		{/foreach}
+	</tr>
+</table>
+
+<script>
+{foreach key=k item=i from=$smarty.request.lang}
+$('#lang_{$i}').attr('checked',true);
+{/foreach}
+</script>
+
+{/if}
+
+{if not $smarty.request.print}
+	<p><a href="?action=anketa_lang_report&print=1&excel=1&generate=1&filename=Отчет по анкете - ЯЗЫКИ">Экспорт в Excel</a></p>
+	<p>
+		<input type=submit name=generate id=generate value="Построить отчет">
+	</p>
+{/if}
+
+{if $smarty.request.generate}
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО</td>
+		<td>Должность</td>
+		<td>Опыт работы в компании, месяцев</td>
+		<td>Рук-ль</td>
+		<td>Регион</td>
+		<td>Язык</td>
+		<td>Степень владения</td>
+	</tr>
+	{foreach key=k item=i from=$list name=list}
+	<tr>
+		<td>{$smarty.foreach.list.iteration}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.opit}</td>
+		<td>{$i.parent_fio}</td>
+		<td>{$i.region_name}</td>
+		<td>{$i.lang_name}</td>
+		<td>{$i.lang_level_name}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}
+
+{if not $smarty.request.print}
+</form>
+{/if}

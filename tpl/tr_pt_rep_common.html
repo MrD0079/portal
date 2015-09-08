@@ -1,0 +1,144 @@
+<h3>Отчет по тренингам ЭТА</h3>
+
+<form target="_self" method="POST" name=form_tr_pt_rep_common id=form_tr_pt_rep_common>
+
+<p>
+	<b>Дата с</b>
+	<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+	<b>по</b>
+	<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+	<script>
+		$('#dates_list1').val('{$smarty.request.dates_list1}');
+		$('#dates_list2').val('{$smarty.request.dates_list2}');
+	</script>
+</p>
+
+<p>
+	<b>Должность</b>
+	<table>
+		<tr>
+		{foreach key=k item=i from=$select_pos name=select_pos}
+			<td>
+				<input
+					{foreach key=k1 item=i1 from=$smarty.request.sp}
+						{if $i.pos_id eq $i1}checked{/if}
+					{/foreach}
+					{if not $smarty.request.sp}checked{/if}
+					class="sp" name="sp[]" type=checkbox value="{$i.pos_id}"
+				>
+				{$i.pos_name}
+			</td>
+			{if $smarty.foreach.select_pos.iteration%4 eq 0}</tr><tr>{/if}
+		{/foreach}
+		</tr>
+	</table>
+{literal}
+<a href="javascript:void(0);" onclick="$('.sp:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.sp:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+{/literal}
+</p>
+
+<p>
+	<b>Тренинг</b>
+	<table>
+		<tr>
+		{foreach key=k item=i from=$select_tr name=select_tr}
+			<td>
+				<input
+					{foreach key=k1 item=i1 from=$smarty.request.st}
+						{if $i.id eq $i1}checked{/if}
+					{/foreach}
+					{if not $smarty.request.st}checked{/if}
+					class="st" name="st[]" type=checkbox value="{$i.id}"
+				>
+				{$i.name}
+			</td>
+			{if $smarty.foreach.select_tr.iteration%4 eq 0}</tr><tr>{/if}
+		{/foreach}
+		</tr>
+	</table>
+{literal}
+<a href="javascript:void(0);" onclick="$('.st:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.st:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+{/literal}
+</p>
+
+<p>
+<input type="submit" name="select" id="select" value="Построить отчет">
+</p>
+
+{if $smarty.request.select}
+
+<table border=1>
+
+	<tr>
+		<td></td>
+		{foreach key=k item=i from=$select_pos name=select_pos}
+			{foreach key=k1 item=i1 from=$smarty.request.sp}
+				{if $i.pos_id eq $i1}
+					<td>
+						{$i.pos_name}
+						{foreach key=k2 item=i2 from=$tbl_top}
+							{if $i.pos_id eq $i2.pos_id}
+								<br>(всего {$i2.cnt})
+							{/if}
+						{/foreach}
+					</td>
+				{/if}
+			{/foreach}
+		{/foreach}
+		<td style="font-weight:bold;text-align:center">Всего</td>
+	</tr>
+	{foreach key=k0 item=i0 from=$select_tr name=select_tr}
+		{foreach key=k1 item=i1 from=$smarty.request.st}
+			{if $i0.id eq $i1}
+				<tr>
+					<td>
+						{$i0.name}
+					</td>
+					{foreach key=k item=i from=$select_pos name=select_pos}
+						{foreach key=k1 item=i1 from=$smarty.request.sp}
+							{if $i.pos_id eq $i1}
+								<td style="text-align:center">
+									{foreach key=k2 item=i2 from=$tbl_cells}
+										{if $i0.id eq $i2.id and $i.pos_id eq $i2.pos_id}
+											<a target=_blank href="?action=tr_pt_rep_detail&tr={$i2.id}&pos={$i2.pos_id}">{$i2.cnt}</a>
+										{/if}
+									{/foreach}
+								</td>
+							{/if}
+						{/foreach}
+					{/foreach}
+								<td style="font-weight:bold;text-align:center">
+									{foreach key=k2 item=i2 from=$tbl_right}
+										{if $i0.id eq $i2.id}
+											<a target=_blank href="?action=tr_pt_rep_detail&tr={$i2.id}&pos={$pos_all}">{$i2.cnt}</a>
+										{/if}
+									{/foreach}
+								</td>
+				</tr>
+			{/if}
+		{/foreach}
+	{/foreach}
+	<tr>
+		<td style="font-weight:bold;text-align:center">Всего</td>
+		{foreach key=k item=i from=$select_pos name=select_pos}
+			{foreach key=k1 item=i1 from=$smarty.request.sp}
+				{if $i.pos_id eq $i1}
+					<td style="font-weight:bold;text-align:center">
+						{foreach key=k2 item=i2 from=$tbl_bottom}
+							{if $i.pos_id eq $i2.pos_id}
+								<a target=_blank href="?action=tr_pt_rep_detail&tr={$tr_pt_all}&pos={$i2.pos_id}">{$i2.cnt}</a>
+							{/if}
+						{/foreach}
+					</td>
+				{/if}
+			{/foreach}
+		{/foreach}
+		<td style="font-weight:bold;text-align:center"><a target=_blank href="?action=tr_pt_rep_detail&tr={$tr_pt_all}&pos={$pos_all}">{$tbl_total}</a></td>
+	</tr>
+</table>
+
+{/if}
+
+</form>

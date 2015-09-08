@@ -1,0 +1,91 @@
+{if not $smarty.request.print}
+
+{include file="bud_svod_filter.html"}
+{include file="bud_svod_filter_fil.html"}
+{include file="bud_svod_filter_cluster.html"}
+
+<table border=0>
+	<tr style="vertical-align: top;">
+		<td>
+			<input onClick="$('#ok_bonus').val(this.value)" type=radio name="ok_bonus" value=1 checked>все ТП с торговыми условиями<br>
+			<input onClick="$('#ok_bonus').val(this.value)" type=radio name="ok_bonus" value=2>планируется выдача бонуса<br>
+			<script>
+				$("input[name=ok_bonus][value={$smarty.request.ok_bonus}]").attr('checked',true);
+			</script>
+		</td>
+		<td>
+			<input onClick="$('#fakt_gt_plan').val(this.value)" type=radio name="fakt_gt_plan" value=1 checked>все ТП<br>
+			<input onClick="$('#fakt_gt_plan').val(this.value)" type=radio name="fakt_gt_plan" value=2>Бонус фактический превышает расчетный<br>
+			<script>
+				$("input[name=fakt_gt_plan][value={$smarty.request.fakt_gt_plan}]").attr('checked',true);
+			</script>
+		</td>
+		<td>
+			<input onClick="$('#cash').val(this.value)" type=radio name="cash" value=1 checked>все<br>
+			<input onClick="$('#cash').val(this.value)" type=radio name="cash" value=2>бонус по форме 2<br>
+			<input onClick="$('#cash').val(this.value)" type=radio name="cash" value=3>бонус товаром<br>
+			<script>
+				$("input[name=cash][value={$smarty.request.cash}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+</table>
+
+<p><a href="javascript:void(0);" onClick="load_tp();">Показать список ТП</a></p>
+
+{/if}
+
+<input type=hidden id=exp_list_without_ts name=exp_list_without_ts value='{$smarty.request.exp_list_without_ts}'>
+<input type=hidden id=exp_list_only_ts name=exp_list_only_ts value='{$smarty.request.exp_list_only_ts}'>
+<input type=hidden id=eta_list name=eta_list value='{$smarty.request.eta_list}'>
+<input type=hidden id=ok_bonus name=ok_bonus value='{$smarty.request.ok_bonus}'>
+<input type=hidden id=fil name=fil value='{$smarty.request.fil}'>
+<input type=hidden id=clusters name=clusters value='{$smarty.request.clusters}'>
+<input type=hidden id=fakt_gt_plan name=fakt_gt_plan value='{$smarty.request.fakt_gt_plan}'>
+<input type=hidden id=cash name=cash value='{$smarty.request.cash}'>
+<input type=hidden id=print name=print value='{$smarty.request.print}'>
+
+<div id="tp" style="display: inline;"></div>
+
+<script>
+v_dt='{$smarty.request.dt}';
+{literal}
+function load_tp()
+{
+x=loadwait_show('tp');
+$('#tp').load('?action=bud_svod_tus_tp&nohead=1',
+{
+	print: $('#print').val(),
+	eta_list: $('#eta_list').val(),
+	ok_bonus: $('#ok_bonus').val(),
+	cash: $('#cash').val(),
+	fakt_gt_plan: $('#fakt_gt_plan').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	exp_list_only_ts: $('#exp_list_only_ts').val(),
+	fil: $('#fil').val(),
+	clusters: $('#clusters').val(),
+	dt: v_dt
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+
+{/literal}
+
+{if $smarty.request.print}
+$("#exp_list_without_ts").val("{$smarty.request.exp_list_without_ts}");
+$("#exp_list_only_ts").val("{$smarty.request.exp_list_only_ts}");
+$("#eta_list").val("{$smarty.request.eta_list}");
+$("#ok_bonus").val("{$smarty.request.ok_bonus}");
+$("#fakt_gt_plan").val("{$smarty.request.fakt_gt_plan}");
+$("#cash").val("{$smarty.request.cash}");
+$("#fil").val("{$smarty.request.fil}");
+$("#clusters").val("{$smarty.request.clusters}");
+//load_tp();
+{/if}
+
+</script>

@@ -1,0 +1,216 @@
+<table style="text-align: left;" border="1">
+	<tr style="text-align:center;font-weight:bold;">
+		<td rowspan=2>Маршрут</td>
+		<td rowspan=2>ФИО отв.</td>
+		<td rowspan=2>Факт, дн</td>
+		<td rowspan=2>Факт GPS, дн</td>
+		<td rowspan=2>Разница</td>
+		<td rowspan=2>Обоснование разницы</td>
+		<td rowspan=2>Продолжит рд, ч</td>
+		<td rowspan=2>План, рд</td>
+		{if not $smarty.request.print}
+		<td rowspan=2>Табель</td>
+		{/if}
+		<td colspan=3>Компенсация транспортных</td>
+		<td rowspan=2>Обоснование</td>
+		<td rowspan=2>Премия</td>
+		<td rowspan=2>Штраф</td>
+		<td rowspan=2>Обоснование</td>
+	</tr>
+	<tr style="text-align:center;font-weight:bold;">
+		<td>Текущий</td>
+		<td>Прошлый</td>
+		<td>Разница</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	{if $tn neq $i.tn}
+		{assign var=disabled value='disabled1'}
+	{/if}
+	{if $ok_nmms}
+		{assign var=disabled value='disabled'}
+	{else}
+		{assign var=enabled value='enabled'}
+	{/if}
+	<tr style="text-align: center;" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$i.rh_num}</td>
+		<td>{$i.fio_otv}</td>
+		<td>{$i.fakt|num:2}</td>
+		<td>{$i.fakt_gps|num:2}</td>
+		<td>{$i.delta|num:2}</td>
+		<td id=td_{$i.id}_justification>
+			{if not $smarty.request.print and $enabled}
+				<textarea onChange="save_tabel({$i.id},'justification',this.value)">{$i.justification}</textarea>
+			{else}
+				{$i.justification}
+			{/if}
+		</td>
+		<td id=td_{$i.id}_work_hours>
+			{if not $smarty.request.print and $enabled}
+				<select id=select_work_hours_{$i.id} onChange="save_tabel({$i.id},'work_hours',this.value)">
+					<option></option>
+					<option value=8>8</option>
+					<option value=12>12</option>
+				</select>
+				<script>$('#select_work_hours_{$i.id} option[value={$i.work_hours}]').prop('selected', true);</script>
+			{else}
+				{$i.work_hours}
+			{/if}
+		</td>
+		<td id=td_{$i.id}_plan_work_days>
+			{if not $smarty.request.print and $enabled}
+				<input class="number" value="{$i.plan_work_days}" size=3 onChange="save_tabel({$i.id},'plan_work_days',this.value)">
+			{else}
+				{$i.plan_work_days|num:2}
+			{/if}
+		</td>
+		{if not $smarty.request.print}
+		<td>
+			<table style="border: 1px dotted; text-align:center">
+				<tr>
+					{foreach key=rbck item=rbci from=$days}
+					<td style="border: 1px dotted; background-color:#FFCC33;"><b>{$rbci.dwtc}</b></td>
+					{/foreach}
+				</tr>
+				<tr>
+					{foreach key=k2 item=i2 from=$i.detail name=i1}
+						{if $i2.dm eq 1}
+						{section name=foo start=1 loop=$i2.dw step=1}
+						<td style="border: 1px dotted;">
+						</td>
+						{/section}
+						{/if}
+						<td style="border: 1px dotted; text-align: right">
+							<table style="text-align:center" border=0>
+								<tr>
+									<td style="width:30px;">{$i2.dm}
+									</td>
+									<td id=td_{$i.id}_{$i2.dm}_hours>
+										{if not $smarty.request.print and $enabled}
+											<input
+											id=input_{$i.id}_{$i2.dm}_hours
+											{if $i2.hours > 24}style="background-color:yellow;"{/if}
+											{$disabled}
+											class="number"
+											value="{$i2.hours}"
+											size=3
+											onChange="
+											save_tabel_days({$i.id},{$i2.dm},'hours',this.value);
+											(this.value>24.0)
+											?
+											$('#input_{$i.id}_{$i2.dm}_hours').css('background-color','yellow')
+											:
+											$('#input_{$i.id}_{$i2.dm}_hours').css('background-color','white')
+											;
+											">
+										{else}
+											<b>{$i2.hours|num:2}</b>
+										{/if}
+									</td>
+								</tr>
+							</table>
+						</td>
+					{if $i2.dw eq 7}
+					</tr>
+					<tr>
+					{/if}
+					{/foreach}
+				</tr>
+			</table>
+		</td>
+		{/if}
+		<td id=td_{$i.id}_ktt>
+			{if not $smarty.request.print and $enabled}
+				<input class="number_int" value="{$i.ktt}" size=3 onChange="save_tabel({$i.id},'ktt',this.value)">
+			{else}
+				{$i.ktt}
+			{/if}
+		</td>
+		<td id=td_{$i.id}_ktp>
+			{if not $smarty.request.print and $enabled}
+				<input class="number_int" value="{$i.ktp}" size=3 onChange="save_tabel({$i.id},'ktp',this.value)">
+			{else}
+				{$i.ktp}
+			{/if}
+		</td>
+		<td>{$i.ktdelta}</td>
+		<td id=td_{$i.id}_kto>
+			{if not $smarty.request.print and $enabled}
+				<textarea onChange="save_tabel({$i.id},'kto',this.value)">{$i.kto}</textarea>
+			{else}
+				{$i.kto}
+			{/if}
+		</td>
+		<td id=td_{$i.id}_bonus>
+			{if not $smarty.request.print and $enabled}
+				<input class="number_int" value="{$i.bonus}" size=3 onChange="save_tabel({$i.id},'bonus',this.value)">
+			{else}
+				{$i.bonus}
+			{/if}
+		</td>
+		<td id=td_{$i.id}_penalty>
+			{if not $smarty.request.print and $enabled}
+				<input class="number_int" value="{$i.penalty}" size=3 onChange="save_tabel({$i.id},'penalty',this.value)">
+			{else}
+				{$i.penalty}
+			{/if}
+		</td>
+		<td id=td_{$i.id}_obosn>
+			{if not $smarty.request.print and $enabled}
+				<textarea onChange="save_tabel({$i.id},'obosn',this.value)">{$i.obosn}</textarea>
+			{else}
+				{$i.obosn}
+			{/if}
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+{if not $smarty.request.print}
+
+<script>
+{literal}
+
+function save_tabel(head_id,field,val)
+{
+$('#td_'+head_id+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('head_id', head_id);
+fd.append('field', field);
+fd.append('val', val);
+$.ajax({
+ type: 'POST',
+ url: '?action=ms_tabel_save&nohead=1',
+ data: fd,
+ processData: false,
+ contentType: false,
+ success: function(data) {
+ $('#td_'+head_id+'_'+field).css('background-color','white');
+ }
+});
+}
+
+function save_tabel_days(head_id,day_num,field,val)
+{
+$('#td_'+head_id+'_'+day_num+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('head_id', head_id);
+fd.append('day_num', day_num);
+fd.append('field', field);
+fd.append('val', val);
+$.ajax({
+ type: 'POST',
+ url: '?action=ms_tabel_days_save&nohead=1',
+ data: fd,
+ processData: false,
+ contentType: false,
+ success: function(data) {
+$('#td_'+head_id+'_'+day_num+'_'+field).css('background-color','white');
+ }
+});
+}
+
+
+{/literal}
+</script>
+
+{/if}

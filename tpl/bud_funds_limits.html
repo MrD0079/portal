@@ -1,0 +1,215 @@
+<h1>Лимит по фондам</h1>
+
+<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+	<p>
+		<select name=month_list id=month_list onChange="$('#form_report').submit();">
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#month_list').val('{$smarty.request.month_list}');</script>
+	</p>
+</form>
+
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td rowspan=2>ФИО<br>ДБ</td>
+		<td rowspan=2>Список<br>привязанных<br>филиалов</td>
+		<td rowspan=2 style="background-color: rgb(255, 204, 153);">План продаж<br>на месяц<br>по ДБ,<br>тыс. {$valuta}</td>
+		{foreach key=k item=i from=$f_list}
+		<td colspan=8 style="border-left: 3px solid">{$i.name}</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold; text-align:center">
+		{foreach key=k item=i from=$f_list}
+		<td style="border-left: 3px solid">ПЛАН нац. активности,<br>тыс. {$valuta}</td>
+		<td>ПЛАН нац. активности,<br>%</td>
+		<td>ПЛАН лок. активности,<br>тыс. {$valuta}</td>
+		<td>ПЛАН лок. активности,<br>%</td>
+		<td>ИТОГО ПЛАН,<br>тыс. {$valuta}</td>
+		<td>ФАКТ,<br>тыс. {$valuta}</td>
+		<td>ФАКТ,<br>%</td>
+		<td>% от продаж</td>
+		{/foreach}
+	</tr>
+	{foreach key=k item=i from=$b}
+	<tr>
+		<td>{$i.db_fio}</td>
+		<td>{$i.fil_list}</td>
+		<td style="background-color: rgb(255, 204, 153); text-align:right">
+			<input size=8 class="number3" id=v_plan{$i.db} value="{$i.plan}"
+				onChange="
+					save('b','plan',this.value,{$i.db},'');
+					save('b','db_fio','{$i.db_fio}','{$i.db}','');
+					save('b','fil_list','{$i.fil_list|escape}','{$i.db}','');
+				"
+			>
+		</td>
+		{foreach key=k1 item=i1 from=$i.detail}
+		<td style="text-align:right; border-left: 3px solid">
+			<input class="number3" size=10 id=v_plan_val{$i.db}{$i1.id} value="{$i1.plan_val}"
+				onChange="save('f','plan_val',this.value,{$i.db},{$i1.id});"
+			>
+		</td>
+		<td style="text-align:right">
+			<input class="number" size=5 id=v_plan_perc{$i.db}{$i1.id} value="{$i1.plan_perc}"
+				onChange="save('f','plan_perc',this.value,{$i.db},{$i1.id});"
+			>
+		</td>
+		<td style="text-align:right">
+			<input class="number3" size=10 id=v_planl_val{$i.db}{$i1.id} value="{$i1.planl_val}"
+				onChange="save('f','planl_val',this.value,{$i.db},{$i1.id});"
+			>
+		</td>
+		<td style="text-align:right">
+			<input class="number" size=5 id=v_planl_perc{$i.db}{$i1.id} value="{$i1.planl_perc}"
+				onChange="save('f','planl_perc',this.value,{$i.db},{$i1.id});"
+			>
+		</td>
+		<td style="text-align:right" id=v_plan_total{$i.db}{$i1.id}>{$i1.plan_total|num:3}</td>
+		<td style="text-align:right">{$i1.fakt_val|num:3}</td>
+		<td style="text-align:right" id=v_fakt_perc{$i.db}{$i1.id}>{$i1.fakt_perc|num:3}</td>
+		<td style="text-align:right" id=v_sales_perc{$i.db}{$i1.id}>{$i1.sales_perc|num:3}</td>
+		{/foreach}
+	</tr>
+	{/foreach}
+</table>
+
+<p><div id="total"></div></p>
+
+<p><div id="ok"></div></p>
+
+<p id=v_ok_traid>
+Планирование фондов завершено:
+{if (($is_traid and $smarty.request.kk eq 0) or ($is_traid_kk and $smarty.request.kk eq 1)) and not $h.ok_dpu}
+<input type=checkbox
+	{if $h.ok_traid}checked{/if}
+	onChange="
+		save('h','ok_traid',this.checked?1:0,'','');
+		save('h','ok_traid_fio',this.checked?'{$fio}':'','','');
+		$('input').attr('disabled',this.checked);
+	"
+>
+{/if}
+<b>{$h.ok_traid_lu} {$h.ok_traid_fio}</b>
+</p>
+
+<p id=v_ok_dpu>
+Подтверждение ДП:
+{if $is_dpu}
+<input type=checkbox
+	{if $h.ok_dpu}checked{/if}
+	onChange="
+		{foreach key=k1 item=i1 from=$f}
+		save('ft','plan_val',this.checked?$('#hidden_plan_val_{$i1.id}').val():'','',{$i1.id});
+		{/foreach}
+		save('h','ok_dpu',this.checked?1:0,'','');
+		save('h','ok_dpu_fio',this.checked?'{$fio}':'','','');
+	"
+>
+{/if}
+<b>{$h.ok_dpu_lu} {$h.ok_dpu_fio}</b>
+</p>
+
+<script>
+var kk='{$smarty.request.kk}';
+var dt='{$smarty.request.sd}';
+{literal}
+
+function save(table,field,val,db,fund)
+{
+	//alert ('#v_'+field+db+fund);
+	$('#v_'+field+db+fund).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('table',  table);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	fd.append('db',  db);
+	fd.append('fund',  fund);
+	fd.append('kk',  kk);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_funds_limits&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#ok').html(''+data+'');
+			if (fund=='')
+			{
+				{/literal}
+				{foreach key=k item=i from=$f_list}
+					get_val('plan_total',db,{$i.id});
+					get_val('fakt_perc',db,{$i.id});
+					get_val('sales_perc',db,{$i.id});
+				{/foreach}
+				{literal}
+			}
+			else
+			{
+				get_val('plan_total',db,fund);
+				get_val('fakt_perc',db,fund);
+				get_val('sales_perc',db,fund);
+			}
+			$('#v_'+field+db+fund).css('background-color','white');
+			load_total();
+		}
+	});
+}
+
+function load_total()
+{
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('kk',  kk);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_funds_limitst&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#total').html(''+data+'');
+		}
+	});
+}
+
+load_total();
+
+function get_val(field,db,fund)
+{
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('field',  field);
+	fd.append('db',  db);
+	fd.append('fund',  fund);
+	fd.append('kk',  kk);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_funds_limits_get_val&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#v_'+field+db+fund).html(''+data+'');
+		}
+	});
+}
+
+{/literal}
+
+{if
+	not
+	(
+		($is_traid and $smarty.request.kk eq 0)
+			or
+		($is_traid_kk and $smarty.request.kk eq 1)
+	)
+	and
+	not $is_admin
+}
+$('input:text').attr('disabled',true);
+{/if}
+
+</script>

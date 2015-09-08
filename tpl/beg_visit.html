@@ -1,0 +1,117 @@
+<h1>Бегунок - Поле - Шаг 1. Создание визита</h1>
+
+<form name=f1 id=f1 target=_self method=post enctype="multipart/form-data" action="?action=beg_visit_2">
+
+
+<p>
+<input type=hidden name=tp_kod id=tp_kod>
+</p>
+
+
+<p>
+Выберите дату визита <input id=dt name=dt class="datepicker" value="{$smarty.request.dt}" size=8 onChange="
+	load_tp_select_list();
+	load_visit_list();
+	$('#find_string').val('');
+	$('#tp_find_list').text('');
+	$('#x1').click();
+">
+</p>
+
+
+<p>
+Выбор ТП:
+</p>
+
+
+
+<p>
+<input
+	type=radio
+	id=x1
+	name=x
+	onclick="
+		$('#tp_select_list').attr('disabled',false);
+		$('#find_string').attr('disabled',true);
+		$('.tp_kod_radio').attr('disabled',true);
+		$('#tp_kod').val($('#tp_select_list').val());
+	"
+	checked
+>
+Точное название из базы
+<select required onchange="$('#tp_kod').val(this.value);" id=tp_select_list></select>
+</p>
+
+<p>
+<input
+	type=radio
+	id=x2
+	name=x
+	onclick="
+		$('#tp_select_list').attr('disabled',true);
+		$('#find_string').attr('disabled',false);
+		$('.tp_kod_radio').attr('disabled',false);
+		$('#tp_kod').val(
+			$('input:radio[name=tp_kod_radio]:checked').val()
+		);
+	"
+>
+Поиск по ключевой фразе
+<input required size=80 type=text name=find_string id=find_string disabled onkeyup="load_tp_find_list();">
+</p>
+
+{literal}
+<script>
+function load_tp_select_list()
+{
+	$('#dt').attr('disabled',true);
+	$('#tp_select_list').load('?action=beg_visit_tp_select_list&nohead=1&dt='+$('#dt').val(),function() {
+		
+		$('#dt').attr('disabled',false);
+	});
+}
+function load_tp_find_list()
+{
+	if ($('#find_string').attr('disabled')==true) {$('#tp_find_list').text('');return;}
+	if ($('#find_string').val()=='') {$('#tp_find_list').text('');return;}
+	if ($('#find_string').val().length<3) {$('#tp_find_list').text('');return;}
+	var s=$("#f1").serialize();
+	$('#tp_find_list').load('?action=beg_visit_tp_find_list&nohead=1&'+s,function() {
+		
+	});
+}
+function load_visit_list()
+{
+	$('#dt').attr('disabled',true);
+	$('#visit_list').load('?action=beg_visit_visit_list&nohead=1&dt='+$('#dt').val(),function() {
+		
+		$('#dt').attr('disabled',false);
+	});
+}
+</script>
+{/literal}
+
+
+
+
+
+
+<div id=tp_find_list></div>
+
+
+<p>
+<input type=submit name=next value="Создать визит">
+</p>
+
+
+<div id=visit_list></div>
+
+</form>
+
+
+
+<script>
+load_tp_select_list();
+load_tp_find_list();
+load_visit_list();
+</script>

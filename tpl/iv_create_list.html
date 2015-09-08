@@ -1,0 +1,46 @@
+<tr id=list_{$id} {if $smarty.request.tn eq $tn or $body_item.tn eq $tn}bgcolor=lightgreen{/if}>
+	<td>
+		{if $smarty.request.tn eq $tn or $body_item.tn eq $tn or $smarty.request.id}
+			{$body_item.fio}
+			{if not $smarty.request.id}
+				<input type=hidden name=data[{$id}][tn] value={$tn}>
+			{/if}
+		{else}
+			<a href='javascript:void(0);' onClick="del_item({$id})">[x]</a>
+			<select required name=data[{$id}][tn] id=data_{$id}_tn>
+				<option></option>
+				{foreach key=key item=item from=$list}
+				<option value={$item.id}>{$item.fio}</option>
+				{/foreach}
+			</select>
+		{/if}
+	</td>
+	<td>
+		{if $smarty.request.tn eq $tn or $body_item.tn eq $tn}
+		<textarea rows=6 cols=40 required name=data[{$id}][strengths] id=data_{$id}_strengths>{$body_item.strengths}</textarea>
+		{else}
+		{$body_item.strengths|nl2br}
+		{/if}
+	</td>
+	<td>
+		{if $smarty.request.tn eq $tn or $body_item.tn eq $tn}
+		<textarea rows=6 cols=40 required name=data[{$id}][weaknesses] id=data_{$id}_weaknesses>{$body_item.weaknesses}</textarea>
+		{else}
+		{$body_item.weaknesses|nl2br}
+		{/if}
+	</td>
+	<td>
+		{if $smarty.request.tn eq $tn or $body_item.tn eq $tn}
+			<select required name=data[{$id}][accepted] id=data_{$id}_accepted>
+				{foreach key=k1 item=i1 from=$iv_st}
+				<option value={$i1.id}>{$i1.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#data_{$id}_accepted option[value={$body_item.accepted}]').prop('selected', true);</script>
+		{else}
+			{foreach key=key item=item from=$iv_st}
+				{if $body_item.accepted eq $item.id}{$item.name}{/if}
+			{/foreach}
+		{/if}
+	</td>
+</tr>

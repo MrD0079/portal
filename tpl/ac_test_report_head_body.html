@@ -1,0 +1,83 @@
+
+<table border=1 style="text-align:center">
+
+<tr style="text-align: center; font-weight:bold">
+<td style="">Участник</td>
+<td style="">Тип</td>
+<td style="">Должность</td>
+<td style="">Логин/пароль</td>
+<td style=" background-color: rgb(204, 255, 255);">Тест "Логика"</td>
+<td style=" background-color: rgb(204, 255, 255);">Результат теста "Логика": балл / % / дата</td>
+<td style=" background-color: rgb(204, 255, 255);">Ошибки в ответах (по последнему тестированию!)</td>
+<td style=" background-color: rgb(255, 255, 204);">Тест "Математика"</td>
+<td style=" background-color: rgb(255, 255, 204);">Результат теста "Математика": балл / % / дата</td>
+<td style=" background-color: rgb(255, 255, 204);">Ошибки в ответах (по последнему тестированию!)</td>
+</tr>
+
+{foreach key=k item=i from=$memb}
+<tr>
+	<td>{$i.fio}</td>
+	<td>{$i.iet}</td>
+	<td>{$i.pos_name}</td>
+	<td>{if $i.ie eq 'ext'}{$i.login}/{$i.password}{/if}</td>
+	<td style="background-color: rgb(204, 255, 255);">
+		{$i.name_logic}
+		{if $i.logic_test eq 2}
+			<div id=div_{$smarty.request.id}_{$i.id}_{$i.ac_test_logic} style="display: inline;">
+			<a href="javascript:void(0);" onClick="TestOn({$smarty.request.id},{$i.id},{$i.ac_test_logic});">Перезапустить</a>
+			</div>
+		{/if}
+	</td>
+	<td style="background-color: rgb(204, 255, 255);">
+			{foreach key=k1 item=i1 from=$i.test_history.logic name=tests}
+				<nobr><b>{$i1.test_ball} / {$i1.test_perc}</b> - {$i1.test_lu}<nobr><br>
+			{/foreach}
+	</td>
+	<td style="background-color: rgb(204, 255, 255);">
+			{if $smarty.foreach.tests.total > 0}
+			{foreach key=k2 item=i2 from=$i.test_res.logic name=test_res}
+				<b>
+				{$smarty.foreach.test_res.iteration}.
+				{if $i2.ok eq ''}
+					<span style="color:red">нет ответа на вопрос:</span>
+				{else}
+					<span style="color:orange">неправильный ответ на вопрос:</span>
+				{/if}
+				</b>
+				{$i2.name}<br>
+			{/foreach}
+			{/if}
+	</td>
+	<td style="background-color: rgb(255, 255, 204);">
+		{$i.name_math}
+		{if $i.math_test eq 2}
+			<div id=div_{$smarty.request.id}_{$i.id}_{$i.ac_test_math} style="display: inline;">
+			<a href="javascript:void(0);" onClick="TestOn({$smarty.request.id},{$i.id},{$i.ac_test_math});">Перезапустить</a>
+			</div>
+		{/if}
+	</td>
+	<td style="background-color: rgb(255, 255, 204);">
+			{foreach key=k1 item=i1 from=$i.test_history.math name=tests}
+				<nobr><b>{$i1.test_ball} / {$i1.test_perc}</b> - {$i1.test_lu}<nobr><br>
+			{/foreach}
+	</td>
+	<td style="background-color: rgb(255, 255, 204);">
+			{if $smarty.foreach.tests.total > 0}
+			{foreach key=k2 item=i2 from=$i.test_res.math name=test_res}
+				<b>
+				{$smarty.foreach.test_res.iteration}.
+				{if $i2.ok eq ''}
+					<span style="color:red">нет ответа на вопрос:</span>
+				{else}
+					<span style="color:orange">неправильный ответ на вопрос:</span>
+				{/if}
+				</b>
+				{$i2.name}<br>
+			{/foreach}
+			{/if}
+	</td>
+</tr>
+{/foreach}
+
+</table>
+

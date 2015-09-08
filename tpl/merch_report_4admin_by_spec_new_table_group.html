@@ -1,0 +1,175 @@
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+    <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+      <td>Дата</td>
+      <td>Область<br>      </td>
+      <td>Город</td>
+      <td>Сеть</td>
+      <td>Юридическое название ТЗ<br></td>
+      <td>Адрес ТЗ<br></td>
+      <td>СВ МС<br></td>
+      <td>Артикул</td>
+      <td>Название</td>
+      <td>Марка</td>
+      <td>Ед. измерения</td>
+      <td>Вес, кг</td>
+      <td>Код</td>
+
+
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td>{$item1.text}</td>
+{/foreach}
+	{if not $smarty.request.print}
+      <td>Фотоотчет</td>
+	{/if}
+    </tr>
+
+
+{foreach key=k item=i from=$d name=d}
+	<tr style="vertical-align:top;text-align:center;">
+	{assign var=s value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s value=`$s+1`}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s value=`$s+1`}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s value=`$s+1`}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s value=`$s+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s value=`$s+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s value=`$s+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+	{/foreach}
+	<td rowspan={$s+1}>{$k}</td>
+	<td colspan={$smarty.foreach.fields.total+13}></td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		<tr style="vertical-align:top;">
+		{assign var=s1 value=0}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s1 value=`$s1+1`}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s1 value=`$s1+1`}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s1 value=`$s1+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s1 value=`$s1+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s1 value=`$s1+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+		<td rowspan={$s1+1}>{$k1}</td>
+		<td colspan={$smarty.foreach.fields.total+12}></td>
+		</tr>
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			<tr style="vertical-align:top;">
+			{assign var=s2 value=0}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{assign var=s2 value=`$s2+1`}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s2 value=`$s2+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s2 value=`$s2+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s2 value=`$s2+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+			<td rowspan={$s2+1}>{$k2}</td>
+			<td colspan={$smarty.foreach.fields.total+11}></td>
+			</tr>
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				<tr style="vertical-align:top;">
+				{assign var=s3 value=0}
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					{assign var=s3 value=`$s3+1`}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s3 value=`$s3+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s3 value=`$s3+1`}
+						{/foreach}
+					{/foreach}
+				{/foreach}
+				<td rowspan={$s3+1}>{$k3}</td>
+				<td colspan={$smarty.foreach.fields.total+10}></td>
+				</tr>
+				{foreach key=k4 item=i4 from=$i3.data name=i4}
+					<tr style="vertical-align:top;">
+					{assign var=s4 value=0}
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						{assign var=s4 value=`$s4+1`}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s4 value=`$s4+1`}
+						{/foreach}
+					{/foreach}
+					<td rowspan={$s4+1}>{$k4}</td>
+					<td colspan={$smarty.foreach.fields.total+9}></td>
+					</tr>
+					{foreach key=k5 item=i5 from=$i4.data name=i5}
+						<tr style="vertical-align:top;">
+						{assign var=s5 value=0}
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							{assign var=s5 value=`$s5+1`}
+						{/foreach}
+						<td rowspan={$s5+1}>{$k5}</td>
+						<td colspan={$smarty.foreach.fields.total+7}></td>
+						<td rowspan={$s5+1}>
+							{foreach key=key item=item from=$i5.files}
+							{if not $smarty.request.print}
+							<a target=_blank href="{$item.path}/{$item.fn}"><img height=50px alt="{$item.fn}" src="{$item.path}/{$item.fn}"></a><br>
+							{/if}
+							{/foreach}
+							<br>
+							{if $i5.files}
+							{if not $smarty.request.print}
+							<a href="{$i5.archive}">Скачать фотоархив</a></td>
+							{/if}
+							{/if}
+						</td>
+						</tr>
+						{foreach key=k6 item=i6 from=$i5.data name=i6}
+							<tr style="vertical-align:top;">
+							<td>{$i6.svms_name}</td>
+							<td>{$i6.msb_art}</td>
+							<td>{$i6.msb_name}</td>
+							<td>{$i6.msb_brand}</td>
+							<td>{$i6.msb_izm}</td>
+							<td style="text-align:right">{$i6.msb_weight|num:2}</td>
+							<td>{$i6.msb_kod}</td>
+							{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+							<td style="text-align:center;background-color: rgb(204, 255, 255)">
+							{assign var="field_name" value="msr_`$item1.name`"}
+							{if $item1.tip eq 'float'}{$i6.$field_name|num:2}{/if}
+							{if $item1.tip eq 'text'}{$i6.$field_name|escape}{/if}
+							{if $item1.tip eq 'bool'}{$i6.$field_name}{/if}
+							</td>
+							{/foreach}
+							</tr>
+						{/foreach}
+					{/foreach}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+	{/foreach}
+{/foreach}
+	<tr style="text-align: center;font-weight:bold">
+		<td colspan="13" style="">ИТОГО</td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td style="text-align:center;background-color: rgb(204, 255, 255)">
+{assign var="field_name" value="msr_`$item1.name`"}
+{if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
+{if $item1.tip eq 'text'}{$rb_total.$field_name|escape}{/if}
+{if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}
+</td>
+{/foreach}
+	</tr>
+</table><br>

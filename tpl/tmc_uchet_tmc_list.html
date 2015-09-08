@@ -1,0 +1,136 @@
+<p>За сотрудником закреплены следующие ТМЦ:</p>
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td>Тип ТМЦ</td>
+		<td>Наименование / модель<br>Серийный номер<br>Инвентарный номер АВК</td>
+		<td>Состояние при выдаче</td>
+		<td>Дата выдачи</td>
+		<td>Внесение записи о выдаче</td>
+		<td>Сотрудник подтвердил</td>
+		<td>Закупочная стоимость</td>
+		<td>Дата закупки</td>
+		<td>Дата закрепления в бух. учете</td>
+		<td>Комментарий</td>
+		<td style="background-color: rgb(204, 255, 255);">Снять ТМЦ с сотрудника</td>
+		<td style="background-color: rgb(204, 255, 255);">Состояние при снятии<br>Дата снятия<br>Перенести на сотрудника</td>
+		<td style="background-color: rgb(204, 255, 255);">Внесение записи о снятии</td>
+	</tr>
+	{foreach key=k item=i from=$tmc}
+	<tr>
+		<td>{$i.tmcs}</td>
+		<td>
+			Наименование / модель
+			<br>
+			<input size=50 {if not $is_it}disabled{/if} name=data[{$i.id}][name] value="{$i.name}">
+			<br>
+			Серийный номер
+			<br>
+			<input size=50 {if not $is_it}disabled{/if} name=data[{$i.id}][sn] value="{$i.sn}">
+			<br>
+			Инвентарный номер АВК
+			<br>
+			<input size=50 {if not $is_it}disabled{/if} name=data[{$i.id}][num_avk] value="{$i.num_avk}">
+		</td>
+		<td>{$i.state}</td>
+		<td>{$i.dtv}</td>
+		<td>{$i.add_fio} {$i.add_lu}</td>
+		<td>{$i.accepted_lu}</td>
+
+
+		{if $i.removed eq 0}
+			<td><input size=10 {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][zakup_price] value="{$i.zakup_price}" class="number"></td>
+			<td><input size=10 {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][zakup_dt] value="{$i.zakup_dt}" class='datepicker'></td>
+			<td><input size=10 {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][buh_dt] value="{$i.buh_dt}" class='datepicker'></td>
+			<td><textarea {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][comm]>{$i.comm}</textarea></td>
+		{else}
+			<td>{$i.zakup_price}</td>
+			<td>{$i.zakup_dt}</td>
+			<td>{$i.buh_dt}</td>
+			<td>{$i.comm|nl2br}</td>
+		{/if}
+
+		{if $i.removed eq 1}
+		<td style="background-color: rgb(204, 255, 255); text-align:left">
+			<nobr><input type=radio name=data1_{$i.id}_removed onClick="$('#data_{$i.id}_removed').attr('disabled',false);$('#data_{$i.id}_removed').val(null);" value=0>не определено</nobr>
+			<br>
+			<nobr><input type=radio name=data1_{$i.id}_removed onClick="$('#data_{$i.id}_removed').attr('disabled',false);$('#data_{$i.id}_removed').val(1);" value=1>снять</nobr>
+			<br>
+			<nobr><input type=radio name=data1_{$i.id}_removed onClick="$('#data_{$i.id}_removed').attr('disabled',false);$('#data_{$i.id}_removed').val(2);" value=2>списать</nobr>
+			<script>$('input[name=data1_{$i.id}_removed][value={$i.removed}]').attr('checked',true);</script>
+			<input name=data[{$i.id}][removed] type=hidden id=data_{$i.id}_removed disabled>
+		</td>
+		<td style="background-color: rgb(204, 255, 255);">
+			Состояние при снятии {$i.state_removed}
+			<br>
+			Дата снятия {$i.dtr}
+			<br>
+			Перенести на сотрудника {$i.moved_fio}
+		</td>
+		<td style="background-color: rgb(204, 255, 255);">{$i.removed_fio} {$i.removed_lu}</td>
+		{else}
+		<td style="background-color: rgb(204, 255, 255); text-align:left">
+			<nobr><input type=radio name=data[{$i.id}][removed] onClick="$('.data{$i.id}').attr('disabled',true)" value=0> не определено</nobr>
+			<br>
+			<nobr><input type=radio name=data[{$i.id}][removed] onClick="$('.data{$i.id}').attr('disabled',false)" value=1> снять</nobr>
+			<br>
+			<nobr><input type=radio name=data[{$i.id}][removed] onClick="$('.data{$i.id}').attr('disabled',true)" value=2> списать</nobr>
+			<script>$('input[name="data[{$i.id}][removed]"][value={$i.removed}]').attr('checked',true);</script>
+		</td>
+		<td style="background-color: rgb(204, 255, 255);">
+			Состояние при снятии
+			<input required disabled class='data{$i.id}' name=data[{$i.id}][state_removed]>
+			<br>
+			Дата снятия
+			<input required disabled class='data{$i.id} datepicker' size=8 name=data[{$i.id}][dtr]>
+			<br>
+			Перенести на сотрудника
+			<select required disabled class='data{$i.id}' name=data[{$i.id}][moved]>
+				<option></option>
+				{foreach key=key item=item from=$emp}
+				<option {if $item.tn eq $i.moved}selected{/if} value="{$item.tn}">{$item.fio|escape} - {$item.dpt_name|escape}</option>
+				{/foreach}
+			</select>
+		</td>
+		<td style="background-color: rgb(204, 255, 255);"></td>
+		<input type=hidden name=data[{$i.id}][removed_fio] value="{$fio}">
+		{/if}
+	</tr>
+	{/foreach}
+</table>
+<p><input name="save" value="Сохранить" type="submit" onClick="$('.add').attr('disabled',true);"></p>
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td>Тип ТМЦ</td>
+		<td>Наименование / модель</td>
+		<td>Серийный номер</td>
+		<td>Инвентарный номер АВК</td>
+		<td>Состояние при выдаче</td>
+		<td>Дата выдачи</td>
+		<td>Закупочная стоимость</td>
+		<td>Дата закупки</td>
+		<td>Дата закрепления в бух. учете</td>
+	</tr>
+	<tr>
+		<td>
+			<select class='add' required name=tmc_new[tmcs]>
+				<option></option>
+				{foreach key=tk item=ti from=$tmcs}
+				<option value="{$ti.id}">{$ti.name|escape}</option>
+				{/foreach}
+			</select>
+		</td>
+		<td><input class='add' required name=tmc_new[name]></td>
+		<td><input class='add' name=tmc_new[sn]></td>
+		<td><input class='add' name=tmc_new[num_avk]></td>
+		<td><input class='add' required name=tmc_new[state]></td>
+		<td><input class='add datepicker' required name=tmc_new[dtv]></td>
+		<td><input class='add number' required name=tmc_new[zakup_price]></td>
+		<td><input class='add datepicker' required name=tmc_new[zakup_dt]></td>
+		<td><input class='add datepicker' required name=tmc_new[buh_dt]></td>
+	</tr>
+</table>
+
+<input type=hidden name=tmc_new[tn] value="{$smarty.request.tn}">
+<input type=hidden name=tmc_new[add_fio] value="{$fio}">
+
+<p><input name="add" value="Добавить" type="submit"></p>

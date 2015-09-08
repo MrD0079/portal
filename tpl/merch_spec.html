@@ -1,0 +1,108 @@
+<h1>Привязка спецификаций М-Сервис</h1>
+
+<form
+	target="_self"
+	method="POST"
+	name="form1"
+	id="form1"
+	enctype="multipart/form-data"
+>
+
+<table>
+	<tr>
+		<td>Заказчик</td>
+		<td>
+			<select required name=routes_agents id=routes_agents onChange="$('#merch_spec_fldag').val();fn_load_fldag_list();fn_load_tz_list();">
+			<option></option>
+			{foreach key=key item=item from=$routes_agents}
+			<option value={$item.id}>{$item.name}</option>
+			{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<div id=merch_spec_fldag></div>
+		</td>
+	</tr>
+	<tr>
+		<td>Сеть</td>
+		<td>
+			<select name=merch_spec_nets id=merch_spec_nets onChange="$('#merch_spec_tz').val();fn_load_tz_list();">
+			<option value=0></option>
+			{foreach key=key item=item from=$merch_spec_nets}
+			<option value={$item.id_net}>{$item.net_name}</option>
+			{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Область</td>
+		<td>
+			<select name=merch_spec_oblast id=merch_spec_oblast onChange="$('#merch_spec_tz').val();fn_load_tz_list();">
+			<option value="0"></option>
+			{foreach key=key item=item from=$merch_spec_oblast}
+			<option value="{$item.h_tz_oblast}">{$item.tz_oblast}</option>
+			{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>ТЗ</td>
+		<td>
+			<div id=t></div>
+			<div id=t1></div>
+		</td>
+	</tr>
+	<tr>
+		<td>Дата начала действия</td>
+		<td>
+			<input required name=merch_spec_sd id=merch_spec_sd class="datepicker" value="{$now}">
+		</td>
+	</tr>
+	<tr>
+		<td>Загрузить специю</td>
+		<td><input type=file name=fn></td>
+	</tr>
+</table>
+
+<script>$('#routes_agents option[value="{$smarty.request.routes_agents}"]').prop('selected', true);</script>
+<script>$('#merch_spec_nets option[value="{$smarty.request.merch_spec_nets}"]').prop('selected', true);</script>
+<script>$('#merch_spec_oblast option[value="{$smarty.request.merch_spec_oblast}"]').prop('selected', true);</script>
+<script>
+$('#merch_spec_sd').val('{$smarty.request.merch_spec_sd}');
+{literal}
+function fn_load_fldag_list()
+{
+$('#routes_agents').val()!=''?$('#merch_spec_fldag').load('?action=merch_spec_fldag_list&nohead=1&routes_agents='+$('#routes_agents').val(),function() {}):$('#merch_spec_fldag').html('');
+}
+function fn_load_tz_list()
+{
+$('#t').load('?action=merch_spec_tz_list&nohead=1&merch_spec_nets='+$('#merch_spec_nets').val()+'&merch_spec_oblast='+$('#merch_spec_oblast').val(),function() {});
+$('#routes_agents').val()!=''?$('#t2').load('?action=merch_spec_tz&nohead=1&merch_spec_nets='+$('#merch_spec_nets').val()+'&merch_spec_oblast='+$('#merch_spec_oblast').val()+'&routes_agents='+$('#routes_agents').val(),function() {}):$('#t2').html('');
+}
+{/literal}
+</script>
+
+
+
+
+
+
+<p>
+<input type=submit name=select id=select value="Показать">
+<input name="save" value="Сохранить" type="submit">
+</p>
+
+<div id=t2></div>
+
+</form>
+
+
+<script>
+fn_load_fldag_list();
+fn_load_tz_list();
+</script>
+
+

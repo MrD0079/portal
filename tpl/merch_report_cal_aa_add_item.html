@@ -1,0 +1,77 @@
+
+<input type=hidden id=id value="{$id}">
+
+<table width=800px>
+<tr>
+<td>Дата начала</td>
+<td>
+<input id="dts" class="datepicker">
+</td>
+</tr>
+<tr>
+<td>Дата окончания</td>
+<td>
+<input id="dte" class="datepicker">
+</td>
+</tr>
+<tr>
+<td>Области</td>
+<td>
+{literal}
+<a href="javascript:void(0);" onclick="$('.obl:enabled').each(function(){$(this).prop('checked',true);});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.obl:enabled').each(function(){$(this).prop('checked',false);});">[-]</a>
+{/literal}
+{foreach key=key item=item from=$obl}
+<input name=obl[] type=checkbox class=obl value="{$item.h_tz_oblast}" id="{$item.h_tz_oblast}">{$item.tz_oblast}
+{/foreach}
+</td>
+</tr>
+<tr>
+<td>Заказчик</td>
+<td>
+<select id=ag_id>
+<option></option>
+{foreach key=key item=item from=$agents}
+<option value="{$item.id}">{$item.name}</option>
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<td>Город</td>
+<td>
+<select id=h_city>
+<option></option>
+{foreach key=key item=item from=$cities}
+	<option value="{$item.h_city}">{$item.city}</option>
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<td>Сеть</td>
+<td>
+<select id=id_net>
+<option></option>
+{foreach key=key item=item from=$nets}
+	<option value="{$item.id_net}">{$item.net_name}</option>
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<td>Суть акции</td>
+<td>
+<textarea id=text cols=50 rows=5></textarea>
+</td>
+</tr>
+<tr>
+<td>Задачи по акции</td>
+<td>
+<textarea id=tasks cols=50 rows=5></textarea>
+</td>
+</tr>
+</table>
+
+
+<p><a href="javascript:void(0);" onclick="add_item(null);">Добавить активность</a></p>

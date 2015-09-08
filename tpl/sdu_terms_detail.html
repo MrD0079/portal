@@ -1,0 +1,81 @@
+<h2>Детализация условий сотрудничества</h2>
+{if not $smarty.request.print}
+	<a target=_blank href="?action=sdu&calendar_years={$smarty.request.calendar_years}&plan_type={$smarty.request.plan_type}&nets={$smarty.request.nets}&ver=1&print=1&excel=1&filename=Детализация условий сотрудничества">Экспорт в Excel</a>
+	{if $is_mkk or $is_rmkk}
+		<input type=submit name=add_ver value="Добавить версию СДУ">
+	{/if}
+{/if}
+<table border=1>
+	<tr style="font-weight:bold;text-align:center">
+		<td width=120px rowspan=2>Критерий</td>
+		<td width=200px colspan=2>История сотрудничества</td>
+		{foreach from=$sdu item=s_item key=s_key}
+		<td colspan=3>Версия {$s_item.ver} ({$s_item.created})
+
+			{if ($is_mkk or $is_rmkk) and $s_item.ok_sdu_rmkk_tmkk neq 1 and $s_item.ok_sdu_nmkk neq 1 and $s_item.ok_sdu_dpu neq 1}
+			{assign var=enabled value='enabled'}
+			{else}
+			{assign var=enabled value=''}
+			{/if}
+
+			{if $enabled and not $smarty.request.print}<a href="javascript:void(0);" onClick="javascript:del_ver({$s_item.ver});">Удалить</a>{/if}
+
+		</td>
+		{/foreach}
+
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td width=100px>Факт договоренностей {$smarty.request.calendar_years-2}</td>
+		<td width=100px>Факт договоренностей {$smarty.request.calendar_years-1}</td>
+		{foreach from=$sdu item=s_item key=s_key}
+		<td>Измерение<br>затрат</td>
+		<td>Стоимость<br>(% / тыс.{$valuta}.)</td>
+		<td>Описание/детализация</td>
+		{/foreach}
+	</tr>
+	{foreach key=key item=item from=$sdu_terms_list}
+	<tr
+		{if $item.color eq 1}style="text-align:center; background-color: rgb(204, 255, 255);"{/if}
+		{if $item.color eq 0}style="text-align:center; background-color: rgb(255, 255, 204);"{/if}
+	>
+		<td>{$item.cooperation_term_name}</td>
+		<td><b>Затраты:</b> {$sdu_terms_year_last_ver2[$item.id].summa}{$sdu_terms_year_last_ver2[$item.id].pay_format}<br><b>Описание:</b> {$sdu_terms_year_last_ver2[$item.id].txt|escape}</td>
+		<td><b>Затраты:</b> {$sdu_terms_year_last_ver1[$item.id].summa}{$sdu_terms_year_last_ver1[$item.id].pay_format}<br><b>Описание:</b> {$sdu_terms_year_last_ver1[$item.id].txt|escape}</td>
+
+		{foreach from=$sdu item=s_item key=s_key}
+			{if not $smarty.request.print}
+				<td>
+		                
+					{if
+						($is_mkk and $s_item.ok_sdu_rmkk_tmkk neq 1)
+						or
+						($is_rmkk and $s_item.ok_sdu_nmkk neq 1 and $s_item.ok_sdu_dpu neq 1)
+					}
+					{assign var=disabled value=''}
+					{else}
+					{assign var=disabled value='disabled'}
+					{/if}
+		                
+					{foreach key=key1 item=item1 from=$payment_format}
+						<nobr><input type=radio {$disabled} name=terms[{$s_item.ver}][{$item.id}][pay_format] value={$item1.id}>{$item1.pay_format}</nobr><br>
+					{/foreach}
+					<script>$("input[name='terms[{$s_item.ver}][{$item.id}][pay_format]'][value={$sdu_terms_year[$s_item.ver][$item.id].pay_format|default:0}]").attr('checked',true);</script>
+				</td>
+				<td><input size=10 {$disabled} name=terms[{$s_item.ver}][{$item.id}][summa] value="{$sdu_terms_year[$s_item.ver][$item.id].summa}"></td>
+				<td><textarea {$disabled} name=terms[{$s_item.ver}][{$item.id}][txt] cols=30 rows=5>{$sdu_terms_year[$s_item.ver][$item.id].txt|escape}</textarea></td>
+			{else}
+				<td>
+					{foreach key=key1 item=item1 from=$payment_format}
+						{if $item1.id eq $sdu_terms_year[$s_item.ver][$item.id].pay_format}{$item1.pay_format}{/if}
+					{/foreach}
+				</td>
+				<td>{$sdu_terms_year[$s_item.ver][$item.id].summa}</td>
+				<td>{$sdu_terms_year[$s_item.ver][$item.id].txt|escape}</td>
+			{/if}
+		{/foreach}
+
+	</tr>
+	{/foreach}
+</table>
+
+<hr>

@@ -1,0 +1,20 @@
+<h1>Замена СВМС</h1>
+
+
+<form target="_self" method="POST" name=form_svms_replace id=form_svms_replace>
+Заменить СВМС
+<select required name=replace_svms[svms_from] id=replace_svms[svms_from]>
+	<option></option>
+	{foreach key=key item=item from=$svms}
+	<option value={$item.tn}>{$item.fio}</option>
+	{/foreach}
+</select>
+на
+<select required name=replace_svms[svms_to] id=replace_svms[svms_to]>
+	<option></option>
+	{foreach key=key item=item from=$svms}
+	<option value={$item.tn}>{$item.fio}</option>
+	{/foreach}
+</select>
+<input type=submit name=replace id=replace value="Заменить">
+</form>

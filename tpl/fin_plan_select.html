@@ -1,0 +1,41 @@
+<h1>{$plan_type_name}</h1>
+<form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
+	<table>
+		<tr>
+			<td>Выберите сеть из списка</td>
+			<td>
+				<select name="nets" id="nets">
+					<option></option>
+					{foreach key=key item=item from=$nets}
+						<option {if $item.ter_mkk eq 1 or $item.ter_rmkk eq 1}style="color:red"{/if} value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+			<td>Планируемый год</td>
+			<td>
+				<select name="calendar_years" id="calendar_years">
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+						<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+		{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4}
+			<td>Планируемый месяц</td>
+			<td>
+				<select name="plan_month" id="plan_month">
+					<option></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#plan_month option[value="{$smarty.request.plan_month}"]').prop('selected', true);</script>
+			</td>
+		{/if}
+		</tr>
+	</table>
+	<input value="Выбрать" name="select_plan" type="submit">
+</form>
+<hr><br>

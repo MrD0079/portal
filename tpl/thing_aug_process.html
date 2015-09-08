@@ -1,0 +1,199 @@
+<h1>Ход акции "Штучка"</h1>
+
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_process id=form_process>
+
+
+{if $is_ts neq 1}
+
+
+По руководителю:
+<br>
+<select name=thing_chief_list id=thing_chief_list onchange="javascript:fn_submit('thing_chief_list');">
+<option value=0></option>
+{foreach key=key item=item from=$thing_chief_list}
+<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.dt}уволен {$item.dt}{/if}</option>
+{/foreach}
+</select>
+
+
+<br>
+
+По супервайзеру:
+<br>
+<select name=thing_ts_list id=thing_ts_list onchange="javascript:fn_submit('thing_ts_list');">
+<option value=0></option>
+{foreach key=key item=item from=$thing_ts_list}
+<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.dt}уволен {$item.dt}{/if}</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#thing_chief_list option[value='{$smarty.request.thing_chief_list}']").prop('selected', true);</script>
+<script>$("#thing_ts_list option[value='{$smarty.request.thing_ts_list}']").prop('selected', true);</script>
+
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_process').submit();
+}
+</script>
+{/literal}
+
+{/if}
+
+
+{/if}
+
+<br>
+Расшифровка классификации продуктов и минимальное количество для заказа в одно ТП. Баллы за дистрибуцию.
+<br>
+<br>
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="background-color: rgb(204, 255, 255);">
+		<td>П1 - Батончик «Коровка-Красотка» 29 г - 8 шт.</td>
+		<td>П2 - Батончик «Спокуса»/ «Спокуса ореховая» - 7 шт.</td>
+		<td>П3 - Батончик «Мажор» со вкусом вишни/ с какао 38 г - 20 шт.</td>
+		<td>П4 - Печенье «Коровка-Красотка»  36 г / Печенье «Коровка-Красотка» в глазури 40 г - 8 шт.</td>
+	</tr>
+	<tr style="background-color: rgb(255, 255, 204);">
+		<td>Дистрибуция 25% - 1 балл</td>
+		<td>Дистрибуция 35% - 3 балла</td>
+		<td>Дистрибуция 45% - 5 баллов</td>
+		<td>Дистрибуция 55% - 7 баллов</td>
+	</tr>
+	<tr style="background-color: rgb(255, 255, 204);">
+		<td>Дистрибуция 30% - 2 балла</td>
+		<td>Дистрибуция 40% - 4 балла</td>
+		<td>Дистрибуция 50% - 6 баллов</td>
+		<td>Дистрибуция 60% - 8 баллов</td>
+	</tr>
+</table>
+
+
+{if not $smarty.request.print}
+<br>
+<a href="?action=thing_aug_process&print=1&excel=1&filename=Ход акции Штучка">Экспорт в Excel</a>
+<br>
+<br>
+{/if}
+
+
+
+<table border=1 cellspacing=0 cellpadding=3 width=1000px>
+	{foreach key=k item=i from=$d name=d}
+
+
+	{math assign="color" equation='y' y=$smarty.foreach.d.iteration%3} 
+	{if $color eq 1}
+	<tr style="font-weight:bold">
+		<td rowspan=2>ФИО рук-ля</td>
+		<td rowspan=2>ФИО ТС</td>
+		<td rowspan=2>План по АКБ</td>
+		<td rowspan=2>ФИО ЭТА</td>
+		<td colspan=3>П1</td>
+		<td colspan=3>П2</td>
+		<td colspan=3>П3</td>
+		<td colspan=3>П4</td>
+		<td rowspan=2>Общий балл</td>
+		<td rowspan=2>Средний балл по команде</td>
+	</tr>
+	<tr style="font-weight:bold">
+		<td>Кол-во ТП</td>
+		<td>Дистр, %</td>
+		<td>Балл</td>
+		<td>Кол-во ТП</td>
+		<td>Дистр, %</td>
+		<td>Балл</td>
+		<td>Кол-во ТП</td>
+		<td>Дистр, %</td>
+		<td>Балл</td>
+		<td>Кол-во ТП</td>
+		<td>Дистр, %</td>
+		<td>Балл</td>
+	</tr>
+	{/if}
+
+
+
+	<tr style="font-weight:bold">
+		<td rowspan={$i.c+1}>{$i.parent_fio}</td>
+		<td rowspan={$i.c+1}>{$i.fio}</td>
+		<td colspan=15></td>
+		<td rowspan={$i.c+1} style="text-align:right">{$i.bt|default:0|num:2}</td>
+	</tr>
+		{foreach key=k1 item=i1 from=$i.data name=i}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:right">{$i1.akb|default:0|num:2}</td>
+		<td>{$i1.fio_eta}</td>
+		<td style="text-align:right">{$i1.s1|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.d1|default:0|num:2}</td>
+		<td style="text-align:right">{$i1.b1|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.s2|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.d2|default:0|num:2}</td>
+		<td style="text-align:right">{$i1.b2|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.s3|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.d3|default:0|num:2}</td>
+		<td style="text-align:right">{$i1.b3|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.s4|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.d4|default:0|num:2}</td>
+		<td style="text-align:right">{$i1.b4|default:0|num:0}</td>
+		<td style="text-align:right">{$i1.bt|default:0|num:2}</td>
+	</tr>
+		{/foreach}
+	{/foreach}
+	<tr style="font-weight:bold">
+		<td></td>
+		<td></td>
+		<td style="text-align:right">{$t2.akb|default:0|num:2}</td>
+		<td></td>
+		<td style="text-align:right">{$t2.s1|default:0|num:0}</td>
+		<td style="text-align:right">{$t2.d1|default:0|num:2}</td>
+		<td></td>
+		<td style="text-align:right">{$t2.s2|default:0|num:0}</td>
+		<td style="text-align:right">{$t2.d2|default:0|num:2}</td>
+		<td></td>
+		<td style="text-align:right">{$t2.s3|default:0|num:0}</td>
+		<td style="text-align:right">{$t2.d3|default:0|num:2}</td>
+		<td></td>
+		<td style="text-align:right">{$t2.s4|default:0|num:0}</td>
+		<td style="text-align:right">{$t2.d4|default:0|num:2}</td>
+		<td></td>
+		<td style="text-align:right">{$t2.bt|default:0|num:2}</td>
+	</tr>
+</table>
+
+
+<h3>Средние баллы по рук-лям</h3>
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>ФИО рук-ля</td>
+		<td>Средний<br>балл<br>по<br>команде</td>
+	</tr>
+	{foreach key=k item=i from=$list_total_parents name=list_total_parents}
+	<tr style="font-weight:bold">
+		<td>{$i.parent_fio}</td>
+		<td style="text-align:right">{$i.bt|default:0|num:2}</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+
+
+
+{if not $smarty.request.print}
+
+</form>
+
+{/if}

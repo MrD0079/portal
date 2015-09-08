@@ -1,0 +1,21 @@
+<h1>Табель учета рабочего времени по месяцу</h1>
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+{include file="ms_tabel_select.html"}
+
+<input type=submit name=select value="Построить отчет">
+
+{if $smarty.request.select}
+<p><a target=_blank href="?action=ms_tabel&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Табель&select=1">экспорт в Excel</a></p>
+{/if}
+
+{/if}
+
+{include file="ms_tabel_dt.html"}
+{include file="ms_tabel_table.html"}
+
+{if not $smarty.request.print}
+</form>
+{/if}

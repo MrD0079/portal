@@ -1,0 +1,87 @@
+<h1>јнкетирование - я«џ »</h1>
+
+
+
+<div id=ok></div>
+
+
+<p>
+ћой опыт работы в компании (мес€цы):
+<input
+	id=td_opit_
+	class=number_int
+	onchange="save_item('','opit',this.value,'anketa_langh');"
+>
+</p>
+<script>
+	$("#td_opit_").val({$opit});
+</script>
+
+<table border=1>
+	<tr style="font-weight:bold">
+		<td>язык</td>
+		<td>¬ладею €зыками</td>
+		<td>”ровень владени€</td>
+	</tr>
+	{foreach key=k item=i from=$list}
+	<tr id="tr_{$i.id}">
+		<td>{$i.name}</td>
+		<td>
+			<input
+				type=checkbox
+				id="lang_enabled_{$i.id}"
+				onchange="
+					$('input[name=lang_level_{$i.id}]').attr('disabled',!this.checked);
+					!this.checked?save_item({$i.id},'lang_level','null','anketa_lang'):null;
+				"
+			>
+			<script>
+				$("#lang_enabled_{$i.id}").attr('checked','{$i.lang_level}'!=='');
+			</script>
+		</td>
+		<td id=td_lang_level_{$i.id}>
+			{foreach key=k1 item=i1 from=$anketa_lang_level}
+			<input
+				onChange="save_item({$i.id},'lang_level',this.value,'anketa_lang');"
+				type=radio
+				name="lang_level_{$i.id}"
+				value="{$i1.id}"
+			>{$i1.name}<br>
+			{/foreach}
+			<script>
+				$('input[name=lang_level_{$i.id}]').attr('disabled','{$i.lang_level}'=='');
+				$("input[name=lang_level_{$i.id}][value={$i.lang_level}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+	{/foreach}
+</table>
+
+<script>
+{literal}
+
+function save_item(id,field,val,table)
+{
+	$('#td_'+field+'_'+id).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	fd.append('table',  table);
+	$.ajax({
+		type: 'POST',
+		url: '?action=anketa_lang_form&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#ok').html(''+data+'');
+			$('#td_'+field+'_'+id).css('background-color','white');
+		}
+	});
+}
+
+{/literal}
+</script>
+
+

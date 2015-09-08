@@ -1,0 +1,113 @@
+<h1>Отчеты подчиненных для принятия</h1>
+
+
+
+<form name=form_zat id=form_zat target=_self method=post>
+<input type="hidden" name="form_submit" id=form_submit>
+
+{literal}
+<script>
+function fn_submit(val)
+{
+	$('#form_submit').val(val);
+	$('#form_zat').submit();
+}
+</script>
+{/literal}
+	Период:
+	<br>
+	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+		{foreach key=key item=item from=$month_list}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+<table border=1 cellspacing=0 cellpadding=1>
+
+
+<tr style="font-weight:bold">
+<td>
+Прямые
+</td>
+<td>
+Непрямые
+</td>
+</tr>
+
+
+
+<tr align=left valign=top>
+
+<td>
+<table border=0 cellspacing=0 cellpadding=1>
+<tr style="font-weight:bold">
+<td>Ф.И.О.</td>
+<td>Принят</td>
+<td>Обработан</td>
+</tr>
+{assign var=rownum value=0}
+{foreach key=key1 item=item1 from=$zat_slaves}
+{if $item1.full eq 1}
+{assign var=rownum value=`$rownum+1`}
+<tr align=left>
+<td>
+{$rownum}
+<a target=_blank href="?action=zat&emp_tn={$item1.tn}&readonly={$item1.readonly}&full={$item1.full}">{$item1.emp_name}</a>
+</td>
+<td {if $item1.zat_monthly_is_accepted}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>
+{if $item1.zat_monthly_is_accepted}да{else}нет{/if}
+</td>
+<td {if $item1.zat_monthly_is_processed}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>
+{if $item1.zat_monthly_is_processed}да{else}нет{/if}
+</td>
+</tr>
+{/if}
+{/foreach}
+</table>
+</td>
+
+<td colspan=3>
+<table border=0 cellspacing=0 cellpadding=1>
+<tr style="font-weight:bold">
+<td>Ф.И.О.</td>
+<td>Утвержден</td>
+<td>Обработан</td>
+</tr>
+{assign var=rownum value=0}
+{foreach key=key1 item=item1 from=$zat_slaves}
+{if $item1.full neq 1}
+{assign var=rownum value=`$rownum+1`}
+<tr align=left>
+<td>
+{$rownum}
+<a target=_blank href="?action=zat&emp_tn={$item1.tn}&readonly={$item1.readonly}&full={$item1.full}">{$item1.emp_name}</a>
+</td>
+<td {if $item1.zat_monthly_is_accepted}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>
+{if $item1.zat_monthly_is_accepted}да{else}нет{/if}
+</td>
+<td {if $item1.zat_monthly_is_processed}style="text-align:center;background-color:green"{else}style="text-align:center;background-color:red"{/if}>
+{if $item1.zat_monthly_is_processed}да{else}нет{/if}
+</td>
+</tr>
+{/if}
+{/foreach}
+</table>
+</td>
+
+
+</tr>
+
+</table>

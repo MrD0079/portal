@@ -1,0 +1,189 @@
+<table style="text-align: left;" border=1>
+    <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+      <td>Дата<br>Маршрут<br>Ф.И.О. отв.<br>Подтверждаю СВ МС</td>
+	<td>
+		Область
+		<br>
+		Сеть
+		<br>
+		Юридическое название ТЗ
+		<br>
+		Адрес ТЗ
+	</td>
+      <td>№ п/п<br>[удал.]</td>
+      <td>Заказчик<br></td>
+      <td>Работа по специи<br></td>
+      <td style="background-color: rgb(204, 255, 255);">План по МР, мин<br></td>
+      <td style="background-color: rgb(204, 255, 255);">Факт по МР, мин<br></td>
+      <td style="background-color: rgb(204, 255, 255);">Отклонение МР, мин<br></td>
+      <td style="background-color: rgb(204, 255, 255);">Комментарии по отклонению МР<br></td>
+      <!--<td style="background-color: rgb(255, 255, 204);">План по Ф, мин<br></td>
+      <td style="background-color: rgb(255, 255, 204);">Факт по Ф, мин<br></td>
+      <td style="background-color: rgb(255, 255, 204);">Отклонение Ф, мин<br></td>
+      <td style="background-color: rgb(255, 255, 204);">Комментарии по отклонению Ф<br></td>
+      <td style="background-color: rgb(255, 204, 255);">Расфас. ВК+ВП, ящ.<br></td>
+      <td style="background-color: rgb(255, 204, 255);">Комментарии по отклонению расфас<br></td>-->
+      <td>GPS</td>
+    </tr>
+{foreach key=k item=i from=$d name=d}
+	<tr style="text-align:center;">
+
+
+
+	{assign var=s1 value=0}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+		{assign var=s1 value=`$s1+1`}
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{assign var=s1 value=`$s1+1`}
+		{/foreach}
+	{/foreach}
+
+
+
+
+
+		<td rowspan={$s1+1}>
+			{$i.head.dt}<br>{$i.head.num}<br>{$i.head.fio_otv}
+			<br>
+			<b>
+			{if $i.head.svms_ok eq 1}
+				{$i.head.svms_ok_date}<br>
+				{assign var=disabled value='disabled'}
+			{else}
+				{assign var=disabled value=''}
+			{/if}
+			{if not $smarty.request.print}
+			<input
+				onclick="$('#svms_ok_{$i.head.head_id}{$i.head.dtt}').val(this.checked?1:0)"
+				{if $i.head.svms_ok eq 1}checked{/if}
+				{if not $is_admin and not $is_ma and $i.head.svms_ok eq 1}disabled{/if}
+				type="checkbox"
+			>
+			<input
+				type=hidden
+				name=svms_ok[{$i.head.head_id}][{$i.head.dt}][svms_ok]
+				id=svms_ok_{$i.head.head_id}{$i.head.dtt}
+				value="{$i.head.svms_ok}"
+			>
+			{/if}
+			</b>
+		</td>
+		<td colspan=12></td>
+	</tr>
+		{foreach key=k1 item=i1 from=$i.data name=i1}
+
+			{assign var=s1 value=0}
+			{foreach key=k2 item=i2 from=$i1.data name=i2}
+				{assign var=s1 value=`$s1+1`}
+			{/foreach}
+
+
+		<tr>
+			<td rowspan={$s1+1}>
+				{$i1.head.tz_oblast}
+				<br>
+				{$i1.head.net_name}
+				<br>
+				{$i1.head.ur_tz_name}
+				<br>
+				{$i1.head.tz_address}
+			</td>
+			<td colspan=7></td>
+			<td rowspan={$s1+1} {if $i1.total.is_red}bgcolor="red"{else}style="background-color: rgb(153, 255, 153);"{/if}>
+				{if $i1.total.plan > 10 or $i1.total.vv	eq 1}
+					{if $i1.head.in_out}
+						<nobr>Код агента: {$i1.head.kod_ag}</nobr>
+						<nobr>Вход/выход: {$i1.head.in_out}</nobr>
+					{/if}
+					<nobr>Отклонение: {$i1.total.gps_delta|num:-1} мин.</nobr>
+					<!--<nobr>Плановое время: {$i1.total.plan} мин.</nobr>-->
+				{else}
+					В анализе не учитывается
+				{/if}
+			</td>
+		</tr>
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+		<tr>
+			<td style="font-weight:bold">
+				<nobr>
+				{$smarty.foreach.i2.iteration}
+				{if $i2.vv eq 1 and $i.head.svms_ok neq 1}
+					<input type=checkbox name="del_vv[{$i2.vv_id}]">
+				{/if}
+				</nobr>
+			</td>
+			<td>{$i2.ag_name}</td>
+			<td>
+				{if not $smarty.request.print}
+					<!--{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dates_list2}&spec_id={$i2.spec_id}">Специя</a>{/if}-->
+					{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$i.head.dt}&spec_id={$i2.spec_id}">Специя</a>{/if}
+				{/if}
+			</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_mr}</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">
+			{if not $smarty.request.print}
+				<input {$disabled} size="7" name="rb[mr_fakt][{$i2.id}]" {if $i2.day_enabled_mr neq 1} disabled {/if} value="{$i2.mr_fakt}" class="number_int">
+			{else}
+				{$i2.mr_fakt}
+			{/if}
+			</td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
+			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">
+			{if not $smarty.request.print}
+				<input {$disabled} size="20" name="rb[mr_text][{$i2.id}]" {if $i2.day_enabled_mr neq 1} disabled {/if} value="{$i2.mr_text|escape}">
+			{else}
+				{$i2.mr_text|escape}
+			{/if}
+			</td>
+			<!--<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_f}</td>
+			<td style="background-color: rgb(255, 255, 204);text-align: center;">
+			{if not $smarty.request.print}
+				<input {$disabled} size="7" name="rb[f_fakt][{$i2.id}]" {if $i2.day_enabled_f neq 1} disabled {/if} value="{$i2.f_fakt}" class="number_int">
+			{else}
+				{$i2.f_fakt}
+			{/if}
+			</td>
+			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_delta}</td>
+			<td style="background-color: {if $i2.day_time_f neq $i2.f_fakt}red{else}rgb(255, 255, 204){/if};text-align: center;">
+			{if not $smarty.request.print}
+				<input {$disabled} size="20" name="rb[f_text][{$i2.id}]" {if $i2.day_enabled_f neq 1} disabled {/if} value="{$i2.f_text|escape}">
+			{else}
+				{$i2.f_text|escape}
+			{/if}
+			</td>
+			<td style="background-color: rgb(255, 204, 255);text-align: center;">
+			{if not $smarty.request.print}
+				<input {$disabled} size="7" name="rb[ras][{$i2.id}]" value="{$i2.ras}" class="number_int">
+			{else}
+				{$i2.ras}
+			{/if}
+			</td>
+			<td style="background-color: rgb(255, 204, 255);text-align: center;">
+			{if not $smarty.request.print}
+				<input {$disabled} size="20" name="rb[ras_text][{$i2.id}]" value="{$i2.ras_text|escape}">
+			{else}
+				{$i2.ras_text|escape}
+			{/if}
+			</td>-->
+
+
+
+		</tr>
+		{/foreach}
+		{/foreach}
+{/foreach}
+    <tr style="text-align: center;font-weight:bold">
+      <td colspan=5>ИТОГО</td>
+      <td>{$rb_total.day_time_mr}</td>
+      <td>{$rb_total.mr_fakt}</td>
+      <td>{$rb_total.mr_delta}</td>
+      <!--<td></td>
+      <td>{$rb_total.day_time_f}</td>
+      <td>{$rb_total.f_fakt}</td>
+      <td>{$rb_total.f_delta}</td>
+      <td></td>
+      <td>{$rb_total.ras}</td>
+      <td></td>
+      <td></td>-->
+    </tr>
+</table><br>

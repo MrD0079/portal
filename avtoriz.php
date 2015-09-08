@@ -1,0 +1,3 @@
+<?
+$smarty->display('avtoriz.html');
+?>

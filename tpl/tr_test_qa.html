@@ -1,0 +1,60 @@
+
+{include file="tr_test_qa_tr.html"}
+
+{if $smarty.request.tr>0}
+
+<h1>
+Вопросы теста
+</h1>
+
+<form target="_self" method="POST" name=form_criteria id=form_criteria>
+<p><input type=submit name=save value="Сохранить"></p>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font:bold;">
+	<td><a href="$('#form_criteria').submit();">x</a></td>
+	<td>Текст вопроса</td>
+	<td>Порядок</td>
+	<td>Ответы</td>
+</tr>
+{foreach key=k item=i from=$tr_test_qa}
+<tr>
+	<td>
+		<input type=checkbox name=del[{$i.head.q_id}]>
+	</td>
+	<td><textarea name=a[{$i.head.q_id}][name] cols=50 rows=10>{$i.head.q_name}</textarea></td>
+	<td><input name=a[{$i.head.q_id}][num] size=5 class="number_int" value="{$i.head.q_num}"></td>
+	<td>
+		<table border=1 cellpadding=3 cellspacing=0>
+		<tr style="font:bold;">
+			<td><a href="$('#form_criteria').submit();">x</a></td>
+			<td>Текст ответа</td>
+			<td>Правильный</td>
+		</tr>
+		{foreach key=k1 item=i1 from=$i.data}
+		<tr {if $i1.a_weight eq 1}style="background-color:green"{/if}>
+			<td>
+				<input type=checkbox name=del[{$i1.a_id}]>
+			</td>
+			<td><textarea name=a[{$i1.a_id}][name] cols=50 rows=2>{$i1.a_name}</textarea></td>
+			<td><input name=a[{$i1.a_id}][weight] size=5 class="number_int_01" value="{$i1.a_weight}"></td>
+		</tr>
+		{/foreach}
+		</table>
+		<p>
+			<input type=submit name=add_a[{$i.head.q_id}] value="Добавить ответ">
+			<input type=submit name=save value="Сохранить">
+		</p>
+	</td>
+</tr>
+{/foreach}
+</table>
+
+<script>{literal}$(function(){$('.number_int_01').autoNumeric('init',{aSep: '',mDec: 0,vMin: 0,vMax: 1});});{/literal}</script>
+
+<p>
+	<input type=submit name=add_q value="Добавить вопрос">
+	<input type=submit name=save value="Сохранить">
+</p>
+</form>
+
+{/if}

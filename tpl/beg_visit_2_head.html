@@ -1,0 +1,70 @@
+<div id=ok style="display: inline;"></div>
+
+<table style="text-align: left;" border="0">
+	<tr>
+		<td>Количество SKU "АВК" ВСЕГО</td>
+		<td><input size="10" id="sku_avk" class="number_int" value="{$head.sku_avk}" onChange="save_head({$smarty.request.head},'sku_avk',this.value);"></td>
+	</tr>
+	<tr>
+		<td>Количество SKU другие ВСЕГО</td>
+		<td><input size="10" id="sku_other" class="number_int" value="{$head.sku_other}" onChange="save_head({$smarty.request.head},'sku_other',this.value);"></td>
+	</tr>
+	<tr>
+		<td>Присутствует Рошен</td>
+		<td style="text-align:center" id="ex_roshen">
+			<input
+			type="checkbox"
+			{if $head.ex_roshen}checked{/if}
+			onClick="
+			save_head({$smarty.request.head},'ex_roshen',this.checked?1:0);
+			">
+		</td>
+	</tr>
+	<tr>
+		<td>Присутствуют кондитерские изделия</td>
+		<td style="text-align:center" id="ex_kond">
+			<input
+			type="checkbox"
+			{if $head.ex_kond}checked{/if}
+			onClick="
+			save_head({$smarty.request.head},'ex_kond',this.checked?1:0);
+			">
+		</td>
+	</tr>
+	<tr>
+		<td>Присутствует МАРС</td>
+		<td style="text-align:center" id="ex_mars">
+			<input
+			type="checkbox"
+			{if $head.ex_mars}checked{/if}
+			onClick="
+			save_head({$smarty.request.head},'ex_mars',this.checked?1:0);
+			">
+		</td>
+	</tr>
+	<tr>
+		<td>Присутствуют хлебобулочные изделия</td>
+		<td style="text-align:center" id="ex_hleb">
+			<input
+			type="checkbox"
+			{if $head.ex_hleb}checked{/if}
+			onClick="
+			save_head({$smarty.request.head},'ex_hleb',this.checked?1:0);
+			">
+		</td>
+	</tr>
+</table>
+
+
+{literal}
+<script>
+function save_head(head,field,val)
+{
+	$('#'+field).css('background-color','red');
+	$('#ok').load('?action=beg_visit_2_head_save&nohead=1&head='+head+'&field='+field+'&val='+val,function() {
+	$('#'+field).css('background-color','white');
+	});
+	
+}
+</script>
+{/literal}

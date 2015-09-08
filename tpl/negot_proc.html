@@ -1,0 +1,144 @@
+<h1>Ход договорной кампании</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td colspan=3>
+				<input checked="checked" name="all_nets" value="0" type="radio">Все сети
+				<input name="all_nets" value="1" type="radio">С бюджетом
+				<input name="all_nets" value="2" type="radio">Без бюджета
+				<script>$("input[name=all_nets][value={$smarty.request.all_nets}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+{if not $is_mkk}
+			<td>
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+{/if}
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+{/if}
+
+
+
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+
+<a href="?action=negot_proc&print=1&excel=1&filename=Ход договорной кампании">Экспорт в Excel</a>
+
+
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	{foreach key=negot_proc_key item=negot_proc_item from=$negot_proc name=negot_proc}
+
+
+	{if $negot_proc_item.draw_head eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>Сеть<br>работает<br>без<br>бюджета</td>
+		<td>Факт. назв.сети</td>
+		<td>ФИО РМКК</td>
+		<td>ФИО МКК</td>
+		<td>Дата<br>встречи<br>ФАКТ</td>
+		<td>Дата<br>следующей<br>встречи<br>ПЛАН</td>
+		<td>Протокол<br>встречи</td>
+		<td>ФИО менеджера,<br>участвовавшего во встрече</td>
+		<td>Договорная<br>кампания<br>завершена</td>
+		<td>Документ,<br>содержащий<br>условия<br>сотрудничества</td>
+		<td>Тип<br>документа</td>
+		<td>Корректность<br>договорного<br>планирования<br>проверена ФМ</td>
+	</tr>
+	{/if}
+
+	<tr {if $negot_proc_item.du_complete}style="background-color: rgb(51, 255, 51);"{/if}>
+		<td style="text-align:center">{$smarty.foreach.negot_proc.iteration}</td>
+		<td style="text-align:center">{$negot_proc_item.no_budget}</td>
+		<td><a target=_blank href="?action=meetings&nets={$negot_proc_item.id_net}&calendar_years={$smarty.request.calendar_years}&plan_type={$smarty.request.plan_type}">{$negot_proc_item.net_name}</a></td>
+		<td>{$negot_proc_item.rmkk}</td>
+		<td>{$negot_proc_item.mkk}</td>
+		<td>
+			{foreach key=meet_key item=meet_item from=$negot_proc_meets name=negot_proc_meets}
+				{if $negot_proc_item.id_net eq $meet_item.id_net}
+					<nobr>{$meet_item.meet_date}</nobr><br>
+				{/if}
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=meet_key item=meet_item from=$negot_proc_meets name=negot_proc_meets}
+				{if $negot_proc_item.id_net eq $meet_item.id_net}
+					<nobr>{$meet_item.meet_date_next}</nobr><br>
+				{/if}
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=meet_key item=meet_item from=$negot_proc_meets name=negot_proc_meets}
+				{if $negot_proc_item.id_net eq $meet_item.id_net}
+					<nobr><a target=_blank href="{$meet_item.meet_file}">{$meet_item.meet_file_name}</a></nobr><br>
+				{/if}
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=meet_key item=meet_item from=$negot_proc_meets name=negot_proc_meets}
+				{if $negot_proc_item.id_net eq $meet_item.id_net}
+					<nobr>{$meet_item.manager_fio}</nobr><br>
+				{/if}
+			{/foreach}
+		</td>
+		<td>{$negot_proc_item.du_complete}</td>
+		<td>
+			{foreach key=dus_key item=dus_item from=$file_list_dus name=file_list_dus}
+				{if $negot_proc_item.id_net eq $dus_item.id_net}
+					<nobr><a target=_blank href="{$dus_item.path}{$dus_item.file}">{$dus_item.file}</a></nobr><br>
+				{/if}
+			{/foreach}
+		</td>
+		<td>{$negot_proc_item.dus_type_name}</td>
+		<td style="text-align:center">{$negot_proc_item.ok_fin_man}</td>
+	</tr>
+	{/foreach}
+	{foreach key=negot_proc_key_total item=negot_proc_item_total from=$negot_proc_total name=negot_proc_total}
+	<tr style="font-weight:bold">
+		<td>Итого</td>
+		<td colspan=8>Завершение договорной кампании: {$negot_proc_item_total.du_complete_perc|default:0|num:2}%</td>
+		<td style="text-align:right">{$negot_proc_item_total.du_complete}</td>
+		<td colspan=3></td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

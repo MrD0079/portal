@@ -1,0 +1,260 @@
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+	<tr style="text-align:center; color:red;">
+		<td>
+			{if $advance_ok_dpu and $is_dpu}
+			<p>
+			Подтверждение авансов
+			{foreach key=k item=i from=$advance_ok_dpu}
+			<a href="?action=advances_accept&sd={$i.data}&select=1">{$i.dt}</a>
+			{/foreach}
+			</p>
+			{/if}
+
+
+			{if $my_advance.enabled}
+			<p>
+			<input
+				onchange="
+				$('#my_advance_val').attr('disabled',!this.checked);
+				$('#my_advance_cur_id').attr('disabled',!this.checked);
+				advance_save(
+					'{$next1}',
+					{$tn},
+					this.checked?$('#my_advance_val').val():0,
+					$('#my_advance_cur_id').val(),'my_advance_enabled'
+				);
+				"
+				id="my_advance_enabled"
+				type=checkbox
+			>
+			Мне нужен аванс транспортные и командировочные расходы на {$next_month_name}:
+			<input
+				size=8
+				onchange="
+				advance_save(
+					'{$next1}',
+					{$tn},
+					$('#my_advance_val').val(),
+					$('#my_advance_cur_id').val(),'my_advance_val','my_advance_val'
+				);
+				"
+				id="my_advance_val"
+				{if not $my_advance.def_val > 0}
+				class="number"
+				{/if}
+			>
+			<input type=hidden id="my_advance_def_val" value="{$my_advance.def_val}">
+			<script>
+				{if $my_advance.def_val > 0}
+					{literal}
+					$(
+						function()
+						{
+							$(
+								'#my_advance_val').
+								autoNumeric(
+									'init',
+									{
+										aSep: '',
+										mDec: 2,
+										vMin: 0.0,
+										vMax: $('#my_advance_def_val').val()
+									}
+							);
+						}
+					);
+					{/literal}
+				{/if}
+			</script>
+			<script>
+				{if $my_advance.tn}
+					$('#my_advance_val').val("{$my_advance.cur_val}");
+				{else}
+					$('#my_advance_val').val("{$my_advance.def_val}");
+				{/if}
+			</script>
+			<select
+				onchange="
+				advance_save(
+					'{$next1}',
+					{$tn},
+					$('#my_advance_val').val(),
+					$('#my_advance_cur_id').val(),'my_advance_cur_id'
+				);
+				"
+				id="my_advance_cur_id"
+			>
+				<option></option>
+				{foreach key=k1 item=i1 from=$currencies}
+				<option value={$i1.id}>{$i1.name}</option>
+				{/foreach}
+			</select>
+			нажать TAB для сохранения суммы
+			<script>
+
+				{if not $my_advance.tn}
+				$('#my_advance_val').attr('disabled',true);
+				$('#my_advance_cur_id').attr('disabled',true);
+				{else}
+				$('#my_advance_enabled').prop('checked',true);
+				{/if}
+
+				{if $my_advance.tn}
+				$('#my_advance_cur_id').val({$my_advance.cur_id});
+				{else}
+				$('#my_advance_cur_id').val({$cur_id});
+				{/if}
+			</script>
+			<p id="adv_result" style="color:red"></p>
+			</p>
+			{/if}
+
+			{if $box_dpu and $tn eq 2923402273}
+			<p>
+			{foreach key=k item=i from=$box_dpu}
+			<div style="text-align:left; background-color:lightgreen;">
+			{$i.head.creator_pos_name}<br>
+			{$i.head.creator_department_name}<br>
+			{$i.head.creator_fio}<br>
+			оставил вам предложение по теме: <a href="javascript:void(0);" onclick="$('#box{$i.head.id}').toggle();"><font style="color:blue">{$i.head.subj}</font></a>
+			<table id=box{$i.head.id}>
+				<tr>
+					<td colspan=3>
+						история переписки:
+					</td>
+				</tr>
+				{foreach key=k1 item=i1 from=$i.chat}
+				<tr style="vertical-align:top">
+					<td>
+						<font style="color:red"><nobr>{$i1.lu}</nobr></font>
+					</td>
+					<td>
+						<font style="color:green">{$i1.who}</font>
+					</td>
+					<td>
+						<font style="color:blue">{$i1.text|nl2br}</font>
+					</td>
+				</tr>
+				{/foreach}
+				<tr>
+					<td colspan=3>
+						<textarea cols="35" rows="3" name="box_text{$i.head.id}" id="box_text{$i.head.id}"></textarea><br>
+						<a href="javascript:void(0);" onclick="box_answer({$i.head.id},$('#box_text{$i.head.id}').val());">Отправить ответ</a>
+						<a href="javascript:void(0);" onclick="box_close({$i.head.id},'closed_dp');">Закрыть тему обсуждения</a>
+
+					</td>
+				</tr>
+			</table>
+			<script>$('#box{$i.head.id}').hide();</script>
+			<p id="box_result{$i.head.id}" style="color:red"></p>
+			</div>
+			<p></p>
+			{/foreach}
+			</p>
+			{/if}
+
+			{if $kc_dpu and $is_dpu}
+			<p>
+			Подтверждение отчета о КПР департамента персонала
+			{foreach key=k item=i from=$kc_dpu}
+			<a href="?action=kc&month_list={$i.data}">{$i.dt}</a>
+			{/foreach}
+			</p>
+			{/if}
+
+			{if $distr_discount_dpu and $is_dpu}
+			<p>
+			Закончен процесс формирования скидок дистрибуторам
+			{foreach key=k item=i from=$distr_discount_dpu}
+			<a href="?action=bud_fil_discount&month_list={$i.data}">{$i.dt}</a>
+			{/foreach}
+			</p>
+			{/if}
+
+			{if $bud_funds_limits_dpu and $is_dpu}
+			<p>
+			Завершено планирование фондов
+			{foreach key=k item=i from=$bud_funds_limits_dpu}
+			<a href="?action=bud_funds_limits&kk={$i.kk}&month_list={$i.data}">{$i.dt} ({$i.type})</a>
+			{/foreach}
+			</p>
+			{/if}
+
+			{if $bud_svod_ta}
+			<p>
+			Подтверждение отчета по фондам
+			{foreach key=k item=i from=$bud_svod_ta}
+			<a href="?action=bud_svod_ta&select=1&dt={$i.dt_txt}&db={$i.tn}">{$i.period} {$i.fio}</a>
+			{/foreach}
+			</p>
+			{/if}
+
+			{if $prob_test}<p><a href="?action=prob_test_go">Ссылка для прохождения теста по АП</a></p>{/if}
+
+			{foreach key=k item=i from=$ac_tests}
+				{if $i.logic_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_logic}">Ссылка для прохождения теста по АЦ - ЛОГИКА</a></p>{/if}
+				{if $i.math_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_math}">Ссылка для прохождения теста по АЦ - МАТЕМАТИКА</a></p>{/if}
+			{/foreach}
+
+			{if $is_admin and $error > 0}
+				<p style="font-weight:bold"><a href="?action=log&prg=error&select=1">Лог ошибок ({$error})</a></p>
+			{/if}
+
+			{if $main_vacation_report_my > 0}
+				<p style="font-weight:bold">
+				Поздравляем вас с выходом из отпуска!<br>
+				Согласно "Регламенту оформления отпуска" вам необходимо в течение 5 дней подвести итоги выполнения поставленных на ваш отпуск задач исполняющим обязанности.<br>
+				Для этого перейдите в подраздел "Команда / Отпуска / Отчет по задачам" или по <a href="?action=vacation_report">ссылке</a>
+				</p>
+			{/if}
+
+
+			{foreach key=k item=i from=$tmc}
+				<p id="tmc{$i.id}">
+					<b>Вам на подотчет поставлена ТМЦ</b>
+					, Тип ТМЦ - <b>{$i.tmcs}</b>
+					, Наименование / модель - <b>{$i.name}</b>
+					, Серийный номер - <b>{$i.sn}</b>
+					, Состояние при выдаче - <b>{$i.state}</b>
+					, Дата выдачи - <b>{$i.dtv}</b>
+					, Внесение записи о выдаче - <b>{$i.add_fio} {$i.add_lu}</b>
+					<a href="javascript:void(0)" onClick="$('#tmc{$i.id}').load('?action=tmc_accept&nohead=1&tmc={$i.id}');">Подтверждаю</a>
+					<br>
+					В случае несогласия/вопросов по данной ТМЦ вы можете связаться с ответственным сотрудником: {$parameters.it3.val_string}
+					<hr>
+				</p>
+			{/foreach}
+
+
+
+			{foreach key=k item=i from=$main_dc}
+				{if $i.stud_tn eq $tn}
+					<p style="background-color: rgb(204, 204, 255);">Вы приглашены для участия в "Девелопмент-центре", {$i.dt_start}, {$i.loc_name}.<br>
+					Темы презентаций для ДЦ - смотрите в почте.</p>
+				{else}
+					<p style="background-color: rgb(204, 204, 255);">Ваш подчиненный {$i.stud_fio} приглашен для участия в "Девелопмент-центре", {$i.dt_start}, {$i.loc_name}.</p>
+				{/if}
+			{/foreach}
+			{foreach key=k item=i from=$main_tr}
+				{if $i.tn eq $tn}
+					<p style="background-color: #CCCCCC;">Вы приглашены для участия в тренинге "{$i.name}", {$i.dt_start}, {$i.loc_name}.</p>
+				{else}
+					<p style="background-color: #CCCCCC;">Ваш подчиненный {$i.fio} приглашен для участия в тренинге "{$i.name}", {$i.dt_start}, {$i.loc_name}.</p>
+				{/if}
+			{/foreach}
+			{foreach key=k item=i from=$main_tr_pt}
+				{if $i.h_eta eq $h_eta}
+					<p style="background-color: #CCCCCC;">Вы приглашены для участия в тренинге "{$i.name}", {$i.dt_start}, {$i.loc_name}.</p>
+				{else}
+					<p style="background-color: #CCCCCC;">Ваш подчиненный {$i.fio} приглашен для участия в тренинге "{$i.name}", {$i.dt_start}, {$i.loc_name}.</p>
+				{/if}
+			{/foreach}
+			{if $d}
+				<p style="background-color: #CCCCCC;">
+				Вам необходимо заполнить обратную связь и пройти тестирование по тренингу "{$h.name}" до {$d.end_time}.<br>
+				Это можно сделать в разделе <a href="?action=tr_os">Команда / Обучение / ОС по тренингу и тестирование</a>
+				<p>
+			{/if}
+		</td>
+	</tr>
+</table>

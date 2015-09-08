@@ -1,0 +1,64 @@
+<tr id=list_{$id}>
+	<td>
+		{if $smarty.request.ro eq 'undefined'}
+		<a href='javascript:void(0);' onClick="del_item({$id})">[x]</a>
+		{/if}
+	</td>
+	<td>
+		{if $smarty.request.type eq 'tn'}менеджер{/if}
+		{if $smarty.request.type eq 'h_eta'}агент{/if}
+	</td>
+	<td>
+		{if $smarty.request.ro neq 'undefined'}
+			{foreach key=key item=item from=$list}
+				{if $smarty.request.key eq $item.id}{$item.fio}{/if}
+			{/foreach}
+		{else}
+		<select required name=data[{$id}][{$smarty.request.type}] id=data_{$id}_{$smarty.request.type}>
+			<option></option>
+			{foreach key=key item=item from=$list}
+			<option value={$item.id}>{$item.fio}</option>
+			{/foreach}
+		</select>
+		{/if}
+	</td>
+	<td>
+		Сумма
+		{if $smarty.request.ro neq 'undefined'}
+		{$smarty.request.summa|num:2}
+		{else}
+		<input required name=data[{$id}][summa] class=number id=data_{$id}_summa>
+		{/if}
+	</td>
+	<td>
+		Валюта
+		{if $smarty.request.ro neq 'undefined'}
+			{foreach key=key item=item from=$currencies}
+				{if $smarty.request.cur_id eq $item.id}{$item.name}{/if}
+			{/foreach}
+		{else}
+			<select required name=data[{$id}][cur_id] id=data_{$id}_cur_id>
+				<option></option>
+				{foreach key=k1 item=i1 from=$currencies}
+				<option value={$i1.id}>{$i1.name}</option>
+				{/foreach}
+			</select>
+		<script>$('#data_{$id}_cur_id').val('{$cur_id}');</script>
+		{/if}
+	</td>
+	<td>
+		Месяц отнесения
+		{if $smarty.request.ro neq 'undefined'}
+			{foreach key=key item=item from=$month_list}
+				{if $smarty.request.mz eq $item.sd_c}{$item.my}{/if}
+			{/foreach}
+		{else}
+		<select required name=data[{$id}][mz] id=data_{$id}_mz>
+			{foreach key=key item=item from=$month_list}
+			<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#data_{$id}_mz').val('{$smarty.request.month_list}');</script>
+		{/if}
+	</td>
+</tr>

@@ -1,0 +1,41 @@
+<tr id=list_{$id}>
+	<td>
+		<a href='javascript:void(0);' onClick="del_item({$id})">[-]</a>
+	</td>
+	<td>
+		<input id=d_{$id}_fio size=30 value="{$new_fio}" onChange="save_item({$id},'fio',this.value);">
+	</td>
+	<td>
+		<input id=d_{$id}_tn size=15 value="{$new_tn}" onChange="save_item({$id},'tn',this.value);" class="number_int">
+	</td>
+				<td>
+					<select
+						id="d_{$id}_ter_ms"
+						onChange="save_item({$id},'ter_ms',this.value);"
+					>
+					<option></option>
+					{foreach key=k1 item=i1 from=$ms_list}
+					<option value={$i1.tn}>{$i1.fio}</option>
+					{/foreach}
+					</select>
+					<script>$('#d_{$id}_ter_ms option[value="{$i.ter_ms}"]').prop('selected', true);</script>
+				</td>
+				<td>
+					<input id=d_{$id}_contract_num size=30 value="{$i.contract_num}" onChange="save_item({$id},'contract_num',this.value);">
+				</td>
+				<td>
+					<input id=d_{$id}_contract_end size=8 value="{$i.contract_end}" onChange="save_item({$id},'contract_end',this.value);" class="datepicker">
+				</td>
+				<td>
+					<select
+						id="d_{$id}_last_month"
+						onChange="save_item({$id},'last_month',this.value);"
+					>
+					<option></option>
+					{foreach key=k1 item=i1 from=$dt}
+					<option value={$i1.sd_c}>{$i1.my}</option>
+					{/foreach}
+					</select>
+					<script>$('#d_{$id}_last_month option[value="{$i.last_month}"]').prop('selected', true);</script>
+				</td>
+</tr>

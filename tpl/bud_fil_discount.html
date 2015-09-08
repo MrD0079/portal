@@ -1,0 +1,182 @@
+<h1>Скидки дистрибуторов</h1>
+
+<div id=ok></div>
+
+{if $head.dpu_tn or not ($is_traid or $is_traid_kk or $is_admin)}
+	{assign var=disabled value=disabled}
+{/if}
+
+<form name=fkc id=fkc target=_self method=post enctype="multipart/form-data">
+<table>
+	<tr>
+		<td>Месяц</td>
+		<td>
+			<select name=sd id=sd onchange="$('#fkc').submit();">
+			{foreach key=key item=item from=$month_list}
+			<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>ДБ</td>
+		<td>
+			<select name=db id=db>
+			<option value=0></option>
+			{foreach key=key item=item from=$db}
+			<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+			{/foreach}
+			</select>
+			<script>$('#db option[value={$smarty.request.db}]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Кластер</td>
+		<td>
+			<select name=cluster id=cluster>
+			<option value=0></option>
+			{foreach key=key item=item from=$clusters}
+			<option value="{$item.id}">{$item.name}</option>
+			{/foreach}
+			</select>
+			<script>$('#cluster option[value="{$smarty.request.cluster}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Дистрибутор</td>
+		<td>
+			<select name=distr id=distr>
+			<option value=0></option>
+			{foreach key=key item=item from=$fil}
+			<option value={$item.id}>{$item.name}</option>
+			{/foreach}
+			</select>
+			<script>$('#distr option[value={$smarty.request.distr}]').prop('selected', true);</script>
+		</td>
+	</tr>
+</table>
+<p><a href="javascript:void(0);" onclick="$('#fkc').submit();">Отобразить скидки</a></p>
+<table>
+	<tr>
+		<td>Скопировать из</td>
+		<td>
+			<select name=fd id=fd>
+				<option></option>
+				{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+</table>
+<input type=hidden id="copy_discount" name="copy_discount">
+<p><a href="javascript:void(0);"
+onclick="
+$('#copy_discount').val(1);
+$('#fd').val()==''?alert('Выберите исходный период для копирования скидок!'):$('#fkc').submit();
+"
+>Скопировать</a></p>
+<p style="color:red">При копировании будут скопированы скидки по всем дистрибьюторам!!!</p>
+</form>
+
+
+<h3>Скидки</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tbody>
+		<tr style="font-weight: bold; text-align:center">
+			<td>№ п/п</td>
+			<td>дистр</td>
+			<td>скидка</td>
+			<td>коммент</td>
+			<td>когда и кто изменил</td>
+		</tr>
+		{foreach key=k item=i from=$body name=body}
+		<tr>
+			<td>{$smarty.foreach.body.iteration}</td>
+			<td>{$i.name}</td>
+			<td id=td_discount{$i.id} style="text-align:right">
+				{if not $disabled}
+				<input
+				class="number"
+				size=5
+				{$disabled}
+				value="{$i.discount}"
+				onChange="
+					save('{$smarty.request.sd}','body','discount',this.value,{$i.id});
+					save('{$smarty.request.sd}','body','fio','{$fio}',{$i.id});
+				"
+				>
+				{else}
+				{$i.discount|num:2}
+				{/if}
+			</td>
+			<td id=td_comm{$i.id} style="text-align:right">
+				{if not $disabled or $is_dpu}
+				<textarea
+				{$disabled}
+				onChange="
+					save('{$smarty.request.sd}','body','comm',this.value,{$i.id});
+					save('{$smarty.request.sd}','body','fio','{$fio}',{$i.id});
+				"
+				>{$i.comm}</textarea>
+				{else}
+				{$i.comm}
+				{/if}
+			</td>
+			<td>{$i.lu} {$i.fio}</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>
+
+<p id=td_tn>
+Скидки на подтверждение ДП
+{if not $is_dpu and not $disabled}
+<input {if $head.tn}checked{/if} type=checkbox onChange="
+save('{$smarty.request.sd}','head','tn',this.checked?{$tn}:'','');
+save('{$smarty.request.sd}','head','fio',this.checked?'{$fio}':'','');
+">
+{/if}
+<b>{$head.fio} {$head.lu}</b>
+</p>
+
+<p id=td_dpu_tn>
+Подтверждение ДП
+{if $is_dpu}
+<input {if $head.dpu_tn}checked{/if} type=checkbox onChange="
+save('{$smarty.request.sd}','head','dpu_tn',this.checked?{$tn}:'','');
+save('{$smarty.request.sd}','head','dpu_fio',this.checked?'{$fio}':'','');
+">
+{/if}
+<b>{$head.dpu_fio} {$head.dpu_lu}</b>
+</p>
+
+<script>
+{literal}
+
+function save(dt,table,field,val,key2)
+{
+	$('#td_'+field+key2).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('key2',  key2);
+	fd.append('table',  table);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_fil_discount&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_'+field+key2).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+
+{/literal}
+</script>

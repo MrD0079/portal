@@ -1,0 +1,21 @@
+<tr id=vv{$new_id}>
+<td>
+<a href="javascript:void(0);" onclick="$('#vv{$new_id}').remove();">[-]</a>
+</td>
+<td>
+<select required name=vv_new[{$new_id}][tp]>
+<option></option>
+{foreach key=k item=i from=$vv_tp name=vv_tp}
+<option value={$i.kodtp}>{$i.tz_oblast} - {$i.net_name} - {$i.ur_tz_name} - {$i.tz_address}</option>
+{/foreach}
+</select>
+</td>
+<td>
+<select required name=vv_new[{$new_id}][ag]>
+<option></option>
+{foreach key=key item=item from=$routes_agents}
+<option value={$item.id}>{$item.name|escape}</option>
+{/foreach}
+</select>
+</td>
+</tr>

@@ -1,0 +1,58 @@
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td rowspan=2>№ п/п</td>
+		<td rowspan=2>ФИО руководителя</td>
+		<td rowspan=2>ФИО ТС<br></td>
+		<td rowspan=2>ФИО ЭТА<br></td>
+		<td rowspan=2>Название ТП<br></td>
+		<td rowspan=2>Адрес ТП<br></td>
+		<td rowspan=2>Дата<br>накладной<br></td>
+		<td rowspan=2>Номер<br>накладной<br></td>
+		<td rowspan=2>Сумма по накладной, {$valuta}</td>
+		<td colspan=3 style="background-color: rgb(204, 255, 255);">КримЧерри 225</td>
+		<td colspan=3 style="background-color: rgb(255, 255, 204);">КримЧерри 420</td>
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td style="background-color: rgb(204, 255, 255);">Количество коробок</td>
+		<td style="background-color: rgb(204, 255, 255);">Выдано коробок</td>
+		<td style="background-color: rgb(204, 255, 255);">Дата выдачи</td>
+		<td style="background-color: rgb(255, 255, 204);">Количество коробок</td>
+		<td style="background-color: rgb(255, 255, 204);">Выдано коробок</td>
+		<td style="background-color: rgb(255, 255, 204);">Дата выдачи</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}"
+		{if $list_item.fakt_bonus > $list_item.bonus_plan}style="background-color: red"{/if}
+		{if $list_item.is_act eq 1}style="background-color: rgb(51, 255, 51)"{/if}
+	>
+		<td>{$smarty.foreach.list.iteration}</td>
+		<td>{$list_item.parent_fio}</td>
+
+		<td>{$list_item.ts_fio}</td>
+		<td>{$list_item.fio_eta}</td>
+		<td>{$list_item.tp_kod} {$list_item.tp_ur}</td>
+		<td>{$list_item.tp_addr}</td>
+		<td>{$list_item.data}</td>
+		<td>{$list_item.nakl}</td>
+		<td style="text-align:right">{$list_item.summa|default:0|num:2}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align:right">{$list_item.cher225q|default:0|num:0}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align:right">{$list_item.bonus_sum1|default:0|num:0}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align:center">{$list_item.bonus_dt1}</td>
+		<td style="background-color: rgb(255, 255, 204);text-align:right">{$list_item.cher420q|default:0|num:0}</td>
+		<td style="background-color: rgb(255, 255, 204);text-align:right">{$list_item.bonus_sum2|default:0|num:0}</td>
+		<td style="background-color: rgb(255, 255, 204);text-align:center">{$list_item.bonus_dt2}</td>
+	</tr>
+	{/foreach}
+</table>
+
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>

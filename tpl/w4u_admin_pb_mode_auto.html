@@ -1,0 +1,53 @@
+
+<p>
+Старый ЭТА
+<select name=eta_old id=eta_old>
+{foreach key=key item=item from=$el}
+	<option value="{$item.h_fio_eta}">{$item.fio_eta} (ТС: {$item.fio_ts})</option>
+{/foreach}
+</select>
+<script>$("#eta_old option[value='{$smarty.request.eta_old}']").prop('selected', true);</script>
+</p>
+
+{if $smarty.request.eta_old}
+<p>Отображается: <select name=old_visible id=old_visible><option value=1>да</option><option value=0>нет</option></select></p>
+<script>$('#old_visible').val({$head_old.visible});</script>
+<p>План по АКБ: {$head_old.akb}</p>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr>
+	{foreach key=k item=i name=data_old from=$data_old}
+		{if $smarty.foreach.data_old.iteration%5 eq 1 and $smarty.foreach.data_old.iteration neq 1}<tr>{/if}
+		<td><!--{$i.product_id}-->{$i.product_name_sw} - <b>{$i.qtytt}</b></td>
+		{if $smarty.foreach.data_old.iteration%5 eq 0 and $smarty.foreach.data_old.iteration neq 1}</tr>{/if}
+	{/foreach}
+	</tr>
+</table>
+{/if}
+
+<p>
+Новый ЭТА
+<select name=eta_new id=eta_new>
+{foreach key=key item=item from=$el}
+	<option value="{$item.h_fio_eta}">{$item.fio_eta} (ТС: {$item.fio_ts})</option>
+{/foreach}
+</select>
+<script>$("#eta_new option[value='{$smarty.request.eta_new}']").prop('selected', true);</script>
+</p>
+
+{if $smarty.request.eta_old}
+<!--
+<p>Отображается: <select name=new_visible id=new_visible><option value=1>да</option><option value=0>нет</option></select></p>
+<script>$('#new_visible').val({$head_new.visible});</script>
+-->
+<p>План по АКБ: {$head_new.akb}</p>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr>
+	{foreach key=k item=i name=data_new from=$data_new}
+		{if $smarty.foreach.data_new.iteration%5 eq 1 and $smarty.foreach.data_new.iteration neq 1}<tr>{/if}
+		<td><!--{$i.product_id}-->{$i.product_name_sw} - <b>{$i.qtytt}</b></td>
+		{if $smarty.foreach.data_new.iteration%5 eq 0 and $smarty.foreach.data_new.iteration neq 1}</tr>{/if}
+	{/foreach}
+	</tr>
+</table>
+{/if}
+

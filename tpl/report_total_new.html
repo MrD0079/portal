@@ -1,0 +1,129 @@
+<h1>Общий сводный отчет М-Сервис за {$smarty.request.dates_list2}</h1>
+
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+
+<b>
+Дата
+с <input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+по <input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+</b>
+
+<script>
+$('#dates_list1').val('{$smarty.request.dates_list1}');
+$('#dates_list2').val('{$smarty.request.dates_list2}');
+</script>
+
+<br>
+
+<b>СВ МС</b>
+<select name=svms_list id=svms_list>
+<option value=0></option>
+{foreach key=key item=item from=$svms_list}
+	<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+{/foreach}
+</select>
+<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+
+
+
+<br>
+
+
+
+
+
+
+<b>Маршрут</b>
+
+<select name="select_route_numb" id="select_route_numb">
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head}
+		<option value="{$item.id}">{$item.fio} - {$item.num} - {$item.fio_otv} - {$item.period}</option>
+	{/foreach}
+</select>
+<script>$('#select_route_numb option[value={$smarty.request.select_route_numb}]').prop('selected', true);</script>
+
+
+
+<br>
+
+<b>Заказчики</b>
+
+
+<br>
+
+{literal}
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+{/literal}
+
+{assign var=s value=0}
+{foreach key=key1 item=item1 from=$smarty.request.head_agents}
+{assign var=s value=1}
+{/foreach}
+
+{foreach key=key item=item from=$routes_head_agents name=d}
+	{math assign="color" equation='y' y=$smarty.foreach.d.iteration%4} 
+	{if $color eq 1}<br>{/if}
+	<input
+	class=chk_all
+	name=head_agents[{$item.id}]
+	id="head_agents_{$item.id}"
+	type=checkbox
+	{foreach key=key1 item=item1 from=$smarty.request.head_agents}
+		{if $item.id eq $key1}checked{/if}
+	{/foreach}
+	{if $s eq 0}checked{/if}
+	>
+	{$item.name|escape}
+{/foreach}
+
+<br>
+
+<input type=submit name=select value="Построить отчет">
+
+{if $smarty.request.select}
+
+<hr>
+<a target=_blank href="?action=report_total_new&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Сводный отчет М-Сервис за {$smarty.request.dates_list2}&select=1&tpl=1">экспорт в Excel</a>
+<br>
+<br>
+
+<input name="save" value="Сохранить" type="submit">
+<br>
+<br>
+{/if}
+
+{/if}
+
+
+{if $smarty.request.select}
+	{if $smarty.request.tpl}
+		{include file="report_total_new_linear.html"}
+	{else}
+		{if $smarty.request.debug}
+			{include file="report_total_new_group_debug.html"}
+		{else}
+			{include file="report_total_new_group.html"}
+		{/if}
+	{/if}
+{/if}
+
+{if not $smarty.request.print}
+
+
+
+{if $smarty.request.select}
+<input name="save" value="Сохранить" type="submit">
+{/if}
+
+</form>
+
+{if $smarty.request.select_route_numb>0}
+{include file="report_total_new_vv.html"}
+{/if}
+
+{/if}

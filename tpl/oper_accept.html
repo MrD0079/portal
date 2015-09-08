@@ -1,0 +1,280 @@
+<h1>Согласование оперативного планирования</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+{if not $smarty.request.print}
+	<table>
+		<tr>
+			<td colspan=10>
+				<input checked="checked" name="neednmkk" value="0" type="radio">Все сети
+				<input name="neednmkk" value="1" type="radio">Обязательны для принятия НМ КК
+				<script>$("input[name=neednmkk][value={$smarty.request.neednmkk}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=10>
+				Подтверждение
+				<input checked="checked" name="ok_filter" value="0" type="radio">Все
+				<input name="ok_filter" value="1" type="radio">Не подтверждено РМ КК
+				<input name="ok_filter" value="2" type="radio">Не подтверждено НМ КК
+				<input name="ok_filter" value="3" type="radio">Не подтверждено ЗГДП
+				<script>$("input[name=ok_filter][value={$smarty.request.ok_filter}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Месяц
+				<br>
+				<select name="calendar_months" id="calendar_months">
+					<option value=0></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_months option[value="{$smarty.request.calendar_months}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Выберите сеть из списка
+				<br>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			{if not $is_mkk}
+			<td>
+				Ответственный РМКК
+				<br>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Ответственный МКК
+				<br>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+			{/if}
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+<br>
+{/if}
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+<a href="?action=oper_accept&print=1&excel=1&filename=Согласование оперативного планирования">Экспорт в Excel</a>
+<p style="text-align:center"><input value="Сохранить" name="save" type="submit"></p>
+{/if}
+
+
+	{foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
+	<p>
+		{$smarty.foreach.fin_report.iteration}.
+		Сеть <b>{$fin_report_item.net_name}</b>
+		Месяц <b>{$fin_report_item.mt}</b>
+		РМКК <b>{$fin_report_item.rmkk}</b>
+		МКК <b>{$fin_report_item.mkk}</b>
+	</p>
+	<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2><b>Статьи затрат</b> (Группы затрат)</td>
+		<td class="bg-f" colspan=4>Финансовое</td>
+		<td class="bg-d" colspan=4>Договорное</td>
+		<td class="bg-o" colspan=4>Оперативное</td>
+		<td colspan=3>Подтверждение<br>оперативного<br>планирования</td>
+		{if not $is_mkk}
+		<td rowspan=2>
+			<b>Текст сообщения</b>
+			<br>
+			<textarea cols=15 rows=5 name=msg[{$smarty.foreach.fin_report.iteration}][msg]>{$fin_report_item.msg|escape}</textarea>
+			<input type=hidden name=msg[{$smarty.foreach.fin_report.iteration}][id_net] value="{$fin_report_item.id_net}">
+			<input type=hidden name=msg[{$smarty.foreach.fin_report.iteration}][net_name] value="{$fin_report_item.net_name}">
+			<input type=hidden name=msg[{$smarty.foreach.fin_report.iteration}][my] value="{$fin_report_item.my}">
+			<input type=hidden name=msg[{$smarty.foreach.fin_report.iteration}][mt] value="{$fin_report_item.mt}">
+			<input type=hidden name=msg[{$smarty.foreach.fin_report.iteration}][rmkk] value="{$fin_report_item.rmkk}">
+			<input type=hidden name=msg[{$smarty.foreach.fin_report.iteration}][mkk] value="{$fin_report_item.mkk}">
+			<br>
+			<input value="Отправить сообщение" name="send_msg" type="submit">
+		</td>
+		{/if}
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td class="bg-f">Кол-во<br>единиц</td>
+		<td class="bg-f">Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>
+		<td class="bg-f">Бонус, %</td>
+		<td class="bg-f">ИТОГО,<br>тыс.<br>{$valuta}</td>
+		<td class="bg-d">Кол-во<br>единиц</td>
+		<td class="bg-d">Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>
+		<td class="bg-d">Бонус, %</td>
+		<td class="bg-d">ИТОГО,<br>тыс.<br>{$valuta}</td>
+		<td class="bg-o">Кол-во<br>единиц</td>
+		<td class="bg-o">Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>
+		<td class="bg-o">Бонус, %</td>
+		<td class="bg-o">ИТОГО,<br>тыс.<br>{$valuta}</td>
+		<td>РМКК</td>
+		<td>НМКК</td>
+		<td>ЗГДП</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$fin_report_item.detail name=detail}
+	<tr>
+		<td><b>{$i1.cost_item}</b> ({$i1.cost_item_parent})</td>
+		<td class="bg-f" style="text-align:right">{if $i1.f_cnt neq 0}{$i1.f_cnt|default:0|num:3}{/if}</td>
+		<td class="bg-f" style="text-align:right">{if $i1.f_price neq 0}{$i1.f_price|default:0|num:3}{/if}</td>
+		<td class="bg-f" style="text-align:right">{if $i1.f_bonus neq 0}{$i1.f_bonus|default:0|num:3}{/if}</td>
+		<td class="bg-f" style="text-align:right">{if $i1.f_total neq 0}{$i1.f_total|default:0|num:3}{/if}</td>
+		<td class="bg-d" style="text-align:right">{if $i1.d_cnt neq 0}{$i1.d_cnt|default:0|num:3}{/if}</td>
+		<td class="bg-d" style="text-align:right">{if $i1.d_price neq 0}{$i1.d_price|default:0|num:3}{/if}</td>
+		<td class="bg-d" style="text-align:right">{if $i1.d_bonus neq 0}{$i1.d_bonus|default:0|num:3}{/if}</td>
+		<td class="bg-d" style="text-align:right">{if $i1.d_total neq 0}{$i1.d_total|default:0|num:3}{/if}</td>
+		<td
+			{if
+				($i1.f_cnt neq 0 and $i1.f_cnt > $i1.o_cnt)
+				or
+				($i1.d_cnt neq 0 and $i1.d_cnt > $i1.o_cnt)
+			}
+				class="bg-red"
+			{else}
+				class="bg-o"
+			{/if}
+			style="text-align:right"
+		>
+			{if $i1.o_cnt neq 0}{$i1.o_cnt|default:0|num:3}{/if}
+		</td>
+
+
+		<td
+			{if
+				($i1.f_price neq 0 and $i1.f_price < $i1.o_price)
+				or
+				($i1.d_price neq 0 and $i1.d_price < $i1.o_price)
+			}
+				class="bg-red"
+			{else}
+				class="bg-o"
+			{/if}
+			style="text-align:right"
+		>
+			{if $i1.o_price neq 0}{$i1.o_price|default:0|num:3}{/if}
+		</td>
+		<td
+			{if
+				($i1.f_bonus neq 0 and $i1.f_bonus < $i1.o_bonus)
+				or
+				($i1.d_bonus neq 0 and $i1.d_bonus < $i1.o_bonus)
+			}
+				class="bg-red"
+			{else}
+				class="bg-o"
+			{/if}
+			style="text-align:right"
+		>
+			{if $i1.o_bonus neq 0}{$i1.o_bonus|default:0|num:3}{/if}
+		</td>
+		<td
+			{if
+				($i1.f_total neq 0 and $i1.f_total < $i1.o_total)
+				or
+				($i1.d_total neq 0 and $i1.d_total < $i1.o_total)
+			}
+				class="bg-red"
+			{else}
+				class="bg-o"
+			{/if}
+			style="text-align:right"
+		>
+			{if $i1.o_total neq 0}{$i1.o_total|default:0|num:3}{/if}
+		</td>
+		{if $smarty.foreach.detail.iteration eq 1}
+		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_rmkk_tmkk}class="bg-green"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_rmkk_tmkk').val(this.checked?1:0)" 
+				{if $fin_report_item.ok_rmkk_tmkk}checked{/if}
+				{if not $is_rmkk or $fin_report_item.ok_nmkk eq 1}disabled{/if}
+			>
+			<input type=hidden name=ok[{$fin_report_item.id_net}][{$fin_report_item.my}][ok_rmkk_tmkk] id='ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_rmkk_tmkk'>
+			{else}
+				{if $fin_report_item.ok_rmkk_tmkk}да{/if}
+			{/if}
+		</td>
+		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_nmkk}class="bg-green"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_nmkk').val(this.checked?1:0)" 
+				{if $fin_report_item.ok_nmkk}checked{/if}
+				{if not $is_nmkk or $fin_report_item.ok_dpu eq 1}disabled{/if}
+			>
+			<input type=hidden name=ok[{$fin_report_item.id_net}][{$fin_report_item.my}][ok_nmkk] id='ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_nmkk'>
+			{else}
+				{if $fin_report_item.ok_nmkk}да{/if}
+			{/if}
+		</td>
+		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_dpu}class="bg-green"{/if} style="text-align:center;">
+			{if not $smarty.request.print}
+			<input type=checkbox onclick="$('#ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_dpu').val(this.checked?1:0)" 
+				{if $fin_report_item.ok_dpu}checked{/if}
+				{if not $is_dpu}disabled{/if}
+			>
+			<input type=hidden name=ok[{$fin_report_item.id_net}][{$fin_report_item.my}][ok_dpu] id='ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_dpu'>
+			{else}
+				{if $fin_report_item.ok_dpu}да{/if}
+			{/if}
+		</td>
+		{/if}
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold">
+		<td>ИТОГО</td>
+		<td class="bg-f" style="text-align:right">{$fin_report_item.detail_total.f_cnt|default:0|num:3}</td>
+		<td class="bg-f" style="text-align:center" colspan=2><a target=_blank href="?action=fin_plan_detail&plan_type=1&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a></td>
+		<td class="bg-f" style="text-align:right">{$fin_report_item.detail_total.f_total|default:0|num:3}</td>
+		<td class="bg-d" style="text-align:right">{$fin_report_item.detail_total.d_cnt|default:0|num:3}</td>
+		<td class="bg-d" style="text-align:center" colspan=2><a target=_blank href="?action=fin_plan_detail&plan_type=2&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a></td>
+		<td class="bg-d" style="text-align:right">{$fin_report_item.detail_total.d_total|default:0|num:3}</td>
+		<td class="bg-o" style="text-align:right">{$fin_report_item.detail_total.o_cnt|default:0|num:3}</td>
+		<td class="bg-o" style="text-align:center" colspan=2><a target=_blank href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a></td>
+		<td class="bg-o" style="text-align:right">{$fin_report_item.detail_total.o_total|default:0|num:3}</td>
+	</tr>
+	<tr style="font-weight:bold">
+		<td>План продаж месяца, тыс.{$valuta}.</td>
+		<td class="bg-f" colspan=4 style="text-align:right">{$fin_report_item.plan1.plan|default:0|num:3}</td>
+		<td class="bg-d" colspan=4 style="text-align:right">{$fin_report_item.plan2.plan|default:0|num:3}</td>
+		<td class="bg-o" colspan=4 style="text-align:right">{$fin_report_item.plan3.plan|default:0|num:3}</td>
+	</tr>
+	<tr style="font-weight:bold">
+		<td>Затраты, %</td>
+		<td class="bg-f" colspan=4 style="text-align:right">{$fin_report_item.plan1.perc_zatr|default:0|num:3}</td>
+		<td class="bg-d" colspan=4 style="text-align:right">{$fin_report_item.plan2.perc_zatr|default:0|num:3}</td>
+		<td class="bg-o" colspan=4 style="text-align:right">{$fin_report_item.plan3.perc_zatr|default:0|num:3}</td>
+	</tr>
+	</table>
+	{/foreach}
+
+{if not $smarty.request.print}
+<p style="text-align:center"><input value="Сохранить" name="save" type="submit"></p>
+{/if}
+{/if}
+</form>

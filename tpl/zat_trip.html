@@ -1,0 +1,69 @@
+<h3>Расходы командировочные</h3>
+
+<table border=1 cellspacing=0 cellpadding=1>
+	<tr align=center>
+		<td>Дата</td>
+		<td>Место работы</td>
+		<td>Город<br>согласно<br>плану<br>активности</td>
+
+		<td>Тренинг/ДЦ</td>
+
+		<td>Кол-во ночлегов вне дома</td>
+		<td>Суточные</td>
+		<td>Стоимость гостиницы</td>
+		<td>Транспортные расходы</td>
+		<td>Всего</td>
+	</tr>
+	{foreach key=key item=item from=$zat_daily}
+	<tr align=center {if $item.vac_data}bgcolor="yellow"{elseif $item.dw eq 6 or $item.dw eq 7}bgcolor="#ff0000"{/if}>
+		<td>{$item.dm}</td>
+		{if $zat_enabled}
+		<td><input size=15 name="zat_daily_trip[{$item.data}][city]" value="{$item.zt_city|escape}"></td>
+		<td>{$item.p_city}</td>
+
+		<td {if $item.tr or $item.dc}style="background-color: rgb(153, 255, 153);"{/if}>{if $item.tr or $item.dc}{$item.tr}/{$item.dc}{/if}</td>
+
+		<td><input size=5 class="number" name="zat_daily_trip[{$item.data}][nights_count]" value="{$item.nights_count}"></td>
+		<td><input size=5 class="number" name="zat_daily_trip[{$item.data}][daily_cost]" value="{$item.daily_cost}"></td>
+		<td><input size=5 class="number" name="zat_daily_trip[{$item.data}][hotel]" value="{$item.hotel}"></td>
+		<td><input size=5 class="number" name="zat_daily_trip[{$item.data}][transport]" value="{$item.transport}"></td>
+		{else}
+		<td>{$item.zt_city}</td>
+		<td>{$item.p_city}</td>
+
+		<td {if $item.tr or $item.dc}style="background-color: rgb(153, 255, 153);"{/if}>{if $item.tr or $item.dc}{$item.tr}/{$item.dc}{/if}</td>
+
+		<td>{$item.nights_count}</td>
+		<td>{$item.daily_cost}</td>
+		<td>{$item.hotel}</td>
+		<td>{$item.transport}</td>
+		{/if}
+		<td>{$item.zt_total}</td>
+	</tr>
+	{/foreach}
+
+
+	{foreach key=key item=item from=$zat_daily_total}
+	{assign var=sum_total value=`$sum_total+$item.zt_total`}
+	<tr align=center align=center style="font-weight:bold">
+		<td colspan=3>Итого</td>
+
+		<td>{$item.tr}/{$item.dc}</td>
+
+		<td>{$item.nights_count}</td>
+		<td>{$item.daily_cost}</td>
+		<td>{$item.hotel}</td>
+		<td>{$item.transport}</td>
+		<td>{$item.zt_total}</td>
+	</tr>
+	{/foreach}
+
+	<tr align=center>
+		<td colspan=8>Лимит на командировочные расходы</td>
+		<td>
+			{$limits_current.limitkom}
+		</td>
+	</tr>
+
+</table>
+

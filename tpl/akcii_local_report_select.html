@@ -1,0 +1,52 @@
+	{if $is_ts neq 1 and $is_eta neq 1}
+		По руководителю:
+		<br>
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+		По супервайзеру:
+		<br>
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+<script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value='{$smarty.request.exp_list_only_ts}']").prop('selected', true);</script>
+
+	{/if}
+	{if $is_eta neq 1}
+		По ЭТА:
+		<br>
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>
+		$('#eta_list').val('{$smarty.request.eta_list}');
+		</script>
+		<br>
+	{/if}
+	<input type="hidden" name="form_submit">
+	<table border=0>
+		<tr style="vertical-align: top;">
+			<td>
+				<input type=radio id="ok_selected" name="ok_selected" value=1>Все ТП<br>
+				<input type=radio id="ok_selected" name="ok_selected" value=2>Только участвующие<br>
+				<script>$("input[name=ok_selected]").val([{$smarty.request.ok_selected}]);</script>
+			</td>
+		</tr>
+	</table>
+	<input type=submit name=generate id=generate value='Выбрать'>
+
+{if $smarty.request.generate}
+	<p><a href="?action=akcii_local_report&print=1&excel=1&generate=1&z_id={$smarty.request.z_id}&filename=Отчет по акции {$act_head.val_string|escape}">Экспорт в Excel</a></p>
+{/if}

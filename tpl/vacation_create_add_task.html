@@ -1,0 +1,48 @@
+{literal}
+<script>
+var i = new Array();
+function add_task(id)
+{
+	if (i[id]==null)
+	{
+		i[id]=0;
+	}
+	i[id]++;
+	$a='<tr id="'+id+'_'+i[id]+'">'+
+	'<td style="text-align: center;"><a href="javascript:void(0);" onclick="$(\'#'+id+'_'+i[id]+'\').remove();$i['+id+']--;">[х]</a></td>'+
+	'<td style="vertical-align: top; background-color: rgb(204, 255, 255); text-align: center;"><textarea required cols="70" rows="2" name="tasks['+id+']['+i[id]+'][task]"></textarea></td>'+
+	'<td style="vertical-align: top; background-color: rgb(255, 255, 204); text-align: center;"><textarea required cols="30" rows="2" name="tasks['+id+']['+i[id]+'][result]"></textarea></td>'+
+	'<td style="vertical-align: top; background-color: rgb(153, 255, 153); text-align: center;"><input required name="tasks['+id+']['+i[id]+'][dt_end]" class="datepicker"></td>'+
+	'</tr>';
+	$($a).insertAfter($("#"+id).children().last());
+	init_form();	
+}
+</script>
+{/literal}
+
+
+<p><div id="body" style="display: inline;">
+
+
+{foreach key=key item=item from=$vacation_task_parts}
+<p style="font-weight:bold">{$item.name} <a href="javascript:void({$item.id});" onclick="add_task({$item.id})">Добавить задачу</a></p>
+<table id="{$item.id}" style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr>
+		<td rowspan="3" style="font-weight: bold; text-align: center;">Удал.</td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(204, 255, 255); font-weight: bold;">Описание задачи</td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(255, 255, 204); font-weight: bold;">Планируемый результат</td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(153, 255, 153); font-weight: bold;">Срок завершения</td>
+	</tr>
+	<tr>
+		<td colspan=3 style="vertical-align: top; text-align: center; background-color: red;">Принцип SMART</td>
+	</tr>
+	<tr>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(204, 255, 255);">S - конкретная; A - достижимая; R - значимая</td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(255, 255, 204);">M - измеримая</td>
+		<td style="vertical-align: top; text-align: center; background-color: rgb(153, 255, 153);">T - ограниченная по времени</td>
+	</tr>
+</table>
+{/foreach}
+
+
+</div></p>

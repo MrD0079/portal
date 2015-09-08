@@ -1,0 +1,130 @@
+{foreach key=key item=item from=$routes_head_agents}
+{if $item.id eq $smarty.request.agent}
+{assign var=ag_name value='по клиенту '}
+{assign var=ag_name value=$ag_name`$item.name`}
+{/if}
+{/foreach}
+
+
+<h1>Сводный отчет М-Сервис по спецификации за {$smarty.request.dates_list2} {$ag_name}</h1>
+
+
+{if not $smarty.request.print}
+<form name=form_select id=form_select target=_self method=post>
+
+
+
+
+<table>
+	<tr>
+		<td style="text-align:right">
+			Дата
+		</td>
+		<td style="text-align:left">
+			<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+			<script>$('#dates_list2').val('{$smarty.request.dates_list2}');</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Область
+		</td>
+		<td style="text-align:left">
+<select name=oblast id=oblast>
+	<option value=0></option>
+	{foreach key=key item=item from=$oblast}
+	<option value="{$item.oblast}">{$item.oblast}</option>
+	{/foreach}
+</select>
+<script>$('#oblast option[value="{$smarty.request.oblast}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Сеть
+		</td>
+		<td style="text-align:left">
+<select name=nets id=nets>
+	<option value=0></option>
+	{foreach key=key item=item from=$nets}
+	<option value="{$item.id_net}">{$item.net_name}</option>
+	{/foreach}
+</select>
+<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">СВ МС
+		</td>
+		<td style="text-align:left">
+<select name=svms_list id=svms_list>
+	<option value=0></option>
+	{foreach key=key item=item from=$svms_list}
+	<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Город
+		</td>
+		<td style="text-align:left">
+<select name="city" id="city">
+	<option value=0></option>
+	{foreach key=key item=item from=$city}
+	<option value="{$item.city|escape}">{$item.city|escape}</option>
+	{/foreach}
+</select>
+<script>$('#city option[value="{$smarty.request.city}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+
+	<tr>
+		<td style="text-align:right">Заказчик
+		</td>
+		<td style="text-align:left">
+<select name=agent id=agent required>
+	<option></option>
+	{foreach key=key item=item from=$routes_head_agents}
+	<option value="{$item.id}">{$item.name|escape}</option>
+	{/foreach}
+</select>
+<script>$('#agent option[value="{$smarty.request.agent}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+
+
+
+	<tr>
+		<td style="text-align:center" colspan=2>
+<input type=submit name=select value="Построить отчет" style="background-color:#B0ADC3;border: #000 1px solid;">
+		</td>
+	</tr>
+</table>
+
+
+{if $smarty.request.select}
+
+<a target=_blank href="?action=merch_report_4admin_by_spec_new&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Сводный отчет М-Сервис по спецификации за {$smarty.request.dates_list2} {$ag_name}&select=1&tpl=1">экспорт в Excel</a>
+
+
+
+
+
+<br>
+<br>
+
+{/if}
+
+{/if}
+
+{if $smarty.request.select}
+	{if $smarty.request.tpl}
+		{include file="merch_report_4admin_by_spec_new_table_linear.html"}
+	{else}
+		{if $smarty.request.debug eq 1}{include file="merch_report_4admin_by_spec_new_table_group_debug.html"}{else}{include file="merch_report_4admin_by_spec_new_table_group.html"}{/if}
+	{/if}
+{/if}
+
+{if not $smarty.request.print}
+</form>
+{/if}

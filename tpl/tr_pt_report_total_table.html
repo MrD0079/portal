@@ -1,0 +1,84 @@
+<table border=1 cellspacing=0 cellpadding=3 width=1000px>
+	<tr style="font-weight:bold; text-align:center">
+		<td>
+			Период проведения тренинга
+		</td>
+		<td>
+			Тренинг
+		</td>
+		<td>
+			Тренер
+		</td>
+		<td>
+			Локация
+		</td>
+		<td>
+			Тренинг проведен
+		</td>
+		<td>
+			Количество участников, ПЛАН
+		</td>
+		<td style="background-color: rgb(255, 204, 153);">
+			Количество участников, ФАКТ
+		</td>
+		<td>
+			Заполнили ОС и прошли тестирование
+		</td>
+		<td>
+			Средний балл по тесту
+		</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+		<tr>
+			<td style="text-align:center">
+				{$i.dt_start_t} - {$i.dt_end_t}
+			</td>
+			<td>
+				<a target=_blank href="?action=tr_pt_report&id={$i.id}">{$i.name}</a>
+			</td>
+			<td>
+				{$i.fio}
+			</td>
+			<td>
+				{$i.loc_name}
+			</td>
+			<td style="text-align:center;{if $i.completed}background-color:rgb(51, 255, 51){/if}">
+				{if $i.completed}да{else}нет{/if}
+			</td>
+			<td style="text-align:center">
+				{$i.stud_cnt}
+			</td>
+			<td style="text-align:center;background-color: rgb(255, 204, 153);">
+				{$i.stud_cnt_fakt}
+			</td>
+			<td style="text-align:center;">
+				<a target=_blank href="?action=tr_pt_os_test_result&id={$i.id}">{$i.stud_cnt_test_ok}</a>
+			</td>
+			<td
+				style="
+					text-align:center;
+					{if $i.max_ball neq 0}
+						{if $i.avg_ball/$i.max_ball*100 >= 85}
+							background-color: rgb(51, 255, 51);
+						{elseif $i.avg_ball/$i.max_ball*100 < 75}
+							background-color: red;
+						{else}
+							background-color: rgb(255, 255, 153);
+						{/if}
+					{/if}
+				"
+			>
+				{$i.avg_ball|default:0|num:2} / {$i.max_ball|default:0|num:2}
+			</td>
+		</tr>
+	{/foreach}
+	<tr style="font-weight:bold; text-align:center">
+		<td colspan=4>ИТОГО</td>
+		<td>{$dt.completed}</td>
+		<td>{$dt.stud_cnt}</td>
+		<td>{$dt.stud_cnt_fakt}</td>
+		<td>{$dt.stud_cnt_test_ok}</td>
+		<td><h2 style="color:red">{$dt.perc|num:2}%</h2></td>
+	</tr>
+</table>
+

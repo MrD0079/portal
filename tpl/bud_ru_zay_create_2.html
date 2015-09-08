@@ -1,0 +1,381 @@
+{literal}
+<script type='text/javascript'>
+$a=1;
+$cnt=0;
+$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>{/if}{/foreach}{literal}";
+function add_acceptor(id)
+{
+	$("<div id=\"div_bud_ru_acceptors_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"check_required(-1);$('#bud_ru_acceptors_new"+$a+"').val(null);$('#bud_ru_acceptors_new"+$a+"').attr('disabled',true);$('#div_bud_ru_acceptors_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#ac1"));
+	$("#div_bud_ru_acceptors_new"+$a).append($("<select required name=\"bud_ru_acceptors[]\" id=\"bud_ru_acceptors_new"+$a+"\">"+$s+"</select>"));
+	$("#bud_ru_acceptors_new"+$a).val(id);
+	$a++;
+	check_required(1);
+}
+
+function check_required(increment)
+{
+	$cnt=$cnt+increment;
+	$cnt>0 ? $("#acc").val($cnt) : $("#acc").val(null);
+	$cnt>0 ? $("#save").attr('disabled',false) : $("#save").attr('disabled',true);
+}
+
+</script>
+{/literal}
+
+
+
+{if $smarty.request.save}
+	<h1>Заявка на активность</h1>
+	<p>Ваша заявка отправлена на согласование и ожидает согласования следующими сотрудниками:</p>
+	{foreach key=key item=item from=$acceptors}
+		<p>{$item.acceptor}</p>
+	{/foreach}
+{else}
+
+<h1>Заявка на активность, создание (шаг 2)</h1>
+
+{if not $smarty.request.id}
+
+<a href="javascript:void(0);" onclick="goto_step1();">Вернуться на Шаг 1</a>
+
+<script>
+{literal}
+function goto_step1()
+{
+$("#form1").attr("action", "?action=bud_ru_zay_create");
+$("#form1").find(":input[required]").attr('required',false);
+$("#form1").submit();
+}
+{/literal}
+</script>
+
+{/if}
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+<h3>Рекомендуемый порядок согласования:</h3>
+
+<p style="color:red">
+			{foreach key=key item=item from=$bud_ru_st_ras}
+				{if $item.id eq $smarty.request.new.st}
+					{$item.hint|nl2br}
+				{/if}
+			{/foreach}
+</p>
+
+<h3>Согласователи. (Последний согласователь будет назначен адресатом заявки на проведение активности)</h3>
+
+<div style="color:red" id=cat_hint></div>
+
+<p><a id="add_file1" href="javascript:void(0)" onclick="javascript:add_acceptor();">Добавить согласователя</a></p>
+
+<input id="acc" type=hidden required>
+
+
+<h3>Обязательные приложения:</h3>
+
+<p style="color:green">
+			{foreach key=key item=item from=$bud_ru_st_ras}
+				{if $item.id eq $smarty.request.new.kat}
+					{$item.req_att|nl2br}
+				{/if}
+			{/foreach}
+</p>
+
+
+
+<p><input type='submit' id='save' name='save' value="Отправить заявку на согласование"></p>
+
+<input type=hidden id="ac1"/>
+
+<script>{foreach from=$bud_ru_zay_edit_acceptors key=k item=i name=acc}add_acceptor({$i.tn});{/foreach}</script>
+
+<h3>Общие вводные</h3>
+
+
+<input type=hidden name="new[tn]" value="{$smarty.request.new.tn}">
+
+<table border="1">
+	<tr>
+		<td>Статья расходов</td>
+		<td>
+			{foreach key=key item=item from=$bud_ru_st_ras}
+				{if $item.id eq $smarty.request.new.st}
+					{$item.name|escape}
+					<input type=hidden name=new[st] value="{$smarty.request.new.st}">
+				{/if}
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td>Категория статьи расходов</td>
+		<td>
+			{foreach key=key item=item from=$bud_ru_st_ras}
+				{if $item.id eq $smarty.request.new.kat}
+					{$item.name|escape}
+					<input type=hidden name=new[kat] value="{$smarty.request.new.kat}">
+				{/if}
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td>Дата создания заявки</td>
+		<td>{$now}</td>
+	</tr>
+	<tr>
+		<td>Дата начала проведения активности</td>
+		<td><input id="master" class="datepicker" size=10 name=new[dt_start] value="{$smarty.request.new.dt_start}"></td>
+	</tr>
+	<tr>
+		<td>Дата окончания проведения активности</td>
+		<td><input id="slave" class="datepicker" size=10 name=new[dt_end] value="{$smarty.request.new.dt_end}"></td>
+	</tr>
+
+
+<script>
+{$DisabledDates}
+{literal}
+$(
+	function()
+	{
+		//$('#master').datepicker('option', 'minDate', -154);
+		$('#master').datepicker('option', 'minDate', '01.01.2015');
+		//$('#master').datepicker('option', 'minDate', -5);
+		$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+	}
+)
+DPInit();
+$('#master').change(
+	function()
+	{
+		$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+		$('#slave').val($('#master').val());
+	}
+);
+{/literal}
+</script>
+
+
+
+
+
+	<tr>
+		<td>Инициатор</td>
+		<td>{$me.fio}</td>
+	</tr>
+	<tr>
+		<td>Регион / Подразделение</td>
+		<td>{$me.region_name} / {$me.department_name}</td>
+	</tr>
+	<tr>
+		<td>Дистрибутор(ы)</td>
+		<td>{$fil_name}</td>
+		<input type=hidden name=new[fil] value="{$smarty.request.new.fil}">
+	</tr>
+	<tr>
+		<td>ФИО РМ/НМ КК</td>
+		<td>{$rm.fio}</td>
+	</tr>
+	<tr>
+		<td>Мобильный телефон</td>
+		<td>{$me.phone}</td>
+	</tr>
+	<tr>
+		<td>Электронный корпоративный адрес</td>
+		<td>{$me.e_mail}</td>
+	</tr>
+	<tr>
+		<td>Скайп</td>
+		<td>{$me.skype}</td>
+	</tr>
+	<tr>
+		<td>Фонд</td>
+		<td>
+			<select name=new[funds] id=funds
+				required
+			>
+			<option></option>
+			{foreach key=key item=item from=$funds}
+				<option value="{$item.id}">{$item.name|escape}</option>
+			{/foreach}
+			</select>
+		</td>
+		<script>$('#funds option[value={$smarty.request.new.funds}]').prop('selected', true);</script>
+	</tr>
+{if $smarty.request.for_kk or $smarty.request.new.id_net}
+	<tr>
+		<td>Возмещение дистрибутору</td>
+		<td>
+			<input
+				type=checkbox
+				id=distr_compensation_cb
+				{if not $smarty.request.new.distr_compensation}disabled{/if}
+				{if $smarty.request.new.distr_compensation}checked{/if}
+				onchange="$('#distr_compensation').val(this.checked?1:0);"
+			>
+			<input
+				type=hidden1
+				name=new[distr_compensation]
+				id=distr_compensation
+				{if not $smarty.request.new.distr_compensation}disabled{/if}
+				{if $smarty.request.new.distr_compensation}value=1{/if}
+			>
+		</td>
+	</tr>
+	<tr>
+		<td>Сеть</td>
+		<td>
+			<select name=new[id_net] id=net
+				required
+			>
+			<option></option>
+			{foreach key=key item=item from=$nets}
+				<option value="{$item.id_net}">{$item.net_name|escape}</option>
+			{/foreach}
+			</select>
+		</td>
+		<script>$('#net option[value={$smarty.request.new.id_net}]').prop('selected', true);</script>
+	</tr>
+	<tr>
+		<td>Форма оплаты</td>
+		<td>
+			<select name=new[payment_type] id=payment_type
+				required
+			>
+				<option value=0></option>
+				{foreach key=key item=item from=$payment_type}
+				<option value={$item.id}>{$item.pay_type}</option>
+				{/foreach}
+			</select>
+		</td>
+		<script>$('#payment_type option[value={$smarty.request.new.payment_type}]').prop('selected', true);</script>
+	</tr>
+	<tr>
+		<td>Статья затрат</td>
+		<td>
+			<select name=new[statya] id=statya
+				required
+			>
+				<option value=0></option>
+				{foreach key=key item=item from=$statya_list}
+				<option {if $item.parent eq 0}disabled{/if} value={$item.id}>{if $item.parent neq 0}&nbsp&nbsp&nbsp{/if}{$item.cost_item}</option>
+				{/foreach}
+			</select>
+		</td>
+		<script>$('#statya option[value={$smarty.request.new.statya}]').prop('selected', true);</script>
+	</tr>
+{/if}
+</table>
+
+<h3>Расчет по заявке и приложения</h3>
+
+<table border="1">
+	<tr style="font-weight:bold">
+		<td>Показатель</td>
+		<td>Значение</td>
+	</tr>
+	{foreach key=k item=i from=$st}
+		<tr>
+			<td>
+				{$i.name}
+			</td>
+			<td>
+				{if $i.type eq 'textarea'}
+					<textarea rows=5 cols=50 id=new_st_{$i.id} name=new_st[{$i.id}] {if $i.required}required{/if}></textarea>
+				{else}
+					{if $i.type eq 'file'}
+						<input id=new_st_{$i.id} name=new_st[{$i.id}][] type=file multiple {if not $smarty.request.id and $i.required}required{/if}>
+						{foreach key=k1 item=i1 from=$smarty.request.edit_st}
+							{if $i1.type eq 'file' and $i1.ff_id eq $i.id}
+								{foreach key=k2 item=i2 from=$i1.val_file}
+									<br><input type=checkbox name="bud_ru_zay_files_del[{$i1.ff_id}][{$i2}]" value="bud_ru_zay_files/{$smarty.request.id}/{$i1.ff_id}/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$smarty.request.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>
+								{/foreach}
+							{/if}
+						{/foreach}
+					{else}
+						{if $i.type eq 'list'}
+							<select id=new_st_{$i.id} name=new_st[{$i.id}] {if $i.required}required{/if}>
+								<option></option>
+								{foreach key=lk item=li from=$i.list}	
+									<option value={$li.id}>{$li.name}</option>
+								{/foreach}
+							</select>
+						{else}
+							{if $i.type eq 'bool'}
+								<input
+									type=checkbox
+									id=new_st_{$i.id}_cb
+									{if $i.required}required{/if}
+									onChange="$('#new_st_{$i.id}_val').val(this.checked?1:0);"
+								>
+								<input
+									type=hidden
+									id=new_st_{$i.id}_val
+									name=new_st[{$i.id}]
+									{if $i.required}required{/if}
+									value=0
+								>
+							{else}
+                                                        	{if $i.type eq 'formula'}
+									<input type=hidden name=new_st[{$i.id}] value=0>
+									<!--
+									{$i.formula}
+									-->
+									<input disabled id=new_st_{$i.id} class="number5">
+								{else}
+									<!--
+									{$i.var_name}
+									{$i.rep_var_name}
+									-->
+									<input
+										size=70
+										id=new_st_{$i.id}
+										name=new_st[{$i.id}]
+										class="{$i.class}"
+										{if $i.required}required{/if}
+										onKeyUp="calc_formula();"
+									>
+								{/if}
+							{/if}
+						{/if}
+					{/if}
+				{/if}
+			</td>
+		</tr>
+	{/foreach}
+	{foreach key=k1 item=i1 from=$smarty.request.edit_st}
+		<script>
+			$("#new_st_{$i1.ff_id}").val("{$i1.val_string}{$i1.val_textarea}{$i1.val_number_int}{$i1.val_number}{$i1.val_datepicker}{$i1.val_formula}");
+			{if $i1.val_list}
+				$('#new_st_{$i1.ff_id} option[value={$i1.val_list}]').prop('selected', true);
+			{/if}
+			{if $i1.val_bool}
+				$("#new_st_{$i1.ff_id}").attr('checked','{$i1.val_bool}'=='1'?true:false);
+			{/if}
+		</script>
+	{/foreach}
+</table>
+
+</form>
+
+{/if}
+
+<script>
+function calc_formula ()
+{literal}{{/literal}
+	{foreach key=k item=i from=$st}
+		{if $i.type eq 'number' or $i.type eq 'number_int'}
+			var {$i.var_name}=parseFloat($('#new_st_{$i.id}').val());
+		{/if}
+	{/foreach}
+	{foreach key=k item=i from=$st}
+		{if $i.type eq 'formula'}
+			var f='{$i.formula}';
+			f=f.split("$").join("");
+			var r=eval(f);
+			r!=r?r=null:r=r.toFixed(3);
+			$('#new_st_{$i.id}').val(r);
+		{/if}
+	{/foreach}
+{literal}}{/literal}
+</script>

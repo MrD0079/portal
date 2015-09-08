@@ -1,0 +1,40 @@
+{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4}
+	{if $is_mkk or $is_rmkk}	{assign var=enabled value='enabled'}	{/if}
+	{if not ($is_mkk or $is_rmkk)}	{assign var=disabled value='disabled'}	{/if}
+{/if}
+
+
+
+
+
+<!--
+
+<br>
+enabled: {if $enabled}{$enabled}{else}null{/if}.
+<br>
+disabled: {if $disabled}{$disabled}{else}null{/if}.
+<br>
+
+-->
+
+
+{include file="zakaz_nal_select.html"}
+
+
+
+
+{if $smarty.request.nets and $smarty.request.calendar_years}
+
+
+
+
+
+	<!--{include file="zakaz_nal_month_ok.html"}-->
+
+
+	{if $enabled and not $oper_plan_disabled}
+					{include file="zakaz_nal_plan_month_edit.html"}
+					{/if}
+
+	{include file="zakaz_nal_plan_month_table.html"}
+{/if}

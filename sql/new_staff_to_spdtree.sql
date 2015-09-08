@@ -1,0 +1,33 @@
+/* Formatted on 07.02.2014 14:35:54 (QP5 v5.227.12220.39724) */
+INSERT INTO spdtree (ID,
+                     fam,
+                     im,
+                     otch,
+                     svideninn,
+                     datastart,
+                     pos_id,
+                     email,
+                     car_brand,
+                     fdata,
+                     dpt_id,
+                     is_mservice,
+                     is_coach,
+                     is_mz,
+                     is_db)
+   SELECT seq_all.NEXTVAL,
+          fam,
+          im,
+          otch,
+          svideninn,
+          datastart,
+          pos_id,
+          email,
+          car_brand,
+          datastart,
+          dpt_id,
+          is_mservice,
+          is_coach,
+          is_mz,
+          is_db
+     FROM new_staff ns
+    WHERE ID = :id

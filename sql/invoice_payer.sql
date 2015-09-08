@@ -1,0 +1,1 @@
+select id,name from invoice_payer order by id

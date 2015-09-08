@@ -1,0 +1,340 @@
+<h1>Детализация затрат при планировании / факта оказанных услуг</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table border=0>
+		<tr>
+			<td style="text-align:right">
+				Год
+			</td>
+			<td>
+				<select name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Месяц
+			</td>
+			<td>
+				<select required name="month" id="month">
+					<option value=0></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#month option[value="{$smarty.request.month}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Выберите сеть из списка
+			</td>
+			<td>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+{if not $is_mkk}
+		<tr>
+			<td style="text-align:right">
+				НМКК
+			</td>
+			<td>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+{/if}
+{if not $is_mkk}
+		<tr>
+			<td style="text-align:right">
+				МКК территории
+			</td>
+			<td>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+{/if}
+		<tr>
+			<td style="text-align:right">
+				Вид планирования / факт услуг
+			</td>
+			<td>
+				<select name=plan_type id=plan_type>
+					<option></option>
+					{foreach key=key item=item from=$plan_type}
+					<option value={$item.id}>{$item.name}</option>
+					{/foreach}
+				</select>
+				<script>$('#plan_type option[value="{$smarty.request.plan_type}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Форма оплаты
+			</td>
+			<td>
+				<select name="payment_type" id="payment_type">
+					<option value=0></option>
+					{foreach key=key item=item from=$payment_type}
+					<option value={$item.id}>{$item.pay_type}</option>
+					{/foreach}
+				<script>$('#payment_type option[value="{$smarty.request.payment_type}"]').prop('selected', true);</script>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Статья затрат
+			</td>
+			<td>
+				<select required name="statya_list" id="statya_list">
+					<option value=0></option>
+					{foreach key=key item=item from=$statya_list}
+					<option {if $item.parent eq 0}disabled{/if} value={$item.id}>{if $item.parent neq 0}&nbsp&nbsp&nbsp{/if}{$item.cost_item}</option>
+					{/foreach}
+				</select>
+				<script>$('#statya_list option[value="{$smarty.request.statya_list}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Группа затрат
+			</td>
+			<td>
+				{foreach key=key item=item from=$groups}
+				<input type=checkbox id=groups_{$item.id} name=groups[{$item.id}] value={$item.id}>{$item.gr_name}
+				<br>
+				{/foreach}
+				<script>
+				{if not $smarty.request.generate}
+					{foreach key=key item=item from=$groups}
+						$("#groups_{$item.id}").prop('checked',true);
+					{/foreach}
+				{/if}
+				{foreach key=key item=item from=$groups}
+					{if $smarty.request.groups[$item.id]}
+						$("#groups_{$item.id}").prop('checked',true);
+					{/if}
+				{/foreach}
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				По фильтру сетей:
+			</td>
+			<td>
+				<select name=flt_id id=flt_id>
+					<option value=0></option>
+					{foreach key=key item=item from=$kk_flt_nets}
+					<option value={$item.id}>{$item.name|escape}</option>
+					{/foreach}
+				</select>
+				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Плательщик
+			</td>
+			<td>
+				<select name="payer" id="payer">
+					<option value=0></option>
+					{foreach key=key item=item from=$payer}
+						<option value={$item.id}>{$item.name}</option>
+					{/foreach}
+				</select>
+				<script>$('#payer option[value={$smarty.request.payer}]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Месяц оплаты с/по
+			</td>
+			<td>
+				<select name="oms" id="oms">
+					<option></option>
+					{foreach key=key1 item=item1 from=$month_list}
+						<option value="{$item1.sd_c}">{$item1.my}</option>
+					{/foreach}
+				</select>
+				<script>$('#oms option[value="{$smarty.request.oms}"]').prop('selected', true);</script>
+				<select name="ome" id="ome">
+					<option></option>
+					{foreach key=key1 item=item1 from=$month_list}
+						<option value="{$item1.sd_c}">{$item1.my}</option>
+					{/foreach}
+				</select>
+				<script>$('#ome option[value="{$smarty.request.ome}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Сортировать по
+			</td>
+			<td>
+				<input type=radio id=orderby name=orderby value=1 checked>названию сети
+				<input type=radio id=orderby name=orderby value=2>плану продаж (по убыванию)
+				<input type=radio id=orderby name=orderby value=3>% затрат (по убыванию)
+				<script>$("input[name=orderby][value={$smarty.request.orderby}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">
+				Возмещение дистрибутору
+			</td>
+			<td>
+				<input type=radio id=distr_compensation name=distr_compensation value=1 checked>все
+				<input type=radio id=distr_compensation name=distr_compensation value=2>да
+				<input type=radio id=distr_compensation name=distr_compensation value=3>нет
+				<script>$("input[name=distr_compensation][value={$smarty.request.distr_compensation}]").attr('checked',true);</script>
+			</td>
+		</tr>
+	</table>
+
+  
+<br>
+
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+<br>
+
+{/if}
+
+{if $smarty.request.calendar_years and $smarty.request.plan_type}
+
+
+{if not $smarty.request.print}
+<a href="?action=fin_plan_detail&calendar_years={$smarty.request.calendar_years}&plan_type={$smarty.request.plan_type}&print=1&excel=1&filename=Детализация затрат при планировании">Экспорт в Excel</a>
+{/if}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	{foreach key=fin_plan_detail_key item=fin_plan_detail_item from=$fin_plan_detail name=fin_plan_detail}
+
+
+	{if $fin_plan_detail_item.draw_head eq 1}
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО РМКК</td>
+		<td>ФИО МКК</td>
+		<td>Факт.<br>назв.<br>сети</td>
+		<td>Месяц</td>
+		<td>Формат оплаты</td>
+		<td>Наименование<br>группы</td>
+		<td>Статья<br>затрат</td>
+		<td>Описание<br>активности</td>
+		<td>Форма<br>оплаты</td>
+		<td>Кол-во<br>единиц</td>
+		<td>Итоговая<br>сумма,<br>тыс. {$valuta}.</td>
+		<td>%<br>затрат</td>
+		<td>МКК<br>территории</td>
+		<td>Плательщик</td>
+		{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
+		<td>№ заявки</td>
+		<td>Возмещение<br>дистрибутору</td>
+		{/if}
+		{if $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
+		<td>номер счета</td>
+		<td>
+			дата
+			<br>
+			{if $smarty.request.plan_type eq 5}
+				оплаты
+			{/if}
+			{if $smarty.request.plan_type eq 7}
+				проведения
+			{/if}
+			<br>
+			счета
+		</td>
+		<td>
+			{if $smarty.request.plan_type eq 5}
+				Оплаченная<br>сумма,<br>тыс. {$valuta}.
+			{/if}
+			{if $smarty.request.plan_type eq 7}
+				Сумма<br>проводки,<br>тыс. {$valuta}. 
+			{/if}
+		</td>
+		<td>Адрес ТЗ</td>
+		{/if}
+
+	</tr>
+	{/if}
+
+		<tr
+			{if $fin_plan_detail_item.color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+			{if $fin_plan_detail_item.color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+		>
+		<td>{$smarty.foreach.fin_plan_detail.iteration}</td>
+		<td>{$fin_plan_detail_item.rmkk}</td>
+		<td>{$fin_plan_detail_item.mkk}</td>
+		<td>{$fin_plan_detail_item.net_name}</td>
+		<td>{$fin_plan_detail_item.month_name}</td>
+		<td>{$fin_plan_detail_item.pay_format}</td>
+		<td>{$fin_plan_detail_item.groupp}</td>
+		<td>{$fin_plan_detail_item.statya}</td>
+		<td>{$fin_plan_detail_item.descript}</td>
+		<td>{$fin_plan_detail_item.pay_type}</td>
+		<td style="text-align:right">{$fin_plan_detail_item.cnt|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_plan_detail_item.total|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_plan_detail_item.perc_zatr|default:0|num:2}</td>
+		<td>{$fin_plan_detail_item.mkk_name}</td>
+		<td>{$fin_plan_detail_item.payer_name}</td>
+		{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
+		<td>{$fin_plan_detail_item.bud_z_id}</td>
+		<td>{if $fin_plan_detail_item.distr_compensation eq 1}да{else}нет{/if}</td>
+		{/if}
+		{if $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
+		<td>{$fin_plan_detail_item.inv_num}</td>
+		<td>
+			{if $smarty.request.plan_type eq 5}
+				{$fin_plan_detail_item.inv_oplata_date}
+			{/if}
+			{if $smarty.request.plan_type eq 7}
+				{$fin_plan_detail_item.inv_act_prov_month_ld}
+			{/if}
+		</td>
+		<td style="text-align:right">
+			{if $smarty.request.plan_type eq 5}
+				{$fin_plan_detail_item.inv_summa|default:0|num:3}
+			{/if}
+			{if $smarty.request.plan_type eq 7}
+				{$fin_plan_detail_item.inv_summa|default:0|num:3}
+			{/if}
+		</td>
+		<td>{$fin_plan_detail_item.bud_z_tz_address}</td>
+		{/if}
+	</tr>
+	{/foreach}
+	{foreach key=fin_plan_detail_key_total item=fin_plan_detail_item_total from=$fin_plan_detail_total name=fin_plan_detail_total}
+	<tr style="font-weight:bold">
+		<td colspan=10>Итого</td>
+		<td style="text-align:right">{$fin_plan_detail_item_total.cnt|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_plan_detail_item_total.total|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_plan_detail_item_total.perc_zatr|default:0|num:2}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

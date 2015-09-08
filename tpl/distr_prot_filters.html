@@ -1,0 +1,167 @@
+<form target="_self" method="POST" name=form1 id=form1>
+
+<table>
+
+<tr><td style="text-align:right">
+Держатель бюджета 	
+</td><td>
+<select name=da_db id=da_db>
+<option value=0></option>
+{foreach key=k item=i from=$da_db}
+<option value='{$i.tn}'>{$i.fio}</option>
+{/foreach}
+</select>
+<script>$('#da_db').val({$smarty.request.da_db});</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Дистрибутор 	
+</td><td>
+<select name=da_di id=da_di>
+<option value=0></option>
+{foreach key=k item=i from=$da_di}
+<option value='{$i.id}'>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#da_di').val({$smarty.request.da_di});</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Регион	
+</td><td>
+<select name=da_re id=da_re>
+<option value=0></option>
+{foreach key=k item=i from=$da_re}
+<option value='{$i.region_name}'>{$i.region_name}</option>
+{/foreach}
+</select>
+<script>$('#da_re').val('{$smarty.request.da_re}');</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Подразделение	
+</td><td>
+<select name=da_de id=da_de>
+<option value=0></option>
+{foreach key=k item=i from=$da_de}
+<option value='{$i.department_name}'>{$i.department_name}</option>
+{/foreach}
+</select>
+<script>$('#da_de').val('{$smarty.request.da_de}');</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+период ЗАГРУЗКИ протокола
+</td><td>
+<input class="datepicker" name=da_sd id=da_sd>
+<script>$('#da_sd').val('{$smarty.request.da_sd}');</script>
+<input class="datepicker" name=da_ed id=da_ed>
+<script>$('#da_ed').val('{$smarty.request.da_ed}');</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Статус
+</td><td>
+{foreach key=k item=i from=$da_st}
+<input {if $i.def_val eq 1}checked="checked"{/if} name="da_st" id="da_st" value="{$i.id}" type="radio"> {$i.name}
+{/foreach}
+<input name="da_st" id="da_st" value="0" type="radio"> все
+<script>$("input[name=da_st]").val([{$smarty.request.da_st}]);</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Этап рассмотрения рук-лем
+</td><td>
+{foreach key=k item=i from=$da_ok_chief}
+<input {if $i.def_val eq 1}checked="checked"{/if} name="da_ok_chief" id="da_ok_chief" value="{$i.id}" type="radio"> {$i.name}
+{/foreach}
+<input name="da_ok_chief" id="da_ok_chief" value="0" type="radio"> все
+<script>$("input[name=da_ok_chief]").val([{$smarty.request.da_ok_chief}]);</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Этап рассмотрения НМ/НМКК
+</td><td>
+{foreach key=k item=i from=$da_ok_chief}
+<input {if $i.def_val eq 1}checked="checked"{/if} name="da_ok_nm" id="da_ok_nm" value="{$i.id}" type="radio"> {$i.name}
+{/foreach}
+<input name="da_ok_nm" id="da_ok_nm" value="0" type="radio"> все
+<script>$("input[name=da_ok_nm]").val([{$smarty.request.da_ok_nm}]);</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Этап рассмотрения ДП
+</td><td>
+{foreach key=k item=i from=$da_ok_chief}
+<input {if $i.def_val eq 1}checked="checked"{/if} name="da_ok_dpu" id="da_ok_dpu" value="{$i.id}" type="radio"> {$i.name}
+{/foreach}
+<input name="da_ok_dpu" id="da_ok_dpu" value="0" type="radio"> все
+<script>$("input[name=da_ok_dpu]").val([{$smarty.request.da_ok_dpu}]);</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Ожидание подтверждения
+</td><td>
+{foreach key=k item=i from=$da_full}
+<input {if $i.def_val eq 1}checked="checked"{/if} name="da_full" id="da_full" value="{$i.id}" type="radio"> {$i.name}
+{/foreach}
+<script>$("input[name=da_full]").val([{$smarty.request.da_full}]);</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Категория
+</td><td>
+<select name=da_cat id=da_cat onchange="javascript:load_conq_list();">
+<option value=0></option>
+{foreach key=k item=i from=$cat}
+<option value='{$i.id}'>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#da_cat').val('{$smarty.request.da_cat}');</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Контрольный вопрос
+</td><td>
+<select name=da_conq id=da_conq><option value=0></option></select>
+</td></tr>
+
+<tr><td style="text-align:right">
+Результат
+</td><td>
+{foreach key=k item=i from=$da_result}
+<input {if $i.def_val eq 1}checked="checked"{/if} name="da_result" id="da_result" value="{$i.id}" type="radio"> {$i.name}
+{/foreach}
+<input name="da_result" id="da_result" value="0" type="radio"> все
+<script>$("input[name=da_result]").val([{$smarty.request.da_result}]);</script>
+</td></tr>
+
+<tr><td style="text-align:right">
+Удаленные протоколы
+</td><td>
+<input checked="checked" name="da_deleted" id="da_deleted" value=0 type="radio"> не показывать
+<input name="da_deleted" id="da_deleted" value=1 type="radio"> показывать
+<script>$("input[name=da_deleted]").val([{$smarty.request.da_deleted}]);</script>
+</td></tr>
+
+<tr>
+	<td style="text-align:right">Поиск по номеру</td>
+	<td>
+		<input onChange="this.value==''?this.value=0:null;" class="number_int" name="prot_id" value="{$smarty.request.prot_id}">
+		{if $find_prot}
+			{if $find_prot.exist eq 0}
+				<font style="font-weight:bold;color:red">Протокол с указанным номером не найден</font>
+			{else}
+				{if $find_prot.visible eq 0}
+					<font style="font-weight:bold;color:red">Протокол в реестре найден, но у вас нет прав для его просмотра</font>
+				{/if}
+			{/if}
+		{/if}
+	</td>
+</tr>
+
+</table>
+
+<input type=submit name=refresh id=refresh value="Показать">
+
+</form>

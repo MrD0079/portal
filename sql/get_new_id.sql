@@ -1,0 +1,1 @@
+SELECT seq_all.NEXTVAL FROM DUAL

@@ -1,0 +1,84 @@
+<h3>Резервисты</h3>
+<form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
+<table>
+	<tr>
+		<td style="text-align:right">Рук-ль</td>
+		<td>
+			<select name=exp_list_without_ts id=exp_list_without_ts>
+				<option value=0></option>
+				{foreach key=key item=item from=$exp_list_without_ts}
+				<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+				{/foreach}
+			</select>
+			<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Должность резерва</td>
+		<td>
+			<select name=res_pos_id id=res_pos_id>
+				<option value=0></option>
+				{foreach key=key item=item from=$res_pos_list}
+				<option value={$item.res_pos_id}>{$item.res_pos_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#res_pos_id').val({$smarty.request.res_pos_id});</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Регион</td>
+		<td>
+			<select name=region_name id=region_name>
+				<option value=0></option>
+				{foreach key=key item=item from=$region_list}
+				<option value="{$item.region_name}">{$item.region_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#region_name').val('{$smarty.request.region_name}');</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Подразделение</td>
+		<td>
+			<select name=department_name id=department_name>
+				<option value=0></option>
+				{foreach key=key item=item from=$department_list}
+				<option value="{$item.department_name}">{$item.department_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#department_name').val('{$smarty.request.department_name}');</script>
+		</td>
+	</tr>
+</table>
+
+<p><input type="submit" name="select" id="select" value="Показать"></p>
+
+{if $smarty.request.select}
+<table border=1 cellpadding=5 cellspacing=0>
+	<tr style="text-align:center;font-weight:bold">
+		<td>ФИО<br> резервиста</td>
+		<td>Текущая<br> должность<br> резервиста</td>
+		<td>Должность<br> резерва</td>
+		<td>Дата<br> включения<br> в резерв</td>
+		<td>ФИО<br> руководителя</td>
+		<td>Регион</td>
+		<td>Подразделение</td>
+		<td>ФИО БТ/ПТ</td>
+		<td>План развития</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr>
+		<td>{$i.fio}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.res_pos_name}</td>
+		<td>{$i.res_dt_t}</td>
+		<td>{$i.chief_fio}</td>
+		<td>{$i.region_name}</td>
+		<td>{$i.department_name}</td>
+		<td>{$i.tr_list}</td>
+		<td><a href="javascript:void(0);">План развития</a></td>
+	</tr>
+	{/foreach}
+</table>
+{/if}
+</form>

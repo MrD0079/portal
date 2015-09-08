@@ -1,0 +1,70 @@
+<form name=form id=form target=_self method=post>
+	<table border=0 cellpadding=0 cellspacing=0 style="text-align:left">
+		<tr>
+			<td>
+				<h1>План развития сотрудника {$razv_fio}</h1>
+				{if $smarty.request.print neq 1}
+					Выбор периода плана развития
+					<select name=razv_event id=razv_event onchange="javascript:this.form.submit()">
+						<option></option>
+						{foreach key=key item=event from=$razv_event}
+							<option value={$event.year}>{$event.name}</option>
+						{/foreach}
+					</select>
+				{/if}
+				Статус плана:
+				{if $smarty.request.print neq 1 and $teacher}
+					<select name=r_plan[status] id=r_plan_status>
+						{foreach key=key item=item from=$razv_plan_status}
+							<option value={$item.id}>{$item.name}</option>
+						{/foreach}
+					</select>
+					<script>$('#r_plan_status option[value="{$status}"]').prop('selected', true);</script>
+				{else}
+					{foreach key=key item=item from=$razv_plan_status}
+						<b>{if $item.id eq $status}[{$item.name}]{/if}</b>
+					{/foreach}
+				{/if}
+				{if $smarty.request.razv_event > 0}
+					<script>$('#razv_event option[value="{$smarty.request.razv_event}"]').prop('selected', true);</script>
+					{if $smarty.request.print neq 1}
+						{if $self}
+							<a target=_blank href="?action=razv_plan&print=1">Версия для печати</a>
+						{else}
+							<a target=_blank href="?action=razv_plan&print=1&tn={$smarty.request.tn}">Версия для печати</a>
+						{/if}
+						<input type=submit name=save align=middle value="сохранить">
+					{/if}
+				{/if}
+			</td>
+		</tr>
+	</table>
+
+
+		{if $smarty.request.razv_event > 0}
+				{include file="razv_plan_r1.html"}
+				{include file="razv_plan_r2.html"}
+				{include file="razv_plan_r3.html"}
+				{include file="razv_plan_r4.html"}
+				{include file="razv_plan_ok.html"}
+		{/if}
+
+
+
+</form>
+
+
+
+{literal}
+<script>
+function submit_val(name,p1,v1)
+{
+	$("#form").append($('<input type=hidden name='+name+'>'));
+	if (p1)
+	{
+		$("#form").append($('<input type=hidden name='+p1+' value='+v1+'>'));
+	}
+	$("#form").submit();
+}
+</script>
+{/literal}

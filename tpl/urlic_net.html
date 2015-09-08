@@ -1,0 +1,10 @@
+<h1>Сети</h1>
+<table>
+<tr>
+<td style="text-align:left">
+{foreach key=key item=item from=$urlic_net}
+<a target=_blank href="?action=urlic_net_link&id_net={$item.id_net}">{$item.net_name}</a><br>
+{/foreach}
+</td>
+</tr>
+</table>

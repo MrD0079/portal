@@ -1,0 +1,16 @@
+<h1>‘акт актов</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+	{if not $smarty.request.print}
+		{include file="acts_fact_select.html"}
+	{/if}
+	{if $smarty.request.generate}
+		{if not $smarty.request.print}
+			<p><a href="?action=acts_fact&generate=1&print=1&excel=1&filename=–есстр счетов">Ёкспорт в Excel</a></p>
+		{/if}
+		{if $smarty.request.print}
+			{include file="acts_fact_table_linear.html"}
+		{else}
+			{include file="acts_fact_table_group.html"}
+		{/if}
+	{/if}
+</form>

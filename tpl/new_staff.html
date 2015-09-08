@@ -1,0 +1,117 @@
+<h1>Новый подчиненный сотрудник</h1>
+
+{if $smarty.request.new_staff}<p>Ваша заявка успешно добавлена на рассмотрение. В течение нескольких часов Вам на корпоративную почту придет сообщение о результате</p>{/if}
+
+{if $error}<p style="color:red">Ваша заявка не добавлена, т.к. сотрудник с таким ИНН уже есть в базе</p>{/if}
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+<p><input type=submit value="Отправить запрос на подтверждение"></p>
+<table cellpadding=3 border=0>
+	<tr>
+		<td>Ф.И.О. нового сотрудника</td>
+		<td><input required name="new_staff[fam]" size=15><input required name="new_staff[im]" size=15><input required name="new_staff[otch]" size=15></td>
+	</tr>
+	<tr>
+		<td>Должность нового сотрудника</td>
+		<td>
+				<select required name="new_staff[pos_id]">
+					<option></option>
+					{foreach key=key item=item from=$dolgn_list_all}
+						<option value={$item.pos_id}>{$item.pos_name}</option>
+					{/foreach}
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Дата начала работы в данной должности</td>
+		<td><input required name="new_staff[datastart]" class="datepicker"></td>
+	</tr>
+	<tr>
+		<td>ИНН</td>
+		<td><input required class="number_int" name="new_staff[svideninn]" size=30></td>
+	</tr>
+	<tr>
+		<td>Электронный адрес (корпоративный)</td>
+		<td><input required name="new_staff[email]" size=30></td>
+	</tr>
+	<tr>
+		<td>ФИО бизнес-тренера</td>
+		<td>
+				<select name="new_staff[bt]">
+					<option></option>
+					{foreach key=key item=item from=$bt_list}
+						<option value={$item.tn}>{$item.fio}</option>
+					{/foreach}
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Марка авто</td>
+		<td><input required name="new_staff[car_brand]" size=30></td>
+	</tr>
+	<tr>
+		<td>Лимит транспортый (литры)</td>
+		<td><input class="number" required name="new_staff[limit_car_vol]" size=30 value=0></td>
+	</tr>
+	<tr>
+		<td>Лимит транспортый общий ({$valuta}.)</td>
+		<td><input class="number" required name="new_staff[limittrans]" size=30 value=0></td>
+	</tr>
+	<tr>
+		<td>Лимит командировочный ({$valuta}.)</td>
+		<td><input class="number" required name="new_staff[limitkom]" size=30 value=0></td>
+	</tr>
+	<tr>
+		<td>Прикрепить личную карточку</td>
+		<td><input name="fn" type="file"></td>
+	</tr>
+	<tr>
+		<td>Прикрепить фото</td>
+		<td><input name="fn1" type="file"></td>
+	</tr>
+	<tr>
+		<td colspan=2><hr></td>
+	</tr>
+	<tr>
+		<td>Прямые подчиненные нового сотрудника<br>(ТОЛЬКО ТЕ,<br>для кого новый сотрудник<br>будет ПРЯМЫМ РУКОВОДИТЕЛЕМ):</td>
+		<td>
+			{foreach key=k item=i from=$childs}
+				<input type=checkbox value="{$i.tn}" name=childs[]>{$i.fio}<br>
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2><hr></td>
+	</tr>
+	<tr>
+		<td>Статусы</td>
+		<td>
+			<input type=checkbox value=1 name=new_staff[is_mservice]>МС<br>
+			<input type=checkbox value=1 name=new_staff[is_mz]>МШ<br>
+			<input type=checkbox value=1 name=new_staff[is_coach]>Тренер<br>
+			{literal}<input type=checkbox value=1 name=new_staff[is_db] onclick="$('.all').attr('disabled',this.checked?false:true);">ДБ<br>{/literal}
+
+
+			
+
+
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2><hr></td>
+	</tr>
+	<tr>
+		<td>Филиалы</td>
+		<td>
+			{foreach key=k item=i from=$bud_fil name=bud_fil}
+				<input disabled class="all" type=checkbox value="{$i.id}" name=bud_fil[]>{$i.name}
+				{if ($smarty.foreach.bud_fil.iteration+1)%5 eq 1}<br>{/if}
+			{/foreach}
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2><hr></td>
+	</tr>
+</table>
+<p><input type=submit value="Отправить запрос на подтверждение"></p>
+</form>

@@ -1,0 +1,24 @@
+{if $tp_list}
+<table border=1>
+	<tr>
+		<td>ЭТА</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Код ТП</td>
+		<td>Тип ТП</td>
+		<td>Выбрать ТП</td>
+	<tr>
+	{foreach key=k item=i from=$tp_list}
+	<tr>
+		<td>{$i.eta}</td>
+		<td>{$i.tp_name}</td>
+		<td>{$i.address}</td>
+		<td>{$i.tp_kod}</td>
+		<td>{$i.tp_type}</td>
+		<td><input required type=radio class=tp_kod_radio name=tp_kod_radio value={$i.tp_kod} onchange="$('#tp_kod').val(this.value);"></td>
+	<tr>
+	{/foreach}
+</table>
+{else}
+совпадения не найдены
+{/if}

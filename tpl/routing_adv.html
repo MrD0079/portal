@@ -1,0 +1,39 @@
+<table border=1 style="text-align:center">
+	<tr>
+		<td></td>
+		{foreach key=k item=i from=$list_adv.Data}
+			<td style="font-weight:bold;background-color:#EEE685">{$k}</td>
+			{foreach key=k1 item=i1 from=$i.Data}
+				<td style="font-weight:bold;background-color:#FFF68F">{$k1}</td>
+			{/foreach}
+		{/foreach}
+		<td style="font-weight:bold;background-color:#CDC673">Итого</td>
+	</tr>
+	{foreach key=k item=i from=$list_adv.Total.Total_in_route.Total.Total_day.Data}
+	<tr>
+		<td style="font-weight:bold; text-align:left">{$k}</td>
+		{foreach key=k1 item=i1 from=$list_adv.Data}
+			<td style="background-color:#EEE685">
+				{$list_adv.Data.$k1.Total.Total_day.Data.$k}
+	        
+			</td>
+			{foreach key=k2 item=i2 from=$i1.Data}
+				<td>
+					{$list_adv.Total.Total_in_route.Data.$k2.Data.$k}
+				</td>
+			{/foreach}
+		{/foreach}
+		<td style="font-weight:bold;background-color:#CDC673">{$i}</td>
+	</tr>
+	{/foreach}
+	<tr>
+		<td></td>
+		{foreach key=k item=i from=$list_adv.Data}
+			<td style="font-weight:bold;background-color:#EEE685">{$i.Total.Total_day.Total.Total_eta}</td>
+			{foreach key=k1 item=i1 from=$i.Data}
+				<td style="font-weight:bold;background-color:#FFF68F">{$i1.Total.Total_eta}</td>
+			{/foreach}
+		{/foreach}
+		<td style="font-weight:bold;background-color:#CDC673">{$list_adv.Total.Total_in_route.Total.Total_day.Total.Total_eta}</td>
+	</tr>
+</table>

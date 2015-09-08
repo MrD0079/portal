@@ -1,0 +1,53 @@
+<h1>Привязка СПД=>Отдел</h1>
+<form name=form target=_self method=post>
+Выберите отдел
+<br>
+<select name=dpt_list>
+  <option></option>
+  {foreach key=key item=item from=$dpt_list}
+<!--  <option value={$key}>{$item.DPTNAME|indent:$item.LVL*10:"&nbsp"}</option>-->
+  <option value={$item.nid}>{$item.nid} - {$item.dptname|indent:$item.lvl*10:"&nbsp"} {if $item.data_d neq null}(удалено {$item.data_d}){/if}</option>
+  {/foreach}
+</select>
+<br>
+Выберите категорию
+<br>
+<select name=kat>
+  <option></option>
+  <option value=1>Руководители</option>
+  <option value=2>Специалисты</option>
+</select>
+<br>
+Введите ИНН
+<br>
+<input name=inn>
+<br>
+<input type=submit name=add_spd value="Привязать СПД к выбранному отделу">
+</form>
+
+<form name=form_spd_otdel id=form_spd_otdel target=_self method=post>
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font:bold;">
+<td><a href="javascript:void(0)" onclick="javascript:form_spd_otdel.submit()">x</a></td>
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Должность</td>
+<!--
+<td>Департамент</td>
+<td>Категория</td>
+-->
+</tr>
+{foreach key=key item=item from=$spd_otdel}
+<tr>
+<td>{$key}<input type=checkbox name=del[{$item.tn}]></td>
+<td>{$item.svideninn}</td>
+<td>{$item.fio}</td>
+<td>{$item.dolgn}</td>
+<!--
+<td>{$item.dptname} {if $item.data_d neq null}(удалено {$item.data_d}){/if}</td>
+<td>{$item.kat_name}</td>
+-->
+</tr>
+{/foreach}
+</table>
+</form>

@@ -1,0 +1,51 @@
+<table border=1 cellspacing=0 cellpadding=3>
+<tr style="font-weight:bold;text-align:center">
+<td>Сеть</td>
+<td>Юр. название ТЗ</td>
+<td>Адрес ТЗ</td>
+<td>Код ТЗ</td>
+<td>Специя</td>
+<td>
+Выбрать<br>для<br>удаления
+<br>
+<a href="javascript:void(0);" onClick="$('.del_cb').click();">[+/-]</a>
+</td>
+</tr>
+{foreach key=key item=item from=$merch_spec_join}
+<tr>
+<td>{$item.net_name}</td>
+<td>{$item.ur_tz_name}</td>
+<td>{$item.tz_address}</td>
+<td>{$item.kodtp}</td>
+<td
+	{if $item.cb neq 0}
+		style="background-color:green"
+	{else}
+		{if $item.c neq 0 and $item.cb eq 0}
+		{else}
+			style="background-color:red"
+		{/if}
+	{/if}
+>
+	{if $item.cb neq 0}
+		<a target=_blank href="?action=merch_spec_view&kod_tp={$item.kodtp}&head_id={$item.head_id}&ag_id={$smarty.request.routes_agents}&id_net={$smarty.request.merch_spec_nets}&print=1">{$item.sd}</a>
+	{else}
+		{if $item.c neq 0 and $item.cb eq 0}
+			Удалена с {$item.sd}
+		{else}
+			Нет
+		{/if}
+	{/if}
+</td>
+<td style="text-align:center">
+	{if $item.c neq 0 and $item.cb neq 0}
+		<input class="del_cb" type=checkbox onclick="
+		$('#del_{$item.kodtp}').attr('disabled',!this.checked);
+		$('#del_{$item.kodtp}').val(this.checked?1:null);
+		">
+		<input disabled type=hidden name=del[{$item.kodtp}] id="del_{$item.kodtp}">
+	{/if}
+</td>
+</tr>
+{/foreach}
+</table>

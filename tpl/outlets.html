@@ -1,0 +1,178 @@
+<h1>Торговые залы</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+	<tr>
+		<td style="vertical-align: top; width: 164px;">Период<br></td>
+		<td style="vertical-align: top; width: 236px;">Ответственный РМ КК</td>
+		<td style="vertical-align: top; width: 259px;">Ответственный МКК</td>
+		<td style="vertical-align: top; width: 259px;">Ответственный ЭТА КК</td>
+		<td style="vertical-align: top; width: 264px;">Сеть</td>
+	</tr>
+	<tr>
+		<td style="vertical-align: top;">
+			<select name=sd id=sd>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#sd option[value="{if $smarty.request.sd}{$smarty.request.sd}{else}{$smarty.request.month_list}{/if}"]').prop('selected', true);</script>
+		</td>
+		<td style="vertical-align: top;">
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+		</td>
+		<td style="vertical-align: top;">
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+		</td>
+		<td style="vertical-align: top;">
+			<select name=tz_eta_list id=tz_eta_list>
+			<option value=''></option>
+			{foreach key=key item=item from=$tz_eta_list}
+			<option value="{$item.eta}">{$item.eta}</option>
+			{/foreach}
+			</select>
+			<script>$('#tz_eta_list option[value="{$smarty.request.tz_eta_list}"]').prop('selected', true);</script>
+		</td>
+		<td style="vertical-align: top;">
+			<select name="nets" id="nets">
+				<option value=0></option>
+				{foreach key=key item=item from=$nets}
+					<option value={$item.id_net}>{$item.net_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="vertical-align: top; background-color: rgb(255, 255, 204);">Формат: </td>
+		<td style="vertical-align: top; background-color: rgb(255, 255, 204);">
+			<input checked="checked" name="format" id="format" value="0" type="radio"> краткий
+			<input name="format" id="format" value="1" type="radio"> развернутый
+			<script>$("input[name=format][value={$smarty.request.format}]").attr('checked',true);</script>
+		</td>
+		</tr>
+		<tr>
+			<td>
+				По фильтру сетей:
+				<br>
+				<select name=flt_id id=flt_id>
+					<option value=0></option>
+					{foreach key=key item=item from=$kk_flt_nets}
+					<option value={$item.id}>{$item.name|escape}</option>
+					{/foreach}
+				</select>
+				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+</tbody>
+</table>
+<div style="text-align: left;"><input name="generate" value="Отобразить список ТЗ" type="submit"></div>
+<hr style="width: 100%; height: 2px;">
+</form>
+
+
+
+{if $smarty.request.generate}
+
+
+
+
+<table border=1>
+<tr style="font-weight:bold">
+<td>Сеть                           </td>
+<td>ФИО РМ КК                      </td>
+<td>ФИО МКК                        </td>
+<td>Юридическое название ТЗ        </td>
+<td>Адрес ТЗ                       </td>
+<td>Количество касс, шт            </td>
+<td>Площадь ТЗ, кв.м.              </td>
+<td>Область                        </td>
+<td>ФИО ЭТА КК                     </td>
+{if $smarty.request.format eq 1}
+<td>Паллета ВК                      </td>
+<td>Минипаллета пластиковая         </td>
+<td>Министеллаж металлический       </td>
+<td>Манеж 0,5                       </td>
+<td>Межполочная система Жувиленд    </td>
+<td>Струбцина металлическая Жувиленд</td>
+<td>Стеллаж 940-980                 </td>
+<td>Стеллаж 1300                    </td>
+<td>Другое                          </td>
+<td>Касса                           </td>
+<td>Торец Фас                       </td>
+<td>Паллета ФК/ПК                   </td>
+<td>Торец Вес/Пакет                 </td>
+<td>Остров ВК                       </td>
+<td>Стеллаж 500                     </td>
+<td>Тумба под ВП                    </td>
+<td>Тумба односторонняя             </td>
+<td>Тумба двусторонняя              </td>
+<td>Стеллаж ДСП                     </td>
+<td>Дисплей Коровка                 </td>
+<td>Паллета НП                      </td>
+<td>Торец НП                        </td>
+{/if}
+</tr>
+{foreach key=k item=i from=$tz name=tz}
+	{math assign="color" equation='x-y' x=1 y=$smarty.foreach.tz.iteration%2} 
+	<tr
+		{if $color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+		{if $color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+	>
+<td>{$i.net_name}</td>
+<td>{$i.rmkk_name}</td>
+<td>{$i.mkk_name}</td>
+<td>{$i.ur_tz_name}</td>
+<td>{$i.tz_address}</td>
+<td style="text-align:right">{$i.kass_count}</td>
+<td style="text-align:right">{$i.tz_square}</td>
+<td>{$i.tz_oblast}</td>
+<td>{$i.fio_eta}</td>
+{if $smarty.request.format eq 1}
+<td style="text-align:right">{$i.paleta}</td>
+<td style="text-align:right">{$i.minipaleta}</td>
+<td style="text-align:right">{$i.ministelag}</td>
+<td style="text-align:right">{$i.maneg05}</td>
+<td style="text-align:right">{$i.juvisystem}</td>
+<td style="text-align:right">{$i.juvistrub}</td>
+<td style="text-align:right">{$i.stelag940980}</td>
+<td style="text-align:right">{$i.stelag1300}</td>
+<td style="text-align:right">{$i.other}</td>
+<td style="text-align:right">{$i.kassa}</td>
+<td style="text-align:right">{$i.torecfas}</td>
+<td style="text-align:right">{$i.paletafkpk}</td>
+<td style="text-align:right">{$i.torecvespak}</td>
+<td style="text-align:right">{$i.ostrovvk}</td>
+<td style="text-align:right">{$i.stelag500}</td>
+<td style="text-align:right">{$i.tumbavp}</td>
+<td style="text-align:right">{$i.tumba1st}</td>
+<td style="text-align:right">{$i.tumba2st}</td>
+<td style="text-align:right">{$i.stelagdsp}</td>
+<td style="text-align:right">{$i.dispkorovka}</td>
+<td style="text-align:right">{$i.paletanp}</td>
+<td style="text-align:right">{$i.torecnp}</td>
+{/if}
+</tr>
+{/foreach}
+</table>
+
+
+{/if}
+
+
+
+
+
+

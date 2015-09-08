@@ -1,0 +1,122 @@
+<h1>Создать команду</h1>
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+	<input type=submit name=save value="Сохранить">
+	<table border=1 cellpadding=3 cellspacing=0>
+		<tr style="font-weight:bold;text-align:center">
+			<td>Страна</td>
+			<td>Группа</td>
+			<td>Регион / область</td>
+			<td>Капитан команды / тел. капитана</td>
+			<td>Статус</td>
+			<td>Комментарии проверяющего</td>
+			<td>Состав</td>
+		</tr>
+		{foreach key=k item=i from=$football_teams}
+		<tr>
+			<td style="text-align:center">{$i.dpt_name|escape}</td>
+			<td style="text-align:center">{$i.gruppa|escape}</td>
+			<td style="text-align:center">{$i.region|escape}</td>
+			<td>
+				Ф.И.О.: <input {if not $football_team_responsible or $tn neq $i.tn_responsible or $i.status neq 15597781}disabled{/if} size=40 name=data[{$i.id}][captain] value="{$i.captain|escape}">
+				<br>
+				тел.: <input {if not $football_team_responsible or $tn neq $i.tn_responsible or $i.status neq 15597781}disabled{/if} size=20 name=data[{$i.id}][captain_phone] value="{$i.captain_phone|escape}">
+			</td>
+			<td style="text-align:center;background-color:{$i.color}">
+				<p>
+				<select
+					{if
+						(not $football_team_checking or $tn neq $i.tn_checking or $i.status eq 15597781)
+						and
+						(not $football_team_responsible or $tn neq $i.tn_responsible or $i.status neq 15597781)
+					}disabled{/if}
+					name=data[{$i.id}][status] id=data{$i.id}status>
+					{foreach key=key item=item from=$status_list}
+					<option
+						{if $tn eq $i.tn_responsible and $item.id eq 15597783 and $i.status neq 15597783}disabled{/if}
+						{if $tn eq $i.tn_checking and $item.id eq 15597782 and $i.status neq 15597782}disabled{/if}
+						value={$item.id}
+					>
+						{$item.name}
+					</option>
+					{/foreach}
+				</select>
+				<script>$('#data{$i.id}status option[value="{$i.status}"]').prop('selected', true);</script>
+				</p>
+			</td>
+			<td>{$i.checking_comments|nl2br}<br><input {if not $football_team_checking or $tn neq $i.tn_checking}disabled{/if} size=40 name=data[{$i.id}][checking_comments]></td>
+			<td style="text-align:center">
+				{if $football_team_responsible and $tn eq $i.tn_responsible and $i.status eq 15597781}<a href="?action=football_create_team&team_id={$i.id}">Редактировать</a>{/if}
+				{if
+					(
+					($football_team_responsible and $tn eq $i.tn_responsible)
+					or
+					($football_team_checking and $tn eq $i.tn_checking)
+					)
+					and $i.status neq 15597781
+				}
+					<a href="?action=football_create_team&team_id={$i.id}&r={$i.id}">Смотреть</a>
+				{/if}
+			</td>
+		</tr>
+		{/foreach}
+	</table>
+	{if $smarty.request.r}
+		{assign var=disabled value='disabled'}
+	{/if}
+	{if $smarty.request.team_id}
+		<hr>
+		{foreach key=k item=i from=$football_teams}
+			{if $smarty.request.team_id eq $i.id}
+				<p style="font-weight:bold">Выбрана следующая команда для редактирования: СТРАНА: {$i.dpt_name|escape} ГРУППА: {$i.gruppa|escape} РЕГИОН/ОБЛАСТЬ: {$i.region|escape}</p>
+			{/if}
+		{/foreach}
+		<h1>Состав команды</h1>
+		<input {$disabled} type=submit name=member_save value="Сохранить">
+		<table border=1 cellpadding=3 cellspacing=0>
+			<tr style="font-weight:bold;text-align:center">
+				<td>[x]</td>
+				<td>ФИО игрока</td>
+				<td>Должность</td>
+				<td>Непосредственный руководитель</td>
+				<td>Дата рождения</td>
+				<td>Фото</td>
+			</tr>
+			{foreach key=k item=i from=$football_team_members}
+			<tr>
+				<td style="text-align:center"><input {$disabled} name=member_del[{$i.id}] type=checkbox></td>
+				<td><input {$disabled} size=40 name=member_data[{$i.id}][fio] value="{$i.fio|escape}" ></td>
+				<td><input {$disabled} size=40 name=member_data[{$i.id}][pos] value="{$i.pos|escape}" ></td>
+				<td>
+					<select {$disabled} name=member_data[{$i.id}][tn_chief] id=member_data{$i.id}tn_chief>
+					<option></option>
+					{foreach key=key item=item from=$spd_list}
+					<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+					{/foreach}
+					</select>
+					<script>$('#member_data{$i.id}tn_chief option[value="{$i.tn_chief}"]').prop('selected', true);</script>
+				</td>
+				<td><input {$disabled} size=10 name=member_data[{$i.id}][birthday] value="{$i.birthday}" class="datepicker"></td>
+				<td>
+					<a target=_blank href="football_teams_members_files/{$i.photo}"><img height=100px src="football_teams_members_files/{$i.photo}"></a>
+					<input {$disabled} name=member_data[{$i.id}] type=file>
+				</td>
+			</tr>
+			{/foreach}
+			<tr>
+				<input {$disabled} type=hidden value="{$smarty.request.team_id}" name=member_data_new[team_id]>
+				<td><input {$disabled} type=submit name=member_new value="Добавить запись"></td>
+				<td><input {$disabled} size=40 name=member_data_new[fio]></td>
+				<td><input {$disabled} size=40 name=member_data_new[pos]></td>
+				<td>
+					<select {$disabled} name=member_data_new[tn_chief]>
+					<option></option>
+					{foreach key=key item=item from=$spd_list}
+					<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+					{/foreach}
+					</select>
+				<td><input {$disabled} size=10 name=member_data_new[birthday] class="datepicker"></td>
+				<td><input {$disabled} name=member_data_new[photo] type=file></td>
+			</tr>
+		</table>
+	{/if}
+</form>

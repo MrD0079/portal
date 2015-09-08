@@ -1,0 +1,94 @@
+<h1>Доступ филиалов/дистрибуторов</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+
+<p>
+Держатель бюджета 	
+<select name=da_db id=da_db>
+<option value=0></option>
+{foreach key=k item=i from=$da_db}
+<option value='{$i.tn}'>{$i.fio}</option>
+{/foreach}
+</select>
+<script>$('#da_db').val({$smarty.request.da_db});</script>
+</p>
+
+<p>
+Дистрибутор 	
+<select name=da_di id=da_di>
+<option value=0></option>
+{foreach key=k item=i from=$da_di}
+<option value='{$i.id}'>{$i.name}</option>
+{/foreach}
+</select>
+<script>$('#da_di').val({$smarty.request.da_di});</script>
+</p>
+
+<p>
+Регион	
+<select name=da_re id=da_re>
+<option value=0></option>
+{foreach key=k item=i from=$da_re}
+<option value='{$i.region_name}'>{$i.region_name}</option>
+{/foreach}
+</select>
+<script>$('#da_re').val('{$smarty.request.da_re}');</script>
+</p>
+
+<p>
+Подразделение	
+<select name=da_de id=da_de>
+<option value=0></option>
+{foreach key=k item=i from=$da_de}
+<option value='{$i.department_name}'>{$i.department_name}</option>
+{/foreach}
+</select>
+<script>$('#da_de').val('{$smarty.request.da_de}');</script>
+</p>
+
+
+<input type=submit name=refresh value="Показать">
+
+
+</form>
+
+{if $smarty.request.refresh}
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td>название</td>
+<td>Национальное<br>подразделение</td>
+<td>Список ДБ</td>
+<td>Комментарий</td>
+<td>Логин</td>
+<td>Пароль</td>
+<td>Отправить<br>логин/пароль</td>
+<td>Получатели<br>рассылки</td>
+</tr>
+{foreach key=key item=item from=$distr_access}
+<tr style="text-align:center">
+<td style="text-align:left">{$item.name|escape}</td>
+<td>{$item.name_nd}</td>
+<td style="text-align:left">{$item.db_list}</td>
+<td style="text-align:left">{$item.comm|escape}</td>
+<td>{$item.login}</td>
+<td><div style="display: inline;" id=div_change_{$item.id}>{$item.password}</div></td>
+<td>
+	{if $item.delivery}
+	<div style="display: inline;" id=div_send_{$item.id}>
+	<a
+		href="javascript:void(0);"
+		onclick="$('#div_send_{$item.id}').load('?action=bud_fil_send_pwd&nohead=1&fil='+'{$item.id}');"
+	>
+		<img title="Отправить логин/пароль" src="/design/send_pwd.jpg">
+	</a>
+	</div>
+	{/if}
+</td>
+<td style="text-align:left">
+	{$item.delivery}
+</td>
+</tr>
+{/foreach}
+</table>
+
+{/if}

@@ -1,0 +1,35 @@
+{foreach key=k item=i from=$list}
+<h1>{$i.name}</h1>
+<p>{$i.db_list}</p>
+<h3>Заявки на активность</h3>
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr style="font-weight: bold;text-align:center">
+      <td>№ заявки</td>
+      <td>Статья</td>
+      <td>Категория</td>
+      <td>ПЛАН<br>сумма<br>затрат,<br>тыс. {$valuta}</td>
+      <td>ФАКТ<br>сумма<br>затрат,<br>тыс. {$valuta}</td>
+      <td>Компенсация<br>дистрибутору</td>
+    </tr>
+{foreach key=k1 item=i1 from=$i.zay}
+    <tr>
+      <td><a target=_blank href="?action=bud_ru_zay_report&z_id={$i1.id}&select=1">{$i1.id}</a></td>
+      <td style="text-align:left">{$i1.st_name}</td>
+      <td style="text-align:left">{$i1.kat_name}</td>
+      <td style="text-align:right">{$i1.z_plan|num:3}</td>
+      <td style="text-align:right">{$i1.z_fakt|num:3}</td>
+      <td style="text-align:right">{$i1.compens_distr|num:3}</td>
+    </tr>
+{/foreach}
+    <tr style="font-weight: bold;">
+      <td style="text-align:right">{$i.zay_total.c}</td>
+      <td></td>
+      <td></td>
+      <td style="text-align:right">{$i.zay_total.z_plan|num:3}</td>
+      <td style="text-align:right">{$i.zay_total.z_fakt|num:3}</td>
+      <td style="text-align:right">{$i.zay_total.compens_distr|num:3}</td>
+    </tr>
+  </tbody>
+</table>
+{/foreach}

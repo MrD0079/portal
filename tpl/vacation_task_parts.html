@@ -1,0 +1,43 @@
+<h1>Задачи на отпуск (разделы)</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+<tr>
+<td>
+<input type=submit name=delete value="Удалить">
+</td>
+<td>
+название
+</td>
+<td>
+порядок
+</td>
+</tr>
+
+{foreach key=key item=item from=$vacation_task_parts}
+<tr>
+<td>
+<input name=del[{$item.id}] type=checkbox>
+</td>
+<td>
+<input name=data[{$item.id}][name] size=50 value="{$item.name|escape}">
+</td>
+<td>
+<input name=data[{$item.id}][sort] size=5 value="{$item.sort}" class="number_int">
+</td>
+</tr>
+{/foreach}
+<tr>
+<td>
+<input type=submit name=add value="Добавить">
+</td>
+<td>
+<input name=new[name] size=50>
+</td>
+<td>
+<input name=new[sort] size=5 class="number_int">
+</td>
+</tr>
+</table>
+
+</form>

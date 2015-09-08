@@ -1,0 +1,127 @@
+<h2>Авансы</h2>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
+
+	<p>
+	Период просмотра
+	<select required="true" name=sd id=sd>
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<select required="true" name=ed id=ed>
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
+	<script>$('#ed option[value="{$smarty.request.ed}"]').prop('selected', true);</script>
+	</p>
+	<p>
+		мои<input type=radio name=full value='me'>
+		прямых подчиненных<input type=radio name=full value='slaves'>
+	</p>
+
+<script>
+$("input[name=full][value={$smarty.request.full}]").attr('checked',true);
+</script>
+
+
+
+
+<p><input type="submit" name="select" id="select" value="Отобразить отчет"></p>
+
+
+
+</form>
+
+{/if}
+
+{if $smarty.request.select}
+
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>Период</td>
+		<td>ФИО сотрудника</td>
+		<td>Сумма<br>заказанного<br>аванса</td>
+		<td>Денежные<br>единицы</td>
+		<td>Последнее<br>изменение</td>
+	</tr>
+	{foreach key=k item=i from=$advances name=advances}
+	<tr>
+		<td style="text-align:center">{$i.mt} {$i.y}</td>
+		<td>{$i.fio}</td>
+		<td style="text-align:right;">
+			{if not $i.ok_ndp and $i.enabled}
+			<input
+				style="{if $i.val > $i.def_val}background-color:red{/if}"
+				id="val_{$i.tn}_{$i.y}_{$i.my}"
+				size=8
+				onchange="
+				advance_save(
+					'{$i.data}',
+					{$i.tn},
+					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'my_advance_val'
+				);
+				"
+				id="my_advance_val"
+				class="number"
+				value="{$i.val}"
+			>
+			{else}
+			{$i.val|num:2}
+			{/if}
+		</td>
+		<td style="text-align:center">
+			{if not $i.ok_ndp and $i.enabled}
+			<select
+				onchange="
+				advance_save(
+					'{$i.data}',
+					{$i.tn},
+					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'cur_id_{$i.tn}_{$i.y}_{$i.my}'
+				);
+				"
+				id="cur_id_{$i.tn}_{$i.y}_{$i.my}"
+			>
+				<option></option>
+				{foreach key=k1 item=i1 from=$currencies}
+				<option value={$i1.id}>{$i1.name}</option>
+				{/foreach}
+			</select>
+			<script>
+				{if $i.cur_id}
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.cur_id});
+				{else}
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.def_cur_id});
+				{/if}
+			</script>
+			{else}
+			{$i.valuta}
+			{/if}
+		</td>
+		<td>
+			{$i.lu}
+			{$i.lu_fio}
+		</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold">
+		<td colspan=2>ИТОГО: {$total.c}</td>
+		<td style="text-align:right">{$total.val|num:2}</td>
+	</tr>
+</table>
+
+<p id="adv_result" style="color:red"></p>
+
+{/if}
+
+
+
+
+

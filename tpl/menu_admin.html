@@ -1,0 +1,145 @@
+
+{if $is_admin or $is_acceptor or $is_test_admin}
+
+<li><a href="javascript:void(0);"><span class="dir">Персонал</span></a>
+	<ul>
+
+		{if $is_admin or $is_acceptor}
+
+		<li><a href="javascript:void(0);"><span class="dir">Личные карточки</span></a>
+			<ul>
+				<li><a href="?action=spdtree&all=1">Личные карточки персонала</a></li>
+				<li><a href="?action=new_spd">Новая личная карточка</a></li>
+				<li><a href="?action=banks">Банки</a></li>
+				<li><a href="?action=perech_departments">Подразделения для учета в факте бюджета</a></li>
+				<li><a href="?action=perech_zat1">Кодировка затрат (уровень 1)</a></li>
+				<li><a href="?action=perech_zat2">Кодировка затрат (уровень 2)</a></li>
+				<li><a href="?action=pos">Должности</a></li>
+			</ul>
+		</li>
+
+		{/if}
+
+		{if $is_admin or $is_test_admin}
+
+		<li><a href="?action=emp_exp&all=1">Эксперт => Оцениваемый</a></li>
+		<li><a href="?action=ol">Обходной лист</a></li>
+		<li><a href="?action=ol_gr">Обходные листы - группы</a></li>
+		<li><a href="?action=bonus_types">Административные меры</a></li>
+		<li><a href="?action=new_staff_accept">Подтверждение новичков</a></li>
+		<li><a href="?action=free_staff_accept">Подтверждение увольнения</a></li>
+
+		{/if}
+
+		{if $is_admin}
+
+		<li><a href="?action=admin_list&all=1">Супер Пользователи</a></li>
+		<li><a href="?action=free_staff_seat">Причины увольнения</a></li>
+		<li><a href="?action=move_staff_accept">Подтверждение переводов</a></li>
+		<li><a href="?action=os_spr">Справочник для формы ОС ДЦ</a></li>
+		<li><a href="?action=os_ac_spr">Справочник для формы ОС АЦ</a></li>
+		<li><a href="?action=tmcs">Типы ТМЦ</a></li>
+
+		{/if}
+
+	</ul>
+</li>
+
+{/if}
+
+{if $is_admin or $is_test_admin or $is_coach}
+
+<li><a href="javascript:void(0);"><span class="dir">Общее</span></a>
+	<ul>
+
+		{if $is_admin}
+
+		<li><a href="?action=log&dates_list1={$now}&dates_list2={$now}">Полный лог</a></li>
+		<li><a href="?action=log&prg=get_data&dates_list1={$now}&dates_list2={$now}">Лог закачки SW=>Oracle</a></li>
+		<li><a href="?action=log&prg=error&dates_list1={$now}&dates_list2={$now}">Лог ошибок</a></li>
+		<li><a href="?action=mr_gps_log">Лог GPS</a></li>
+		<li><a href="?action=inform">Настройка информационных сообщений</a></li>
+		<li><a href="?action=params">Переменные среды</a></li>
+		<li><a href="?action=news_admin">Редактор новостей</a></li>
+		<li><a href="?action=departments">Страны</a></li>
+		<li><a href="?action=news_eta_admin">Редактор новостей для ЭТА</a></li>
+		<li><a href="?action=beg_to">Т.О.</a></li>
+		<li><a href="?action=lang">Языки</a></li>
+		<li><a href="?action=currencies">Валюты</a></li>
+
+		{/if}
+
+		<li><a href="?action=files">Управление документами раздела "Надо знать"</a></li>
+	</ul>
+</li>
+
+{/if}
+
+{if $is_admin or $is_do}
+
+<li><a href="javascript:void(0);"><span class="dir">Служебные записки</span></a>
+	<ul>
+		<li><a href="?action=log&prg=sz">Лог</a></li>
+		<li><a href="?action=sz_tpl">Редактор шаблонов</a></li>
+		<li><a href="?action=sz_cat">Редактор категорий</a></li>
+		<li><a href="?action=sz_change">Замена исполнителей/согласователей</a></li>
+		<li><a href="?action=assist">Ассистенты рук-лей</a></li>
+	</ul>
+</li>
+
+{/if}
+
+{if $is_admin or $is_test_admin}
+
+<li><a href="javascript:void(0);"><span class="dir">Оценка персонала</span></a>
+	<ul>
+		<li><a href="?action=ocenka_events_admin">Евенты</a></li>
+		<li><a href="?action=ocenka_criteria&type=4">Критерии должностей</a></li>
+		<li><a href="?action=ocenka_test_list">Включение теста</a></li>
+		<li><a href="?action=ocenka_criteria&type=5">Вопросы теста</a></li>
+	</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Планы активности</span></a>
+	<ul>
+		<li><a href="?action=activ_types">Справочник - виды активностей</a></li>
+	</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Музей шоколада</span></a>
+	<ul>
+		<li><a href="?action=mz_spr_pri">Статьи доходов</a></li>
+		<li><a href="?action=mz_spr_inv">Статьи инвестиций</a></li>
+		<li><a href="?action=mz_spr_ras">Статьи расходов</a></li>
+		<li><a href="?action=mz_spr_vis">Посещаемость</a></li>
+		<li><a href="?action=mz_spr_mz">Список музеев</a></li>
+		<li><a href="?action=mz_tn">Привязка Музеи-Люди</a></li>
+	</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Менеджер задач</span></a>
+	<ul>
+		<!--
+		<li><a href="?action=project_new">Формирование задач</a></li>
+		<li><a href="?action=project_grant">Назначение прав</a></li>
+		-->
+		<li><a href="?action=vacation_task_parts">Задачи на отпуск</a></li>
+	</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Акции</span></a>
+	<ul>
+		<li><a href="?action=replace_ts">Замена ТС</a></li>
+		<li><a href="?action=apvd_eta">Поездка вых. дня 2012 (ноябрь)</a></li>
+		<li><a href="?action=apvd12_eta">Поездка вых. дня 2012 (декабрь)</a></li>
+		<li><a href="javascript:void(0);"><span class="dir">Дегустация Труфалье</span></a>
+		<ul>
+			<li><a href="?action=atd_contr_avk">Контролеры АВК</a></li>
+			<li><a href="?action=atd_contr_ag">Контролеры агентства</a></li>
+			<li><a href="?action=atd_ocenka_params">Параметры для оценки</a></li>
+			<li><a href="?action=atd_city">Города</a></li>
+			<li><a href="?action=atd_nets">Сети</a></li>
+			<li><a href="?action=atd_diviz">Дивизии</a></li>
+			<li><a href="?action=atd_tz">Торговые залы</a></li>
+		</ul>
+		</li>
+	</ul>
+</li>
+
+{/if}

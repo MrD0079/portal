@@ -1,0 +1,22 @@
+<table border=1>
+	<tr>
+		<td>ЭТА</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Код ТП</td>
+		<td>Тип ТП</td>
+		<td>Время создания визита</td>
+		<td>Редактировать</td>
+	<tr>
+	{foreach key=k item=i from=$visit_list}
+	<tr>
+		<td>{$i.eta}</td>
+		<td>{$i.tp_name}</td>
+		<td>{$i.address}</td>
+		<td>{$i.tp_kod}</td>
+		<td>{$i.tp_type}</td>
+		<td>{$i.lu_t}</td>
+		<td><a href="?action=beg_visit_2&tp_kod={$i.tp_kod}&dt={$smarty.request.dt}">Редактировать</a></td>
+	<tr>
+	{/foreach}
+</table>

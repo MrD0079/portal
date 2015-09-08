@@ -1,0 +1,90 @@
+<h1>Планы/бонусы по ТП для акции "Шоколадный сезон"</h1>
+
+<p style="color:red">Если не выбрать фильтры, то будет отображена вся таблица, а это несколько десятков тысяч строк!</p>
+
+<form target="_self" method="POST" name=form_tp id=form_tp>
+
+		По руководителю:
+		<br>
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+		По супервайзеру:
+		<br>
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+	<input type=submit name=generate id=generate value='Выбрать'>
+	{if $smarty.request.generate}
+	<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold; text-align:center">
+			<td>№ п/п</td>
+			<td>т.н. ТС</td>
+			<td>ФИО ТС</td>
+			<td>ФИО ЭТА</td>
+			<td>Код ТП</td>
+			<td>Код ТП SW</td>
+			<td>Название ТП</td>
+			<td>План окт</td>
+			<td>Бонус окт</td>
+			<td>План ноя</td>
+			<td>Бонус ноя</td>
+			<td>План дек</td>
+			<td>Бонус дек</td>
+		</tr>
+		{foreach key=tp_key item=i from=$tp name=tp}
+		<tr>
+			<td>{$smarty.foreach.tp.iteration}</td>
+			<td>{$i.tab_num}</td>
+			<td>{$i.fio}</td>
+			<td>{$i.fio_eta}</td>
+			<td>{$i.tp_kod}</td>
+			<td>{$i.tp_kod_sw}</td>
+			<td>{$i.tp_name}</td>
+			<td id="td_{$i.tp_kod}_p10"><input class=number_int size=7 value="{$i.p10}" onChange="save_item({$i.tp_kod},'p10',this.value);"></td>
+			<td id="td_{$i.tp_kod}_b10"><input class=number_int size=7 value="{$i.b10}" onChange="save_item({$i.tp_kod},'b10',this.value);"></td>
+			<td id="td_{$i.tp_kod}_p11"><input class=number_int size=7 value="{$i.p11}" onChange="save_item({$i.tp_kod},'p11',this.value);"></td>
+			<td id="td_{$i.tp_kod}_b11"><input class=number_int size=7 value="{$i.b11}" onChange="save_item({$i.tp_kod},'b11',this.value);"></td>
+			<td id="td_{$i.tp_kod}_p12"><input class=number_int size=7 value="{$i.p12}" onChange="save_item({$i.tp_kod},'p12',this.value);"></td>
+			<td id="td_{$i.tp_kod}_b12"><input class=number_int size=7 value="{$i.b12}" onChange="save_item({$i.tp_kod},'b12',this.value);"></td>
+		</tr>
+		{/foreach}
+	</table>
+	{/if}
+</form>
+
+<script>
+{literal}
+
+function save_item(id,field,val)
+{
+	$('#td_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=a14ss_pb&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_'+id+'_'+field).css('background-color','white');
+		}
+	});
+}
+
+{/literal}
+</script>

@@ -1,0 +1,56 @@
+<h3>Базовый аванс</h3>
+
+<table border=1 cellpadding=3 cellspacing=0>
+	<tbody>
+		<tr style="font-weight:bold;text-align:center">
+			<td>
+				Должность
+			</td>
+			<td>
+				Количество<br>работающих<br>в "ветке"<br>сотрудников
+			</td>
+			<td>
+				Сумма<br>базового<br>аванса
+			</td>
+			<td>
+				Последнее<br>изменение
+			</td>
+		</tr>
+		{foreach key=k item=i from=$advance_pos}
+			<tr id=list_{$i.pos_id}>
+				<td>
+					{$i.pos_name}
+				</td>
+				<td style="text-align:center">
+					{$i.c}
+				</td>
+				<td>
+					<input id=d_{$i.pos_id} value="{$i.val}" onChange="save_item({$i.pos_id},this.value);" class="number" size=8>
+				</td>
+				<td>
+					{$i.lu}
+					{$i.lu_fio}
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>
+
+{literal}
+<script>
+function save_item(pos_id,val)
+{
+	$('#d_'+pos_id).css('background-color','red');
+	$('#ok').load('?action=advance_pos&save=1&nohead=1',
+	{
+		pos_id: pos_id,
+		val: val
+	},
+	function() {
+	$('#d_'+pos_id).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

@@ -1,0 +1,38 @@
+<h1>Места проведения</h1>
+<form target="_self" method="POST" name=form1 id=form1>
+<input type=submit name=save value="Сохранить">
+<table border=1 cellpadding=3 cellspacing=0>
+{foreach key=key item=item from=$tr_loc}
+<tr>
+<td>
+&nbsp&nbsp&nbsp<input name=del[{$item.id}] type=checkbox>&nbsp&nbsp&nbsp
+</td>
+<td>
+название локации<br>
+<input name=data[{$item.id}][name] size=150 value="{$item.name|escape}"><br>
+адрес локации<br>
+<input name=data[{$item.id}][addr] size=150 value="{$item.addr|escape}"><br>
+комментарии<br>
+<textarea name=data[{$item.id}][text] rows=10 cols=100>{$item.text|escape}</textarea><br>
+ссылка на карту <a target=_blank href="{$item.url|escape}">Посмотреть</a><br>
+<textarea name=data[{$item.id}][url] rows=10 cols=100>{$item.url|escape}</textarea><br>
+</td>
+</tr>
+{/foreach}
+<tr>
+<td></td>
+<td>
+название локации<br>
+<input size=150 name=new_name><br>
+адрес локации<br>
+<input size=150 name=new_addr><br>
+комментарии<br>
+<textarea rows=10 cols=100 name=new_text></textarea><br>
+ссылка на карту<br>
+<textarea rows=10 cols=100 name=new_url></textarea><br>
+<input type=submit name=new value="Добавить запись">
+</td>
+</tr>
+</table>
+
+</form>

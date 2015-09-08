@@ -1,0 +1,66 @@
+
+{include file="ocenka_events.html"}
+
+
+<h1>Отчет по оценке: {$emp_fio}</h1>
+<br>
+{assign var=sum value=0}
+<table border=1 cellpadding=3 cellspacing=0>
+  <tr align=center>
+    <td width=1000><b>Критерий</b> (описание)</td>
+    <td><b>Вес</b></td>
+    <td><b>Са мо оцен ка</b></td>
+    <td><b>Оцен ка ру ко во ди те ля</b></td>
+    <td><b>Оцен ка экс пер тов (сред няя)</b></td>
+    <td><b>Сред няя оцен ка (экс пер ты + ру ко во ди тель)</b></td>
+    <td><b>Ито го</b></td>
+  </tr>
+  {foreach key=key item=report_self from=$report_self}
+  <tr>
+    <td><b>{$report_self.name|nl2br}</b><br>{$report_self.description|nl2br}</td>
+    <td align=right>{$report_self.weight|default:'0,00'|num:2}</td>
+    <td align=right>{$report_self.self_score|default:'0,00'|num:2}</td>
+    <td align=right>{$report_self.chief_score|default:'0,00'|num:2}</td>
+    <td align=right>{$report_self.exp_avg_score|default:'0,00'|num:2}</td>
+    <td align=right>{$report_self.chief_plus_exp_avg_score|default:'0,00'|num:2}</td>
+    <td align=right>{$report_self.total_score|default:'0,00'|num:2}</td>
+    {assign var=z value=$report_self.total_score|num:0}
+    {assign var=sum value=`$sum+$z`}
+  </tr>
+  {/foreach}
+  <tr align=center>
+    <td colspan=6 align=left>
+	<b>Результаты теста</b><br>
+	{if count($test_errors) neq 0}
+		<b>Неправильно ответил или не ответил на следующие вопросы:</b><br>
+		{foreach key=test_errors_key item=test_errors_item name=test_errors from=$test_errors}
+			{if $is_admin} <!-- пока результаты теста видны только админу -->
+			{/if}
+			<b><!--{$smarty.foreach.test_errors.iteration}. -->{$test_errors_item[0]}</b> <!--{$test_errors_item[1]}--> <nobr><b>- {if $test_errors_item[2] neq ''}Неправильный ответ{else}Нет ответа{/if}</b></nobr><br>
+		{/foreach}
+	{else}
+		&nbsp
+	{/if}
+    </td>
+    <td>{$test_result|default:0|num:1}</td>
+    {assign var=z value=$test_result|default:0|num:0}
+    {assign var=sum value=`$sum+$z`}
+  </tr>
+  <tr align=center>
+    <td colspan=7 align=left>
+	<b>Комментарии экспертов</b><br>
+	{if count($exp_comm) neq 0}
+		{foreach key=exp_comm_key item=exp_comm_item name=exp_comm from=$exp_comm}
+			<b>{$smarty.foreach.exp_comm.iteration}. {$exp_comm_item[0]} -</b> {$exp_comm_item[1]}<br>
+		{/foreach}
+	{else}
+		&nbsp
+	{/if}
+    </td>
+  </tr>
+  <tr align=center>
+    <td><b>Итог оценки</b></td>
+    <td colspan=5>&nbsp</td>
+    <td>{$sum|num:2}</td>
+  </tr>
+</table>

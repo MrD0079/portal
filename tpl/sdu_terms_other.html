@@ -1,0 +1,100 @@
+<h2>Согласованные доли полочного пространства - ПРОЦЕНТЫ</h2>
+<table border=1 style="text-align:center">
+	<tr style="font-weight:bold">
+		<td>Год</td>
+		{foreach key=key item=item from=$nets_proportions_perc}
+		<td>{$item.proportion_name}, %</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>{$smarty.request.calendar_years-2}</td>
+		{foreach key=key item=item from=$nets_proportions_perc}
+		<td>{$item.perc2|default:0|num:2}</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>{$smarty.request.calendar_years-1}</td>
+		{foreach key=key item=item from=$nets_proportions_perc}
+		<td>{$item.perc1|default:0|num:2}</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>{$smarty.request.calendar_years}</td>
+		{foreach key=key item=item from=$nets_proportions_perc}
+		<td><input {$disabled} name=perc[{$item.id}] value="{$item.perc}" size=10></td>
+		{/foreach}
+	</tr>
+</table>
+
+<hr>
+
+<h2>Согласованные доли полочного пространства - ФЕЙСИНГИ</h2>
+<table border=1 style="text-align:center">
+	<tr style="font-weight:bold">
+		<td>Год</td>
+		{foreach key=key item=item from=$nets_proportions_face}
+		<td>{$item.proportion_name}, фейс.</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>{$smarty.request.calendar_years-2}</td>
+		{foreach key=key item=item from=$nets_proportions_face}
+		<td>{$item.face2|default:0|num:2}</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>{$smarty.request.calendar_years-1}</td>
+		{foreach key=key item=item from=$nets_proportions_face}
+		<td>{$item.face1|default:0|num:2}</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>{$smarty.request.calendar_years}</td>
+		{foreach key=key item=item from=$nets_proportions_face}
+		<td><input {$disabled} name=face[{$item.id}] value="{$item.face}" size=10></td>
+		{/foreach}
+	</tr>
+</table>
+
+<hr>
+<h2>Протокол согласования условий сотрудничества</h2>
+{foreach key=key item=item from=$file_list_psus}
+{if $enabled}<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}{$item.file}');">[X]</a>{/if} <a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+{/foreach}
+<br>
+Добавить файл <input {$disabled} name="file_psus" type="file">
+
+<hr>
+<h2>Адресная программа по дополнительным местам продаж</h2>
+{foreach key=key item=item from=$file_list_dmp}
+{if $enabled}<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}{$item.file}');">[X]</a></a>{/if} <a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+{/foreach}
+<br>
+Добавить файл <input {$disabled} name="file_dmp" type="file">
+
+<hr>
+<h2>Адресная программа по маркетинговым мероприятиям</h2>
+{foreach key=key item=item from=$file_list_mm}
+{if $enabled}<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}{$item.file}');">[X]</a>{/if} <a target=_blank href="{$item.path}{$item.file}">{$item.file}</a><br>
+{/foreach}
+<br>
+Добавить файл <input {$disabled} name="file_mm" type="file">
+
+
+<hr>
+<input value="Сохранить" name="save" type="submit">
+
+{literal}
+<script>
+function del_ver(ver)
+{
+	$("#form").append($('<input type=hidden name=del_ver id=del_ver value='+ver+'>'));
+	$("#form").submit();
+}
+function del_file(rid)
+{
+	$("#form").append($('<input type=hidden name=del_file id=del_file value='+rid+'>'));
+	$("#form").submit();
+}
+</script>
+{/literal}

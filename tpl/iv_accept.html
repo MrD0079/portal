@@ -1,0 +1,164 @@
+<div id=ok style="color:red"></div>
+{literal}
+<script>
+	function save_item(tbl,id,field,val)
+	{
+		$('#ok').html('');
+		$('#d_'+id+'_'+field).css('background-color','red');
+		var fd = new FormData();
+		fd.append('tbl', tbl);
+		fd.append('id', id);
+		fd.append('field', field);
+		fd.append('val', val);
+		$.ajax
+		(
+			{
+				type: 'POST',
+				url: '?action=iv_accept&save=1&nohead=1',
+				data: fd,
+				processData: false,
+				contentType: false,
+				success: function(data)
+				{
+					$('#ok').html(''+data+'');
+					$('#d_'+id+'_'+field).css('background-color','white');
+				}
+			}
+		);
+	}
+</script>
+{/literal}
+
+<h3>Проведенные собеседования</h3>
+
+	<form target="_self" method="POST" name=form_sz_accept id=form_sz_accept enctype="multipart/form-data">
+	{foreach item=iv from=$ivl}
+	<table border=1>
+		<tr>
+			<td>Фамилия</td>
+			<td>{$iv.fam}</td>
+		</tr>
+		<tr>
+			<td>Имя</td>
+			<td>{$iv.im}</td>
+		</tr>
+		<tr>
+			<td>Отчество</td>
+			<td>{$iv.ot}</td>
+		</tr>
+		<tr>
+			<td>Дата рождения</td>
+			<td>{$iv.birthday}</td>
+		</tr>
+		<tr>
+			<td>Претендует на должность</td>
+			<td>{$iv.pos_name}</td>
+		</tr>
+		<tr>
+			<td>Территория</td>
+			<td>{$iv.territory}</td>
+		</tr>
+		<tr>
+			<td>Планируемая дата выхода на работу</td>
+			<td>{$iv.planned_start}</td>
+		</tr>
+		<tr>
+			<td>Испытательный срок: "с"</td>
+			<td>{$iv.prob_period_start}</td>
+		</tr>
+		<tr>
+			<td>Испытательный срок: "по"</td>
+			<td>{$iv.prob_period_end}</td>
+		</tr>
+		<tr>
+			<td>Категория на период ИС</td>
+			<td>{$iv.cat_on_prob}</td>
+		</tr>
+		<tr>
+			<td>Категория после прохождения ИС</td>
+			<td>{$iv.cat_after_prob}</td>
+		</tr>
+		<tr>
+			<td>Наставник</td>
+			<td>{$iv.mentor_fio}</td>
+		</tr>
+		<tr>
+			<td>Резюме</td>
+			<td><a target=blank_ href="iv_files/{$iv.resume}">{$iv.resume}</a></td>
+		</tr>
+		<tr>
+			<td>Адрес электронной почты (личный)</td>
+			<td>{$iv.email_private}</td>
+		</tr>
+		<tr>
+			<td>Имя и фамилия латиницей (как в загранпаспорте)</td>
+			<td>{$iv.fio_zpassport}</td>
+		</tr>
+	</table>
+	<p></p>
+	<table id=items{$iv.id} border=1 cellpadding=3 cellspacing=0 width=800px>
+		<tbody>
+			<tr style="font-weight:bold">
+				<td>Ф.И.О.</td>
+				<td>Сильные стороны кандидата</td>
+				<td>На развитие</td>
+				<td>Решение</td>
+			</tr>
+			{foreach key=ivk item=ivb from=$iv.body}
+			<tr id=list_{$ivb.id} {if $ivb.tn eq $tn}bgcolor=lightgreen{/if}>
+				<td>{$ivb.fio}</td>
+				<td>
+					{if $ivb.tn eq $tn and $iv.current_acceptor eq $tn}
+						<textarea rows=6 cols=40 required name=data[{$ivb.id}][strengths] id=d_{$ivb.id}_strengths
+						onchange="save_item('body',{$ivb.id},'strengths',this.value);"
+						>{$ivb.strengths}</textarea>
+					{else}
+						{$ivb.strengths|nl2br}
+					{/if}
+				</td>
+				<td>
+					{if $ivb.tn eq $tn and $iv.current_acceptor eq $tn}
+						<textarea rows=6 cols=40 required name=data[{$ivb.id}][weaknesses] id=d_{$ivb.id}_weaknesses
+						onchange="save_item('body',{$ivb.id},'weaknesses',this.value);"
+						>{$ivb.weaknesses}</textarea>
+					{else}
+						{$ivb.weaknesses|nl2br}
+					{/if}
+				</td>
+				<td>
+					{if $ivb.tn eq $tn and $iv.current_acceptor eq $tn}
+						<select required name=data[{$ivb.id}][accepted] id=d_{$ivb.id}_accepted
+						onchange="
+						save_item('body',{$ivb.id},'accepted',this.value);
+						$(this).attr('disabled', true);
+						this.value==3?$('#d_{$iv.id}_revision_reason').show():null;
+						this.value==3?$('#d_{$iv.id}_revision_reason_label').show():null;
+						"
+						>
+							{foreach key=k1 item=i1 from=$iv_st}
+							<option value={$i1.id}>{$i1.name}</option>
+							{/foreach}
+						</select>
+						<div id=d_{$iv.id}_revision_reason_label>Причина отправки на доработку</div>
+						<textarea rows=3 cols=40 id=d_{$iv.id}_revision_reason
+						onchange="save_item('head',{$iv.id},'revision_reason',this.value);"
+						>{$ivb.revision_reason}</textarea>
+						<script>
+							$('#d_{$ivb.id}_accepted option[value={$ivb.accepted}]').prop('selected', true);
+							$('#d_{$iv.id}_revision_reason').hide();
+							$('#d_{$iv.id}_revision_reason_label').hide();
+						</script>
+					{else}
+						{foreach key=key item=item from=$iv_st}
+							{if $ivb.accepted eq $item.id}{$item.name}{/if}
+						{/foreach}
+						{$iv.revision_reason|nl2br}
+					{/if}
+				</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+	<p></p>
+	{/foreach}
+	</form>

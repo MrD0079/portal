@@ -1,0 +1,90 @@
+{literal}
+    <style>
+      #map-canvas {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+
+ <style type="text/css">
+   .labels {
+     color: white;
+     background-color: red;
+     font-family: "Lucida Grande", "Arial", sans-serif;
+     font-size: 10px;
+     text-align: center;
+     width: 20px;     
+     white-space: nowrap;
+   }
+ </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    <script type="text/javascript" src="js/markerwithlabel.js"></script>
+     <script>
+String.prototype.nl2br = function()
+{
+    return this.replace(/\n/g, "<br />");
+}
+function initialize() {
+  var mapOptions = {
+    zoom: 0,
+    center: new google.maps.LatLng(0, 0),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map($('#map-canvas'),
+      mapOptions);
+  var polyOptions = {
+    strokeColor: '#000000',
+    strokeOpacity: 1.0,
+    strokeWeight: 3
+  };
+window.googlemapdata = [
+{/literal}
+{foreach key=list_detail_key item=list_detail_item from=$list_detail name=list_detail}
+{if
+	$list_item.day eq $list_detail_item.day
+	and $list_item.h_eta eq $list_detail_item.h_eta
+	and $list_item.ts eq $list_detail_item.ts
+	and $list_detail_item.latitude
+	and $list_detail_item.longitude
+}
+{$list_detail_item.googledata}
+{/if}
+{/foreach}
+{literal}
+];
+	poly = new google.maps.Polyline(polyOptions);
+	poly.setMap(map);
+	var path = poly.getPath();
+	var latlngbounds = new google.maps.LatLngBounds();
+	for (var i = 0; i < googlemapdata.length; i++) {
+		path.push(googlemapdata[i].latlng);
+     googlemapdata[i].marker = new MarkerWithLabel({
+       position: googlemapdata[i].latlng,
+       draggable: true,
+       raiseOnDrag: true,
+       map: map,
+       labelContent: googlemapdata[i].num,
+       labelAnchor: new google.maps.Point(10, 0),
+       labelClass: "labels", // the CSS class for the label
+       labelStyle: {opacity: 0.75}
+	,title: googlemapdata[i].name
+     ,iw : new google.maps.InfoWindow({
+       content: googlemapdata[i].name.nl2br()
+     })
+     });
+     google.maps.event.addListener(googlemapdata[i].marker, "click", function (e) {
+	for (var i = 0; i < googlemapdata.length; i++) {
+	googlemapdata[i].marker.iw.close();
+	}
+this.iw.open(map, this); });
+		latlngbounds.extend(googlemapdata[i].latlng);
+	}
+	map.fitBounds(latlngbounds);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+{/literal}
+    <div id="map-canvas"></div>

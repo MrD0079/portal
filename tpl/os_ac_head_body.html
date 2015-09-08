@@ -1,0 +1,240 @@
+
+<div id=ok style="display: inline;"></div>
+
+
+<hr>
+
+
+
+{if $os_ac_memb_head.ok_accept_tn}
+{assign var=disabled value='disabled'}
+{assign var=disabled1 value='disabled'}
+{/if}
+
+
+
+<h1>{$os_ac_memb_head.fio}</h1>
+
+<p><a href="?action=ac_report&ac_id={$smarty.request.ac_id}">Перейти к отчету по АЦ</a></p>
+
+<table>
+	<tr>
+		<td>Претендует на должность</td>
+		<td id=pos_name>
+			<select {$disabled} name=d[pos_name]
+				onChange="save_head({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}','pos_name',this.value);"
+			>
+			<option></option>
+			<option value="{$ac_head.vac1|escape}">{$ac_head.vac1|escape}</option>
+			<option value="{$ac_head.vac2|escape}">{$ac_head.vac2|escape}</option>
+			<option value="{$ac_head.vac3|escape}">{$ac_head.vac3|escape}</option>
+			</select>
+			<script>
+			$("[name='d[pos_name]']").val('{$os_ac_head.pos_name|escape}');
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Цели участника на АЦ</td>
+		<td>
+			<input {$disabled} id=goal name=d[goal] size=60 value="{$os_ac_head.goal|escape}" onChange="save_head({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}','goal',this.value);">
+		</td>
+	</tr>
+	{if $os_ac_memb_head.ie eq 'ext'}
+	<tr>
+		<td>Резюме</td>
+		<td>
+			<a href="ac_files/{$os_ac_memb_head.resume}">{$os_ac_memb_head.resume}</a>
+		</td>
+	</tr>
+	{/if}
+	<tr>
+		<td>Тема для презентаци</td>
+		<td>{$ac_head.head|escape}</td>
+	</tr>
+	<tr>
+		<td>Файлы презентации</td>
+		<td id="td_{$smarty.request.id}_{$smarty.request.ac_id}">
+			<input type=file name="files_{$smarty.request.id}_{$smarty.request.ac_id}[]" id="files_{$smarty.request.id}_{$smarty.request.ac_id}" multiple>
+			<a href="javascript:void(0);" onClick="send_file({$smarty.request.id},{$smarty.request.ac_id});" class="send_file_button">Добавить файлы</a>
+			<br>
+			<div id="files_list_{$smarty.request.id}_{$smarty.request.ac_id}" style="display: inline;"></div>
+		</td>
+	</tr>
+</table>
+
+<!--
+<p><input type=submit {$disabled1} value=Сохранить name=save></p>
+-->
+
+
+<hr>
+
+<table border=0 cellpadding=3 cellspacing=3>
+{foreach key=k item=i from=$os_ac_body name=body}
+
+{if $i.level eq 2}
+<tr>
+<td style="border: 1px solid black" rowspan={$i.c+1}>{$i.name}</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по компетенции</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold"><div style="display: inline;" id="ispresent{$i.id}">{$i.en|default:0}</div> из {$i.c}</td>
+</tr>
+{/if}
+
+{if $i.level eq 3}
+<tr>
+<td style="border: 1px solid black">{$i.name}</td>
+<td style="border: 1px solid black; text-align:center; {if $i.v_int eq 1}background-color:rgb(153, 255, 153){/if}" id=v_int_{$i.id}>
+	<input
+	onclick="
+		save_body({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}',{$i.id},'v_int',this.checked?1:0);
+		$('#ispresent{$i.parent}').text($('.ispresent{$i.parent}:checked').length);
+		$('#ispresent{$i.parent1}').text($('.ispresent{$i.parent1}:checked').length);
+	"
+	class="ispresent{$i.parent} ispresent{$i.parent1}"
+	{$disabled}
+	type=checkbox
+	{if $i.v_int eq 1}checked{/if}
+	>
+</td>
+</tr>
+{/if}
+
+{if $i.level eq 1}
+<tr>
+<td style="text-align:right" colspan=4><h3>Блок "{$i.name}"</h3></td>
+</tr>
+
+<tr style="text-align:center;font-weight:bold">
+<td style="border: 1px solid black">Компетенция</td>
+<td style="border: 1px solid black">Индикаторы</td>
+<td style="border: 1px solid black">Проявление</td>
+<td style="border: 1px solid black">Выводы по блоку</td>
+</tr>
+<tr>
+<td colspan=2 style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по блоку</td>
+<td style="border: 1px solid black; text-align:center; font-weight:bold"><div style="display: inline;" id="ispresent{$i.id}">{$i.en|default:0}</div> из {$i.c1}</td>
+<td style="border: 1px solid black; text-align:center" rowspan={$i.c+1}>
+<textarea {$disabled} name=body[{$i.id}][v_text] rows={$i.c} cols=20 id=v_text_{$i.id} onChange="save_body({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}',{$i.id},'v_text',this.value);">{$i.v_text|escape}</textarea>
+</td>
+</tr>
+{/if}
+
+{/foreach}
+</table>
+
+<hr>
+
+<table style="text-align:center" border=0 cellpadding=3 cellspacing=3>
+	<tr>
+		<td>
+			<h3>Решение оценочной комиссии</h3>
+			<textarea {$disabled1} cols=50 rows=10 class="datepicker" name=d[findings] id=findings onChange="save_head({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}','findings',this.value);">{$os_ac_head.findings|escape}</textarea>
+		</td>
+		<td>
+			<h3>ОС участнику АЦ</h3>
+			<textarea {$disabled} cols=50 rows=10 class="datepicker" name=d[os_ac] id=os_ac onChange="save_head({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}','os_ac',this.value);">{$os_ac_head.os_ac|escape}</textarea>
+		</td>
+	</tr>
+</table>
+
+<hr>
+
+<h3>Цель участника на АЦ</h3>
+<div id="goal_res">
+{foreach key=key item=item from=$os_ac_goal}
+	<input {$disabled} name=d[goal_res] value={$item.id} type="radio" onClick="save_head({$smarty.request.id},{$smarty.request.ac_id},'{$os_ac_memb_head.ie}','goal_res',this.value);">{$item.name}<br>
+{/foreach}
+</div>
+
+
+<script>$("input[name='d[goal_res]'][value={$os_ac_head.goal_res|default:39977154}]").attr('checked',true);</script>
+
+<p><a href="?action=ac_report&ac_id={$smarty.request.ac_id}">Перейти к отчету по АЦ</a></p>
+
+<hr>
+
+{literal}
+<script>
+//$('#total_sku').text($('.ispresent:checked').length);
+function save_head(id,ac_id,ie,field,val)
+{
+	$('#'+field).css('background-color','red');
+	$('#ok').load('?action=os_ac_head_save&nohead=1',
+	{
+		id: id,
+		ac_id: ac_id,
+		ie: ie,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#'+field).css('background-color','white');
+	});
+	
+}
+function save_body(id,ac_id,ie,spr_id,field,val)
+{
+	$('#'+field+'_'+spr_id).css('background-color','red');
+	$('#ok').load('?action=os_ac_body_save&nohead=1',
+	{
+		id: id,
+		ac_id: ac_id,
+		spr_id: spr_id,
+		ie: ie,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#'+field+'_'+spr_id).css('background-color','white');
+	});
+}
+function del_file(id,memb_id,ac_id)
+{
+	$('#ok').load('?action=os_ac_f_save&nohead=1',
+	{
+		del_file: id,
+		memb_id: memb_id,
+		ac_id: ac_id
+	},
+	function() {
+		$('#files_'+memb_id+'_'+ac_id).val('');
+		$('.send_file_button').click();
+	});
+}
+function send_file(memb_id,ac_id)
+{
+$('#td_'+memb_id+'_'+ac_id).css('background-color','red');
+//$('#files_'+id).attr('disabled',true);
+//$('.send_file_button').attr('disabled',true);
+var fd = new FormData();
+fd.append('memb_id', memb_id);
+fd.append('ac_id', ac_id);
+//fd.append('img', $('#files_'+id)[0].files[0]);
+jQuery.each($('#files_'+memb_id+'_'+ac_id)[0].files, function(i, file) {
+fd.append('img['+i+']', file);
+});
+$.ajax({
+  type: 'POST',
+  url: '?action=os_ac_f_save&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+    $('#files_list_'+memb_id+'_'+ac_id).html(data);
+$('#td_'+memb_id+'_'+ac_id).css('background-color','white');
+//$('#files_'+id).attr('disabled',false);
+//    console.log(data);
+  },
+  error: function(data) {
+    $('#files_list_'+memb_id+'_'+ac_id).html(data);
+$('#td_'+memb_id+'_'+ac_id).css('background-color','white');
+//$('#files_'+id).attr('disabled',false);
+//$('.send_file_button').attr('disabled',false);
+//    console.log(data);
+  }
+});
+}
+$('.send_file_button').click();
+</script>
+{/literal}

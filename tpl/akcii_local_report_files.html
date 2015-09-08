@@ -1,0 +1,24 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>удалить</td>
+		<td>ФИО<br>ТС</td>
+		<td>Название<br>файла-сканкопии</td>
+		<td>Сумма к компенсации дистрибутору<br>согласно данному реестру, {$valuta}</td>
+	</tr>
+	{foreach key=k item=i from=$f}
+	<tr id=trf_{$i.id} style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td style="text-align:center">
+			{if ($is_db or $has_parent_db) and not $act_head.ok_db_tn}
+				<a href="javascript:void(0);" onClick="del_file({$i.id});">[X]</a>
+			{/if}
+		</td>
+		<td style="text-align:left">{$i.fio}</td>
+		<td style="text-align:left"><a target=_blank href="akcii_local_files/{$i.fn}">{$i.fn}</a></td>
+		<td style="text-align:right">{$i.bonus|num:2}</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+
+

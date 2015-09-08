@@ -1,0 +1,182 @@
+<h3>Тесты АП</h3>
+
+<div id=detail_0></div>
+
+{literal}
+<script>
+
+function copy_prob_test(parent,div)
+{
+var fd = new FormData();
+fd.append('parent', parent);
+fd.append('copy', 1);
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tprob_test_'+div+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+
+function add_prob_test(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('name', $('#name_'+id).val());
+fd.append('test_len', $('#test_len_'+id).val());
+fd.append('comm', $('#comm_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tprob_test_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+
+function add_prob_test_q(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('name', $('#name_'+id).val());
+fd.append('q_sort', $('#q_sort_'+id).val());
+fd.append('pict', $('#pict_'+id)[0].files[0]);
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_q_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tprob_test_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+
+function add_prob_test_a(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('name', $('#name_'+id).val());
+fd.append('a_ok', $('#a_ok_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_a_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tprob_test_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+
+function save_prob_test(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	if (field=='pict')
+	{
+		fd.append('pict', $('#d_'+id+'_pict')[0].files[0]);
+	}
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=prob_test_save&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			if (field=='pict')
+			{
+				$('#div_'+id+'_pict').html(data);
+			}
+			$('#d_'+id+'_'+field).css('background-color','white');
+			if (field=='a_ok')
+			{
+				val==1?$('#prob_test_'+id).css('background-color','lightgreen'):$('#prob_test_'+id).css('background-color','white');
+			}
+		}
+	});
+}
+
+function del_prob_test(id)
+{
+save_prob_test(id,'id',0);
+$('#prob_test_'+id).remove();
+}
+
+function show_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+
+$(function() {show_items(0);});
+
+function show_q_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_q_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+
+function show_a_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=prob_test_a_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

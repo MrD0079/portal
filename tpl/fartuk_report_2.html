@@ -1,0 +1,99 @@
+{if not $smarty.request.print}
+
+<p><input type=submit name=save id=save class=save value="Сохранить"></p>
+
+{/if}
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО руководителя</td>
+		<td>ФИО ТС</td>
+		<td>ФИО ЭТА</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Дата<br>накладной</td>
+		<td>Номер<br>накладной</td>
+		<td>Сумма<br>по накладной,<br>{$valuta}</td>
+		<td>Количество<br>выданных<br>фартуков</td>
+		<td>Дата<br>выдачи<br>фартука</td>
+		<td>Запрет<br>ВСТМ</td>
+		<td>Подтверждение<br>рук-ля</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}"
+		{if $list_item.fakt_bonus > $list_item.bonus_plan}style="background-color: red"{/if}
+		{if $list_item.is_act eq 1}style="background-color: rgb(51, 255, 51)"{/if}
+	>
+		<td>{$smarty.foreach.list.iteration}</td>
+		<td>{$list_item.parent_fio}</td>
+		<td>{$list_item.ts_fio}</td>
+		<td>{$list_item.merchname}</td>
+		<td>{$list_item.kod_tt} {$list_item.jur_nazv}</td>
+		<td>{$list_item.addr}</td>
+		<td>{$list_item.data}</td>
+		<td>{$list_item.invoice_no}</td>
+		<td style="text-align:right">{$list_item.summnds|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.bonus_qty|default:0|num:0}</td>
+		<td style="text-align:right">{$list_item.bonus_date}</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print}
+			<input
+			type=checkbox
+			onclick="
+			$('#ok_traid_{$list_item.id}').attr('disabled',false);
+			$('#ok_traid_{$list_item.id}').val(this.checked);
+			"
+			{if $list_item.ok_traid eq 1}checked{/if}
+			{if not $is_traid or $list_item.ok_chief eq 1}disabled{/if}
+			>
+			{else}
+				{if $list_item.ok_traid eq 1}да{/if}
+			{/if}
+		</td>
+		<td>
+			{if not $smarty.request.print}
+			<input type="checkbox"
+			onclick="
+			$('#ok_chief_{$list_item.id}').attr('disabled',false);
+			$('#ok_chief_{$list_item.id}').val(this.checked);
+			"
+			{if $list_item.ok_chief eq 1}checked{/if}
+			{if not $list_item.ok_traid neq 1 or $list_item.parent_tn neq $tn}disabled{/if}
+			>
+			{if $list_item.ok_chief eq 1}{$list_item.parent_fio} {$list_item.ok_chief_date}{/if}
+			{else}
+				{if $list_item.ok_chief eq 1}да {$list_item.parent_fio} {$list_item.ok_chief_date}{/if}
+			{/if}
+		</td>
+		{if not $smarty.request.print}
+			<input type=hidden name=data[{$list_item.id}][ok_traid] id=ok_traid_{$list_item.id} disabled>
+			<input type=hidden name=data[{$list_item.id}][ok_chief] id=ok_chief_{$list_item.id} disabled>
+		{/if}
+	</tr>
+	{/foreach}
+	{foreach key=list_key item=list_item from=$list_total name=list_total}
+	<tr style="font-weight:bold">
+		<td colspan=6>Итого ТП: {$list_item.tp_kod|default:0}</td>
+			<td style="text-align:right">{$list_item.sales11|default:0|num:2}</td>
+			<td style="text-align:right">{$list_item.sales12|default:0|num:2}</td>
+			<td style="text-align:right">{$list_item.rost_perc|default:0|num:2}</td>
+			<td style="text-align:right">{$list_item.rost_uah|default:0|num:2}</td>
+			<td style="text-align:right">{$list_item.bonus_plan|default:0|num:2}</td>
+			<td></td>
+			<td style="text-align:right">{$list_item.ok_traid|default:0}</td>
+			<td></td>
+			<td style="text-align:right">{$list_item.fakt_bonus|default:0|num:2}</td>
+			<td style="text-align:right">{$list_item.ok_chief|default:0}</td>
+	</tr>
+	{/foreach}
+</table>
+
+
+{if not $smarty.request.print}
+<p><input type=submit name=save id=save class=save value="Сохранить"></p>
+{/if}
+
+

@@ -1,0 +1,108 @@
+<form target="_self" method="POST" name=fin_plan_year id=fin_plan_year>
+	<input type=hidden name=nets value="{$smarty.request.nets}">
+	<input type=hidden name=calendar_years value="{$smarty.request.calendar_years}">
+	<table border=0>
+		<tr>
+			<td rowspan=2>
+				<table border=0>
+					<tr>
+						<td>Планируемый годовой объем продаж, тыс. {$valuta}</td>
+						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
+						<td><input required {$disabled} class=number size="15" name="sales_cur_year" id="sales_cur_year" value={$sales_cur_year}></td>
+					</tr>
+					<tr>
+						<td>Объем продаж предыдущего года, тыс. {$valuta}</td>
+						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
+						<td><input required class=number size="15" name="sales_prev_year" id="sales_prev_year" value={$sales_prev_year}></td>
+					</tr>
+					<tr>
+						<td>Процент роста, %</td>
+						<td><input disabled size="15" name="percent" id="percent" value={$percent}></td>
+					</tr>
+					<tr>
+						<td>Количество ТЗ на начало планируемого года</td>
+						<td><input required {$disabled} size="15" name="tz" id="tz" value={$nets_plan_year.tz}></td>
+					</tr>
+					<tr>
+						<td>Прогноз по открытию новых залов</td>
+						<td><input required {$disabled} size="15" name="zal_prognoz" id="zal_prognoz" value={$nets_plan_year.zal_prognoz}></td>
+					</tr>
+				</table>
+				Сеть будет работать на стандартных условиях без бюджета
+				<select {$disabled} name="no_budget" id="no_budget">
+					<option value=0>нет</option><option value=1>да</option>
+				</select>
+				<script>$('#no_budget option[value="{$nets_plan_year.no_budget}"]').prop('selected', true);</script>
+				<br>
+				<input value="Сохранить" name="save_year" type="submit">
+				<a target=_blank href="?action=sdu&plan_type=1">Перейти к СДУ</a>
+			</td>
+			<td colspan=2 style="text-align:center">
+				Прогноз продаж по месяцам
+			</td>
+			<td style="text-align:center">
+				Динамика по группе затрат
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border=1 cellpadding=3 cellspacing=0>
+					<tr>
+						<td>№ п/п</td>
+						<td>Месяц</td>
+						<td>%</td>
+						<td>План<br>продаж,<br>тыс.{$valuta}</td>
+						<td>Затраты<br>тыс.{$valuta}</td>
+						<td>Затраты<br>%</td>
+					</tr>
+					{foreach key=key item=item from=$month_prognoz name=month_prognoz}
+					{if $smarty.foreach.month_prognoz.iteration<=6}
+					<tr>
+						<td>{$item.month}</td>
+						<td>{$item.month_name}</td>
+						<td align=right>{$item.koeff|default:0|num:2}</td>
+						<td align=right>{$item.summa|default:0|num:3}</td>
+						<td align=right>{$item.zatr|default:0|num:3}</td>
+						<td align=right>{$item.perc_zatr|default:0|num:2}</td>
+					</tr>
+					{/if}
+					{/foreach}
+				</table>
+			</td>
+			<td>
+				<table border=1 cellpadding=3 cellspacing=0>
+					<tr>
+						<td>№ п/п</td>
+						<td>Месяц</td>
+						<td>%</td>
+						<td>План<br>продаж,<br>тыс.{$valuta}</td>
+						<td>Затраты<br>тыс.{$valuta}</td>
+						<td>Затраты<br>%</td>
+					</tr>
+					{foreach key=key item=item from=$month_prognoz name=month_prognoz}
+					{if $smarty.foreach.month_prognoz.iteration>6}
+					<tr>
+						<td>{$item.month}</td>
+						<td>{$item.month_name}</td>
+						<td align=right>{$item.koeff|default:0|num:2}</td>
+						<td align=right>{$item.summa|default:0|num:3}</td>
+						<td align=right>{$item.zatr|default:0|num:3}</td>
+						<td align=right>{$item.perc_zatr|default:0|num:2}</td>
+					</tr>
+					{/if}
+					{/foreach}
+				</table>
+			</td>
+			<td>
+				<a target=_blank href="?action=main">"Тредмаркетинговая активность"</a>
+				<br>
+				<br>
+				<a target=_blank href="?action=main">"Дополнительные места продаж"</a>
+				<br>
+				<br>
+				<a target=_blank href="?action=main">"Затраты дистрибутора"</a>
+			</td>
+		</tr>
+	</table>
+</form>
+<hr><br>

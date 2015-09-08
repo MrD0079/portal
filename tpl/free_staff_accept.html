@@ -1,0 +1,108 @@
+<h1>Подтверждение увольнения</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+
+<input type=submit value="Сохранить" name="free">
+
+{foreach key=key1 item=item1 from=$free_staff}
+<hr>
+<table cellpadding=3 border=0>
+	<tr>
+		<td>
+			<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+				<tr>
+					<td>ФИО увольняющегося сотрудника</td>
+					<td>
+						{$item1.uvol_name}
+						{if $item1.tn_new_db}
+								<div id="uploadOutput{$item1.id}" style="display: inline;">
+								</div>
+								<script>
+								$db={$item1.tn_new_db};
+								$tn={$item1.tn};
+								$id={$item1.id};
+								{literal}
+									$('#uploadOutput'+$id).load('?action=free_staff_my_emp_all&nohead=1&tn='+$tn+'&id='+$id+'&db='+$db/*,
+									function() {$('#free_staff_'+$id+'_tn_new_db').val($db);}*/
+									);
+								{/literal}
+								</script>
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<td>Причина увольнения</td>
+					<td>
+						<select required name="free_staff[{$item1.id}][seat]" id="free_staff_{$item1.id}_seat">
+							<option></option>
+							{foreach from=$seat key=k item=i}
+							<option value={$i.id}>{$i.name}</option>
+							{/foreach}
+						</select>
+						<script>$('#free_staff_{$item1.id}_seat option[value="{$item1.seat}"]').prop('selected', true);</script>
+					</td>
+				</tr>
+				<tr>
+					<td>Дата увольнения</td>
+					<td><input required name="free_staff[{$item1.id}][datauvol]" class="datepicker" value="{$item1.datauvol_t}"></td>
+				</tr>
+				<tr>
+					<td>
+						Условия увольнения<br>
+						(дорабатывает до...)<br>
+						(увольняется без отработки)<br>
+						"Наложено удержание в сумме... за....<br>
+						(Достигнута договоренность...) и т.д.
+					</td>
+					<td><textarea required cols="85" rows="5" name="free_staff[{$item1.id}][params]">{$item1.params|escape}</textarea></td>
+				</tr>
+				<tr>
+					<td>Дата блокировки корпоративного электронного адреса</td>
+					<td><input required name="free_staff[{$item1.id}][block_email]" class="datepicker" value="{$item1.block_email_t}"></td>
+				</tr>
+				<tr>
+					<td style="">Дата блокировки корпоративного мобильного номера</td>
+					<td style=""><input required name="free_staff[{$item1.id}][block_mob]" class="datepicker" value="{$item1.block_mob_t}"></td>
+				</tr>
+				<tr>
+					<td style="">Дата блокировки доступа к корпоративному порталу</td>
+					<td style=""><input required name="free_staff[{$item1.id}][block_portal]" class="datepicker" value="{$item1.block_portal_t}"></td>
+				</tr>
+				<tr>
+					<td style="">ФИО, должность сотрудника, принимающего территорию<br>(или кто будет исполнять обязанности):</td>
+					<td style="">
+						<input type=radio name="free_staff[{$item1.id}][val_new]" value=1 onClick="$('#y1_{$item1.id}').attr('disabled',false);$('#f1_{$item1.id}').attr('disabled',true);$('#s1_{$item1.id}').attr('disabled',true)" checked>Рук-ль
+						<input type=hidden required id=y1_{$item1.id} name="free_staff[{$item1.id}][tn_new]" value="{$item1.creator}">
+						<input type=radio name="free_staff[{$item1.id}][val_new]" value=2 onClick="$('#y1_{$item1.id}').attr('disabled',true);$('#f1_{$item1.id}').attr('disabled',true);$('#s1_{$item1.id}').attr('disabled',false)">подчиненный
+						<select required disabled id=s1_{$item1.id} name="free_staff[{$item1.id}][tn_new]">
+						<option></option>
+						{foreach key=k item=i from=$item1.childs}
+						<option value="{$i.tn}">{$i.fio}</option>
+						{/foreach}
+						</select>
+						<input type=radio name="free_staff[{$item1.id}][val_new]" value=3 onClick="$('#y1_{$item1.id}').attr('disabled',true);$('#f1_{$item1.id}').attr('disabled',false);$('#s1_{$item1.id}').attr('disabled',true)">другое (указать ФИО, должность) 
+						<input required disabled size="50" id=f1_{$item1.id} name="free_staff[{$item1.id}][fio_new]" value="{$item1.fio_new|escape}">
+					</td>
+					<script>$('input:radio[name="free_staff[{$item1.id}][val_new]"]').filter('[value="{$item1.val_new}"]').click();</script>
+					<script>$('#s1_{$item1.id}').val('{$item1.tn_new}');</script>
+				</tr>
+				<tr>
+					<td style="">Номер с/з на увольнение (для РФ)</td>
+					<td style=""><input name="free_staff[{$item1.id}][sz_id]" class="number_int" value="{$item1.sz_id}"></td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<input onClick="$('#comment_{$item1.id}').attr('disabled',true)" type=radio name="r[{$item1.id}]" value=1>Подтвердить
+			<input onClick="$('#comment_{$item1.id}').attr('disabled',false)" type=radio name="r[{$item1.id}]" value=0>Удалить
+			<textarea disabled name="comment[{$item1.id}]" id="comment_{$item1.id}"></textarea>
+		</td>
+	</tr>
+</table>
+{/foreach}
+
+<hr>
+
+<input type=submit value="Сохранить" name="free">
+
+</form>

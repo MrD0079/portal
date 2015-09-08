@@ -1,0 +1,209 @@
+<h1>Торговые агенты</h1>
+
+
+{if not $smarty.request.print}
+
+
+<form target="_self" method="POST" name=form1 id=form1>
+
+По руководителю:
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+<br>
+
+По ТС/СТС:
+<select name=exp_list_only_ts id=exp_list_only_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_only_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+<br>
+
+<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+
+
+<br>
+Резерв:
+<input type=radio id=reserv name=reserv value=1>все
+<input type=radio id=reserv name=reserv value=2>в резерве
+<script>$("input[name=reserv][value={$smarty.request.reserv}]").attr('checked',true);</script>
+
+
+<p><input name="show" value="Показать" type="submit"></p>
+
+
+{if $smarty.request.show}
+	{if not $smarty.request.print}
+		<p><a href="?action=spr_users_eta&print=1&excel=1&show=1&filename=Торговые агенты">Экспорт в Excel</a></p>
+	{/if}
+{/if}
+
+{/if}
+
+{if not $smarty.request.print}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="text-align:center;font-weight:bold">
+		<td>ЭТА КК</td>
+		<td>ФИО ЭТА / ЭТА КК</td>
+		<td>Логин</td>
+		<td>Пароль</td>
+		<td>Обновить пароль</td>
+		<td>Последний вход</td>
+		<td>в резерве</td>
+		<td>дата включения</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	<tr style="font-weight:bold">
+		<td colspan=8>
+			{$i.head.fio}
+			{if $i.head.datauvol}<font style="color:red">уволен(а) {$i.head.datauvol}</font>{/if}
+			<a href="javascript:void(0);" onclick="sendPwds({$i.head.tn});">Выслать пароли на ТС / СТС / МКК</a>
+			<div style="display:inline;" id="sendPwds_{$i.head.tn}"></div>
+			БТ: {$i.head.tr_list}</td>
+		</td>
+	</tr>
+		{foreach key=k1 item=i1 from=$i.data name=i}
+		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<td style="text-align:center;">{if $i1.is_eta_kk eq 1}да{/if}</td>
+			<td style="text-align:left;">{$i1.eta}</td>
+			<td style="text-align:center;">{$i1.login}</td>
+			<td style="text-align:center;" id="updatePwd_{$i1.login}">{$i1.password}</td>
+			<td style="text-align:center;">
+				<a href="javascript:void(0);" onclick="updatePwd('{$i1.login}');">Обновить пароль</a>
+			</td>
+			<td style="text-align:center;{if not $i1.lu}background-color:orange;{/if}">{$i1.lu}</td>
+			<td style="text-align:center;{if $i1.reserv}background-color:lightgreen;{/if}" id="v_{$i1.login}_reserv">
+				<input
+					onchange="
+						save_vals('{$i1.login}','reserv',this.checked?1:0);
+						this.checked?null:$('#v_{$i1.login}_reserv_dt').val('');
+						$('#v_{$i1.login}_reserv_dt').attr('disabled',!this.checked);
+					"
+					type=checkbox
+					{if $i1.reserv eq 1}checked{/if}
+				>
+			</td>
+			<td style="text-align:center;">
+				<input
+					id="v_{$i1.login}_reserv_dt"
+					onchange="save_vals('{$i1.login}','reserv_dt',this.value);"
+					class="datepicker"
+					size=8
+					value="{$i1.reserv_dt}"
+					{if $i1.reserv neq 1}disabled{/if}
+				>
+			</td>
+		</tr>
+		{/foreach}
+	{/foreach}
+</table>
+{else}
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>ФИО ТС / СТС / МКК</td>
+		<td>БТ</td>
+		<td>ЭТА КК</td>
+		<td>ФИО ЭТА / ЭТА КК</td>
+		<td>Логин</td>
+		<td>Пароль</td>
+		<td>Последний вход</td>
+		<td>в резерве</td>
+		<td>дата включения</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+		{foreach key=k1 item=i1 from=$i.data name=i}
+		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<td style="text-align:center">
+				{$i.head.fio}
+				{if $i.head.datauvol}<br><font style="color:red">уволен(а) {$i.head.datauvol}</font>{/if}
+			</td>
+			<td style="text-align:center;">{$i.head.tr_list}</td>
+			<td style="text-align:center;">{if $i1.is_eta_kk eq 1}да{/if}</td>
+			<td style="text-align:center;">{$i1.eta}</td>
+			<td style="text-align:center;">{$i1.login}</td>
+			<td style="text-align:center;">{$i1.password}</td>
+			<td style="text-align:center;{if not $i1.lu}background-color:orange;{/if}">{$i1.lu}</td>
+			<td style="text-align:center;{if $i1.reserv}background-color:lightgreen;{/if}">{if $i1.reserv eq 1}да{/if}</td>
+			<td style="text-align:center;">{$i1.reserv_dt}</td>
+		</tr>
+		{/foreach}
+	{/foreach}
+</table>
+{/if}
+
+{if not $smarty.request.print}
+
+</form>
+
+<div id=ok style="display:inline"></div>
+
+{literal}
+<script>
+
+function save_vals(login,field,val)
+{
+$('#v_'+login+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('login',  login);
+fd.append('field',  field);
+fd.append('val',  val);
+$('#ok').text('');
+$.ajax({
+  type: 'POST',
+  url: '?action=spr_users_eta&nohead=1&save=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+    $('#ok').html(data);
+    $('#v_'+login+'_'+field).css('background-color','white');
+  }
+});
+}
+
+function updatePwd(login)
+{
+var fd = new FormData();
+fd.append('login',  login);
+$('#updatePwd_'+login).text('');
+$.ajax({
+  type: 'POST',
+  url: '?action=spr_users_eta&nohead=1&updatePwd=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+    $('#updatePwd_'+login).html(data);
+  }
+});
+}
+
+function sendPwds(tn)
+{
+var fd = new FormData();
+fd.append('tn',  tn);
+$('#sendPwds_'+tn).text('');
+$.ajax({
+  type: 'POST',
+  url: '?action=spr_users_eta&nohead=1&sendPwds=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+    $('#sendPwds_'+tn).html(data);
+  }
+});
+}
+
+</script>
+{/literal}
+
+{/if}

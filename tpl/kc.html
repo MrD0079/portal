@@ -1,0 +1,170 @@
+<h1>Расчет КПР тренеров</h1>
+
+<script>
+{literal}
+
+function del_task(id)
+{
+	var fd = new FormData();
+	fd.append('id',  id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=kc&del_task=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#tr_'+id).remove();
+		}
+	});
+
+}
+
+function add_task(dt,coach,disabled,id)
+{
+	//$('#td_'+field+key2).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('coach',  coach);
+	fd.append('disabled',  disabled);
+	fd.append('id',  id);
+	$.ajax({
+		type: 'POST',
+		url: '?action=kc&add_task=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			//$('#td_'+field+key2).css('background-color','white');
+			//$('#ok').html(data);
+			//field==='msg'?$('#chat').load('?action=kcm_chat&nohead=1&sd='+dt):null;
+			$(''+data+'').insertAfter('#tr_'+coach);
+			//alert(data);
+		}
+	});
+
+}
+
+function save(dt,table,field,val,key2,key3)
+{
+	$('#td_'+field+key2+key3).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('key2',  key2);
+	fd.append('key3',  key3);
+	fd.append('table',  table);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=kc&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_'+field+key2+key3).css('background-color','white');
+			$('#ok').html(data);
+			field==='msg'?$('#chat').load('?action=kcm_chat&nohead=1&sd='+dt):null;
+		}
+	});
+}
+
+
+function send_msg(dt,msg)
+{
+	$('#td_msg').css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('msg',  msg);
+	$.ajax({
+		type: 'POST',
+		url: '?action=kcm_chat&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_msg').css('background-color','white');
+			$('#chat').html(data);
+		}
+	});
+}
+
+{/literal}
+</script>
+
+<div id=ok></div>
+
+{if $kcm.ok_dpu_tn or not $is_ndp}
+	{assign var=disabled value=disabled}
+{/if}
+
+{if $kcm.ok_dpu_tn}
+	{assign var=disabled_msg value=disabled}
+{/if}
+
+Месяц
+<form name=fkc id=fkc target=_self method=post enctype="multipart/form-data">
+<select name=sd id=sd onchange="$('#fkc').submit();">
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#sd').val('{$smarty.request.sd}');</script>
+</form>
+
+
+
+{if not $disabled_msg}
+	<p>
+	Текст сообщения:
+	<br>
+	<textarea id=td_msg cols=50 rows=3></textarea>
+	<br>
+	<a href="javascript:void(0);" onClick="send_msg('{$smarty.request.sd}',$('#td_msg').val());">Отправить сообщение</a>
+	</p>
+{/if}
+
+<div id=chat></div>
+
+<script>$('#chat').load('?action=kcm_chat&nohead=1&dt={$smarty.request.sd}');</script>
+
+<p id=td_it_perc>
+Выполнение тактических задач ведущим специалистом по автоматизации бизнес-процессов, %
+{if not $disabled}
+<input class="number_int" size=8 value="{$kcm.it_perc}" onChange="save('{$smarty.request.sd}','m','it_perc',this.value,'','');">
+{else}
+<b>{$kcm.it_perc}</b>
+{/if}
+</p>
+
+{if not $disabled}
+Выберите тренеров для учета:
+<table cellpadding=0 cellspacing=0>
+{foreach key=k item=i from=$kcc}
+<tr>
+<td style="text-align:left" id=td_coach{$i.tn}>
+<input {$disabled} {if $i.coach}checked{/if} type=checkbox onChange="save('{$smarty.request.sd}','c','coach',this.checked?{$i.tn}:'',{$i.tn},'');">{$i.fio}<br>
+</td>
+</tr>
+{/foreach}
+</table>
+
+
+<p>
+<a href="javascript:void(0);" onclick="$('#fkc').submit();">Обновить</a>
+</p>
+
+{/if}
+
+
+{include file="kc_tbl.html"}
+
+
+<p id=td_ok_dpu_tn>
+Подтверждение ЗГДП
+{if $is_dpu}
+<input {if $kcm.ok_dpu_tn}checked{/if} type=checkbox onChange="save('{$smarty.request.sd}','m','ok_dpu_tn',this.checked?{$tn}:'','');">
+{/if}
+<b>{$kcm.ok_dpu_fio} {$kcm.ok_dpu_lu}</b>
+</p>
+

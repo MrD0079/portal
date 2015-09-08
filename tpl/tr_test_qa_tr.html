@@ -1,0 +1,12 @@
+<p>
+<form name=form id=form target=_self method=post>
+Выбор тренинга
+<select name=tr id=tr onchange="javascript:this.form.submit()">
+	<option></option>
+	{foreach key=key item=i from=$tr}
+		<option value={$i.id}>{$i.name}</option>
+	{/foreach}
+</select>
+<script>$("#tr option[value='{$smarty.request.tr}']").prop('selected', true);</script>
+</form>
+</p>

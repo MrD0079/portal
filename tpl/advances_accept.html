@@ -1,0 +1,203 @@
+<h2>Согласование авансов</h2>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
+	<p>
+	Месяц
+	<select required="true" name=sd id=sd>
+		{foreach key=key item=item from=$dt}
+			<option value="{$item.sd_c}">{$item.my}</option>
+		{/foreach}
+	</select>
+	<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
+	</p>
+
+	<p>
+	Руководитель:
+	<select name=exp_list_without_ts id=exp_list_without_ts>
+		<option value=0></option>
+		{foreach key=key item=item from=$exp_list_without_ts}
+		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+	</p>
+
+	<p>
+	Должность:
+	<select name=pos_list id=pos_list>
+		<option value=0></option>
+		{foreach key=key item=item from=$pos_list}
+		<option value={$item.pos_id}>{$item.pos_name}</option>
+		{/foreach}
+	</select>
+	<script>$('#pos_list option[value="{$smarty.request.pos_list}"]').prop('selected', true);</script>
+	</p>
+
+	<p>
+	Валюты:
+	<a href="javascript:void(0);" onClick="$('.cur').prop('checked',true);">[+]</a>
+	<a href="javascript:void(0);" onClick="$('.cur').prop('checked',false);">[-]</a>
+	{foreach key=k item=i from=$currencies}
+			<input
+				class="cur"
+				type=checkbox
+				id="cur_{$i.id}"
+				name="cur[{$i.id}]"
+				value="{$i.id}"
+			>{$i.name}
+	{/foreach}
+	<script>
+	{foreach key=k item=i from=$smarty.request.cur}
+	$('#cur_{$i}').attr('checked',true);
+	{/foreach}
+	</script>
+	</p>
+
+
+	<p><input type="submit" name="select" id="select" value="Отобразить отчет"></p>
+</form>
+
+{/if}
+
+{if $smarty.request.select}
+
+
+<p id=td_ok_ndp>
+Подтверждение НДП
+{if $is_ndp and not $ok.ok_dpu}
+<input {if $ok.ok_ndp}checked{/if} type=checkbox onChange="adv_ok_save('{$smarty.request.sd}','ok_ndp',this.checked?1:0);">
+{/if}
+<b>{$ok.ok_ndp_fio} {$ok.ok_ndp_lu}</b>
+</p>
+
+<p id=td_ok_dpu>
+Подтверждение ДП
+{if $is_dpu and not $ok.ok_dpu}
+<input {if $ok.ok_dpu}checked{/if} type=checkbox onChange="adv_ok_save('{$smarty.request.sd}','ok_dpu',this.checked?1:0);">
+{/if}
+<b>{$ok.ok_dpu_fio} {$ok.ok_dpu_lu}</b>
+</p>
+
+
+<script>
+{literal}
+function adv_ok_save(dt,field,val)
+{
+	$('#td_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=advances_accept_save&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td_'+field).css('background-color','white');
+			$('#adv_result').html(data);
+		}
+	});
+}
+{/literal}
+</script>
+
+
+
+	{if not $smarty.request.print}
+		<p><a href="?action=advances_accept&sd={$smarty.request.sd}&print=1&excel=1&select=1&filename=Согласование авансов">Экспорт в Excel</a></p>
+		<input type=hidden name=generate value="Выбрать">
+	{/if}
+
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>Период</td>
+		<td>должность</td>
+		<td>Т.н.</td>
+		<td>ФИО сотрудника</td>
+		<td>Сумма<br>заказанного<br>аванса</td>
+		<td>Денежные<br>единицы</td>
+		<td>Последнее<br>изменение</td>
+	</tr>
+	{foreach key=k item=i from=$advances name=advances}
+	<tr style="{if $i.free_staff_flag}background-color:red{/if}">
+		<td style="text-align:center">{$i.mt} {$i.y}</td>
+		<td>{$i.pos_name}</td>
+		<td>{$i.tab_num}</td>
+		<td>{$i.fio}</td>
+		<td style="text-align:right;{if $i.val > $i.def_val}background-color:red{/if}">
+			{if ($is_ndp or $is_test_admin) and not $smarty.request.print and not $ok.ok_ndp}
+			<input
+				style=""
+				id="val_{$i.tn}_{$i.y}_{$i.my}"
+				size=8
+				onchange="
+				advance_save(
+					'{$i.data}',
+					{$i.tn},
+					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'my_advance_val'
+				);
+				"
+				id="my_advance_val"
+				class="number"
+				value="{$i.val}"
+			>
+			{else}
+			{$i.val|num:2}
+			{/if}
+		</td>
+		<td style="text-align:center;{if $i.cur_id neq $i.def_cur_id}background-color:red{/if}">
+			{if ($is_ndp or $is_test_admin) and not $smarty.request.print and not $ok.ok_ndp}
+			<select
+				style=""
+				onchange="
+				advance_save(
+					'{$i.data}',
+					{$i.tn},
+					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'cur_id_{$i.tn}_{$i.y}_{$i.my}'
+				);
+				"
+				id="cur_id_{$i.tn}_{$i.y}_{$i.my}"
+			>
+				<option></option>
+				{foreach key=k1 item=i1 from=$currencies}
+				<option value={$i1.id}>{$i1.name}</option>
+				{/foreach}
+			</select>
+			<script>
+				{if $i.cur_id}
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.cur_id});
+				{else}
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.def_cur_id});
+				{/if}
+			</script>
+			{else}
+			{$i.valuta}
+			{/if}
+		</td>
+		<td>
+			{$i.lu}
+			{$i.lu_fio}
+		</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold">
+		<td colspan=4>ИТОГО: {$total.c}</td>
+		<td style="text-align:right">{$total.val|num:2}</td>
+	</tr>
+</table>
+
+<p id="adv_result" style="color:red"></p>
+
+{/if}
+
+
+
+
+

@@ -1,0 +1,41 @@
+<h1>Процент заполнения паспортов дистрибьюторов</h1>
+
+{if not $smarty.request.print}
+<p><a href="?action=bud_fil_passport_fill_perc&print=1&excel=1&filename=Процент заполнения паспортов дистрибьюторов">Экспорт в Excel</a></p>
+{/if}
+
+
+
+<table style="text-align:center" border=1 cellpadding=3 cellspacing=0>
+	<tr style="font-weight:bold">
+		<td rowspan=2>дистр</td>
+		<td colspan=3>поля паспорта</td>
+		<td colspan=3>поля контактов</td>
+		<td colspan=3>поля все</td>
+	</tr>
+	<tr style="font-weight:bold">
+		<td>всего</td>
+		<td>заполнено</td>
+		<td>%</td>
+		<td>всего</td>
+		<td>заполнено</td>
+		<td>%</td>
+		<td>всего</td>
+		<td>заполнено</td>
+		<td>%</td>
+	</tr>
+	{foreach key=key item=item from=$d}
+	<tr>
+		<td style="text-align:left">{$item.name}</td>
+		<td>{$item.f_total}</td>
+		<td>{$item.f_cnt}</td>
+		<td>{$item.perc}</td>
+		<td>{$item.fc_total}</td>
+		<td>{$item.fc_cnt}</td>
+		<td>{$item.cperc}</td>
+		<td>{$item.t_total}</td>
+		<td>{$item.t_cnt}</td>
+		<td>{$item.tperc}</td>
+	</tr>
+	{/foreach}
+</table>

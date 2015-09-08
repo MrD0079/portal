@@ -1,0 +1,75 @@
+<h1>Редактирование заявок на проведение тренинга</h1>
+
+{if not $smarty.request.print}
+
+<form name=form_tr id=form_tr target=_self method=post>
+
+<p>
+Период проведения тренинга
+с
+<select name=sd id=sd>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#sd').val('{$smarty.request.sd}');</script>
+по
+<select name=ed id=ed>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#ed').val('{$smarty.request.ed}');</script>
+</p>
+
+<p>
+Тренер
+<select name="tr_tn">
+	<option value=0></option>
+	{foreach key=key item=item from=$tr_tn}
+		<option value={$item.tn}>{$item.fio|escape}</option>
+	{/foreach}
+</select>
+<script>$('[name=tr_tn]').val({$smarty.request.tr_tn});</script>
+</p>
+
+<p>
+Тренинг
+<select name="tr">
+	<option value=0></option>
+	{foreach key=key item=item from=$tr}
+		<option value={$item.id}>{$item.name|escape}</option>
+	{/foreach}
+</select>
+<script>$('[name=tr]').val({$smarty.request.tr});</script>
+</p>
+
+<p>
+Локация
+<select name="tr_loc">
+	<option value=0></option>
+	{foreach key=key item=item from=$tr_loc}
+		<option value={$item.id}>{$item.name|escape}</option>
+	{/foreach}
+</select>
+<script>$('[name=tr_loc]').val({$smarty.request.tr_loc});</script>
+</p>
+
+<p>
+<input name=generate type=submit value="Отобразить заявки">
+</p>
+
+
+{/if}
+
+{if $smarty.request.generate}
+
+<p><input type=submit name=save value="Сохранить"></p>
+
+{include file="tr_list_table.html"}
+
+<p><input type=submit name=save value="Сохранить"></p>
+
+{/if}
+
+</form>

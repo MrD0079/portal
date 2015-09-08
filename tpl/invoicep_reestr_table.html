@@ -1,0 +1,167 @@
+<script>
+{literal}
+function load_list(id,id_net,urlic)
+$("#new_urlic_"+id).load('?action=urlic_net_list&id_net='+id_net+'&nohead=1'
+,{},
+function() {
+	//$("#new_urlic_"+id).val(urlic);
+	$('#new_urlic_'+id+' option[value="'+urlic+'"]').prop('selected', true);
+}
+);
+{/literal}
+</script>
+
+
+<table border=1>
+<tbody>
+<tr style="font-weight:bold;text-align: center;">
+	{if not $smarty.request.print}
+	<td>X</td>
+	<td>Привязать статьи к промо</td>
+	{/if}
+	<td>№ промо</td>
+	<td>Дата промо</td>
+	<td>Сеть</td>
+	<td>ФИО РМ КК </td>
+	<td>ФИО МКК </td>
+	{if $smarty.request.format eq 1}
+	<td>Статьи затрат</td>
+	{else}
+	<td>Привязано статей в промо</td>
+	{/if}
+	<td>Сумма промо (расчетная), тыс.{$valuta}.</td>
+	<td>Сумма промо (выставленная), тыс.{$valuta}.</td>
+	<td>Плательщик</td>
+	<td>Юр.лицо</td>
+	<td>Файлы</td>
+	<td>Промо в реестр добавлен</td>
+	<td>Проверено и подтверждено ФМ</td>
+	<td>Дата оплаты промо</td>
+	<td>Месяц отнесения затрат</td>
+	{if not $smarty.request.print}
+	<td>Коммент</td>
+	{/if}
+</tr>
+{foreach key=key item=item from=$invoice name=invoice}
+{math assign="color" equation='x-y' x=1 y=$smarty.foreach.invoice.iteration%2} 
+<tr
+	{if $item.st_count eq 0}
+		bgcolor="red"
+	{else}
+		{if $color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+		{if $color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+	{/if}
+>
+	{if not $smarty.request.print}
+	<td style="text-align: center;">
+	{if $item.ok_fm neq 1 and not $item.bud_z_id}
+		{if $is_mkk or $is_rmkk or $is_fin_man or $is_admin}
+			<input type=checkbox name=del[{$item.id}] value={$item.id}>
+		{/if}
+	{/if}
+	</td>
+	<td>
+	{if $item.ok_fm neq 1 and not $item.bud_z_id}
+		{if $is_mkk or $is_rmkk or $is_fin_man or $is_admin}
+			<a target=_blank href="?action=invoicep_detail&id={$item.id}">Привязать</a>
+		{/if}
+	{/if}
+	</td>
+	{/if}
+	<td style="text-align: center;">{$item.num}</td>
+	<td>{$item.data_t}</td>
+	<td>{$item.net_name}</td>
+	<td>{$item.rmkk}</td>
+	<td>{$item.mkk}</td>
+	{if $smarty.request.format eq 1}
+	<td>
+		<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+			<tr style="font-weight:bold">
+				<td>Месяц / год услуги</td>
+				<td>Статья затрат</td>
+				<td>Количество единиц</td>
+				<td>Итоговая сумма, тыс.{$valuta}.</td>
+			</tr>
+			{foreach key=key1 item=item1 from=$item.detail}
+			<tr>
+				<td>{$item1.month_name} {$item1.year}<br> </td>
+				<td>{$item1.statya}</td>
+				<td style="text-align:right">{$item1.cnt|default:0|num:3}</td>
+				<td style="text-align:right">{$item1.total|default:0|num:3}</td>
+			</tr>
+			{/foreach}
+		</table>
+	</td>
+	{else}
+	<td style="text-align:right">{$item.st_count|default:0|num:0}</td>
+	{/if}
+	<td style="text-align:right">{$item.st_total|default:0|num:3}</td>
+	<td style="text-align:right">{$item.summa|default:0|num:3}</td>
+	<td>{$item.payer_name}</td>
+	<td>
+		{if $item.ok_fm neq 1 and $item.bud_z_id and not $smarty.request.print and ($is_mkk or $is_rmkk or $is_fin_man or $is_admin)}
+			<select name="data[{$item.id}][urlic]" id="new_urlic_{$item.id}"></select>
+			<script>load_list({$item.id},{$item.id_net},{$item.urlic|default:0})</script>
+		{else}
+			{$item.urlic_name}
+		{/if}
+	</td>
+	<td>
+		{foreach key=key1 item=item1 from=$item.files}
+			<nobr>
+				{if $item.ok_fm neq 1 and $item.bud_z_id and ($is_mkk or $is_rmkk or $is_fin_man or $is_admin)}
+					<input type=checkbox name=del_files[{$item1.id}] value={$item1.id}>
+				{/if}
+				<a target=_blank href="invoice_files/{$item1.fn}">{$item1.fn}</a>
+			</nobr>
+			<br>
+		{/foreach}
+		{if $item.ok_fm neq 1 and $item.bud_z_id and ($is_mkk or $is_rmkk or $is_fin_man or $is_admin)}
+			<input type=file multiple name="files[{$item.id}][]">
+		{/if}
+	</td>
+	<td>{$item.lu_t}</td>
+	<td style="text-align: center;{if $item.ok_fm eq 1}background-color: rgb(51, 255, 51);{/if}">
+		{if not $smarty.request.print}
+			<input onclick="
+			$('#data_{$item.id}_ok_fm').val(this.checked?1:0);
+			$('#data_{$item.id}_oplata_date').attr('disabled',this.checked?false:true);
+			$('#data_{$item.id}_act_prov_month').attr('disabled',this.checked?false:true);
+			" {if not $is_fin_man and not $is_admin}disabled{/if} {if $item.ok_fm eq 1}checked="checked"{/if} name="isCheckFM[{$item.id}]" type="checkbox">
+			<input type=hidden name=data[{$item.id}][ok_fm] id=data_{$item.id}_ok_fm value='{$item.ok_fm}'>
+		{else}
+			{if $item.ok_fm eq 1}да{/if}
+		{/if}
+	</td>
+	<td>
+		{if not $smarty.request.print}
+			<input {if (not $is_fin_man and not $is_admin) or $item.ok_fm neq 1}disabled{/if} class="datepicker" value="{$item.oplata_date}" name=data[{$item.id}][oplata_date] id=data_{$item.id}_oplata_date size=8>
+		{else}
+			{$item.oplata_date}
+		{/if}
+	</td>
+	<td>
+		{if not $smarty.request.print}
+			<select {if (not $is_fin_man and not $is_admin) or $item.ok_fm neq 1}disabled{/if} name=data[{$item.id}][act_prov_month] id=data_{$item.id}_act_prov_month>
+			{if not $item.act_prov_month}<option></option>{/if}
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#data_{$item.id}_act_prov_month option[value="{$item.act_prov_month}"]').prop('selected', true);</script>
+		{else}
+			{$item.act_prov_month}
+		{/if}
+	</td>
+	{if not $smarty.request.print}
+	<td>
+		<textarea {if not $is_fin_man and not $is_admin}disabled{/if} name=data[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
+		<input {if not $is_fin_man and not $is_admin}disabled{/if} type=submit name=sendmsg[{$item.id}][sendmsg] value="Отправить сообщение">
+	</td>
+	{/if}
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+

@@ -1,0 +1,67 @@
+<form target="_self" method="POST" name=form2 id=form2 enctype="multipart/form-data">
+<input type=hidden name=nets value={$smarty.request.nets}>
+<input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
+<input type=hidden name=calendar_months value={$smarty.request.calendar_months}>
+<input type=hidden name=tn_mkk value={$smarty.request.tn_mkk}>
+<input type=hidden name=tn_rmkk value={$smarty.request.tn_rmkk}>
+<input type=hidden name=format value="{$smarty.request.format}">
+<input type=hidden name=ok value="{$smarty.request.ok}">
+{if $smarty.request.generate}
+<input type=hidden name=generate value="{$smarty.request.generate}">
+{/if}
+{literal}<script>function ListLoad(val){$("#new_urlic").load('?action=urlic_net_list&id_net='+val+'&nohead=1');}</script>{/literal}
+<div style="text-align: left; background-color:lightgreen">
+<span style="font-weight: bold;">Добавить промо в реестр</span>
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>Сеть</td>
+<td>
+	<select required="required" name="new[id_net]" id="new[id_net]" onChange="ListLoad(this.value)">
+		<option></option>
+		{foreach key=key item=item from=$nets}
+			<option value={$item.id_net}>{$item.net_name}</option>
+		{/foreach}
+	</select>
+</td>
+</tr>
+<tr>
+<td>Юр.лицо</td>
+<td>
+<select name="new[urlic]" id="new_urlic"></select></td>
+</tr>
+<tr>
+<td>№ промо</td>
+<td>
+<input required="required" size="25" name="new[num]"></td>
+</tr>
+<tr>
+<td>Дата промо</td>
+<td>
+<input required="required" name="new[data]" class="datepicker"></td>
+</tr>
+<tr>
+<td>Общая сумма по промо, тыс.{$valuta}.</td>
+<td>
+<input required="required" size="10" name="new[summa]"></td>
+</tr>
+<tr>
+<td>Плательщик</td>
+<td>
+	<select name="new[payer]" id="new[payer]">
+		{foreach key=key item=item from=$payer}
+			<option value={$item.id}>{$item.name}</option>
+		{/foreach}
+	</select>
+</td>
+</tr>
+<tr>
+<td>Файлы</td>
+<td>
+<input type=file name="new_files[]" id="new_files" multiple></td>
+</tr>
+</tbody>
+</table>
+<input value="Добавить" name="add" type="submit">
+</div>
+</form>

@@ -1,0 +1,89 @@
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+<td>Дата</td>
+<td>СВ МС<br></td>
+<td>Маршрут</td>
+<td>Ф.И.О. отв.</td>
+<td>Область<br>      </td>
+<td>Город<br></td>
+<td>Сеть</td>
+<td>Юридическое название ТЗ<br></td>
+<td>Адрес ТЗ<br></td>
+<td>Заказчик<br></td>
+<td>Артикул</td>
+<td>Название</td>
+<td>Марка</td>
+<td>Ед. измерения</td>
+<td>Вес, кг</td>
+<td>Код</td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td>{$item1.text}</td>
+{/foreach}
+</tr>
+
+
+
+{assign var=color value=''}
+
+
+
+{foreach key=k item=i from=$d name=d}
+	{foreach key=k1 item=i1 from=$i.data name=i1}
+
+{if $color eq '#ccffff'}
+{assign var=color value='#ffffcc'}
+{else}
+{assign var=color value='#ccffff'}
+{/if}
+
+		{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{foreach key=k3 item=i3 from=$i2.data name=i3}
+				<tr bgcolor="{$color}">
+				<td>{$i3.dt}</td>
+				<td>{$i3.svms_name}</td>
+				<td>{$i3.num}</td>
+				<td>{$i3.fio_otv}</td>
+				<td>{$i3.tz_oblast}</td>
+				<td>{$i3.city}</td>
+				<td>{$i3.net_name}</td>
+				<td>{$i3.ur_tz_name}</td>
+				<td>{$i3.tz_address}</td>
+				<td>{$i3.ag_name}</td>
+				<td>{$i3.msb_art}</td>
+				<td>{$i3.msb_name}</td>
+				<td>{$i3.msb_brand}</td>
+				<td>{$i3.msb_izm}</td>
+				<td style="text-align:right">{$i3.msb_weight|default:0|num:2}</td>
+				<td>{$i3.msb_kod}</td>
+				{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+				<td style="text-align:center;background-color: rgb(204, 255, 255)">
+				{assign var="field_name" value="msr_`$item1.name`"}
+				{if $item1.tip eq 'float'}{$i3.$field_name|num:2}{/if}
+				{if $item1.tip eq 'text'}{$i3.$field_name|escape}{/if}
+				{if $item1.tip eq 'bool'}{$i3.$field_name}{/if}
+				</td>
+				{/foreach}
+				</tr>
+			{/foreach}
+		{/foreach}
+	{/foreach}
+
+
+{/foreach}
+<tr style="text-align: center;font-weight:bold">
+<td colspan="14" style="">ИТОГО</td>
+<td style="text-align:right">{$rb_total.msb_weight|default:0|num:2}</td>
+<td></td>
+{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
+<td style="text-align:center;background-color: rgb(204, 255, 255)">
+{assign var="field_name" value="msr_`$item1.name`"}
+{if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
+{if $item1.tip eq 'text'}{$rb_total.$field_name|escape}{/if}
+{if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}
+</td>
+{/foreach}
+</tr>
+</table><br>
+
+
+

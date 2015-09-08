@@ -1,0 +1,99 @@
+<table style="width:1000px;text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tr style="font-weight:bold;text-align: center;">
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Период</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Подразделение<br>      <br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Дистрибутор<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Регион<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">ДБ</td>
+
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Статья<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Категория<br>      </td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">ПЛАН, тыс. ден. ед.</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">ФАКТ, тыс. ден. ед.</td>
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Комментарии<br>      </td>
+
+      <td colspan="2" style="vertical-align: top; text-align: center;">Затраты дистрибутора</td>
+
+      <td rowspan="2" style="vertical-align: top; text-align: center;">Изменено<br>      </td>
+    </tr>
+    <tr style="font-weight:bold">
+      <td>ФАКТ, тыс. ден. ед.</td>
+      <td>Комментарии</td>
+    </tr>
+{if not $smarty.request.print}
+{foreach key=k item=i from=$pd_out}
+	{foreach key=k1 item=i1 from=$i.data}{/foreach}
+	{cycle assign='bgcolor' values="#ccffff,#ffffcc"}
+	<tr bgcolor="{$bgcolor}">
+		<td rowspan="{$i.c1+1}">{$i.dt}</td>
+		<td rowspan="{$i.c1+1}">{$i.nd}</td>
+		<td rowspan="{$i.c1+1}">{$i.fil_name}</td>
+		<td rowspan="{$i.c1+1}">{$i.db_region}</td>
+		<td rowspan="{$i.c1+1}">{$i.db_fio}</td>
+		<td style="font-weight:bold"><nobr>итого по дистрибьютору</nobr></td>
+		<td style="font-weight:bold"></td>
+		<td style="font-weight:bold">{$i.plan|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i.fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+		<td style="font-weight:bold">{$i.zd_fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+		<td rowspan="{$i.c1+1}"><nobr>{$i.lu}</nobr> <nobr>{$i.lu_fio}</nobr></td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.data}
+	<tr bgcolor="{$bgcolor}">
+		<td rowspan="{$i1.c+1}"><nobr>{$i1.name}</nobr></td>
+		<td style="font-weight:bold"><nobr>итого по статье</nobr></td>
+		<td style="font-weight:bold">{$i1.plan|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i1.fakt|default:0|num:3}</td>
+		<td style="font-weight:bold">{$i1.text}</td>
+		<td style="font-weight:bold">{$i1.zd_fakt|default:0|num:3}</td>
+		<td style="font-weight:bold"></td>
+	</tr>
+	{foreach key=k2 item=i2 from=$i1.data}
+	<tr bgcolor="{$bgcolor}">
+		<td><nobr>{$i2.kat_name}</nobr></td>
+		<td>{$i2.plan|default:0|num:3}</td>
+		<td>{$i2.fakt|default:0|num:3}</td>
+		<td>{$i2.text}</td>
+		<td>{$i2.zd_fakt|default:0|num:3}</td>
+		<td>{$i2.zd_text}</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+{/foreach}
+{else}
+{foreach key=k item=i from=$pd_out}
+	{foreach key=k1 item=i1 from=$i.data}{/foreach}
+	{cycle assign='bgcolor' values="#ccffff,#ffffcc"}
+	{foreach key=k1 item=i1 from=$i.data}
+	{foreach key=k2 item=i2 from=$i1.data}
+	<tr bgcolor="{$bgcolor}">
+		<td>{$i.dt}</td>
+		<td>{$i.nd}</td>
+		<td>{$i.fil_name}</td>
+		<td>{$i.db_region}</td>
+		<td>{$i.db_fio}</td>
+		<td>{$i1.name}</td>
+		<td>{$i2.kat_name}</td>
+		<td>{$i2.plan|default:0|num:3}</td>
+		<td>{$i2.fakt|default:0|num:3}</td>
+		<td>{$i2.text}</td>
+		<td>{$i2.zd_fakt|default:0|num:3}</td>
+		<td>{$i2.zd_text}</td>
+		<td><nobr>{$i.lu}</nobr> <nobr>{$i.lu_fio}</nobr></td>
+	</tr>
+	{/foreach}
+	{/foreach}
+{/foreach}
+{/if}
+<tr style="font-weight: bold;">
+	<td colspan="6" rowspan="1"></td>
+	<td>ИТОГО</td>
+	<td>{$pdt_out.plan|default:0|num:3}</td>
+	<td>{$pdt_out.fakt|default:0|num:3}</td>
+	<td></td>
+	<td>{$pdt_out.zd_fakt|default:0|num:3}</td>
+	<td></td>
+	<td></td>
+</tr>
+</table>

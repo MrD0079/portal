@@ -1,0 +1,14 @@
+<h1>Настройка информационных сообщений</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+	<select name=dolgn_msg id=dolgn_msg onChange="javascript:form3.submit()">
+		<option value=0></option>
+		{foreach key=pos_key item=pos_item from=$dolgn_msg}
+		<option value={$pos_item.pos_id}>{$pos_item.pos_name}</option>
+		{/foreach}
+	</select>
+	<br>
+	<script>$('#dolgn_msg option[value="{$smarty.request.dolgn_msg}"]').prop('selected', true);</script>
+	<textarea name=msg id=msg cols=80 rows=20>{foreach key=pos_key item=pos_item from=$dolgn_msg}{if $pos_item.pos_id eq $smarty.request.dolgn_msg}{$pos_item.pos_msg|escape}{/if}{/foreach}</textarea>
+	<br>
+	<input value="Сохранить" name="save" type="submit">
+</form>

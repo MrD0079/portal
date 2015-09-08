@@ -1,0 +1,31 @@
+<table border=0 width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td valign="top" align="left">
+			<div class="top_right_dotted">
+				{include file="server_is_down.html"}
+				{include file="main_center.html"}
+				{if $news}
+					{include file="main_news.html"}
+				{/if}
+				{if not $is_eta and $in_vac1}
+					{include file="main_vacations.html"}
+				{/if}
+				{if not $is_eta and $birthdays}
+					{include file="main_birthdays.html"}
+				{/if}
+			</div>
+		</td>
+		<td valign="top" align="right" style="text-align: right; width:300px;">
+			{if not $is_eta}
+				{include file="main_works.html"}
+				{include file="main_info.html"}
+				{if not $is_dpu}
+					{include file="main_box.html"}
+				{/if}
+			{else}
+				{include file="main_eta_works.html"}
+				{include file="main_eta_inform.html"}
+			{/if}
+		</td>
+	</tr>
+</table>

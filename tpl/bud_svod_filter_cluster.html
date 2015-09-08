@@ -1,0 +1,10 @@
+<p>
+Кластер
+<select name=clusters id=clusters>
+<option value=0></option>
+{foreach key=key item=item from=$clusters}
+<option value="{$item.id}">{$item.name}</option>
+{/foreach}
+</select>
+<script>$('#clusters option[value="{$smarty.request.clusters}"]').prop('selected', true);</script>
+</p>

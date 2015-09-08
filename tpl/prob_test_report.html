@@ -1,0 +1,94 @@
+<h1>Результаты тестирования по результатам АП</h1>
+<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+	Дата с/по
+	<input size=10 class="datepicker" name=sd id=sd>
+	<input size=10 class="datepicker" name=ed id=ed>
+	<script>
+		$('#sd').val('{$smarty.request.sd}');
+		$('#ed').val('{$smarty.request.ed}');
+	</script>
+	<br>
+	По руководителю сотрудников, проходивших тестирование:
+	<br>
+	<select name=exp_list_without_ts id=exp_list_without_ts>
+		<option value=0></option>
+		{foreach key=key item=item from=$exp_list_without_ts}
+		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		{/foreach}
+	</select>
+	<br>
+	По сотруднику, проходившему тестирование:
+	<br>
+	<select name=probs id=probs>
+		<option value=0></option>
+		{foreach key=key item=item from=$probs}
+		<option value={$item.tn}>{$item.fio}</option>
+		{/foreach}
+	</select>
+	<br>
+	<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
+	<script>$('#probs option[value="{$smarty.request.probs}"]').prop('selected', true);</script>
+	<input type=submit name=generate id=generate value='Выбрать'>
+
+	<table border=1>
+		<tbody style="vertical-align:top">
+			<tr style="font-weight:bold">
+				<td>ФИО рук-ля</td>
+				<td>ФИО сотрудника</td>
+				<td>Дата прохождения тестирования</td>
+				<td>Результаты (балл / max / %)</td>
+				<td>Ошибки в вопросах</td>
+				<td>Перезапустить</td>
+			</tr>
+			{foreach key=k item=i from=$d}
+			<tr>
+				<td>{$i.fio_chief}</td>
+				<td>{$i.fio}</td>
+				<td>{$i.test_lu}</td>
+				<td
+					style="background-color:{if $i.perc < 75}red{elseif $i.perc >= 85}lightgreen{else}yellow{/if}"
+				>{$i.test_ball} / {$i.max_ball} / {$i.perc|num:2}</td>
+				<td>
+					{if $i.test_count > 0}
+					{foreach key=k2 item=i2 from=$i.test_res name=test_res}
+						<b>{$smarty.foreach.test_res.iteration}.
+						{if $i2.ok eq ''}
+							<span style="color:red">нет ответа на вопрос:</span>
+						{else}
+							<span style="color:orange">неправильный ответ на вопрос:</span>
+						{/if}
+						</b>
+						{$i2.name}
+						<br>
+					{/foreach}
+					{/if}
+				</td>
+				<td id=cl{$i.tn}><a href="javascript:void(0);" onClick="restart({$i.tn});">Перезапустить</a></td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</form>
+
+{literal}
+<script>
+function restart(tn)
+{
+	$('#cl'+tn).css('background-color','red');
+	var fd = new FormData();
+	fd.append('tn',  tn);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=prob_test_report&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#cl'+tn).css('background-color','white');
+			$('#cl'+tn).html('Тест включен повторно');
+		}
+	});
+}
+</script>
+{/literal}

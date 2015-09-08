@@ -1,0 +1,371 @@
+<h1>Оплата счетов</h1>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form1 id=form1>
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>
+Ответственный РМ КК</td>
+<td>
+Ответственный МКК</td>
+<td>
+Сеть</td>
+<td>
+Начало периода</td>
+<td>
+Окончание периода</td>
+</tr>
+<tr>
+      <td style="vertical-align: top;">
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+      </td>
+      <td style="vertical-align: top;">
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+      </td>
+      <td style="vertical-align: top;">
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+      </td>
+
+
+		<td>
+			<select name=sd id=sd>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#sd').val("{if $smarty.request.sd}{$smarty.request.sd}{else}{$smarty.request.month_list}{/if}");</script>
+		</td>
+		<td>
+			<select name=ed id=ed>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#ed').val("{if $smarty.request.ed}{$smarty.request.ed}{else}{$smarty.request.month_list}{/if}");</script>
+		</td>
+
+
+
+
+    </tr>
+    <tr>
+<td colspan=5>
+Выводить по:
+<input checked="checked" name="sort" id="sort" value="0" type="radio">дате выставления счета
+<input name="sort" id="sort" value="1" type="radio">
+дате оплаты счета
+<input name="sort" id="sort" value="2" type="radio">дате передачи счета на оплату
+<br>
+Показать счета:
+<input name="show" id="show" value="all" type="radio" checked="checked">все
+<input name="show" id="show" value="opl" type="radio">
+оплаченные
+<input name="show" id="show" value="noopl" type="radio">
+неоплаченные
+<input name="show" id="show" value="dolg_act" type="radio">с задолженностью по актам
+<input name="show" id="show" value="dolg_nal" type="radio">с задолженностью по НН
+
+{if $smarty.request.sort}
+	<script>$("input[name=sort][value={$smarty.request.sort}]").attr('checked',true);</script>
+{/if}
+{if $smarty.request.show}
+	<script>$("input[name=show][value={$smarty.request.show}]").attr('checked',true);</script>
+{/if}
+
+</td>
+    </tr>
+    <tr>
+</tr>
+</tbody>
+</table>
+
+
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+<tr>
+<td>
+</td>
+</tr>
+</table>
+
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+<tr>
+<td>
+Юридическое лицо
+</td>
+<td>
+Месяц проведения акта
+</td>
+<td>
+Месяц оплаты счета
+</td>
+</tr>
+<tr>
+<td>
+			<select name=urlic id=urlic>
+				<option value=0></option>
+				{foreach key=urlic_key item=urlic_item from=$list_urlic}
+				<option value={$urlic_item.id}>{$urlic_item.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#urlic option[value="{$smarty.request.urlic}"]').prop('selected', true);</script>
+</td>
+<td>
+			<select name=act_prov_month id=act_prov_month>
+			<option value=0></option>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#act_prov_month option[value="{$smarty.request.act_prov_month}"]').prop('selected', true);</script>
+</td>
+<td>
+			<select name=oplata_date id=oplata_date>
+			<option value=0></option>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$('#oplata_date option[value="{$smarty.request.oplata_date}"]').prop('selected', true);</script>
+</td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="text-align: left;"><input name="generate" value="Построить отчет" type="submit"><br></div>
+
+<hr style="width: 100%; height: 2px;">
+
+<span style="text-decoration: underline;"><a href="?action=invoice_pay&generate&print=1&excel=1&filename=Оплата счетов">Экспорт в Excel</a></span>
+
+</form>
+<br>
+
+<form target="_self" method="POST" name=form2 id=form2>
+
+<div style="text-align: center;"><input name="save" value="Сохранить" type="submit"></div>
+<input type=hidden name=nets value="{$smarty.request.nets}">
+<input type=hidden name=sd value="{$smarty.request.sd}">
+<input type=hidden name=ed value="{$smarty.request.ed}">
+<input type=hidden name=tn_mkk value="{$smarty.request.tn_mkk}">
+<input type=hidden name=tn_rmkk value="{$smarty.request.tn_rmkk}">
+<input type=hidden name=sort value="{$smarty.request.sort}">
+<input type=hidden name=show value="{$smarty.request.show}">
+<input type=hidden name=urlic value="{$smarty.request.urlic}">
+<input type=hidden name=act_prov_month value="{$smarty.request.act_prov_month}">
+<input type=hidden name=oplata_date value="{$smarty.request.oplata_date}">
+{if $smarty.request.generate}
+<input type=hidden name=generate value="{$smarty.request.generate}">
+{/if}
+
+
+
+{/if}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table style="text-align: left; width: 100%; outline-color: navy; outline-width: 2px;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold;text-align: center;">
+		<td rowspan=2>№ счета<br>      </td>
+		<td rowspan=2>Дата счета<br>      </td>
+		<td rowspan=2>Сеть<br>      </td>
+		<td rowspan=2>Юр.лицо</td>
+		<td rowspan=2>ФИО РМ КК      </td>
+		<td rowspan=2>ФИО МКК      </td>
+		<td rowspan=2>Сумма счета (расчетная), тыс.{$valuta}.<br>      </td>
+		<td rowspan=2>Сумма счета (выставленная), тыс.{$valuta}.<br>      </td>
+		<td rowspan=2>Дата передачи счета на оплату</td>
+		<td rowspan=2>Плательщик</td>
+		<td colspan=2>Проверены документы</td>
+		<td rowspan=2>Счет оплачен</td>
+		<td rowspan=2>Дата оплаты счета</td>
+		<td rowspan=2>Месяц проведения акта</td>
+		{if not $smarty.request.print}
+		<td rowspan=2>Коммент</td>
+		{/if}
+	</tr>
+	<tr style="font-weight:bold;text-align: center;">
+		<td>Акты</td>
+		<td>Налоговые</td>
+	</tr>
+	{foreach key=key item=item from=$invoice name=invoice}
+	<tr
+		{if $item.st_count eq 0}
+			bgcolor="red"
+		{else}
+			{if $color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+			{if $color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+		{/if}
+	>
+		<td>{$item.num}</td>
+		<td>{$item.data_t}</td>
+		<td>{$item.net_name}</td>
+		<td>{$item.urlic_name}</td>
+		<td>{$item.rmkk}</td>
+		<td>{$item.mkk}</td>
+		<td style="text-align:right">{$item.st_total|default:0|num:3}</td>
+		<td style="text-align:right">{$item.summa|default:0|num:3}</td>
+		<td>{$item.nmkk_lu_t}<br>      </td>
+		<td>{$item.payer_name}</td>
+		<td style="text-align: center;{if $item.dolg_act eq 1}background-color: red;{/if}">
+			{if not $smarty.request.print}
+				<input onclick="$('#ok1{$item.id}dolg_act').val(this.checked?1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_act eq 1}checked="checked"{/if} name="isCheck_dolg_act[{$item.id}]" type="checkbox">
+			{else}
+				{if $item.dolg_act eq 1}да{/if}
+			{/if}
+		</td>
+		<td style="text-align: center;{if $item.dolg_nal eq 1}background-color: red;{/if}">
+			{if not $smarty.request.print}
+				<input onclick="$('#ok1{$item.id}dolg_nal').val(this.checked1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_nal eq 1}checked="checked"{/if} name="isCheck_dolg_nal[{$item.id}]" type="checkbox">
+			{else}
+				{if $item.dolg_nal eq 1}да{/if}
+			{/if}
+		</td>
+		<td style="text-align: center;{if $item.oplachen eq 1}background-color: rgb(51, 255, 51);{/if}">
+			{if not $smarty.request.print}
+				<input onclick="$('#ok1{$item.id}oplachen').val(this.checked?1:0);$('#date{$item.id}oplata_date').attr('disabled',!this.checked)" {if not $is_fin_man}disabled{/if} {if $item.oplachen eq 1}checked="checked"{/if} name="isCheck_oplachen[{$item.id}]" type="checkbox">
+			{else}
+				{if $item.oplachen eq 1}да{/if}
+			{/if}
+		</td>
+
+{if not $smarty.request.print}
+		<input type=hidden name=ok1[{$item.id}][dolg_act] id=ok1{$item.id}dolg_act>
+		<input type=hidden name=ok1[{$item.id}][dolg_nal] id=ok1{$item.id}dolg_nal>
+		<input type=hidden name=ok1[{$item.id}][oplachen] id=ok1{$item.id}oplachen>
+{/if}
+
+		<td>
+			{if not $smarty.request.print}
+				<input {if not $is_fin_man or $item.oplachen neq 1}disabled{/if} class="datepicker" value="{$item.oplata_date}"
+				name=date[{$item.id}][oplata_date] name=date{$item.id}oplata_date size=8>
+			{else}
+				{$item.oplata_date}
+			{/if}
+		</td>
+
+
+		<td>
+			{if not $smarty.request.print}
+				<select {if not $is_fin_man}disabled{/if} name=date[{$item.id}][act_prov_month] id=date_{$item.id}_act_prov_month>
+				{if not $item.act_prov_month}<option></option>{/if}
+				{foreach key=key1 item=item1 from=$month_list}
+					<option value="{$item1.sd_c}">{$item1.my}</option>
+				{/foreach}
+				</select>
+				<script>$('#date_{$item.id}_act_prov_month option[value="{$item.act_prov_month}"]').prop('selected', true);</script>
+			{else}
+				{$item.act_prov_month}
+			{/if}
+		</td>
+
+
+		{if not $smarty.request.print}
+		<td>
+			<textarea {if not $is_fin_man}disabled{/if} name=comm[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
+			<input {if not $is_fin_man}disabled{/if} type=submit name=sendmsg[{$item.id}][sendmsg] value="Отправить сообщение">
+		</td>
+		{/if}
+
+	</tr>
+	{/foreach}
+	<tr  style="font-weight:bold;">
+		<td colspan=6>ИТОГО % оплаченных счетов: {$invoice_total.perc|default:0|num:2}</td>
+		<td style="text-align:right">{$invoice_total.st_total|default:0|num:3}</td>
+		<td style="text-align:right">{$invoice_total.summa|default:0|num:3}</td>
+		<td colspan=2></td>
+		<td style="text-align:right">{$invoice_total.dolg_act|default:0|num:3}</td>
+		<td style="text-align:right">{$invoice_total.dolg_nal|default:0|num:3}</td>
+		<td style="text-align:right">{$invoice_total.oplachen|default:0|num:3}</td>
+		<td></td>
+		{if not $smarty.request.print}
+		<td></td>
+		{/if}
+	</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+{if not $smarty.request.print}
+
+<br>
+<div style="text-align: center;"><input name="save" value="Сохранить" type="submit"></div>
+</div>
+</div>
+</form>
+
+{if not $smarty.request.print}
+{literal}
+<script>
+function check_item($k1,$k2,$sck,$date)
+{
+	var hd = document.forms["form2"].elements["ok1["+$k1+"]["+$k2+"]"];
+	if ($sck) { hd.value=1; } else { hd.value=0; }
+	var d = document.forms["form2"].elements["date["+$k1+"][oplata_date]"];
+	if ($date) { /*d.value='';*/ d.disabled = !$sck;}
+}
+</script>
+{/literal}
+{/if}
+
+
+{/if}

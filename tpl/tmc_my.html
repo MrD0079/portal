@@ -1,0 +1,37 @@
+<h3>ТМЦ на мне</h3>
+
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>Дата<br>выдачи</td>
+		<td>Тип<br>ТМЦ</td>
+		<td>Наименование/модель</td>
+		<td>Серийный<br>номер</td>
+		<td>Инв.<br>номер<br>АВК</td>
+		<td>Состояние<br>при<br>выдаче</td>
+		<td>Внесение записи<br>о выдаче</td>
+		<td>Сотрудник<br>подтвердил</td>
+		<td>Закупочная стоимость</td>
+		<td>Дата закупки</td>
+		<td>Дата закрепления в бух. учете</td>
+		<td>Комментарий</td>
+	</tr>
+	{foreach key=k item=i from=$tmc_my}
+	<tr>
+		<td style="text-align:center">{$i.dtv}</td>
+		<td style="text-align:center">{$i.tmcs}</td>
+		<td>{$i.name}</td>
+		<td style="text-align:center">{$i.sn}</td>
+		<td style="text-align:center">{$i.num_avk}</td>
+		<td style="text-align:center">{$i.state}</td>
+		<td>{$i.add_fio} {$i.add_lu}</td>
+		<td style="text-align:center">{$i.accepted_lu}</td>
+		<td>{$i.zakup_price}</td>
+		<td>{$i.zakup_dt}</td>
+		<td>{$i.buh_dt}</td>
+		<td>{$i.comm|nl2br}</td>
+	</tr>
+	{/foreach}
+</table>
+
+<p></p>
+

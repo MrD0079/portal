@@ -1,0 +1,237 @@
+<h1>Сводный отчет</h1>
+
+{if $smarty.request.print}
+период {foreach key=key item=item from=$month_list}{if $smarty.request.sd eq $item.sd_c}{$item.my}{/if}{/foreach} - {foreach key=key item=item from=$month_list}{if $smarty.request.ed eq $item.sd_c}{$item.my}{/if}{/foreach}
+{/if}
+
+
+
+{if not $smarty.request.print}
+<form name=bud_ru_cash id=bud_ru_cash target=_self method=post enctype="multipart/form-data">
+
+<table>
+    <tr>
+      <td style="text-align:right">Отчетный период<br>
+      </td>
+      <td>
+		<select required name="sd" id="sd">
+			{foreach key=key item=item from=$month_list}
+			<option value={$item.sd_c}>{$item.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#sd').val('{$smarty.request.sd}');</script>
+		-
+		<select required name="ed" id="ed">
+			{foreach key=key item=item from=$month_list}
+			<option value={$item.sd_c}>{$item.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#ed').val('{$smarty.request.ed}');</script>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:right">Подразделение</td>
+      <td>
+      <select name="nd" id="nd">
+		<option value="0"></option>
+		{foreach key=k item=i from=$nd}
+		<option value="{$i.id}">{$i.name}</option>
+		{/foreach}
+      </select>
+		<script>$('#nd').val('{$smarty.request.nd}');</script>
+      </td>
+    </tr>
+	<tr>
+		<td style="text-align:right">Регион</td>
+		<td>
+			<select name=region_name id=region_name>
+				<option value="0"></option>
+				{foreach key=key item=item from=$region_list}
+				<option value="{$item.region_name}">{$item.region_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#region_name').val('{$smarty.request.region_name}');</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Дистрибьютор</td>
+		<td>
+			<select name=fil id=fil>
+				<option value=0></option>
+				{foreach key=key item=item from=$fil_list}
+				<option value="{$item.id}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<script>$('#fil').val('{$smarty.request.fil}');</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">ДБ</td>
+		<td>
+			<select name=db id=db>
+				<option value=0></option>
+				{foreach key=key item=item from=$db_list}
+				<option value="{$item.tn}">{$item.fio}</option>
+				{/foreach}
+			</select>
+			<script>$('#db').val('{$smarty.request.db}');</script>
+		</td>
+	</tr>
+	<tr><td colspan=2><p></p></td></tr>
+	<tr><td></td><td style="color:red">Следующие ниже фильтры не влияют на первую сводную таблицу!</td></tr>
+	<tr><td colspan=2><p></p></td></tr>
+	<tr>
+		<td style="text-align:right">Статья дохода</td>
+		<td>
+				<input type=hidden name=r_st_pri value=0>
+				{foreach key=key item=item from=$st_pri}
+				<input name=r_st_pri[{$item.id}] id=r_st_pri_{$item.id} type=checkbox value={$item.id}>{$item.name}
+				{/foreach}
+				<script>
+					{foreach key=k item=i from=$smarty.request.r_st_pri}
+						$('#r_st_pri_{$k}').prop('checked',true);
+					{/foreach}
+				</script>
+		</td>
+	</tr>
+	<tr><td colspan=2><p></p></td></tr>
+	<tr>
+		<td style="text-align:right">Статья расходов</td>
+		<td>
+				<input type=hidden name=r_st_ras value=0>
+				{foreach key=key item=item from=$st}
+				{if $item.parent eq 0}<input name=r_st_ras[{$item.id}] id=r_st_ras_{$item.id} type=checkbox value={$item.id}>{$item.name}{/if}
+				{/foreach}
+				<script>
+					{foreach key=k item=i from=$smarty.request.r_st_ras}
+						$('#r_st_ras_{$k}').prop('checked',true);
+					{/foreach}
+				</script>
+		</td>
+	</tr>
+	<tr><td colspan=2><p></p></td></tr>
+	<tr>
+		<td style="text-align:right">Категория статьи расходов</td>
+		<td>
+				<input type=hidden name=r_kat value=0>
+				{foreach key=key item=item from=$st}
+				{if $item.parent neq 0}<input name=r_kat[{$item.id}] id=r_kat_{$item.id} type=checkbox value={$item.id}>{$item.name}{else}<br>{/if}
+				{/foreach}
+				<script>
+					{foreach key=k item=i from=$smarty.request.r_kat}
+						$('#r_kat_{$k}').prop('checked',true);
+					{/foreach}
+				</script>
+		</td>
+	</tr>
+	<tr><td colspan=2><p></p></td></tr>
+</table>
+
+
+<p><input name="select" value="Построить отчет" type="submit"></p>
+
+</form>
+
+{/if}
+
+{if $smarty.request.select}
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="?action=bud_ru_cash_rep&print=1&excel=1&filename=Сводный отчет&select=1">экспорт в Excel</a>
+</p>
+{/if}
+
+
+
+<h3>Сводная информация по данным на экране</h3>
+
+<table border="1" cellpadding="2" cellspacing="0" style="text-align:center; width:800px">
+    <tr style="font-weight:bold">
+      <td colspan="1" rowspan="2" style="text-align: center; background-color: rgb(255, 204, 153);">Дистрибутор</td>
+      <td colspan="2" rowspan="1" style="text-align: center; background-color: rgb(255, 204, 153);">Остаток ДС по фонду на начало отчетного периода</td>
+      <td colspan="2" rowspan="1" style="text-align: center; background-color: rgb(255, 204, 153);">Поступление ДС за отчетный период</td>
+      <td colspan="2" rowspan="1" style="text-align: center; background-color: rgb(255, 204, 153);">Общая сумма по фонду на начало периода</td>
+      <td colspan="3" rowspan="1" style="text-align: center; background-color: rgb(255, 204, 153);">Расход ДС за отчетный период</td>
+      <td colspan="1" rowspan="2" style="text-align: center; background-color: rgb(255, 204, 153);">Затраты дистрибутора, тыс. ден.ед</td>
+      <td colspan="2" rowspan="1" style="text-align: center; background-color: rgb(255, 204, 153);">Остаток ДС на конец периода</td>
+      <td colspan="1" rowspan="2" style="text-align: center; background-color: rgb(255, 204, 153);">Согласовано с дистрибутором</td>
+    </tr>
+    <tr style="font-weight:bold">
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">План, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">Факт, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">План, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">Факт, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">План, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">Факт, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">План, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">Факт, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">% от общей фактической суммы фонда</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">План, тыс. ден.ед.</td>
+      <td style="text-align: center; background-color: rgb(255, 204, 153);">Факт, тыс. ден.ед.</td>
+    </tr>
+<!--
+    <tr>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= Начальный остаток ПЛАН из справочника "Дистрибутор" + все поступления за предыдущ периоды ПЛАН - все расходы за предыдущие периоды ПЛАН</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= Начальный остаток ФАКТ из справочника "Дистрибутор" + все поступления за предыдущ периоды ФАКТ - все расходы за предыдущие периоды ФАКТ</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= сумма (поступления ДС за отчетный период ПЛАН)</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= сумма (поступления ДС за отчетный период ФАКТ)</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= Остаток ДС по фонду ПЛАН + поступления ПЛАН</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= Остаток ДС по фонду ФАКТ + поступления ФАКТ</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= сумма (расходов ДС за отчетный период ПЛАН)</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">= сумма (расходов ДС за отчетный период ФАКТ)</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">=расход ФАКТ / общая сумма по фонду факт</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">//подтяг из формы "Расход ДС / Затраты дистрибутора ФАКТ"</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">=общая сумма на начало периода ПЛАН - расходы ПЛАН</td>
+      <td style="vertical-align: top; background-color: rgb(255, 204, 153);">=общая сумма на начало периода ФАКТ - расходы ФАКТ      </td>
+    </tr>
+-->
+{foreach key=k item=i from=$total}
+    <tr>
+      <td style="text-align:left; background-color: rgb(255, 204, 153);"><nobr>{$i.name}</nobr></td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.remain_start_plan|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.remain_start_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.in_rep_plan|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.in_rep_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.sum_start_plan|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.sum_start_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.out_rep_plan|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.out_rep_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.out_perc_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.zd_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.sum_end_plan|default:0|num:3}</td>
+      <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.sum_end_fakt|default:0|num:3}</td>
+      <td style="text-align:right; background-color: {if $i.ok_fil}rgb(51, 255, 51);{else}rgb(255, 204, 153);{/if}">{if $i.ok_fil}да{/if}</td>
+    </tr>
+{/foreach}
+    <tr style="text-align:right; font-weight:bold; background-color: rgb(51, 255, 51);">
+      <td style="text-align:left;">итого</td>
+      <td>{$total_total.remain_start_plan|default:0|num:3}</td>
+      <td>{$total_total.remain_start_fakt|default:0|num:3}</td>
+      <td>{$total_total.in_rep_plan|default:0|num:3}</td>
+      <td>{$total_total.in_rep_fakt|default:0|num:3}</td>
+      <td>{$total_total.sum_start_plan|default:0|num:3}</td>
+      <td>{$total_total.sum_start_fakt|default:0|num:3}</td>
+      <td>{$total_total.out_rep_plan|default:0|num:3}</td>
+      <td>{$total_total.out_rep_fakt|default:0|num:3}</td>
+      <td>{$total_total.out_perc_fakt|default:0|num:3}</td>
+      <td>{$total_total.zd_fakt|default:0|num:3}</td>
+      <td>{$total_total.sum_end_plan|default:0|num:3}</td>
+      <td>{$total_total.sum_end_fakt|default:0|num:3}</td>
+      <td>{$total_total.ok_fil}</td>
+    </tr>
+</table>
+
+{if $smarty.request.r_st_ras eq 0 and $smarty.request.r_kat eq 0}
+<h3>Сводная информация по поступлениям ДС</h3>
+{include file="bud_ru_cash_rep_in.html"}
+{/if}
+
+
+{if $smarty.request.r_st_pri eq 0}
+<h3>Сводная информация по расходам ДС</h3>
+{include file="bud_ru_cash_rep_out.html"}
+{/if}
+
+
+{/if}

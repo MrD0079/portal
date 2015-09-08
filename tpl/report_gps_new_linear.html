@@ -1,0 +1,61 @@
+<table style="text-align: left;" border="1">
+	<tr style="text-align:center;font-weight:bold;">
+		<td>СВ МС / РМ МС</td>
+		<td>Маршрут</td>
+		<td>ФИО ответственного</td>
+		{if $smarty.request.report_gps_new_page eq 'days'}
+		<td>Дата</td>
+		{/if}
+		<td>План, мин</td>
+		<td>Факт, мин</td>
+		<td>Разница, мин</td>
+		<td>Факт GPS, мин</td>
+		<td>Разница GPS, мин</td>
+		<td>План ТП</td>
+		<td>Факт ТП GPS</td>
+		<td>Разница ТП GPS</td>
+		{if $smarty.request.report_gps_new_page eq 'days'}
+		<td>Первый вход GPS</td>
+		<td>Последний выход GPS</td>
+		<td>Рабочий день (ч:м)</td>
+		{/if}
+		{if $smarty.request.report_gps_new_page eq 'period'}
+		<td>Кол-во дней, где время работы < 8 часов 30 минут</td>
+		{/if}
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$i.fio}</td>
+		<td>{$i.num}</td>
+		{if $smarty.request.report_gps_new_page eq 'period'}
+		<td>
+			<a target=_blank href="?action=report_gps_new&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&select=1&report_gps_new_page=days&otv_list={$i.fio_otv}">{$i.fio_otv}</a>
+		</td>
+		{/if}
+		{if $smarty.request.report_gps_new_page eq 'days'}
+		<td>{$i.fio_otv}</td>
+		{/if}
+		{if $smarty.request.report_gps_new_page eq 'days'}
+		<td>
+			<a target=_blank href="?action=report_total_new&dates_list2={$i.dt}&select=1&select_route_numb={$i.id}">{$i.dt}</a>
+		</td>
+		{/if}
+		<td style="text-align: center;">{$i.plan}</td>
+		<td style="text-align: center;">{$i.fakt}</td>
+		<td style="text-align: center;">{$i.delta}</td>
+		<td style="text-align: center;">{$i.minutes}</td>
+		<td style="text-align: center;">{$i.gps_delta}</td>
+		<td style="text-align: center;">{$i.tp_cnt}</td>
+		<td style="text-align: center;">{$i.gps_tp_cnt}</td>
+		<td style="text-align: center;">{$i.gps_delta_tp}</td>
+		{if $smarty.request.report_gps_new_page eq 'days'}
+		<td style="text-align: center;">{$i.min_time_in}</td>
+		<td style="text-align: center;">{$i.max_time_out}</td>
+		<td style="text-align: center;{if $i.work_day_is_red neq 0}background-color:red{/if}">{$i.work_day_time}</td>
+		{/if}
+		{if $smarty.request.report_gps_new_page eq 'period'}
+		<td style="text-align: center;{if $i.work_day_is_red neq 0}background-color:red{/if}">{$i.work_day_is_red}</td>
+		{/if}
+	</tr>
+	{/foreach}
+</table>

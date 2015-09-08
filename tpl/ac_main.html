@@ -1,0 +1,4 @@
+{foreach key=k item=i from=$ac_tests}
+	{if $i.logic_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_logic}">Ссылка для прохождения теста по АЦ - ЛОГИКА</a></p>{/if}
+	{if $i.math_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_math}">Ссылка для прохождения теста по АЦ - МАТЕМАТИКА</a></p>{/if}
+{/foreach}

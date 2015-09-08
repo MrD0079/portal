@@ -1,0 +1,238 @@
+<form target="_self" method="POST" name=fin_plan_month id=fin_plan_month>
+	{if not $dog_plan_disabled}
+	<input type=hidden name=nets value="{$smarty.request.nets}">
+	<input type=hidden name=calendar_years value="{$smarty.request.calendar_years}">
+	<table>
+		<tr>
+			<td>Месяц предоставления услуги</td>
+			<td>
+				<select required name="month" id="month" onChange="$('#fin_plan_month').submit();">
+					<option></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option
+						{foreach from=$fin_plan_month_ok key=okey item=oitem}
+							{if
+								$smarty.request.plan_type eq 3
+								and
+								$oitem.my eq $item.my
+								and
+								(
+									$oitem.ok_rmkk_tmkk eq 1
+									or
+									$oitem.ok_nmkk eq 1
+									or
+									$oitem.ok_dpu eq 1
+								)
+							}
+								disabled
+							{/if}
+							{if
+								$smarty.request.plan_type eq 4
+								and
+								$oitem.my eq $item.my
+								and
+								$oitem.ok_fm eq 1
+							}
+								disabled
+							{/if}
+						{/foreach}
+						value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+	{/if}
+	{if $smarty.request.month}
+		{if not $smarty.request.edit}
+		<tr>
+			<td>Статья дествует ежемесячно целый год</td>
+			<td>
+				<select name="statya_on_year" id="statya_on_year" onChange="$('#fin_plan_month').submit();">
+					<option value=0>нет</option><option value=1>да</option>
+				</select>
+			</td>
+		</tr>
+		{/if}
+		<tr>
+			<td>Формат оплаты</td>
+			<td>
+				{foreach key=key item=item from=$payment_format}
+					<input required {if $item.id eq 1}checked{/if} id="payment_format" name="payment_format" value={$item.id} type="radio" onClick="$('#fin_plan_month').submit();">{$item.pay_format}
+				{/foreach}
+			</td>
+		</tr>
+		<tr>
+			<td>Наименование группы</td>
+			<td>
+				<select required name="groupp" id="groupp" onChange="$('#fin_plan_month').submit();">
+					<option></option>
+					{foreach key=key item=item from=$groups}
+					<option value={$item.id}>{$item.gr_name}</option>
+					{/foreach}
+				</select>
+				{if $smarty.request.groupp and $smarty.request.payment_format eq 1 and not $smarty.request.edit} Общий бонус: <input size=8 disabled id=total_bonus> <input value="Пересчитать бонус" name="refresh_month" type="submit">{/if}
+			</td>
+		</tr>
+		{if $smarty.request.groupp}
+		<tr>
+			<td>Статья затрат</td>
+			<td>
+				<table border=1>
+					<tr>
+						<td>Наименование статьи затрат</td>
+						<td>Участвует</td>
+						<td>Количество ед/мес</td>
+						<td>
+							{if $smarty.request.payment_format eq 1}Часть бонуса за статью, %{/if}
+							{if $smarty.request.payment_format eq 2}Цена за единицу, тыс.{$valuta}.{/if}
+						</td>
+						<td>МКК территории</td>
+						<td>плательщик</td>
+					</tr>
+					{foreach key=key item=item from=$statya}
+					<tr
+						{if $item.color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
+						{if $item.color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
+					>
+						<td>{$item.cost_item}</td>
+						<td style="text-align:center"><input type=checkbox name=statya_enabled[{$item.id}] id=statya_enabled{$item.id}></td>
+						<td style="text-align:center"><input size=15 name=cnt[{$item.id}] id=cnt{$item.id}></td>
+						<td style="text-align:center">
+							{if $smarty.request.payment_format eq 1}<input size=15 name=bonus[{$item.id}] id=bonus{$item.id}>{/if}
+							{if $smarty.request.payment_format eq 2}<input size=15 name=price[{$item.id}] id=price{$item.id}>{/if}
+						</td>
+						<td>
+							<select required name=mkk_ter[{$item.id}] id=mkk_ter{$item.id}>
+								<option></option>
+								{foreach key=mkk_key item=mkk_item from=$list_mkk_all}
+								<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+								{/foreach}
+							</select>
+
+
+							<script>$("#mkk_ter{$item.id} option[value='{$tn}']").prop('selected', true);</script>
+
+
+						</td>
+						<td>
+							<select name=payer[{$item.id}] id=payer{$item.id}>
+								<option></option>
+								{foreach key=k1 item=i1 from=$fil_list}
+								<option value={$i1.id}>{$i1.name}</option>
+								{/foreach}
+							</select>
+
+
+							<script>$("#payer{$item.id} option[value='{$item.payer}']").prop('selected', true);</script>
+
+
+						</td>
+					</tr>
+					{/foreach}
+				</table>
+			</td>
+		</tr>
+		{/if}
+		<tr>
+			<td>Описание активности</td>
+			<td>
+				<textarea required cols="50" rows="5" name="descript" id="descript">{if $smarty.request.descript and !$smarty.request.save_month}{$smarty.request.descript}{/if}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>Форма оплаты</td>
+			<td>
+				<select required name="payment_type" id="payment_type">
+					<option></option>
+					{foreach key=key item=item from=$payment_type}
+					<option value={$item.id}>{$item.pay_type}</option>
+					{/foreach}
+				</select>
+			</td>
+		</tr>
+	{/if}
+	{if not $dog_plan_disabled}
+	</table>
+	{/if}
+	{if $smarty.request.edit}<input type=hidden name="edit" value="{$smarty.request.edit}">{/if}
+	<script>
+		$("#month option[value='{$smarty.request.month}']").prop('selected', true);
+		$("#statya_on_year option[value='{$smarty.request.statya_on_year}']").prop('selected', true);
+		$("input[name=payment_format][value='{$smarty.request.payment_format}']").attr('checked',true);
+		$("#groupp option[value='{$smarty.request.groupp}']").prop('selected', true);
+		$("#payment_type option[value='{$smarty.request.payment_type}']").prop('selected', true);
+
+		{if $smarty.request.edit}
+			{foreach key=key item=item from=$nets_plan_month}
+				{if $item.rid eq $smarty.request.edit}
+					$("#statya_enabled{$item.statya_id}").prop('checked',true);
+					$('#cnt{$item.statya_id}').val({$item.cnt|default:0});
+					{if $smarty.request.payment_format eq 1}
+						$('#bonus{$item.statya_id}').val("{$item.bonus|default:0}");
+					{/if}
+					{if $smarty.request.payment_format eq 2}
+						$('#price{$item.statya_id}').val("{$item.price|default:0}");
+					{/if}
+					$("#mkk_ter{$item.statya_id} option[value='{$item.mkk_ter|default:0}']").prop('selected', true);
+					$("#payer{$item.statya_id} option[value='{$item.payer|default:0}']").prop('selected', true);
+				{/if}
+			{/foreach}
+		{else}
+			{if !$smarty.request.save_month}
+				{if $smarty.request.statya_enabled}
+					{foreach key=key item=item from=$smarty.request.statya_enabled}
+						$("#statya_enabled{$key}").prop('checked',true);
+					{/foreach}
+				{/if}
+				{if $smarty.request.cnt}
+					{foreach key=key item=item from=$smarty.request.cnt}
+					$('#cnt{$item.statya_id}').val({$item.cnt|default:0});
+						$('#cnt{$key}').val({$item});
+					{/foreach}
+				{/if}
+				{if $smarty.request.mkk_ter}
+					{foreach key=key item=item from=$smarty.request.mkk_ter}
+						{if $item}$("#mkk_ter{$key} option[value='{$item}']").prop('selected', true);{/if}
+					{/foreach}
+				{/if}
+				{if $smarty.request.payer}
+					{foreach key=key item=item from=$smarty.request.payer}
+						{if $item neq null}$("#payer{$key} option[value='{$item}']").prop('selected', true);{/if}
+					{/foreach}
+				{/if}
+				{if $smarty.request.payment_format eq 1}
+					{if $smarty.request.bonus}
+						{assign var=w1 value=0}
+						$('#total_bonus').val(0);
+						{foreach key=key item=item from=$smarty.request.bonus}
+							{if $item}
+								$('#bonus{$key}').val("{$item}");
+								{assign var=w1 value=`$w1+$item`}
+	                                
+							{/if}
+						{/foreach}
+						{if $w1>0}
+						$('#total_bonus').val({$w1});
+						{/if}
+					{/if}
+				{/if}
+				{if $smarty.request.payment_format eq 2}
+					{if $smarty.request.price}
+						{foreach key=key item=item from=$smarty.request.price}
+							{if $item}$('#price{$key}').val("{$item}");{/if}
+						{/foreach}
+					{/if}
+				{/if}
+			{/if}
+		{/if}
+	</script>
+	{if $smarty.request.month}
+		{if $smarty.request.edit}
+			<input value="Сохранить" name="save_month" type="submit">
+			<input value="Отменить" name="cancel_month" type="submit">
+		{else}
+			<input value="Добавить" name="add_month" type="submit">
+		{/if}
+	{/if}
+</form>
+<hr><br>

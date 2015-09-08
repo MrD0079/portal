@@ -1,0 +1,1 @@
+select * from ocenka_events order by year

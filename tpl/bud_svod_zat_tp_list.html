@@ -1,0 +1,79 @@
+{if $find_tp}
+	{if $find_tp.exist eq 0}
+		<font style="font-weight:bold;color:red">ТП не найдена</font>
+	{else}
+		{if $find_tp.visible eq 0}
+			<font style="font-weight:bold;color:red">ТП найдена, но у вас нет прав для ее просмотра</font>
+		{/if}
+	{/if}
+{/if}
+
+
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="
+?action=bud_svod_zat_tp_list
+&print=1
+&sd={$smarty.request.sd}
+&ed={$smarty.request.ed}
+&exp_list_without_ts={$smarty.request.exp_list_without_ts}
+&exp_list_only_ts={$smarty.request.exp_list_only_ts}
+&eta_list={$smarty.request.eta_list}
+&st={$smarty.request.st}
+&sort={$smarty.request.sort}
+&tp_kod={$smarty.request.tp_kod}
+&excel=1
+&filename=Свод Затраты по ТП
+">Excel</a>
+</p>
+{/if}
+<table border=1>
+<tr style="font-weight:bold; text-align:center">
+<td colspan=7>ИТОГО (записей: {$list_total.c} ТП: {$list_total.tpc})</td>
+<td style="text-align:right">{$list_total.act_bonus|num:2}</td>
+<td style="text-align:right">{$list_total.act_local_bonus|num:2}</td>
+<td style="text-align:right">{$list_total.zay_zat|num:2}</td>
+<td style="text-align:right">{$list_total.total|num:2}</td>
+<td style="text-align:right">{$list_total.skidka_val|num:2}</td>
+<td style="text-align:right;background-color: rgb(153, 255, 153);">{$list_total.zat_total|num:2}</td>
+<td style="text-align:right">{$list_total.summa|num:2}</td>
+<td style="text-align:right;background-color: rgb(255, 204, 153);">{$list_total.zat_perc|num:2}</td>
+</tr>
+<tr style="font-weight:bold; text-align:center">
+<td>период</td>
+<td>ФИО рук-ля</td>
+<td>ФИО ТС</td>
+<td>ФИО ЭТА</td>
+<td>Код ТП</td>
+<td>Название ТП</td>
+<td>Адрес ТП</td>
+<td>Затраты: Национальные акции, грн</td>
+<td>Затраты: Локальные акции, грн</td>
+<td>Затраты: заявки на активность</td>
+<td>Торговые условия, грн</td>
+<td>Скидка, грн</td>
+<td style="background-color: rgb(153, 255, 153);">ИТОГО затраты, грн</td>
+<td>Продажи за период, грн</td>
+<td style="background-color: rgb(255, 204, 153);">% затрат от продаж</td>
+</tr>
+{foreach key=k item=i from=$xx}
+<tr>
+<td>{$i.period_text}</td>
+<td>{$i.chief_fio}</td>
+<td>{$i.ts_fio}</td>
+<td>{$i.eta}</td>
+<td>{$i.tp_kod}</td>
+<td>{$i.tp_ur}</td>
+<td>{$i.tp_addr}</td>
+<td style="text-align:right">{$i.act_bonus|num:2}</td>
+<td style="text-align:right">{$i.act_local_bonus|num:2}</td>
+<td style="text-align:right">{$i.zay_zat|num:2}</td>
+<td style="text-align:right">{$i.total|num:2}</td>
+<td style="text-align:right">{$i.skidka_val|num:2}</td>
+<td style="text-align:right;background-color: rgb(153, 255, 153);">{$i.zat_total|num:2}</td>
+<td style="text-align:right">{$i.summa|num:2}</td>
+<td style="text-align:right;background-color: rgb(255, 204, 153);">{$i.zat_perc|num:2}</td>
+</tr>
+{/foreach}
+</table>

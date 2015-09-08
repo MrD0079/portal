@@ -1,0 +1,38 @@
+<p><input name="save_record" value="Сохранить" type="submit"></p>
+
+
+<p>
+
+<input type=checkbox onclick="$('#ok_fil').val(this.checked?1:0);$('#ok_fil_text').attr('disabled',!this.checked);" {if $head.ok_fil}checked{/if}>
+<input type=hidden id=ok_fil name=head[ok_fil] value="{if $head.ok_fil}1{else}0{/if}">
+
+Согласовано с дистрибутором {if $head.ok_fil}{$head.ok_fil_lu}{/if}
+
+<br>
+<textarea {if not $head.ok_fil}disabled{/if} id=ok_fil_text name=head[ok_fil_text] rows=5 cols=50>{$head.ok_fil_text}</textarea>
+<p>
+
+<table border=1>
+	<tr style="font-weight:bold; text-align:center">
+		<td>Участвует</td>
+		<td>Статья прихода</td>
+		<td>ПЛАН, тыс. ден.ед.</td>
+		<td>ФАКТ, тыс. ден.ед.</td>
+		<td>Комментарии</td>
+	</tr>
+	{foreach key=k item=i from=$body}
+	<tr>
+		<td>
+			<input type=checkbox onclick="$('#enabled{$i.st}').val(this.checked?1:0);$('.i{$i.st}').attr('disabled',!this.checked);" {if $i.id}checked{/if}>
+			<input type=hidden id=enabled{$i.st} name=enabled[{$i.st}] value="{if $i.id}1{else}0{/if}">
+			<input type=hidden name=body[{$i.st}][st] value="{$i.st}">
+		</td>
+		<td>{$i.name}</td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st} number3" name=body[{$i.st}][plan] value="{$i.plan}" required></td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st} number3" name=body[{$i.st}][fakt] value="{$i.fakt}" required></td>
+		<td><input {if not $i.id}disabled{/if} class="i{$i.st}" name=body[{$i.st}][text] value="{$i.text}" size=50></td>
+	</tr>
+	{/foreach}
+</table>
+
+<p><input name="save_record" value="Сохранить" type="submit"></p>

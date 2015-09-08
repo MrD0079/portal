@@ -1,0 +1,55 @@
+<h1>Обратная связь и результаты теста</h1>
+
+{if not $smarty.request.print}
+<a href="?action=tr_os_test_result&id={$smarty.request.id}&print=1&excel=1&filename=Обратная связь и результаты теста">Экспорт в Excel</a>
+{/if}
+
+<p>
+Тренинг: {$h.name}<br>
+Тренер: {$h.fio}<br>
+Дата проведения: {$h.dt_start_t}<br>
+Место проведения: {$h.loc_name}<br>
+Количество участников: {$h.stud_cnt}<br>
+</p>
+
+<table style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+	<tr style="text-align: center; font-weight:bold;">
+		<td rowspan="2">ФИО участника</td>
+		<td colspan="2" style="background-color: rgb(204, 255, 255);">Работа тренера</td>
+		<td colspan="2" style="background-color: rgb(255, 255, 204);">Материалы тренинга</td>
+		<td colspan="2" style="background-color: rgb(153, 255, 153);">Организация тренинга</td>
+		<td rowspan="2">Результат теста балл / % / дата (максимум баллов- {$h.max_ball})</td>
+		<td rowspan="2">Ошибки в ответах (по последнему тестированию!)</td>
+	</tr>
+	<tr style="text-align: center; font-weight:bold;">
+		<td style="background-color: rgb(204, 255, 255); width:100px">Сильные стороны</td>
+		<td style="background-color: rgb(204, 255, 255); width:100px">Моменты к улучшению</td>
+		<td style="background-color: rgb(255, 255, 204); width:100px">Сильные стороны</td>
+		<td style="background-color: rgb(255, 255, 204); width:100px">Моменты к улучшению</td>
+		<td style="background-color: rgb(153, 255, 153); width:100px">Сильные стороны</td>
+		<td style="background-color: rgb(153, 255, 153); width:100px">Моменты к улучшению</td>
+	</tr>
+	{foreach key=k item=i from=$tru name=tru}
+	<tr style="vertical-align:top">
+		<td><!--{$i.head.tn}-->{$i.head.fio}</td>
+		<td style="background-color: rgb(204, 255, 255); width:100px">{$i.head.s_cj|escape}</td>
+		<td style="background-color: rgb(204, 255, 255); width:100px">{$i.head.w_cj|escape}</td>
+		<td style="background-color: rgb(255, 255, 204); width:100px">{$i.head.s_tm|escape}</td>
+		<td style="background-color: rgb(255, 255, 204); width:100px">{$i.head.w_tm|escape}</td>
+		<td style="background-color: rgb(153, 255, 153); width:100px">{$i.head.s_to|escape}</td>
+		<td style="background-color: rgb(153, 255, 153); width:100px">{$i.head.w_to|escape}</td>
+		<td style="vertical-align:top; text-align:left">
+			{foreach key=k1 item=i1 from=$i.tests name=tests}
+				<nobr><b>{$i1.test_ball} / {$i1.test_perc}</b> - {$i1.test_lu}<nobr><br>
+			{/foreach}
+		</td>
+		<td style="vertical-align:top; text-align:left">
+			{if $smarty.foreach.tests.total > 0}
+			{foreach key=k2 item=i2 from=$i.test_res name=test_res}
+				<b>{$smarty.foreach.test_res.iteration}. {if $i2.ok eq ''}<span style="color:red">нет ответа на вопрос:</span>{else}<span style="color:orange">неправильный ответ на вопрос:</span>{/if}</b> {$i2.q_name}<br>
+			{/foreach}
+			{/if}
+		</td>
+	</tr>
+	{/foreach}
+</table>

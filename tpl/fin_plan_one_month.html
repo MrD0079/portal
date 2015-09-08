@@ -1,0 +1,61 @@
+<h2>План / факт продаж сети за месяц
+	<font style="color:red">
+	{foreach key=key item=item from=$calendar_months}
+	{if $smarty.request.plan_month eq $item.my}{$item.mt}{/if}
+	{/foreach}
+	</font>
+</h2>
+    <table border="1" cellpadding="2" cellspacing="2" 
+        style="TEXT-ALIGN: left; ">
+        <tr>
+            <td style="VERTICAL-ALIGN: top">
+                <br />
+            </td>
+            <td style="VERTICAL-ALIGN: top">
+                <b>Финансовое планирование</b></td>
+            <td style="VERTICAL-ALIGN: top">
+                <b>Договорное планирование</b></td>
+            <td style="VERTICAL-ALIGN: top">
+                <b>Оперативное планирование</b></td>
+        </tr>
+        <tr>
+            <td style="VERTICAL-ALIGN: top">
+                <b>План продаж, тыс.{$valuta}.</b></td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_1.plan|default:0|num:3}
+            </td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_2.plan|default:0|num:3}</td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_3.plan|default:0|num:3}
+            </td>
+        </tr>
+        <tr>
+            <td style="VERTICAL-ALIGN: top">
+                <b>Затраты, тыс. {$valuta}.</b></td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_1.zatr|default:0|num:3}</td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_2.zatr|default:0|num:3}</td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_3.zatr|default:0|num:3}</td>
+        </tr>
+        <tr>
+            <td style="VERTICAL-ALIGN: top">
+                <b>Затраты, %</b></td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_1.perc_zatr|default:0|num:2}
+            </td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_2.perc_zatr|default:0|num:2}</td>
+            <td style="VERTICAL-ALIGN: top">
+                {$fin_plan_one_month_3.perc_zatr|default:0|num:2}
+            </td>
+        </tr>
+        <tr align="middle">
+            <td colspan="4" rowspan="1" style="VERTICAL-ALIGN: top">
+                Факт продаж, тыс.{$valuta}.: {$fin_plan_one_month_3.fakt|default:0|num:3}<br />
+            </td>
+        </tr>
+    </table>
+<hr><br>

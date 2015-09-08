@@ -1,0 +1,38 @@
+<h1>Замена ТС в таблицах</h1>
+<form target="_self" method="POST" name=form_ts_replace id=form_ts_replace>
+<p>
+<select required name=from id=from>
+	<option></option>
+	{foreach key=key item=item from=$list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+</p>
+<p>на</p>
+<p>
+<select required name=to id=to>
+	<option></option>
+	{foreach key=key item=item from=$list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+</p>
+<p><input type=submit name=replace id=replace value="Заменить"></p>
+<p>Замена ТС будет произведена в следующих акциях/таблицах:</p>
+
+<p>
+<table border=1>
+<tr style="font-weight:bold">
+<td>акция</td><td>таблица</td><td>поле</td>
+</tr>
+{foreach key=k item=i from=$replace_ts}
+<tr>
+<td>{$i.action_name}</td><td>{$i.table_name}</td><td>{$i.field_name}</td>
+</tr>
+{/foreach}
+</table>
+</p>
+
+</form>
+
+

@@ -1,0 +1,113 @@
+<h1>Отчет по задачам</h1>
+{if not $vacation_task_parts}
+	<h2 style="color:red">В данный момент у вас нет назначенных задач на период отпуска руководителя / подчиненного / коллеги</h2>
+{else}
+	{foreach key=key0 item=item0 from=$vacation_task_parts}
+	<hr>
+	<h2>
+		Задачи на период отпуска с {$item0.head.v_from_t} по {$item0.head.v_to_t}
+		<br>
+		отпускник: {$item0.head.fio}
+		<br>
+		и.о.: {$item0.head.replacement_fio}
+	</h2>
+	<form target="_self" method="POST" name=form_v_{$key0} id=form_v_{$key0} enctype="multipart/form-data">
+		<p><input class="save{$key0}" name="save" value="Сохранить" type="submit"></p>
+		{foreach key=key item=item from=$item0.data}
+		<p style="font-weight:bold">{$item.head.part_name}
+		<!--<a href="javascript:void({$item.head.part_id});" onclick="add_task({$item.head.part_id})">Добавить задачу</a>-->
+		</p>
+		<table id="{$item.head.part_id}" style="text-align: left; width:800px;" border="1" cellpadding="0" cellspacing="0">
+			<tr>
+				<td style="vertical-align: top; text-align: center; background-color: rgb(204, 255, 255); font-weight: bold;">Описание задачи</td>
+				<td style="vertical-align: top; text-align: center; background-color: rgb(255, 255, 204); font-weight: bold;">Планируемый результат</td>
+				<td style="vertical-align: top; text-align: center; background-color: rgb(153, 255, 153); font-weight: bold;">Срок завершения</td>
+				<td colspan=2 style="vertical-align: top; text-align: center; font-weight: bold;">Исполняющий обязанности</td>
+				<td colspan=2 style="vertical-align: top; text-align: center; font-weight: bold;">Отпускник</td>
+			</tr>
+			<tr>
+				<td colspan=3 style="vertical-align: top; text-align: center; background-color: red;">Принцип SMART</td>
+				<td rowspan="2" style="vertical-align: top; text-align: center;">Выполнено</td>
+				<td rowspan="2" style="vertical-align: top; text-align: center;">Достигнутый результат</td>
+				<td rowspan="2" style="vertical-align: top; text-align: center;">Подтверждено выполнение задачи на 100%</td>
+				<td rowspan="2" style="vertical-align: top; text-align: center;">
+					Комментарии
+					<br>
+					<span style="color:red;font-weight:bold">Длина комментария не менее 10 символов</span>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top; text-align: center; background-color: rgb(204, 255, 255);">S - конкретная; A - достижимая; R - значимая</td>
+				<td style="vertical-align: top; text-align: center; background-color: rgb(255, 255, 204);">M - измеримая</td>
+				<td style="vertical-align: top; text-align: center; background-color: rgb(153, 255, 153);">T - ограниченная по времени</td>
+			</tr>
+			{foreach key=key1 item=item1 from=$item.data}
+			<tr id="{$item.head.part_id}_{$item1.id}">
+				<td style="vertical-align: top; background-color: rgb(204, 255, 255); text-align: left;">{$item1.task|nl2br}</td>
+				<td style="vertical-align: top; background-color: rgb(255, 255, 204); text-align: left;">{$item1.result|nl2br}</td>
+				<td style="vertical-align: top; background-color: rgb(153, 255, 153); text-align: center;">{$item1.dt_end}</td>
+				<td style="vertical-align: top; text-align: center;">
+					<input {if not $item0.head.i_am_replacement}disabled{/if} {if $item1.replacement_ok}checked{/if} type="checkbox" onclick="$('#tasks_{$item1.id}_replacement_ok').val(this.checked?1:0);/*$('#tasks_{$item1.id}_replacement_result').attr('disabled',!this.checked);*/">
+					<input {if not $item0.head.i_am_replacement}disabled{/if} {if $item1.replacement_ok}value=1{/if} name="tasks[{$item1.id}][replacement_ok]" id=tasks_{$item1.id}_replacement_ok type="hidden">
+				</td>
+				<td style="vertical-align: top; text-align: center;">
+					<textarea
+						{if not $item0.head.i_am_replacement}disabled{/if}
+						{if not $item1.replacement_ok}disabled1111111111111{/if}
+						required
+						cols="20" rows="10"
+						id=tasks_{$item1.id}_replacement_result
+						name="tasks[{$item1.id}][replacement_result]"
+					>{$item1.replacement_result|escape}</textarea>
+				</td>
+				<td style="vertical-align: top; text-align: center;">
+					<input {if not $item0.head.i_am_vac}disabled{/if} {if $item1.chief_ok}checked{/if} type="checkbox" onclick="$('#tasks_{$item1.id}_chief_ok').val(this.checked?1:0);">
+					<input {if not $item0.head.i_am_vac}disabled{/if} {if $item1.chief_ok}value=1{/if} name="tasks[{$item1.id}][chief_ok]" id=tasks_{$item1.id}_chief_ok type="hidden">
+				</td>
+				<td style="vertical-align: top; text-align: center;">
+					<textarea {if not $item0.head.i_am_vac}disabled{/if} class="comment{$key0}" required cols="20" rows="10" id=tasks_{$item1.id}_chief_comment name="tasks[{$item1.id}][chief_comment]">{$item1.chief_comment|escape}</textarea>
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+		{/foreach}
+		<p><input class="save{$key0}" name="save" value="Сохранить" type="submit"></p>
+		<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+			<tr>
+				<td style="text-align: center;">Отчет по отпуску завершен</td>
+				<td style="text-align: center;">
+					Выводы отпускника о качестве выполнения задач исполняющим обязанности
+					<br>
+					<span style="color:red;font-weight:bold">Длина комментария не менее 10 символов</span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: center;">
+					<input {if not $item0.head.i_am_vac}disabled{/if} {if $item0.head.vac_finished}checked{/if} type="checkbox" onclick="$('#vac_{$key0}_vac_finished').val(this.checked?1:0);$('#vac_{$key0}_summary').attr('disabled',!this.checked);">
+					<input {if not $item0.head.i_am_vac}disabled{/if} {if $item0.head.vac_finished}value=1{/if} name="vac[{$key0}][vac_finished]" id=vac_{$key0}_vac_finished type="hidden">
+					{$item0.head.vac_finished_lu}
+				</td>
+				<td style="text-align: center;">
+					<textarea {if not $item0.head.i_am_vac}disabled{/if} {if not $item0.head.vac_finished}disabled{/if} class="comment{$key0}" required cols="20" rows="10" id=vac_{$key0}_summary name="vac[{$key0}][summary]">{$item0.head.summary}</textarea>
+				</td>
+			</tr>
+		</table>
+		<p><input class="save{$key0}" name="save" value="Сохранить" type="submit"></p>
+	</form>
+{literal}
+<script>
+var mf{/literal}{$key0}{literal} = function() {
+    if($(this).val().length >= 10) {
+	$(".save{/literal}{$key0}{literal}").attr('disabled',false);
+    } else {
+	$(".save{/literal}{$key0}{literal}").attr('disabled',true);
+    }
+}
+$(".comment{/literal}{$key0}{literal}").keyup(mf{/literal}{$key0}{literal}).keypress(mf{/literal}{$key0}{literal}).change(mf{/literal}{$key0}{literal});
+</script>
+{/literal}
+	{/foreach}
+{/if}
+
+
+

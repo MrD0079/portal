@@ -1,0 +1,38 @@
+<p>
+ФИО
+{if not $smarty.request.print}
+<select required name=k[tn] id=tn>
+	<option></option>
+	{foreach key=key item=item from=$os_user_list}
+	<option value={$item.tn}>{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<script>$('#tn option[value="{$smarty.request.k.tn}"]').prop('selected', true);</script>
+{else}
+	{foreach key=key item=item from=$os_user_list}
+	{if $smarty.request.k.tn eq $item.tn}<b>{$item.fio}</b>{/if}
+	{/foreach}
+{/if}
+</p>
+<p>
+Год
+{if not $smarty.request.print}
+<select required name=k[y] id=y>
+	<option></option>
+	{foreach key=key item=item from=$calendar_years}
+		<option value={$item.y}>{$item.y}</option>
+	{/foreach}
+</select>
+<script>$('#y option[value="{$smarty.request.k.y}"]').prop('selected', true);</script>
+{else}
+	{foreach key=key item=item from=$calendar_years}
+	{if $smarty.request.k.y eq $item.y}<b>{$item.y}</b>{/if}
+	{/foreach}
+{/if}
+</p>
+{if not $smarty.request.print}
+<p>
+<input type=submit value="Выбрать" name=refresh>
+</p>
+{/if}
+

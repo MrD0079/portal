@@ -1,0 +1,95 @@
+<h1>Выбор продуктов</h1>
+
+<form name=form_w4u_admin_vp id=form_w4u_admin_vp target=_self method=post>
+
+<p>
+Месяц
+<select name=ml1 id=ml1 onChange="$('#content').hide();">
+{foreach key=key item=item from=$ml1}
+	<option value="{$item.dt}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#ml1 option[value='{$smarty.request.ml1}']").prop('selected', true);</script>
+</p>
+
+<p><input type="submit" name="select" value="Показать"></p>
+<p><input type="submit" name="copy" value="Скопировать из предыдущего месяца"></p>
+
+{if $smarty.request.select or $smarty.request.copy or $smarty.request.save}
+
+<div id=content>
+
+<hr>
+
+<p><input type="submit" name="save" value="Сохранить"></p>
+
+<p>
+Считать прирост от базового месяца
+<select name=ml2 id=ml2>
+{foreach key=key item=item from=$ml2}
+	<option value="{$item.dt}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#ml2 option[value='{$smarty.request.ml2}']").prop('selected', true);</script>
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+<tr>
+<td>№ п/п</td>
+<td>Категория</td>
+<td>Формат</td>
+<td>Продукт</td>
+<td>Вес продукта</td>
+<td>Код продукта</td>
+<td>Участвует</td>
+<td>Балл</td>
+<td>Минимальный порог, %</td>
+<td>Категория</td>
+<td>Объединить результат с другим продуктом</td>
+</tr>
+{assign var=cnt value=0}
+{foreach key=k item=i from=$pl name=pl}
+{if $i.prod_id}
+{assign var=cnt value=$cnt+1}
+{/if}
+<tr>
+<td style="text-align:center">{$smarty.foreach.pl.iteration}</td>
+<td>{$i.product_group_avk}</td>
+<td>{$i.unit_name_sw}</td>
+<td>{$i.product_name_sw}</td>
+<td style="text-align:right">{$i.product_weight|num:3}</td>
+<td style="text-align:center">{$i.product_id}</td>
+<td style="text-align:center"><input {if $i.prod_id}checked{/if} name=checked[{$i.product_id}] type=checkbox></td>
+<td style="text-align:center"><input size=5 value='{$i.ball}' name=data[{$i.product_id}][ball] class="number"></td>
+<td style="text-align:center"><input size=5 value='{$i.min_por}' name=data[{$i.product_id}][min_por] class="number"></td>
+<td style="text-align:center"><input size=10 value='{$i.cat}' name=data[{$i.product_id}][cat]></td>
+<td style="text-align:left">
+	<input type=hidden name=data[{$i.product_id}][prod_link] id=prod_link_{$i.product_id} value='{$i.prod_link}'>
+	<input type=hidden id=prod_link_name_{$i.product_id} value='{$i.prod_link_name|default:"выбрать"}'>
+	<div style="display: inline;" id=div_{$i.product_id}></div>
+	<div style="display: inline;" id=div1_{$i.product_id}>
+	<a id=a_link_{$i.product_id}
+		href="javascript:void(0);"
+		onclick="$('#div_{$i.product_id}').load('?action=w4u_admin_vp_prod_list&nohead=1&product_id={$i.product_id}&prod_link='+$('#prod_link_{$i.product_id}').val());">
+		{$i.prod_link_name}
+	</a>
+	<script>$('#a_link_{$i.product_id}').text($('#prod_link_name_{$i.product_id}').val());</script>
+	</div>
+	<script>
+	$('#div1_{$i.product_id}').hide();
+	$('#div_{$i.product_id}').html($('#div1_{$i.product_id}').html());
+	</script>
+</td>
+</tr>
+{/foreach}
+<tr><td style="text-align:center; font-weight:bold" colspan=10>Итого участвует продуктов: {$cnt}</td></tr>
+</table>
+
+<p><input type="submit" name="save" value="Сохранить"></p>
+
+</div>
+
+
+{/if}
+
+</form>

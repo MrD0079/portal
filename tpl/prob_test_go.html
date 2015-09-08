@@ -1,0 +1,14 @@
+<h1>Тестирование по АП</h1>
+{if $smarty.request.test_end}
+	{include file="prob_test_go_end.html"}
+{else}
+	{if $d}
+		{if $smarty.request.process}
+			{include file="prob_test_go_process.html"}
+		{else}
+			{include file="prob_test_go_start.html"}
+		{/if}
+	{else}
+		<h1 style="color:red">Данный тест уже пройден</h1>
+	{/if}
+{/if}

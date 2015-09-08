@@ -1,0 +1,102 @@
+<form target="_self" method="POST" name=form1 id=form1>
+
+{if not $smarty.request.print}
+
+<h1>Сводный отчет - по SKU</h1>
+<table style="text-align: left; height: 34px; width: 100px;" border="0" cellpadding="5" cellspacing="5">
+  <tbody>
+    <tr>
+      <td style=" width: 100px; text-align: left;">Месяц 
+	<select name=month_list id=month_list>
+	{foreach key=key item=item from=$month_list}
+		<option value="{$item.sd_c}">{$item.my}</option>
+	{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+	<input value="Выбрать" name="select" type="submit"><br>
+      </td>
+      <td style=" width: 100px; text-align: left;">СВ МС
+	<select name=svms_list id=svms_list>
+	<option value=0></option>
+	{foreach key=key item=item from=$svms_list}
+		<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+	{/foreach}
+	</select>
+	<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+      </td>
+      <td style=" width: 100px; text-align: left;">Маршрут
+	<select name="select_route_numb" id="select_route_numb">
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head}
+		<option value="{$item.id}">{$item.fio|escape} {$item.num}</option>
+	{/foreach}
+	</select>
+	<script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>
+      </td>
+      <td style=" width: 100px; text-align: left;">
+	<input value="Построить отчет" name="show" type="submit"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+{/if}
+
+{if $smarty.request.show}
+
+
+{if not $smarty.request.print}
+<a target=_blank href="?action=routes_report_by_sku_new&show=1&print=1">Версия для печати</a>
+<a href="?action=routes_report_by_sku_new&show=1&print=1&excel=1&filename=Сводный отчет - по SKU">Экспорт в Excel</a>
+<br>
+<br>
+{/if}
+
+<table style="text-align: left" border="1" cellpadding="2" cellspacing="0">
+    <tr style="font-weight:bold;text-align: center;">
+	<td rowspan=2>№ п/п</td>
+	<td rowspan=2>СВ МС</td>
+	<td rowspan=2>Маршрут</td>
+	<td rowspan=2>ФИО отв. сотр.</td>
+	{foreach key=k item=i from=$ra}
+	<td colspan=2>{$i.name}</td>
+	{/foreach}
+	<td>Итого</td>
+    </tr>
+    <tr style="font-weight:bold;text-align: center;">
+	{foreach key=k item=i from=$ra}
+	<td>Виз.</td>
+	<td>*</td>
+	{/foreach}
+	<td>*</td>
+    </tr>
+ 	{foreach key=k1 item=i1 from=$d name=d}
+	{assign var="t1" value=0}
+	{assign var="t2" value=0}
+	{assign var="t3" value=0}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+	<td>{$smarty.foreach.d.iteration}</td>
+	<td>{$i1.head.svms_name}</td>
+	<td>{$i1.head.num}</td>
+	<td>{$i1.head.fio_otv}</td>
+	{foreach key=k2 item=i2 from=$ra}
+		{assign var="id1" value="`$i2.id`"}
+		<td style="text-align: center;">{$i1.detail.$id1.visits}</td>
+		<td style="text-align: center;">{$i1.detail.$id1.total}</td>
+		{assign var="t3" value="`$t3+$i1.detail.$id1.total`"}
+	{/foreach}
+	<td style="text-align: center;" bgcolor="#ffccff">{$t3}</td>
+	</tr>
+	{/foreach}
+</table>
+
+{/if}
+</form>
+
+
+
+
+
+

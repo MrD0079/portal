@@ -1,0 +1,103 @@
+<h1>Отчет по акции "Летнее печенье (август)"</h1>
+
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+
+
+{if $is_ts neq 1 and $is_eta neq 1}
+
+
+
+По руководителю:
+<br>
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+{/foreach}
+</select>
+
+
+<br>
+
+По супервайзеру:
+<br>
+<select name=exp_list_only_ts id=exp_list_only_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_only_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+
+{/if}
+
+
+{if $is_eta neq 1}
+
+По ЭТА:
+<br>
+<select name=eta_list id=eta_list>
+<option value=""></option>
+{foreach key=key item=item from=$eta_list}
+<option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
+{/foreach}
+</select>
+
+<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+
+
+<br>
+
+
+
+{/if}
+
+
+
+<input type="hidden" name="form_submit">
+
+
+<table border=0>
+	<tr style="vertical-align: top;">
+		<td>
+			<input type=radio id="ok_chief" name="ok_chief" value=1>все ТП<br>
+			<input type=radio id="ok_chief" name="ok_chief" value=2>подтверждено руководителем<br>
+			<input type=radio id="ok_chief" name="ok_chief" value=3>не подтверждено руководителем<br>
+			<script>$("input[name=ok_chief][value={$smarty.request.ok_chief|default:1}]").attr('checked',true);</script>
+		</td>
+	</tr>
+</table>
+
+<input type=submit name=generate id=generate value="Выбрать">
+
+{/if}
+
+
+{if $smarty.request.generate}
+
+
+{if not $smarty.request.print}
+<p><a href="?action=a13_sp8_report&print=1&excel=1&generate=1&filename=Ход акции Весенний БУМ">Экспорт в Excel</a></p>
+<input type=hidden name=generate value="Выбрать">
+{/if}
+
+
+{include file="a13_sp8_report_1.html"}
+{include file="a13_sp8_report_2.html"}
+{if $is_eta neq 1}{include file="a13_sp8_report_3.html"}{/if}
+{/if}
+
+{if not $smarty.request.print}
+
+</form>
+
+{/if}

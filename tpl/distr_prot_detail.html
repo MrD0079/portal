@@ -1,0 +1,66 @@
+{if not $smarty.request.excel}
+
+<h3>Детализация</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="text-align: center; font-weight: bold;">
+<td>Всего<br> дистрибуторов</td>
+<td>Есть<br> протоколы</td>
+<td>Протоколы<br> без прогресса</td>
+<td>Протоколы<br> с прогрессом</td>
+<td>Протоколы<br> с результатом</td>
+<td>Нет<br> протоколов</td>
+</tr>
+<tr style="text-align: center;">
+<td>{$d.c}</td>
+<td>{$d.with_prot}</td>
+<td>{$d.r_no}</td>
+<td>{$d.r_pr}</td>
+<td>{$d.r_re}</td>
+<td>{$d.without_prot}</td>
+</tr>
+<!--
+<tr>
+<td>count<br>(По данному контрольному вопросу:<br>из списка на форме Контрольные вопросы,<br>где признак "Участвует" == true)</td>
+<td>count<br>(select distinct (название дистриба) from...<br>where (контрольный вопрос = текущий выбранный)<br>and (протокол загружен)</td>
+<td>см. столбец "Есть протокол"<br> с учетом признака "Результат"</td>
+<td>см. столбец "Есть протокол"<br> с учетом признака "Результат"</td>
+<td>см. столбец "Есть протокол"<br> с учетом признака "Результат"</td>
+<td>см. столбец "Есть протокол"<br> с учетом признака "Результат"</td>
+</tr>
+-->
+</tbody>
+</table>
+
+<p><a href="?action=distr_prot_detail
+&conq={$smarty.request.conq}
+&sd={$smarty.request.sd}
+&ed={$smarty.request.ed}
+&print=1&refresh=1&excel=1&filename=Протоколы встреч - Список дистрибуторов без протоколов">Экспорт в Excel</a></p>
+{/if}
+  
+<h3>Список дистрибуторов без протоколов</h3>
+<table border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="text-align: center; font-weight: bold;">
+<td>Дистрибутор</td>
+<td>Национальное<br>подразделение</td>
+<td>ДБ</td>
+</tr>
+<!--
+<tr style="text-align: center;">
+<td>//подтяг дистрибуторы,<br> по которым нет протокола -<br> т.е. список дистрибуторов,<br> количество которых указано<br> в последнем столбце таблицы выше</td>
+<td>//подтяг</td>
+<td>$[ФИО привязанного ДБ]<br> (рук. $[ФИО прямого ру-ля ДБ]),<br> скайп: $[скайп ДБ],<br> тел.: $[телефон ДБ], <br>почта: $[почта ДБ]</td>
+</tr>
+-->
+{foreach key=k item=i from=$d2}
+<tr style="text-align: center;">
+<td>{$i.fil_name}</td>
+<td>{$i.nd_name}</td>
+<td>{$i.db_list}</td>
+</tr>
+{/foreach}
+</tbody>
+</table>

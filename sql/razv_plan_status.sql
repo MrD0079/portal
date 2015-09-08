@@ -1,0 +1,1 @@
+select id,name from plan_status order by id

@@ -1,0 +1,26 @@
+{if not $smarty.request.print}
+<table style="text-align: left; width:800px" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td>Количество ТП всего<br></td>
+		<td>Участвовал в акции "Волшебная осень" - НАКОПИТЕЛЬНАЯ</td>
+		<td>Продажи январь-сентябрь 2013</td>
+		<td>Объем продаж за период акции (без учета акционных накладных по другим акциям)</td>
+		<td>Участвовал в акции "Новогодний вал"</td>
+		<td>Факт ноябрь, {$valuta}</td>
+		<td>Факт декабрь, {$valuta}</td>
+		<td>Сумма бонуса, {$valuta}</td>
+		<td>Выдано</td>
+	</tr>
+	<tr style="text-align:right">
+		<td>{$itogi.cnt|default:0}</td>
+		<td>{$itogi.vo1|default:0}</td>
+		<td>{$itogi.prev|default:0|num:2}</td>
+		<td>{$itogi.summa|default:0|num:2}</td>
+		<td>{$itogi.nv1|default:0}</td>
+		<td>{$itogi.salesnov|default:0|num:2}</td>
+		<td>{$itogi.salesdec|default:0|num:2}</td>
+		<td>{$itogi.bonus_sum1|default:0|num:2}</td>
+		<td>{$itogi.bonus_dt1|default:0|num:0}</td>
+	</tr>
+</table>
+{/if}

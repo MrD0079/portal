@@ -1,0 +1,16 @@
+{if $smarty.request.type eq 'tn'}
+<select name="grant[{$smarty.request.id}][{$smarty.request.type}][{$smarty.request.val}][]">
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+		<option value="{$item.tn}">{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+{/if}
+{if $smarty.request.type eq 'pos'}
+<select name="grant[{$smarty.request.id}][{$smarty.request.type}][{$smarty.request.val}][]">
+	<option></option>
+	{foreach key=key item=item from=$pos_list_actual}
+		<option value="{$item.pos_id}">{$item.pos_name}</option>
+	{/foreach}
+</select>
+{/if}

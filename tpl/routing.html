@@ -1,0 +1,156 @@
+{if not $smarty.request.google}
+<h1>Маршруты ЭТА / МКК</h1>
+<form target="_self" method="POST" name=form_report id=form_report>
+{/if}
+
+{if not $smarty.request.print}
+
+{if $is_ts neq 1 and $is_mkk neq 1 and $is_eta neq 1}
+
+По руководителю:
+<br>
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+<br>
+
+По ТС/МКК:
+<br>
+<select name=exp_list_only_ts id=exp_list_only_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_only_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+
+{/if}
+
+{if $is_eta neq 1}
+
+По ЭТА:
+<br>
+<select name=routes_eta_list id=routes_eta_list>
+<option value=''></option>
+{foreach key=key item=item from=$routes_eta_list}
+<option value="{$item.h_eta}">{$item.eta}</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#routes_eta_list option[value='{$smarty.request.routes_eta_list}']").prop('selected', true);</script>
+
+{/if}
+
+Дни:
+<br>
+<table border=0>
+	<tr style="vertical-align:top">
+		{foreach key=key item=item name=routes_days_list from=$routes_days_list}
+			<td>
+				<table>
+					{foreach key=key_1 item=item_1 name=routes_days_list_1 from=$routes_days_list_1}
+						{if $item.col eq $item_1.col}
+							<tr>
+								<td>
+									<input class="chk_all" type=checkbox id="routes_days_list_{$item_1.h_x}" name="routes_days_list[]" value="{$item_1.h_x}">{$item_1.dwt|escape}
+								</td>
+							</tr>
+						{/if}
+					{/foreach}
+				</table>
+			</td>
+		{/foreach}
+	</tr>
+</table>
+
+<input type=hidden id="routes_days_list[0]" name="routes_days_list[]" value="0">
+
+{literal}
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+{/literal}
+
+
+<script>
+
+{if not $smarty.request.generate}
+{literal}
+$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});
+{/literal}
+{/if}
+
+{foreach key=key item=item from=$routes_days_list_1}
+	{if $smarty.request.routes_days_list[$item.day_pos]}
+		$("#routes_days_list_{$item.h_x}").prop('checked',true);
+	{/if}
+{/foreach}
+
+{foreach key=key item=item from=$smarty.request.routes_days_list}
+		$("#routes_days_list_{$item}").prop('checked',true);
+{/foreach}
+
+</script>
+
+<p>
+<input type=submit name=generate id=generate value="Построить отчет">
+</p>
+
+{/if}
+
+{if $list_adv and not $smarty.request.print}
+
+{include file="routing_adv.html"}
+
+{/if}
+
+{foreach key=list_key item=list_item from=$list name=list}
+
+{if not $smarty.request.print
+	or
+	(
+		$smarty.request.print
+		and
+		$list_item.dwt eq $smarty.request.day
+		and
+		$list_item.eta eq $smarty.request.eta
+		and
+		$list_item.ts eq $smarty.request.ts
+	)
+}
+
+{if not $smarty.request.google}
+<h2>ДЕНЬ НЕДЕЛИ: {$list_item.dwt} ЭТА: {$list_item.eta} ТС: {$list_item.ts}</h2>
+{/if}
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="?action=routing&generate=1&print=1&day={$list_item.dwt}&week={$list_item.week}&eta={$list_item.eta}&ts={$list_item.ts}">Версия для печати</a>
+<a href="?action=routing&generate=1&print=1&excel=1&day={$list_item.dwt}&week={$list_item.week}&eta={$list_item.eta}&ts={$list_item.ts}&filename={$list_item.eta} {$list_item.dwt}">Экспорт в Excel</a>
+<a target=_blank href="?action=routing&generate=1&print=1&google=1&day={$list_item.dwt}&week={$list_item.week}&eta={$list_item.eta}&ts={$list_item.ts}">Построить картосхему</a>
+</p>
+{/if}
+
+
+{if not $smarty.request.google}
+{include file="routing_detail.html"}
+<hr>
+{else}
+{include file="routing_detail_google.html"}
+{/if}
+
+{/if}
+
+{/foreach}
+
+</form>

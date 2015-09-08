@@ -1,0 +1,140 @@
+<h3>СПД</h3>
+
+<p>
+<a href="?action=rep_spd_list&valid=1">все</a>
+<a href="?action=rep_spd_list&valid=2">действующие</a>
+<a href="?action=rep_spd_list&valid=3">не действующие</a>
+</p>
+
+
+<table id=trep_spd_list border=1 width=600px>
+	<tbody>
+		<tr style="font-weight:bold">
+			<td>Действие</td>
+			<td>ФИО</td>
+			<td>ИНН</td>
+			<td>Территория контроля</td>
+			<td>№ договора</td>
+			<td>Дата окончания действия договора</td>
+			<td>Последний месяц оказания услуг</td>
+		</tr>
+		{foreach key=k item=i from=$rep_spd_list}
+			<tr id=list_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_item({$i.id})">[-]</a>
+				</td>
+				<td>
+					<input id=d_{$i.id}_fio size=30 value="{$i.fio}" onChange="save_item({$i.id},'fio',this.value);">
+				</td>
+				<td>
+					<input id=d_{$i.id}_tn size=15 value="{$i.tn}" onChange="save_item({$i.id},'tn',this.value);" class="number_int">
+				</td>
+				<td>
+					<select
+						id="d_{$i.id}_ter_db"
+						onChange="save_item({$i.id},'ter_db',this.value);"
+					>
+					<option></option>
+					{foreach key=k1 item=i1 from=$db_list}
+					<option value={$i1.tn}>{$i1.fio}</option>
+					{/foreach}
+					</select>
+					<script>$('#d_{$i.id}_ter_db option[value="{$i.ter_db}"]').prop('selected', true);</script>
+				</td>
+				<td>
+					<input id=d_{$i.id}_contract_num size=30 value="{$i.contract_num}" onChange="save_item({$i.id},'contract_num',this.value);">
+				</td>
+				<td>
+					<input id=d_{$i.id}_contract_end size=8 value="{$i.contract_end}" onChange="save_item({$i.id},'contract_end',this.value);" class="datepicker">
+				</td>
+				<td>
+					<select
+						id="d_{$i.id}_last_month"
+						onChange="save_item({$i.id},'last_month',this.value);"
+					>
+					<option></option>
+					{foreach key=k1 item=i1 from=$dt}
+					<option value={$i1.sd_c}>{$i1.my}</option>
+					{/foreach}
+					</select>
+					<script>$('#d_{$i.id}_last_month option[value="{$i.last_month}"]').prop('selected', true);</script>
+				</td>
+			</tr>
+		{/foreach}
+		<tr id="last_row">
+			<td>
+				<a href="javascript:void(0);" onClick="add_item();">[+]</a>
+			</td>
+			<td>
+				<input size=30 id=new_fio>
+			</td>
+			<td>
+				<input size=15 id=new_tn class="number_int">
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{literal}
+<script>
+function add_item(id)
+{
+var fd = new FormData();
+fd.append('new_fio', $('#new_fio').val());
+fd.append('new_tn', $('#new_tn').val());
+$.ajax({
+  type: 'POST',
+  url: '?action=rep_spd_list&new=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  //$('#trep_spd_list>tbody:last').append(''+data+'');
+  //$('#trep_spd_list>tbody:last').prev().append(''+data+'');
+  $('#trep_spd_list tr:last').before(''+data+'');
+  }
+});
+}
+function save_item(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=rep_spd_list&save=1&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function del_item(id)
+{
+save_item(id,'id',0);
+$('#list_'+id).remove();
+}
+
+/*
+function show_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=rep_spd_list&items=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+*/
+//$(function() {show_items(0);});
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

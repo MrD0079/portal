@@ -1,0 +1,69 @@
+<h3>Отчет СПД</h3>
+
+<form name=form_m id=form_m target=_self method=post enctype="multipart/form-data">
+<select name=month_list id=month_list onchange="$('#form_m').submit();">
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>
+	$('#month_list').val('{$smarty.request.month_list}');
+</script>
+<input type=hidden name=generate id=generate disabled>
+</form>
+
+<p>
+<a onclick="$('#generate').attr('disabled',false);$('#form_m').submit();" href="javascript:void(0);">Добавить текущий месяц в очередь на формирование отчета</a>
+<b>
+{if $status.dt eq 1}Отчет находится в очереди.{/if}
+{if $status.job eq 1}Отчет формируется.{/if}
+</b>
+</p>
+
+<table id=trep_spd_head border=1>
+	<tbody>
+		<tr style="font-weight:bold">
+			<td>ФИО</td>
+			<td>Количество часов оказанных услуг</td>
+			<td>Просмотреть отчет</td>
+			<td>На данный месяц отчет</td>
+		</tr>
+		{foreach key=k item=i from=$rep_spd_head}
+			<tr id=list_{$i.tn} style="background-color:{$i.contract_color}">
+				<td>
+					{$i.fio}
+				</td>
+				<td>
+					<input id=d_{$i.tn}_service size=8 value="{$i.service}" class="number" onChange="save_item({$i.tn},'{$smarty.request.month_list}','service',this.value);">
+				</td>
+				<td>
+					{if $i.h_fio_eta}<a target="_blank" href="?action=rep_spd_body&month_list={$smarty.request.month_list}&tn={$i.tn}">Отчет</a>{/if}
+				</td>
+				<td>
+					{if not $i.h_fio_eta}НЕ{/if} СФОРМИРОВАН {if $i.h_fio_eta}{$i.last_gen}{/if}
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>
+
+{literal}
+<script>
+function save_item(tn,dt,field,val)
+{
+	$('#d_'+tn+'_'+field).css('background-color','red');
+	$('#ok').load('?action=rep_spd_head&save=1&nohead=1',
+	{
+		tn: tn,
+		dt: dt,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+tn+'_'+field).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

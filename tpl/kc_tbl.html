@@ -1,0 +1,185 @@
+<h3>блок задач на месяц и их выполнения</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+	<tr style="font-weight: bold;">
+		<td>[x]</td>
+		<td>Описание задачи</td>
+		<td>% выполнения</td>
+		<td>Комментарии</td>
+	</tr>
+	{foreach key=k item=i from=$kcc_tbl}
+	<tr style="font-weight:bold" id="tr_{$i.coach}">
+		<td colspan=4>
+			{$i.fio}
+			{if not $disabled}
+				<a href="javascript:void(0);" onclick="add_task('{$smarty.request.sd}',{$i.coach},'{$disabled}',null);">[+]</a>
+			{/if}
+		</td>
+	</tr>
+		<script>
+		{foreach key=k1 item=i1 from=$i.tasks}
+			add_task('{$smarty.request.sd}',{$i.coach},'{$disabled}',{$i1.id});
+		{/foreach}
+		</script>
+	{/foreach}
+</tbody>
+</table>
+
+<h3>Подбор и найм. Количество просроченных вакансий</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight: bold;">
+<td></td>
+<td>ЭТА</td>
+<td>ТС</td>
+<td>ТМ</td>
+<td>РМ</td>
+<td>НМ</td>
+</tr>
+{foreach key=k item=i from=$kcc_tbl}
+<tr>
+<td>{$i.fio}</td>
+{if not $disabled}
+<td id=td_prosr_vac_eta{$i.coach} style="text-align:right"><input class="number_int" size=5 {$disabled} value="{$i.prosr_vac_eta}" onChange="save('{$smarty.request.sd}','c','prosr_vac_eta',this.value,{$i.coach},'');"></td>
+<td id=td_prosr_vac_ts{$i.coach} style="text-align:right"><input class="number_int" size=5 {$disabled} value="{$i.prosr_vac_ts}" onChange="save('{$smarty.request.sd}','c','prosr_vac_ts',this.value,{$i.coach},'');"></td>
+<td id=td_prosr_vac_tm{$i.coach} style="text-align:right"><input class="number_int" size=5 {$disabled} value="{$i.prosr_vac_tm}" onChange="save('{$smarty.request.sd}','c','prosr_vac_tm',this.value,{$i.coach},'');"></td>
+<td id=td_prosr_vac_rm{$i.coach} style="text-align:right"><input class="number_int" size=5 {$disabled} value="{$i.prosr_vac_rm}" onChange="save('{$smarty.request.sd}','c','prosr_vac_rm',this.value,{$i.coach},'');"></td>
+<td id=td_prosr_vac_nm{$i.coach} style="text-align:right"><input class="number_int" size=5 {$disabled} value="{$i.prosr_vac_nm}" onChange="save('{$smarty.request.sd}','c','prosr_vac_nm',this.value,{$i.coach},'');"></td>
+{else}
+<td style="text-align:right">{$i.prosr_vac_eta}</td>
+<td style="text-align:right">{$i.prosr_vac_ts}</td>
+<td style="text-align:right">{$i.prosr_vac_tm}</td>
+<td style="text-align:right">{$i.prosr_vac_rm}</td>
+<td style="text-align:right">{$i.prosr_vac_nm}</td>
+{/if}
+</tr>
+{/foreach}
+<tr style="font-weight: bold;">
+<td>ИТОГО</td>
+<td style="text-align:right">{$kcc_tbl_total.prosr_vac_eta}</td>
+<td style="text-align:right">{$kcc_tbl_total.prosr_vac_ts}</td>
+<td style="text-align:right">{$kcc_tbl_total.prosr_vac_tm}</td>
+<td style="text-align:right">{$kcc_tbl_total.prosr_vac_rm}</td>
+<td style="text-align:right">{$kcc_tbl_total.prosr_vac_nm}</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+Адаптация. Количество сотрудников с просроченной адаптацией
+</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight: bold;">
+<td></td>
+<td>ТС</td>
+<td>ТМ</td>
+<td>РМ</td>
+<td>НМ</td>
+</tr>
+{foreach key=k item=i from=$kcc_tbl}
+<tr>
+<td>{$i.fio}</td>
+<td style="text-align:right">{$i.prob_ts}</td>
+<td style="text-align:right">{$i.prob_tm}</td>
+<td style="text-align:right">{$i.prob_rm}</td>
+<td style="text-align:right">{$i.prob_nm}</td>
+</tr>
+{/foreach}
+<tr style="font-weight: bold;">
+<td>ИТОГО</td>
+<td style="text-align:right">{$kcc_tbl_total.prob_ts}</td>
+<td style="text-align:right">{$kcc_tbl_total.prob_tm}</td>
+<td style="text-align:right">{$kcc_tbl_total.prob_rm}</td>
+<td style="text-align:right">{$kcc_tbl_total.prob_nm}</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Адаптация. Качество усвоения материала - по результатам тестирования/опроса, %</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight: bold;">
+<td></td>
+<td>ЭТА</td>
+<td>ТС</td>
+<td>ТМ</td>
+<td>РМ</td>
+<td>НМ</td>
+</tr>
+{foreach key=k item=i from=$kcc_tbl}
+<tr>
+<td>{$i.fio}</td>
+<td style="text-align:right">100,00</td>
+<td style="text-align:right">{$i.ts_perc|num:2}</td>
+<td style="text-align:right">{$i.tm_perc|num:2}</td>
+<td style="text-align:right">{$i.rm_perc|num:2}</td>
+<td style="text-align:right">{$i.nm_perc|num:2}</td>
+</tr>
+{/foreach}
+<tr style="font-weight: bold;">
+<td>ИТОГО</td>
+<td style="text-align:right">100,00</td>
+<td style="text-align:right">{$kcc_tbl_total.ts_perc|num:2}</td>
+<td style="text-align:right">{$kcc_tbl_total.tm_perc|num:2}</td>
+<td style="text-align:right">{$kcc_tbl_total.rm_perc|num:2}</td>
+<td style="text-align:right">{$kcc_tbl_total.nm_perc|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Обучение</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight: bold;">
+<td></td>
+<td>Результаты<br>тренингов</td>
+</tr>
+{foreach key=k item=i from=$kcc_tbl}
+<tr>
+<td>{$i.fio}</td>
+<td style="text-align:right">{$i.perc|num:2}</td>
+</tr>
+{/foreach}
+<tr style="font-weight: bold;">
+<td>ИТОГО</td>
+<td style="text-align:right">{$kcc_tbl_total.perc|num:2}</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Кадровый резерв на позицию</h3>
+
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight: bold;">
+<td></td>
+<td>ТС</td>
+<td>ТМ</td>
+<td>РМ</td>
+<td>НМ</td>
+</tr>
+{foreach key=k item=i from=$kcc_tbl}
+<tr>
+<td>{$i.fio}</td>
+<td style="text-align:right">{$i.res_ts}</td>
+<td style="text-align:right">{$i.res_tm}</td>
+<td style="text-align:right">{$i.res_rm}</td>
+<td style="text-align:right">{$i.res_nm}</td>
+</tr>
+{/foreach}
+<tr style="font-weight: bold;">
+<td>ИТОГО</td>
+<td style="text-align:right">{$kcc_tbl_total.res_ts}</td>
+<td style="text-align:right">{$kcc_tbl_total.res_tm}</td>
+<td style="text-align:right">{$kcc_tbl_total.res_rm}</td>
+<td style="text-align:right">{$kcc_tbl_total.res_nm}</td>
+</tr>
+</tbody>
+</table>
+

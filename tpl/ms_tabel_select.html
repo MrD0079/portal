@@ -1,0 +1,61 @@
+<table>
+
+<tr>
+<td>
+Дата
+</td>
+<td>
+	<select name=dates_list2 id=dates_list2>
+	{foreach key=key item=item from=$month_list}
+		{if $item.ms_agenda_enabled}<option value="{$item.sd_c}">{$item.my}</option>{/if}
+	{/foreach}
+	</select>
+</td>
+<script>
+	$("#dates_list2 option[value='{$smarty.request.dates_list2}']").prop('selected', true);
+</script>
+</tr>
+
+<tr><td>СВ МС</td>
+<td>
+<select name=svms_list id=svms_list>
+	<option value=0></option>
+	{foreach key=key item=item from=$svms_list}
+	<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+	{/foreach}
+</select>
+<script>
+$("#svms_list option[value={$smarty.request.svms_list}]").prop('selected', true);
+</script>
+</td>
+</tr>
+
+<tr><td>Маршрут</td>
+<td>
+<select name="numb" id="numb">
+	<option value=0></option>
+	{foreach key=key item=item from=$routes_head}
+	<option value="{$item.id}">{$item.fio} - {$item.num} - {$item.fio_otv}</option>
+	{/foreach}
+</select>
+<script>
+$("#numb option[value={$smarty.request.numb}]").prop('selected', true);
+</script>
+</td>
+</tr>
+
+<tr><td>ФИО</td>
+<td>
+<select name="fio_otv" id="fio_otv">
+	<option value='0'></option>
+	{foreach key=key item=item from=$routes_head_fio_otv}
+	<option value='{$item.fio_otv}'>{$item.fio_otv}</option>
+	{/foreach}
+</select>
+<script>
+$("#fio_otv option[value='{$smarty.request.fio_otv}']").prop('selected', true);
+</script>
+</td>
+</tr>
+
+</table>

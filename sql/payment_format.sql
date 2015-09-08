@@ -1,0 +1,1 @@
+select * from payment_format order by pay_format

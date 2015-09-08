@@ -1,0 +1,212 @@
+{if not $smarty.request.print}
+
+<h1>Назначение экспертов (
+{if $smarty.request.all eq 0}Все{/if}
+{if $smarty.request.all eq 1}Работающие{/if}
+{if $smarty.request.all eq -1}Уволенные{/if}
+)</h1>
+
+
+<p>
+<a href="?action=emp_exp&all=0">Все</a>
+&nbsp&nbsp&nbsp
+<a href="?action=emp_exp&all=1">Работающие</a>
+&nbsp&nbsp&nbsp
+<a href="?action=emp_exp&all=-1">Уволенные</a>
+</p>
+
+
+{/if}
+
+
+
+
+
+
+
+
+<form target="_self" method="POST" name=form_exp_dep id=form_exp_dep>
+Эксперт
+<select required name=exp_dep_params[p_exp]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+Подразделение
+<select required name=exp_dep_params[p_dep] id=department_name>
+	<option value=0></option>
+	{foreach key=key item=item from=$department_list}
+	<option value="{$item.department_name}">{$item.department_name}</option>
+	{/foreach}
+</select>
+<br>
+<input type=submit name=exp_dep id=exp_dep value="Привязать эксперта к сотрудникам подразделения">
+</form>
+
+
+<br>
+
+
+<form target="_self" method="POST" name=form_exp_reg id=form_exp_reg>
+Эксперт
+<select required name=exp_reg_params[p_exp]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+Регион
+<select required name=exp_reg_params[p_reg] id=region_name>
+	<option value=0></option>
+	{foreach key=key item=item from=$region_list}
+	<option value="{$item.region_name}">{$item.region_name}</option>
+	{/foreach}
+</select>
+<br>
+<input type=submit name=exp_reg id=exp_reg value="Привязать эксперта к сотрудникам региона">
+</form>
+
+
+<br>
+
+
+
+
+
+<form target="_self" method="POST" name=form_drop id=form_drop>
+Отвязать эксперта от всех
+<select required name=drop_exp>
+	<option></option>
+	{foreach key=key item=item from=$spd_list_full}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<input type=submit name=drop id=drop value="Отвязать">
+</form>
+
+
+<br>
+
+
+
+<form target="_self" method="POST" name=form_exp_replace id=form_exp_replace>
+Замена эксперта
+<select required name=replace_exp[exp_from] id=replace_exp[exp_from]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+на
+<select required name=replace_exp[exp_to] id=replace_exp[exp_to]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+<input type=submit name=replace id=replace value="Заменить">
+</form>
+
+
+<br>
+
+
+<form target="_self" method="POST" name=form_emp_exp>
+
+
+Оцениваемый
+<select required name=add[emp_tn]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+Эксперт
+<select required name=add[exp_tn]>
+	<option></option>
+	{foreach key=key item=item from=$spd_list}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<br>
+Руководитель
+<select required name=add[full]>
+	<option value=0>нет</option>
+	<option value=1>да</option>
+</select>
+<input type=submit name=new value="Добавить">
+<br>
+<br>
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;">
+<td rowspan=2><a href="javascript:void(0)" onclick="javascript:form_emp_exp.submit()">x</a></td>
+<td colspan=4>Оцениваемый</td>
+<td colspan=4>Эксперт</td>
+<td rowspan=2>Рук-ль</td>
+</tr>
+<tr style="font-weight:bold;">
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Департамент</td>
+<td>Дата увольнения</td>
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Департамент</td>
+<td>Дата увольнения</td>
+</tr>
+{foreach key=emp_exp_key item=emp_exp_item from=$emp_exp name=emp_exp}
+<tr>
+<td>
+	<input type=checkbox name=del[{$emp_exp_key}] value="{$emp_exp_item.emp_tn},{$emp_exp_item.exp_tn}">
+	{$smarty.foreach.emp_exp.iteration}
+</td>
+<td>{$emp_exp_item.emp_svid}</td>
+<td>{$emp_exp_item.emp_name}</td>
+<td>{$emp_exp_item.dpt_name_m}</td>
+<td>{$emp_exp_item.emp_datauvol}</td>
+<td>{$emp_exp_item.exp_svid}</td>
+<td>{$emp_exp_item.exp_name}</td>
+<td>{$emp_exp_item.dpt_name_x}</td>
+<td>{$emp_exp_item.exp_datauvol}</td>
+<td>{if $emp_exp_item.full eq 1}да{else}нет{/if}</td>
+</tr>
+{/foreach}
+</table>
+
+<h3>Сотрудники без прямых руководителей</h3>
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;">
+<td>ИНН</td>
+<td>Ф.И.О.</td>
+<td>Департамент</td>
+<td>Дата увольнения</td>
+</tr>
+{foreach key=emp_exp_wo_full_key item=emp_exp_wo_full_item from=$emp_exp_wo_full name=emp_exp_wo_full}
+<tr>
+<td>{$emp_exp_wo_full_item.tn}</td>
+<td>{$emp_exp_wo_full_item.fio}</td>
+<td>{$emp_exp_wo_full_item.dpt_name}</td>
+<td>{$emp_exp_wo_full_item.datauvol}</td>
+</tr>
+{/foreach}
+</table>
+
+
+</form>
+
+
+
+
+
+
+

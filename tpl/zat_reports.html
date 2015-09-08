@@ -1,0 +1,264 @@
+<h1>Сводные данные по отчетам о затратах</h1>
+
+
+
+{if not $smarty.request.print}
+
+<form name=form_zat id=form_zat target=_self method=post>
+
+<input type="hidden" name="form_submit">
+
+Период:
+с
+<select name=sd id=sd>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#sd').val('{$smarty.request.sd}');</script>
+по
+<select name=ed id=ed>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$('#ed').val('{$smarty.request.ed}');</script>
+
+<br>
+
+
+Тип отчета:
+<br>
+
+<select name=report_list id=report_list>
+	<option value=0></option>
+	<option value=1>отчет по прямым подчиненным (общий)</option>
+	<option value=2>отчет по прямым подчиненным (развернутый)</option>
+	<option value=3>отчет по непрямым подчиненным (общий)</option>
+	<option value=4>отчет по непрямым подчиненным (развернутый)</option>
+	{if $is_admin or $is_super or $is_acceptor}
+	<option value=5>отчет по всем сотрудникам (общий)</option>
+	<option value=6>отчет по всем сотрудникам (развернутый)</option>
+	{/if}
+</select>
+<script>$("#report_list option[value='{$smarty.request.report_list}']").prop('selected', true);</script>
+
+
+
+
+{if $smarty.request.report_list eq 5 or $smarty.request.report_list eq 6}
+{/if}
+
+<br>
+Рук-ль/Эксперт:
+<br>
+<select name=exp_list id=exp_list>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list}
+<option value={$key}>{$item}</option>
+{/foreach}
+</select>
+<script>$("#exp_list option[value='{$smarty.request.exp_list}']").prop('selected', true);</script>
+
+
+<br>
+Валюта:
+<a href="javascript:void(0);" onClick="$('.cur').prop('checked',true);">[+]</a>
+<a href="javascript:void(0);" onClick="$('.cur').prop('checked',false);">[-]</a>
+<table border=0>
+	<tr style="vertical-align:top">
+			<td>
+				<input
+					class="cur"
+					type=checkbox
+					id="cur_0"
+					name="cur[0]"
+					value="0"
+				>Не указана
+			</td>
+		{foreach key=k item=i from=$currencies}
+			<td>
+				<input
+					class="cur"
+					type=checkbox
+					id="cur_{$i.id}"
+					name="cur[{$i.id}]"
+					value="{$i.id}"
+				>{$i.name}
+			</td>
+		{/foreach}
+	</tr>
+</table>
+
+<script>
+{if $smarty.request.cur}
+{foreach key=k item=i from=$smarty.request.cur}
+$('#cur_{$i}').attr('checked',true);
+{/foreach}
+{else}
+{foreach key=k item=i from=$currencies}
+$('#cur_{$i}').attr('checked',true);
+{/foreach}
+{/if}
+</script>
+
+
+
+
+<br>
+<input type=submit value="Построить отчет">
+
+<br>
+
+<a href="?action=zat_reports&print=1&excel=1&filename=Сводные данные по отчетам о затратах">Экспорт в Excel</a>
+
+
+</form>
+
+
+
+
+
+{/if}
+
+
+
+{if $smarty.request.report_list eq 1 or $smarty.request.report_list eq 3 or $smarty.request.report_list eq 5}
+{assign var=total value=0}
+<table border=1 cellspacing=0 cellpadding=1>
+<tr style="font-weight:bold">
+<td>№ п/п</td>
+<td>Период</td>
+<td>Должность</td>
+<td>т.н.</td>
+<td>ФИО</td>
+<td>Валюта</td>
+<td>Всего</td>
+<td>Общий лимит</td>
+</tr>
+{foreach key=key item=item from=$zat_reports name=zat_reports}
+{assign var=total value=`$total+$item.total`}
+<tr {if $item.datauvol_txt} style="background-color:#8FFFFF" {/if}>
+<td align=center>{$smarty.foreach.zat_reports.iteration}</td>
+<td align=center>{$item.mt} {$item.y}</td>
+<td align=left>{$item.pos_name}</td>
+<td align=left>{$item.tn}</td>
+<td align=left>{$item.fio} {if $item.datauvol_txt}(уволен {$item.datauvol_txt}){/if}</td>
+<td align=center>{$item.valuta}</td>
+<td align=right {if ($item.limitkom+$item.limittrans-$item.total)<0} style="font-weight:bold;color:red" {/if} >{$item.total|num:2}</td>
+<td align=right>{$item.limitkom+$item.limittrans|num:2}</td>
+</tr>
+{/foreach}
+{foreach key=key item=item from=$zat_reports_total}
+<tr style="font-weight:bold">
+<td colspan=6>Итого</td>
+<td align=right>{$item.total|num:2}</td>
+<td align=right>{$item.total_limit|num:2}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+
+{if $smarty.request.report_list eq 2 or $smarty.request.report_list eq 4 or $smarty.request.report_list eq 6}
+{assign var=total value=0}
+<table border=1 cellspacing=0 cellpadding=1>
+<tr style="font-weight:bold">
+<td>№ п/п</td>
+<td>Период</td>
+<td>Должность</td>
+<td>т.н.</td>
+<td>ФИО</td>
+<td>Валюта</td>
+<td>Бензин, л</td>
+<td>Бензин</td>
+<td>Масло</td>
+<td>Мойка</td>
+<td>Автосервис</td>
+<td>Расходы на стоянку</td>
+<td>Суточные</td>
+<td>Питание</td>
+<td>Стоимость гостиницы</td>
+<td>Трансп. расходы</td>
+<td>Аморт.</td>
+<td>Представительские расходы</td>
+<td>Канцелярия</td>
+<td>Объявления в СМИ</td>
+<td>Почта</td>
+<td>Конференцзал</td>
+<td>Питание участников тренинга</td>
+<td>ЕСВ</td>
+<td>Единый налог</td>
+<td>Оплата услуг ведения счета 	</td>
+<td>Мобильная связь</td>
+<td>Всего</td>
+<td>Общий лимит</td>
+</tr>
+{foreach key=key item=item from=$zat_reports name=zat_reports}
+<tr {if $item.datauvol_txt} style="background-color:#8FFFFF" {/if}>
+<td align=center>{$smarty.foreach.zat_reports.iteration}</td>
+<td align=center>{$item.mt} {$item.y}</td>
+<td align=left>{$item.pos_name}</td>
+<td align=left>{$item.tn}</td>
+<td align=left>{$item.fio} {if $item.datauvol_txt}(уволен {$item.datauvol_txt}){/if}</td>
+<td align=center>{$item.valuta}</td>
+<td align=right>{$item.pet_vol|num:2}</td>
+<td align=right>{$item.pet_sum|num:2}</td>
+<td align=right>{$item.oil_sum|num:2}</td>
+<td align=right>{$item.wash|num:2}</td>
+<td align=right>{$item.service|num:2}</td>
+<td align=right>{$item.parking|num:2}</td>
+<td align=right>{$item.daily_cost|num:2}</td>
+<td align=right>{$item.food|num:2}</td>
+<td align=right>{$item.hotel|num:2}</td>
+<td align=right>{$item.transport|num:2}</td>
+<td align=right>{$item.amort|num:2}</td>
+<td align=right>{$item.present_cost|num:2}</td>
+<td align=right>{$item.stationery|num:2}</td>
+<td align=right>{$item.media_advert|num:2}</td>
+<td align=right>{$item.mail|num:2}</td>
+<td align=right>{$item.conference|num:2}</td>
+<td align=right>{$item.training_food|num:2}</td>
+<td align=right>{$item.esv|num:2}</td>
+<td align=right>{$item.single_tax|num:2}</td>
+<td align=right>{$item.account_payments|num:2}</td>
+<td align=right>{$item.mobile|num:2}</td>
+<td align=right {if ($item.limitkom+$item.limittrans-$item.total)<0} style="font-weight:bold;color:red" {/if} >{$item.total|num:2}</td>
+<td align=right>{$item.limitkom+$item.limittrans|num:2}</td>
+</tr>
+{/foreach}
+{foreach key=key item=item from=$zat_reports_total}
+<tr style="font-weight:bold">
+<td colspan=6>Итого</td>
+<td align=right>{$item.pet_vol|num:2}</td>
+<td align=right>{$item.pet_sum|num:2}</td>
+<td align=right>{$item.oil_sum|num:2}</td>
+<td align=right>{$item.wash|num:2}</td>
+<td align=right>{$item.service|num:2}</td>
+<td align=right>{$item.parking|num:2}</td>
+<td align=right>{$item.daily_cost|num:2}</td>
+<td align=right>{$item.food|num:2}</td>
+<td align=right>{$item.hotel|num:2}</td>
+<td align=right>{$item.transport|num:2}</td>
+<td align=right>{$item.amort|num:2}</td>
+<td align=right>{$item.present_cost|num:2}</td>
+<td align=right>{$item.stationery|num:2}</td>
+<td align=right>{$item.media_advert|num:2}</td>
+<td align=right>{$item.mail|num:2}</td>
+<td align=right>{$item.conference|num:2}</td>
+<td align=right>{$item.training_food|num:2}</td>
+<td align=right>{$item.esv|num:2}</td>
+<td align=right>{$item.single_tax|num:2}</td>
+<td align=right>{$item.account_payments|num:2}</td>
+<td align=right>{$item.mobile|num:2}</td>
+<td align=right>{$item.total|num:2}</td>
+<td align=right>{$item.total_limit|num:2}</td>
+</tr>
+{/foreach}
+</table>
+{/if}
+
+
+
+
+
