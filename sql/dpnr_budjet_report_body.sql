@@ -7,7 +7,7 @@
          scname,
          SUM (b.plan) plan,
          SUM (b.fakt) fakt,
-         MAX (comm) comm,
+         /*MAX (comm)*/null comm,
          DECODE (
             (SELECT SUM (plan_sum)
                FROM dpnr_budjet_head h,

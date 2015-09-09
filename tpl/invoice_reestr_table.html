@@ -45,14 +45,14 @@
 	{if not $smarty.request.print}
 	<td style="text-align: center;">
 	{if $item.ok_fm neq 1}
-		{if $is_mkk or $is_rmkk or $is_fin_man}
+		{if $is_mkk or $is_rmkk or $is_fin_man or $is_admin}
 			<input type=checkbox name=del[{$item.id}] value={$item.id}>
 		{/if}
 	{/if}
 	</td>
 	<td>
 	{if $item.ok_fm neq 1}
-		{if $is_mkk or $is_rmkk or $is_fin_man}
+		{if $is_mkk or $is_rmkk or $is_fin_man or $is_admin}
 			<a target=_blank href="?action=invoice_detail&id={$item.id}">Привязать</a>
 		{/if}
 	{/if}

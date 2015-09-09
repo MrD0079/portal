@@ -13,6 +13,7 @@
       <td>№ п/п<br>[удал.]</td>
       <td>Заказчик<br></td>
       <td>Работа по специи<br></td>
+      <td colspan=6>Отчетность</td>
       <td style="background-color: rgb(204, 255, 255);">План по МР, мин<br></td>
       <td style="background-color: rgb(204, 255, 255);">Факт по МР, мин<br></td>
       <td style="background-color: rgb(204, 255, 255);">Отклонение МР, мин<br></td>
@@ -68,7 +69,7 @@
 			{/if}
 			</b>
 		</td>
-		<td colspan=12></td>
+		<td colspan=18></td>
 	</tr>
 		{foreach key=k1 item=i1 from=$i.data name=i1}
 
@@ -88,7 +89,7 @@
 				<br>
 				{$i1.head.tz_address}
 			</td>
-			<td colspan=7></td>
+			<td colspan=13></td>
 			<td rowspan={$s1+1} {if $i1.total.is_red}bgcolor="red"{else}style="background-color: rgb(153, 255, 153);"{/if}>
 				{if $i1.total.plan > 10 or $i1.total.vv	eq 1}
 					{if $i1.head.in_out}
@@ -117,6 +118,25 @@
 				{if not $smarty.request.print}
 					<!--{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dates_list2}&spec_id={$i2.spec_id}">Специя</a>{/if}-->
 					{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$i.head.dt}&spec_id={$i2.spec_id}">Специя</a>{/if}
+				{/if}
+			</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep1}height:36px;width:36px;background-color:{$i2.reminders.rep1.color};{/if}">{if $i2.reminders.rep1}<img style="height:30px;width:30px;" src="design/mrc1.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep2}height:36px;width:36px;background-color:{$i2.reminders.rep2.color};{/if}">{if $i2.reminders.rep2}<img style="height:30px;width:30px;" src="design/mrc2.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep3}height:36px;width:36px;background-color:{$i2.reminders.rep3.color};{/if}">{if $i2.reminders.rep3}<img style="height:30px;width:30px;" src="design/mrc3.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep4}height:36px;width:36px;background-color:{$i2.reminders.rep4.color};{/if}">{if $i2.reminders.rep4}<img style="height:30px;width:30px;" src="design/mrc4.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep5}height:36px;width:36px;background-color:{$i2.reminders.rep5.color};{/if}">{if $i2.reminders.rep5}<img style="height:30px;width:30px;" src="design/mrc5.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep6}height:36px;width:36px;background-color:{$i2.reminders.rep6.color};{/if}">
+				{if $i2.reminders.rep6}
+
+				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i2.spec_id}').show();">
+					<img style="height:29px;width:29px;" src="design/mrc6.png">
+				</div>
+				<div style="display:none;width:300px;" id="text_{$i2.spec_id}">{$i2.reminders.rep6.text}</div>
+				<script>
+				/*$('#div{$i2.spec_id}').hide();*/
+				</script>
+
+					<!--<span title="{$i2.reminders.rep6.text}"><img src="design/mrc6.png"></span>-->
 				{/if}
 			</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_mr}</td>
@@ -173,7 +193,7 @@
 		{/foreach}
 {/foreach}
     <tr style="text-align: center;font-weight:bold">
-      <td colspan=5>ИТОГО</td>
+      <td colspan=11>ИТОГО</td>
       <td>{$rb_total.day_time_mr}</td>
       <td>{$rb_total.mr_fakt}</td>
       <td>{$rb_total.mr_delta}</td>

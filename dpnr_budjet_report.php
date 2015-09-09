@@ -39,6 +39,7 @@ $res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('head', $res);
 $sql = rtrim(file_get_contents('sql/dpnr_budjet_report_body.sql'));
 $sql=stritr($sql,$p);
+//echo $sql;
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($res as $k=>$v)
 {

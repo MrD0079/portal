@@ -17,6 +17,7 @@
 		<td>Адрес E-Mail</td>
 		<td>Привязка областей</td>
 		<td>Привязка сетей</td>
+		<td>Удалить</td>
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 	<tr style="font-weight:bold">
@@ -41,6 +42,7 @@
 		<td style="text-align:center"><input name=email[{$i1.login}] size=50 value="{$i1.email|escape}"></td>
 		<td style="text-align:left"><a target=_blank href="?action=routes_logins_oblast&login={$i1.login}">Привязка областей</a></td>
 		<td style="text-align:left"><a target=_blank href="?action=routes_logins_nets&login={$i1.login}">Привязка сетей</a></td>
+		<td style="text-align:center"><input type=checkbox name=del[{$i1.login}]></td>
 	</tr>
 	{/foreach}
 	{/foreach}

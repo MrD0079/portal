@@ -2,7 +2,7 @@
 SELECT SUM (h.plan_weight) plan_weight,
        SUM (h.plan_sum) plan_sum,
        SUM (h.plan_sume) plan_sume,
-       SUM (ms.fakt_weight) fakt_weight,
+       SUM (ms.fakt_weight)/1000 fakt_weight,
        SUM (ms.fakt_sum) fakt_sum,
        SUM (ms.fakt_sume) fakt_sume
   FROM dpnr_budjet_head h,

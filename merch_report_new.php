@@ -113,6 +113,7 @@ if (isset($r["id"]))
 
 			$sqlr = rtrim(file_get_contents('sql/merch_report_new_routes_body_reminders.sql'));
 			$p=array(":route"=>$r["id"],":ag_id"=>$v["ag_id"],":kodtp"=>$v["kodtp"],":dates_list"=>"'".$_REQUEST["dates_list"]."'");
+//print_r($p);
 			$sqlr=stritr($sqlr,$p);
 			$rb1r = $db->getAll($sqlr, null, null, null, MDB2_FETCHMODE_ASSOC);
 			//echo $sql;

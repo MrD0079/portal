@@ -53,6 +53,13 @@ if (isset($_REQUEST["save_data"]))
 			Table_Update("routes_agents_pwd",array("login"=>$k),array("is_super"=>$v));
 		}
 	}
+	if (isset($_REQUEST["del"]))
+	{
+		foreach ($_REQUEST["del"] as $k=>$v)
+		{
+			Table_Update("routes_agents_pwd",array("login"=>$k),null);
+		}
+	}
 }
 
 $sql = rtrim(file_get_contents('sql/routes_agents_pwd.sql'));

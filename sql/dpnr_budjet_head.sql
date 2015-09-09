@@ -8,7 +8,7 @@ SELECT h.ok_chief,
        h.plan_weight,
        h.plan_sum,
        h.plan_sume,
-       s.qty fakt_weight,
+       s.qty/1000 fakt_weight,
        s.summ_dol fakt_sum,
        s.summ_evr fakt_sume,
        (SELECT parent

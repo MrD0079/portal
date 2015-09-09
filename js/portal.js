@@ -24,12 +24,22 @@ function init_form()
 				dateFormat: 'dd.mm.yy',
 			}
 		);
-		$(".datepicker").datepicker();
+		$(".datepicker").not(".hasDatepicker").datepicker();
 		$(".datepicker").datepicker({beforeShowDay:function(date){return[!DateDisabled(date)];}});
 		$(".datepicker").datepicker( "option", "showOtherMonths", true);
 		//$(".datepicker").datepicker( "option", "showButtonPanel", true);
-		var dt = new Date();
-		$(".datepicker_prev1").datepicker( "option", "minDate", new Date(dt.getFullYear(),dt.getMonth(),1));
+		/*
+		{literal}
+		$(
+			function()
+			{
+				var dt = new Date();
+				dt.setMonth(dt.getMonth()-1);
+				$(".datepicker_prev1").datepicker( "option", "minDate", dt);
+			}
+		)
+		{/literal}
+		*/
 		$(".datepicker_3_0").datepicker( "option", "minDate", -3);
 		$(".datepicker_3_0").datepicker( "option", "maxDate", +0);
 		$(".datepicker_7_0").datepicker( "option", "minDate", -7);
@@ -37,6 +47,8 @@ function init_form()
 		$(".datepicker").attr('readonly','readonly');
 	});
 }
+
+init_form();
 
 $(function(){$("form").submit(function(){var error=0;$(this).find(":input").each(function(){if(!$(this).attr("disabled")&&$(this).attr("required")&&!$(this).val()){/*$(this).css('border', 'red 1px solid');*/error=1;}else{/*$(this).css('border', 'gray 1px solid');*/}});if(error==0){return true;}else{var error_msg = "Please fill in the required fields";alert(error_msg);return false;}});});
 function blink_text(el){op=.9;/*$('#'+el).html('<p id="loadwait">Load data ...</p>');*/x=setInterval(function(){op=.9-op;$('#'+el).animate({opacity:.1+op});},500);return x;}

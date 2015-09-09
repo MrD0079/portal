@@ -20,6 +20,16 @@
 	{/foreach}
 	</select>
 	<script>
+		{literal}
+		$(
+			function()
+			{
+				var dt = new Date();
+				dt.setMonth(dt.getMonth()-1);
+				$(".datepicker_prev1").datepicker( "option", "minDate", dt);
+			}
+		)
+		{/literal}
 		$("#week_list option[value='{$smarty.request.dates_list2}']").prop('selected', true);
 		$("#dates_list2 option[value='{$smarty.request.dates_list2}']").prop('selected', true);
 		$("#per_day").val('{$smarty.request.dates_list2}');

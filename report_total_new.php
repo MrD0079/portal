@@ -140,6 +140,29 @@ if (isset($_REQUEST["select"]))
 		$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["head"]=$v;
 		$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]=$v;
 	}
+//print_r($rb);
+		foreach ($rb as $k=>$v)
+		{
+//			$d[$v["kodtp"]]["head"]=$v;
+//			$d[$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]=$v;
+
+
+
+			$sqlr = rtrim(file_get_contents('sql/merch_report_new_routes_body_reminders.sql'));
+			$pr=array(":route"=>$v["head_id"],":ag_id"=>$v["ag_id"],":kodtp"=>$v["kodtp"],":dates_list"=>"'".$v["dt"]."'");
+			$sqlr=stritr($sqlr,$pr);
+//print_r($pr);
+			$rb1r = $db->getAll($sqlr, null, null, null, MDB2_FETCHMODE_ASSOC);
+			//echo $sql;
+			$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']=null;
+			foreach ($rb1r as $kr=>$vr)
+			{
+				$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']]=$vr;
+			}
+/*
+*/		}
+//print_r($d);
+
 
 	$sql = rtrim(file_get_contents('sql/report_total_new1.sql'));
 	$sql=stritr($sql,$p);
