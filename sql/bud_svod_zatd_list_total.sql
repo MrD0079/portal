@@ -353,7 +353,7 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                 (SELECT COUNT (*)
                                                    FROM bud_ru_zay_accept
                                                   WHERE     z_id = z.id
-                                                        AND accepted = 464262),
+                                                        AND accepted = 2),
                                                 0, 0,
                                                 1)
                                                 deleted,
@@ -369,7 +369,7 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                                     WHERE     z_id =
                                                                                  z.id
                                                                           AND accepted =
-                                                                                 464262),
+                                                                                 2),
                                                                   0),
                                                                0, (SELECT MAX (
                                                                              accept_order)
@@ -382,7 +382,7 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                                  WHERE     z_id =
                                                                               z.id
                                                                        AND accepted =
-                                                                              464262)))
+                                                                              2)))
                                                 current_accepted_id,
                                              st.name st_name,
                                              kat.name kat_name,
@@ -469,7 +469,7 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                         FROM user_list
                                                        WHERE tn = :tn) = 1)
                                              AND u.tn = DECODE (:db, 0, u.tn, :db)) z
-                               WHERE current_accepted_id = 464261 AND deleted = 0
+                               WHERE current_accepted_id = 1 AND deleted = 0
                             GROUP BY z.fil, z.funds, TRUNC (z.dt_start, 'mm')) zay,
                            (  SELECT t.dt period,
                                      z.fil,
@@ -579,7 +579,7 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                                 WHERE     z_id =
                                                                              z.id
                                                                       AND accepted =
-                                                                             464262),
+                                                                             2),
                                                               0),
                                                            0, (SELECT MAX (
                                                                          accept_order)
@@ -590,8 +590,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                               FROM bud_ru_zay_accept
                                                              WHERE     z_id = z.id
                                                                    AND accepted =
-                                                                          464262))) =
-                                            464261
+                                                                          2))) =
+                                            1
                                      AND z.valid_no = 0
                                      AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE (
                                                                              :sd,

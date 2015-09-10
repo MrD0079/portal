@@ -19,7 +19,7 @@ if (isset($_REQUEST["save"]))
 			$sql=stritr($sql,$params);
 			$h = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-			if ($v["accepted"]==464261)
+			if ($v["accepted"]==1)
 			{
 				if ($h["bud_ru_zay_ok"]==1)
 				{
@@ -81,7 +81,7 @@ if (isset($_REQUEST["save"]))
 					send_mail($email,$subj,$text);
 				}
 			}
-			if ($v["accepted"]==464262)
+			if ($v["accepted"]==2)
 			{
 				$subj="Отклонение заявки на проведение активности №".$h["id"]." от ".$h["created"];
 				audit ("отклонил заявку на проведение активности №".$h["id"],"bud_ru_zay");
@@ -102,7 +102,7 @@ if (isset($_REQUEST["save"]))
 					send_mail($email,$subj,$text);
 				}
 			}
-			if ($v["accepted"]!=464260)
+			if ($v["accepted"]!=0)
 			{
 				echo "<hr>";
 			}
@@ -146,9 +146,9 @@ if (isset($_REQUEST["add_chat"]))
 
 
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_types.sql'));
+$sql=rtrim(file_get_contents('sql/accept_types.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_accept_types', $data);
+$smarty->assign('accept_types', $data);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_accept.sql'));
 $params=array(':tn' => $tn,':wait4myaccept'=>$_REQUEST['wait4myaccept']);

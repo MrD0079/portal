@@ -306,7 +306,7 @@
                                           (SELECT MAX (accept_order)
                                              FROM bud_ru_zay_accept
                                             WHERE     z_id = z1.id
-                                                  AND rep_accepted = 464262),
+                                                  AND rep_accepted = 2),
                                           0),
                                        0, (SELECT MAX (accept_order)
                                              FROM bud_ru_zay_accept
@@ -315,11 +315,11 @@
                                        (SELECT MAX (accept_order)
                                           FROM bud_ru_zay_accept
                                          WHERE     z_id = z1.id
-                                               AND rep_accepted = 464262))) =
-                        464261
+                                               AND rep_accepted = 2))) =
+                        1
                  AND DECODE ( (SELECT COUNT (*)
                                  FROM bud_ru_zay_accept
-                                WHERE z_id = z1.id AND rep_accepted = 464262),
+                                WHERE z_id = z1.id AND rep_accepted = 2),
                              0, 0,
                              1) = 0
                  AND DECODE (:fil, 0, z1.fil, :fil) = z1.fil

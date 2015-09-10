@@ -189,17 +189,17 @@
 		<td width=200px>Комментарии / Уточнения</td>
 	</tr>
 	{foreach key=k item=i from=$d}
-	{if $i.head.current_status eq 464260}{assign var=color value="#FFFF66"}{/if}
-	{if $i.head.current_status eq 464261}{assign var=color value="#66FF66"}{/if}
-	{if $i.head.current_status eq 464262}{assign var=color value="#FFCC99"}{/if}
+	{if $i.head.current_status eq 0}{assign var=color value="#FFFF66"}{/if}
+	{if $i.head.current_status eq 1}{assign var=color value="#66FF66"}{/if}
+	{if $i.head.current_status eq 2}{assign var=color value="#FFCC99"}{/if}
 	{if $i.head.valid_no eq 1}{assign var=color value="#66FFFF"}{/if}
 	<tr style="background-color:{$color}">
 		<td style="text-align:center">
 			{$i.head.id}
 			</br>
-			{if ($i.head.creator_tn eq $tn or $is_do) and ($i.head.current_status eq 464262 or $i.head.not_seen eq 1)}<nobr>удал.<input type=checkbox name=del[] value={$i.head.id}></nobr>{/if}
+			{if ($i.head.creator_tn eq $tn or $is_do) and ($i.head.current_status eq 2 or $i.head.not_seen eq 1)}<nobr>удал.<input type=checkbox name=del[] value={$i.head.id}></nobr>{/if}
 			</br>
-			{if ($i.head.creator_tn eq $tn and ($i.head.current_status eq 464262 or $i.head.not_seen eq 1)) or ($is_do and $i.head.current_status neq 464261)}<a target=_blank href="?action=ac_new&id={$i.head.id}">ред.</a>{/if}
+			{if ($i.head.creator_tn eq $tn and ($i.head.current_status eq 2 or $i.head.not_seen eq 1)) or ($is_do and $i.head.current_status neq 1)}<a target=_blank href="?action=ac_new&id={$i.head.id}">ред.</a>{/if}
 		</td>
 		<td>
 			<b>Дата создания:</b> {$i.head.created}<br>
@@ -248,7 +248,7 @@
 				<font style="color:blue">{$i.head.valid_lu}</font>
 				<br>
 			{/if}
-			{if $i.head.current_status eq 464261 and (($is_do and $i.head.valid_no neq 1) or $is_admin)}
+			{if $i.head.current_status eq 1 and (($is_do and $i.head.valid_no neq 1) or $is_admin)}
 				<input onclick="
 				$('#valid_no_{$i.head.id}').val(this.checked?1:0);
 				$('#valid_text_{$i.head.id}').attr('disabled',!this.checked);

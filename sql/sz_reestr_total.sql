@@ -1,12 +1,12 @@
 /* Formatted on 21.10.2014 10:30:02 (QP5 v5.227.12220.39724) */
   SELECT current_status,
          (SELECT name1
-            FROM sz_accept_types
+            FROM accept_types
            WHERE id = z.current_status)
             current_status_txt,
          COUNT (*) c
     FROM (SELECT DISTINCT
-                 z.id, NVL (current_accepted_id, 464260) current_status
+                 z.id, NVL (current_accepted_id, 0) current_status
             FROM (SELECT sz.id,
                          TO_CHAR (sz.created, 'dd.mm.yyyy hh24:mi:ss') created,
                          sz.created created_dt,
@@ -27,12 +27,12 @@
                          szat.name accepted_name,
                          DECODE (
                             sz_accept.accepted,
-                            464260, NULL,
+                            0, NULL,
                             TO_CHAR (sz_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                             accepted_date,
                          DECODE ( (SELECT COUNT (*)
                                      FROM sz_accept
-                                    WHERE sz_id = sz.id AND accepted = 464262),
+                                    WHERE sz_id = sz.id AND accepted = 2),
                                  0, 0,
                                  1)
                             deleted,
@@ -46,16 +46,16 @@
                                               (SELECT MAX (accept_order)
                                                  FROM sz_accept
                                                 WHERE     sz_id = sz.id
-                                                      AND accepted = 464262),
+                                                      AND accepted = 2),
                                               0),
                                            0, (SELECT MAX (accept_order)
                                                  FROM sz_accept
-                                                WHERE sz_id = sz.id /* AND accepted <> 464260*/
+                                                WHERE sz_id = sz.id /* AND accepted <> 0*/
                                                                    ),
                                            (SELECT MAX (accept_order)
                                               FROM sz_accept
                                              WHERE     sz_id = sz.id
-                                                   AND accepted = 464262)))
+                                                   AND accepted = 2)))
                             current_accepted_id,
                          (SELECT lu
                             FROM sz_accept
@@ -66,16 +66,16 @@
                                               (SELECT MAX (accept_order)
                                                  FROM sz_accept
                                                 WHERE     sz_id = sz.id
-                                                      AND accepted = 464262),
+                                                      AND accepted = 2),
                                               0),
                                            0, (SELECT MAX (accept_order)
                                                  FROM sz_accept
-                                                WHERE sz_id = sz.id /* AND accepted <> 464260*/
+                                                WHERE sz_id = sz.id /* AND accepted <> 0*/
                                                                    ),
                                            (SELECT MAX (accept_order)
                                               FROM sz_accept
                                              WHERE     sz_id = sz.id
-                                                   AND accepted = 464262)))
+                                                   AND accepted = 2)))
                             current_accepted_date,
                          (SELECT COUNT (tn)
                             FROM sz_accept
@@ -136,7 +136,7 @@
                          DECODE (
                             (SELECT COUNT (*)
                                FROM sz_accept
-                              WHERE sz_id = sz.id AND accepted <> 464260),
+                              WHERE sz_id = sz.id AND accepted <> 0),
                             0, 1,
                             0)
                             not_seen,
@@ -151,7 +151,7 @@
                     FROM sz,
                          sz_accept,
                          sz_executors,
-                         sz_accept_types szat,
+                         accept_types szat,
                          sz_files f,
                          user_list u,
                          user_list u1,
@@ -186,21 +186,21 @@
                                                                 WHERE     sz_id =
                                                                              sz.id
                                                                       AND accepted =
-                                                                             464262),
+                                                                             2),
                                                               0),
                                                            0, (SELECT MAX (
                                                                          accept_order)
                                                                  FROM sz_accept
                                                                 WHERE sz_id =
-                                                                         sz.id /* AND accepted <> 464260*/
+                                                                         sz.id /* AND accepted <> 0*/
                                                                               ),
                                                            (SELECT accept_order
                                                               FROM sz_accept
                                                              WHERE     sz_id =
                                                                           sz.id
                                                                    AND accepted =
-                                                                          464262))),
-                                         464260, NULL,
+                                                                          2))),
+                                         0, NULL,
                                          (SELECT lu
                                             FROM sz_accept
                                            WHERE     sz_id = sz.id
@@ -212,20 +212,20 @@
                                                                 WHERE     sz_id =
                                                                              sz.id
                                                                       AND accepted =
-                                                                             464262),
+                                                                             2),
                                                               0),
                                                            0, (SELECT MAX (
                                                                          accept_order)
                                                                  FROM sz_accept
                                                                 WHERE sz_id =
-                                                                         sz.id /* AND accepted <> 464260*/
+                                                                         sz.id /* AND accepted <> 0*/
                                                                               ),
                                                            (SELECT accept_order
                                                               FROM sz_accept
                                                              WHERE     sz_id =
                                                                           sz.id
                                                                    AND accepted =
-                                                                          464262)))))) BETWEEN TO_DATE (
+                                                                          2)))))) BETWEEN TO_DATE (
                                                                                                   :dates_list1,
                                                                                                   'dd.mm.yyyy')
                                                                                            AND TO_DATE (
@@ -234,14 +234,14 @@
                          AND DECODE (:sz_id, 0, sz.id, :sz_id) = sz.id) z
            WHERE     DECODE (:status,
                              0, 0,
-                             1, 464261,
-                             2, 464260,
+                             1, 1,
+                             2, 0,
                              3, 0,
                              4, 0) =
                         DECODE (:status,
                                 0, 0,
                                 1, current_accepted_id,
-                                2, NVL (current_accepted_id, 464260),
+                                2, NVL (current_accepted_id, 0),
                                 3, 0,
                                 4, 0)
                  AND DECODE (:status, 3, 1, 0) =

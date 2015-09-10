@@ -19,7 +19,7 @@
                                          (SELECT MAX (accept_order)
                                             FROM ac_accept
                                            WHERE     ac_id = ac.id
-                                                 AND accepted = 464262),
+                                                 AND accepted = 2),
                                          0),
                                       0, (SELECT MAX (accept_order)
                                             FROM ac_accept
@@ -27,8 +27,8 @@
                                       (SELECT MAX (accept_order)
                                          FROM ac_accept
                                         WHERE     ac_id = ac.id
-                                              AND accepted = 464262))),
-                    464260)
+                                              AND accepted = 2))),
+                    0)
                     current_status,
                  (SELECT tn
                     FROM ac_accept
@@ -36,7 +36,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM ac_accept
-                                  WHERE ac_id = ac.id AND accepted = 464260))
+                                  WHERE ac_id = ac.id AND accepted = 0))
                     current_acceptor_tn,
                  fn_getname (
                     (SELECT tn
@@ -45,7 +45,7 @@
                             AND accept_order =
                                    (SELECT MIN (accept_order)
                                       FROM ac_accept
-                                     WHERE ac_id = ac.id AND accepted = 464260)))
+                                     WHERE ac_id = ac.id AND accepted = 0)))
                     current_acceptor_name,
                  ac_accept.tn acceptor_tn,
                  fn_getname ( ac_accept.tn) acceptor_name,
@@ -54,12 +54,12 @@
                  ac_accept.accept_order,
                  acat.name accepted_name,
                  DECODE (ac_accept.accepted,
-                         464260, NULL,
+                         0, NULL,
                          TO_CHAR (ac_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                     accepted_date,
                  DECODE ( (SELECT COUNT (*)
                              FROM ac_accept
-                            WHERE ac_id = ac.id AND accepted = 464262),
+                            WHERE ac_id = ac.id AND accepted = 2),
                          0, 0,
                          1)
                     deleted,
@@ -69,7 +69,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM ac_accept
-                                  WHERE ac_id = ac.id AND accepted = 464260))
+                                  WHERE ac_id = ac.id AND accepted = 0))
                     current_accept_id,
                  (SELECT accept_order
                     FROM ac_accept
@@ -77,7 +77,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM ac_accept
-                                  WHERE ac_id = ac.id AND accepted = 464260))
+                                  WHERE ac_id = ac.id AND accepted = 0))
                     current_accept_order,
                  (SELECT id
                     FROM ac_accept
@@ -110,7 +110,7 @@
                                                                   WHERE     ac_id =
                                                                                ac.id
                                                                         AND accepted =
-                                                                               464260))))
+                                                                               0))))
                          AND tn = :tn)
                     allow_text,
                  u.pos_name creator_pos_name,
@@ -151,7 +151,7 @@
                     me_math
             FROM ac,
                  ac_accept,
-                 ac_accept_types acat,
+                 accept_types acat,
                  user_list u,
                  user_list u1,
                  user_list u2,
@@ -184,7 +184,7 @@
                                         (SELECT MIN (accept_order)
                                            FROM ac_accept
                                           WHERE     ac_id = ac.id
-                                                AND accepted = 464260)) = :tn
+                                                AND accepted = 0)) = :tn
                       OR ac.tn = :tn
                       OR ( (SELECT accept_order
                               FROM ac_accept
@@ -193,13 +193,13 @@
                                           (SELECT MIN (accept_order)
                                              FROM ac_accept
                                             WHERE     ac_id = ac.id
-                                                  AND accepted = 464260)) >=
+                                                  AND accepted = 0)) >=
                              (SELECT accept_order
                                 FROM ac_accept
                                WHERE ac_id = ac.id AND tn = :tn)))
                  AND DECODE ( (SELECT COUNT (*)
                                  FROM ac_accept
-                                WHERE ac_id = ac.id AND accepted = 464262),
+                                WHERE ac_id = ac.id AND accepted = 2),
                              0, 0,
                              1) = 0
                  AND NVL (
@@ -212,7 +212,7 @@
                                              (SELECT MAX (accept_order)
                                                 FROM ac_accept
                                                WHERE     ac_id = ac.id
-                                                     AND accepted = 464262),
+                                                     AND accepted = 2),
                                              0),
                                           0, (SELECT MAX (accept_order)
                                                 FROM ac_accept
@@ -220,8 +220,8 @@
                                           (SELECT MAX (accept_order)
                                              FROM ac_accept
                                             WHERE     ac_id = ac.id
-                                                  AND accepted = 464262))),
-                        464260) <> 464261
+                                                  AND accepted = 2))),
+                        0) <> 1
                  AND ac.vac1_pos = p1.pos_id(+)
                  AND ac.vac2_pos = p2.pos_id(+)
                  AND ac.vac3_pos = p3.pos_id(+)) z

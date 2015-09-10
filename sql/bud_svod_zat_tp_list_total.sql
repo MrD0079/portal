@@ -82,7 +82,7 @@ SELECT COUNT (*) c,
                                                        FROM bud_ru_zay_accept
                                                       WHERE     z_id = z.id
                                                             AND rep_accepted =
-                                                                   464262),
+                                                                   2),
                                                     0),
                                                  0, (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
@@ -93,8 +93,8 @@ SELECT COUNT (*) c,
                                                     FROM bud_ru_zay_accept
                                                    WHERE     z_id = z.id
                                                          AND rep_accepted =
-                                                                464262))) =
-                                  464261
+                                                                2))) =
+                                  1
                            AND DECODE (:st, 0, z.st, :st) = z.st
                   GROUP BY TRUNC (z.dt_start, 'mm'), tp.tp_kod) act_local,
                  (  SELECT period, SUM (z_fakt) zat, tp_kod
@@ -121,7 +121,7 @@ SELECT COUNT (*) c,
                                    DECODE (
                                       (SELECT COUNT (*)
                                          FROM bud_ru_zay_accept
-                                        WHERE z_id = z1.id AND accepted = 464262),
+                                        WHERE z_id = z1.id AND accepted = 2),
                                       0, 0,
                                       1)
                                       deleted,
@@ -136,7 +136,7 @@ SELECT COUNT (*) c,
                                                            FROM bud_ru_zay_accept
                                                           WHERE     z_id = z1.id
                                                                 AND accepted =
-                                                                       464262),
+                                                                       2),
                                                         0),
                                                      0, (SELECT MAX (
                                                                    accept_order)
@@ -146,7 +146,7 @@ SELECT COUNT (*) c,
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z1.id
                                                              AND accepted =
-                                                                    464262)))
+                                                                    2)))
                                       current_accepted_id
                               FROM bud_ru_zay z1
                              WHERE     z1.kat NOT IN (SELECT id
@@ -154,7 +154,7 @@ SELECT COUNT (*) c,
                                                        WHERE la = 1)
                                    AND z1.valid_no = 0
                                    AND DECODE (:st, 0, z1.st, :st) = z1.st)
-                     WHERE current_accepted_id = 464261 AND deleted = 0
+                     WHERE current_accepted_id = 1 AND deleted = 0
                   GROUP BY period, tp_kod) zay
            WHERE     zp.dt BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
                                AND TO_DATE (:ed, 'dd.mm.yyyy')

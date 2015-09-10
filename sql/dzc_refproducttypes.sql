@@ -1,0 +1,1 @@
+select * from dzc_refproducttypes order by producttype

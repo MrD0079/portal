@@ -96,15 +96,15 @@
                                NVL (
                                   (SELECT MAX (accept_order)
                                      FROM bud_ru_zay_accept
-                                    WHERE z_id = z.id AND accepted = 464262),
+                                    WHERE z_id = z.id AND accepted = 2),
                                   0),
                                0, (SELECT MAX (accept_order)
                                      FROM bud_ru_zay_accept
                                     WHERE z_id = z.id),
                                (SELECT MAX (accept_order)
                                   FROM bud_ru_zay_accept
-                                 WHERE z_id = z.id AND accepted = 464262))) =
-                464261
+                                 WHERE z_id = z.id AND accepted = 2))) =
+                1
          AND valid_no = 0
          AND TRUNC (z.dt_start, 'mm') = TO_DATE (:dt, 'dd.mm.yyyy')
 ORDER BY val_string, fil_name

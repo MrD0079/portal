@@ -13,7 +13,7 @@ SELECT COUNT (*) c,
                                        (SELECT accept_order
                                           FROM sz_accept
                                          WHERE     sz_id = sz.id
-                                               AND accepted = 464262),
+                                               AND accepted = 2),
                                        0),
                                     0, (SELECT MAX (accept_order)
                                           FROM sz_accept
@@ -21,8 +21,8 @@ SELECT COUNT (*) c,
                                     (SELECT accept_order
                                        FROM sz_accept
                                       WHERE     sz_id = sz.id
-                                            AND accepted = 464262))),
-                  464260)
+                                            AND accepted = 2))),
+                  0)
                   current_status,
                (SELECT tn
                   FROM sz_accept
@@ -30,7 +30,7 @@ SELECT COUNT (*) c,
                        AND accept_order =
                               (SELECT MIN (accept_order)
                                  FROM sz_accept
-                                WHERE sz_id = sz.id AND accepted = 464260))
+                                WHERE sz_id = sz.id AND accepted = 0))
                   current_acceptor_tn,
                (SELECT COUNT (*)
                   FROM sz_accept
@@ -39,4 +39,4 @@ SELECT COUNT (*) c,
           FROM sz) z
  WHERE     current_acceptor_tn = :tn
        AND accept_cnt > 0
-       AND current_status <> 464262
+       AND current_status <> 2

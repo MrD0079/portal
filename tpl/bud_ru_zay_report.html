@@ -323,9 +323,9 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 
 <form target="_self" method="POST" enctype="multipart/form-data">
 
-	{if $i.head.current_status eq 464260}{assign var=color value="#FFFF66"}{/if}
-	{if $i.head.current_status eq 464261}{assign var=color value="#66FF66"}{/if}
-	{if $i.head.current_status eq 464262}{assign var=color value="#FFCC99"}{/if}
+	{if $i.head.current_status eq 0}{assign var=color value="#FFFF66"}{/if}
+	{if $i.head.current_status eq 1}{assign var=color value="#66FF66"}{/if}
+	{if $i.head.current_status eq 2}{assign var=color value="#FFCC99"}{/if}
 	{if $i.head.valid_no eq 1}{assign var=color value="#66FFFF"}{/if}
 
 
@@ -394,9 +394,9 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			{/if}
 			<br>
 			<b>Подтверждение:</b>
-			{if $i.head.current_status eq 464260}<font style="background-color:#FFFF66">отчет на согласовании</font>{/if}
-			{if $i.head.current_status eq 464261}<font style="background-color:#66FF66">подтвержден</font>{/if}
-			{if $i.head.current_status eq 464262}<font style="background-color:#FFCC99">отклонен</font>{/if}
+			{if $i.head.current_status eq 0}<font style="background-color:#FFFF66">отчет на согласовании</font>{/if}
+			{if $i.head.current_status eq 1}<font style="background-color:#66FF66">подтвержден</font>{/if}
+			{if $i.head.current_status eq 2}<font style="background-color:#FFCC99">отклонен</font>{/if}
 			<br>
 			<b>Отчет заполнен: </b>
 			{if $i.head.creator_tn eq $tn and $i.head.not_seen}

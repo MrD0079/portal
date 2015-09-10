@@ -67,14 +67,14 @@
                                 zat.name accepted_name,
                                 DECODE (
                                    za.rep_accepted,
-                                   464260, NULL,
+                                   0, NULL,
                                    TO_CHAR (za.rep_lu, 'dd.mm.yyyy hh24:mi:ss'))
                                    accepted_date,
                                 DECODE (
                                    (SELECT COUNT (*)
                                       FROM bud_ru_zay_accept
                                      WHERE     z_id = z.id
-                                           AND rep_accepted = 464262),
+                                           AND rep_accepted = 2),
                                    0, 0,
                                    1)
                                    deleted,
@@ -88,7 +88,7 @@
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z.id
                                                              AND accepted =
-                                                                    464262),
+                                                                    2),
                                                      0),
                                                   0, (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
@@ -96,7 +96,7 @@
                                                   (SELECT MAX (accept_order)
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id = z.id
-                                                          AND accepted = 464262)))
+                                                          AND accepted = 2)))
                                    z_current_accepted_id,
                                 (SELECT rep_accepted
                                    FROM bud_ru_zay_accept
@@ -108,7 +108,7 @@
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z.id
                                                              AND rep_accepted =
-                                                                    464262),
+                                                                    2),
                                                      0),
                                                   0, (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
@@ -117,7 +117,7 @@
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id = z.id
                                                           AND rep_accepted =
-                                                                 464262)))
+                                                                 2)))
                                    current_accepted_id,
                                 (SELECT tn
                                    FROM bud_ru_zay_accept
@@ -127,7 +127,7 @@
                                                   FROM bud_ru_zay_accept
                                                  WHERE     z_id = z.id
                                                        AND rep_accepted =
-                                                              464260))
+                                                              0))
                                    current_acceptor_tn,
                                 (SELECT id
                                    FROM bud_ru_zay_accept
@@ -137,7 +137,7 @@
                                                   FROM bud_ru_zay_accept
                                                  WHERE     z_id = z.id
                                                        AND rep_accepted =
-                                                              464260))
+                                                              0))
                                    current_accept_id,
                                 (SELECT lu
                                    FROM bud_ru_zay_accept
@@ -149,7 +149,7 @@
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z.id
                                                              AND rep_accepted =
-                                                                    464262),
+                                                                    2),
                                                      0),
                                                   0, (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
@@ -158,7 +158,7 @@
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id = z.id
                                                           AND rep_accepted =
-                                                                 464262)))
+                                                                 2)))
                                    current_accepted_date,
                                 (SELECT COUNT (tn)
                                    FROM bud_ru_zay_accept
@@ -217,7 +217,7 @@
                                    (SELECT COUNT (*)
                                       FROM bud_ru_zay_accept
                                      WHERE     z_id = z.id
-                                           AND rep_accepted <> 464260),
+                                           AND rep_accepted <> 0),
                                    0, 1,
                                    0)
                                    not_seen,
@@ -250,7 +250,7 @@
                                 z.report_short
                            FROM bud_ru_zay z,
                                 bud_ru_zay_accept za,
-                                bud_ru_zay_accept_types zat,
+                                accept_types zat,
                                 user_list u,
                                 user_list u1,
                                 user_list u2,
@@ -284,7 +284,7 @@
                                                           AND TO_DATE (
                                                                  :dates_list2,
                                                                  'dd.mm.yyyy')) z
-                  WHERE     464261 = z_current_accepted_id
+                  WHERE     1 = z_current_accepted_id
                         AND report_data IS NOT NULL
                         AND :srok_ok =
                                DECODE (:srok_ok,
@@ -294,21 +294,21 @@
                                DECODE (:report_done_flt,
                                        0, 0,
                                        DECODE (report_done, NULL, 2, 1))
-         AND DECODE (:status,  0, 0,  1, 464261,  2, 464260,  3, 0,  4, 0) =
+         AND DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
                 DECODE (:status,
                         0, 0,
                         1, current_accepted_id,
-                        2, NVL (current_accepted_id, 464260),
+                        2, NVL (current_accepted_id, 0),
                         3, 0,
                         4, 0)
          AND DECODE (:status, 3, 1, 0) = DECODE (:status, 3, deleted, 0)
          AND DECODE (:status, 1, 0, 0) = DECODE (:status, 1, valid_no, 0)
          AND DECODE (:status, 4, 1, 0) = DECODE (:status, 4, valid_no, 0)
-/*         AND DECODE (:status,  0, 0,  1, 464261,  2, 464260,  3, 0) =
+/*         AND DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0) =
                 DECODE (:status,
                         0, 0,
                         1, current_accepted_id,
-                        2, NVL (current_accepted_id, 464260),
+                        2, NVL (current_accepted_id, 0),
                         3, 0)
          AND DECODE (:status, 3, 1, 0) = DECODE (:status, 3, deleted, 0)
          AND DECODE (:status, 0, 0, 0) = DECODE (:status, 0, valid_no, 0)

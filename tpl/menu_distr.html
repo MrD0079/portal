@@ -42,3 +42,15 @@
 			<li><a href="?action=bud_fil_discount">Скидки дистрибуторов</a></li>
 
 			{/if}
+
+			{if ($is_traid or $is_traid_kk or $is_admin or $is_do) and $cnt_kod neq 'nr'}
+
+			<li><a href="javascript:void(0);"><span class="dir">Компенсации</span></a>
+				<ul>
+					<li><a href="?action=dzc_new">Заявка на компенсацию</a></li>
+					<li><a href="?action=dzc_accept">Согласование заявок</a></li>
+					<li><a href="?action=dzc_reestr">Реестр заявок</a></li>
+				</ul>
+			</li>
+
+			{/if}

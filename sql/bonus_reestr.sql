@@ -16,14 +16,14 @@
                            NVL (
                               (SELECT accept_order
                                  FROM sz_accept
-                                WHERE sz_id = h.sz_id AND accepted = 464262),
+                                WHERE sz_id = h.sz_id AND accepted = 2),
                               0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = h.sz_id),
                            (SELECT accept_order
                               FROM sz_accept
-                             WHERE sz_id = h.sz_id AND accepted = 464262)))
+                             WHERE sz_id = h.sz_id AND accepted = 2)))
             sz_status_id,
          (SELECT lu
             FROM sz_accept
@@ -33,18 +33,18 @@
                            NVL (
                               (SELECT accept_order
                                  FROM sz_accept
-                                WHERE sz_id = h.sz_id AND accepted = 464262),
+                                WHERE sz_id = h.sz_id AND accepted = 2),
                               0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = h.sz_id),
                            (SELECT accept_order
                               FROM sz_accept
-                             WHERE sz_id = h.sz_id AND accepted = 464262)))
+                             WHERE sz_id = h.sz_id AND accepted = 2)))
             sz_accepted,
          DECODE ( (SELECT COUNT (*)
                      FROM sz_accept
-                    WHERE sz_id = h.sz_id AND accepted <> 464260),
+                    WHERE sz_id = h.sz_id AND accepted <> 0),
                  0, 1,
                  0)
             sz_not_seen
@@ -65,15 +65,15 @@
                                NVL (
                                   (SELECT accept_order
                                      FROM sz_accept
-                                    WHERE sz_id = h.sz_id AND accepted = 464262),
+                                    WHERE sz_id = h.sz_id AND accepted = 2),
                                   0),
                                0, (SELECT MAX (accept_order)
                                      FROM sz_accept
                                     WHERE sz_id = h.sz_id),
                                (SELECT accept_order
                                   FROM sz_accept
-                                 WHERE sz_id = h.sz_id AND accepted = 464262))) =
-                464261
+                                 WHERE sz_id = h.sz_id AND accepted = 2))) =
+                1
          AND (   (    :date_between = 'mz'
                   AND (b.mz BETWEEN TO_DATE (:smz, 'dd.mm.yyyy')
                                 AND TO_DATE (:emz, 'dd.mm.yyyy')))
@@ -88,7 +88,7 @@
                                                (SELECT accept_order
                                                   FROM sz_accept
                                                  WHERE     sz_id = h.sz_id
-                                                       AND accepted = 464262),
+                                                       AND accepted = 2),
                                                0),
                                             0, (SELECT MAX (accept_order)
                                                   FROM sz_accept
@@ -96,7 +96,7 @@
                                             (SELECT accept_order
                                                FROM sz_accept
                                               WHERE     sz_id = h.sz_id
-                                                    AND accepted = 464262)))) BETWEEN TO_DATE (
+                                                    AND accepted = 2)))) BETWEEN TO_DATE (
                                                                                          :scr,
                                                                                          'dd.mm.yyyy')
                                                                                   AND TO_DATE (

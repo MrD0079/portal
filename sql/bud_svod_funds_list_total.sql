@@ -152,7 +152,7 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                 (SELECT COUNT (*)
                                                    FROM bud_ru_zay_accept
                                                   WHERE     z_id = z.id
-                                                        AND accepted = 464262),
+                                                        AND accepted = 2),
                                                 0, 0,
                                                 1)
                                                 deleted,
@@ -168,7 +168,7 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                                     WHERE     z_id =
                                                                                  z.id
                                                                           AND accepted =
-                                                                                 464262),
+                                                                                 2),
                                                                   0),
                                                                0, (SELECT MAX (
                                                                              accept_order)
@@ -181,7 +181,7 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                                  WHERE     z_id =
                                                                               z.id
                                                                        AND accepted =
-                                                                              464262)))
+                                                                              2)))
                                                 current_accepted_id,
                                              st.name st_name,
                                              kat.name kat_name,
@@ -281,7 +281,7 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                             :funds)
                                              AND z.valid_no = 0
                                              AND DECODE (:st, 0, z.st, :st) = z.st) z
-                               WHERE current_accepted_id = 464261 AND deleted = 0
+                               WHERE current_accepted_id = 1 AND deleted = 0
                             ORDER BY period,
                                      fil,
                                      st_name,
@@ -437,7 +437,7 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                                 WHERE     z_id =
                                                                              z.id
                                                                       AND accepted =
-                                                                             464262),
+                                                                             2),
                                                               0),
                                                            0, (SELECT MAX (
                                                                          accept_order)
@@ -448,8 +448,8 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                               FROM bud_ru_zay_accept
                                                              WHERE     z_id = z.id
                                                                    AND accepted =
-                                                                          464262))) =
-                                            464261
+                                                                          2))) =
+                                            1
                                      AND z.valid_no = 0
                                      AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE (
                                                                              :sd,

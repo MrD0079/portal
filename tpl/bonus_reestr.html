@@ -175,9 +175,9 @@ $('#bst_{$i}').attr('checked',true);
 		<td>Заявка</td>
 	</tr>
 	{foreach key=k item=i from=$bonus name=bonus}
-	{if $i.sz_status_id eq 464260}{assign var=color value="#FFFF66"}{/if}
-	{if $i.sz_status_id eq 464261}{assign var=color value="#66FF66"}{/if}
-	{if $i.sz_status_id eq 464262}{assign var=color value="#FFCC99"}{/if}
+	{if $i.sz_status_id eq 0}{assign var=color value="#FFFF66"}{/if}
+	{if $i.sz_status_id eq 1}{assign var=color value="#66FF66"}{/if}
+	{if $i.sz_status_id eq 2}{assign var=color value="#FFCC99"}{/if}
 	<tr {if $i.sz_status_id}style="background-color:{$color}"{/if}>
 		<td>{$smarty.foreach.bonus.iteration}</td>
 		<td>{$i.tab_num}</td>

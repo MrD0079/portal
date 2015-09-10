@@ -14,7 +14,7 @@
                                 (SELECT MIN (accept_order)
                                    FROM bud_ru_zay_accept
                                   WHERE     z_id = bud_ru_zay.id
-                                        AND accepted = 464260))
+                                        AND accepted = 0))
                     current_acceptor_tn,
                  fn_getname (
                     (SELECT tn
@@ -24,7 +24,7 @@
                                    (SELECT MIN (accept_order)
                                       FROM bud_ru_zay_accept
                                      WHERE     z_id = bud_ru_zay.id
-                                           AND accepted = 464260)))
+                                           AND accepted = 0)))
                     current_acceptor_name,
                  bud_ru_zay_accept.tn acceptor_tn,
                  fn_getname (bud_ru_zay_accept.tn) acceptor_name,
@@ -34,12 +34,12 @@
                  bud_ru_zayat.name accepted_name,
                  DECODE (
                     bud_ru_zay_accept.accepted,
-                    464260, NULL,
+                    0, NULL,
                     TO_CHAR (bud_ru_zay_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                     accepted_date,
                  DECODE ( (SELECT COUNT (*)
                              FROM bud_ru_zay_accept
-                            WHERE z_id = bud_ru_zay.id AND accepted = 464262),
+                            WHERE z_id = bud_ru_zay.id AND accepted = 2),
                          0, 0,
                          1)
                     deleted,
@@ -50,7 +50,7 @@
                                 (SELECT MIN (accept_order)
                                    FROM bud_ru_zay_accept
                                   WHERE     z_id = bud_ru_zay.id
-                                        AND accepted = 464260))
+                                        AND accepted = 0))
                     current_accept_id,
                  bud_ru_zay.fil,
                  f.name fil_name,
@@ -60,7 +60,7 @@
                  ss.cost_item statya_name,bud_ru_zay.distr_compensation
             FROM bud_ru_zay,
                  bud_ru_zay_accept,
-                 bud_ru_zay_accept_types bud_ru_zayat,
+                 accept_types bud_ru_zayat,
                  bud_fil f,
                  bud_funds fu,
                  nets n,

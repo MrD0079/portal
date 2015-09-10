@@ -38,11 +38,6 @@ InitRequestVar("date_between_brzr","dt12");
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_types.sql'));
-$sql=stritr($sql,$params);
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_accept_types', $data);
-
 $sql=rtrim(file_get_contents('sql/bud_ru_st_ras.sql'));
 $sql=stritr($sql,$params);
 $st = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

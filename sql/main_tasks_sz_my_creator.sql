@@ -9,13 +9,13 @@ SELECT COUNT (*) c,
                        AND accept_order =
                               (SELECT MAX (accept_order)
                                  FROM sz_accept
-                                WHERE sz_id = sz.id AND accepted <> 464260))
+                                WHERE sz_id = sz.id AND accepted <> 0))
                   current_accepted_id,
                (SELECT COUNT (*)
                   FROM sz_accept
                  WHERE sz_id = sz.id)
                   accept_cnt
           FROM sz) z
- WHERE     NVL (current_accepted_id, 464260) = 464260
+ WHERE     NVL (current_accepted_id, 0) = 0
        AND accept_cnt > 0
        AND tn = :tn

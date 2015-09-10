@@ -15,23 +15,23 @@
             replacement_fio,
          v.sz_id,
          /*f.full,*/
-         (SELECT sz_accept_types.name1
-            FROM sz_accept, sz_accept_types
+         (SELECT accept_types.name1
+            FROM sz_accept, accept_types
            WHERE     sz_id = v.sz_id
-                 AND accepted = sz_accept_types.id(+)
+                 AND accepted = accept_types.id(+)
                  AND accept_order =
                         DECODE (
                            NVL (
                               (SELECT accept_order
                                  FROM sz_accept
-                                WHERE sz_id = v.sz_id AND accepted = 464262),
+                                WHERE sz_id = v.sz_id AND accepted = 2),
                               0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = v.sz_id),
                            (SELECT accept_order
                               FROM sz_accept
-                             WHERE sz_id = v.sz_id AND accepted = 464262)))
+                             WHERE sz_id = v.sz_id AND accepted = 2)))
             sz_status,
          (SELECT accepted
             FROM sz_accept
@@ -41,14 +41,14 @@
                            NVL (
                               (SELECT accept_order
                                  FROM sz_accept
-                                WHERE sz_id = v.sz_id AND accepted = 464262),
+                                WHERE sz_id = v.sz_id AND accepted = 2),
                               0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = v.sz_id),
                            (SELECT accept_order
                               FROM sz_accept
-                             WHERE sz_id = v.sz_id AND accepted = 464262)))
+                             WHERE sz_id = v.sz_id AND accepted = 2)))
             sz_status_id,
          (SELECT failure
             FROM sz_accept
@@ -58,18 +58,18 @@
                            NVL (
                               (SELECT accept_order
                                  FROM sz_accept
-                                WHERE sz_id = v.sz_id AND accepted = 464262),
+                                WHERE sz_id = v.sz_id AND accepted = 2),
                               0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = v.sz_id),
                            (SELECT accept_order
                               FROM sz_accept
-                             WHERE sz_id = v.sz_id AND accepted = 464262)))
+                             WHERE sz_id = v.sz_id AND accepted = 2)))
             failure,
          DECODE ( (SELECT COUNT (*)
                      FROM sz_accept
-                    WHERE sz_id = v.sz_id AND accepted <> 464260),
+                    WHERE sz_id = v.sz_id AND accepted <> 0),
                  0, 1,
                  0)
             sz_not_seen
@@ -93,13 +93,13 @@
                                      (SELECT accept_order
                                         FROM sz_accept
                                        WHERE     sz_id = v.sz_id
-                                             AND accepted = 464262),
+                                             AND accepted = 2),
                                      0),
                                   0, (SELECT MAX (accept_order)
                                         FROM sz_accept
                                        WHERE sz_id = v.sz_id),
                                   (SELECT accept_order
                                      FROM sz_accept
-                                    WHERE sz_id = v.sz_id AND accepted = 464262))),
-                0) /*<> 464261*/ in (464260,464262)
+                                    WHERE sz_id = v.sz_id AND accepted = 2))),
+                0) /*<> 1*/ in (0,2)
 ORDER BY vv_from DESC, vv_to DESC, u.fio

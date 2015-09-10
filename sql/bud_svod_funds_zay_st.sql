@@ -42,7 +42,7 @@
                            z.*,
                            DECODE ( (SELECT COUNT (*)
                                        FROM bud_ru_zay_accept
-                                      WHERE z_id = z.id AND accepted = 464262),
+                                      WHERE z_id = z.id AND accepted = 2),
                                    0, 0,
                                    1)
                               deleted,
@@ -55,7 +55,7 @@
                                                 (SELECT MAX (accept_order)
                                                    FROM bud_ru_zay_accept
                                                   WHERE     z_id = z.id
-                                                        AND accepted = 464262),
+                                                        AND accepted = 2),
                                                 0),
                                              0, (SELECT MAX (accept_order)
                                                    FROM bud_ru_zay_accept
@@ -63,7 +63,7 @@
                                              (SELECT MAX (accept_order)
                                                 FROM bud_ru_zay_accept
                                                WHERE     z_id = z.id
-                                                     AND accepted = 464262)))
+                                                     AND accepted = 2)))
                               current_accepted_id,
                            st.name st_name,
                            kat.name kat_name,
@@ -149,7 +149,7 @@
                            AND z.funds = DECODE (:funds, 0, z.funds, :funds)
                            AND z.valid_no = 0
                            AND DECODE (:st, 0, z.st, :st) = z.st) z
-             WHERE current_accepted_id = 464261 AND deleted = 0
+             WHERE current_accepted_id = 1 AND deleted = 0
           ORDER BY period,
                    fil,
                    st_name,

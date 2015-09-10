@@ -1,5 +1,5 @@
 /* Formatted on 04.02.2014 8:38:38 (QP5 v5.227.12220.39724) */
-  SELECT z.*, NVL (current_accepted_id, 464260) current_status
+  SELECT z.*, NVL (current_accepted_id, 0) current_status
     FROM (SELECT ac.id,
                  TO_CHAR (ac.created, 'dd.mm.yyyy hh24:mi:ss') created,
                  ac.created created_dt,
@@ -23,12 +23,12 @@
                  ac_accept.accept_order,
                  acat.name accepted_name,
                  DECODE (ac_accept.accepted,
-                         464260, NULL,
+                         0, NULL,
                          TO_CHAR (ac_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                     accepted_date,
                  DECODE ( (SELECT COUNT (*)
                              FROM ac_accept
-                            WHERE ac_id = ac.id AND accepted = 464262),
+                            WHERE ac_id = ac.id AND accepted = 2),
                          0, 0,
                          1)
                     deleted,
@@ -42,14 +42,14 @@
                                       (SELECT MAX (accept_order)
                                          FROM ac_accept
                                         WHERE     ac_id = ac.id
-                                              AND accepted = 464262),
+                                              AND accepted = 2),
                                       0),
                                    0, (SELECT MAX (accept_order)
                                          FROM ac_accept
                                         WHERE ac_id = ac.id),
                                    (SELECT MAX (accept_order)
                                       FROM ac_accept
-                                     WHERE ac_id = ac.id AND accepted = 464262)))
+                                     WHERE ac_id = ac.id AND accepted = 2)))
                     current_accepted_id,
                  (SELECT lu
                     FROM ac_accept
@@ -60,14 +60,14 @@
                                       (SELECT MAX (accept_order)
                                          FROM ac_accept
                                         WHERE     ac_id = ac.id
-                                              AND accepted = 464262),
+                                              AND accepted = 2),
                                       0),
                                    0, (SELECT MAX (accept_order)
                                          FROM ac_accept
                                         WHERE ac_id = ac.id),
                                    (SELECT MAX (accept_order)
                                       FROM ac_accept
-                                     WHERE ac_id = ac.id AND accepted = 464262)))
+                                     WHERE ac_id = ac.id AND accepted = 2)))
                     current_accepted_date,
                  (SELECT COUNT (tn)
                     FROM ac_accept
@@ -128,7 +128,7 @@
                  a.id chat_id,
                  DECODE ( (SELECT COUNT (*)
                              FROM ac_accept
-                            WHERE ac_id = ac.id AND accepted <> 464260),
+                            WHERE ac_id = ac.id AND accepted <> 0),
                          0, 1,
                          0)
                     not_seen,
@@ -151,7 +151,7 @@
                  (SELECT ace.*, acu.pos_name, acu.department_name
                     FROM ac_executors ace, user_list acu
                    WHERE ace.tn = acu.tn) ac_executors,
-                 ac_accept_types acat,
+                 accept_types acat,
                  ac_files f,
                  user_list u,
                  user_list u1,
@@ -187,7 +187,7 @@
                                                          FROM ac_accept
                                                         WHERE     ac_id = ac.id
                                                               AND accepted =
-                                                                     464262),
+                                                                     2),
                                                       0),
                                                    0, (SELECT MAX (
                                                                  accept_order)
@@ -197,8 +197,8 @@
                                                       FROM ac_accept
                                                      WHERE     ac_id = ac.id
                                                            AND accepted =
-                                                                  464262))),
-                                 464260, NULL,
+                                                                  2))),
+                                 0, NULL,
                                  (SELECT lu
                                     FROM ac_accept
                                    WHERE     ac_id = ac.id
@@ -209,7 +209,7 @@
                                                          FROM ac_accept
                                                         WHERE     ac_id = ac.id
                                                               AND accepted =
-                                                                     464262),
+                                                                     2),
                                                       0),
                                                    0, (SELECT MAX (
                                                                  accept_order)
@@ -219,17 +219,17 @@
                                                       FROM ac_accept
                                                      WHERE     ac_id = ac.id
                                                            AND accepted =
-                                                                  464262)))))) BETWEEN TO_DATE (
+                                                                  2)))))) BETWEEN TO_DATE (
                                                                                           :dates_list1,
                                                                                           'dd.mm.yyyy')
                                                                                    AND TO_DATE (
                                                                                           :dates_list2,
                                                                                           'dd.mm.yyyy')) z
-   WHERE     DECODE (:status,  0, 0,  1, 464261,  2, 464260,  3, 0,  4, 0) =
+   WHERE     DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
                 DECODE (:status,
                         0, 0,
                         1, current_accepted_id,
-                        2, NVL (current_accepted_id, 464260),
+                        2, NVL (current_accepted_id, 0),
                         3, 0,
                         4, 0)
          AND DECODE (:status, 3, 1, 0) = DECODE (:status, 3, deleted, 0)

@@ -11,7 +11,7 @@ SELECT u.dpt_name,
                    WHERE sz_id = sz.id)
                - (SELECT COUNT (*)
                     FROM sz_accept
-                   WHERE sz_id = sz.id AND accepted = 464261),
+                   WHERE sz_id = sz.id AND accepted = 1),
                0, 1,
                0)
           sz_ok,

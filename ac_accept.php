@@ -24,7 +24,7 @@ if (isset($_REQUEST["save"]))
 			$sql=stritr($sql,$params);
 			$e = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);*/
 
-			if ($v["accepted"]==464261)
+			if ($v["accepted"]==1)
 			{
 
 				if ($h["ac_ok"]==1)
@@ -123,7 +123,7 @@ if (isset($_REQUEST["save"]))
 					//}
 				}
 			}
-			if ($v["accepted"]==464262)
+			if ($v["accepted"]==2)
 			{
 				$subj="Отклонение заявку на проведение АЦ №".$h["id"]./*" по теме: ".$h["head"].*/" от ".$h["created"];
 				audit ("отклонил заявку на проведение АЦ №".$h["id"],"ac");
@@ -144,7 +144,7 @@ if (isset($_REQUEST["save"]))
 					send_mail($email,$subj,$text);
 				}
 			}
-			if ($v["accepted"]!=464260)
+			if ($v["accepted"]!=0)
 			{
 				echo "<hr>";
 			}
@@ -189,9 +189,9 @@ if (isset($_REQUEST["add_chat"]))
 
 
 
-$sql=rtrim(file_get_contents('sql/ac_accept_types.sql'));
+$sql=rtrim(file_get_contents('sql/accept_types.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('acat', $data);
+$smarty->assign('accept_types', $data);
 
 $sql=rtrim(file_get_contents('sql/ac_accept.sql'));
 $params=array(':tn' => $tn, ":ac_cat"=>0,':wait4myaccept'=>$_REQUEST['wait4myaccept']);

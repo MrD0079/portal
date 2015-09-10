@@ -1,0 +1,39 @@
+<table border=0 cellpadding=5 cellspacing=0 width=100%>
+	<tr style="text-align:center;">
+		<td colspan=2>
+			<p><img src="design/logo.png" border="0"/></p>
+			<h2>
+			ДИРЕКЦИЯ ПО ПРОДАЖАМ ООО "АВК КОНФЕКШИНЭРИ"
+			</h2>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:left;">№{$smarty.request.id} от {$d.head.created_dt}</td>
+		<td style="text-align:right;">{$d.head.recipient_pos}<br>{$d.head.recipient}</td>
+	</tr>
+	<tr style="text-align:center;">
+		<td colspan=2>
+			<h3>
+			Заявка на компенсацию дистрибутору
+			</h3>
+		</td>
+	</tr>
+</table>
+<p style="text-align:left;">{$d.head.comm|nl2br}</p>
+<table border=0 cellpadding=5 cellspacing=0 width=100%>
+	<tr>
+		<td style="text-align:left;"><img src="files/chart{$smarty.request.id}.png"/></td>
+		<td style="text-align:right;">{$d.head.creator_pos}<br>{$d.head.creator}</td>
+	</tr>
+</table>
+
+
+			<p>Комментарии/уточнения:</p>
+			<p>
+			{foreach key=k1 item=i1 from=$d.chat}
+				<font style="color:red">{$i1.chat_time}</font>
+				{$i1.pos_name}, {$i1.department_name}, <font style="color:green">{$i1.chater}:</font>
+				<font style="color:blue">{$i1.text}</font>
+				<br>
+			{/foreach}
+			</p>

@@ -53,10 +53,6 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('department_list', $data);
 
-$sql=rtrim(file_get_contents('sql/sz_accept_types.sql'));
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('szat', $data);
-
 if (isset($_REQUEST["del_sz"]))
 {
 	$_REQUEST["select"]=1;

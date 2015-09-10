@@ -61,7 +61,7 @@
                                             (SELECT MAX (accept_order)
                                                FROM bud_ru_zay_accept
                                               WHERE     z_id = z.id
-                                                    AND accepted = 464262),
+                                                    AND accepted = 2),
                                             0),
                                          0, (SELECT MAX (accept_order)
                                                FROM bud_ru_zay_accept
@@ -69,8 +69,8 @@
                                          (SELECT MAX (accept_order)
                                             FROM bud_ru_zay_accept
                                            WHERE     z_id = z.id
-                                                 AND accepted = 464262))) =
-                          464261
+                                                 AND accepted = 2))) =
+                          1
           /*AND (SELECT rep_accepted
                         FROM bud_ru_zay_accept
                        WHERE     z_id = z.id
@@ -79,7 +79,7 @@
                                        NVL (
                                           (SELECT MAX (accept_order)
                                              FROM bud_ru_zay_accept
-                                            WHERE z_id = z.id AND rep_accepted = 464262),
+                                            WHERE z_id = z.id AND rep_accepted = 2),
                                           0),
                                        0, (SELECT MAX (accept_order)
                                              FROM bud_ru_zay_accept
@@ -87,8 +87,8 @@
                                                   AND rep_accepted IS NOT NULL),
                                        (SELECT MAX (accept_order)
                                           FROM bud_ru_zay_accept
-                                         WHERE z_id = z.id AND rep_accepted = 464262))) =
-                        464261*/
+                                         WHERE z_id = z.id AND rep_accepted = 2))) =
+                        1*/
           /*раскомменитровать,
           если все-таки нужно будет брать
           согласованные отчеты, а не заявки*/

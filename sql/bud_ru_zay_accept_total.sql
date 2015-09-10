@@ -29,17 +29,17 @@ SELECT COUNT (DISTINCT id) c,
                                                     FROM bud_ru_zay_accept
                                                    WHERE     z_id =
                                                                 bud_ru_zay.id
-                                                         AND accepted = 464262),
+                                                         AND accepted = 2),
                                                  0),
                                               0, (SELECT MAX (accept_order)
                                                     FROM bud_ru_zay_accept
-                                                   WHERE z_id = bud_ru_zay.id /* AND accepted <> 464260*/
+                                                   WHERE z_id = bud_ru_zay.id /* AND accepted <> 0*/
                                                                              ),
                                               (SELECT MAX (accept_order)
                                                  FROM bud_ru_zay_accept
                                                 WHERE     z_id = bud_ru_zay.id
-                                                      AND accepted = 464262))),
-                            464260)
+                                                      AND accepted = 2))),
+                            0)
                             current_status,
                          (SELECT tn
                             FROM bud_ru_zay_accept
@@ -48,7 +48,7 @@ SELECT COUNT (DISTINCT id) c,
                                         (SELECT MIN (accept_order)
                                            FROM bud_ru_zay_accept
                                           WHERE     z_id = bud_ru_zay.id
-                                                AND accepted = 464260))
+                                                AND accepted = 0))
                             current_acceptor_tn,
                          fn_getname (
                             (SELECT tn
@@ -58,7 +58,7 @@ SELECT COUNT (DISTINCT id) c,
                                            (SELECT MIN (accept_order)
                                               FROM bud_ru_zay_accept
                                              WHERE     z_id = bud_ru_zay.id
-                                                   AND accepted = 464260)))
+                                                   AND accepted = 0)))
                             current_acceptor_name,
                          bud_ru_zay_accept.tn acceptor_tn,
                          fn_getname (bud_ru_zay_accept.tn) acceptor_name,
@@ -68,14 +68,14 @@ SELECT COUNT (DISTINCT id) c,
                          bud_ru_zayat.name accepted_name,
                          DECODE (
                             bud_ru_zay_accept.accepted,
-                            464260, NULL,
+                            0, NULL,
                             TO_CHAR (bud_ru_zay_accept.lu,
                                      'dd.mm.yyyy hh24:mi:ss'))
                             accepted_date,
                          DECODE (
                             (SELECT COUNT (*)
                                FROM bud_ru_zay_accept
-                              WHERE z_id = bud_ru_zay.id AND accepted = 464262),
+                              WHERE z_id = bud_ru_zay.id AND accepted = 2),
                             0, 0,
                             1)
                             deleted,
@@ -86,7 +86,7 @@ SELECT COUNT (DISTINCT id) c,
                                         (SELECT MIN (accept_order)
                                            FROM bud_ru_zay_accept
                                           WHERE     z_id = bud_ru_zay.id
-                                                AND accepted = 464260))
+                                                AND accepted = 0))
                             current_accept_id,
                          (SELECT accept_order
                             FROM bud_ru_zay_accept
@@ -95,7 +95,7 @@ SELECT COUNT (DISTINCT id) c,
                                         (SELECT MIN (accept_order)
                                            FROM bud_ru_zay_accept
                                           WHERE     z_id = bud_ru_zay.id
-                                                AND accepted = 464260))
+                                                AND accepted = 0))
                             current_accept_order,
                          (SELECT id
                             FROM bud_ru_zay_accept
@@ -131,7 +131,7 @@ SELECT COUNT (DISTINCT id) c,
                                                                           WHERE     z_id =
                                                                                        bud_ru_zay.id
                                                                                 AND accepted =
-                                                                                       464260))))
+                                                                                       0))))
                                  AND tn = :tn)
                             allow_text,
                          u.pos_name creator_pos_name,
@@ -149,7 +149,7 @@ SELECT COUNT (DISTINCT id) c,
                          ss.cost_item statya_name,bud_ru_zay.distr_compensation
                     FROM bud_ru_zay,
                          bud_ru_zay_accept,
-                         bud_ru_zay_accept_types bud_ru_zayat,
+                         accept_types bud_ru_zayat,
                          BUD_RU_st_ras st,
                          BUD_RU_st_ras kat,
                          user_list u,
@@ -182,7 +182,7 @@ SELECT COUNT (DISTINCT id) c,
                                                    FROM bud_ru_zay_accept
                                                   WHERE     z_id =
                                                                bud_ru_zay.id
-                                                        AND accepted = 464260)) =
+                                                        AND accepted = 0)) =
                                     :tn
                               OR bud_ru_zay.tn = :tn
                               OR ( (SELECT accept_order
@@ -193,7 +193,7 @@ SELECT COUNT (DISTINCT id) c,
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id =
                                                                  bud_ru_zay.id
-                                                          AND accepted = 464260)) >=
+                                                          AND accepted = 0)) >=
                                      (SELECT accept_order
                                         FROM bud_ru_zay_accept
                                        WHERE z_id = bud_ru_zay.id AND tn = :tn)))
@@ -201,7 +201,7 @@ SELECT COUNT (DISTINCT id) c,
                                 (SELECT COUNT (*)
                                    FROM bud_ru_zay_accept
                                   WHERE     z_id = bud_ru_zay.id
-                                        AND accepted = 464262),
+                                        AND accepted = 2),
                                 0, 0,
                                 1) = 0
                          AND NVL (
@@ -216,7 +216,7 @@ SELECT COUNT (DISTINCT id) c,
                                                        WHERE     z_id =
                                                                     bud_ru_zay.id
                                                              AND accepted =
-                                                                    464262),
+                                                                    2),
                                                      0),
                                                   0, (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
@@ -226,8 +226,8 @@ SELECT COUNT (DISTINCT id) c,
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id =
                                                                  bud_ru_zay.id
-                                                          AND accepted = 464262))),
-                                464260) <> 464261
+                                                          AND accepted = 2))),
+                                0) <> 1
                          AND bud_ru_zay.valid_no = 0) z
            WHERE DECODE (:wait4myaccept, 0, :tn, 0) =
                     DECODE (:wait4myaccept, 0, z.current_acceptor_tn, 0)

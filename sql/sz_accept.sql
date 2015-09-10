@@ -17,17 +17,17 @@
                                          (SELECT MAX (accept_order)
                                             FROM sz_accept
                                            WHERE     sz_id = sz.id
-                                                 AND accepted = 464262),
+                                                 AND accepted = 2),
                                          0),
                                       0, (SELECT MAX (accept_order)
                                             FROM sz_accept
-                                           WHERE sz_id = sz.id /* AND accepted <> 464260*/
+                                           WHERE sz_id = sz.id /* AND accepted <> 0*/
                                                               ),
                                       (SELECT MAX (accept_order)
                                          FROM sz_accept
                                         WHERE     sz_id = sz.id
-                                              AND accepted = 464262))),
-                    464260)
+                                              AND accepted = 2))),
+                    0)
                     current_status,
                  (SELECT tn
                     FROM sz_accept
@@ -35,7 +35,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM sz_accept
-                                  WHERE sz_id = sz.id AND accepted = 464260))
+                                  WHERE sz_id = sz.id AND accepted = 0))
                     current_acceptor_tn,
                  fn_getname (
                     (SELECT tn
@@ -44,7 +44,7 @@
                             AND accept_order =
                                    (SELECT MIN (accept_order)
                                       FROM sz_accept
-                                     WHERE sz_id = sz.id AND accepted = 464260)))
+                                     WHERE sz_id = sz.id AND accepted = 0)))
                     current_acceptor_name,
                  sz_accept.tn acceptor_tn,
                  fn_getname ( sz_accept.tn) acceptor_name,
@@ -55,12 +55,12 @@
                  sz_accept.accept_order,
                  szat.name accepted_name,
                  DECODE (sz_accept.accepted,
-                         464260, NULL,
+                         0, NULL,
                          TO_CHAR (sz_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                     accepted_date,
                  DECODE ( (SELECT COUNT (*)
                              FROM sz_accept
-                            WHERE sz_id = sz.id AND accepted = 464262),
+                            WHERE sz_id = sz.id AND accepted = 2),
                          0, 0,
                          1)
                     deleted,
@@ -71,7 +71,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM sz_accept
-                                  WHERE sz_id = sz.id AND accepted = 464260))
+                                  WHERE sz_id = sz.id AND accepted = 0))
                     current_accept_id,
                  (SELECT accept_order
                     FROM sz_accept
@@ -79,7 +79,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM sz_accept
-                                  WHERE sz_id = sz.id AND accepted = 464260))
+                                  WHERE sz_id = sz.id AND accepted = 0))
                     current_accept_order,
                  sz_executors.execute_order,
                  (SELECT id
@@ -114,7 +114,7 @@
                                                                   WHERE     sz_id =
                                                                                sz.id
                                                                         AND accepted =
-                                                                               464260))))
+                                                                               0))))
                          AND tn = :tn)
                     allow_text,
                  u.pos_name creator_pos_name,
@@ -131,7 +131,7 @@
                  (SELECT sze.*, szu.pos_name, szu.department_name
                     FROM sz_executors sze, user_list szu
                    WHERE sze.tn = szu.tn) sz_executors,
-                 sz_accept_types szat,
+                 accept_types szat,
                  sz_files f,
                  sz_cat sc,
                  user_list u,
@@ -154,7 +154,7 @@
                                         (SELECT MIN (accept_order)
                                            FROM sz_accept
                                           WHERE     sz_id = sz.id
-                                                AND accepted = 464260)) = :tn
+                                                AND accepted = 0)) = :tn
                       OR sz.tn = :tn
                       OR ( (SELECT accept_order
                               FROM sz_accept
@@ -163,13 +163,13 @@
                                           (SELECT MIN (accept_order)
                                              FROM sz_accept
                                             WHERE     sz_id = sz.id
-                                                  AND accepted = 464260)) >=
+                                                  AND accepted = 0)) >=
                              (SELECT accept_order
                                 FROM sz_accept
                                WHERE sz_id = sz.id AND tn = :tn)))
                  AND DECODE ( (SELECT COUNT (*)
                                  FROM sz_accept
-                                WHERE sz_id = sz.id AND accepted = 464262),
+                                WHERE sz_id = sz.id AND accepted = 2),
                              0, 0,
                              1) = 0
                  AND NVL (
@@ -182,17 +182,17 @@
                                              (SELECT MAX (accept_order)
                                                 FROM sz_accept
                                                WHERE     sz_id = sz.id
-                                                     AND accepted = 464262),
+                                                     AND accepted = 2),
                                              0),
                                           0, (SELECT MAX (accept_order)
                                                 FROM sz_accept
-                                               WHERE sz_id = sz.id /* AND accepted <> 464260*/
+                                               WHERE sz_id = sz.id /* AND accepted <> 0*/
                                                                   ),
                                           (SELECT MAX (accept_order)
                                              FROM sz_accept
                                             WHERE     sz_id = sz.id
-                                                  AND accepted = 464262))),
-                        464260) <> 464261
+                                                  AND accepted = 2))),
+                        0) <> 1
                  AND DECODE (:sz_cat, 0, 0, :sz_cat) =
                         DECODE (:sz_cat, 0, 0, sz.cat)) z
    WHERE DECODE (:wait4myaccept, 0, :tn, 0) =

@@ -8,10 +8,10 @@ InitRequestVar("wait4myaccept",1);
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_types.sql'));
+$sql=rtrim(file_get_contents('sql/accept_types.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_accept_types', $data);
+$smarty->assign('accept_types', $data);
 
 if (isset($_REQUEST["save"]))
 {
@@ -146,7 +146,7 @@ if (isset($_REQUEST["save"]))
 			$sql=stritr($sql,$params);
 			$h = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-			if ($v["rep_accepted"]==464261)
+			if ($v["rep_accepted"]==1)
 			{
 
 				if ($h["rep_bud_ru_zay_ok"]==1)
@@ -201,7 +201,7 @@ if (isset($_REQUEST["save"]))
 					send_mail($email,$subj,$text);
 				}
 			}
-			if ($v["rep_accepted"]==464262)
+			if ($v["rep_accepted"]==2)
 			{
 				$subj="Отклонение отчета по активности №".$h["id"]." от ".$h["created"];
 				audit ("отклонил отчет по активности №".$h["id"],"bud_ru_zay");
@@ -222,7 +222,7 @@ if (isset($_REQUEST["save"]))
 					send_mail($email,$subj,$text);
 				}
 			}
-			if ($v["rep_accepted"]!=464260)
+			if ($v["rep_accepted"]!=0)
 			{
 				echo "<hr>";
 			}

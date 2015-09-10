@@ -80,7 +80,7 @@
                                                  (SELECT accept_order
                                                     FROM sz_accept
                                                    WHERE     sz_id = v.sz_id
-                                                         AND accepted = 464262),
+                                                         AND accepted = 2),
                                                  0),
                                               0, (SELECT MAX (accept_order)
                                                     FROM sz_accept
@@ -88,8 +88,8 @@
                                               (SELECT accept_order
                                                  FROM sz_accept
                                                 WHERE     sz_id = v.sz_id
-                                                      AND accepted = 464262))),
-                            0) = 464261
+                                                      AND accepted = 2))),
+                            0) = 1
                      AND c1.data BETWEEN v.v_from AND v.v_to
                      AND v.tn = u.tn
                      AND t.dt_start_new = c1.data) = 0

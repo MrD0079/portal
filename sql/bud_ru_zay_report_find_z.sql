@@ -48,12 +48,12 @@ SELECT COUNT (*) exist,
                za.accept_order,
                zat.name accepted_name,
                DECODE (za.rep_accepted,
-                       464260, NULL,
+                       0, NULL,
                        TO_CHAR (za.rep_lu, 'dd.mm.yyyy hh24:mi:ss'))
                   accepted_date,
                DECODE ( (SELECT COUNT (*)
                            FROM bud_ru_zay_accept
-                          WHERE z_id = z.id AND rep_accepted = 464262),
+                          WHERE z_id = z.id AND rep_accepted = 2),
                        0, 0,
                        1)
                   deleted,
@@ -65,14 +65,14 @@ SELECT COUNT (*) exist,
                                  NVL (
                                     (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
-                                      WHERE z_id = z.id AND accepted = 464262),
+                                      WHERE z_id = z.id AND accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
                                       WHERE z_id = z.id),
                                  (SELECT MAX (accept_order)
                                     FROM bud_ru_zay_accept
-                                   WHERE z_id = z.id AND accepted = 464262)))
+                                   WHERE z_id = z.id AND accepted = 2)))
                   z_current_accepted_id,
                (SELECT rep_accepted
                   FROM bud_ru_zay_accept
@@ -83,7 +83,7 @@ SELECT COUNT (*) exist,
                                     (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
                                       WHERE     z_id = z.id
-                                            AND rep_accepted = 464262),
+                                            AND rep_accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
@@ -91,7 +91,7 @@ SELECT COUNT (*) exist,
                                  (SELECT MAX (accept_order)
                                     FROM bud_ru_zay_accept
                                    WHERE     z_id = z.id
-                                         AND rep_accepted = 464262)))
+                                         AND rep_accepted = 2)))
                   current_accepted_id,
                (SELECT tn
                   FROM bud_ru_zay_accept
@@ -99,7 +99,7 @@ SELECT COUNT (*) exist,
                        AND accept_order =
                               (SELECT MIN (accept_order)
                                  FROM bud_ru_zay_accept
-                                WHERE z_id = z.id AND rep_accepted = 464260))
+                                WHERE z_id = z.id AND rep_accepted = 0))
                   current_acceptor_tn,
                (SELECT id
                   FROM bud_ru_zay_accept
@@ -107,7 +107,7 @@ SELECT COUNT (*) exist,
                        AND accept_order =
                               (SELECT MIN (accept_order)
                                  FROM bud_ru_zay_accept
-                                WHERE z_id = z.id AND rep_accepted = 464260))
+                                WHERE z_id = z.id AND rep_accepted = 0))
                   current_accept_id,
                (SELECT lu
                   FROM bud_ru_zay_accept
@@ -118,7 +118,7 @@ SELECT COUNT (*) exist,
                                     (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
                                       WHERE     z_id = z.id
-                                            AND rep_accepted = 464262),
+                                            AND rep_accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
@@ -126,7 +126,7 @@ SELECT COUNT (*) exist,
                                  (SELECT MAX (accept_order)
                                     FROM bud_ru_zay_accept
                                    WHERE     z_id = z.id
-                                         AND rep_accepted = 464262)))
+                                         AND rep_accepted = 2)))
                   current_accepted_date,
                (SELECT COUNT (tn)
                   FROM bud_ru_zay_accept
@@ -172,7 +172,7 @@ SELECT COUNT (*) exist,
                ac.id zchat_id,
                DECODE ( (SELECT COUNT (*)
                            FROM bud_ru_zay_accept
-                          WHERE z_id = z.id AND rep_accepted <> 464260),
+                          WHERE z_id = z.id AND rep_accepted <> 0),
                        0, 1,
                        0)
                   not_seen,
@@ -206,7 +206,7 @@ SELECT COUNT (*) exist,
                ss.cost_item statya_name,z.distr_compensation
           FROM bud_ru_zay z,
                bud_ru_zay_accept za,
-               bud_ru_zay_accept_types zat,
+               accept_types zat,
                user_list u,
                user_list u1,
                user_list u2,
@@ -235,4 +235,4 @@ SELECT COUNT (*) exist,
                AND z.st = st.id(+)
                AND z.kat = kat.id(+)
                AND z.id = :z_id) z
- WHERE 464261 = z_current_accepted_id AND report_data IS NOT NULL
+ WHERE 1 = z_current_accepted_id AND report_data IS NOT NULL

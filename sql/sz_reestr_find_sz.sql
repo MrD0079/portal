@@ -28,12 +28,12 @@ SELECT COUNT (*) exist,
                sz_accept.accept_order,
                szat.name accepted_name,
                DECODE (sz_accept.accepted,
-                       464260, NULL,
+                       0, NULL,
                        TO_CHAR (sz_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                   accepted_date,
                DECODE ( (SELECT COUNT (*)
                            FROM sz_accept
-                          WHERE sz_id = sz.id AND accepted = 464262),
+                          WHERE sz_id = sz.id AND accepted = 2),
                        0, 0,
                        1)
                   deleted,
@@ -47,14 +47,14 @@ SELECT COUNT (*) exist,
                                     (SELECT MAX (accept_order)
                                        FROM sz_accept
                                       WHERE     sz_id = sz.id
-                                            AND accepted = 464262),
+                                            AND accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM sz_accept
                                       WHERE sz_id = sz.id),
                                  (SELECT MAX (accept_order)
                                     FROM sz_accept
-                                   WHERE sz_id = sz.id AND accepted = 464262)))
+                                   WHERE sz_id = sz.id AND accepted = 2)))
                   current_accepted_id,
                (SELECT lu
                   FROM sz_accept
@@ -65,14 +65,14 @@ SELECT COUNT (*) exist,
                                     (SELECT MAX (accept_order)
                                        FROM sz_accept
                                       WHERE     sz_id = sz.id
-                                            AND accepted = 464262),
+                                            AND accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM sz_accept
                                       WHERE sz_id = sz.id),
                                  (SELECT MAX (accept_order)
                                     FROM sz_accept
-                                   WHERE sz_id = sz.id AND accepted = 464262)))
+                                   WHERE sz_id = sz.id AND accepted = 2)))
                   current_accepted_date,
                (SELECT COUNT (tn)
                   FROM sz_accept
@@ -120,7 +120,7 @@ SELECT COUNT (*) exist,
                a.id chat_id,
                DECODE ( (SELECT COUNT (*)
                            FROM sz_accept
-                          WHERE sz_id = sz.id AND accepted <> 464260),
+                          WHERE sz_id = sz.id AND accepted <> 0),
                        0, 1,
                        0)
                   not_seen,
@@ -143,7 +143,7 @@ SELECT COUNT (*) exist,
                (SELECT sze.*, szu.pos_name, szu.department_name
                   FROM sz_executors sze, user_list szu
                  WHERE sze.tn = szu.tn) sz_executors,
-               sz_accept_types szat,
+               accept_types szat,
                sz_files f,
                user_list u,
                user_list u1,

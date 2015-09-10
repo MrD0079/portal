@@ -29,15 +29,15 @@
                                      (SELECT accept_order
                                         FROM sz_accept
                                        WHERE     sz_id = v.sz_id
-                                             AND accepted = 464262),
+                                             AND accepted = 2),
                                      0),
                                   0, (SELECT MAX (accept_order)
                                         FROM sz_accept
                                        WHERE sz_id = v.sz_id),
                                   (SELECT accept_order
                                      FROM sz_accept
-                                    WHERE sz_id = v.sz_id AND accepted = 464262))),
-                0) = 464261
+                                    WHERE sz_id = v.sz_id AND accepted = 2))),
+                0) = 1
          AND TRUNC (SYSDATE) BETWEEN v.v_from AND v.v_to
 ORDER BY u.pos_name,
          vv_from,

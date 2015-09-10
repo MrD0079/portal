@@ -24,13 +24,13 @@
 		<td>Текущий статус СЗ на отпуск</td>
 	</tr>
 	{foreach key=k item=i from=$vacation name=vacation}
-	{if $i.sz_status_id eq 464260}{assign var=color value="#FFFF66"}{/if}
-	{if $i.sz_status_id eq 464261}{assign var=color value="#66FF66"}{/if}
-	{if $i.sz_status_id eq 464262}{assign var=color value="#FFCC99"}{/if}
+	{if $i.sz_status_id eq 0}{assign var=color value="#FFFF66"}{/if}
+	{if $i.sz_status_id eq 1}{assign var=color value="#66FF66"}{/if}
+	{if $i.sz_status_id eq 2}{assign var=color value="#FFCC99"}{/if}
 	<tr>
 		<td>{$smarty.foreach.vacation.iteration}</td>
 		<td>
-			{if ($i.sz_status_id eq 464262 or $i.sz_not_seen eq 1) and $tn eq $i.tn}
+			{if ($i.sz_status_id eq 2 or $i.sz_not_seen eq 1) and $tn eq $i.tn}
 				<a href="javascript:void(0)" onclick="javascript:fn_change_by_id({$i.id});">ред.</a>
 			{/if}
 		</td>

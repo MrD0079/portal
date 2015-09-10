@@ -117,15 +117,15 @@
                                NVL (
                                   (SELECT MAX (accept_order)
                                      FROM bud_ru_zay_accept
-                                    WHERE z_id = z.id AND accepted = 464262),
+                                    WHERE z_id = z.id AND accepted = 2),
                                   0),
                                0, (SELECT MAX (accept_order)
                                      FROM bud_ru_zay_accept
                                     WHERE z_id = z.id),
                                (SELECT MAX (accept_order)
                                   FROM bud_ru_zay_accept
-                                 WHERE z_id = z.id AND accepted = 464262))) =
-                464261
+                                 WHERE z_id = z.id AND accepted = 2))) =
+                1
          AND z.valid_no = 0
          AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
                                           AND TO_DATE (:ed, 'dd.mm.yyyy')

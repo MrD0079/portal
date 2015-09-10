@@ -14,13 +14,13 @@
                                      (SELECT MAX (accept_order)
                                         FROM ac_accept
                                        WHERE     ac_id = ac.id
-                                             AND accepted = 464262),
+                                             AND accepted = 2),
                                      0),
                                   0, (SELECT MAX (accept_order)
                                         FROM ac_accept
                                        WHERE ac_id = ac.id),
                                   (SELECT MAX (accept_order)
                                      FROM ac_accept
-                                    WHERE ac_id = ac.id AND accepted = 464262))),
-                464260) = 464261
+                                    WHERE ac_id = ac.id AND accepted = 2))),
+                0) = 1
 ORDER BY c.y DESC

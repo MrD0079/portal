@@ -2,7 +2,7 @@
   SELECT h.*,
          DECODE ( (SELECT COUNT (*)
                      FROM sz_accept
-                    WHERE sz_id = h.sz_id AND accepted <> 464260),
+                    WHERE sz_id = h.sz_id AND accepted <> 0),
                  0, 1,
                  0)
             sz_not_seen

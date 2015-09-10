@@ -41,14 +41,14 @@
                                    NVL (
                                       (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
-                                        WHERE z_id = z.id AND accepted = 464262),
+                                        WHERE z_id = z.id AND accepted = 2),
                                       0),
                                    0, (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
                                         WHERE z_id = z.id),
                                    (SELECT MAX (accept_order)
                                       FROM bud_ru_zay_accept
-                                     WHERE z_id = z.id AND accepted = 464262)))
+                                     WHERE z_id = z.id AND accepted = 2)))
                     z_current_accepted_id,
                  z.st st_id,
                  z.kat kat_id,
@@ -92,5 +92,5 @@
                  AND z.tn = :tn
                  AND z.report_data IS NOT NULL
                  AND z.report_done IS NULL) z
-   WHERE z_current_accepted_id = 464261 AND srok_ok IS NULL
+   WHERE z_current_accepted_id = 1 AND srok_ok IS NULL
 ORDER BY created_dt, id

@@ -8,7 +8,7 @@ SELECT TO_CHAR (ac.created, 'dd.mm.yyyy hh24:mi:ss') created,
                    WHERE ac_id = ac.id)
                - (SELECT COUNT (*)
                     FROM ac_accept
-                   WHERE ac_id = ac.id AND accepted = 464261),
+                   WHERE ac_id = ac.id AND accepted = 1),
                0, 1,
                0)
           ac_ok,

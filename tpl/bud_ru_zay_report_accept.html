@@ -37,9 +37,9 @@
 	{foreach key=k item=i from=$d}
 
 
-	{if $i.head.current_status eq 464260}{assign var=color value="#FFFF66"}{/if}
-	{if $i.head.current_status eq 464261}{assign var=color value="#66FF66"}{/if}
-	{if $i.head.current_status eq 464262}{assign var=color value="#FFCC99"}{/if}
+	{if $i.head.current_status eq 0}{assign var=color value="#FFFF66"}{/if}
+	{if $i.head.current_status eq 1}{assign var=color value="#66FF66"}{/if}
+	{if $i.head.current_status eq 2}{assign var=color value="#FFCC99"}{/if}
 	{if $i.head.valid_no eq 1}{assign var=color value="#66FFFF"}{/if}
 
 
@@ -106,9 +106,9 @@
 			{/if}
 			<br>
 			<b>Подтверждение:</b>
-			{if $i.head.current_status eq 464260}<font style="background-color:#FFFF66">отчет на согласовании</font>{/if}
-			{if $i.head.current_status eq 464261}<font style="background-color:#66FF66">подтвержден</font>{/if}
-			{if $i.head.current_status eq 464262}<font style="background-color:#FFCC99">отклонен</font>{/if}
+			{if $i.head.current_status eq 0}<font style="background-color:#FFFF66">отчет на согласовании</font>{/if}
+			{if $i.head.current_status eq 1}<font style="background-color:#66FF66">подтвержден</font>{/if}
+			{if $i.head.current_status eq 2}<font style="background-color:#FFCC99">отклонен</font>{/if}
 			<br>
 			<b>Отчет заполнен: </b>
 			{if $i.head.creator_tn eq $tn and $i.head.not_seen}
@@ -260,14 +260,14 @@
 			{if $i.head.allow_status_change eq 1 and $i.head.report_done}
 			<hr>
 			Мое согласование:<br>
-			{foreach key=k2 item=i2 from=$bud_ru_zay_accept_types}
+			{foreach key=k2 item=i2 from=$accept_types}
 				<nobr><input type=radio name="bud_ru_zay_accept[{$i.head.current_accept_id}][rep_accepted]" onclick="
-						$('#bud_ru_zay_accept_failure_{$i.head.current_accept_id}').attr('disabled',{$i2.id}==464262?false:true);
-						{$i2.id}==464262?null:$('#bud_ru_zay_accept_failure_{$i.head.current_accept_id}').val('');
+						$('#bud_ru_zay_accept_failure_{$i.head.current_accept_id}').attr('disabled',{$i2.id}==2?false:true);
+						{$i2.id}==2?null:$('#bud_ru_zay_accept_failure_{$i.head.current_accept_id}').val('');
 						" value={$i2.id}>{$i2.name}</nobr><br>
 			{/foreach}
 			<textarea rows=5 cols=20 disabled required name="bud_ru_zay_accept[{$i.head.current_accept_id}][rep_failure]" id="bud_ru_zay_accept_failure_{$i.head.current_accept_id}"></textarea>
-			<script>$("input[name='bud_ru_zay_accept[{$i.head.current_accept_id}][accepted]'][value=464260]").attr('checked',true);</script>
+			<script>$("input[name='bud_ru_zay_accept[{$i.head.current_accept_id}][accepted]'][value=0]").attr('checked',true);</script>
 			<br>
 			<input type="submit" name="save" id="save" value="Сохранить">
 			{/if}

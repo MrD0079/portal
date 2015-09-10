@@ -14,12 +14,12 @@ SELECT COUNT (*)
                              NVL (
                                 (SELECT accept_order
                                    FROM sz_accept
-                                  WHERE sz_id = v.sz_id AND accepted = 464262),
+                                  WHERE sz_id = v.sz_id AND accepted = 2),
                                 0),
                              0, (SELECT MAX (accept_order)
                                    FROM sz_accept
                                   WHERE sz_id = v.sz_id),
                              (SELECT accept_order
                                 FROM sz_accept
-                               WHERE sz_id = v.sz_id AND accepted = 464262))) =
-              464261
+                               WHERE sz_id = v.sz_id AND accepted = 2))) =
+              1

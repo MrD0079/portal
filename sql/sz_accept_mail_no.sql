@@ -17,5 +17,5 @@ SELECT fn_getname ( tn) fio,
                    WHERE sz_id = (SELECT sz_id
                                     FROM sz_accept
                                    WHERE id = :accept_id)
-                         AND accepted = 464261
+                         AND accepted = 1
                 ORDER BY accept_order)) z

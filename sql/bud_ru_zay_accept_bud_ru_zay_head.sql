@@ -7,7 +7,7 @@ SELECT TO_CHAR (bud_ru_zay.created, 'dd.mm.yyyy hh24:mi:ss') created,
                    WHERE z_id = bud_ru_zay.id)
                - (SELECT COUNT (*)
                     FROM bud_ru_zay_accept
-                   WHERE z_id = bud_ru_zay.id AND accepted = 464261),
+                   WHERE z_id = bud_ru_zay.id AND accepted = 1),
                0, 1,
                0)
           bud_ru_zay_ok,
@@ -16,7 +16,7 @@ SELECT TO_CHAR (bud_ru_zay.created, 'dd.mm.yyyy hh24:mi:ss') created,
                    WHERE z_id = bud_ru_zay.id and rep_accepted is not null)
                - (SELECT COUNT (*)
                     FROM bud_ru_zay_accept
-                   WHERE z_id = bud_ru_zay.id and rep_accepted is not null AND rep_accepted = 464261),
+                   WHERE z_id = bud_ru_zay.id and rep_accepted is not null AND rep_accepted = 1),
                0, 1,
                0)
           rep_bud_ru_zay_ok,

@@ -1,0 +1,143 @@
+<h1>
+{if $smarty.request.save}
+Новая заявка
+{else}
+Редактирование заявки
+{/if}
+</h1>
+
+{if $smarty.request.save}
+Ваша заявка добавлена в реестр и ожидает подтверждения следующими сотрудниками:
+<br>
+<br>
+{foreach key=key item=item from=$acceptors}
+{$item.acceptor}<br>
+{/foreach}
+<br>
+{else}
+<form target="_self" method="POST" name=form_dzc id=form_dzc enctype="multipart/form-data">
+<input type=hidden name="dzc[tn]" value="{$smarty.request.dzc.tn}">
+<h3>Создатель: {if $smarty.request.id}{$smarty.request.dzc.creator}{else}{$fio}{/if}</h3>
+
+
+{literal}
+<script type='text/javascript'>
+$a=1;
+$cnt=0;
+$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>{/if}{/foreach}{literal}";
+function add_acceptor(id)
+{
+	$("<div id=\"div_dzc_acceptors_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"check_required(-1);$('#dzc_acceptors_new"+$a+"').val(null);$('#dzc_acceptors_new"+$a+"').attr('disabled',true);$('#div_dzc_acceptors_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#ac1"));
+	$("#div_dzc_acceptors_new"+$a).append($("<select required name=\"dzc_acceptors[]\" id=\"dzc_acceptors_new"+$a+"\">"+$s+"</select>"));
+	$("#dzc_acceptors_new"+$a).val(id);
+	$a++;
+	check_required(1);
+}
+function check_required(increment)
+{
+	$cnt=$cnt+increment;
+	$cnt>0 ? $("#acc").val($cnt) : $("#acc").val(null);
+	$cnt>0 ? $("#save").attr('disabled',false) : $("#save").attr('disabled',true);
+}
+function add_file(id)
+{
+	$("<div id=\"div_dzc_fn_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"$('#dzc_fn_new"+$a+"').val(null);$('#div_dzc_fn_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#save"));
+	$("#div_dzc_fn_new"+$a).append($("<input type=file name=\""+$a+"\" id=\"dzc_fn_new"+$a+"\">"));
+	$a++;
+}
+</script>
+{/literal}
+
+
+<h3>Согласователи. (Последний согласователь будет назначен адресатом заявки)</h3>
+<div style="color:red" id=cat_hint></div>
+<p><a id="add_file1" href="javascript:void(0)" onclick="javascript:add_acceptor();">Добавить согласователя</a></p>
+<input id="acc" type=hidden required>
+<input type=hidden id="ac1"/>
+<script>{foreach from=$smarty.request.dzc_acceptors key=k item=i name=acc}add_acceptor({$i});{/foreach}</script>
+
+
+Дистрибутор
+<select name=dzc[customerid] id=customerid>
+	<option></option>
+	{foreach key=key item=item from=$dzc_refcustomers}
+	<option value={$item.customerid}>{$item.customername}</option>
+	{/foreach}
+</select>
+<script>$("#customerid option[value='{$smarty.request.dzc.customerid}']").prop('selected', true);</script>
+<br>
+
+Статья затрат
+<select name=dzc[statid] id=statid>
+	<option></option>
+	{foreach key=key item=item from=$dzc_refstatesofexpences}
+	<option value={$item.statid}>{$item.statname}</option>
+	{/foreach}
+</select>
+<script>$("#statid option[value='{$smarty.request.dzc.statid}']").prop('selected', true);</script>
+<br>
+
+Подразделение
+<select name=dzc[departmentid] id=departmentid>
+	<option></option>
+	{foreach key=key item=item from=$dzc_refdepartments}
+	<option value={$item.departmentid}>{$item.departemntname}</option>
+	{/foreach}
+</select>
+<script>$("#departmentid option[value='{$smarty.request.dzc.departmentid}']").prop('selected', true);</script>
+<br>
+
+Тип продукта
+<select name=dzc[h_producttype] id=h_producttype>
+	<option></option>
+	{foreach key=key item=item from=$dzc_refproducttypes}
+	<option value={$item.h_producttype}>{$item.producttype}</option>
+	{/foreach}
+</select>
+<script>$("#h_producttype option[value='{$smarty.request.dzc.h_producttype}']").prop('selected', true);</script>
+<br>
+
+Валюта затраты
+<select name=dzc[currencycode] id=currencycode>
+	<option></option>
+	{foreach key=key item=item from=$dzc_refcurrency}
+	<option value={$item.currencycode}>{$item.currencyname}</option>
+	{/foreach}
+</select>
+<script>$("#currencycode option[value='{$smarty.request.dzc.currencycode}']").prop('selected', true);</script>
+<br>
+
+Сумма затрат*
+//маскир. поле ввода веществ. значений
+Период затрат
+//месяц_год
+
+
+<br>
+Комментарии
+<br>
+<textarea cols="100" rows="5" name="dzc[comm]" id="dzc_comm">{if not $smarty.request.select_shablon>0}{if $smarty.request.dzc.comm}{$smarty.request.dzc.comm}{/if}{/if}</textarea>
+<br>
+
+{foreach from=$smarty.request.files key=k item=i name=fl}
+{/foreach}
+
+{if $smarty.foreach.fl.total > 0 }
+<p>Отметить файлы для удаления</p>
+{/if}
+
+{foreach from=$smarty.request.files key=k item=i name=fl}
+<input type=checkbox name="files_del[]" value={$i.fn}><a target=_blank href="files/{$i.fn}">{$i.fn}</a><br>
+{/foreach}
+
+
+<p><a id="add_file" href="javascript:void(0)" onclick="javascript:add_file();">добавить файл</a></p>
+
+<p><input type=submit value="Сохранить" name="save" id="save"/></p>
+
+</form>
+
+{/if}
+
+
+

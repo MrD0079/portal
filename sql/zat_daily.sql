@@ -74,7 +74,7 @@
                                              (SELECT accept_order
                                                 FROM sz_accept
                                                WHERE     sz_id = v.sz_id
-                                                     AND accepted = 464262),
+                                                     AND accepted = 2),
                                              0),
                                           0, (SELECT MAX (accept_order)
                                                 FROM sz_accept
@@ -82,8 +82,8 @@
                                           (SELECT accept_order
                                              FROM sz_accept
                                             WHERE     sz_id = v.sz_id
-                                                  AND accepted = 464262))),
-                        0) = 464261
+                                                  AND accepted = 2))),
+                        0) = 1
                  AND c1.data BETWEEN v.v_from AND v.v_to
                  AND v.tn = :tn) vac
    WHERE     TRUNC (c.data, 'mm') =                           /*'01.08.2011'*/
