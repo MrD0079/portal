@@ -13,6 +13,12 @@ $params=array(
 //$x=microtime(true);
 
 
+$sql=rtrim(file_get_contents('sql/main_dzc_accept.sql'));
+$params[':wait4myaccept']=0;
+$sql=stritr($sql,$params);
+$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('dzc_accept', $data);
+
 $sql=rtrim(file_get_contents('sql/main_bud_svod_ta.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

@@ -5,13 +5,9 @@ InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 InitRequestVar("who",0);
 InitRequestVar("status",0);
-InitRequestVar("dzc_cat",0);
 InitRequestVar("creator",0);
 InitRequestVar("country",$_SESSION["cnt_kod"]);
 InitRequestVar("orderby",1);
-InitRequestVar("dzc_pos_id",0);
-InitRequestVar("region_name","0");
-InitRequestVar("department_name","0");
 InitRequestVar("dzc_id",0);
 
 //ses_req();
@@ -66,14 +62,10 @@ $params=array(
 ":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
 ":dates_list2"=>"'".$_REQUEST["dates_list2"]."'",
 ":status"=>$_REQUEST["status"],
-":dzc_cat"=>$_REQUEST["dzc_cat"],
 ":creator"=>$_REQUEST["creator"],
 ":who"=>$_REQUEST["who"],
 ":orderby"=>$_REQUEST["orderby"],
 ":country"=>"'".$_REQUEST["country"]."'",
-":dzc_pos_id"=>$_REQUEST["dzc_pos_id"],
-":region_name"=>"'".$_REQUEST["region_name"]."'",
-":department_name"=>"'".$_REQUEST["department_name"]."'",
 ":dzc_id"=>$_REQUEST["dzc_id"],
 );
 

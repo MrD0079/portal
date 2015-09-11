@@ -56,8 +56,10 @@ function add_file(id)
 <input type=hidden id="ac1"/>
 <script>{foreach from=$smarty.request.dzc_acceptors key=k item=i name=acc}add_acceptor({$i});{/foreach}</script>
 
-
-Дистрибутор
+<table>
+<tr>
+<td>Дистрибутор</td>
+<td>
 <select name=dzc[customerid] id=customerid>
 	<option></option>
 	{foreach key=key item=item from=$dzc_refcustomers}
@@ -65,9 +67,11 @@ function add_file(id)
 	{/foreach}
 </select>
 <script>$("#customerid option[value='{$smarty.request.dzc.customerid}']").prop('selected', true);</script>
-<br>
-
-Статья затрат
+</td>
+</tr>
+<tr>
+<td>Статья затрат</td>
+<td>
 <select name=dzc[statid] id=statid>
 	<option></option>
 	{foreach key=key item=item from=$dzc_refstatesofexpences}
@@ -75,19 +79,23 @@ function add_file(id)
 	{/foreach}
 </select>
 <script>$("#statid option[value='{$smarty.request.dzc.statid}']").prop('selected', true);</script>
-<br>
-
-Подразделение
+</td>
+</tr>
+<tr>
+<td>Подразделение</td>
+<td>
 <select name=dzc[departmentid] id=departmentid>
 	<option></option>
 	{foreach key=key item=item from=$dzc_refdepartments}
-	<option value={$item.departmentid}>{$item.departemntname}</option>
+	<option value={$item.departmentid}>{$item.departmentname}</option>
 	{/foreach}
 </select>
 <script>$("#departmentid option[value='{$smarty.request.dzc.departmentid}']").prop('selected', true);</script>
-<br>
-
-Тип продукта
+</td>
+</tr>
+<tr>
+<td>Тип продукта</td>
+<td>
 <select name=dzc[h_producttype] id=h_producttype>
 	<option></option>
 	{foreach key=key item=item from=$dzc_refproducttypes}
@@ -95,9 +103,11 @@ function add_file(id)
 	{/foreach}
 </select>
 <script>$("#h_producttype option[value='{$smarty.request.dzc.h_producttype}']").prop('selected', true);</script>
-<br>
-
-Валюта затраты
+</td>
+</tr>
+<tr>
+<td>Валюта затраты</td>
+<td>
 <select name=dzc[currencycode] id=currencycode>
 	<option></option>
 	{foreach key=key item=item from=$dzc_refcurrency}
@@ -105,19 +115,32 @@ function add_file(id)
 	{/foreach}
 </select>
 <script>$("#currencycode option[value='{$smarty.request.dzc.currencycode}']").prop('selected', true);</script>
-<br>
-
-Сумма затрат*
-//маскир. поле ввода веществ. значений
-Период затрат
-//месяц_год
-
-
-<br>
-Комментарии
-<br>
-<textarea cols="100" rows="5" name="dzc[comm]" id="dzc_comm">{if not $smarty.request.select_shablon>0}{if $smarty.request.dzc.comm}{$smarty.request.dzc.comm}{/if}{/if}</textarea>
-<br>
+</td>
+</tr>
+<tr>
+<td>Сумма затрат</td>
+<td>
+<input name="dzc[summa]" id="dzc_summa" value="{$smarty.request.dzc.summa}" class="number">
+</td>
+</tr>
+<tr>
+<td>Период затрат</td>
+<td>
+<select name="dzc[dt]" id="dzc_dt">
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#dzc_dt option[value='{$smarty.request.dzc.dt|default:$smarty.request.month_list}']").prop('selected', true);</script>
+</td>
+</tr>
+<tr>
+<td>Комментарии</td>
+<td>
+<textarea cols="100" rows="5" name="dzc[comm]" id="dzc_comm">{$smarty.request.dzc.comm}</textarea>
+</td>
+</tr>
+</table>
 
 {foreach from=$smarty.request.files key=k item=i name=fl}
 {/foreach}

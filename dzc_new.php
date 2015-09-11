@@ -12,6 +12,7 @@ if (isset($_REQUEST["debug"]))
 
 if (isset($_REQUEST["save"]))
 {
+	isset($_REQUEST["dzc"]["dt"]) ? $_REQUEST["dzc"]["dt"]=OraDate2MDBDate($_REQUEST["dzc"]["dt"]) : null;
 	foreach ($_REQUEST["dzc_acceptors"] as $k=>$v)
 	{
 		if ($v!=null)
@@ -153,6 +154,10 @@ foreach ($ref as $v)
 	$smarty->assign('dzc_ref'.$v, $db->getAll(rtrim(file_get_contents('sql/dzc_ref'.$v.'.sql')), null, null, null, MDB2_FETCHMODE_ASSOC));
 	//print_r($db->getAll(rtrim(file_get_contents('sql/dzc_ref'.$v.'.sql')), null, null, null, MDB2_FETCHMODE_ASSOC));
 }
+
+$sql = rtrim(file_get_contents('sql/month_list.sql'));
+$res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('month_list', $res);
 
 $smarty->display('dzc_new.html');
 

@@ -1,8 +1,15 @@
-/* Formatted on 10/09/2015 16:43:28 (QP5 v5.227.12220.39724) */
+/* Formatted on 11/09/2015 12:34:18 (QP5 v5.227.12220.39724) */
   SELECT z.*, DECODE (z.current_acceptor_tn, :tn, 1, 0) allow_status_change
     FROM (SELECT dzc.id,
                  TO_CHAR (dzc.created, 'dd.mm.yyyy hh24:mi:ss') created,
                  dzc.comm,
+                 rcy.currencyname,
+                 rcs.customername,
+                 rds.departmentname,
+                 rps.statname,
+                 rss.producttype,
+                 dzc.summa,
+                 c.mt || ' ' || c.y dt,
                  dzc.tn creator_tn,
                  fn_getname (dzc.tn) creator,
                  fn_getname (dzc.recipient) recipient,
@@ -125,7 +132,13 @@
                  user_list u,
                  user_list u1,
                  user_list u2,
-                 dzc_chat a
+                 dzc_chat a,
+                 DZC_REFCURRENCY rcy,
+                 DZC_REFCUSTOMERS rcs,
+                 DZC_REFDEPARTMENTS rds,
+                 DZC_REFSTATESOFEXPENCES rps,
+                 DZC_REFPRODUCTTYPES rss,
+                 calendar c
            WHERE     dzc.tn = u.tn
                  AND dzc_accept.tn = u1.tn
                  AND dzc.recipient = u2.tn
@@ -179,8 +192,12 @@
                                             WHERE     dzc_id = dzc.id
                                                   AND accepted = 2))),
                         0) <> 1
-                 AND DECODE (:dzc_cat, 0, 0, :dzc_cat) =
-                        DECODE (:dzc_cat, 0, 0, dzc.cat)) z
+                 AND dzc.CURRENCYCODE = rcy.CURRENCYCODE(+)
+                 AND dzc.CUSTOMERID = rcs.CUSTOMERID(+)
+                 AND dzc.DEPARTMENTID = rds.DEPARTMENTID(+)
+                 AND dzc.STATID = rps.STATID(+)
+                 AND dzc.H_PRODUCTTYPE = rss.H_PRODUCTTYPE(+)
+                 AND dzc.dt = c.data(+)) z
    WHERE DECODE (:wait4myaccept, 0, :tn, 0) =
             DECODE (:wait4myaccept, 0, z.current_acceptor_tn, 0)
 ORDER BY z.id, z.accept_order, z.chat_time_d

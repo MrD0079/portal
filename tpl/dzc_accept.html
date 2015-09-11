@@ -19,31 +19,29 @@
 </p>
 
 
-<table border=1 cellpadding=5 cellspacing=0 width=1410px>
+<table border=1 cellpadding=5 cellspacing=0>
 	<tr style="text-align:center;font-weight:bold">
-		<td rowspan=2 width=10px>№</td>
-		<td rowspan=2 width=200px>Заголовок</td>
-		<td rowspan=2 width=100px>Комментарии</td>
-		<td colspan=3 width=600px>Блок согласования</td>
+		<td rowspan=2>Заголовок</td>
+		<td rowspan=2>Содержание</td>
+		<td colspan=3>Блок согласования</td>
 	</tr>
 	<tr style="text-align:center;font-weight:bold">
-		<td width=200px>
+		<td>
 				Должность, подразделение, <font style="color:red">согласователь</font>
 				<font style="color:green">статус</font>
 				<font style="color:blue">дата</font>
 		</td>
-		<td width=200px>Мое согласование</td>
-		<td width=200px>Комментарии / Уточнения</td>
+		<td>Мое согласование</td>
+		<td>Комментарии / Уточнения</td>
 	</tr>
 	{foreach key=k item=i from=$d}
 	{if $i.head.current_status eq 0}{assign var=color value="#FFFF66"}{/if}
 	{if $i.head.current_status eq 1}{assign var=color value="#66FF66"}{/if}
 	{if $i.head.current_status eq 2}{assign var=color value="#FFCC99"}{/if}
 	<tr style="background-color:{$color}">
-		<td>{$i.head.id}</td>
 		<td>
+			<b>№:</b> {$i.head.id}<br>
 			<b>Дата создания:</b> {$i.head.created}<br>
-			<b>Категория:</b> {$i.head.cat_name}<br>
 			<b>Инициатор:</b> {$i.head.creator_pos_name}, {$i.head.creator_department_name}, <font style="color:red">{$i.head.creator}</font><br>
 			<b>Адресат:</b> {$i.head.recipient_pos_name}, {$i.head.recipient_department_name}, <font style="color:red">{$i.head.recipient}</font><br>
 			<b>Приложения</b>&nbsp
@@ -51,9 +49,16 @@
 				<nobr><a target=_blank href="files/{$i1.fn}">{$i1.fn}</a></nobr>&nbsp
 			{/foreach}
 		</td>
-
-		<td>{$i.head.comm|nl2br}</td>
-
+		<td>
+			<b>Дистрибутор:</b> {$i.head.customername}<br>
+			<b>Статья затрат:</b> {$i.head.statname}<br>
+			<b>Подразделение:</b> {$i.head.departmentname}<br>
+			<b>Тип продукта:</b> {$i.head.producttype}<br>
+			<b>Валюта затраты:</b> {$i.head.currencyname}<br>
+			<b>Сумма затрат:</b> {$i.head.summa|num:2}<br>
+			<b>Период затрат:</b> {$i.head.dt}<br>
+			<b>Комментарии:</b> {$i.head.comm|nl2br}
+		</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.data name=rn}
 				<b>{$smarty.foreach.rn.iteration}.</b> {$i1.acceptor_pos_name}, {$i1.acceptor_department_name}, <font style="color:red">{$i1.acceptor_name}</font>

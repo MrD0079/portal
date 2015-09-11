@@ -1,9 +1,17 @@
-/* Formatted on 10/09/2015 16:45:40 (QP5 v5.227.12220.39724) */
+/* Formatted on 11/09/2015 16:00:03 (QP5 v5.227.12220.39724) */
   SELECT z.*, NVL (current_accepted_id, 0) current_status
     FROM (SELECT dzc.id,
                  TO_CHAR (dzc.created, 'dd.mm.yyyy hh24:mi:ss') created,
                  dzc.created created_dt,
                  dzc.comm,
+                 rcy.currencyname,
+                 rcs.customername,
+                 rds.departmentname,
+                 rps.statname,
+                 rss.producttype,
+                 dzc.summa,
+dzc.num1s,
+                 c.mt || ' ' || c.y dt,
                  dzc.valid_no,
                  dzc.valid_tn,
                  fn_getname (dzc.valid_tn) valid_fio,
@@ -92,19 +100,6 @@
                                          FROM user_list
                                         WHERE tn = dzc.tn))
                     slaves3,
-                 (SELECT COUNT (*)
-                    FROM full
-                   WHERE     master IN
-                                (SELECT tn
-                                   FROM user_list
-                                  WHERE DECODE (:department_name,
-                                                '0', '0',
-                                                :department_name) =
-                                           DECODE (:department_name,
-                                                   '0', '0',
-                                                   department_name))
-                         AND slave = dzc.tn)
-                    slaves5,
                  fn_getname (a.tn) chater,
                  a.text,
                  a.lu chat_time_d,
@@ -135,7 +130,13 @@
                  user_list u,
                  user_list u1,
                  user_list u2,
-                 dzc_chat a
+                 dzc_chat a,
+                 DZC_REFCURRENCY rcy,
+                 DZC_REFCUSTOMERS rcs,
+                 DZC_REFDEPARTMENTS rds,
+                 DZC_REFSTATESOFEXPENCES rps,
+                 DZC_REFPRODUCTTYPES rss,
+                 calendar c
            WHERE     dzc.tn = u.tn
                  AND dzc_accept.tn = u1.tn
                  AND dzc.recipient = u2.tn
@@ -198,7 +199,13 @@
                                                                                       AND TO_DATE (
                                                                                              :dates_list2,
                                                                                              'dd.mm.yyyy')
-                 AND DECODE (:dzc_id, 0, dzc.id, :dzc_id) = dzc.id) z
+                 AND DECODE (:dzc_id, 0, dzc.id, :dzc_id) = dzc.id
+                 AND dzc.CURRENCYCODE = rcy.CURRENCYCODE(+)
+                 AND dzc.CUSTOMERID = rcs.CUSTOMERID(+)
+                 AND dzc.DEPARTMENTID = rds.DEPARTMENTID(+)
+                 AND dzc.STATID = rps.STATID(+)
+                 AND dzc.H_PRODUCTTYPE = rss.H_PRODUCTTYPE(+)
+                 AND dzc.dt = c.data(+)) z
    WHERE     DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
                 DECODE (:status,
                         0, 0,
@@ -217,12 +224,6 @@
                    2, DECODE (i_am_is_acceptor, 0, 0, 1))
          AND DECODE (:creator, 0, 0, :creator) =
                 DECODE (:creator, 0, 0, creator_tn)
-         AND DECODE (:dzc_pos_id, 0, 0, :dzc_pos_id) =
-                DECODE (:dzc_pos_id, 0, 0, pos_id)
-         AND DECODE (:region_name, '0', '0', :region_name) =
-                DECODE (:region_name, '0', '0', region_name)
-         AND DECODE (:department_name, '0', 0, 1) =
-                DECODE (:department_name, '0', 0, DECODE (slaves5, 0, 0, 1))
 ORDER BY DECODE (:orderby,  1, created_dt,  2, current_accepted_date),
          id,
          accept_order,
