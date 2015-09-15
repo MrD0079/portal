@@ -1,0 +1,62 @@
+<h1>Нагрузка на ТП</h1>
+	<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value='{$smarty.request.exp_list_only_ts}']").prop('selected', true);</script>
+		</p>
+
+		<p>
+		месяц
+		<select required="true" name=dt id=dt>
+			{foreach key=key item=item from=$dt}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#dt option[value="{$smarty.request.dt}"]').prop('selected', true);</script>
+		</p>
+
+		<p>
+		Отобрать ТОП-<input required name=top value="{$smarty.request.top}">
+		</p>
+
+		<p>
+		<input type=submit name=generate id=generate value='Построить отчет'>
+		</p>
+	</form>
+
+{if $smarty.request.generate}
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr>
+		<td>Сумма продаж ТОП, {$valuta}</td>
+		<td style="text-align:right">{$itogi.sumtop|num:2}</td>
+	</tr>
+	<tr>
+		<td>АКБ, ТП</td>
+		<td style="text-align:right">{$itogi.cnt}</td>
+	</tr>
+	<tr>
+		<td>Нагрузка, {$valuta}/ТП</td>
+		<td style="text-align:right">{$itogi.val|num:2}</td>
+	</tr>
+</table>
+
+{/if}

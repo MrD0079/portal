@@ -1,4 +1,4 @@
-/* Formatted on 16/06/2015 14:58:43 (QP5 v5.227.12220.39724) */
+/* Formatted on 15/09/2015 12:39:57 (QP5 v5.227.12220.39724) */
   SELECT cid,
          cname,
          spid,
@@ -7,7 +7,16 @@
          scname,
          SUM (b.plan) plan,
          SUM (b.fakt) fakt,
-         /*MAX (comm)*/null comm,
+         /*REPLACE (*/
+            TRIM (
+               ';' FROM wm_concat (
+                           CASE
+                              WHEN LENGTH (comm) > 0 THEN ';' || comm
+                              ELSE NULL
+                           END))/*,
+            ';',
+            '<br>')*/
+            comm,
          DECODE (
             (SELECT SUM (plan_sum)
                FROM dpnr_budjet_head h,

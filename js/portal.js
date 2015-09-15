@@ -24,10 +24,38 @@ function init_form()
 				dateFormat: 'dd.mm.yy',
 			}
 		);
+		$.datepicker._gotoToday = function (id) { $(id).datepicker('setDate', new Date()).datepicker('hide').blur(); };
 		$(".datepicker").not(".hasDatepicker").datepicker();
 		$(".datepicker").datepicker({beforeShowDay:function(date){return[!DateDisabled(date)];}});
 		$(".datepicker").datepicker( "option", "showOtherMonths", true);
-		//$(".datepicker").datepicker( "option", "showButtonPanel", true);
+		$(".datepicker").datepicker( "option", "showButtonPanel", true);
+		$(".datepicker").datepicker( "option", "beforeShow", function( input ) {
+			setTimeout(function() {
+				var buttonPane = $( input )
+				.datepicker( "widget" )
+				.find( ".ui-datepicker-buttonpane" );
+				$( "<button>", {
+					text: "Clear",
+					click: function() {
+						$.datepicker._clearDate( input );
+					}
+				}).appendTo( buttonPane ).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+			}, 1 );
+		});
+		$(".datepicker").datepicker( "option", "onChangeMonthYear", function( year, month, instance ) {
+			setTimeout(function() {
+				var buttonPane = $( instance )
+				.datepicker( "widget" )
+				.find( ".ui-datepicker-buttonpane" );
+				$( "<button>", {
+					text: "Clear",
+					click: function() {
+						$.datepicker._clearDate( instance.input );
+					}
+				}).appendTo( buttonPane ).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
+			}, 1 );
+		});
+//$(".ui-datepicker-clear").hide();
 		/*
 		{literal}
 		$(

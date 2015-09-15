@@ -12,8 +12,8 @@ if (isset($_REQUEST["new"]))
 {
 	foreach ($_REQUEST["new"] as $k=>$v)
 	{
-		$new_pwd=$db->getOne("select DBMS_RANDOM.STRING ('A', 4) from dual");
-		Table_Update("routes_agents_pwd",array("ag_id"=>$k,"id"=>0),array("ag_id"=>$k));
+		$id=get_new_id();
+		Table_Update("routes_agents_pwd",array("ag_id"=>$k,"id"=>$id),array("ag_id"=>$k,"id"=>$id));
 	}
 }
 
