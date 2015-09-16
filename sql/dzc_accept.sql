@@ -1,4 +1,4 @@
-/* Formatted on 11/09/2015 12:34:18 (QP5 v5.227.12220.39724) */
+/* Formatted on 16.09.2015 16:31:18 (QP5 v5.227.12220.39724) */
   SELECT z.*, DECODE (z.current_acceptor_tn, :tn, 1, 0) allow_status_change
     FROM (SELECT dzc.id,
                  TO_CHAR (dzc.created, 'dd.mm.yyyy hh24:mi:ss') created,
@@ -8,7 +8,8 @@
                  rds.departmentname,
                  rps.statname,
                  rss.producttype,
-                 dzc.summa,
+                 dzc_customers.customerid,
+                 dzc_customers.summa,
                  c.mt || ' ' || c.y dt,
                  dzc.tn creator_tn,
                  fn_getname (dzc.tn) creator,
@@ -127,6 +128,7 @@
                  u.region_name
             FROM dzc,
                  dzc_accept,
+                 dzc_customers,
                  accept_types dzcat,
                  dzc_files f,
                  user_list u,
@@ -143,6 +145,7 @@
                  AND dzc_accept.tn = u1.tn
                  AND dzc.recipient = u2.tn
                  AND dzc.id = dzc_accept.dzc_id(+)
+                 AND dzc.id = dzc_customers.dzc_id(+)
                  AND dzc_accept.accepted = dzcat.id(+)
                  AND a.dzc_id(+) = dzc.id
                  AND dzc.id = f.dzc_id(+)
@@ -193,7 +196,7 @@
                                                   AND accepted = 2))),
                         0) <> 1
                  AND dzc.CURRENCYCODE = rcy.CURRENCYCODE(+)
-                 AND dzc.CUSTOMERID = rcs.CUSTOMERID(+)
+                 AND dzc_customers.CUSTOMERID = rcs.CUSTOMERID(+)
                  AND dzc.DEPARTMENTID = rds.DEPARTMENTID(+)
                  AND dzc.STATID = rps.STATID(+)
                  AND dzc.H_PRODUCTTYPE = rss.H_PRODUCTTYPE(+)

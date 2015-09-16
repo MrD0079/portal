@@ -7,7 +7,7 @@
          rds.departmentname,
          rps.statname,
          rss.producttype,
-         dzc.summa,
+         /*dzc.summa,*/
          c.mt || ' ' || c.y dt,
          dzc.tn creator_tn,
          fn_getname (dzc.tn) creator,
@@ -70,7 +70,7 @@
                                     WHERE dzc_id = dzc.id AND accepted = 2))),
                 0) <> 1
          AND dzc.CURRENCYCODE = rcy.CURRENCYCODE(+)
-         AND dzc.CUSTOMERID = rcs.CUSTOMERID(+)
+         /*AND dzc.CUSTOMERID = rcs.CUSTOMERID(+)*/
          AND dzc.DEPARTMENTID = rds.DEPARTMENTID(+)
          AND dzc.STATID = rps.STATID(+)
          AND dzc.H_PRODUCTTYPE = rss.H_PRODUCTTYPE(+)

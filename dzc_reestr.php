@@ -105,6 +105,7 @@ foreach ($data as $k=>$v)
 {
 $d[$v["id"]]["head"]=$v;
 $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
+$d[$v["id"]]["customers"][$v["customerid"]]=$v;
 if ($v["chat_id"]!="")
 {
 $d[$v["id"]]["chat"][$v["chat_id"]]=$v;

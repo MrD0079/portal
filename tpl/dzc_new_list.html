@@ -1,0 +1,18 @@
+<tr id=list_{$id}>
+	<td>
+		<a href='javascript:void(0);' onClick="del_item({$id})">[x]</a>
+	</td>
+	<td>
+		Дистрибьютор
+		<select required name=customers[{$id}][customerid] id=customers_{$id}_customerid>
+			<option></option>
+			{foreach key=key item=item from=$dzc_refcustomers}
+			<option value={$item.customerid}>{$item.customername}</option>
+			{/foreach}
+		</select>
+	</td>
+	<td>
+		Сумма
+		<input required name=customers[{$id}][summa] class=number id=customers_{$id}_summa>
+	</td>
+</tr>

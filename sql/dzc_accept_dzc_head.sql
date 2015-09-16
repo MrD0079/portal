@@ -1,4 +1,4 @@
-/* Formatted on 11/09/2015 16:17:06 (QP5 v5.227.12220.39724) */
+/* Formatted on 16.09.2015 16:37:20 (QP5 v5.227.12220.39724) */
 SELECT u.dpt_name,
        TO_CHAR (dzc.created, 'dd.mm.yyyy hh24:mi:ss') created,
        dzc.comm,
@@ -9,11 +9,9 @@ SELECT u.dpt_name,
        rps.statname,
        rss.producttype,
        dzc.currencycode,
-       dzc.customerid,
        dzc.departmentid,
        dzc.statid,
        dzc.h_producttype,
-       dzc.summa,
        TO_CHAR (dzc.dt, 'yyyymmdd') dt,
        fn_getname (dzc.tn) creator,
        DECODE (  (SELECT COUNT (*)
@@ -39,7 +37,6 @@ SELECT u.dpt_name,
                       WHERE id = :accept_id)
        AND dzc.tn = u.tn
        AND dzc.currencycode = rcy.currencycode(+)
-       AND dzc.customerid = rcs.customerid(+)
        AND dzc.departmentid = rds.departmentid(+)
        AND dzc.statid = rps.statid(+)
        AND dzc.h_producttype = rss.h_producttype(+)

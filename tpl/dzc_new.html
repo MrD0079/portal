@@ -58,18 +58,6 @@ function add_file(id)
 
 <table>
 <tr>
-<td>Дистрибутор</td>
-<td>
-<select name=dzc[customerid] id=customerid>
-	<option></option>
-	{foreach key=key item=item from=$dzc_refcustomers}
-	<option value={$item.customerid}>{$item.customername}</option>
-	{/foreach}
-</select>
-<script>$("#customerid option[value='{$smarty.request.dzc.customerid}']").prop('selected', true);</script>
-</td>
-</tr>
-<tr>
 <td>Статья затрат</td>
 <td>
 <select name=dzc[statid] id=statid>
@@ -118,12 +106,6 @@ function add_file(id)
 </td>
 </tr>
 <tr>
-<td>Сумма затрат</td>
-<td>
-<input name="dzc[summa]" id="dzc_summa" value="{$smarty.request.dzc.summa}" class="number">
-</td>
-</tr>
-<tr>
 <td>Период затрат</td>
 <td>
 <select name="dzc[dt]" id="dzc_dt">
@@ -141,6 +123,50 @@ function add_file(id)
 </td>
 </tr>
 </table>
+
+<p>
+<a href='javascript:void(0);' onclick="add_item(0);">добавить дистрибьютора</a>
+<table id=items border=0 cellpadding=3 cellspacing=0><tbody></tbody></table>
+</p>
+
+	{literal}
+	<script>
+		function add_item(id,customerid,summa)
+		{
+			var fd = new FormData();
+			fd.append('id', id);
+			fd.append('customerid', customerid);
+			fd.append('summa', summa);
+			$.ajax
+			(
+				{
+					type: 'POST',
+					url: '?action=dzc_new_list&nohead=1',
+					data: fd,
+					processData: false,
+					contentType: false,
+					success: function(data)
+					{
+						$('#items>tbody:last').append(''+data+'');
+						$('#customers_'+id+'_customerid option[value="'+customerid+'"]').prop('selected', true);
+						$('#customers_'+id+'_summa').val(summa);
+					}
+				}
+			);
+		}
+		function del_item(id)
+		{
+			$('#list_'+id).remove();
+		}
+	</script>
+	{/literal}
+	<script>
+		{foreach key=k item=i from=$smarty.request.dzc_customers}
+			add_item({$i.id},'{$i.customerid}','{$i.summa}');
+		{/foreach}
+	</script>
+
+
 
 {foreach from=$smarty.request.files key=k item=i name=fl}
 {/foreach}

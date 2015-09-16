@@ -58,6 +58,14 @@ if (isset($_REQUEST["save"]))
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('acceptors', $data);
 
+	foreach ($_REQUEST["customers"] as $k=>$v)
+	{
+		$vals=$v;
+		$vals["dzc_id"]=$id;
+		$vals["id"]=$k;
+		//isset($vals["mz"]) ? $vals["mz"]=OraDate2MDBDate($vals["mz"]) : null;
+		Table_Update("dzc_customers",$vals,$vals);
+	}
 
 	if (isset($_FILES))
 	{
@@ -89,6 +97,14 @@ if (isset($_REQUEST["id"]))
 	$sql=stritr($sql,$params);
 	$data = $db->getAssoc($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$_REQUEST["dzc_acceptors"]=$data;
+
+	$sql=rtrim(file_get_contents('sql/dzc_edit_customers.sql'));
+	$params=array(':id'=>$_REQUEST["id"]);
+	$sql=stritr($sql,$params);
+	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	$_REQUEST["dzc_customers"]=$data;
+
+ses_req();
 
 	if (isset($_REQUEST["files_del"]))
 	{

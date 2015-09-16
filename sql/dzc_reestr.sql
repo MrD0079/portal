@@ -1,4 +1,4 @@
-/* Formatted on 11/09/2015 16:00:03 (QP5 v5.227.12220.39724) */
+/* Formatted on 16.09.2015 16:55:15 (QP5 v5.227.12220.39724) */
   SELECT z.*, NVL (current_accepted_id, 0) current_status
     FROM (SELECT dzc.id,
                  TO_CHAR (dzc.created, 'dd.mm.yyyy hh24:mi:ss') created,
@@ -9,8 +9,9 @@
                  rds.departmentname,
                  rps.statname,
                  rss.producttype,
-                 dzc.summa,
-dzc.num1s,
+                 dzc_customers.customerid,
+                 dzc_customers.summa,
+                 dzc_customers.num1s,
                  c.mt || ' ' || c.y dt,
                  dzc.valid_no,
                  dzc.valid_tn,
@@ -125,6 +126,7 @@ dzc.num1s,
                  u.region_name
             FROM dzc,
                  dzc_accept,
+                 dzc_customers,
                  accept_types dzcat,
                  dzc_files f,
                  user_list u,
@@ -146,6 +148,7 @@ dzc.num1s,
                                            FROM departments
                                           WHERE cnt_kod = :country))
                  AND dzc.id = dzc_accept.dzc_id(+)
+                 AND dzc.id = dzc_customers.dzc_id(+)
                  AND a.dzc_id(+) = dzc.id
                  AND dzc.id = f.dzc_id(+)
                  AND TRUNC (
@@ -201,7 +204,7 @@ dzc.num1s,
                                                                                              'dd.mm.yyyy')
                  AND DECODE (:dzc_id, 0, dzc.id, :dzc_id) = dzc.id
                  AND dzc.CURRENCYCODE = rcy.CURRENCYCODE(+)
-                 AND dzc.CUSTOMERID = rcs.CUSTOMERID(+)
+                 AND dzc_customers.CUSTOMERID = rcs.CUSTOMERID(+)
                  AND dzc.DEPARTMENTID = rds.DEPARTMENTID(+)
                  AND dzc.STATID = rps.STATID(+)
                  AND dzc.H_PRODUCTTYPE = rss.H_PRODUCTTYPE(+)

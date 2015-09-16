@@ -19,7 +19,23 @@
 		</td>
 	</tr>
 </table>
-<p style="text-align:left;">{$d.head.comm|nl2br}</p>
+
+<p style="text-align:left;">
+
+
+
+			<b>Статья затрат:</b> {$d.head.statname}<br>
+			<b>Подразделение:</b> {$d.head.departmentname}<br>
+			<b>Тип продукта:</b> {$d.head.producttype}<br>
+			<b>Валюта затраты:</b> {$d.head.currencyname}<br>
+			<b>Период затрат:</b> {$d.head.dt}<br>
+			<b>Комментарии:</b> {$d.head.comm|nl2br}<br>
+			{foreach key=k1 item=i1 from=$d.customers}
+				<b>Дистрибутор:</b> {$i1.customername} <b>Сумма затрат:</b> {$i1.summa|num:2} {$valuta}<br>
+			{/foreach}
+</p>
+
+
 <table border=0 cellpadding=5 cellspacing=0 width=100%>
 	<tr>
 		<td style="text-align:left;"><img src="files/chart{$smarty.request.id}.png"/></td>

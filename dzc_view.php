@@ -18,6 +18,7 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($data as $k=>$v){
 $d["head"]=$v;
 $d["data"][$v["acceptor_tn"]]=$v;
+$d["customers"][$v["customerid"]]=$v;
 $d["files"][$v["fn"]]=$v;
 }
 

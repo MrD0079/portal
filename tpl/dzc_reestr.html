@@ -174,14 +174,15 @@
 			{/foreach}
 		</td>
 		<td>
-			<b>Дистрибутор:</b> {$i.head.customername}<br>
 			<b>Статья затрат:</b> {$i.head.statname}<br>
 			<b>Подразделение:</b> {$i.head.departmentname}<br>
 			<b>Тип продукта:</b> {$i.head.producttype}<br>
 			<b>Валюта затраты:</b> {$i.head.currencyname}<br>
-			<b>Сумма затрат:</b> {$i.head.summa|num:2}<br>
 			<b>Период затрат:</b> {$i.head.dt}<br>
-			<b>Комментарии:</b> {$i.head.comm|nl2br}
+			<b>Комментарии:</b> {$i.head.comm|nl2br}<br>
+			{foreach key=k1 item=i1 from=$i.customers}
+				<b>Дистрибутор:</b> {$i1.customername} <b>Сумма затрат:</b> {$i1.summa|num:2} {$valuta}<br>
+			{/foreach}
 		</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.data name=rn}
@@ -226,7 +227,9 @@
 			{/if}
 		</td>
 		<td style="text-align:center">
-			{$i.head.num1s}
+			{foreach key=k1 item=i1 from=$i.customers}
+				<b>Дистрибутор:</b> {$i1.customername} <b>Статус:</b> {$i1.num1s}<br>
+			{/foreach}
 		</td>
 	</tr>
 	{/foreach}

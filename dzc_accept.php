@@ -79,41 +79,51 @@ if (isset($_REQUEST["save"]))
 						* dateExpenses - показывает дату в формате "YYYYMM0100000"
 						* (четыре цифры года, две цифры месяца, две цифры дня - 01, две цифры часа - 00, две цифры минут - 00, две цифры секунд - 00).
 						* Т.е. передается первое число месяца, который выбран в выпадающем списке. */
-						try
-						{  
-							ini_set("soap.wsdl_cache_enabled", "0");
-							$client1s = new SoapClient("http://1cupp.avk.company/Expenses/ws/Expenses/?wsdl");
-							$soap_params = array(
-								'codeCustomer'=>$h['customerid'],
-								'codeStateOfExpences'=>$h['statid'],
-								'codeDepartments'=>$h['departmentid'],
-								'codeProductTypes'=>$h['producttype'],
-								'codeCurrency'=>$h['currencycode'],
-								'sumExpenses'=>$h['summa'],
-								'dateExpenses'=>$h['dt'].'000000'
-								/*
-								'codeCustomer'=>1289358871218779886,
-								'codeStateOfExpences'=>1289198880368469776,
-								'codeDepartments'=>1289277617991902950,
-								'codeProductTypes'=>mb_convert_encoding('Кофе','UTF-8','CP1251'),
-								'codeCurrency'=>9,
-								'sumExpenses'=>123.456,
-								'dateExpenses'=>'2015090100000'
-								*/
-							);
-							foreach ($soap_params as $sk => $sv)
-							{
-								$soap_params[$sk] = mb_convert_encoding($sv,'UTF-8','CP1251');
+						$sql=rtrim(file_get_contents('sql/dzc_edit_customers.sql'));
+						$params=array(':id' => $h["id"]);
+						$sql=stritr($sql,$params);
+						$customers = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+						foreach ($customers as $cid=>$cval)
+						{
+							try
+							{  
+								ini_set("soap.wsdl_cache_enabled", "0");
+								$client1s = new SoapClient("http://1cupp.avk.company/Expenses/ws/Expenses/?wsdl");
+								$soap_params = array(
+									'codeCustomer'=>$cval["customerid"],
+									'codeStateOfExpences'=>$h['statid'],
+									'codeDepartments'=>$h['departmentid'],
+									'codeProductTypes'=>$h['producttype'],
+									'codeCurrency'=>$h['currencycode'],
+									'sumExpenses'=>$cval["summa"],
+									'dateExpenses'=>$h['dt'].'000000'
+									/*'codeCustomer'=>1289358871218779886,
+									'codeStateOfExpences'=>1289198880368469776,
+									'codeDepartments'=>1289277617991902950,
+									'codeProductTypes'=>mb_convert_encoding('Кофе','UTF-8','CP1251'),
+									'codeCurrency'=>9,
+									'sumExpenses'=>123.456,
+									'dateExpenses'=>'20150914000000'*/
+									
+								);
+								foreach ($soap_params as $sk => $sv)
+								{
+									$soap_params[$sk] = mb_convert_encoding($sv,'UTF-8','CP1251');
+								}
+								//var_dump($soap_params);
+								$result = $client1s->Get($soap_params)->return;
+								//var_dump(mb_convert_encoding($result,'CP1251','UTF-8'));
+								Table_Update(
+									"dzc_customers",
+									array("dzc_id"=>$h['id'],"customerid"=>$cval["customerid"]),
+									array("num1s"=>mb_convert_encoding($result,'CP1251','UTF-8'))
+								);
 							}
-							//var_dump($soap_params);
-							$result = $client1s->Get($soap_params)->return;
-							//var_dump(mb_convert_encoding($result,'CP1251','UTF-8'));
-							Table_Update("dzc",array("id"=>$h['id']),array("num1s"=>mb_convert_encoding($result,'CP1251','UTF-8')));
+							catch (Exception $e)
+							{ 
+								echo mb_convert_encoding($e->getMessage(),'CP1251','UTF-8');
+							}  
 						}
-						catch (Exception $e)
-						{ 
-							echo mb_convert_encoding($e->getMessage(),'CP1251','UTF-8');
-						}  
 					}
 				}
 				if ($v["accepted"]==2)
@@ -195,6 +205,7 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($data as $k=>$v){
 $d[$v["id"]]["head"]=$v;
 $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
+$d[$v["id"]]["customers"][$v["customerid"]]=$v;
 if ($v["chat_id"]!="")
 {
 $d[$v["id"]]["chat"][$v["chat_id"]]=$v;
