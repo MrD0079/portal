@@ -113,6 +113,14 @@ function send_msg(dt,msg)
 </form>
 
 
+<h3 id=td_ok_dpu_tn>
+Подтверждение ДП
+{if $is_dpu}
+<input {if $kcm.ok_dpu_tn}checked{/if} type=checkbox onChange="save('{$smarty.request.sd}','m','ok_dpu_tn',this.checked?{$tn}:'','');">
+{/if}
+<b>{$kcm.ok_dpu_fio} {$kcm.ok_dpu_lu}</b>
+</h3>
+
 
 {if not $disabled_msg}
 	<p>
@@ -158,13 +166,3 @@ function send_msg(dt,msg)
 
 
 {include file="kc_tbl.html"}
-
-
-<p id=td_ok_dpu_tn>
-Подтверждение ЗГДП
-{if $is_dpu}
-<input {if $kcm.ok_dpu_tn}checked{/if} type=checkbox onChange="save('{$smarty.request.sd}','m','ok_dpu_tn',this.checked?{$tn}:'','');">
-{/if}
-<b>{$kcm.ok_dpu_fio} {$kcm.ok_dpu_lu}</b>
-</p>
-
