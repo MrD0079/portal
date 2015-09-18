@@ -1,4 +1,4 @@
-/* Formatted on 01/07/2015 15:34:15 (QP5 v5.227.12220.39724) */
+/* Formatted on 18/09/2015 11:39:22 (QP5 v5.227.12220.39724) */
   SELECT   SUM (
               (SELECT SUM (
                          DECODE (
@@ -246,4 +246,16 @@
          AND u.dpt_id = :dpt_id
          AND u.tn = prob_prosroch.coach(+)
          AND u.tn = prob_test_perc.coach(+)
+         AND (   u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :tn)
+              OR (SELECT NVL (is_acceptor, 0)
+                    FROM user_list
+                   WHERE tn = :tn) = 1
+              OR (SELECT NVL (is_ndp, 0)
+                    FROM user_list
+                   WHERE tn = :tn) = 1
+              OR (SELECT NVL (is_dpu, 0)
+                    FROM user_list
+                   WHERE tn = :tn) = 1)
 ORDER BY u.fio

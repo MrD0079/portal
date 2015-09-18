@@ -126,6 +126,12 @@ function add_file(id)
 
 <p>
 <a href='javascript:void(0);' onclick="add_item(0);">добавить дистрибьютора</a>
+<div>
+	Итоговая сумма:
+	<div style="display:inline" id=total>
+		{0|num:2}
+	</div>
+</div>
 <table id=items border=0 cellpadding=3 cellspacing=0><tbody></tbody></table>
 </p>
 
@@ -150,6 +156,7 @@ function add_file(id)
 						$('#items>tbody:last').append(''+data+'');
 						$('#customers_'+id+'_customerid option[value="'+customerid+'"]').prop('selected', true);
 						$('#customers_'+id+'_summa').val(summa);
+						calc_total();
 					}
 				}
 			);
@@ -157,6 +164,14 @@ function add_file(id)
 		function del_item(id)
 		{
 			$('#list_'+id).remove();
+		}
+		function calc_total()
+		{
+			var i = 0;
+			$('.total').each(function(){
+				i+=parseFloat($(this).val()?$(this).val():0);
+			});
+			$('#total').text(i.toFixed(2));
 		}
 	</script>
 	{/literal}

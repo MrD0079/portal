@@ -104,7 +104,7 @@ if (isset($_REQUEST["id"]))
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$_REQUEST["dzc_customers"]=$data;
 
-ses_req();
+//ses_req();
 
 	if (isset($_REQUEST["files_del"]))
 	{

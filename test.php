@@ -1,6 +1,14 @@
 <?
 
 
+send_mail('denis.yakovenko@avk.ua','test','test');
+
+
+exit;
+
+
+
+
 echo 30 * 5 . 7;
 //var_dump(3*4);
 exit;
@@ -76,4 +84,3 @@ echo $pathold."/".$v["val"]." =>  =>  => ".$pathnew."/".$v["val"]."<br>";
 }
 
 
-?>
