@@ -1,0 +1,67 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<h1>З/п за месяц</h1>
+Выберите месяц
+<select name=month_list id=month_list onchange="$('#form1').submit();">
+{foreach key=key item=item from=$month_list}
+<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+<input value="Выбрать" name="select_month" type="submit">
+</form>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>№ п/п</td>
+		<td>ФИО СВ МС</td>
+		<td>Название маршрута</td>
+		<td>ФИО ответственного</td>
+		<td>PIN</td>
+		<td>Последнее изменение</td>
+	</tr>
+	<tr style="font-weight:bold">
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+			<td>{$smarty.foreach.d.iteration}</td>
+			<td>{$i.svms}</td>
+			<td>{$i.num}</td>
+			<td>{$i.fio_otv}</td>
+			<td>
+				<input
+					class="num4"
+					name=data[{$i.id}]
+					id=data{$i.id}pin
+					value="{$i.pin}"
+					onChange="save({$i.id},'pin',this.value);"
+					size=5
+					class="number_int"
+				>
+			</td>
+			<td>{$i.pin_lu} {$i.pin_lu_fio}</td>
+		</tr>
+	{/foreach}
+</table>
+
+
+
+{literal}
+<script>
+$('.num4').mask('9999');
+function save(id,field,val)
+{
+	$('#data'+id+field).css('background-color','red');
+	$('#ok').load('?action=mr_zp&save=1&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#data'+id+field).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

@@ -64,7 +64,7 @@
 		<tr>
 			<td>Наименование группы</td>
 			<td>
-				<select required name="groupp" id="groupp" onChange="$('#fin_plan_month').submit();">
+				<select required name="groupp" id="groupp" onChange="{literal}$('#fin_plan_month').find(':input').each(function(){$(this).attr('required',false);});$('#fin_plan_month').submit();{/literal}">
 					<option></option>
 					{foreach key=key item=item from=$groups}
 					<option value={$item.id}>{$item.gr_name}</option>
@@ -96,10 +96,10 @@
 					>
 						<td>{$item.cost_item}</td>
 						<td style="text-align:center"><input type=checkbox name=statya_enabled[{$item.id}] id=statya_enabled{$item.id}></td>
-						<td style="text-align:center"><input size=15 name=cnt[{$item.id}] id=cnt{$item.id}></td>
+						<td style="text-align:center"><input class=number3 size=15 name=cnt[{$item.id}] id=cnt{$item.id}></td>
 						<td style="text-align:center">
-							{if $smarty.request.payment_format eq 1}<input size=15 name=bonus[{$item.id}] id=bonus{$item.id}>{/if}
-							{if $smarty.request.payment_format eq 2}<input size=15 name=price[{$item.id}] id=price{$item.id}>{/if}
+							{if $smarty.request.payment_format eq 1}<input class=number3 size=15 name=bonus[{$item.id}] id=bonus{$item.id}>{/if}
+							{if $smarty.request.payment_format eq 2}<input class=number3 size=15 name=price[{$item.id}] id=price{$item.id}>{/if}
 						</td>
 						<td>
 							<select required name=mkk_ter[{$item.id}] id=mkk_ter{$item.id}>

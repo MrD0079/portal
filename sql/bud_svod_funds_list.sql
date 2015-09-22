@@ -1,4 +1,4 @@
-/* Formatted on 18/05/2015 19:38:05 (QP5 v5.227.12220.39724) */
+/* Formatted on 22/09/2015 13:16:57 (QP5 v5.227.12220.39724) */
   SELECT tf.fil_id,
          tf.name,
          /*tf.db_list,*/
@@ -22,7 +22,7 @@
          + NVL (act.fakt_distr, 0)
          + NVL (svs.fakt_distr, 0)
             fakt_distr,
-         zay.compens_db,
+         act_local.compens_db + zay.compens_db compens_db,
          tf.period,
          (SELECT mt || ' ' || y
             FROM calendar
@@ -151,8 +151,7 @@
                                                                      accept_order)
                                                              FROM bud_ru_zay_accept
                                                             WHERE     z_id = z.id
-                                                                  AND accepted =
-                                                                         2),
+                                                                  AND accepted = 2),
                                                           0),
                                                        0, (SELECT MAX (
                                                                      accept_order)
@@ -161,8 +160,7 @@
                                                        (SELECT MAX (accept_order)
                                                           FROM bud_ru_zay_accept
                                                          WHERE     z_id = z.id
-                                                               AND accepted =
-                                                                      2)))
+                                                               AND accepted = 2)))
                                         current_accepted_id,
                                      st.name st_name,
                                      kat.name kat_name,
@@ -263,6 +261,7 @@
                    SUM (summa) summa,
                    SUM (bonus_sum) bonus_sum,
                    SUM (compens_distr) compens_distr,
+                   SUM (compens_db) compens_db,
                    SUM (fakt_distr) fakt_distr
               FROM (  SELECT z.id,
                              z.dt_start,
@@ -275,6 +274,7 @@
                              t.summa,
                              t.bonus_sum,
                              t.compens_distr,
+                             t.compens_db,
                              t.fakt_distr,
                              f.name fil_name,
                              zff1.val_string,
@@ -313,6 +313,20 @@
                                                                      WHERE     dpt_id =
                                                                                   :dpt_id
                                                                            AND admin_id =
+                                                                                  9)
+                                                            AND z_id = z.id),
+                                                    0) = 1
+                                            THEN
+                                               0
+                                            WHEN NVL (
+                                                    (SELECT val_bool
+                                                       FROM bud_ru_zay_ff
+                                                      WHERE     ff_id IN
+                                                                   (SELECT id
+                                                                      FROM bud_ru_ff
+                                                                     WHERE     dpt_id =
+                                                                                  :dpt_id
+                                                                           AND admin_id =
                                                                                   8)
                                                             AND z_id = z.id),
                                                     0) = 0
@@ -335,6 +349,24 @@
                                                    WHERE id = z.fil)
                                          END
                                           compens_distr,
+                                         SUM (t.bonus_sum)
+                                       * CASE
+                                            WHEN NVL (
+                                                    (SELECT val_bool
+                                                       FROM bud_ru_zay_ff
+                                                      WHERE     ff_id IN
+                                                                   (SELECT id
+                                                                      FROM bud_ru_ff
+                                                                     WHERE     dpt_id =
+                                                                                  :dpt_id
+                                                                           AND admin_id =
+                                                                                  9)
+                                                            AND z_id = z.id),
+                                                    0) = 1
+                                            THEN
+                                               1
+                                         END
+                                          compens_db,
                                        SUM (t.bonus_sum) fakt_distr,
                                        TRUNC (z.dt_start, 'mm') period
                                   FROM (SELECT m.dt,
@@ -405,8 +437,7 @@
                                                    (SELECT MAX (accept_order)
                                                       FROM bud_ru_zay_accept
                                                      WHERE     z_id = z.id
-                                                           AND accepted = 2))) =
-                                    1
+                                                           AND accepted = 2))) = 1
                              AND z.valid_no = 0
                              AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE (
                                                                      :sd,

@@ -1,4 +1,4 @@
-/* Formatted on 28/07/2015 14:41:42 (QP5 v5.227.12220.39724) */
+/* Formatted on 22/09/2015 13:31:27 (QP5 v5.227.12220.39724) */
   SELECT x.fil_id,
          x.fil_name,
          SUM (x.sales_fact) / COUNT (DISTINCT x.fund_id) sales_fact,
@@ -10,7 +10,7 @@
             gsm_total,
          SUM (CASE WHEN x.fnd_kod = 'prm' THEN x.promo_total ELSE NULL END)
             promo_total,
-         SUM (x.zay_compens_db) zay_compens_db,
+         SUM (x.compens_db) compens_db,
          x.prot_db,
          x.ok_db_tn,
          x.ok_t1_tn,
@@ -56,7 +56,7 @@
                    act.compens_distr act_compens_distr,
                    act_local.compens_distr act_local_compens_distr,
                    zay.compens_distr zay_compens_distr,
-                   zay.compens_db zay_compens_db,
+                   act_local.compens_db + zay.compens_db compens_db,
                      NVL (act.compens_distr, 0)
                    + NVL (act_local.compens_distr, 0)
                    + NVL (zay.compens_distr, 0)
@@ -189,8 +189,7 @@
                                                                      accept_order)
                                                              FROM bud_ru_zay_accept
                                                             WHERE     z_id = z.id
-                                                                  AND accepted =
-                                                                         2),
+                                                                  AND accepted = 2),
                                                           0),
                                                        0, (SELECT MAX (
                                                                      accept_order)
@@ -199,8 +198,7 @@
                                                        (SELECT MAX (accept_order)
                                                           FROM bud_ru_zay_accept
                                                          WHERE     z_id = z.id
-                                                               AND accepted =
-                                                                      2)))
+                                                               AND accepted = 2)))
                                         current_accepted_id,
                                      st.name st_name,
                                      kat.name kat_name,
@@ -277,7 +275,10 @@
                                      AND u.tn = DECODE (:db, 0, u.tn, :db)) z
                        WHERE current_accepted_id = 1 AND deleted = 0
                     GROUP BY z.fil, z.funds) zay,
-                   (  SELECT z.fil, z.funds, SUM (t.compens_distr) compens_distr
+                   (  SELECT z.fil,
+                             z.funds,
+                             SUM (t.compens_distr) compens_distr,
+                             SUM (t.compens_db) compens_db
                         FROM bud_ru_zay z,
                              user_list u,
                              bud_ru_st_ras st,
@@ -297,6 +298,20 @@
                                        SUM (t.bonus_sum) bonus_sum,
                                          SUM (t.bonus_sum)
                                        * CASE
+                                            WHEN NVL (
+                                                    (SELECT val_bool
+                                                       FROM bud_ru_zay_ff
+                                                      WHERE     ff_id IN
+                                                                   (SELECT id
+                                                                      FROM bud_ru_ff
+                                                                     WHERE     dpt_id =
+                                                                                  :dpt_id
+                                                                           AND admin_id =
+                                                                                  9)
+                                                            AND z_id = z.id),
+                                                    0) = 1
+                                            THEN
+                                               0
                                             WHEN NVL (
                                                     (SELECT val_bool
                                                        FROM bud_ru_zay_ff
@@ -327,7 +342,25 @@
                                                     FROM bud_fil
                                                    WHERE id = z.fil)
                                          END
-                                          compens_distr
+                                          compens_distr,
+                                         SUM (t.bonus_sum)
+                                       * CASE
+                                            WHEN NVL (
+                                                    (SELECT val_bool
+                                                       FROM bud_ru_zay_ff
+                                                      WHERE     ff_id IN
+                                                                   (SELECT id
+                                                                      FROM bud_ru_ff
+                                                                     WHERE     dpt_id =
+                                                                                  :dpt_id
+                                                                           AND admin_id =
+                                                                                  9)
+                                                            AND z_id = z.id),
+                                                    0) = 1
+                                            THEN
+                                               1
+                                         END
+                                          compens_db
                                   FROM (SELECT m.tab_num,
                                                m.tp_kod,
                                                m.y,
@@ -377,8 +410,7 @@
                                                    (SELECT MAX (accept_order)
                                                       FROM bud_ru_zay_accept
                                                      WHERE     z_id = z.id
-                                                           AND accepted = 2))) =
-                                    1
+                                                           AND accepted = 2))) = 1
                              AND z.valid_no = 0
                              AND TRUNC (z.dt_start, 'mm') =
                                     TO_DATE (:dt, 'dd.mm.yyyy')

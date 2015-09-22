@@ -10,6 +10,7 @@
          t.summa,
          t.bonus_sum,
          t.compens_distr,
+t.compens_db,
          f.name fil_name,
          zff1.val_string,
          zff2.val_textarea,
@@ -45,9 +46,21 @@
                                                (SELECT id
                                                   FROM bud_ru_ff
                                                  WHERE     dpt_id = :dpt_id
+                                                       AND admin_id = 9)
+                                        AND z_id = z.id),
+                                0) = 1 
+                        THEN
+                           0
+                        WHEN NVL (
+                                (SELECT val_bool
+                                   FROM bud_ru_zay_ff
+                                  WHERE     ff_id IN
+                                               (SELECT id
+                                                  FROM bud_ru_ff
+                                                 WHERE     dpt_id = :dpt_id
                                                        AND admin_id = 8)
                                         AND z_id = z.id),
-                                0) = 0
+                                0) = 0 
                         THEN
                            1
                         ELSE
@@ -64,6 +77,22 @@
                                WHERE id = z.fil)
                      END
                       compens_distr,
+                     SUM (t.bonus_sum)
+                   * CASE
+                        WHEN NVL (
+                                (SELECT val_bool
+                                   FROM bud_ru_zay_ff
+                                  WHERE     ff_id IN
+                                               (SELECT id
+                                                  FROM bud_ru_ff
+                                                 WHERE     dpt_id = :dpt_id
+                                                       AND admin_id = 9)
+                                        AND z_id = z.id),
+                                0) = 1 
+                        THEN
+                           1
+                     END
+                      compens_db,
                    TRUNC (z.dt_start, 'mm') period
               FROM (SELECT m.dt,
                            m.tab_num,
