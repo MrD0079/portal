@@ -6,37 +6,38 @@
 
 InitRequestVar('files_activ',1);
 
+ses_req();
 
-if (isset($_REQUEST["new"]))
+if (isset($_REQUEST["new_section"]))
 {
-	foreach ($_REQUEST["new"] as $k=>$v)
-	{
-		$table=$k;
-		foreach($v as $k1=>$v1)
-		{
-			$keys=array("id"=>-1/*$k1*/);
-			$values=$v1;
+	Table_Update('files_sections',$_REQUEST["new_section"],$_REQUEST["new_section"]);
+}
 
-			if (isset($values["section"]))
-			{
-			if (isset($_FILES["new"]["tmp_name"]["files"][$values["section"]]["path"]))
-			{
-				move_uploaded_file(
-					$_FILES["new"]["tmp_name"]["files"][$values["section"]]["path"],
-					"files/".$_SESSION["cnt_kod"]."/".translit($_FILES["new"]["name"]["files"][$values["section"]]["path"])
-				);
-				$values["path"]="files/".$_SESSION["cnt_kod"]."/".translit($_FILES["new"]["name"]["files"][$values["section"]]["path"]);
-			}
-			}
-			if ($values["name"]!='')
-			{
-				Table_Update($table,$keys,$values);
-				//echo  "insert ".$table;
-				//print_r($keys);
-				//print_r($values);
-				//echo "<br>";
-			}
-		}
+if (
+	isset($_REQUEST["new_file"])
+	&&
+	isset($_FILES["new_file"])
+	&&
+	$_FILES['new_file']['error']==0
+	&&
+	is_uploaded_file($_FILES["new_file"]["tmp_name"])
+	&&
+	isset($_REQUEST["new_file_dpt"])
+)
+{
+	foreach ($_REQUEST["new_file_dpt"] as $k=>$v)
+	{
+		$path = "files/faq_".get_new_file_id().'_'.translit($_FILES["new_file"]["name"]);
+		copy($_FILES["new_file"]["tmp_name"],$path);
+		$vals=$_REQUEST["new_file"];
+		$vals["path"]=$path;
+		$sql='SELECT fn_check_file_section (:h_name, :dpt_id) FROM DUAL';
+		$params=array(':h_name'=>"'".$vals['section']."'",':dpt_id' => $v);
+		$sql=stritr($sql,$params);
+		$section_id = $db->getOne($sql);
+		$vals['section'] = $section_id;
+		//var_dump($vals);
+		Table_Update('files',$vals,$vals);
 	}
 }
 
@@ -59,6 +60,24 @@ if (isset($_REQUEST["update"]))
 	}
 }
 
+if (isset($_FILES["update"]))
+{
+	foreach ($_FILES["update"]["name"] as $k=>$v)
+	{
+		$table=$k;
+		foreach($v as $k1=>$v1)
+		{
+			if (is_uploaded_file($_FILES["update"]["tmp_name"][$k][$k1]['avatar']))
+			{
+				$path = "files/faq_avatar_".get_new_file_id().'_'.translit($v1['avatar']);
+				move_uploaded_file($_FILES["update"]["tmp_name"][$k][$k1]['avatar'],$path);
+				$keys=array("id"=>$k1);
+				$vals=array('avatar'=>$path);
+				Table_Update($table,$keys,$vals);
+			}
+		}
+	}
+}
 
 if (isset($_REQUEST["delete"]))
 {
@@ -81,6 +100,9 @@ if (isset($_REQUEST["delete"]))
 }
 
 
+$sql=rtrim(file_get_contents('sql/files_sections.sql'));
+$files = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('files_sections', $files);
 
 $sql=rtrim(file_get_contents('sql/files.sql'));
 $params=array(':pos_id'=>0,':dpt_id' => $_SESSION["dpt_id"],':files_activ'=>$_REQUEST["files_activ"]);

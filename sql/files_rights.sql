@@ -1,13 +1,29 @@
-/* Formatted on 04/03/2015 10:28:27 (QP5 v5.227.12220.39724) */
-  SELECT DISTINCT pos.pos_id, pos.pos_name, f.ID
-    FROM user_list st,
-         pos,
-         (SELECT *
-            FROM files_rights
-           WHERE file_id = :id) f
-   WHERE     pos.pos_id = st.pos_id
-         AND pos.pos_id = f.pos_id(+)
-         AND st.datauvol IS NULL
-         AND st.dpt_id = :dpt_id
-         AND st.tn <> 2885600038
-ORDER BY pos.pos_name
+/* Formatted on 23/09/2015 17:59:14 (QP5 v5.227.12220.39724) */
+SELECT pos.pos_id id,
+       pos.pos_name name,
+       f.ID fid,
+       'pos' tbl,
+       'yellow' color
+  FROM pos,
+       (SELECT *
+          FROM files_rights
+         WHERE file_id = :id) f
+ WHERE     pos.pos_id = f.pos_id(+)
+       AND pos.pos_id IN
+              (SELECT pos_id
+                 FROM user_list
+                WHERE     datauvol IS NULL
+                      AND dpt_id = :dpt_id
+                      AND tn <> 2885600038)
+UNION
+SELECT pers_cats.id,
+       pers_cats.name,
+       f.ID fid,
+       'cat' tbl,
+       'lightblue' color
+  FROM pers_cats,
+       (SELECT *
+          FROM files_rights
+         WHERE file_id = :id) f
+ WHERE pers_cats.id = f.cat_id(+)
+ORDER BY tbl, name

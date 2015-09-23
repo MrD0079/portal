@@ -1,0 +1,93 @@
+<h3>Категории персонала для раздела "Надо знать"</h3>
+
+<div id=detail_0></div>
+
+{literal}
+<script>
+function add_pers_cat(id)
+{
+var fd = new FormData();
+fd.append('parent', id);
+fd.append('new_pers_cat_name', $('#new_pers_cat_name_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=pers_cats_new&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tpers_cats_'+id+'>tbody:last').append(''+data+'');
+  
+  }
+});
+}
+function save_pers_cat(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=pers_cats_save&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function del_pers_cat(id)
+{
+save_pers_cat(id,'id',0);
+$('#pers_cat_'+id).remove();
+}
+function show_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=pers_cats_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  
+  }
+});
+}
+$(function() {show_items(0);});
+function show_poss_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=pers_cats_poss_items&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('.detail').html('');
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  }
+});
+}
+function save_pers_cat_poss(id,parent,val)
+{
+	$('#d_'+id+'_'+parent).css('background-color','red');
+	$('#t_'+id+'_'+parent).load('?action=pers_cats_poss_save&nohead=1',
+	{
+		id: id,
+		parent: parent,
+		val: val
+	},
+	function() {
+	val==1?$('#d_'+id+'_'+parent).css('background-color','rgb(153, 255, 153)'):$('#d_'+id+'_'+parent).css('background-color','white');
+	});
+}
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

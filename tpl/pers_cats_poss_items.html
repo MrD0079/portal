@@ -1,0 +1,21 @@
+<table id=tpers_cats_{$smarty.request.id} border=0 cellpadding=3 cellspacing=0>
+	<tbody>
+		<tr>
+			<td style="text-align:left">
+			{foreach key=k item=i from=$pers_cats_poss}
+				<div id=d_{$i.pos_id}_{$smarty.request.id} style="display: inline;">
+					<nobr>
+						<input id=cb_{$i.pos_id}_{$smarty.request.id} type=checkbox onClick="save_pers_cat_poss({$i.pos_id},{$smarty.request.id},this.checked?1:0);">
+						{$i.pos_name} <div id=t_{$i.pos_id}_{$smarty.request.id} style="display: inline; font-weight:bold">({$i.pers_cats_list})</div>
+						<script>
+							$("#cb_{$i.pos_id}_{$smarty.request.id}").attr('checked','{$i.selected}'=='1'?true:false);
+							'{$i.selected}'=='1'?$('#d_{$i.pos_id}_{$smarty.request.id}').css('background-color','rgb(153, 255, 153)'):null;
+						</script>
+					</nobr>
+				</div>
+				<br>
+			{/foreach}
+			</td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,22 @@
+<table id=tpers_cats_{$smarty.request.id} border=0 cellpadding=3 cellspacing=0 style="text-align:left">
+	<tbody>
+		{if $smarty.request.id eq 0}
+		{/if}
+		<tr>
+			<td>
+				<input size=50 id=new_pers_cat_name_{$smarty.request.id}>
+				<a href="javascript:void(0);" onClick="add_pers_cat({$smarty.request.id});">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$pers_cats}
+			<tr id=pers_cat_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_pers_cat({$i.id})">[x]</a>
+					<input id=d_{$i.id}_name size=50 value="{$i.name}" onChange="save_pers_cat({$i.id},'name',this.value);">
+					<a href='javascript:void(0);' onClick="show_poss_items({$i.id})">Должности</a>
+					<div style="margin-left:50px" class="detail" id=detail_{$i.id}></div>
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>

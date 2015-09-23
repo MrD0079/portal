@@ -1,8 +1,8 @@
-/* Formatted on 04/03/2015 10:33:33 (QP5 v5.227.12220.39724) */
+/* Formatted on 23/09/2015 18:15:52 (QP5 v5.227.12220.39724) */
            SELECT *
              FROM (SELECT ID,
                           NAME,
-                          NULL PATH,
+                          avatar PATH,
                           NULL PARENT,
                           orderby,
                           TO_CHAR (lu, 'dd.mm.yyyy hh24:mi:ss') lu
@@ -27,7 +27,17 @@
                     WHERE    (SELECT COUNT (*)
                                 FROM files_rights
                                WHERE     file_id = f.ID
-                                     AND DECODE (:pos_id, 0, pos_id, :pos_id) = pos_id) >
+                                     AND pos_id = (SELECT pos_id
+                                                     FROM user_list
+                                                    WHERE tn = :tn)) > 0
+                          OR (SELECT COUNT (*)
+                                FROM files_rights
+                               WHERE     file_id = f.ID
+                                     AND cat_id = (SELECT pers_cat_id
+                                                     FROM pers_cats_poss
+                                                    WHERE pos_id = (SELECT pos_id
+                                                                      FROM user_list
+                                                                     WHERE tn = :tn))) >
                                 0
                           OR (SELECT is_admin
                                 FROM user_list

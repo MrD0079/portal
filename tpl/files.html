@@ -13,7 +13,51 @@ $('.apage').css('font-weight','');
 $('#a{$smarty.request.files_activ}').css('font-weight','bold');
 </script>
 
-
+<table border=1 cellpadding=15>
+	<tr>
+		<td>
+			<form target="_self" method="POST" name=formf id=formf enctype="multipart/form-data">
+			Новый раздел
+			<input required1 name=new_section[name] size=20>
+			<br>
+			порядок
+			<input required1 name=new_section[orderby] size=5>
+			<input type=hidden name=new_section[dpt_id] value={$dpt_id}>
+			<br>
+			<input type=submit value="добавить">
+			</form>
+		</td>
+		<td>
+			<form target="_self" method="POST" name=forms id=forms enctype="multipart/form-data">
+			Новый файл
+			<input required1 name=new_file type=file>
+			<br>
+			раздел
+			<select required1 name=new_file[section]>
+				<option></option>
+				{foreach key=key item=item from=$files_sections}
+				<option value="{$item.h_name}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<br>
+			название
+			<input required1 name=new_file[name] size=20>
+			<br>
+			порядок
+			<input required1 name=new_file[orderby] size=5>
+			<br>
+			Страна
+			{foreach key=key item=item from=$countries name=countries}
+			<input type=checkbox name=new_file_dpt[] value={$item.dpt_id} {if $item.cnt_kod eq $cnt_kod}checked{/if}>
+			{$item.dpt_name}
+			{if $smarty.foreach.countries.iteration%3 eq 0}<br>{/if}
+			{/foreach}
+			<br>
+			<input type=submit value="добавить">
+			</form>
+		</td>
+	</tr>
+</table>
 
 <form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
 
@@ -22,26 +66,16 @@ $('#a{$smarty.request.files_activ}').css('font-weight','bold');
 </p>
 
 
-<nobr>
-Новый раздел <input name=new[files_sections][0][name] size=20>
-порядок <input name=new[files_sections][0][orderby] size=5>
-</nobr>
-
-<input type=hidden name=new[files_sections][0][dpt_id] value={$dpt_id}>
-
-
-
-<br>
-<br>
 
 <table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold">
 		<td>[x]</td>
 		<td>разделы/файлы</td>
 		<td>порядок</td>
-		<td>путь/загрузка</td>
+		<td>путь / загрузка аватарок для разделов</td>
 		<td>права</td>
 		<td>статус</td>
+		<td>загружен</td>
 	</tr>
 	{foreach key=key item=item from=$files}
 	{if $item.fr neq 'dual'}
@@ -56,15 +90,11 @@ $('#a{$smarty.request.files_activ}').css('font-weight','bold');
 			<input name=update[{$item.fr}][{$item.id}][orderby] size=5 value="{$item.orderby}">
 		</td>
 		<td>
-			{if $item.fr eq 'files_sections'}
-				<nobr>
-				Выбрать файл для добавления в этот раздел<br><input name=new[files][{$item.id}][path] type=file>
-				название <input name=new[files][{$item.id}][name] size=20>
-				порядок <input name=new[files][{$item.id}][orderby] size=5>
-				</nobr>
-				<input type=hidden name=new[files][{$item.id}][section] size=5 value={$item.id}>
+			{if $item.fr eq 'files'}
+				<nobr><a target=_blank href="{$item.path}">{$item.path}</a></nobr>
 			{else}
-				<nobr>{$item.path|escape}</nobr>
+				{if $item.path}<a target=_blank href="{$item.path}"><img style="height:100px;" src="{$item.path}"></a>{/if}
+				<input type=file name=update[{$item.fr}][{$item.id}][avatar]>
 			{/if}
 		</td>
 		<td>
@@ -75,6 +105,11 @@ $('#a{$smarty.request.files_activ}').css('font-weight','bold');
 		<td {if $item.cnt}style="background-color:lightgreen"{/if}>
 			{if $item.fr eq 'files'}
 				{if $item.cnt}активный{/if}
+			{/if}
+		</td>
+		<td>
+			{if $item.fr eq 'files'}
+				{$item.lu}
 			{/if}
 		</td>
 	</tr>

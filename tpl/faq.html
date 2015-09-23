@@ -1,22 +1,33 @@
-<table border=0 width=100% cellpadding=3>
+<table border=0 width=600px cellpadding=3>
 <tr>
 <td valign=top align=left>
-{foreach key=key item=item from=$files}
-{if $item.parent eq null}
-<p style="color:red;font-weight:bold">{$item.name}</p>
-{else}
-&nbsp&nbsp&nbsp&nbsp&nbsp<a target=_blank href="{$item.path}">{$item.name}</a><br>
-{/if}
-{/foreach}
+<ul>
+	{foreach key=k item=i from=$data}
+	<li style="list-style-type: none; border:3px solid {cycle values='#0070C0,#00B050'}; margin-top: 10px;  padding: 10px; border-radius: 10px;">
+		<table border=0>
+			<tr>
+				<td>
+					{if $i.section.path}
+						<a target=_blank href="{$i.section.path}">
+							<img align=middle src="{$i.section.path}">
+						</a>
+					{/if}
+				</td>
+				<td>
+					<span style="font-size:22px">{$i.section.name}</span>
+				</td>
+			</tr>
+		</table>
+		<ul>
+			{foreach key=k1 item=i1 from=$i.files}
+			<li style="list-style-type: disc;">
+				<a target=_blank href="{$i1.path}">{$i1.name}</a>
+			</li>
+			{/foreach}
+		</ul>
+	</li>
+	{/foreach}
+</ul>
 </td>
 </tr>
 </table>
-
-
-
-
-
-
-
-
-

@@ -10,7 +10,7 @@
                      cnt
              FROM (SELECT ID,
                           NAME,
-                          NULL PATH,
+                          avatar PATH,
                           NULL PARENT,
                           orderby,
                           TO_CHAR (lu, 'dd.mm.yyyy hh24:mi:ss') lu,

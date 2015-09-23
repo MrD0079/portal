@@ -1,0 +1,8 @@
+<tr id=pers_cat_{$id}>
+	<td>
+		<a href='javascript:void(0);' onClick="del_pers_cat({$id})">[x]</a>
+		<input id=d_{$id}_name size=50 value="{$name}" onChange="save_pers_cat({$id},'name',this.value);">
+		<a href='javascript:void(0);' onClick="show_poss_items({$id})">Должности</a>
+		<div style="margin-left:50px" class="detail" id=detail_{$id}></div>
+	</td>
+</tr>

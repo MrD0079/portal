@@ -12,8 +12,6 @@
 <input type=submit value="оповестить" name=files_rassilka>
 </p>
 
-
-
 <table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold">
 		<td>
@@ -22,25 +20,25 @@
 			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
 			{/literal}
 		</td>
-		<td>должность</td>
+		<td>категория/должность</td>
 	</tr>
 	{foreach key=key item=item from=$files_rights}
 	<tr>
-		<td {if $item.id neq null}bgcolor="#00ff00"{/if}>
+		<td {if $item.fid neq null}bgcolor="#00ff00"{/if}>
 			<input
 				type=checkbox
 				class="chk_all"
-				name="cb[]"
-				onClick="$('#enabled1_{$item.pos_id}').val(this.checked?1:0);"
-				value="{$item.pos_id}"
-				{if $item.id neq null}checked{/if}
-				name="e1{$item.pos_id}" id="e1{$item.pos_id}"
+				onClick="$('#enabled1_{$item.id}').val(this.checked?1:0);"
+				value="{$item.id}"
+				{if $item.fid neq null}checked{/if}
 			>
-			<input type=hidden name="enabled1[{$item.pos_id}]" id="enabled1_{$item.pos_id}" value="">
+			<input type=hidden name="enabled1[{$item.tbl}][{$item.id}]" id="enabled1_{$item.id}" value="">
 		</td>
-		<td>{$item.pos_name|escape}</td>
+		<td bgcolor="{$item.color}">{$item.name}</td>
 	</tr>
 	{/foreach}
 </table>
+
+
 
 </form>
