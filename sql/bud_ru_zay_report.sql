@@ -1,4 +1,4 @@
-/* Formatted on 28/08/2015 12:35:22 (QP5 v5.227.12220.39724) */
+/* Formatted on 24/09/2015 17:05:48 (QP5 v5.227.12220.39724) */
   SELECT z.*,
          NVL (current_accepted_id, 0) current_status,
          DECODE (current_acceptor_tn, :tn, 1, 0) allow_status_change
@@ -56,11 +56,10 @@
                    WHERE     z_id = z.id
                          AND accept_order =
                                 DECODE (
-                                   NVL (
-                                      (SELECT MAX (accept_order)
-                                         FROM bud_ru_zay_accept
-                                        WHERE z_id = z.id AND accepted = 2),
-                                      0),
+                                   NVL ( (SELECT MAX (accept_order)
+                                            FROM bud_ru_zay_accept
+                                           WHERE z_id = z.id AND accepted = 2),
+                                        0),
                                    0, (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
                                         WHERE z_id = z.id),
@@ -76,8 +75,7 @@
                                    NVL (
                                       (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
-                                        WHERE     z_id = z.id
-                                              AND rep_accepted = 2),
+                                        WHERE z_id = z.id AND rep_accepted = 2),
                                       0),
                                    0, (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
@@ -85,8 +83,7 @@
                                               AND rep_accepted IS NOT NULL),
                                    (SELECT MAX (accept_order)
                                       FROM bud_ru_zay_accept
-                                     WHERE     z_id = z.id
-                                           AND rep_accepted = 2)))
+                                     WHERE z_id = z.id AND rep_accepted = 2)))
                     current_accepted_id,
                  (SELECT tn
                     FROM bud_ru_zay_accept
@@ -112,8 +109,7 @@
                                    NVL (
                                       (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
-                                        WHERE     z_id = z.id
-                                              AND rep_accepted = 2),
+                                        WHERE z_id = z.id AND rep_accepted = 2),
                                       0),
                                    0, (SELECT MAX (accept_order)
                                          FROM bud_ru_zay_accept
@@ -121,8 +117,7 @@
                                               AND rep_accepted IS NOT NULL),
                                    (SELECT MAX (accept_order)
                                       FROM bud_ru_zay_accept
-                                     WHERE     z_id = z.id
-                                           AND rep_accepted = 2)))
+                                     WHERE z_id = z.id AND rep_accepted = 2)))
                     current_accepted_date,
                  (SELECT COUNT (tn)
                     FROM bud_ru_zay_accept
@@ -213,7 +208,8 @@
                  n.net_name,
                  z.report_short,
                  pt.pay_type payment_type_name,
-                 ss.cost_item statya_name,z.distr_compensation
+                 ss.cost_item statya_name,
+                 z.distr_compensation
             FROM bud_ru_zay z,
                  bud_ru_zay_accept za,
                  accept_types zat,
@@ -271,18 +267,7 @@
                         3, 0,
                         4, 0)
          AND DECODE (:status, 3, 1, 0) = DECODE (:status, 3, deleted, 0)
-         AND DECODE (:status, 1, 0, 0) = DECODE (:status, 1, valid_no, 0)
-         AND DECODE (:status, 4, 1, 0) = DECODE (:status, 4, valid_no, 0)
-         /*         AND DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0) =
-                         DECODE (:status,
-                                 0, 0,
-                                 1, current_accepted_id,
-                                 2, NVL (current_accepted_id, 0),
-                                 3, 0)
-                  AND DECODE (:status, 3, 1, 0) = DECODE (:status, 3, deleted, 0)
-                  AND DECODE (:status, 0, 0, 0) = DECODE (:status, 0, valid_no, 0)
-                  AND DECODE (:status, 3, 1, 0) = DECODE (:status, 3, valid_no, 0)
-         */
+         AND DECODE (:status, 4, 1, 0) = NVL (valid_no, 0)
          AND DECODE (:who,  0, 1,  1, :tn,  2, 1) =
                 DECODE (
                    :who,

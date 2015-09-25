@@ -149,18 +149,14 @@
 	{/if}
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Ожидают отчета</td>
-		<td {if $bud_ru_zay_report_total1_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=0&who=1&select=1&dates_list1={$bud_ru_zay_report_total1_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_i.c|default:0}</a></td>
-		<td {if $bud_ru_zay_report_total1_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total1_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_o.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total1_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=1&select=1&dates_list1={$bud_ru_zay_report_total1_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_i.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total1_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total1_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_o.c|default:0}</a></td>
 	</tr>
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Отчет просрочен</td>
-		<td {if $bud_ru_zay_report_total3_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=2&who=1&select=1&dates_list1={$bud_ru_zay_report_total3_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_i.c|default:0}</a></td>
-		<td {if $bud_ru_zay_report_total3_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=0&report_done_flt=2&srok_ok=2&who=2&select=1&dates_list1={$bud_ru_zay_report_total3_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_o.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total3_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=2&who=1&select=1&dates_list1={$bud_ru_zay_report_total3_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_i.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total3_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=2&who=2&select=1&dates_list1={$bud_ru_zay_report_total3_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_o.c|default:0}</a></td>
 	</tr>
-	<!--<tr style="background-color: rgb(153, 255, 153);">
-		<td>Согласование отчета</td>
-		<td {if $bud_ru_zay_report_total2_o.c > 0}style="background-color:red"{/if} colspan=3><a href="?action=bud_ru_zay_report&wait4myaccept=0&status=2&report_done_flt=1&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total2_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total2_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total2_o.c|default:0}</a></td>
-	</tr>-->
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Согласование отчета</td>
 		<td {if $bud_ru_zay_report_accept_total.c > 0}style="background-color:red"{/if} colspan=3><a href="?action=bud_ru_zay_report_accept&wait4myaccept=0&select=1">{$bud_ru_zay_report_accept_total.c|default:0}</a></td>
@@ -168,19 +164,7 @@
     <tr style="background-color: #FFCCFF;">
       <td style="font-weight:bold" colspan="4" rowspan="1">Реализация задач</td>
     </tr>
-<!--
-    <tr style="background-color: #FFCCFF;">
-      <td>Задачи</td>
-      <td>{if $project_my neq 0}<a href="?action=project_my">{$project_my}</a>{else}0{/if}</td>
-      <td>{if $project_slaves neq 0}<a href="?action=project_slaves">{$project_slaves}</a>{else}0{/if}</td>
-      <td>{if $project_report neq 0}<a href="?action=project_report">{$project_report}</a>{else}0{/if}</td>
-    </tr>
 
-    <tr style="background-color: #FFCCFF;">
-      <td>Контроль</td>
-      <td colspan=3>{if $project_report_chk neq 0}<a href="?action=project_report">{$project_report_chk}</a>{else}0{/if}</td>
-    </tr>
--->
     <tr style="background-color: #FFCCFF;">
       <td>Отпуск рук-ля</td>
       <td colspan=3><a href="?action=vacation_report">{$main_vacation_report}</a></td>
@@ -193,15 +177,6 @@
       <td {if $main_vacation_reestr.val_11 > 0}style="background-color:red"{/if}><a href="?action=vacation_reestr&dates_list1={$year_start}&dates_list2={$year_end}&select=1&full=2&replacement=0&creator=0&vac_pos_id=0&region_name=0&department_name=0&parent_list=0&in_vac=1&vac_finished=0">{$main_vacation_reestr.val_11}</a></td>
       <td {if $main_vacation_reestr.val_10 > 0}style="background-color:red"{/if}><a href="?action=vacation_reestr&dates_list1={$year_start}&dates_list2={$year_end}&select=1&full=3&replacement=0&creator=0&vac_pos_id=0&region_name=0&department_name=0&parent_list=0&in_vac=1&vac_finished=0">{$main_vacation_reestr.val_10}</a></td>
     </tr>
-
-
-
-
-
-
-
-
-
 
     <tr style="background-color: #CCCCCC;">
       <td style="font-weight:bold" colspan="4" rowspan="1"><a href="?action=tr_shed&month_list={$now1}">Аудиторное обучение {$now_month} {$now_year}</a></td>

@@ -117,7 +117,7 @@ $smarty->assign('bud_ru_zay_reestr_total_o', $data);
 
 
 
-$params1[":status"]=0;
+$params1[":status"]=2;
 $params1[":srok_ok"]=0;
 $params1[":report_done_flt"]=2;
 
@@ -135,11 +135,7 @@ $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_zay_report_total1_o', $data);
 
-
-
-
-
-$params1[":status"]=0;
+$params1[":status"]=2;
 $params1[":srok_ok"]=2;
 $params1[":report_done_flt"]=2;
 
@@ -156,24 +152,6 @@ $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_zay_report_total3_o', $data);
-
-
-
-$params1[":wait4myaccept"]=0;
-
-$params1[":status"]=2;
-$params1[":srok_ok"]=0;
-$params1[":report_done_flt"]=1;
-
-$params1[":who"]=2;
-
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
-$sql = stritr($sql, $params1);
-$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total2_o', $data);
-
-
-
 
 $params1[":wait4myaccept"]=0;
 

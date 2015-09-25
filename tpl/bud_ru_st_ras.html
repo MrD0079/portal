@@ -13,8 +13,9 @@
 		<td>порядок</td>
 		<td>На отчет</td>
 		<td>ЛА</td>
+		<td>без АС</td>
 		<td>Обязательные приложения</td>
-		<td><nobr>новая статья <input name=new[0][name] size=40></nobr></td>
+		<td>новая статья <input name=new[0][name] size=40></td>
 		<input type=hidden name=new[0][dpt_id] value="{$dpt_id}">
 		<td>Рекомендуемый порядок согласования</td>
 	</tr>
@@ -22,10 +23,10 @@
 	<tr {if $item.parent eq 0}style="background-color: rgb(150, 150, 150);"{/if}>
 		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path|escape}"></td>
 		<td><input name=update[{$item.id}][name] size=60 value="{$item.name|escape}"></td>
-		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=10></td>
+		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=3></td>
 
 		<td>
-			{if $item.parent neq 0}<input name=update[{$item.id}][days4report] class="number_int" value="{$item.days4report}" size=10>{/if}
+			{if $item.parent neq 0}<input name=update[{$item.id}][days4report] class="number_int" value="{$item.days4report}" size=3>{/if}
 		</td>
 
 <td>
@@ -35,22 +36,28 @@
 {/if}
 </td>
 
+<td>
+{if $item.parent neq 0}
+<input type=checkbox {if $item.woac}checked{/if} onclick="$('#woac_{$item.id}').attr('disabled',false);$('#woac_{$item.id}').val(this.checked?1:null);">
+<input type=hidden disabled name=update[{$item.id}][woac] id=woac_{$item.id}>
+{/if}
+</td>
 
 <td>
 {if $item.parent neq 0}
-<textarea cols=50 rows=3 name=update[{$item.id}][req_att] size=80>{$item.req_att|escape}</textarea>
+<textarea cols=20 rows=3 name=update[{$item.id}][req_att]>{$item.req_att|escape}</textarea>
 {/if}
 </td>
 
 
-		<td>{if $item.parent eq 0}<nobr>новая категория <input name=new[{$item.id}][name] size=40></nobr>{/if}</td>
+		<td>{if $item.parent eq 0}новая категория <input name=new[{$item.id}][name] size=40>{/if}</td>
 		{if $item.parent eq 0}
 			<input type=hidden name=new[{$item.id}][parent] size=5 value={$item.id}>
 			<input type=hidden name=new[{$item.id}][dpt_id] value="{$dpt_id}">
 		{/if}
 
 {if $item.parent eq 0}
-<td><textarea cols=50 rows=3 name=update[{$item.id}][hint] size=80>{$item.hint|escape}</textarea></td>
+<td><textarea cols=20 rows=3 name=update[{$item.id}][hint]>{$item.hint|escape}</textarea></td>
 {/if}
 
 

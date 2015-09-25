@@ -10,6 +10,33 @@
 <input value="Выбрать" name="select_month" type="submit">
 </form>
 
+<div id=hpart1>
+часть 1
+<input
+	type=checkbox
+	id=hpart1val
+	value="{$h.part1}"
+	onChange="savem('{$smarty.request.month_list}','part1',this.checked?1:0);"
+>
+{$h.part1_lu}
+{$h.part1_lu_fio}
+</div>
+<div id=hpart2>
+часть 2
+<input
+	type=checkbox
+	id=hpart2val
+	value="{$h.part2}"
+	onChange="savem('{$smarty.request.month_list}','part2',this.checked?1:0);"
+>
+{$h.part2_lu}
+{$h.part2_lu_fio}
+</div>
+<script>
+$("#hpart1val").prop('checked','{$h.part1}'=='1'?true:false);
+$("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
+</script>
+
 <table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold">
 		<td>№ п/п</td>
@@ -18,6 +45,12 @@
 		<td>ФИО ответственного</td>
 		<td>PIN</td>
 		<td>Последнее изменение</td>
+		<td style="background-color: rgb(204, 255, 255);">Сумма периода 1</td>
+		<td style="background-color: rgb(204, 255, 255);">PIN совпал</td>
+		<td style="background-color: rgb(204, 255, 255);">STAMP</td>
+		<td style="background-color: rgb(255, 255, 204);">Сумма периода 2</td>
+		<td style="background-color: rgb(255, 255, 204);">PIN совпал</td>
+		<td style="background-color: rgb(255, 255, 204);">STAMP</td>
 	</tr>
 	<tr style="font-weight:bold">
 	</tr>
@@ -38,6 +71,12 @@
 				>
 			</td>
 			<td>{$i.pin_lu} {$i.pin_lu_fio}</td>
+			<td style="background-color: rgb(204, 255, 255); text-align:right">{$i.part1_sum|num:2}</td>
+			<td style="background-color: {if $i.part1_pin_ok}rgb(204, 255, 255);{else}red{/if}">{if $i.part1_pin_ok}да{else}нет{/if}</td>
+			<td style="background-color: rgb(204, 255, 255);">{$i.part1_lu}</td>
+			<td style="background-color: rgb(255, 255, 204); text-align:right">{$i.part2_sum|num:2}</td>
+			<td style="background-color: {if $i.part2_pin_ok}rgb(255, 255, 204);{else}red{/if}">{if $i.part2_pin_ok}да{else}нет{/if}</td>
+			<td style="background-color: rgb(255, 255, 204);">{$i.part2_lu}</td>
 		</tr>
 	{/foreach}
 </table>
@@ -58,6 +97,19 @@ function save(id,field,val)
 	},
 	function() {
 	$('#data'+id+field).css('background-color','white');
+	});
+}
+function savem(dt,field,val)
+{
+	$('#h'+field).css('background-color','red');
+	$('#ok').load('?action=mr_zp&savem=1&nohead=1',
+	{
+		dt: dt,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#h'+field).css('background-color','white');
 	});
 }
 </script>

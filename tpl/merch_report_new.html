@@ -1,6 +1,64 @@
 {include file="server_is_down.html"}
 
+
+{if $zpm and $zpm.all_ok neq 1}
+<form target="_self" method="POST" name=formzp id=formzp>
+
+{if $zpm.part1_needed eq 1 and $zpm.part1_ok neq 1}
+<h3>Полученные бонусы "Часть 1", {$zpm.period}</h3>
+<table border=1>
+<tr>
+<td>ФИО ответственного</td>
+<td>Полученные бонусы</td>
+<td>Дата получения</td>
+<td>PIN</td>
+</tr>
+{foreach key=k item=i from=$zp}
+{if $i.pin neq $i.part1_pin}
+<tr>
+<td><input name=zpm1 type=radio onChange="$('.fo1').attr('disabled',true);$('.fo1{$i.h_fio_otv}').attr('disabled',false);">{$i.fio_otv}</td>
+<td><input name="data[{$i.h_fio_otv}][part1_sum]" value="{$i.part1_sum}" required class="fo1 fo1{$i.h_fio_otv} number"></td>
+<td><input name="data[{$i.h_fio_otv}][part1_dt]"  value="{$i.part1_dt}"  required class="fo1 fo1{$i.h_fio_otv} datepicker"></td>
+<td><input name="data[{$i.h_fio_otv}][part1_pin]" value="{$i.part1_pin}" required class="fo1 fo1{$i.h_fio_otv} num4"></td>
+</tr>
+{/if}
+{/foreach}
+<table>
+<script>$("input[name=zpm1]").click();</script>
+{/if}
+
+{if $zpm.part2_needed eq 1 and $zpm.part2_ok neq 1}
+<h3>Полученные бонусы "Часть 2", {$zpm.period}</h3>
+<table border=1>
+<tr>
+<td>ФИО ответственного</td>
+<td>Полученные бонусы</td>
+<td>Дата получения</td>
+<td>PIN</td>
+</tr>
+{foreach key=k item=i from=$zp}
+{if $i.pin neq $i.part2_pin}
+<tr>
+<td><input name=zpm2 type=radio onChange="$('.fo2').attr('disabled',true);$('.fo2{$i.h_fio_otv}').attr('disabled',false);">{$i.fio_otv}</td>
+<td><input name="data[{$i.h_fio_otv}][part2_sum]" value="{$i.part2_sum}" required class="fo2 fo2{$i.h_fio_otv} number"></td>
+<td><input name="data[{$i.h_fio_otv}][part2_dt]"  value="{$i.part2_dt}"  required class="fo2 fo2{$i.h_fio_otv} datepicker"></td>
+<td><input name="data[{$i.h_fio_otv}][part2_pin]" value="{$i.part2_pin}" required class="fo2 fo2{$i.h_fio_otv} num4"></td>
+</tr>
+{/if}
+{/foreach}
+<table>
+<script>$("input[name=zpm2]").click();</script>
+{/if}
+
+<input value="Сохранить" name="save_zp" type="submit">
+</form>
+<script>
+$('.num4').mask('9999');
+</script>
+{/if}
+
 <form target="_self" method="POST" name=form1 id=form1>
+
 <h1>Внесение данных в отчет. Маршрут: {$route.num} Ответственный: {$route.fio_otv}</h1>
 {if $route.svms_ok eq 1}
 	{assign var=disabled value='disabled'}
@@ -16,8 +74,7 @@
 </select>
 <script>$("#dates_list option[value='{$smarty.request.dates_list}']").prop('selected', true);</script>
 
-<input value="Выбрать" name="select_month" type="submit"><br>
-</p>
+<input value="Выбрать" name="select_month" type="submit"></p>
 
 <table style="text-align: left; " border="1">
 <tbody>

@@ -2,6 +2,9 @@
 
 //audit("открыл merch_report_new","merch_report_new");
 
+
+
+
 $sql=rtrim(file_get_contents('sql/routes_text.sql'));
 $routes_text = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_text', $routes_text);
@@ -27,12 +30,30 @@ $smarty->assign('route', $r);
 
 //echo $r["id"];
 
+
+
+
+
+
+
 function Time2Int($v)
 {
 	$h=substr($v,0,2);
 	$m=substr($v,3,2);
 	//echo $h."-".$m."<br>";
 	return $h*60+$m;
+}
+
+
+if (isset($_REQUEST["save_zp"]))
+{
+	foreach ($_REQUEST["data"] as $k => $v)
+	{
+		$keys = array('head_id'=>$r["id"],'h_fio_otv'=>$k);
+		isset($v['part1_dt'])?$v['part1_dt']=OraDate2MDBDate($v['part1_dt']):null;
+		isset($v['part2_dt'])?$v['part2_dt']=OraDate2MDBDate($v['part2_dt']):null;
+		Table_Update ('mr_zp', $keys, $v);
+	}
 }
 
 if (isset($_REQUEST["save"]))
@@ -134,6 +155,25 @@ if (isset($r["id"]))
 		$sql=stritr($sql,$p);
 		$res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('rb_total', $res);
+
+$sql = rtrim(file_get_contents('sql/merch_report_new_zpm.sql'));
+$p=array(":head_id"=>$r["id"],":month_list"=>"'".$_REQUEST["dates_list"]."'");
+$sql=stritr($sql,$p);
+$zpm = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('zpm', $zpm);
+
+$sql = rtrim(file_get_contents('sql/merch_report_new_zp.sql'));
+$p=array(":head_id"=>$r["id"],":month_list"=>"'".$_REQUEST["dates_list"]."'");
+$sql=stritr($sql,$p);
+$zp = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('zp', $zp);
+
+/*
+print_r($zpm);
+echo "zzz";
+print_r($zp);
+*/
+
 	}
 }
 
