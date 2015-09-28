@@ -104,19 +104,26 @@
 
 <h3>Фотоотчет</h3>
 
-<table><tr><td>
+
+<div style="width:100%;text-align:center; border: 0px dotted green">
 {foreach key=key item=item from=$file_list name=fl}
-{math assign="color" equation='y' y=$smarty.foreach.fl.iteration%7} 
+{math assign="color" equation='y' y=$smarty.foreach.fl.iteration%10} 
 {if $color eq 1}<br>{/if}
-<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}/{$item.file}');">[X]</a>
-<div class="pics">
+<div style="border: 0px dotted red; position:relative; margin-top:10px; margin-left:10px; display:inline-block;">
+<a href="javascript:void(0);" onClick="javascript:rotate_file('{$item.path}/{$item.file}',90);"><img class="pics_icons" src="design/rotate2left.png"></a>
+<a href="javascript:void(0);" onClick="javascript:rotate_file('{$item.path}/{$item.file}',-90);"><img class="pics_icons" src="design/rotate2right.png"></a>
+<br>
+<div style="border: 0px dotted blue" class="pics">
 	<a target=_blank href="{$item.path}/{$item.file}">
 		<img src="{$item.path}/{$item.file}" height=50px>
 	</a>
 	<img src="{$item.path}/{$item.file}" class="hov">
 </div>
+<br>
+<a href="javascript:void(0);" onClick="javascript:del_file('{$item.path}/{$item.file}');">[X]</a>
+</div>
 {/foreach}
-</td></tr></table>
+</div>
 
 <!--<p>Загрузить файл с фотоотчетом <input name="files" type="file"></p>-->
 
@@ -137,6 +144,12 @@
 function del_file(rid)
 {
 	$("#form1").append($('<input type=hidden name=del_file id=del_file value='+rid+'>'));
+	$("#form1").submit();
+}
+function rotate_file(rid, rotate_degrees)
+{
+	$("#form1").append($('<input type=hidden name=rotate_file id=rotate_file value='+rid+'>'));
+	$("#form1").append($('<input type=hidden name=rotate_degrees id=rotate_degrees value='+rotate_degrees+'>'));
 	$("#form1").submit();
 }
 </script>

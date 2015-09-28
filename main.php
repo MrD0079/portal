@@ -376,12 +376,12 @@ $sql=rtrim(file_get_contents('sql/main_tasks_ol_staff.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
 $smarty->assign('ol_staff', $data);
-
+/*
 $sql=rtrim(file_get_contents('sql/main_tasks_iv_cnt.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
 $smarty->assign('iv_cnt', $data);
-
+*/
 
 $sql=rtrim(file_get_contents('sql/main_box_dpu.sql'));
 $sql=stritr($sql,$params);

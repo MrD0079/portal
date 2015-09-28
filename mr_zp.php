@@ -21,20 +21,43 @@ if (isset($_REQUEST["savem"]))
 else
 {
 audit("открыл «/п за мес€ц","mr_zp");
+InitRequestVar("flt_sum",0);
+InitRequestVar("flt_pin",0);
+InitRequestVar("select_route_numb",0);
+InitRequestVar("svms_list",0);
+$p=array(
+	":month_list"=>"'".$_REQUEST["month_list"]."'",
+	":select_route_numb"=>$_REQUEST["select_route_numb"],
+	":svms_list"=>$_REQUEST["svms_list"],
+	":flt_sum"=>$_REQUEST["flt_sum"],
+	":flt_pin"=>$_REQUEST["flt_pin"],
+);
 $sql = rtrim(file_get_contents('sql/mr_zp.sql'));
-$p=array(":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('d', $d);
+$smarty->assign('zp', $d);
+$sql = rtrim(file_get_contents('sql/mr_zpt.sql'));
+$sql=stritr($sql,$p);
+$d = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('zpt', $d);
 $sql = rtrim(file_get_contents('sql/mr_zpm.sql'));
 $p=array(":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $d = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('h', $d);
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
-//echo $sql;
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
+$sql=rtrim(file_get_contents('sql/svms_list.sql'));
+$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id']);
+$sql=stritr($sql,$p);
+$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('svms_list', $data);
+$sql = rtrim(file_get_contents('sql/report_total_new_routes_head.sql'));
+$p=array(":tn"=>$tn,":sd"=>"'".$_REQUEST["month_list"]."'",":ed"=>"'".$_REQUEST["month_list"]."'");
+$sql=stritr($sql,$p);
+$res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('routes_head', $res);
 $smarty->display('mr_zp.html');
 }
 ?>

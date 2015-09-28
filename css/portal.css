@@ -31,3 +31,6 @@ form input[type="submit"] {padding:12px;clear:left;font-size:12px;font-weight:no
 /*.lt-ie7 #toTop{display:none!important;visibility:hidden!important}*/
 a#toTop:hover{opacity:.7}
 a#toTop:active{}
+
+/* disable datepicker "done" button */
+button.ui-datepicker-close {display: none;}

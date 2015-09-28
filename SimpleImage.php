@@ -101,5 +101,11 @@ class SimpleImage {
       $this->image = $new_image;
    }      
  
+   function rotate($degrees) {
+      imagesetinterpolation($this->image, IMG_SINC);
+      $new_image = imagerotate($this->image, $degrees, 0);
+      $this->image = $new_image;
+   }      
+ 
 }
 ?>

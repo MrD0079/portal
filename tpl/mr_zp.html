@@ -1,12 +1,67 @@
 <form target="_self" method="POST" name=form1 id=form1>
 <h1>З/п за месяц</h1>
-Выберите месяц
-<select name=month_list id=month_list onchange="$('#form1').submit();">
-{foreach key=key item=item from=$month_list}
-<option value="{$item.sd_c}">{$item.my}</option>
-{/foreach}
-</select>
-<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+
+
+
+
+
+<table>
+
+	<tr>
+		<td style="text-align:right">Выберите месяц</td>
+		<td style="text-align:left">
+			<select name=month_list id=month_list onchange="$('#form1').submit();">
+				{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+				{/foreach}
+			</select>
+			<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">СВ МС</td>
+		<td style="text-align:left">
+			<select name=svms_list id=svms_list>
+				<option value=0></option>
+				{foreach key=key item=item from=$svms_list}
+				<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+				{/foreach}
+			</select>
+			<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Маршрут</td>
+		<td style="text-align:left">
+			<select name="select_route_numb" id="select_route_numb">
+				<option value=0></option>
+				{foreach key=key item=item from=$routes_head}
+				<option value="{$item.id}">{$item.fio} - {$item.num} - {$item.fio_otv}</option>
+				{/foreach}
+			</select>
+			<script>$('#select_route_numb option[value={$smarty.request.select_route_numb}]').prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Фильтр по сумме</td>
+		<td>
+			<input checked="checked" name="flt_sum" id="flt_sum" value="0" type="radio"> все
+			<input name="flt_sum" id="flt_sum" value="1" type="radio"> Сумма 1 не выплачена
+			<input name="flt_sum" id="flt_sum" value="2" type="radio"> Сумма 2 не выплачена
+			<script>$("input[name=flt_sum][value={$smarty.request.flt_sum}]").attr('checked',true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Фильтр по PIN</td>
+		<td>
+			<input checked="checked" name="flt_pin" id="flt_pin" value="0" type="radio"> все
+			<input name="flt_pin" id="flt_pin" value="1" type="radio"> PIN1 не совпал
+			<input name="flt_pin" id="flt_pin" value="2" type="radio"> PIN2 не совпал
+			<script>$("input[name=flt_pin][value={$smarty.request.flt_pin}]").attr('checked',true);</script>
+		</td>
+	</tr>
+</table>
+
 <input value="Выбрать" name="select_month" type="submit">
 </form>
 
@@ -52,11 +107,9 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 		<td style="background-color: rgb(255, 255, 204);">PIN совпал</td>
 		<td style="background-color: rgb(255, 255, 204);">STAMP</td>
 	</tr>
-	<tr style="font-weight:bold">
-	</tr>
-	{foreach key=k item=i from=$d name=d}
+	{foreach key=k item=i from=$zp name=zp}
 		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
-			<td>{$smarty.foreach.d.iteration}</td>
+			<td>{$smarty.foreach.zp.iteration}</td>
 			<td>{$i.svms}</td>
 			<td>{$i.num}</td>
 			<td>{$i.fio_otv}</td>
@@ -79,6 +132,15 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 			<td style="background-color: rgb(255, 255, 204);">{$i.part2_lu}</td>
 		</tr>
 	{/foreach}
+		<tr style="font-weight:bold;text-align:right">
+			<td style="text-align:center" colspan=6>ИТОГО:{$zpt.cnt}</td>
+			<td>{$zpt.part1_sum|num:2}</td>
+			<td>{$zpt.part1_pin_ok}</td>
+			<td></td>
+			<td>{$zpt.part2_sum|num:2}</td>
+			<td>{$zpt.part2_pin_ok}</td>
+			<td></td>
+		</tr>
 </table>
 
 

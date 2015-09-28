@@ -77,7 +77,7 @@
 <option></option>
 {foreach key=k1 item=i1 from=$ol_gr}
 {if $i1.id neq 0}
-<option value={$i1.gr}>{$i1.gr}. {$i1.name}</option>
+<option value={$i1.id}>{$i1.gr}. {$i1.name}</option>
 {/if}
 {/foreach}
 </select>

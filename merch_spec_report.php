@@ -77,6 +77,27 @@ if (!file_exists($d2)) {mkdir($d2);}
 if (!file_exists($d3)) {mkdir($d3);}
 if (!file_exists($d4)) {mkdir($d4);}
 include_once('SimpleImage.php');
+
+
+if (isset($_REQUEST["rotate_file"]))
+{
+	$path_parts = pathinfo($_REQUEST["rotate_file"]); 
+	$fn_new="msrf".get_new_file_id().".".$path_parts["extension"];
+	$image = new SimpleImage();
+	$image->load($_REQUEST["rotate_file"]);
+	$image->rotate($_REQUEST["rotate_degrees"]);
+	$image->save($d4."/".$fn_new);
+	$keys = array("dt"=>OraDate2MDBDate($_REQUEST["dt"]),"ag_id"=>$r["ag_id"],"kod_tp"=>$r["kod_tp"],"fn"=>$path_parts["basename"]);
+	//var_dump ($keys);
+	Table_Update ("merch_spec_report_files", $keys, null);
+	$keys = array("dt"=>OraDate2MDBDate($_REQUEST["dt"]),"ag_id"=>$r["ag_id"],"kod_tp"=>$r["kod_tp"],"fn"=>$fn_new);
+	//var_dump ($keys);
+	Table_Update ("merch_spec_report_files", $keys, $keys);
+	unlink($_REQUEST["rotate_file"]);
+	//var_dump ($fn_new);
+	//ses_req();
+}
+
 if (isset($_FILES["multiple_files"]))
 {
 $z = $_FILES["multiple_files"];
