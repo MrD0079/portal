@@ -1,4 +1,4 @@
-/* Formatted on 06/08/2015 16:01:24 (QP5 v5.227.12220.39724) */
+/* Formatted on 29.09.2015 13:24:25 (QP5 v5.227.12220.39724) */
 SELECT COUNT (*) c,
        SUM (day_TIME_MR) day_TIME_MR,
        /*SUM (day_TIME_F) day_TIME_F,*/
@@ -12,6 +12,7 @@ SELECT COUNT (*) c,
                TO_CHAR (mr.DT, 'dd.mm.yyyy') dt,
                mr.dt,
                rh.fio_otv,
+               rh.login,
                rh.num,
                rh.id head_id,
                cpp1.tz_oblast,

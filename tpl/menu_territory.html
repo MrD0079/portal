@@ -1,166 +1,156 @@
-			{if $cnt_kod neq 'nr'}
+{if $cnt_kod neq 'nr'}
 
-			<li><a href="javascript:void(0);"><span class="dir">Национальные акции</span></a>
+<li><a href="javascript:void(0);"><span class="dir">Национальные акции</span></a>
+<ul>
+
+	{include file="menu_akcii.html"}
+
+</ul>
+</li>
+
+{/if}
+
+{if not $is_eta and $cnt_kod neq 'nr'}
+
+<li><a href="javascript:void(0);"><span class="dir">Локальные акции</span></a>
+<ul>
+
+	{include file="menu_akcii_local.html"}
+
+</ul>
+</li>
+
+{/if}
+
+{if $cnt_kod neq 'nr'}
+
+<li><a href="javascript:void(0);"><span class="dir">Маршрутизация</span></a>
+	<ul>
+		<li><a href="?action=routing">Маршруты ЭТА / МКК</a></li>
+	</ul>
+</li>
+
+<li><a href="?action=um">Утренний митинг</a></li>
+
+{/if}
+
+{if $cnt_kod eq "ua" and not $is_eta and $cnt_kod neq 'nr'}
+
+<li><a href="javascript:void(0);"><span class="dir">Стандарт ТО</span></a>
+	<ul>
+		{if $is_ts}
+		<li><a href="?action=a14to_report">Вечерний отчет</a></li>
+		{/if}
+		<li><a href="?action=a14to_accept">Подтверждение</a></li>
+		<li><a href="?action=a14to_stat">Статистика</a></li>
+		<li><a href="?action=a14to_nophoto">Нет фото</a></li>
+	</ul>
+</li>
+<li><a href="javascript:void(0);"><span class="dir">Отчетные собрания</span></a>
+	<ul>
+		<li><a href="?action=main">Отчетные собрания</a></li>
+	</ul>
+</li>
+
+{/if}
+
+{if $cnt_kod eq "ua" and not $is_eta and $cnt_kod neq 'nr'}
+
+<li><a href="javascript:void(0);"><span class="dir">Полевая работа</span></a>
+	<ul>
+		<!--<li><a href="?action=fw">Полевые работы</a></li>-->
+
+		{if $is_run or $is_admin}
+
+		<li><a href="javascript:void(0);"><span class="dir">Бегунок</span></a>
 			<ul>
-			
-				{include file="menu_akcii.html"}
-			
+				<li><a href="?action=beg_visit">Поле</a></li>
+				<li><a href="?action=main">Отчет</a></li>
+				<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+					<ul>
+						<li><a href="?action=beg_routes">Создать маршрут</a></li>
+						<li><a href="?action=dimproduct">Выбрать продукты</a></li>
+						<li><a href="?action=beg_ff">Поля формы</a></li>
+						<li><a href="?action=beg_to_rep_show">Т.О. - отображение в отчете</a></li>
+					</ul>
+				</li>
 			</ul>
-			</li>
+		</li>
 
-			{/if}
+		{/if}
 
-			{if not $is_eta and $cnt_kod neq 'nr'}
+	</ul>
+</li>
 
-			<li><a href="javascript:void(0);"><span class="dir">Локальные акции</span></a>
+{/if}
+
+<!--
+{if not $is_eta and $cnt_kod neq 'nr'}
+<li><a href="javascript:void(0);"><span class="dir">Кубок по футболу</span></a>
+	<ul>
+		<li><a href="javascript:void(0);"><span class="dir">2014</span></a>
 			<ul>
-			
-				{include file="menu_akcii_local.html"}
-			
-			</ul>
-			</li>
 
-			{/if}
+				{if $is_bud_admin}
 
-			{if $cnt_kod neq 'nr'}
-
-			<li><a href="javascript:void(0);"><span class="dir">Маршрутизация</span></a>
+				<li><a href="javascript:void(0);"><span class="dir">Админка</span></a>
 				<ul>
-					<li><a href="?action=routing">Маршруты ЭТА / МКК</a></li>
+					<li><a href="?action=football2014_teams">Команды</a></li>
 				</ul>
-			</li>
+				</li>
 
-			<li><a href="?action=um">Утренний митинг</a></li>
+				{/if}
 
-			{/if}
+				{if $football_team_responsible or $football_team_checking}
 
-			{if $cnt_kod eq "ua" and not $is_eta and $cnt_kod neq 'nr'}
-			
-			<li><a href="javascript:void(0);"><span class="dir">Стандарт ТО</span></a>
-				<ul>
-					{if $is_ts}
-					<li><a href="?action=a14to_report">Вечерний отчет</a></li>
-					{/if}
-					<li><a href="?action=a14to_accept">Подтверждение</a></li>
-					<li><a href="?action=a14to_stat">Статистика</a></li>
-					<li><a href="?action=a14to_nophoto">Нет фото</a></li>
-				</ul>
-			</li>
-			<li><a href="javascript:void(0);"><span class="dir">Отчетные собрания</span></a>
-				<ul>
-					<li><a href="?action=main">Отчетные собрания</a></li>
-				</ul>
-			</li>
-			
-			{/if}
-			
-			{if $cnt_kod eq "ua" and not $is_eta and $cnt_kod neq 'nr'}
-			
-			<li><a href="javascript:void(0);"><span class="dir">Полевая работа</span></a>
-				<ul>
-					<li><a href="?action=fw">Полевые работы</a></li>
-<!--					<li><a href="javascript:void(0);"><span class="dir">Совместная работа</span></a>
-						<ul>
-							<li><a href="?action=sr">Новая совместная работа</a></li>
-							<li><a href="?action=sr_reestr">Реестр совместных работ</a></li>
-						</ul>
-					</li>
+				<li><a href="?action=football2014_create_team">Создать команду</a></li>
+
+				{/if}
+
+				<li><a href="?action=football2014_lineup">Состав команд</a></li>
+			</ul>                           	
+		</li>
+	</ul>
+</li>
+{/if}
 -->
 
-					{if $is_run or $is_admin}
+{if not $is_eta}
 
-					<li><a href="javascript:void(0);"><span class="dir">Бегунок</span></a>
-						<ul>
-							<li><a href="?action=beg_visit">Поле</a></li>
-							<li><a href="?action=main">Отчет</a></li>
-							<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
-								<ul>
-									<li><a href="?action=beg_routes">Создать маршрут</a></li>
-									<li><a href="?action=dimproduct">Выбрать продукты</a></li>
-									<li><a href="?action=beg_ff">Поля формы</a></li>
-									<li><a href="?action=beg_to_rep_show">Т.О. - отображение в отчете</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
+<li><a href="javascript:void(0);"><span class="dir">ТМЦ</span></a>
+	<ul>
 
-					{/if}
+		{if $is_traid or $is_traid_kk or $is_it or $is_admin}
 
-				</ul>
-			</li>
-			
-			{/if}
-			
-			{if not $is_eta and $cnt_kod neq 'nr'}
+		<li><a href="?action=tmc_uchet">Учет ТМЦ</a></li>
+		<li><a href="?action=tmc_doubled">Задвоенные ТМЦ</a></li>
 
-			<li><a href="javascript:void(0);"><span class="dir">Кубок по футболу</span></a>
-				<ul>
-					<li><a href="javascript:void(0);"><span class="dir">2014</span></a>
-						<ul>
-			
-							{if $is_bud_admin}
-			
-							<li><a href="javascript:void(0);"><span class="dir">Админка</span></a>
-							<ul>
-								<li><a href="?action=football2014_teams">Команды</a></li>
-								<!--<li><a href="?action=football2014_shedule">Расписание</a></li>
-								<li><a href="?action=football2014_results">Результаты</a></li>-->
-							</ul>
-							</li>
-			
-							{/if}
-			
-							{if $football_team_responsible or $football_team_checking}
-			
-							<li><a href="?action=football2014_create_team">Создать команду</a></li>
-			
-							{/if}
-			
-							<li><a href="?action=football2014_lineup">Состав команд</a></li>
-							<!--<li><a href="?action=football2014_match_results">Результаты матча</a></li>-->
-						</ul>                           	
-					</li>
-				</ul>
-			</li>
+		{/if}
 
-			{/if}
+		<li><a href="?action=tmc_reestr">Реестр ТМЦ</a></li>
+		<li><a href="?action=tmc_my">ТМЦ на мне</a></li>
+	</ul>
+</li>
 
-			{if not $is_eta}
+{/if}
 
-			<li><a href="javascript:void(0);"><span class="dir">ТМЦ</span></a>
-				<ul>
+{if ($is_mservice or $is_kk or $is_admin) and $cnt_kod neq 'nr'}
+<li><a href="javascript:void(0);"><span class="dir">Сроки/браки</span></a>
+	<ul>
+		<li><a href="?action=merch_report_4sv_sb">Сводный отчет сроки/браки</a></li>
+	</ul>
+</li>
+{/if}
 
-					{if $is_traid or $is_traid_kk or $is_it or $is_admin}
+{if $cnt_kod eq 'ua1' and ($is_admin or $is_don)}
+<li><a href="javascript:void(0);"><span class="dir">Отчет СПД</span></a>
+	<ul>
+		<li><a href="?action=rep_spd_list&valid=1">СПД</a></li>
+		<li><a href="?action=rep_spd_head">Отчет</a></li>
+		<li><a href="?action=rep_spdms_list&valid=1">СПД МС</a></li>
+		<li><a href="?action=rep_spdms_head">Отчет МС</a></li>
+	</ul>
+</li>
+{/if}
 
-					<li><a href="?action=tmc_uchet">Учет ТМЦ</a></li>
-					<li><a href="?action=tmc_doubled">Задвоенные ТМЦ</a></li>
-
-					{/if}
-
-					<li><a href="?action=tmc_reestr">Реестр ТМЦ</a></li>
-					<li><a href="?action=tmc_my">ТМЦ на мне</a></li>
-				</ul>
-			</li>
-
-			{/if}
-
-			{if ($is_mservice or $is_kk or $is_admin) and $cnt_kod neq 'nr'}
-			<li><a href="javascript:void(0);"><span class="dir">Сроки/браки</span></a>
-				<ul>
-					<li><a href="?action=merch_report_4sv_sb">Сводный отчет сроки/браки</a></li>
-				</ul>
-			</li>
-			{/if}
-
-			{if $cnt_kod eq 'ua1' and ($is_admin or $is_don)}
-			<li><a href="javascript:void(0);"><span class="dir">Отчет СПД</span></a>
-				<ul>
-					<li><a href="?action=rep_spd_list&valid=1">СПД</a></li>
-					<li><a href="?action=rep_spd_head">Отчет</a></li>
-					<li><a href="?action=rep_spdms_list&valid=1">СПД МС</a></li>
-					<li><a href="?action=rep_spdms_head">Отчет МС</a></li>
-				</ul>
-			</li>
-			{/if}
-
-			<li><a href="?action=salesbytp">Нагрузка на ТП</a></li>
+<li><a href="?action=salesbytp">Нагрузка на ТП</a></li>

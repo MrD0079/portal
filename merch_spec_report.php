@@ -1,5 +1,4 @@
 <?
-//ses_req();
 //audit("открыл merch_spec_report","merch_spec_report");
 $sql="select * from merch_spec_head where id=".$_REQUEST["spec_id"];
 $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -16,49 +15,62 @@ $fields = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('merch_spec_report_fields', $fields);
 //print_r($fields);
 
+isset($_REQUEST['login'])?$login=$_REQUEST['login']:null;
+
 $sql = rtrim(file_get_contents('sql/merch_report_head.sql'));
 $p=array(":data"=>"'".$_REQUEST["dt"]."'",":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $h=$db->GetRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //print_r($h);
 
-if (isset($_REQUEST["save"])||isset($_REQUEST["del_file"])||isset($_FILES["multiple_files"]))
+
+function sok($rep_id)
 {
+	if ($rep_id==null) {return null;};
+	global $h,$r;
 	$keys = array(
 		'head_id'=>$h["id"],
 		'ag_id'=>$r["ag_id"],
 		'kodtp'=>$r["kod_tp"],
-		'data'=>OraDate2MDBDate($_REQUEST["dt"])
+		'data'=>OraDate2MDBDate($_REQUEST["dt"]),
+		'rep_id'=>$rep_id
 	);
+	$_REQUEST["keys"][$rep_id]=$keys;
 	Table_Update ('MERCH_REPORT_CAL_SOK', $keys, $keys);
 }
 
+
 if (isset($_REQUEST["save"]))
 {
+	//ses_req();
 	if (isset($_REQUEST["rb"]))
 	{
-		//$oos_cnt=0;
 		$table_name = "merch_spec_report";
 		foreach ($_REQUEST["rb"] as $k => $v)
 		{
-			//echo $k."<br>";
 			foreach ($v as $k1 => $v1)
 			{
-					//if (($k1=='oos')&&($v1==1)){$oos_cnt++;}
-					//echo $k1."<br>";
-					$keys = array('spec_id'=>$k,'dt'=>OraDate2MDBDate($_REQUEST["dt"]));
-					$values = $keys;
-					Table_Update ($table_name, $keys, $values);
-					$values = array($k1=>$v1);
-					/*echo $table_name."<br>";
-					print_r($keys);
-					echo "<br>";
-					print_r($values);
-					echo "<br>";*/
-					Table_Update ($table_name, $keys, $values);
+				$keys = array('spec_id'=>$k,'dt'=>OraDate2MDBDate($_REQUEST["dt"]));
+				$values = $keys;
+				Table_Update ($table_name, $keys, $values);
+				$values = array($k1=>$v1);
+				Table_Update ($table_name, $keys, $values);
+				$rep_id = $db->getOne("select id from merch_report_cal_rep where rep_name='".$k1."'");
+				$v1!=''?sok($rep_id):null;
 			}
 		}
-		//echo count($_REQUEST["rb"]).'.'.$oos_cnt;
+	}
+	if (isset($_REQUEST["oos_pr"]))
+	{
+		$keys = array(
+			'ag_id'=>$r["ag_id"],
+			'kod_tp'=>$r["kod_tp"],
+			'dt'=>OraDate2MDBDate($_REQUEST["dt"])
+		);
+		$_REQUEST["oos_pr"]==1?$vals=$keys:$vals=null;
+		Table_Update ('MERCH_SPEC_REPORT_PR', $keys, $vals);
+		$rep_id = $db->getOne("select id from merch_report_cal_rep where rep_name='oos'");
+		$_REQUEST["oos_pr"]==1?sok($rep_id):null;
 	}
 }
 $d1="merch_spec_report_files";
@@ -71,6 +83,7 @@ if (isset($_REQUEST["del_file"]))
 	$path_parts = pathinfo($_REQUEST["del_file"]); 
 	$keys = array("dt"=>OraDate2MDBDate($_REQUEST["dt"]),"ag_id"=>$r["ag_id"],"kod_tp"=>$r["kod_tp"],"fn"=>$path_parts["basename"]);
 	Table_Update ("merch_spec_report_files", $keys, null);
+	sok(1);
 }
 if (!file_exists($d1)) {mkdir($d1);}
 if (!file_exists($d2)) {mkdir($d2);}
@@ -96,6 +109,7 @@ if (isset($_REQUEST["rotate_file"]))
 	unlink($_REQUEST["rotate_file"]);
 	//var_dump ($fn_new);
 	//ses_req();
+	sok(1);
 }
 
 if (isset($_FILES["multiple_files"]))
@@ -112,16 +126,17 @@ foreach ($z['tmp_name'] as $k=>$v)
 		$image->load($d4."/".$fn);
 		//if (is_resource($image))
 		//{
-			$h=$image->getHeight();
+			$handle=$image->getHeight();
 			if ($image->getHeight()>600)
 			{
 			$image->resizeToHeight(600);
-			//echo $fn.": ".$h."=>".$image->getHeight();
+			//echo $fn.": ".$handle."=>".$image->getHeight();
 			}
 			$image->save($d4."/".$fn);
 		//}
 		$keys = array("dt"=>OraDate2MDBDate($_REQUEST["dt"]),"ag_id"=>$r["ag_id"],"kod_tp"=>$r["kod_tp"],"fn"=>$fn);
 		Table_Update ("merch_spec_report_files", $keys, $keys);
+		sok(1);
 	}
 }
 }
@@ -148,5 +163,20 @@ $sql=stritr($sql,$p);
 $res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('merch_spec_report_body_total', $res);
 //print_r($res);
+$sql = rtrim(file_get_contents('sql/merch_spec_report_oos_pr.sql'));
+$p=array(
+':ag_id'=>$r["ag_id"],
+':kod_tp'=>$r["kod_tp"],
+":dt"=>"'".$_REQUEST["dt"]."'"
+);
+$sql=stritr($sql,$p);
+//echo $sql;
+$res = $db->getOne($sql);
+$smarty->assign('oos_pr', $res);
 $smarty->display('merch_spec_report.html');
+
+
+//ses_req();
+
+
 ?>

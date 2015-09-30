@@ -5,12 +5,12 @@
 <form target="_self" method="POST" name=formzp id=formzp>
 
 {if $zpm.part1_needed eq 1 and $zpm.part1_ok neq 1}
-<h3>Полученные бонусы "Часть 1", {$zpm.period}</h3>
+<h3>{$zpm.period} - 1</h3>
 <table border=1>
 <tr>
-<td>ФИО ответственного</td>
-<td>Полученные бонусы</td>
-<td>Дата получения</td>
+<td>ФИО</td>
+<td>Код подтверждения</td>
+<td>Дата</td>
 <td>PIN</td>
 </tr>
 {foreach key=k item=i from=$zp}
@@ -28,12 +28,12 @@
 {/if}
 
 {if $zpm.part2_needed eq 1 and $zpm.part2_ok neq 1}
-<h3>Полученные бонусы "Часть 2", {$zpm.period}</h3>
+<h3>{$zpm.period} - 2</h3>
 <table border=1>
 <tr>
-<td>ФИО ответственного</td>
-<td>Полученные бонусы</td>
-<td>Дата получения</td>
+<td>ФИО</td>
+<td>Код подтверждения</td>
+<td>Дата</td>
 <td>PIN</td>
 </tr>
 {foreach key=k item=i from=$zp}

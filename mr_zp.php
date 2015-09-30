@@ -4,7 +4,8 @@ if (isset($_REQUEST["save"]))
 	audit("сохранил З/п за месяц","mr_zp");
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$keys = array('id'=>$_REQUEST['id']);
-	$vals = array($_REQUEST['field']=>$_REQUEST['val'],'pin_lu_fio'=>$fio);
+	$vals = array($_REQUEST['field']=>$_REQUEST['val']);
+	$_REQUEST['field']=='pin'?$vals['pin_lu_fio']=$fio:null;
 	Table_Update('mr_zp', $keys,$vals);
 }
 else

@@ -48,7 +48,7 @@
 		<tr>
 			{if not $is_mkk}
 			<td>
-				Ответственный РМКК
+				НМКК
 				<br>
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>
@@ -59,7 +59,7 @@
 				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
 			</td>
 			<td>
-				Ответственный МКК
+				Ответственный ТМКК
 				<br>
 				<select name=tn_mkk id=tn_mkk>
 					<option value=0></option>
@@ -88,8 +88,8 @@
 		{$smarty.foreach.fin_report.iteration}.
 		Сеть <b>{$fin_report_item.net_name}</b>
 		Месяц <b>{$fin_report_item.mt}</b>
-		РМКК <b>{$fin_report_item.rmkk}</b>
-		МКК <b>{$fin_report_item.mkk}</b>
+		НМКК <b>{$fin_report_item.rmkk}</b>
+		ТМКК <b>{$fin_report_item.mkk}</b>
 	</p>
 	<table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold;text-align:center">

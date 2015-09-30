@@ -12,6 +12,8 @@
          TO_CHAR (z.part2_dt, 'dd.mm.yyyy') part2_dt,
          z.part1_sum,
          z.part2_sum,
+         z.part1_charged,
+         z.part2_charged,
          TO_CHAR (z.part1_lu, 'dd.mm.yyyy hh24:mi:ss') part1_lu,
          TO_CHAR (z.part2_lu, 'dd.mm.yyyy hh24:mi:ss') part2_lu,
          CASE WHEN z.pin = z.part1_pin THEN 1 END part1_pin_ok,

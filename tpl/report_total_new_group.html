@@ -117,7 +117,7 @@
 			<td>
 				{if not $smarty.request.print}
 					<!--{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dates_list2}&spec_id={$i2.spec_id}">Специя</a>{/if}-->
-					{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$i.head.dt}&spec_id={$i2.spec_id}">Специя</a>{/if}
+					{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$i.head.dt}&spec_id={$i2.spec_id}&login={$i.head.login}">Специя</a>{/if}
 				{/if}
 			</td>
 			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep1}height:36px;width:36px;background-color:{$i2.reminders.rep1.color};{/if}">{if $i2.reminders.rep1}<img style="height:30px;width:30px;" src="design/mrc1.png">{/if}</td>

@@ -22,6 +22,7 @@
 	<p>
 		мои<input type=radio name=full value='me'>
 		прямых подчиненных<input type=radio name=full value='slaves'>
+		{if $is_admin}все (only for admin)<input type=radio name=full value='all'>{/if}
 	</p>
 
 <script>

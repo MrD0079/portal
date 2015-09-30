@@ -36,7 +36,7 @@
 		<tr>
 			{if not $is_mkk}
 			<td>
-				Ответственный РМКК
+				НМКК
 				<br>
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>
@@ -47,7 +47,7 @@
 				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
 			</td>
 			<td>
-				Ответственный МКК
+				Ответственный ТМКК
 				<br>
 				<select name=tn_mkk id=tn_mkk>
 					<option value=0></option>
@@ -83,8 +83,8 @@
 	{if $fin_report_item.draw_head eq 1}
 	<tr style="font-weight:bold;text-align:center">
 		<td>№ п/п</td>
-		<td>ФИО РМКК</td>
-		<td>ФИО МКК</td>
+		<td>ФИО НМКК</td>
+		<td>ФИО ТМКК</td>
 		<td>Факт. назв.сети</td>
 		<td>Сеть работает без бюджета</td>
 		<!--<td>Факт продаж пред. года, тыс. {$valuta}</td>-->

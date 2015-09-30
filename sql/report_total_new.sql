@@ -1,5 +1,6 @@
-/* Formatted on 14/07/2015 12:31:08 (QP5 v5.227.12220.39724) */
-  SELECT q1.id,
+/* Formatted on 29.09.2015 13:09:09 (QP5 v5.227.12220.39724) */
+  SELECT q1.login,
+         q1.id,
          q1.dt,
          q1.dtt,
          q1.dt1,
@@ -14,7 +15,7 @@
          q1.kodtp,
          q1.ag_name,
          q1.ag_id,
-         case when q1.spec_oos = q1.spec then 1 end spec_oos_all,
+         CASE WHEN q1.spec_oos = q1.spec THEN 1 END spec_oos_all,
          q1.spec,
          q1.spec_id,
          q1.dm,
@@ -44,6 +45,7 @@
             is_red,
          vv_id
     FROM (SELECT DISTINCT
+                 rh.login,
                  mr.id,
                  TO_CHAR (mr.DT, 'dd.mm.yyyy') dt,
                  TO_CHAR (mr.DT, 'ddmmyyyy') dtt,
@@ -112,9 +114,10 @@
                     FROM merch_report_ok
                    WHERE dt = mr.dt AND head_id = rh.id)
                     svms_ok_date,
-                 ROUND ( (NVL (rb.DAY_TIME_MR, 0) /*+ NVL (rb.DAY_TIME_F, 0)*/))
-                    gps_delta,
-                 NVL (rb.DAY_TIME_MR, 0) /*+ NVL (rb.DAY_TIME_F, 0)*/ is_red,
+                 ROUND ( (NVL (rb.DAY_TIME_MR, 0) /*+ NVL (rb.DAY_TIME_F, 0)*/
+                                                 )) gps_delta,
+                 NVL (rb.DAY_TIME_MR, 0) /*+ NVL (rb.DAY_TIME_F, 0)*/
+                                        is_red,
                  cpp1.id cpp1_id,
                  (SELECT id
                     FROM merch_report_vv
@@ -174,7 +177,8 @@
                                    AND dt = mr.dt),
                            0)
                       + rb.vv <> 1)
-                 AND (rb.DAY_enabled_MR = 1 /*OR rb.DAY_enabled_F = 1*/)) q1,
+                 AND (rb.DAY_enabled_MR = 1        /*OR rb.DAY_enabled_F = 1*/
+                                           )) q1,
          (  SELECT dt,
                    kod_ag,
                    kod_tp,

@@ -6,8 +6,8 @@
 			<td>Сеть</td>
 			<td>Год</td>
 			<td>Месяц</td>
-			<td>РМКК</td>
-			<td>МКК</td>
+			<td>НМ КК</td>
+			<td>ТМ КК</td>
 		</tr>
 		<tr>
 			<td>
@@ -77,11 +77,11 @@
 
 <table border=1 cellpadding=0 cellspacing=0>
 	<tr>
-		<td width=100px>РМКК</td>
+		<td width=100px>НМ КК</td>
 		<td>
 			<table border=1 cellpadding=0 cellspacing=0>
 				<tr>
-					<td width=100px>МКК</td>
+					<td width=100px>ТМ КК</td>
 					<td width=300px>
 						<table border=1 cellpadding=0 cellspacing=0>
 							<tr>
@@ -91,13 +91,13 @@
 							</tr>
 						</table>
 					</td>
-					<td width=100px>Итого по МКК Форма 2, тыс.{$valuta}.       </td>
-					<td width=100px>Итого по МКК Оплата товаром, тыс.{$valuta}.</td>
+					<td width=100px>Итого по ТМ КК Форма 2, тыс.{$valuta}.       </td>
+					<td width=100px>Итого по ТМ КК Оплата товаром, тыс.{$valuta}.</td>
 				</tr>
 			</table>
 		</td>
-		<td width=100px>Итого по РМКК Форма 2, тыс.{$valuta}.       </td>
-		<td width=100px>Итого по РМКК Оплата товаром, тыс.{$valuta}.</td>
+		<td width=100px>Итого по НМ КК Форма 2, тыс.{$valuta}.       </td>
+		<td width=100px>Итого по НМ КК Оплата товаром, тыс.{$valuta}.</td>
 	</tr>
 	{foreach key=key item=item from=$data_table name=data_table}
 	<tr>
@@ -132,8 +132,8 @@
 <br>
 <table border=1 cellpadding=0 cellspacing=0>
 	<tr>
-		<td>Итого по РМКК Форма 2, тыс.{$valuta}.       </td>
-		<td>Итого по РМКК Оплата товаром, тыс.{$valuta}.</td>
+		<td>Итого по НМ КК Форма 2, тыс.{$valuta}.       </td>
+		<td>Итого по НМ КК Оплата товаром, тыс.{$valuta}.</td>
 	</tr>
 	<tr>
 		<td style="text-align:right">{$d1.total.1|default:0|num:3}</td>

@@ -25,6 +25,28 @@
 <br>
 {/if}
 
+<p>
+{if not $smarty.request.print or $oos_pr eq 1}
+100% SKU по спецификации представлено в ТЗ
+{/if}
+{if not $smarty.request.print}
+{literal}
+<input id=oos_pr_cb type=checkbox onclick="
+	$('#oos_pr').val(this.checked?1:0);
+	$('.bool_oos').each(function(){
+		$('#oos_pr_cb').is(':checked')?$(this).prop('checked',false):null;
+	});
+	$('.rb_oos').each(function(){
+		$('#oos_pr_cb').is(':checked')?$(this).val(0):null;
+	});
+">
+{/literal}
+<input id=oos_pr name=oos_pr type=hidden value="{$oos_pr}">
+<script>$('#oos_pr_cb').prop('checked',{$oos_pr}==1?true:false);</script>
+{/if}
+</p>
+
+
 <table border=1 cellspacing=0 cellpadding=3>
 <tr style="font-weight:bold">
 <td>№</td>
@@ -55,12 +77,17 @@
 	{if $item1.tip eq 'text'}<input name=rb[{$item.id}][{$item1.name}] value="{$item.$field_name|escape}">{/if}
 	{if $item1.tip eq 'bool'}
 	<input
-	onclick="$('#rb{$item.id}{$item1.name}').val(this.checked?1:0)"
+	class="bool_{$item1.name}"
+	onclick="$('#rb{$item.id}{$item1.name}').val(this.checked?1:0);
+	this.checked?$('#oos_pr_cb').prop('checked',false):null;
+	this.checked?$('#oos_pr').val(0):null;
+	"
 	{if $item.$field_name eq 1}checked{/if}
 	type="checkbox"
 	>
 	<input
 	type=hidden
+	class=rb_{$item1.name}
 	name=rb[{$item.id}][{$item1.name}]
 	id="rb{$item.id}{$item1.name}"
 	value="{$item.$field_name}"

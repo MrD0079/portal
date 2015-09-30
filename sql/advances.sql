@@ -42,7 +42,8 @@
                            FROM full
                           WHERE     master = :tn
                                 AND (   (full = -2 AND :full = 'me')
-                                     OR (full = 1 AND :full = 'slaves')))
+                                     OR (full = 1 AND :full = 'slaves')
+                                     OR (:full = 'all')))
                  AND c.data BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
                                 AND TO_DATE (:ed, 'dd.mm.yyyy')
                  AND TRUNC (c.data, 'mm') = c.data

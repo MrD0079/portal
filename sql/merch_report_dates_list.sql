@@ -2,5 +2,5 @@
 SELECT ROWNUM, z.*
   FROM (  SELECT TO_CHAR (DATA, 'dd.mm.yyyy') DATA_C, c.*
             FROM calendar c
-           WHERE data BETWEEN TRUNC (SYSDATE) - 3 AND TRUNC (SYSDATE)
+           WHERE data BETWEEN TRUNC (SYSDATE) - 3 AND TRUNC (SYSDATE) + 3
         ORDER BY DATA) z

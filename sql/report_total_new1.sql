@@ -1,6 +1,7 @@
-/* Formatted on 06/08/2015 16:00:53 (QP5 v5.227.12220.39724) */
+/* Formatted on 29.09.2015 13:23:12 (QP5 v5.227.12220.39724) */
   SELECT q1.dt,
          q1.dt1,
+         q1.login,
          q1.num,
          q1.kodtp,
          q1.mr_fakt,
@@ -35,6 +36,7 @@
                       vv,
                    TO_CHAR (mr.dt, 'dd.mm.yyyy') dt,
                    mr.dt dt1,
+                   rh.login,
                    rh.num,
                    cpp1.kodtp,
                    SUM (mr_fakt) mr_fakt,
@@ -112,6 +114,7 @@
                    AND (rb.DAY_enabled_MR = 1      /*OR rb.DAY_enabled_F = 1*/
                                              )
           GROUP BY mr.dt,
+                   rh.login,
                    rh.num,
                    cpp1.kodtp,
                    cpp1.id) q1,

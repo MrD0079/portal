@@ -92,6 +92,8 @@ $("#hpart1val").prop('checked','{$h.part1}'=='1'?true:false);
 $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 </script>
 
+{assign var=color1 value="#ccffff"}
+{assign var=color2 value="#ffffcc"}
 <table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold">
 		<td>№ п/п</td>
@@ -100,15 +102,22 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 		<td>ФИО ответственного</td>
 		<td>PIN</td>
 		<td>Последнее изменение</td>
-		<td style="background-color: rgb(204, 255, 255);">Сумма периода 1</td>
-		<td style="background-color: rgb(204, 255, 255);">PIN совпал</td>
-		<td style="background-color: rgb(204, 255, 255);">STAMP</td>
-		<td style="background-color: rgb(255, 255, 204);">Сумма периода 2</td>
-		<td style="background-color: rgb(255, 255, 204);">PIN совпал</td>
-		<td style="background-color: rgb(255, 255, 204);">STAMP</td>
+		<td style="background-color: {$color1};">Начислено по периоду 1</td>
+		<td style="background-color: {$color1};">Сумма периода 1</td>
+		<td style="background-color: {$color1};">PIN совпал</td>
+		<td style="background-color: {$color1};">STAMP</td>
+		<td style="background-color: {$color2};">Начислено по периоду 2</td>
+		<td style="background-color: {$color2};">Сумма периода 2</td>
+		<td style="background-color: {$color2};">PIN совпал</td>
+		<td style="background-color: {$color2};">STAMP</td>
 	</tr>
 	{foreach key=k item=i from=$zp name=zp}
-		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		{if $i.part1_charged neq $i.part1_sum or $i.part2_charged neq $i.part2_sum}
+			{assign var=color value="yellow"}
+		{else}
+			{cycle assign=color values="#ccffff,#ffffcc"}
+		{/if}
+		<tr bgcolor="{$color}">
 			<td>{$smarty.foreach.zp.iteration}</td>
 			<td>{$i.svms}</td>
 			<td>{$i.num}</td>
@@ -116,7 +125,6 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 			<td>
 				<input
 					class="num4"
-					name=data[{$i.id}]
 					id=data{$i.id}pin
 					value="{$i.pin}"
 					onChange="save({$i.id},'pin',this.value);"
@@ -124,22 +132,50 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 				>
 			</td>
 			<td>{$i.pin_lu} {$i.pin_lu_fio}</td>
-			<td style="background-color: rgb(204, 255, 255); text-align:right">{$i.part1_sum|num:2}</td>
-			<td style="background-color: {if $i.part1_pin_ok}rgb(204, 255, 255);{else}red{/if}">{if $i.part1_pin_ok}да{else}нет{/if}</td>
-			<td style="background-color: rgb(204, 255, 255);">{$i.part1_lu}</td>
-			<td style="background-color: rgb(255, 255, 204); text-align:right">{$i.part2_sum|num:2}</td>
-			<td style="background-color: {if $i.part2_pin_ok}rgb(255, 255, 204);{else}red{/if}">{if $i.part2_pin_ok}да{else}нет{/if}</td>
-			<td style="background-color: rgb(255, 255, 204);">{$i.part2_lu}</td>
+			<td style="background-color: {$color1}; text-align:right">
+				{if $is_admin or $is_ma}
+				<input
+					class="number"
+					id=data{$i.id}part1_charged
+					value="{$i.part1_charged}"
+					onChange="save({$i.id},'part1_charged',this.value);"
+					size=10
+				>
+				{else}
+					{$i.part1_charged|num:2}
+				{/if}
+			</td>
+			<td style="background-color: {$color1}; text-align:right">{$i.part1_sum|num:2}</td>
+			<td style="background-color: {if $i.part1_pin_ok}{$color1}{else}red{/if}">{if $i.part1_pin_ok}да{else}нет{/if}</td>
+			<td style="background-color: {$color1};">{$i.part1_lu}</td>
+			<td style="background-color: {$color2}; text-align:right">
+				{if $is_admin or $is_ma}
+				<input
+					class="number"
+					id=data{$i.id}part2_charged
+					value="{$i.part2_charged}"
+					onChange="save({$i.id},'part2_charged',this.value);"
+					size=10
+				>
+				{else}
+					{$i.part2_charged|num:2}
+				{/if}
+			</td>
+			<td style="background-color: {$color2}; text-align:right">{$i.part2_sum|num:2}</td>
+			<td style="background-color: {if $i.part2_pin_ok}{$color2}{else}red{/if}">{if $i.part2_pin_ok}да{else}нет{/if}</td>
+			<td style="background-color: {$color2};">{$i.part2_lu}</td>
 		</tr>
 	{/foreach}
 		<tr style="font-weight:bold;text-align:right">
 			<td style="text-align:center" colspan=6>ИТОГО:{$zpt.cnt}</td>
-			<td>{$zpt.part1_sum|num:2}</td>
-			<td>{$zpt.part1_pin_ok}</td>
-			<td></td>
-			<td>{$zpt.part2_sum|num:2}</td>
-			<td>{$zpt.part2_pin_ok}</td>
-			<td></td>
+			<td style="background-color: {$color1};"></td>
+			<td style="background-color: {$color1};">{$zpt.part1_sum|num:2}</td>
+			<td style="background-color: {$color1};">{$zpt.part1_pin_ok}</td>
+			<td style="background-color: {$color1};"></td>
+			<td style="background-color: {$color2};"></td>
+			<td style="background-color: {$color2};">{$zpt.part2_sum|num:2}</td>
+			<td style="background-color: {$color2};">{$zpt.part2_pin_ok}</td>
+			<td style="background-color: {$color2};"></td>
 		</tr>
 </table>
 
