@@ -34,3 +34,17 @@ a#toTop:active{}
 
 /* disable datepicker "done" button */
 button.ui-datepicker-close {display: none;}
+
+.cb_container{
+ /*border: 1px solid red;*/
+ width: 100%;
+ overflow: hidden;
+}
+.cb_block{
+ /*border: 1px solid green;*/
+ width:200px; 
+ height:20px; 
+ float:left; 
+ overflow:hidden;
+ text-align:left;
+}
