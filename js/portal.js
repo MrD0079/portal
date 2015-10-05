@@ -181,34 +181,3 @@ $.ajax({
   }
 });
 }
-
-function list_tp(tp)
-{
-var fd = new FormData();
-var oblast = [];
-$("input[name='oblast[]']:checked").each(function(){oblast.push($(this).val());});
-var city = [];
-$("input[name='city[]']:checked").each(function(){city.push($(this).val());});
-var nets = [];
-$("input[name='nets[]']:checked").each(function(){nets.push($(this).val());});
-fd.append('oblast',  oblast);
-fd.append('city',  city);
-fd.append('nets',  nets);
-/*
-fd.append('oblast',  $('#oblast').val());
-fd.append('city',  $('#city').val());
-fd.append('nets',  $('#nets').val());
-*/
-fd.append('tp',  tp);
-$.ajax({
-  type: 'POST',
-  url: '?action=list_tp&print=1&nohead=1',
-  data: fd,
-  processData: false,
-  contentType: false,
-  success: function(data) {
-   $('#list_tp').html(data);
-   $('#tp').val(tp);
-  }
-});
-}
