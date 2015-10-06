@@ -1,0 +1,113 @@
+<h1>Статистика по филиалам</h1>
+
+<form target="_self" method="POST" name=form_emp_exp>
+
+
+<p>
+Месяц
+<select name=month_list id=month_list>
+{foreach key=key item=item from=$month_list}
+	<option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select>
+<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+</p>
+
+<p>
+Филиал(UA)/Дистрибутор(RU)
+<select id=bud_id name=bud_id>
+	<option value=0></option>
+	{foreach key=key item=item from=$bud_fil}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+<script>$("#bud_id option[value='{$smarty.request.bud_id}']").prop('selected', true);</script>
+</p>
+
+<p>
+координатор
+<select id=dm name=dm>
+	<option value=0></option>
+	{foreach key=key item=item from=$bud_tn}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+<script>$("#dm option[value='{$smarty.request.dm}']").prop('selected', true);</script>
+</p>
+
+<p>
+филиалы
+<input checked="checked" name="fils" id="fils" value="0" type="radio"> все
+<input name="fils" id="fils" value="1" type="radio"> мои
+<script>$("input[name=fils][value={$smarty.request.fils}]").attr('checked',true);</script>
+</p>
+
+<p>
+<input type=submit name=generate value="Построить отчет">
+</p>
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+	<td>Филиалы</td>
+	{foreach key=k item=i from=$list.columns}
+	<td {if $i.current_week}style="background-color:lightblue"{/if}>{$i.dm}<br>{$i.dwtc}</td>
+	{/foreach}
+</tr>
+{foreach key=k item=i from=$list.data}
+<tr>
+	<td>{$i.bud_name} ({$i.fio})</td>
+	{foreach key=k1 item=i1 from=$i.data}
+	<td
+		id="td{$i.tn}{$i.bud_id}{$k1}"
+		{if $i1.val eq '0'}style="background-color:lightgreen;"{/if}
+		{if $i1.val eq '1'}style="background-color:yellow;"{/if}
+		{if $i1.val eq '2'}style="background-color:red;"{/if}
+	>
+		{if $tn eq $i.tn}
+		<input size=1 class="number012" onchange="save({$i.tn},{$i.bud_id},'{$k1}','{$i1.data_t}',this.value);" value="{$i1.val}">
+		{else}
+		{$i1.val}
+		{/if}
+	</td>
+	{/foreach}
+</tr>
+{/foreach}
+</table>
+
+</form>
+
+<script>
+{literal}
+
+function save(tn,bud_id,k1,dt,val)
+{
+	$('#td'+tn+bud_id+k1).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('tn',  tn);
+	fd.append('bud_id',  bud_id);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=dm_fil_stat&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td'+tn+bud_id+k1).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+{/literal}
+</script>
+
+<div id=ok></div>
+
+{literal}
+<script>
+$(function(){$('.number012').autoNumeric('init',{aSep: '',mDec: 0,vMin: 0.0,vMax: 2.0});});
+</script>
+{/literal}

@@ -1,0 +1,51 @@
+<h1>Привязка Филиалы(UA)/Дистрибуторы(RU) - координатор</h1>
+
+<form target="_self" method="POST" name=form_emp_exp>
+
+
+<p>
+Филиал(UA)/Дистрибутор(RU)
+<select required name=add[bud_id]>
+	<option></option>
+	{foreach key=key item=item from=$bud_fil}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+</p>
+
+<p>
+координатор
+<select required name=add[tn]>
+	<option></option>
+	{foreach key=key item=item from=$bud_tn}
+	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+	{/foreach}
+</select>
+</p>
+
+<p>
+<input type=submit name=new value="Добавить">
+</p>
+
+
+
+<table border=1 cellpadding=3 cellspacing=0>
+<tr style="font-weight:bold;text-align:center">
+<td><a href="javascript:void(0)" onclick="javascript:form_emp_exp.submit()">[X]</a></td>
+<td>Филиал(UA)/Дистрибутор(RU)</td>
+<td>координатор</td>
+<td>Добавлено</td>
+</tr>
+{foreach key=k item=i from=$list name=list}
+<tr>
+<td>
+<input type=checkbox name=del[{$k}] value="{$i.tn},{$i.bud_id}">
+{$smarty.foreach.list.iteration}
+</td>
+<td>{$i.bud_name}</td>
+<td>{$i.emp_name}</td>
+<td>{$i.lu_txt}</td>
+</tr>
+{/foreach}
+</table>
+</form>

@@ -59,6 +59,7 @@
 		<td align=center>ИТ<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 		<td align=center>Бег<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 		<td align=center>Дон<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
+		<td align=center>ДМ<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 	</tr>
 	{/if}
 	<tr style="text-align:center">
@@ -99,6 +100,7 @@
 		<td {if $i.is_it eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p23_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_it eq 1}checked{/if}>			<input type=hidden id=p23_{$i.tn} name=ds[spdtree][svideninn][is_it][{$i.tn}]>			</td>
 		<td {if $i.is_run eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p24_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_run eq 1}checked{/if}>			<input type=hidden id=p24_{$i.tn} name=ds[spdtree][svideninn][is_run][{$i.tn}]>			</td>
 		<td {if $i.is_don eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p26_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_don eq 1}checked{/if}>			<input type=hidden id=p26_{$i.tn} name=ds[spdtree][svideninn][is_don][{$i.tn}]>		</td>
+		<td {if $i.is_dm eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p27_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_dm eq 1}checked{/if}>			<input type=hidden id=p27_{$i.tn} name=ds[spdtree][svideninn][is_dm][{$i.tn}]>		</td>
 	</tr>
 	{/foreach}
 </table>
