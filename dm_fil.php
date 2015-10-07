@@ -31,7 +31,7 @@ $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('list', $data);
 
-$sql = rtrim(file_get_contents('sql/bud_fil.sql'));
+$sql = rtrim(file_get_contents('sql/dm_list_fil.sql'));
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_fil', $data);
