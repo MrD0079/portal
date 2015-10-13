@@ -279,6 +279,10 @@
 		</td>
 		<td>Адрес ТЗ</td>
 		{/if}
+		{if $smarty.request.plan_type eq 7}
+		<td>№ акта</td>
+		<td>Дата акта</td>
+		{/if}
 
 	</tr>
 	{/if}
@@ -325,6 +329,10 @@
 			{/if}
 		</td>
 		<td>{$fin_plan_detail_item.bud_z_tz_address}</td>
+		{/if}
+		{if $smarty.request.plan_type eq 7}
+		<td>{$fin_plan_detail_item.inv_act_num}</td>
+		<td>{$fin_plan_detail_item.inv_act_dt}</td>
 		{/if}
 	</tr>
 	{/foreach}

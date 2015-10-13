@@ -14,61 +14,15 @@ InitRequestVar("ed",$_REQUEST["month_list"]);
 InitRequestVar("act_prov_month"/*,$_REQUEST["month_list"]*/);
 InitRequestVar("oplata_date"/*,$_REQUEST["month_list"]*/);
 
-if (isset($_REQUEST["save"])&&isset($_REQUEST["ok1"]))
+if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 {
-	foreach ($_REQUEST["ok1"] as $k=>$v)
+	foreach ($_REQUEST["data"] as $k=>$v)
 	{
-		$keys["id"]=$k;
-		foreach ($v as $k1=>$v1)
-		{
-			if ($v1!="")
-			{
-				$vals=array($k1=>$v1);
-				//print_r($keys);
-				//print_r($vals);
-				Table_Update ("invoice", $keys, $vals);
-			}
-		}
-	}
-}
-
-if (isset($_REQUEST["save"])&&isset($_REQUEST["date"]))
-{
-	foreach ($_REQUEST["date"] as $k=>$v)
-	{
-		$keys["id"]=$k;
-		foreach ($v as $k1=>$v1)
-		{
-			if ($v1!="")
-			{
-				$vals=array($k1=>OraDate2MDBDate($v1));
-			}
-			else
-			{
-				$vals=array($k1=>null);
-			}
-			Table_Update ("invoice", $keys, $vals);
-		}
-	}
-}
-
-if (isset($_REQUEST["save"])&&isset($_REQUEST["comm"]))
-{
-	foreach ($_REQUEST["comm"] as $k=>$v)
-	{
-		$keys["id"]=$k;
-		foreach ($v as $k1=>$v1)
-		{
-			if ($v1!="")
-			{
-				$vals=array($k1=>$v1);
-			}
-			else
-			{
-				$vals=array($k1=>null);
-			}
-			Table_Update ("invoice", $keys, $vals);
-		}
+		$keys = array("id"=>$k);
+		isset($v['act_prov_month'])?$v['act_prov_month']=OraDate2MDBDate($v['act_prov_month']):null;
+		isset($v['oplata_date'])?$v['oplata_date']=OraDate2MDBDate($v['oplata_date']):null;
+		isset($v['act_dt'])?$v['act_dt']=OraDate2MDBDate($v['act_dt']):null;
+		Table_Update ("invoice", $keys, $v);
 	}
 }
 

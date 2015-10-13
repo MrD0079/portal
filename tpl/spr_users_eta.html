@@ -59,6 +59,7 @@
 		<td>Последний вход</td>
 		<td>в резерве</td>
 		<td>дата включения</td>
+		<td>дата увольнения</td>
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 	<tr style="font-weight:bold">
@@ -96,11 +97,12 @@
 					id="v_{$i1.login}_reserv_dt"
 					onchange="save_vals('{$i1.login}','reserv_dt',this.value);"
 					class="datepicker"
-					size=8
+					size=10
 					value="{$i1.reserv_dt}"
 					{if $i1.reserv neq 1}disabled{/if}
 				>
 			</td>
+			<td style="text-align:center;{if $i1.datauvol}background-color:red{/if}">{$i1.datauvol}</td>
 		</tr>
 		{/foreach}
 	{/foreach}
@@ -117,6 +119,7 @@
 		<td>Последний вход</td>
 		<td>в резерве</td>
 		<td>дата включения</td>
+		<td>дата увольнения</td>
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 		{foreach key=k1 item=i1 from=$i.data name=i}
@@ -133,6 +136,7 @@
 			<td style="text-align:center;{if not $i1.lu}background-color:orange;{/if}">{$i1.lu}</td>
 			<td style="text-align:center;{if $i1.reserv}background-color:lightgreen;{/if}">{if $i1.reserv eq 1}да{/if}</td>
 			<td style="text-align:center;">{$i1.reserv_dt}</td>
+			<td style="text-align:center;{if $i1.datauvol}background-color:red{/if}">{$i1.datauvol}</td>
 		</tr>
 		{/foreach}
 	{/foreach}

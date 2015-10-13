@@ -7,6 +7,14 @@ SELECT (SELECT sales
           FROM nets_plan_year
          WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net)
           plan_prev_year,
+       (SELECT sales_ng
+          FROM nets_plan_year
+         WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net)
+          plan_cur_year_ng,
+       (SELECT sales_prev_ng
+          FROM nets_plan_year
+         WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net)
+          plan_prev_year_ng,
        DECODE (
           NVL (
              (SELECT sales_prev

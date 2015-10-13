@@ -10,6 +10,7 @@
 		<td>Закупочная стоимость</td>
 		<td>Дата закупки</td>
 		<td>Дата закрепления в бух. учете</td>
+		<td>Файл</td>
 		<td>Комментарий</td>
 		<td style="background-color: rgb(204, 255, 255);">Снять ТМЦ с сотрудника</td>
 		<td style="background-color: rgb(204, 255, 255);">Состояние при снятии<br>Дата снятия<br>Перенести на сотрудника</td>
@@ -36,18 +37,24 @@
 		<td>{$i.add_fio} {$i.add_lu}</td>
 		<td>{$i.accepted_lu}</td>
 
-
 		{if $i.removed eq 0}
 			<td><input size=10 {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][zakup_price] value="{$i.zakup_price}" class="number"></td>
 			<td><input size=10 {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][zakup_dt] value="{$i.zakup_dt}" class='datepicker'></td>
 			<td><input size=10 {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][buh_dt] value="{$i.buh_dt}" class='datepicker'></td>
-			<td><textarea {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][comm]>{$i.comm}</textarea></td>
 		{else}
 			<td>{$i.zakup_price}</td>
 			<td>{$i.zakup_dt}</td>
 			<td>{$i.buh_dt}</td>
+		{/if}
+
+		<td><a target=_blank href="files/{$i.fn}">{$i.fn}</a></td>
+
+		{if $i.removed eq 0}
+			<td><textarea {if not $is_it and not $is_admin}disabled{/if} name=data[{$i.id}][comm]>{$i.comm}</textarea></td>
+		{else}
 			<td>{$i.comm|nl2br}</td>
 		{/if}
+
 
 		{if $i.removed eq 1}
 		<td style="background-color: rgb(204, 255, 255); text-align:left">
@@ -99,19 +106,9 @@
 </table>
 <p><input name="save" value="Сохранить" type="submit" onClick="$('.add').attr('disabled',true);"></p>
 <table border=1>
-	<tr style="font-weight:bold; text-align:center">
-		<td>Тип ТМЦ</td>
-		<td>Наименование / модель</td>
-		<td>Серийный номер</td>
-		<td>Инвентарный номер АВК</td>
-		<td>Состояние при выдаче</td>
-		<td>Дата выдачи</td>
-		<td>Закупочная стоимость</td>
-		<td>Дата закупки</td>
-		<td>Дата закрепления в бух. учете</td>
-	</tr>
 	<tr>
-		<td>
+		<td style="text-align:right">Тип ТМЦ</td>
+		<td style="text-align:left">
 			<select class='add' required name=tmc_new[tmcs]>
 				<option></option>
 				{foreach key=tk item=ti from=$tmcs}
@@ -119,14 +116,42 @@
 				{/foreach}
 			</select>
 		</td>
-		<td><input class='add' required name=tmc_new[name]></td>
-		<td><input class='add' name=tmc_new[sn]></td>
-		<td><input class='add' name=tmc_new[num_avk]></td>
-		<td><input class='add' required name=tmc_new[state]></td>
-		<td><input class='add datepicker' required name=tmc_new[dtv]></td>
-		<td><input class='add number' required name=tmc_new[zakup_price]></td>
-		<td><input class='add datepicker' required name=tmc_new[zakup_dt]></td>
-		<td><input class='add datepicker' required name=tmc_new[buh_dt]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Наименование / модель</td>
+		<td style="text-align:left"><input class='add' required name=tmc_new[name]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Серийный номер</td>
+		<td style="text-align:left"><input class='add' name=tmc_new[sn]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Инвентарный номер АВК</td>
+		<td style="text-align:left"><input class='add' name=tmc_new[num_avk]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Состояние при выдаче</td>
+		<td style="text-align:left"><input class='add' required name=tmc_new[state]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Дата выдачи</td>
+		<td style="text-align:left"><input class='add datepicker' required name=tmc_new[dtv]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Закупочная стоимость</td>
+		<td style="text-align:left"><input class='add number' required name=tmc_new[zakup_price]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Дата закупки</td>
+		<td style="text-align:left"><input class='add datepicker' required name=tmc_new[zakup_dt]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Дата закрепления в бух. учете</td>
+		<td style="text-align:left"><input class='add datepicker' required name=tmc_new[buh_dt]></td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Файл</td>
+		<td style="text-align:left"><input class='add' name=tmc_new[fn] type=file></td>
 	</tr>
 </table>
 

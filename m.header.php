@@ -1,15 +1,19 @@
 <?php
 
-if (!isset($_REQUEST["excel"]))
+if (isset($_REQUEST["excel"]))
+{
+	header("Content-type:application/vnd.ms-excel");
+	header("Content-Disposition: attachment; filename=\"".$_REQUEST["filename"].".xls\"");
+}
+else
+if (isset($_REQUEST["google"]))
+{
+}
+else
 {
 	header("Content-Type: text/html; charset=\"windows-1251\"");
 	header("Cache-Control: no-store, no-cache,  must-revalidate"); 
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-}
-else
-{
-	header("Content-type:application/vnd.ms-excel");
-	header("Content-Disposition: attachment; filename=\"".$_REQUEST["filename"].".xls\"");
 }
 
 if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
@@ -19,7 +23,8 @@ if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
 <?
 }
 
-if (!isset($_REQUEST["nohead"]))
+if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
+//if (!isset($_REQUEST["nohead"]))
 {
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -45,7 +50,8 @@ if (!isset($_REQUEST["print"])&&!isset($_REQUEST["nohead"]))
 <?
 }
 
-if (!isset($_REQUEST["nohead"]))
+if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
+//if (!isset($_REQUEST["nohead"]))
 {
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -60,9 +66,11 @@ if (!isset($_REQUEST["nohead"]))
 <?
 }
 
-if (!isset($_REQUEST["nohead"]))
+if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
+//if (!isset($_REQUEST["nohead"]))
 {
-?><title>Портал дирекции по продажам АВК</title></head><body>
+?><title>Портал дирекции по продажам АВК</title><?
+?></head><body>
 <link rel="icon" href="design/favicon.ico" type="image/x-icon">
 <a id="toTop" href="javascript:void(0);" title="Up"></a>
 <?

@@ -43,7 +43,7 @@
 <tr>
 <td>Общая сумма по счету, тыс.{$valuta}.</td>
 <td>
-<input required="required" size="10" name="new[summa]"></td>
+<input required="required" size="10" name="new[summa]" class="number3"></td>
 </tr>
 <tr>
 <td>Плательщик</td>
@@ -59,6 +59,16 @@
 <td>Файлы</td>
 <td>
 <input type=file name="new_files[]" id="new_files" multiple></td>
+</tr>
+<tr>
+<td>№ акта</td>
+<td>
+<input size="25" name="new[act_num]"></td>
+</tr>
+<tr>
+<td>Дата акта</td>
+<td>
+<input name="new[act_dt]" class="datepicker"></td>
 </tr>
 </tbody>
 </table>

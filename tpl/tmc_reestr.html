@@ -136,6 +136,7 @@
 		<td>Закупочная стоимость</td>
 		<td>Дата закупки</td>
 		<td>Дата закрепления в бух. учете</td>
+		<td>Файл</td>
 		<td>Комментарий</td>
 		<td style="background-color: rgb(204, 255, 255);">Снято с сотрудника</td>
 		<td style="background-color: rgb(204, 255, 255);">Состояние при снятии</td>
@@ -158,6 +159,7 @@
 		<td>{$i.zakup_price}</td>
 		<td>{$i.zakup_dt}</td>
 		<td>{$i.buh_dt}</td>
+		<td><a target=_blank href="files/{$i.fn}">{$i.fn}</a></td>
 		<td>{$i.comm|nl2br}</td>
 		<td style="background-color: rgb(204, 255, 255); text-align:center">{if $i.removed}да{/if}</td>
 		<td style="background-color: rgb(204, 255, 255); text-align:center">{$i.state_removed}</td>

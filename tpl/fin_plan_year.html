@@ -6,30 +6,44 @@
 			<td rowspan=2>
 				<table border=0>
 					<tr>
-						<td>Планируемый годовой объем продаж, тыс. {$valuta}</td>
+						<td>Продажи без учета НГ, тыс. {$valuta}</td>
 						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
-						<td><input required {$disabled} class=number size="15" name="sales_cur_year" id="sales_cur_year" value={$sales_cur_year}></td>
+						<td><input required {$disabled} class=number size="15" name="nets_plan_year[sales]" id="sales" value={$sales.sales}></td>
 					</tr>
 					<tr>
-						<td>Объем продаж предыдущего года, тыс. {$valuta}</td>
+						<td>Продажи предыдущего года без учета НГ, тыс. {$valuta}</td>
 						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
-						<td><input required class=number size="15" name="sales_prev_year" id="sales_prev_year" value={$sales_prev_year}></td>
+						<td><input required class=number size="15" name="nets_plan_year[sales_prev]" id="sales_prev" value={$sales.sales_prev}></td>
 					</tr>
 					<tr>
-						<td>Процент роста, %</td>
-						<td><input disabled size="15" name="percent" id="percent" value={$percent}></td>
+						<td>Процент роста без учета НГ, %</td>
+						<td><input disabled size="15" name="percent" id="percent" value={$percent.percent}></td>
+					</tr>
+					<tr>
+						<td>Продажи НГ, тыс. {$valuta}</td>
+						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
+						<td><input required {$disabled} class=number size="15" name="nets_plan_year[sales_ng]" id="sales_ng" value={$sales.sales_ng}></td>
+					</tr>
+					<tr>
+						<td>Продажи предыдущего года НГ, тыс. {$valuta}</td>
+						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
+						<td><input required class=number size="15" name="nets_plan_year[sales_prev_ng]" id="sales_prev_ng" value={$sales.sales_prev_ng}></td>
+					</tr>
+					<tr>
+						<td>Процент роста НГ, %</td>
+						<td><input disabled size="15" name="percent_ng" id="percent_ng" value={$percent.percent_ng}></td>
 					</tr>
 					<tr>
 						<td>Количество ТЗ на начало планируемого года</td>
-						<td><input required {$disabled} size="15" name="tz" id="tz" value={$nets_plan_year.tz}></td>
+						<td><input required {$disabled} size="15" name="nets_plan_year[tz]" id="tz" value={$nets_plan_year.tz}></td>
 					</tr>
 					<tr>
 						<td>Прогноз по открытию новых залов</td>
-						<td><input required {$disabled} size="15" name="zal_prognoz" id="zal_prognoz" value={$nets_plan_year.zal_prognoz}></td>
+						<td><input required {$disabled} size="15" name="nets_plan_year[zal_prognoz]" id="zal_prognoz" value={$nets_plan_year.zal_prognoz}></td>
 					</tr>
 				</table>
 				Сеть будет работать на стандартных условиях без бюджета
-				<select {$disabled} name="no_budget" id="no_budget">
+				<select {$disabled} name="nets_plan_year[no_budget]" id="no_budget">
 					<option value=0>нет</option><option value=1>да</option>
 				</select>
 				<script>$('#no_budget option[value="{$nets_plan_year.no_budget}"]').prop('selected', true);</script>
@@ -39,9 +53,6 @@
 			</td>
 			<td colspan=2 style="text-align:center">
 				Прогноз продаж по месяцам
-			</td>
-			<td style="text-align:center">
-				Динамика по группе затрат
 			</td>
 		</tr>
 		<tr>
@@ -92,15 +103,6 @@
 					{/if}
 					{/foreach}
 				</table>
-			</td>
-			<td>
-				<a target=_blank href="?action=main">"Тредмаркетинговая активность"</a>
-				<br>
-				<br>
-				<a target=_blank href="?action=main">"Дополнительные места продаж"</a>
-				<br>
-				<br>
-				<a target=_blank href="?action=main">"Затраты дистрибутора"</a>
 			</td>
 		</tr>
 	</table>

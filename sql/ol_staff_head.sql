@@ -70,9 +70,9 @@
          AND (   (    i_am_is_acceptor = 1
                   AND i_am_is_accepted <> 1
                   AND i_am_is_gr_acceptor = o1.gruppa)
-              /*OR (SELECT NVL (is_admin, 0)
+              OR (SELECT NVL (is_admin, 0)
                     FROM user_list
-                   WHERE tn = :tn) = 1*/)
+                   WHERE tn = :tn) = 1)
          /*and i_am_is_gr_acceptor=1*/
          AND (   u.tn IN
                     (SELECT slave

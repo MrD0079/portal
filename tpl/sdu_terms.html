@@ -1,88 +1,88 @@
-				<table border=0>
-					<tr>
-						<td colspan=2>
-						{foreach key=key item=item from=$nets}
-							{if $smarty.request.nets eq $item.id_net}
-								Ответственный РМ КК: {$item.rmkk_name}
-								<br>
-								Ответственный МКК: {$item.mkk_name}
-							{/if}
-						{/foreach}
-						</td>
-					</tr>
-
-					<tr>
-						<td>Уточненный период</td>
-						<td><input {$disabled} size="70" name="specified_period" id="specified_period" value="{$nets_plan_year.specified_period|escape}"></td>
-					</tr>
-					<tr>
-						<td>Условия работы сети</td>
-						<td>
-							<select {$disabled} name="condition" id="condition">
-								{foreach key=key item=item from=$conditions}
-									<option value={$item.id}>{$item.condition_name}</option>
-								{/foreach}
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td style="vertical-align:top">Условия оплаты</td>
-						<td>
-
-
-
-
-							<table border=1>
-								<tr>
-									<td>{$smarty.request.calendar_years-2}</td>
-									<td>
-										{if $nets_plan_year2.pay_type}
-										{foreach key=key item=item from=$nets_pay_types}
-											{if $nets_plan_year2.pay_type eq $item.id}{$item.pay_type_name}{/if}
-										{/foreach}
-										{$nets_plan_year2.pay_days} дней
-										{/if}
-									</td>
-								</tr>
-								<tr>
-									<td>{$smarty.request.calendar_years-1}</td>
-									<td>
-										{if $nets_plan_year1.pay_type}
-										{foreach key=key item=item from=$nets_pay_types}
-											{if $nets_plan_year1.pay_type eq $item.id}{$item.pay_type_name}{/if}
-										{/foreach}
-										{$nets_plan_year1.pay_days} дней
-										{/if}
-									</td>
-								</tr>
-							</table>
-
-
-
-
-
-
-
-
-							<select {$disabled} name="pay_type" id="pay_type" onchange="javascript:z();">
-								{foreach key=key item=item from=$nets_pay_types}
-									<option value={$item.id}>{$item.pay_type_name}</option>
-								{/foreach}
-							</select>
-
-							<input {$disabled} size="5" name="pay_days" id="pay_days" value="{$nets_plan_year.pay_days}">
-							календарных дней
-							<br>
-							Детализация условий оплаты по реализации:
-							<br>
-							<textarea required {if $disabled or $nets_plan_year.pay_type neq 2}disabled{/if} rows="5"  cols="50" name="pay_detail" id="pay_detail">{$nets_plan_year.pay_detail|escape}</textarea>
-						</td>
-					</tr>
-				</table>
-
-				<script>$("#condition option[value='{$smarty.request.condition}']").prop('selected', true);</script>
-				<script>$("#pay_type option[value='{$smarty.request.pay_type}']").prop('selected', true);</script>
+<table border=0>
+	<tr>
+		<td colspan=2>
+		{foreach key=key item=item from=$nets}
+			{if $smarty.request.nets eq $item.id_net}
+				Ответственный НМ КК: {$item.rmkk_name}
 				<br>
+				Ответственный ТМ КК: {$item.mkk_name}
+			{/if}
+		{/foreach}
+		</td>
+	</tr>
+
+	<tr>
+		<td>Уточненный период</td>
+		<td><input {$disabled} size="70" name="specified_period" id="specified_period" value="{$nets_plan_year.specified_period|escape}"></td>
+	</tr>
+	<tr>
+		<td>Условия работы сети</td>
+		<td>
+			<select {$disabled} name="condition" id="condition">
+				{foreach key=key item=item from=$conditions}
+					<option value={$item.id}>{$item.condition_name}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td style="vertical-align:top">Условия оплаты</td>
+		<td>
+
+
+
+
+			<table border=1>
+				<tr>
+					<td>{$smarty.request.calendar_years-2}</td>
+					<td>
+						{if $nets_plan_year2.pay_type}
+						{foreach key=key item=item from=$nets_pay_types}
+							{if $nets_plan_year2.pay_type eq $item.id}{$item.pay_type_name}{/if}
+						{/foreach}
+						{$nets_plan_year2.pay_days} дней
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<td>{$smarty.request.calendar_years-1}</td>
+					<td>
+						{if $nets_plan_year1.pay_type}
+						{foreach key=key item=item from=$nets_pay_types}
+							{if $nets_plan_year1.pay_type eq $item.id}{$item.pay_type_name}{/if}
+						{/foreach}
+						{$nets_plan_year1.pay_days} дней
+						{/if}
+					</td>
+				</tr>
+			</table>
+
+
+
+
+
+
+
+
+			<select {$disabled} name="pay_type" id="pay_type" onchange="javascript:z();">
+				{foreach key=key item=item from=$nets_pay_types}
+					<option value={$item.id}>{$item.pay_type_name}</option>
+				{/foreach}
+			</select>
+
+			<input {$disabled} size="5" name="pay_days" id="pay_days" value="{$nets_plan_year.pay_days}">
+			календарных дней
+			<br>
+			Детализация условий оплаты по реализации:
+			<br>
+			<textarea required {if $disabled or $nets_plan_year.pay_type neq 2}disabled{/if} rows="5"  cols="50" name="pay_detail" id="pay_detail">{$nets_plan_year.pay_detail|escape}</textarea>
+		</td>
+	</tr>
+</table>
+
+<script>$("#condition option[value='{$smarty.request.condition}']").prop('selected', true);</script>
+<script>$("#pay_type option[value='{$smarty.request.pay_type}']").prop('selected', true);</script>
+<br>
 
 
 {if $sdu_budjet_last_ver0.b_rost > $sdu_budjet_last_ver0.plan_rost}
@@ -111,12 +111,8 @@
 		{/foreach}
 
 	</tr>
-
-
-
-
 	<tr>
-		<td>Объем продаж, тыс.{$valuta}.</td>
+		<td>Продажи без учета НГ, тыс.{$valuta}.</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_cur_year|default:0|num:3}</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_cur_year|default:0|num:3}</td>
 		{foreach from=$sdu item=s_item key=s_key}
@@ -124,11 +120,27 @@
 		{/foreach}
 	</tr>
 	<tr style="color:grey">
-		<td>Объем продаж (факт пред. года), тыс.{$valuta}.</td>
+		<td>Продажи предыдущего года без учета НГ, тыс.{$valuta}.</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_prev_year|default:0|num:3}</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_prev_year|default:0|num:3}</td>
 		{foreach from=$sdu item=s_item key=s_key}
 		<td style="text-align:right">{$sdu_budjet[$s_item.ver].plan_prev_year|default:0|num:3}</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Продажи НГ, тыс.{$valuta}.</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_cur_year_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_cur_year_ng|default:0|num:3}</td>
+		{foreach from=$sdu item=s_item key=s_key}
+		<td style="text-align:right">{$sdu_budjet[$s_item.ver].plan_cur_year_ng|default:0|num:3}</td>
+		{/foreach}
+	</tr>
+	<tr style="color:grey">
+		<td>Продажи предыдущего года НГ, тыс.{$valuta}.</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_prev_year_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_prev_year_ng|default:0|num:3}</td>
+		{foreach from=$sdu item=s_item key=s_key}
+		<td style="text-align:right">{$sdu_budjet[$s_item.ver].plan_prev_year_ng|default:0|num:3}</td>
 		{/foreach}
 	</tr>
 	<tr>
@@ -233,10 +245,10 @@
 			{/foreach}
 		</tr>
 		<tr>
-			<td>Цели по сети согласованы: РМКК/ТМКК</td>
+			<td>Цели по сети согласованы: НМ КК</td>
 			{foreach from=$sdu item=item key=key}
 			<td>
-				<select {if not $is_rmkk or $item.ok_sdu_nmkk eq 1}disabled{/if} name="ok[{$item.ver}][ok_sdu_rmkk_tmkk]" id="ok_{$item.ver}_ok_sdu_rmkk_tmkk">
+				<select {if not $is_rmkk}disabled{/if} name="ok[{$item.ver}][ok_sdu_rmkk_tmkk]" id="ok_{$item.ver}_ok_sdu_rmkk_tmkk">
 					<option value=0>нет</option><option value=1>да</option>
 				</select>
 				<script>$("#ok_{$item.ver}_ok_sdu_rmkk_tmkk option[value='{$item.ok_sdu_rmkk_tmkk}']").prop('selected', true);</script>
@@ -255,18 +267,7 @@
 			{/foreach}
 		</tr>
 		<tr>
-			<td>Подтверждаю: НМ КК</td>
-			{foreach from=$sdu item=item key=key}
-			<td>
-				<select {if not $is_nmkk or $item.ok_sdu_dpu eq 1}disabled{/if} name="ok[{$item.ver}][ok_sdu_nmkk]" id="ok_{$item.ver}_ok_sdu_nmkk">
-					<option value=0>нет</option><option value=1>да</option>
-				</select>
-				<script>$("#ok_{$item.ver}_ok_sdu_nmkk option[value='{$item.ok_sdu_nmkk}']").prop('selected', true);</script>
-			</td>
-			{/foreach}
-		</tr>
-		<tr>
-			<td>Утвержден: ЗГДП</td>
+			<td>Утвержден: ДП / ИП</td>
 			{foreach from=$sdu item=item key=key}
 			<td>
 				<select {if not $is_dpu}disabled{/if} name="ok[{$item.ver}][ok_sdu_dpu]" id="ok_{$item.ver}_ok_sdu_dpu">

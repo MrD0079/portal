@@ -64,122 +64,31 @@ if (isset($_REQUEST["fin_plan_month_ok"]))
 	}
 }
 
-if (isset($_REQUEST["save_year"]))
+if (isset($_REQUEST["save_year"])||isset($_REQUEST["nets_plan_year"]))
 {
+	$params=array(
+		":net" => $_REQUEST["nets"],
+		":plan_type" => $_REQUEST["plan_type"],
+		":y" => $_REQUEST["calendar_years"]
+	);
 	audit("сохранил годовой фин. план сети","fin_plan");
-	if (isset($_REQUEST["sales_cur_year"]))
+	if (
+		isset($_REQUEST['nets_plan_year']["sales"])||
+		isset($_REQUEST['nets_plan_year']["sales_prev"])||
+		isset($_REQUEST['nets_plan_year']["sales_ng"])||
+		isset($_REQUEST['nets_plan_year']["sales_prev_ng"])
+	)
 	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			//"sales" => str_replace(",", ".", $_REQUEST["sales_cur_year"])
-			"sales" => $_REQUEST["sales_cur_year"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-		$params=array(
-			":net" => $_REQUEST["nets"],
-			":plan_type" => $_REQUEST["plan_type"],
-			":y" => $_REQUEST["calendar_years"]
-		);
 		$sql="update nets_plan_month set payment_format = 1 where plan_type=:plan_type and payment_format = 1 and id_net = :net and year = :y";
 		$sql=stritr($sql,$params);
 		$db->query($sql);
 	}
-	if (isset($_REQUEST["sales_prev_year"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"sales_prev" => $_REQUEST["sales_prev_year"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-		$params=array(
-			":net" => $_REQUEST["nets"],
-			":plan_type" => $_REQUEST["plan_type"],
-			":y" => $_REQUEST["calendar_years"]
-		);
-		$sql="update nets_plan_month set payment_format = 1 where plan_type=:plan_type and payment_format = 1 and id_net = :net and year = :y";
-		$sql=stritr($sql,$params);
-		$db->query($sql);
-	}
-	if (isset($_REQUEST["no_budget"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"no_budget" => $_REQUEST["no_budget"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-	}
-	if (isset($_REQUEST["tz"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"tz" => $_REQUEST["tz"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-	}
-	if (isset($_REQUEST["zal_prognoz"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"zal_prognoz" => $_REQUEST["zal_prognoz"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-	}
-	if (isset($_REQUEST["ok_rmkk_tmkk"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"ok_rmkk_tmkk" => $_REQUEST["ok_rmkk_tmkk"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-	}
-	if (isset($_REQUEST["ok_fin_man"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"ok_fin_man" => $_REQUEST["ok_fin_man"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-	}
-	if (isset($_REQUEST["ok_dpu"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"plan_type" => $_REQUEST["plan_type"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		$values=array(
-			"ok_dpu" => $_REQUEST["ok_dpu"]
-		);
-		Table_Update ("nets_plan_year", $keys, $values);
-	}
+	$keys=array(
+		"id_net" => $_REQUEST["nets"],
+		"plan_type" => $_REQUEST["plan_type"],
+		"year" => $_REQUEST["calendar_years"]
+	);
+	Table_Update ("nets_plan_year", $keys, $_REQUEST['nets_plan_year']);
 }
 
 
@@ -370,19 +279,13 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$params=array(':year'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
 		$sql=stritr($sql,$params);
 		$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		//print_r($data);
 		$smarty->assign('nets_plan_year', $data);
 
 		$sql=rtrim(file_get_contents('sql/sales_cur_year.sql'));
 		$params=array(':year'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
 		$sql=stritr($sql,$params);
-		//$data = $db->getOne($sql);
 		$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		//echo $data;
-		$smarty->assign('sales_cur_year', $data["sales"]);
-		$smarty->assign('sales_prev_year', $data["sales_prev"]);
-
-
+		$smarty->assign('sales', $data);
 
 		for($i=1;$i<=3;$i++)
 		{
@@ -391,23 +294,12 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$sql=stritr($sql,$params);
 		$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('plan_year_type_'.$i, $data);
-		//print_r($data);
 		}
 
-
-/*
-		$sql=rtrim(file_get_contents('sql/sales_cur_year.sql'));
-		$params=array(':year'=>$_REQUEST["calendar_years"]-1,":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
-		$sql=stritr($sql,$params);
-		$data = $db->getOne($sql);
-		//echo $data;
-		$smarty->assign('sales_prev_year', $data);
-*/
 		$sql=rtrim(file_get_contents('sql/sales_koeff.sql'));
 		$params=array(':year'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
 		$sql=stritr($sql,$params);
-		//echo $sql;
-		$data = $db->getOne($sql);
+		$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('percent', $data);
 
 		$sql=rtrim(file_get_contents('sql/month_prognoz.sql'));
@@ -497,7 +389,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 			$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign("fin_plan_month_ok", $data);
 		}
-		if (isset($_REQUEST["plan_month"]))
+		if (isset($_REQUEST["month"]))
 		{
 			$sql=rtrim(file_get_contents('sql/fil_list.sql'));
 			$params=array(':y'=>$_REQUEST["calendar_years"],":m" => $_REQUEST["plan_month"],':tn'=>$tn);

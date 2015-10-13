@@ -221,6 +221,8 @@
 		<td rowspan=2>Плательщик</td>
 		<td colspan=2>Проверены документы</td>
 		<td rowspan=2>Счет оплачен</td>
+		<td rowspan=2>№ акта</td>
+		<td rowspan=2>Дата акта</td>
 		<td rowspan=2>Дата оплаты счета</td>
 		<td rowspan=2>Месяц проведения акта</td>
 		{if not $smarty.request.print}
@@ -252,51 +254,59 @@
 		<td>{$item.payer_name}</td>
 		<td style="text-align: center;{if $item.dolg_act eq 1}background-color: red;{/if}">
 			{if not $smarty.request.print}
-				<input onclick="$('#ok1{$item.id}dolg_act').val(this.checked?1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_act eq 1}checked="checked"{/if} name="isCheck_dolg_act[{$item.id}]" type="checkbox">
+				<input onclick="$('#data{$item.id}dolg_act').val(this.checked?1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_act eq 1}checked="checked"{/if} type="checkbox">
+				<input type=hidden name=data[{$item.id}][dolg_act] id=data{$item.id}dolg_act value="{$item.dolg_act}">
 			{else}
 				{if $item.dolg_act eq 1}да{/if}
 			{/if}
 		</td>
 		<td style="text-align: center;{if $item.dolg_nal eq 1}background-color: red;{/if}">
 			{if not $smarty.request.print}
-				<input onclick="$('#ok1{$item.id}dolg_nal').val(this.checked1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_nal eq 1}checked="checked"{/if} name="isCheck_dolg_nal[{$item.id}]" type="checkbox">
+				<input onclick="$('#data{$item.id}dolg_nal').val(this.checked?1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_nal eq 1}checked="checked"{/if} type="checkbox">
+				<input type=hidden name=data[{$item.id}][dolg_nal] id=data{$item.id}dolg_nal value="{$item.dolg_nal}">
 			{else}
 				{if $item.dolg_nal eq 1}да{/if}
 			{/if}
 		</td>
 		<td style="text-align: center;{if $item.oplachen eq 1}background-color: rgb(51, 255, 51);{/if}">
 			{if not $smarty.request.print}
-				<input onclick="$('#ok1{$item.id}oplachen').val(this.checked?1:0);$('#date{$item.id}oplata_date').attr('disabled',!this.checked)" {if not $is_fin_man}disabled{/if} {if $item.oplachen eq 1}checked="checked"{/if} name="isCheck_oplachen[{$item.id}]" type="checkbox">
+				<input onclick="$('#data{$item.id}oplachen').val(this.checked?1:0);$('#data{$item.id}oplata_date').attr('disabled',!this.checked)" {if not $is_fin_man}disabled{/if} {if $item.oplachen eq 1}checked="checked"{/if} type="checkbox">
+				<input type=hidden name=data[{$item.id}][oplachen] id=data{$item.id}oplachen value="{$item.oplachen}">
 			{else}
 				{if $item.oplachen eq 1}да{/if}
 			{/if}
 		</td>
-
-{if not $smarty.request.print}
-		<input type=hidden name=ok1[{$item.id}][dolg_act] id=ok1{$item.id}dolg_act>
-		<input type=hidden name=ok1[{$item.id}][dolg_nal] id=ok1{$item.id}dolg_nal>
-		<input type=hidden name=ok1[{$item.id}][oplachen] id=ok1{$item.id}oplachen>
-{/if}
-
+		<td>
+			{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+				<input name=data[{$item.id}][act_num] value="{$item.act_num}" size=10>
+			{else}
+				{$item.act_num}
+			{/if}
+		</td>
+		<td>
+			{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+				<input name=data[{$item.id}][act_dt] value="{$item.act_dt_t}" size=10 class="datepicker">
+			{else}
+				{$item.act_dt_t}
+			{/if}
+		</td>
 		<td>
 			{if not $smarty.request.print}
 				<input {if not $is_fin_man or $item.oplachen neq 1}disabled{/if} class="datepicker" value="{$item.oplata_date}"
-				name=date[{$item.id}][oplata_date] name=date{$item.id}oplata_date size=8>
+				name=data[{$item.id}][oplata_date] name=data{$item.id}oplata_date size=8>
 			{else}
 				{$item.oplata_date}
 			{/if}
 		</td>
-
-
 		<td>
 			{if not $smarty.request.print}
-				<select {if not $is_fin_man}disabled{/if} name=date[{$item.id}][act_prov_month] id=date_{$item.id}_act_prov_month>
+				<select {if not $is_fin_man}disabled{/if} name=data[{$item.id}][act_prov_month] id=data_{$item.id}_act_prov_month>
 				{if not $item.act_prov_month}<option></option>{/if}
 				{foreach key=key1 item=item1 from=$month_list}
 					<option value="{$item1.sd_c}">{$item1.my}</option>
 				{/foreach}
 				</select>
-				<script>$('#date_{$item.id}_act_prov_month option[value="{$item.act_prov_month}"]').prop('selected', true);</script>
+				<script>$('#data_{$item.id}_act_prov_month option[value="{$item.act_prov_month}"]').prop('selected', true);</script>
 			{else}
 				{$item.act_prov_month}
 			{/if}
@@ -305,7 +315,7 @@
 
 		{if not $smarty.request.print}
 		<td>
-			<textarea {if not $is_fin_man}disabled{/if} name=comm[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
+			<textarea {if not $is_fin_man}disabled{/if} name=data[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
 			<input {if not $is_fin_man}disabled{/if} type=submit name=sendmsg[{$item.id}][sendmsg] value="Отправить сообщение">
 		</td>
 		{/if}
@@ -320,29 +330,7 @@
 		<td style="text-align:right">{$invoice_total.dolg_act|default:0|num:3}</td>
 		<td style="text-align:right">{$invoice_total.dolg_nal|default:0|num:3}</td>
 		<td style="text-align:right">{$invoice_total.oplachen|default:0|num:3}</td>
-		<td></td>
-		{if not $smarty.request.print}
-		<td></td>
-		{/if}
 	</tr>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </table>
 
 {if not $smarty.request.print}
@@ -352,20 +340,5 @@
 </div>
 </div>
 </form>
-
-{if not $smarty.request.print}
-{literal}
-<script>
-function check_item($k1,$k2,$sck,$date)
-{
-	var hd = document.forms["form2"].elements["ok1["+$k1+"]["+$k2+"]"];
-	if ($sck) { hd.value=1; } else { hd.value=0; }
-	var d = document.forms["form2"].elements["date["+$k1+"][oplata_date]"];
-	if ($date) { /*d.value='';*/ d.disabled = !$sck;}
-}
-</script>
-{/literal}
-{/if}
-
 
 {/if}

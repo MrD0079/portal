@@ -156,6 +156,7 @@ $('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').
 		<td>Состояние<br>при<br>выдаче</td>
 		<td>Дата<br>выдачи</td>
 		<td>Внесение<br>записи<br>о выдаче</td>
+		<td>Файл</td>
 	</tr>
 	{foreach key=k item=i from=$i.tmc}
 	<tr>
@@ -166,6 +167,7 @@ $('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').
 		<td>{$i.state}</td>
 		<td>{$i.dtv}</td>
 		<td>{$i.add_fio} {$i.add_lu}</td>
+		<td><a target=_blank href="files/{$i.fn}">{$i.fn}</a></td>
 		{/if}
 	</tr>
 	{/foreach}

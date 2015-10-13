@@ -13,6 +13,7 @@
 		<td>Закупочная стоимость</td>
 		<td>Дата закупки</td>
 		<td>Дата закрепления в бух. учете</td>
+		<td>Файл</td>
 		<td>Комментарий</td>
 	</tr>
 	{foreach key=k item=i from=$tmc_my}
@@ -28,6 +29,7 @@
 		<td>{$i.zakup_price}</td>
 		<td>{$i.zakup_dt}</td>
 		<td>{$i.buh_dt}</td>
+		<td><a target=_blank href="files/{$i.fn}">{$i.fn}</a></td>
 		<td>{$i.comm|nl2br}</td>
 	</tr>
 	{/foreach}

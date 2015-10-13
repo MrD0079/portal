@@ -6,7 +6,7 @@
 
 InitRequestVar('files_activ',1);
 
-ses_req();
+//ses_req();
 
 if (isset($_REQUEST["new_section"]))
 {

@@ -4,6 +4,7 @@
          fn_getname ( n.tn_mkk) mkk,
          fn_getname ( n.tn_rmkk) rmkk,
          TO_CHAR (i.DATA, 'dd.mm.yyyy') data_t,
+         TO_CHAR (i.act_dt, 'dd.mm.yyyy') act_dt_t,
          TO_CHAR (i.lu, 'dd.mm.yyyy hh24:mi:ss') lu_t,
          (SELECT COUNT (*)
             FROM invoice_detail

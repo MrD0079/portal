@@ -7,7 +7,7 @@
 		<tr>
 			<td>План по сети согласован: НМ КК</td>
 			<td>
-				<select {if not $is_rmkk}disabled{/if} name="ok_rmkk_tmkk" id="ok_rmkk_tmkk">
+				<select {if not $is_rmkk}disabled{/if} name="nets_plan_year[ok_rmkk_tmkk]" id="ok_rmkk_tmkk">
 					<option value=0>нет</option><option value=1>да</option>
 				</select>
 			</td>
@@ -16,7 +16,7 @@
 		<tr>
 			<td>Корректность данных проверена: ФМ</td>
 			<td>
-				<select {if not $is_fin_man}disabled{/if} name="ok_fin_man" id="ok_fin_man">
+				<select {if not $is_fin_man}disabled{/if} name="nets_plan_year[ok_fin_man]" id="ok_fin_man">
 					<option value=0>нет</option><option value=1>да</option>
 				</select>
 			</td>
@@ -25,7 +25,7 @@
 		<tr>
 			<td>Утвержден: ДП/ИП</td>
 			<td>
-				<select {if not $is_dpu}disabled{/if} name="ok_dpu" id="ok_dpu">
+				<select {if not $is_dpu}disabled{/if} name="nets_plan_year[ok_dpu]" id="ok_dpu">
 					<option value=0>нет</option><option value=1>да</option>
 				</select>
 			</td>

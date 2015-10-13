@@ -121,11 +121,11 @@ $('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).clic
 	(
 		$smarty.request.print
 		and
-		$list_item.dwt eq $smarty.request.day
+		$list_item.h_dwt eq $smarty.request.day
 		and
-		$list_item.eta eq $smarty.request.eta
+		$list_item.h_eta eq $smarty.request.eta
 		and
-		$list_item.ts eq $smarty.request.ts
+		$list_item.tn eq $smarty.request.ts
 	)
 }
 
@@ -135,9 +135,9 @@ $('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).clic
 
 {if not $smarty.request.print}
 <p>
-<a target=_blank href="?action=routing&generate=1&print=1&day={$list_item.dwt}&week={$list_item.week}&eta={$list_item.eta}&ts={$list_item.ts}">Версия для печати</a>
-<a href="?action=routing&generate=1&print=1&excel=1&day={$list_item.dwt}&week={$list_item.week}&eta={$list_item.eta}&ts={$list_item.ts}&filename={$list_item.eta} {$list_item.dwt}">Экспорт в Excel</a>
-<a target=_blank href="?action=routing&generate=1&print=1&google=1&day={$list_item.dwt}&week={$list_item.week}&eta={$list_item.eta}&ts={$list_item.ts}">Построить картосхему</a>
+<a target=_blank href="?action=routing&generate=1&print=1&day={$list_item.h_dwt}&week={$list_item.week}&eta={$list_item.h_eta}&ts={$list_item.tn}">Версия для печати</a>
+<a href="?action=routing&generate=1&print=1&excel=1&day={$list_item.h_dwt}&week={$list_item.week}&eta={$list_item.h_eta}&ts={$list_item.tn}&filename={$list_item.eta} {$list_item.dwt}">Экспорт в Excel</a>
+<a target=_blank href="?action=routing&generate=1&print=1&google=1&day={$list_item.h_dwt}&week={$list_item.week}&eta={$list_item.h_eta}&ts={$list_item.tn}">Построить картосхему</a>
 </p>
 {/if}
 
@@ -153,4 +153,6 @@ $('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).clic
 
 {/foreach}
 
+{if not $smarty.request.google}
 </form>
+{/if}

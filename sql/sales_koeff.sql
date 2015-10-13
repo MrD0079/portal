@@ -1,7 +1,19 @@
-/* Formatted on 21.11.2014 19:50:50 (QP5 v5.227.12220.39724) */
+/* Formatted on 08/10/2015 12:41:44 (QP5 v5.252.13127.32867) */
 SELECT ROUND (
-          (SELECT NVL (sales, 0) / NVL (sales_prev, 0) * 100
+          (SELECT DECODE (NVL (sales_prev, 0),
+                          0, 0,
+                          (NVL (sales, 0) / NVL (sales_prev, 0) - 1) * 100)
              FROM nets_plan_year
             WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net),
           2)
+          percent,
+       ROUND (
+          (SELECT DECODE (
+                     NVL (sales_prev_ng, 0),
+                     0, 0,
+                     (NVL (sales_ng, 0) / NVL (sales_prev_ng, 0) - 1) * 100)
+             FROM nets_plan_year
+            WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net),
+          2)
+          percent_ng
   FROM DUAL

@@ -23,6 +23,8 @@
 	<td rowspan=2 style="text-align: center;">Счет в реестр добавлен</td>
 	<td rowspan=2 style="text-align: center;">Проверено ФМ</td>
 	<td rowspan=2 style="text-align: center;">Подтверждено НМ КК</td>
+	<td rowspan=2 style="text-align: center;">№ акта</td>
+	<td rowspan=2 style="text-align: center;">Дата акта</td>
 	<td colspan=2>Проверены документы</td>
 	{if not $smarty.request.print}
 	<td rowspan=2>Коммент</td>
@@ -106,39 +108,53 @@
 	<td>{$item.lu_t}</td>
 	<td style="text-align: center;{if $item.ok_fm eq 1}background-color: rgb(51, 255, 51);{/if}">
 	{if not $smarty.request.print}
-		<input onclick="$('#ok1_{$item.id}_ok_fm').val(this.checked?1:0);" {if not $is_fin_man or $item.ok_nmkk eq 1}disabled{/if} {if $item.ok_fm eq 1}checked="checked"{/if} name="isCheckFM[{$item.id}]" type="checkbox">
-		<input type=hidden name=ok1[{$item.id}][ok_fm] id=ok1_{$item.id}_ok_fm>
+		<input onclick="$('#data_{$item.id}_ok_fm').val(this.checked?1:0);" {if not $is_fin_man or $item.ok_nmkk eq 1}disabled{/if} {if $item.ok_fm eq 1}checked="checked"{/if} type="checkbox">
+		<input type=hidden name=data[{$item.id}][ok_fm] id=data_{$item.id}_ok_fm value="{$item.ok_fm}">
 	{else}
 		{if $item.ok_fm eq 1}да{/if}
 	{/if}
 	</td>
 	<td style="text-align: center;{if $item.ok_nmkk eq 1}background-color: rgb(51, 255, 51);{/if}">
 	{if not $smarty.request.print}
-		<input onclick="$('#ok1_{$item.id}_ok_nmkk').val(this.checked?1:0);" {if not $is_rmkk or $item.ok_fm neq 1}disabled{/if} {if $item.ok_nmkk eq 1}checked="checked"{/if} name="isCheckNMKK[{$item.id}]" type="checkbox">
-		<input type=hidden name=ok1[{$item.id}][ok_nmkk] id=ok1_{$item.id}_ok_nmkk>
+		<input onclick="$('#data_{$item.id}_ok_nmkk').val(this.checked?1:0);" {if not $is_rmkk or $item.ok_fm neq 1}disabled{/if} {if $item.ok_nmkk eq 1}checked="checked"{/if} type="checkbox">
+		<input type=hidden name=data[{$item.id}][ok_nmkk] id=data_{$item.id}_ok_nmkk value="{$item.ok_nmkk}">
 	{else}
 		{if $item.ok_nmkk eq 1}да{/if}
 	{/if}
 	</td>
-	<td style="text-align: center;{if $item.dolg_act eq 1}background-color: red;{/if}">
-		{if not $smarty.request.print}
-			<input onclick="$('#ok1_{$item.id}_dolg_act').val(this.checked?1:0);" {if not $is_fin_man}disabled{/if} {if $item.dolg_act eq 1}checked="checked"{/if} name="isCheck_dolg_act[{$item.id}]" type="checkbox">
-			<input type=hidden name=ok1[{$item.id}][dolg_act] id=ok1_{$item.id}_dolg_act>
+	<td>
+		{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+			<input name=data[{$item.id}][act_num] value="{$item.act_num}" size=10>
 		{else}
-			{if $item.dolg_act eq 1}да{/if}
+			{$item.act_num}
+		{/if}
+	</td>
+	<td>
+		{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+			<input name=data[{$item.id}][act_dt] value="{$item.act_dt_t}" size=10 class="datepicker">
+		{else}
+			{$item.act_dt_t}
 		{/if}
 	</td>
 	<td style="text-align: center;{if $item.dolg_nal eq 1}background-color: red;{/if}">
 		{if not $smarty.request.print}
-			<input onclick="$('#ok1_{$item.id}_dolg_nal').val(this.checked?1:0);" {if not $is_fin_man}disabled{/if} {if $item.dolg_nal eq 1}checked="checked"{/if} name="isCheck_dolg_nal[{$item.id}]" type="checkbox">
-			<input type=hidden name=ok1[{$item.id}][dolg_nal] id=ok1_{$item.id}_dolg_nal>
+			<input onclick="$('#data{$item.id}dolg_nal').val(this.checked?1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_nal eq 1}checked="checked"{/if} type="checkbox">
+			<input type=hidden name=data[{$item.id}][dolg_nal] id=data{$item.id}dolg_nal value="{$item.dolg_nal}">
 		{else}
 			{if $item.dolg_nal eq 1}да{/if}
 		{/if}
 	</td>
+	<td style="text-align: center;{if $item.oplachen eq 1}background-color: rgb(51, 255, 51);{/if}">
+		{if not $smarty.request.print}
+			<input onclick="$('#data{$item.id}oplachen').val(this.checked?1:0);$('#data{$item.id}oplata_date').attr('disabled',!this.checked)" {if not $is_fin_man}disabled{/if} {if $item.oplachen eq 1}checked="checked"{/if} type="checkbox">
+			<input type=hidden name=data[{$item.id}][oplachen] id=data{$item.id}oplachen value="{$item.oplachen}">
+		{else}
+			{if $item.oplachen eq 1}да{/if}
+		{/if}
+	</td>
 	{if not $smarty.request.print}
 	<td>
-		<textarea {if not $is_fin_man}disabled{/if} name=comm[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
+		<textarea {if not $is_fin_man}disabled{/if} name=data[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
 		<input {if not $is_fin_man}disabled{/if} type=submit name=sendmsg[{$item.id}][sendmsg] value="Отправить сообщение">
 	</td>
 	{/if}

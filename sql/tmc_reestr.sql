@@ -1,4 +1,4 @@
-/* Formatted on 14/07/2015 10:30:57 (QP5 v5.227.12220.39724) */
+/* Formatted on 08/10/2015 10:39:20 (QP5 v5.252.13127.32867) */
   SELECT t.id,
          t.name,
          t.sn,
@@ -24,48 +24,49 @@
          t.zakup_price,
          TO_CHAR (t.zakup_dt, 'dd.mm.yyyy ') zakup_dt,
          TO_CHAR (t.buh_dt, 'dd.mm.yyyy ') buh_dt,
-         t.comm
+         t.comm,
+         t.fn
     FROM tmc t, tmcs s, user_list u
    WHERE     t.tn = u.tn
          AND t.tmcs = s.id
-         AND DECODE (:removed,  0, 0,  1, 1,  2, 2,  3, 0) =
-                DECODE (:removed,
+         AND DECODE ( :removed,  0, 0,  1, 1,  2, 2,  3, 0) =
+                DECODE ( :removed,
                         0, NVL (t.removed, 0),
                         1, NVL (t.removed, 0),
                         2, NVL (t.removed, 0),
                         3, 0)
-         AND u.dpt_id = DECODE (:country,
+         AND u.dpt_id = DECODE ( :country,
                                 '0', u.dpt_id,
                                 (SELECT dpt_id
                                    FROM departments
                                   WHERE cnt_kod = :country))
-         AND DECODE (:owner, 0, 0, :owner) = DECODE (:owner, 0, 0, t.tn)
-         AND DECODE (:tmc_pos_id, 0, 0, :tmc_pos_id) =
-                DECODE (:tmc_pos_id, 0, 0, pos_id)
-         AND DECODE (:region_name, '0', '0', :region_name) =
-                DECODE (:region_name, '0', '0', region_name)
-         AND DECODE (:department_name, '0', 0, 1) =
+         AND DECODE ( :owner, 0, 0, :owner) = DECODE ( :owner, 0, 0, t.tn)
+         AND DECODE ( :tmc_pos_id, 0, 0, :tmc_pos_id) =
+                DECODE ( :tmc_pos_id, 0, 0, pos_id)
+         AND DECODE ( :region_name, '0', '0', :region_name) =
+                DECODE ( :region_name, '0', '0', region_name)
+         AND DECODE ( :department_name, '0', 0, 1) =
                 DECODE (
                    :department_name,
                    '0', 0,
                    DECODE (
                       (SELECT COUNT (*)
                          FROM full
-                        WHERE     master IN
-                                     (SELECT tn
-                                        FROM user_list
-                                       WHERE DECODE (
-                                                :department_name,
-                                                '0', '0',
-                                                :department_name) =
-                                                DECODE (:department_name,
-                                                        '0', '0',
-                                                        department_name))
+                        WHERE     master IN (SELECT tn
+                                               FROM user_list
+                                              WHERE DECODE (
+                                                       :department_name,
+                                                       '0', '0',
+                                                       :department_name) =
+                                                       DECODE (
+                                                          :department_name,
+                                                          '0', '0',
+                                                          department_name))
                               AND slave = t.tn),
                       0, 0,
                       1))
-         AND dtv BETWEEN TO_DATE (:dates_list_t_1, 'dd.mm.yyyy')
-                     AND TO_DATE (:dates_list_t_2, 'dd.mm.yyyy')
+         AND dtv BETWEEN TO_DATE ( :dates_list_t_1, 'dd.mm.yyyy')
+                     AND TO_DATE ( :dates_list_t_2, 'dd.mm.yyyy')
          AND (   t.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)
@@ -84,5 +85,6 @@
               OR (SELECT NVL (is_it, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND (LOWER (t.sn) LIKE LOWER ('%' || :sn || '%') OR length(:sn) is null)
+         AND (   LOWER (t.sn) LIKE LOWER ('%' || :sn || '%')
+              OR LENGTH ( :sn) IS NULL)
 ORDER BY t.dtv, u.fio, t.name

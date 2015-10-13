@@ -4,6 +4,7 @@
          fn_getname ( n.tn_mkk) mkk,
          fn_getname ( n.tn_rmkk) rmkk,
          TO_CHAR (i.DATA, 'dd.mm.yyyy') data_t,
+         TO_CHAR (i.act_dt, 'dd.mm.yyyy') act_dt_t,
          TO_CHAR (i.lu, 'dd.mm.yyyy hh24:mi:ss') lu_t,
          TO_CHAR (i.nmkk_lu, 'dd.mm.yyyy') nmkk_lu_t,
          TO_CHAR (i.oplata_date, 'dd.mm.yyyy') oplata_date,

@@ -77,7 +77,14 @@
                    WHERE     msh.kod_tp = cpp1.kodtp
                          AND msb.head_id = msh.id
                          AND msh.ag_id = ra.id
-                         AND msh.id_net = n.id_net)
+                         AND msh.id_net = n.id_net
+                         AND msh.sd =
+                                (SELECT MAX (sd)
+                                   FROM merch_spec_head
+                                  WHERE     id_net = n.id_net
+                                        AND kod_tp = cpp1.kodtp
+                                        AND ag_id = ra.id
+                                        AND sd <= mr.dt))
                     spec,
                  (SELECT id
                     FROM merch_spec_head msh

@@ -29,7 +29,6 @@ if (isset($_REQUEST["add"]))
 	)
 	{
 		$v["data"]=OraDate2MDBDate($v["data"]);
-		$v["summa"]=str_replace(",", ".", $v["summa"]);
 		$v["promo"]=1;
 		$id=get_new_id();
 		$v["id"]=$id;
