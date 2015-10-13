@@ -102,7 +102,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 		$data[$k]["detail"] = $db->getAll(stritr($sql_detail,$params), null, null, null, MDB2_FETCHMODE_ASSOC);
 		$d = $db->getAll(stritr($sql_detail_total,$params), null, null, null, MDB2_FETCHMODE_ASSOC);
 		$data[$k]["detail_total"] = $d[0];
-		for($i=1;$i<=3;$i++)
+		for($i=1;$i<=4;$i++)
 		{
 		$sql1=rtrim(file_get_contents("sql/fin_plan_one_month_".$i.".sql"));
 		$params1=array(

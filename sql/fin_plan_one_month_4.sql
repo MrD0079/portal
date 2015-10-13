@@ -2,7 +2,7 @@
 SELECT SUM (plan) plan,
        SUM (fakt) fakt,
        SUM (zatr) zatr,
-       DECODE (SUM (plan), 0, 0, SUM (zatr) / SUM (plan) * 100) perc_zatr
+       DECODE (SUM (fakt), 0, 0, SUM (zatr) / SUM (fakt) * 100) perc_zatr
   FROM (  SELECT (SELECT PLAN
                     FROM networkplanfact
                    WHERE     YEAR = :y

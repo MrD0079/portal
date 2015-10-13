@@ -52,10 +52,10 @@
          AND DECODE (
                 :ok_filter,
                 0, 0,
-                1, (SELECT ok_fm
+                1, nvl((SELECT ok_fm
                       FROM nets_plan_month_ok
                      WHERE     YEAR = :y
                            AND id_net = n.id_net
                            AND MONTH = cm.my
-                           AND plan_type = 4)) = 0
+                           AND plan_type = 4),0)) = 0
 ORDER BY n.net_name, cm.my
