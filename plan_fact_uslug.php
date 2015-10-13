@@ -7,7 +7,6 @@ if (isset($_REQUEST["nets"])){$_SESSION["nets"]=$_REQUEST["nets"];}else{if (isse
 if (isset($_REQUEST["calendar_years"])){$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];}else{if (isset($_SESSION["calendar_years"])){$_REQUEST["calendar_years"]=$_SESSION["calendar_years"];}}
 if (isset($_REQUEST["tn_rmkk"])){$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];}else{if (isset($_SESSION["tn_rmkk"])){$_REQUEST["tn_rmkk"]=$_SESSION["tn_rmkk"];}}
 if (isset($_REQUEST["tn_mkk"])){$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];}else{if (isset($_SESSION["tn_mkk"])){$_REQUEST["tn_mkk"]=$_SESSION["tn_mkk"];}}
-if (isset($_REQUEST["neednmkk"])){$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];}else{if (isset($_SESSION["neednmkk"])){$_REQUEST["neednmkk"]=$_SESSION["neednmkk"];}}
 if (isset($_REQUEST["calendar_months"])){$_SESSION["calendar_months"]=$_REQUEST["calendar_months"];}else{if (isset($_SESSION["calendar_months"])){$_REQUEST["calendar_months"]=$_SESSION["calendar_months"];}}
 
 if (isset($_REQUEST["statya_list"])){$_SESSION["statya_list"]=$_REQUEST["statya_list"];}else{if (isset($_SESSION["statya_list"])){$_REQUEST["statya_list"]=$_SESSION["statya_list"];}}
@@ -30,7 +29,6 @@ $groups[]=$v["id"];
 !isset($_REQUEST["tn_rmkk"]) ? $_REQUEST["tn_rmkk"]=0: null;
 !isset($_REQUEST["tn_mkk"]) ? $_REQUEST["tn_mkk"]=0: null;
 !isset($_REQUEST["nets"]) ? $_REQUEST["nets"]=0: null;
-!isset($_REQUEST["neednmkk"]) ? $_REQUEST["neednmkk"]=0: null;
 !isset($_REQUEST["calendar_months"]) ? $_REQUEST["calendar_months"]=0: null;
 
 !isset($_REQUEST["statya_list"]) ? $_REQUEST["statya_list"]=0: null;
@@ -46,7 +44,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 	$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];
 	$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];
 	$_SESSION["nets"]=$_REQUEST["nets"];
-	$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];
 
 	$_SESSION["statya_list"]=$_REQUEST["statya_list"];
 	$_SESSION["groups"]=$_REQUEST["groups"]/*$groups_filter*/;
@@ -59,7 +56,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 		':dpt_id' => $_SESSION["dpt_id"],
 		':y'=>$_REQUEST["calendar_years"],
 		':nets'=>$_REQUEST["nets"],
-		':neednmkk'=>$_REQUEST["neednmkk"],
 		':calendar_months'=>$_REQUEST["calendar_months"],
 		':statya_list'=>$_REQUEST["statya_list"],
 		':groups'=>$groups_filter,

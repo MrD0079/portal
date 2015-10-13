@@ -20,7 +20,7 @@
         </tr>
         <tr>
             <td style="VERTICAL-ALIGN: top">
-                –Ã   <br />
+                ÕÃ  <br />
             </td>
 		{foreach from=$fin_plan_month_ok key=key item=item}
 	            <td
@@ -30,7 +30,7 @@
 				type=checkbox
 				onclick="$('#plan_month_ok_ok_rmkk_tmkk_{$item.my}'.val(this.checked?1:0)"
 				{if $item.ok_rmkk_tmkk eq 1}checked{/if}
-				{if not $is_rmkk or $item.ok_nmkk eq 1 or $item.ok_dpu eq 1}disabled{/if}
+				{if not $is_rmkk or $item.ok_dpu eq 1}disabled{/if}
 			>
 			<input type=hidden name=plan_month_ok[ok_rmkk_tmkk][{$item.my}] id=plan_month_ok_ok_rmkk_tmkk_{$item.my}>
 	            </td>
@@ -38,19 +38,19 @@
         </tr>
         <tr>
             <td style="VERTICAL-ALIGN: top">
-                ÕÃ   <br />
+                ‘Ã<br />
             </td>
 		{foreach from=$fin_plan_month_ok key=key item=item}
 	            <td
-			style="TEXT-ALIGN: center; {if $required}BACKGROUND-COLOR:#CCCCFF;{/if} {if $item.ok_nmkk}BACKGROUND-COLOR:rgb(51,255,51);{/if}"
+			style="TEXT-ALIGN: center; {if $required}BACKGROUND-COLOR:#CCCCFF;{/if} {if $item.ok_fm}BACKGROUND-COLOR:rgb(51,255,51);{/if}"
 			>
 			<input
 				type=checkbox
-				onclick="$('#plan_month_ok_ok_nmkk_{$item.my}'.val(this.checked?1:0)"
-				{if $item.ok_nmkk eq 1}checked{/if}
-				{if not $is_nmkk or $item.ok_dpu eq 1}disabled{/if}
+				onclick="$('#plan_month_ok_ok_fm_{$item.my}'.val(this.checked?1:0)"
+				{if $item.ok_fm eq 1}checked{/if}
+				{if not $is_fin_man or $item.ok_dpu eq 1}disabled{/if}
 			>
-			<input type=hidden name=plan_month_ok[ok_nmkk][{$item.my}] id=plan_month_ok_ok_nmkk_{$item.my}>
+			<input type=hidden name=plan_month_ok[ok_fm][{$item.my}] id=plan_month_ok_ok_fm_{$item.my}>
 	            </td>
 		{/foreach}
         </tr>

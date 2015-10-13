@@ -8,7 +8,6 @@ if (isset($_REQUEST["nets"])){$_SESSION["nets"]=$_REQUEST["nets"];}else{if (isse
 if (isset($_REQUEST["calendar_years"])){$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];}else{if (isset($_SESSION["calendar_years"])){$_REQUEST["calendar_years"]=$_SESSION["calendar_years"];}}
 if (isset($_REQUEST["tn_rmkk"])){$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];}else{if (isset($_SESSION["tn_rmkk"])){$_REQUEST["tn_rmkk"]=$_SESSION["tn_rmkk"];}}
 if (isset($_REQUEST["tn_mkk"])){$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];}else{if (isset($_SESSION["tn_mkk"])){$_REQUEST["tn_mkk"]=$_SESSION["tn_mkk"];}}
-if (isset($_REQUEST["neednmkk"])){$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];}else{if (isset($_SESSION["neednmkk"])){$_REQUEST["neednmkk"]=$_SESSION["neednmkk"];}}
 
 
 
@@ -18,7 +17,6 @@ if (isset($_REQUEST["neednmkk"])){$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];}e
 !isset($_REQUEST["tn_rmkk"]) ? $_REQUEST["tn_rmkk"]=0: null;
 !isset($_REQUEST["tn_mkk"]) ? $_REQUEST["tn_mkk"]=0: null;
 !isset($_REQUEST["nets"]) ? $_REQUEST["nets"]=0: null;
-!isset($_REQUEST["neednmkk"]) ? $_REQUEST["neednmkk"]=0: null;
 
 
 
@@ -53,7 +51,6 @@ if (isset($_REQUEST["calendar_years"]))
 	$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];
 	$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];
 	$_SESSION["nets"]=$_REQUEST["nets"];
-	$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];
 
 	$sql=rtrim(file_get_contents('sql/fin_dog_accept.sql'));
 	$sql_total=rtrim(file_get_contents('sql/fin_dog_accept_total.sql'));
@@ -61,7 +58,6 @@ if (isset($_REQUEST["calendar_years"]))
 		':dpt_id' => $_SESSION["dpt_id"],
 		':y'=>$_REQUEST["calendar_years"],
 		':nets'=>$_REQUEST["nets"],
-		':neednmkk'=>$_REQUEST["neednmkk"],
 		':tn_rmkk'=>$_REQUEST["tn_rmkk"],
 		':tn_mkk'=>$_REQUEST["tn_mkk"],
 		':tn'=>$tn

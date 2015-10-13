@@ -26,6 +26,11 @@ SELECT SUM (msb.weight) msb_weight,
          /*AND mr.dt = TO_DATE (:ed, 'dd.mm.yyyy')*/
          /*AND msh.data = TO_DATE (:ed, 'dd.mm.yyyy')*/
          /*AND mr.dt = c.data*/
+
+         AND msr.r_dt = msh.data
+         AND msh.data = mr.dt
+
+
          AND mr.dt = ms_rep_routes1.rb_data
          AND DECODE (:svms_list, 0, 0, ms_rep_routes1.rh_tn) =
                 DECODE (:svms_list, 0, 0, :svms_list)
@@ -41,8 +46,12 @@ SELECT SUM (msb.weight) msb_weight,
                 DECODE (:select_route_numb, 0, 0, :select_route_numb)
          AND DECODE (:select_route_fio_otv, 0, 0, ms_rep_routes1.rh_id) =
                 DECODE (:select_route_fio_otv, 0, 0, :select_route_fio_otv)
+
+
+
          AND DECODE (:tp, 0, 0, ms_rep_routes1.rb_kodtp) =
                 DECODE (:tp, 0, 0, :tp)
+
          AND (ms_rep_routes1.rh_tn IN (SELECT emp_tn
                           FROM who_full
                          WHERE exp_tn = :tn)
@@ -51,3 +60,7 @@ SELECT SUM (msb.weight) msb_weight,
                    WHERE tn = :tn) = 1 OR (SELECT is_admin
                     FROM user_list
                    WHERE tn = :tn) = 1)
+
+
+
+

@@ -137,7 +137,6 @@ if ($a->getAuth())
 		$smarty->assign('is_mkk', $a->getAuthData('is_mkk'));
 		$smarty->assign('is_mkk_new', $a->getAuthData('is_mkk_new'));
 		$smarty->assign('is_rmkk', $a->getAuthData('is_rmkk'));
-		$smarty->assign('is_nmkk', $a->getAuthData('is_nmkk'));
 		$smarty->assign('is_ts', $a->getAuthData('is_ts'));
 		$smarty->assign('is_rm', $a->getAuthData('is_rm'));
 		$smarty->assign('is_tm', $a->getAuthData('is_tm'));

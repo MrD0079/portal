@@ -7,7 +7,7 @@
 <tbody>
 <tr>
 <td>
-НМ КК</td>
+НМКК</td>
 <td>
 Ответственный ТМ КК</td>
 <td>
@@ -213,7 +213,7 @@
 		<td rowspan=2>Дата счета<br>      </td>
 		<td rowspan=2>Сеть<br>      </td>
 		<td rowspan=2>Юр.лицо</td>
-		<td rowspan=2>ФИО НМ КК      </td>
+		<td rowspan=2>ФИО НМКК      </td>
 		<td rowspan=2>ФИО ТМ КК      </td>
 		<td rowspan=2>Сумма счета (расчетная), тыс.{$valuta}.<br>      </td>
 		<td rowspan=2>Сумма счета (выставленная), тыс.{$valuta}.<br>      </td>
@@ -277,14 +277,14 @@
 			{/if}
 		</td>
 		<td>
-			{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+			{if not $item.act_prov_month and ($is_fin_man or $is_mkk)}
 				<input name=data[{$item.id}][act_num] value="{$item.act_num}" size=10>
 			{else}
 				{$item.act_num}
 			{/if}
 		</td>
 		<td>
-			{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+			{if not $item.act_prov_month and ($is_fin_man or $is_mkk)}
 				<input name=data[{$item.id}][act_dt] value="{$item.act_dt_t}" size=10 class="datepicker">
 			{else}
 				{$item.act_dt_t}

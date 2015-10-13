@@ -26,7 +26,7 @@
 			<td>ѕланируемый мес€ц</td>
 			<td>
 				<select name="plan_month" id="plan_month">
-					<option></option>
+					<option value=0></option>
 					{foreach key=key item=item from=$calendar_months}
 					<option value={$item.my}>{$item.mt}</option>
 					{/foreach}

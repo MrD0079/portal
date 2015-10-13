@@ -4,17 +4,10 @@
 	<table>
 		<tr>
 			<td colspan=10>
-				<input checked="checked" name="neednmkk" value="0" type="radio">Все сети
-				<input name="neednmkk" value="1" type="radio">Обязательны для принятия НМ КК
-				<script>$("input[name=neednmkk][value={$smarty.request.neednmkk}]").attr('checked',true);</script>
-			</td>
-		</tr>
-		<tr>
-			<td colspan=10>
 				Подтверждение
 				<input checked="checked" name="ok_filter" value="0" type="radio">Все
-				<input name="ok_filter" value="1" type="radio">Не подтверждено РМ КК
-				<input name="ok_filter" value="2" type="radio">Не подтверждено НМ КК
+				<input name="ok_filter" value="1" type="radio">Не подтверждено НМКК
+				<input name="ok_filter" value="2" type="radio">Не подтверждено ФМ
 				<input name="ok_filter" value="3" type="radio">Не подтверждено ЗГДП
 				<script>$("input[name=ok_filter][value={$smarty.request.ok_filter}]").attr('checked',true);</script>
 			</td>
@@ -136,9 +129,9 @@
 		<td class="bg-o">Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>
 		<td class="bg-o">Бонус, %</td>
 		<td class="bg-o">ИТОГО,<br>тыс.<br>{$valuta}</td>
-		<td>ТМКК</td>
 		<td>НМКК</td>
-		<td>ЗГДП</td>
+		<td>ФМ</td>
+		<td>ДП/ИП</td>
 	</tr>
 	{foreach key=k1 item=i1 from=$fin_report_item.detail name=detail}
 	<tr>
@@ -214,22 +207,22 @@
 			{if not $smarty.request.print}
 			<input type=checkbox onclick="$('#ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_rmkk_tmkk').val(this.checked?1:0)" 
 				{if $fin_report_item.ok_rmkk_tmkk}checked{/if}
-				{if not $is_rmkk or $fin_report_item.ok_nmkk eq 1}disabled{/if}
+				{if not $is_rmkk}disabled{/if}
 			>
 			<input type=hidden name=ok[{$fin_report_item.id_net}][{$fin_report_item.my}][ok_rmkk_tmkk] id='ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_rmkk_tmkk'>
 			{else}
 				{if $fin_report_item.ok_rmkk_tmkk}да{/if}
 			{/if}
 		</td>
-		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_nmkk}class="bg-green"{/if} style="text-align:center;">
+		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_fm}class="bg-green"{/if} style="text-align:center;">
 			{if not $smarty.request.print}
-			<input type=checkbox onclick="$('#ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_nmkk').val(this.checked?1:0)" 
-				{if $fin_report_item.ok_nmkk}checked{/if}
-				{if not $is_nmkk or $fin_report_item.ok_dpu eq 1}disabled{/if}
+			<input type=checkbox onclick="$('#ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_fm').val(this.checked?1:0)" 
+				{if $fin_report_item.ok_fm}checked{/if}
+				{if not $is_fin_man or $fin_report_item.ok_dpu eq 1}disabled{/if}
 			>
-			<input type=hidden name=ok[{$fin_report_item.id_net}][{$fin_report_item.my}][ok_nmkk] id='ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_nmkk'>
+			<input type=hidden name=ok[{$fin_report_item.id_net}][{$fin_report_item.my}][ok_fm] id='ok{$fin_report_item.id_net}_{$fin_report_item.my}_ok_fm'>
 			{else}
-				{if $fin_report_item.ok_nmkk}да{/if}
+				{if $fin_report_item.ok_fm}да{/if}
 			{/if}
 		</td>
 		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_dpu}class="bg-green"{/if} style="text-align:center;">

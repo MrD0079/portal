@@ -9,35 +9,6 @@ SELECT ROWNUM,
                  fn_getname ( n.tn_mkk) mkk,
                  n.id_net,
                  n.net_name,
-                 (SELECT CASE
-                            WHEN    NVL (y.sales, 0) >=
-                                       (SELECT val_number
-                                          FROM PARAMETERS
-                                         WHERE     LOWER (param_name) =
-                                                      LOWER ('valNMKK')
-                                               AND dpt_id = :dpt_id)
-                                 OR DECODE (
-                                       NVL (y.sales, 0),
-                                       0, 0,
-                                         (SELECT NVL (SUM (total), 0)
-                                            FROM nets_plan_month m
-                                           WHERE     m.YEAR = :y
-                                                 AND m.plan_type = 1
-                                                 AND m.id_net = n.id_net)
-                                       / y.sales
-                                       * 100) >=
-                                       (SELECT val_number
-                                          FROM PARAMETERS
-                                         WHERE     LOWER (param_name) =
-                                                      LOWER ('budKK')
-                                               AND dpt_id = :dpt_id)
-                            THEN
-                               1
-                            ELSE
-                               0
-                         END
-                    FROM DUAL)
-                    neednmkk,
                  DECODE (y.no_budget, 1, 'да', '') no_budget,
                  NVL (y.sales_prev, 0) prev_year_fakt,
                  NVL (y.sales, 0) year_plan,
@@ -176,65 +147,11 @@ SELECT ROWNUM,
                                      67, :tn,
                                      (SELECT pos_id
                                         FROM user_list
-                                       WHERE tn = :tn AND is_super = 1), :tn))
+                                       WHERE tn = :tn AND is_super = 1), :tn,
+                                     (SELECT pos_id
+                                        FROM user_list
+                                       WHERE tn = :tn AND is_admin = 1), :tn))
                  AND DECODE (:tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
                  AND DECODE (:tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
                  AND DECODE (:nets, 0, n.id_net, :nets) = n.id_net
-                 AND DECODE (
-                        :neednmkk,
-                        0, CASE
-                              WHEN    NVL (y.sales, 0) >=
-                                         (SELECT val_number
-                                            FROM PARAMETERS
-                                           WHERE     LOWER (param_name) =
-                                                        LOWER ('valNMKK')
-                                                 AND dpt_id = :dpt_id)
-                                   OR DECODE (
-                                         NVL (y.sales, 0),
-                                         0, 0,
-                                           (SELECT NVL (SUM (total), 0)
-                                              FROM nets_plan_month m
-                                             WHERE     m.YEAR = :y
-                                                   AND m.plan_type = 1
-                                                   AND m.id_net = n.id_net)
-                                         / y.sales
-                                         * 100) >=
-                                         (SELECT val_number
-                                            FROM PARAMETERS
-                                           WHERE     LOWER (param_name) =
-                                                        LOWER ('budKK')
-                                                 AND dpt_id = :dpt_id)
-                              THEN
-                                 1
-                              ELSE
-                                 0
-                           END,
-                        :neednmkk) =
-                        CASE
-                           WHEN    NVL (y.sales, 0) >=
-                                      (SELECT val_number
-                                         FROM PARAMETERS
-                                        WHERE     LOWER (param_name) =
-                                                     LOWER ('valNMKK')
-                                              AND dpt_id = :dpt_id)
-                                OR DECODE (
-                                      NVL (y.sales, 0),
-                                      0, 0,
-                                        (SELECT NVL (SUM (total), 0)
-                                           FROM nets_plan_month m
-                                          WHERE     m.YEAR = :y
-                                                AND m.plan_type = 1
-                                                AND m.id_net = n.id_net)
-                                      / y.sales
-                                      * 100) >=
-                                      (SELECT val_number
-                                         FROM PARAMETERS
-                                        WHERE     LOWER (param_name) =
-                                                     LOWER ('budKK')
-                                              AND dpt_id = :dpt_id)
-                           THEN
-                              1
-                           ELSE
-                              0
-                        END
         ORDER BY n.net_name) z

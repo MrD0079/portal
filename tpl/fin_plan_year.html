@@ -13,7 +13,7 @@
 					<tr>
 						<td>Продажи предыдущего года без учета НГ, тыс. {$valuta}</td>
 						<!-- {$disabled} вернуть в инпут когда скажет Дима -->
-						<td><input required class=number size="15" name="nets_plan_year[sales_prev]" id="sales_prev" value={$sales.sales_prev}></td>
+						<td><input required {if $prev_year_wo_ng_enabled neq 1}disabled{/if} class=number size="15" name="nets_plan_year[sales_prev]" id="sales_prev" value={$sales.sales_prev}></td>
 					</tr>
 					<tr>
 						<td>Процент роста без учета НГ, %</td>

@@ -3,7 +3,7 @@
 		<td colspan=2>
 		{foreach key=key item=item from=$nets}
 			{if $smarty.request.nets eq $item.id_net}
-				Ответственный НМ КК: {$item.rmkk_name}
+				Ответственный НМКК: {$item.rmkk_name}
 				<br>
 				Ответственный ТМ КК: {$item.mkk_name}
 			{/if}
@@ -245,7 +245,7 @@
 			{/foreach}
 		</tr>
 		<tr>
-			<td>Цели по сети согласованы: НМ КК</td>
+			<td>Цели по сети согласованы: НМКК</td>
 			{foreach from=$sdu item=item key=key}
 			<td>
 				<select {if not $is_rmkk}disabled{/if} name="ok[{$item.ver}][ok_sdu_rmkk_tmkk]" id="ok_{$item.ver}_ok_sdu_rmkk_tmkk">
@@ -289,5 +289,5 @@
 	{/foreach}
 	{/if}
 
-	{if $is_mkk or ($is_rmkk and $cat_a) or ($is_nmkk and $cat_a)}<input value="Отправить СДУ на согласование руководителю" name="ok_sdu" type="submit">{/if}
+	{if $is_mkk or ($is_rmkk and $cat_a)}<input value="Отправить СДУ на согласование руководителю" name="ok_sdu" type="submit">{/if}
 	<hr>

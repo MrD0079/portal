@@ -66,8 +66,6 @@
 				(
 					$oitem.ok_rmkk_tmkk eq 1
 					or
-					$oitem.ok_nmkk eq 1
-					or
 					$oitem.ok_dpu eq 1
 				)
 			}
@@ -100,8 +98,6 @@
 				(
 					$oitem.ok_rmkk_tmkk eq 1
 					or
-					$oitem.ok_nmkk eq 1
-					or
 					$oitem.ok_dpu eq 1
 				)
 			}
@@ -118,7 +114,7 @@
 			{/if}
 		{/foreach}
 		{if $item.bud_z_id}
-			{assign var=item_disabled____________________________________________1 value=1}
+			{assign var=item_disabled value=1}
 		{/if}
 
 		{if not $item_disabled}

@@ -3,13 +3,6 @@
 {if not $smarty.request.print}
 	<table>
 		<tr>
-			<td colspan=10>
-				<input checked="checked" name="neednmkk" value="0" type="radio">Все сети
-				<input name="neednmkk" value="1" type="radio">Обязательны для принятия НМ КК
-				<script>$("input[name=neednmkk][value={$smarty.request.neednmkk}]").attr('checked',true);</script>
-			</td>
-		</tr>
-		<tr>
 			<td>
 				Год
 				<br>
@@ -88,7 +81,7 @@
 		<td>Факт. назв.сети</td>
 		<td>Сеть работает без бюджета</td>
 		<!--<td>Факт продаж пред. года, тыс. {$valuta}</td>-->
-		<td>План продаж, тыс.{$valuta}</td>
+		<td>Продажи без учета НГ, тыс.{$valuta}</td>
 		<td>% прироста продаж</td>
 		<!--<td>Бюджет пред. года, тыс.{$valuta}.</td>-->
 
@@ -98,9 +91,9 @@
 		<td style="background-color: rgb(204, 255, 255);">Бюджет, тыс.{$valuta}.</td>
 		<td style="background-color: rgb(204, 255, 255);">% прироста бюджета</td>
 		<td style="background-color: rgb(204, 255, 255);">% затрат</td>
-		<td style="background-color: rgb(204, 255, 255);">РМ КК</td>
+		<td style="background-color: rgb(204, 255, 255);">НМКК</td>
 		<td style="background-color: rgb(204, 255, 255);">ФМ</td>
-		<td style="background-color: rgb(204, 255, 255);">ЗГДП</td>
+		<td style="background-color: rgb(204, 255, 255);">ДП / ИП</td>
 
 		{if not $smarty.request.print}
 		<td style="background-color: rgb(255, 255, 204);">Переход</td>

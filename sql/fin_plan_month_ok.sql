@@ -2,7 +2,6 @@
   SELECT mc.my,
          mc.mt,
          mo.ok_rmkk_tmkk,
-         mo.ok_nmkk,
          mo.ok_dpu,
          mo.ok_fm
     FROM (SELECT DISTINCT my, mt FROM calendar) mc, nets_plan_month_ok mo

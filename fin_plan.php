@@ -150,6 +150,7 @@ if (isset($_REQUEST["save_month"]))
 		}
 		Table_Update ("nets_plan_month", $keys, $values);
 	}
+	$_REQUEST["month"] = null;
 	$_REQUEST["edit"] = null;
 }
 
@@ -211,6 +212,8 @@ if (isset($_REQUEST["add_month"]))
 			}
 		}
 	}
+	$_REQUEST["month"] = null;
+	$_REQUEST["edit"] = null;
 }
 
 if (isset($_REQUEST["del"]))
@@ -275,6 +278,9 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 {
 	if (($_REQUEST["calendar_years"]>0)&&($_REQUEST["nets"]>0))
 	{
+		$prev_year_wo_ng_enabled = $db->getOne("SELECT CASE WHEN TRUNC (SYSDATE) - TO_DATE ('26/01/' || ".$_REQUEST["calendar_years"].", 'dd.mm.yyyy') < 0 THEN 1 END FROM DUAL");
+		$smarty->assign('prev_year_wo_ng_enabled', $prev_year_wo_ng_enabled);
+
 		$sql=rtrim(file_get_contents('sql/nets_plan_year.sql'));
 		$params=array(':year'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
 		$sql=stritr($sql,$params);
@@ -317,7 +323,17 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$sql=rtrim(file_get_contents('sql/nets_plan_month.sql'));
 		}
 
-		$params=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],":plan_month" => 0,':net'=>$_REQUEST["nets"],':tn'=>$tn);
+/*
+		if ($_REQUEST["plan_type"]==3)
+		{
+		$m=$_REQUEST["plan_month"];
+		}
+		else
+		{
+		$m=0;
+		}
+*/
+		$params=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],":plan_month" => $_REQUEST["plan_month"],':net'=>$_REQUEST["nets"],':tn'=>$tn);
 		$sql=stritr($sql,$params);
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign("nets_plan_month", $data);
@@ -392,7 +408,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		if (isset($_REQUEST["month"]))
 		{
 			$sql=rtrim(file_get_contents('sql/fil_list.sql'));
-			$params=array(':y'=>$_REQUEST["calendar_years"],":m" => $_REQUEST["plan_month"],':tn'=>$tn);
+			$params=array(':y'=>$_REQUEST["calendar_years"],":m" => $_REQUEST["month"],':tn'=>$tn);
 			$sql=stritr($sql,$params);
 			$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign("fil_list", $data);
@@ -466,5 +482,8 @@ $smarty->assign('payment_format', $data);
 $smarty->display('kk_start.html');
 $smarty->display('fin_plan.html');
 $smarty->display('kk_end.html');
+
+
+//ses_req();
 
 ?>

@@ -3,13 +3,6 @@
 {if not $smarty.request.print}
 	<table>
 		<tr>
-			<td colspan=10>
-				<input checked="checked" name="neednmkk" value="0" type="radio">Все сети
-				<input name="neednmkk" value="1" type="radio">Обязательны для принятия НМ КК
-				<script>$("input[name=neednmkk][value={$smarty.request.neednmkk}]").attr('checked',true);</script>
-			</td>
-		</tr>
-		<tr>
 			<td>
 				Год
 				<br>
@@ -47,7 +40,7 @@
 		<tr>
 			{if not $is_mkk}
 			<td>
-				НМ КК
+				НМКК
 				<br>
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>

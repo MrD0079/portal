@@ -58,7 +58,7 @@ disabled: {$disabled}.
 
 	{foreach key=key item=item from=$nets}
 		{if $smarty.request.nets eq $item.id_net}
-			Ответственный РМ КК: {$item.rmkk_name}
+			Ответственный РМКК: {$item.rmkk_name}
 			<br>
 			Ответственный МКК: {$item.mkk_name}
 		{/if}

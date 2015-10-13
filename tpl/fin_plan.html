@@ -33,24 +33,6 @@
 	{if not ($is_mkk or $is_rmkk)}	{assign var=disabled value='disabled'}	{/if}
 {/if}
 
-
-{if $smarty.request.plan_type eq 3}
-	{if
-		(
-			$plan_year_type_1.sales >= $parameters.valNMKK.val_number
-			or
-			$plan_year_type_1.perc >= $parameters.budKK.val_number
-		)
-	}
-		{assign var=NeedNMKK value=1}
-	{/if}
-{/if}
-
-
-
-
-
-
 {if $smarty.request.plan_type eq 2 and $nets_plan_year.du_complete neq 1}
 {assign var=dog_plan_disabled value='disabled'}
 {/if}
@@ -60,37 +42,7 @@
 {/if}
 
 
-<!--
-
-<br>
-enabled: {if $enabled}{$enabled}{else}null{/if}.
-<br>
-disabled: {if $disabled}{$disabled}{else}null{/if}.
-<br>
-
--->
-
-
 {include file="fin_plan_select.html"}
-
-
-
-
-
-{if $smarty.request.debug}
-<h2>
-s1 {$plan_year_type_1.sales|default:0|num:2} p1 {$plan_year_type_1.perc|default:0|num:2} ok_rmkk_tmkk {$plan_year_type_1.ok_rmkk_tmkk} ok_fin_man {$plan_year_type_1.ok_fin_man}<br>
-s2 {$plan_year_type_2.sales|default:0|num:2} p2 {$plan_year_type_2.perc|default:0|num:2} ok_rmkk_tmkk {$plan_year_type_2.ok_rmkk_tmkk} ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
-s3 {$plan_year_type_3.sales|default:0|num:2} p3 {$plan_year_type_3.perc|default:0|num:2} ok_rmkk_tmkk {$plan_year_type_3.ok_rmkk_tmkk} ok_fin_man {$plan_year_type_3.ok_fin_man}<br>
-$parameters.valNMKK.val_number {$parameters.valNMKK.val_number}<br>
-$parameters.budKK.val_number {$parameters.budKK.val_number}<br>
-$smarty.request.plan_type {$smarty.request.plan_type}<br>
-$oper_plan_disabled {$oper_plan_disabled}<br>
-$plan_year_type_2.ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
-</h2>
-{/if}
-
-
 
 {if $smarty.request.nets and $smarty.request.calendar_years}
 
@@ -105,14 +57,7 @@ $plan_year_type_2.ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
 
 	{if $plan_year_type_1.ok_rmkk_tmkk neq 1 and $smarty.request.plan_type eq 3}
 		<p style="font-weight:bold;color:red">
-		Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование РМ КК.
-		</p>
-		{assign var=oper_plan_disabled value=1}
-	{/if}
-
-	{if NeedNMKK eq 1 and $smarty.request.plan_type eq 3}
-		<p style="font-weight:bold;color:red">
-		Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование НМ КК.
+		Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование НМКК.
 		</p>
 		{assign var=oper_plan_disabled value=1}
 	{/if}
@@ -131,7 +76,7 @@ $plan_year_type_2.ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
 
 	{if $smarty.request.plan_type eq 4 and $smarty.request.plan_month}
 										{include file="fin_plan_fakt_uslug_base.html"}
-		{if $fakt_uslug_ok.ok_rmkk_tmkk eq 1 and not ($NeedNMKK eq 1 and $fakt_uslug_ok.ok_nmkk eq 0)}
+		{if $fakt_uslug_ok.ok_rmkk_tmkk eq 1}
 										{include file="fin_plan_dog_plan_one_month.html"}
 		{/if}
 											{/if}
@@ -144,7 +89,7 @@ $plan_year_type_2.ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
 										{include file="fin_plan_month_ok.html"}
 											{/if}
 
-	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3 and $smarty.request.plan_month}
+	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3}
 										{include file="fin_plan_one_month.html"}
 											{/if}
 
@@ -168,7 +113,7 @@ $plan_year_type_2.ok_fin_man {$plan_year_type_2.ok_fin_man}<br>
 	{if $enabled and not $oper_plan_disabled and not (($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4) and not $smarty.request.edit)}
 											{/if}
 
-	{if not $dog_plan_disabled and not $oper_plan_disabled and ($smarty.request.plan_type eq 1 or $smarty.request.plan_type eq 2 or $smarty.request.plan_month)}
+	{if not $dog_plan_disabled and not $oper_plan_disabled and ($smarty.request.plan_type eq 1 or $smarty.request.plan_type eq 2 or $smarty.request.plan_type eq 3 or $smarty.request.plan_month)}
 										{include file="fin_plan_plan_month_table.html"}
 											{/if}
 {/if}

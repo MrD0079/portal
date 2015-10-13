@@ -19,8 +19,6 @@
 								(
 									$oitem.ok_rmkk_tmkk eq 1
 									or
-									$oitem.ok_nmkk eq 1
-									or
 									$oitem.ok_dpu eq 1
 								)
 							}
@@ -95,37 +93,40 @@
 						{if $item.color eq 0}style="background-color: rgb(255, 255, 204);"{/if}
 					>
 						<td>{$item.cost_item}</td>
-						<td style="text-align:center"><input type=checkbox name=statya_enabled[{$item.id}] id=statya_enabled{$item.id}></td>
-						<td style="text-align:center"><input class=number3 size=15 name=cnt[{$item.id}] id=cnt{$item.id}></td>
 						<td style="text-align:center">
-							{if $smarty.request.payment_format eq 1}<input class=number3 size=15 name=bonus[{$item.id}] id=bonus{$item.id}>{/if}
-							{if $smarty.request.payment_format eq 2}<input class=number3 size=15 name=price[{$item.id}] id=price{$item.id}>{/if}
+							<input
+								onClick="
+									$('#cnt{$item.id}').attr('disabled',!this.checked);
+									$('#mkk_ter{$item.id}').attr('disabled',!this.checked);
+									$('#payer{$item.id}').attr('disabled',!this.checked);
+									{if $smarty.request.payment_format eq 1}$('#bonus{$item.id}').attr('disabled',!this.checked);{/if}
+									{if $smarty.request.payment_format eq 2}$('#price{$item.id}').attr('disabled',!this.checked);{/if}
+								"
+								type=checkbox name=statya_enabled[{$item.id}] id=statya_enabled{$item.id}
+							>
+						</td>
+						<td style="text-align:center"><input disabled required class=number3 size=15 name=cnt[{$item.id}] id=cnt{$item.id}></td>
+						<td style="text-align:center">
+							{if $smarty.request.payment_format eq 1}<input disabled required class=number3 size=15 name=bonus[{$item.id}] id=bonus{$item.id}>{/if}
+							{if $smarty.request.payment_format eq 2}<input disabled required class=number3 size=15 name=price[{$item.id}] id=price{$item.id}>{/if}
 						</td>
 						<td>
-							<select required name=mkk_ter[{$item.id}] id=mkk_ter{$item.id}>
+							<select disabled required name=mkk_ter[{$item.id}] id=mkk_ter{$item.id}>
 								<option></option>
 								{foreach key=mkk_key item=mkk_item from=$list_mkk_all}
 								<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
 								{/foreach}
 							</select>
-
-
 							<script>$("#mkk_ter{$item.id} option[value='{$tn}']").prop('selected', true);</script>
-
-
 						</td>
 						<td>
-							<select name=payer[{$item.id}] id=payer{$item.id}>
+							<select disabled required name=payer[{$item.id}] id=payer{$item.id}>
 								<option></option>
 								{foreach key=k1 item=i1 from=$fil_list}
 								<option value={$i1.id}>{$i1.name}</option>
 								{/foreach}
 							</select>
-
-
 							<script>$("#payer{$item.id} option[value='{$item.payer}']").prop('selected', true);</script>
-
-
 						</td>
 					</tr>
 					{/foreach}
@@ -165,12 +166,17 @@
 		{if $smarty.request.edit}
 			{foreach key=key item=item from=$nets_plan_month}
 				{if $item.rid eq $smarty.request.edit}
+					$('#cnt{$item.statya_id}').attr('disabled',false);
+					$('#mkk_ter{$item.statya_id}').attr('disabled',false);
+					$('#payer{$item.statya_id}').attr('disabled',false);
 					$("#statya_enabled{$item.statya_id}").prop('checked',true);
-					$('#cnt{$item.statya_id}').val({$item.cnt|default:0});
+					$('#cnt{$item.statya_id}').val({$item.cnt});
 					{if $smarty.request.payment_format eq 1}
+						$('#bonus{$item.statya_id}').attr('disabled',false);
 						$('#bonus{$item.statya_id}').val("{$item.bonus|default:0}");
 					{/if}
 					{if $smarty.request.payment_format eq 2}
+						$('#price{$item.statya_id}').attr('disabled',false);
 						$('#price{$item.statya_id}').val("{$item.price|default:0}");
 					{/if}
 					$("#mkk_ter{$item.statya_id} option[value='{$item.mkk_ter|default:0}']").prop('selected', true);
@@ -178,7 +184,7 @@
 				{/if}
 			{/foreach}
 		{else}
-			{if !$smarty.request.save_month}
+/*			{if !$smarty.request.save_month}
 				{if $smarty.request.statya_enabled}
 					{foreach key=key item=item from=$smarty.request.statya_enabled}
 						$("#statya_enabled{$key}").prop('checked',true);
@@ -186,7 +192,7 @@
 				{/if}
 				{if $smarty.request.cnt}
 					{foreach key=key item=item from=$smarty.request.cnt}
-					$('#cnt{$item.statya_id}').val({$item.cnt|default:0});
+					$('#cnt{$key}').val({$item});
 						$('#cnt{$key}').val({$item});
 					{/foreach}
 				{/if}
@@ -224,6 +230,7 @@
 					{/if}
 				{/if}
 			{/if}
+*/
 		{/if}
 	</script>
 	{if $smarty.request.month}

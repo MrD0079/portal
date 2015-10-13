@@ -7,7 +7,6 @@ if (isset($_REQUEST["nets"])){$_SESSION["nets"]=$_REQUEST["nets"];}else{if (isse
 if (isset($_REQUEST["calendar_years"])){$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];}else{if (isset($_SESSION["calendar_years"])){$_REQUEST["calendar_years"]=$_SESSION["calendar_years"];}}
 if (isset($_REQUEST["tn_rmkk"])){$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];}else{if (isset($_SESSION["tn_rmkk"])){$_REQUEST["tn_rmkk"]=$_SESSION["tn_rmkk"];}}
 if (isset($_REQUEST["tn_mkk"])){$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];}else{if (isset($_SESSION["tn_mkk"])){$_REQUEST["tn_mkk"]=$_SESSION["tn_mkk"];}}
-if (isset($_REQUEST["neednmkk"])){$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];}else{if (isset($_SESSION["neednmkk"])){$_REQUEST["neednmkk"]=$_SESSION["neednmkk"];}}
 if (isset($_REQUEST["calendar_months"])){$_SESSION["calendar_months"]=$_REQUEST["calendar_months"];}else{if (isset($_SESSION["calendar_months"])){$_REQUEST["calendar_months"]=$_SESSION["calendar_months"];}}
 if (isset($_REQUEST["ok_filter"])){$_SESSION["ok_filter"]=$_REQUEST["ok_filter"];}else{if (isset($_SESSION["ok_filter"])){$_REQUEST["ok_filter"]=$_SESSION["ok_filter"];}}
 
@@ -15,7 +14,6 @@ if (isset($_REQUEST["ok_filter"])){$_SESSION["ok_filter"]=$_REQUEST["ok_filter"]
 !isset($_REQUEST["tn_rmkk"]) ? $_REQUEST["tn_rmkk"]=0: null;
 !isset($_REQUEST["tn_mkk"]) ? $_REQUEST["tn_mkk"]=0: null;
 !isset($_REQUEST["nets"]) ? $_REQUEST["nets"]=0: null;
-!isset($_REQUEST["neednmkk"]) ? $_REQUEST["neednmkk"]=0: null;
 !isset($_REQUEST["calendar_months"]) ? $_REQUEST["calendar_months"]=0: null;
 !isset($_REQUEST["ok_filter"]) ? $_REQUEST["ok_filter"]=0: null;
 
@@ -96,7 +94,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 	$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];
 	$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];
 	$_SESSION["nets"]=$_REQUEST["nets"];
-	$_SESSION["neednmkk"]=$_REQUEST["neednmkk"];
 	$_SESSION["ok_filter"]=$_REQUEST["ok_filter"];
 
 	$sql=rtrim(file_get_contents('sql/oper_accept.sql'));
@@ -113,7 +110,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 		':dpt_id' => $_SESSION["dpt_id"],
 		':y'=>$_REQUEST["calendar_years"],
 		':nets'=>$_REQUEST["nets"],
-		':neednmkk'=>$_REQUEST["neednmkk"],
 		':ok_filter'=>$_REQUEST["ok_filter"],
 		':calendar_months'=>$_REQUEST["calendar_months"],
 		':tn_rmkk'=>$_REQUEST["tn_rmkk"],
@@ -123,12 +119,9 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 	$sql=stritr($sql,$params);
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-//if (isset($_REQUEST["debug"])) {echo $sql;}
-
 	foreach ($data as $k=>$v)
 	{
 
-		//echo $v["id_net"]."-".$v["my"]."<br>";
 		$params[":calendar_months"]=$v["my"];
 		$params[":nets"]=$v["id_net"];
 		

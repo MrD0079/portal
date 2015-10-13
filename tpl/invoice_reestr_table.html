@@ -8,7 +8,7 @@
 	<td rowspan=2 style="text-align: center;">№ счета</td>
 	<td rowspan=2 style="text-align: center;">Дата счета</td>
 	<td rowspan=2 style="text-align: center;">Сеть</td>
-	<td rowspan=2 style="text-align: center;">ФИО НМ КК </td>
+	<td rowspan=2 style="text-align: center;">ФИО РМКК </td>
 	<td rowspan=2 style="text-align: center;">ФИО ТМ КК </td>
 	{if $smarty.request.format eq 1}
 	<td rowspan=2 style="text-align: center;">Статьи затрат</td>
@@ -22,7 +22,7 @@
 	<td rowspan=2 style="text-align: center;">Файлы</td>
 	<td rowspan=2 style="text-align: center;">Счет в реестр добавлен</td>
 	<td rowspan=2 style="text-align: center;">Проверено ФМ</td>
-	<td rowspan=2 style="text-align: center;">Подтверждено НМ КК</td>
+	<td rowspan=2 style="text-align: center;">Подтверждено НМКК</td>
 	<td rowspan=2 style="text-align: center;">№ акта</td>
 	<td rowspan=2 style="text-align: center;">Дата акта</td>
 	<td colspan=2>Проверены документы</td>
@@ -123,14 +123,14 @@
 	{/if}
 	</td>
 	<td>
-		{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+		{if not $item.act_prov_month and ($is_fin_man or $is_mkk)}
 			<input name=data[{$item.id}][act_num] value="{$item.act_num}" size=10>
 		{else}
 			{$item.act_num}
 		{/if}
 	</td>
 	<td>
-		{if $item.act_prov_month and ($is_fin_man or $is_mkk)}
+		{if not $item.act_prov_month and ($is_fin_man or $is_mkk)}
 			<input name=data[{$item.id}][act_dt] value="{$item.act_dt_t}" size=10 class="datepicker">
 		{else}
 			{$item.act_dt_t}
