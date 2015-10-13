@@ -1,7 +1,0 @@
-#RewriteEngine On
-#RewriteCond %{SERVER_PORT} !^8080$
-#RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
-DirectoryIndex index.php
-AddType application/x-httpd-php5 .php
-AddHandler application/x-httpd-php5 .php
-Action application/x-httpd-php5 "/php5/php-cgi.exe"
