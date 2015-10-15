@@ -7,7 +7,7 @@ audit("открыл fin_plan","fin_plan");
 
 InitRequestVar("nets");
 InitRequestVar("calendar_years");
-InitRequestVar("plan_month");
+InitRequestVar("plan_month",0);
 InitRequestVar("plan_type");
 
 
@@ -323,16 +323,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$sql=rtrim(file_get_contents('sql/nets_plan_month.sql'));
 		}
 
-/*
-		if ($_REQUEST["plan_type"]==3)
-		{
-		$m=$_REQUEST["plan_month"];
-		}
-		else
-		{
-		$m=0;
-		}
-*/
 		$params=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],":plan_month" => $_REQUEST["plan_month"],':net'=>$_REQUEST["nets"],':tn'=>$tn);
 		$sql=stritr($sql,$params);
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

@@ -4,7 +4,7 @@ if (isset($_REQUEST['save']))
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']),'tn'=>$_REQUEST['tn'],'bud_id'=>$_REQUEST['bud_id']);
 	$vals = array('val'=>$_REQUEST['val']);
-	Table_Update('dm_fil_stat', $keys,$vals);
+	Table_Update('dm_fil_stat_day', $keys,$vals);
 }
 else
 {
@@ -20,7 +20,7 @@ else
 		":dm" => $_REQUEST["dm"],
 		":bud_id" => $_REQUEST["bud_id"],
 	);
-	$sql = rtrim(file_get_contents('sql/dm_fil_stat.sql'));
+	$sql = rtrim(file_get_contents('sql/dm_fil_stat_day.sql'));
 	$sql=stritr($sql,$p);
 	//echo $sql;
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

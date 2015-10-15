@@ -153,6 +153,7 @@ if ($a->getAuth())
 		$smarty->assign('has_parent_db', $a->getAuthData('has_parent_db'));
 		$smarty->assign('is_coach', $a->getAuthData('is_coach'));
 		$smarty->assign('is_test_admin', $a->getAuthData('is_test_admin'));
+		$smarty->assign('is_dm', $a->getAuthData('is_dm'));
 		$p = array(':tn' => $tn);
 		$sql=rtrim(file_get_contents('sql/countries.sql'));
 		$sql=stritr($sql,$p);
