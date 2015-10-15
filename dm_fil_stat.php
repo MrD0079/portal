@@ -7,6 +7,14 @@ if (isset($_REQUEST['save']))
 	Table_Update('dm_fil_stat_day', $keys,$vals);
 }
 else
+if (isset($_REQUEST['save_m']))
+{
+	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
+	$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']),'tn'=>$_REQUEST['tn'],'bud_id'=>$_REQUEST['bud_id']);
+	$vals = array($_REQUEST['field']=>$_REQUEST['val']);
+	Table_Update('dm_fil_stat_month', $keys,$vals);
+}
+else
 {
 	InitRequestVar("fils",0);
 	InitRequestVar("dm",0);
@@ -38,6 +46,21 @@ else
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['data'][$v['data8']]['val']=$v['val'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['data'][$v['data8']]['data']=$v['data'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['data'][$v['data8']]['data_t']=$v['data_t'];
+	}
+
+
+	$sql = rtrim(file_get_contents('sql/dm_fil_stat_month.sql'));
+	$sql=stritr($sql,$p);
+	//echo $sql;
+	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	//print_r($data);
+	//$d = [];
+	foreach ($data as $k => $v)
+	{
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['doc1c']=$v['doc1c'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['sum1c']=$v['sum1c'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['docdm']=$v['docdm'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['sumdm']=$v['sumdm'];
 	}
 	//print_r($d);
 	$smarty->assign('list', $d);

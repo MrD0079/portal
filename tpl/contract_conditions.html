@@ -1,0 +1,108 @@
+<h1>Краткие условия ДК (на основе договорного планирования)</h1>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form3 id=form3>
+	<table>
+		<tr>
+			<td>
+				Год
+				<br>
+				<select required name=calendar_years id=calendar_years>
+					<option></option>
+					{foreach key=key item=item from=$calendar_years}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td>
+				Выберите сеть из списка
+				<br>
+				<select required name="nets" id="nets">
+					<option></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+{/if}
+
+{if $smarty.request.calendar_years}
+
+{if not $smarty.request.print}
+<a href="?action=contract_conditions&calendar_years={$smarty.request.calendar_years}&nets={$smarty.request.nets}&generate=1&print=1&excel=1&filename=Согласование оперативного планирования">Экспорт в Excel</a>
+{/if}
+
+Корректность данных проверена ФМ:
+{if ($is_fin_man) and not $smarty.request.print}
+	<select id="ok_fin_man" onChange="save_ok_fin_man({$smarty.request.calendar_years},{$smarty.request.nets},this.value);">
+		<option value=0>нет</option><option value=1>да</option>
+	</select>
+	<script>$('#ok_fin_man option[value="{$nets_plan_year.ok_fin_man}"]').prop('selected', true);</script>
+	<div id="ok" style="display: inline;"></div>
+	<script>
+	{literal}
+	function save_ok_fin_man(calendar_years,nets,ok_fin_man)
+	{
+		$('#ok_fin_man').css('background-color','red');
+		$('#ok').load('?action=contract_conditions&save=1&nohead=1',
+		{
+			calendar_years: calendar_years,
+			nets: nets,
+			ok_fin_man: ok_fin_man
+		},
+		function() {
+		$('#ok_fin_man').css('background-color','white');
+		});
+	}
+	{/literal}
+	</script>
+{else}
+{if $nets_plan_year.ok_fin_man}да{else}нет{/if}
+{/if}
+
+
+<table border=1>
+<tr style="font-weight:bold;text-align:center">
+	<td>Группы затрат</td>
+	<td>Статьи затрат</td>
+	<td>Кол-во<br>единиц</td>
+	<td>Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>
+	<td>Бонус, %</td>
+	<td>ИТОГО,<br>тыс.<br>{$valuta}</td>
+</tr>
+{foreach key=k1 item=i1 from=$detail name=detail}
+<tr>
+	<td>{$i1.kat_name}</td>
+	<td>{$i1.st_name}</td>
+	<td style="text-align:right">{$i1.cnt|num:3}</td>
+	<td style="text-align:right">{$i1.price|num:3}</td>
+	<td style="text-align:right">{$i1.bonus|num:3}</td>
+	<td style="text-align:right">{$i1.total|num:3}</td>
+</tr>
+{/foreach}
+<tr style="font-weight:bold">
+	<td colspan=2>ИТОГО</td>
+	<td style="text-align:right">{$detail_total.cnt|default:0|num:3}</td>
+	<td style="text-align:center" colspan=2>
+		{if not $smarty.request.print}
+			<a target=_blank href="?action=fin_plan_detail&plan_type=2&calendar_years={$smarty.request.calendar_years}&nets={$smarty.request.nets}&month=0&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a>
+		{/if}
+	</td>
+	<td style="text-align:right">{$detail_total.total|default:0|num:3}</td>
+</tr>
+<tr style="font-weight:bold">
+	<td colspan=2>План продаж, тыс.{$valuta}.</td>
+	<td colspan=4 style="text-align:right">{$fin_plan.plan|default:0|num:3}</td>
+</tr>
+<tr style="font-weight:bold">
+	<td colspan=2>Затраты, %</td>
+	<td colspan=4 style="text-align:right">{$fin_plan.perc_zatr|default:0|num:3}</td>
+</tr>
+</table>
+
+{/if}

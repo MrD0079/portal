@@ -47,6 +47,15 @@
 </p>
 
 
+<p>
+<table>
+<tr>
+<td bgcolor="#33ff33">0 - нет проблем</td>
+<td bgcolor="#ffff00">1 - проблемы на стороне дистрибутора</td>
+<td bgcolor="#ff0000">2 - проблемы на стороне ДМ</td>
+</tr>
+</table>
+</p>
 
 <table border=1 cellpadding=3 cellspacing=0>
 <tr style="font-weight:bold;text-align:center">
@@ -54,11 +63,20 @@
 	{foreach key=k item=i from=$list.columns}
 	<td {if $i.current_week}style="background-color:lightblue"{/if}>{$i.dm}<br>{$i.dwtc}</td>
 	{/foreach}
+	<td style="background-color: #F5E3BF">Кол- во док 1С</td>
+	<td style="background-color: #F5E3BF">Сумма с НДС 1С, {$valuta}</td>
+	<td style="background-color: #F5E3BF">Кол- во док DM</td>
+	<td style="background-color: #F5E3BF">Сумма с НДС DM, {$valuta}</td>
+	<td style="background-color: #F5E3BF">Разница по кол- ву док</td>
+	<td style="background-color: #F5E3BF">Разница по сумме, {$valuta}</td>
+	<td style="background-color: #F5E3BF">% соотв по док</td>
+	<td style="background-color: #F5E3BF">% соотв по сумме</td>
+	<td style="background-color: #F5E3BF">Файл сверки</td>
 </tr>
-{foreach key=k item=i from=$list.data}
+{foreach key=k item=i from=$list.data name=data_row}
 <tr>
 	<td>{$i.bud_name} ({$i.fio})</td>
-	{foreach key=k1 item=i1 from=$i.data}
+	{foreach key=k1 item=i1 from=$i.data name=data_column}
 	<td
 		id="td{$i.tn}{$i.bud_id}{$k1}"
 		{if $i1.val eq '0'}style="background-color:lightgreen;"{/if}
@@ -66,12 +84,86 @@
 		{if $i1.val eq '2'}style="background-color:red;"{/if}
 	>
 		{if $tn eq $i.tn}
-		<input size=1 class="number012" onchange="save({$i.tn},{$i.bud_id},'{$k1}','{$i1.data_t}',this.value);" value="{$i1.val}">
+		<input
+			id="input{$i.tn}{$i.bud_id}{$k1}"
+			tabindex="{$smarty.foreach.data_column.iteration*1000+$smarty.foreach.data_row.iteration}"
+			size=1
+			class="number012"
+			onchange="save({$i.tn},{$i.bud_id},'{$k1}','{$i1.data_t}',this.value);"
+		>
+		<script>$('#input{$i.tn}{$i.bud_id}{$k1}').val({$i1.val});</script>
 		{else}
 		{$i1.val}
 		{/if}
 	</td>
 	{/foreach}
+	{assign var=data_column value=`$smarty.foreach.data_column.iteration`}
+	{assign var=data_row value=`$smarty.foreach.data_row.iteration`}
+	{assign var=tabindex1 value=`$data_column*1000+$data_row+1000`}
+	{assign var=tabindex2 value=`$data_column*1000+$data_row+2000`}
+	{assign var=tabindex3 value=`$data_column*1000+$data_row+3000`}
+	{assign var=tabindex4 value=`$data_column*1000+$data_row+4000`}
+	<td id="td{$i.tn}{$i.bud_id}doc1c" style="background-color: #F5E3BF">
+		{if $tn eq $i.tn}
+		<input
+			id="input{$i.tn}{$i.bud_id}doc1c"
+			tabindex="{$tabindex1}"
+			size=5
+			class="number_int"
+			onchange="save_m({$i.tn},{$i.bud_id},'doc1c','{$smarty.request.month_list}',this.value);"
+		>
+		<script>$('#input{$i.tn}{$i.bud_id}doc1c').val({$i.doc1c});</script>
+		{else}
+		{$i.doc1c}
+		{/if}
+	</td>
+	<td id="td{$i.tn}{$i.bud_id}sum1c" style="background-color: #F5E3BF">
+		{if $tn eq $i.tn}
+		<input
+			id="input{$i.tn}{$i.bud_id}sum1c"
+			tabindex="{$tabindex2}"
+			size=5
+			class="number"
+			onchange="save_m({$i.tn},{$i.bud_id},'sum1c','{$smarty.request.month_list}',this.value);"
+		>
+		<script>$('#input{$i.tn}{$i.bud_id}sum1c').val({$i.sum1c});</script>
+		{else}
+		{$i.sum1c}
+		{/if}
+	</td>
+	<td id="td{$i.tn}{$i.bud_id}docdm" style="background-color: #F5E3BF">
+		{if $tn eq $i.tn}
+		<input
+			id="input{$i.tn}{$i.bud_id}docdm"
+			tabindex="{$tabindex3}"
+			size=5
+			class="number_int"
+			onchange="save_m({$i.tn},{$i.bud_id},'docdm','{$smarty.request.month_list}',this.value);"
+		>
+		<script>$('#input{$i.tn}{$i.bud_id}docdm').val({$i.docdm});</script>
+		{else}
+		{$i.docdm}
+		{/if}
+	</td>
+	<td id="td{$i.tn}{$i.bud_id}sumdm" style="background-color: #F5E3BF">
+		{if $tn eq $i.tn}
+		<input
+			id="input{$i.tn}{$i.bud_id}sumdm"
+			tabindex="{$tabindex4}"
+			size=5
+			class="number"
+			onchange="save_m({$i.tn},{$i.bud_id},'sumdm','{$smarty.request.month_list}',this.value);"
+		>
+		<script>$('#input{$i.tn}{$i.bud_id}sumdm').val({$i.sumdm});</script>
+		{else}
+		{$i.sumdm}
+		{/if}
+	</td>
+	<td id="td{$i.tn}{$i.bud_id}deltadoc" style="background-color: #F5E3BF"></td>
+	<td id="td{$i.tn}{$i.bud_id}deltasum" style="background-color: #F5E3BF"></td>
+	<td id="td{$i.tn}{$i.bud_id}percdoc" style="background-color: #F5E3BF"></td>
+	<td id="td{$i.tn}{$i.bud_id}percsum" style="background-color: #F5E3BF"></td>
+	<td id="td{$i.tn}{$i.bud_id}fn" style="background-color: #F5E3BF"><input type=file disabled></td>
 </tr>
 {/foreach}
 </table>
@@ -101,6 +193,29 @@ function save(tn,bud_id,k1,dt,val)
 		}
 	});
 }
+
+function save_m(tn,bud_id,field,dt,val)
+{
+	$('#td'+tn+bud_id+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('tn',  tn);
+	fd.append('bud_id',  bud_id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=dm_fil_stat&save_m=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#td'+tn+bud_id+field).css('background-color','#F5E3BF');
+			$('#ok').html(data);
+		}
+	});
+}
+
 {/literal}
 </script>
 
