@@ -4,6 +4,7 @@
                   s.docdm,
                   s.sumdm,
                   s.fn,
+                  TO_CHAR ( s.datar, 'dd.mm.yyyy') datar,
                   l.tn,
                   l.bud_id,
                   u.fio,

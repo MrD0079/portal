@@ -11,8 +11,32 @@ if (isset($_REQUEST['save_m']))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']),'tn'=>$_REQUEST['tn'],'bud_id'=>$_REQUEST['bud_id']);
+	$_REQUEST['field']=='datar'?$_REQUEST['val']=OraDate2MDBDate($_REQUEST['val']):null;
 	$vals = array($_REQUEST['field']=>$_REQUEST['val']);
 	Table_Update('dm_fil_stat_month', $keys,$vals);
+}
+else
+if (isset($_REQUEST['send_file']))
+{
+	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
+	$_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
+	if
+	(
+		is_uploaded_file($_FILES['fn']['tmp_name'])
+	)
+	{
+		$a=pathinfo($_FILES['fn']['name']);
+		$fn=get_new_file_id().'.'.$a['extension'];
+		$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']),'tn'=>$_REQUEST['tn'],'bud_id'=>$_REQUEST['bud_id']);
+		$vals = array('fn'=>$fn);
+		Table_Update('dm_fil_stat_month', $keys,$vals);
+		move_uploaded_file($_FILES['fn']['tmp_name'], 'files/'.$fn);
+		echo $fn;
+	}
+	else
+	{
+		echo 'Ошибка загрузки файла';
+	}
 }
 else
 {
@@ -61,6 +85,8 @@ else
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['sum1c']=$v['sum1c'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['docdm']=$v['docdm'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['sumdm']=$v['sumdm'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['datar']=$v['datar'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['fn']=$v['fn'];
 	}
 	//print_r($d);
 	$smarty->assign('list', $d);

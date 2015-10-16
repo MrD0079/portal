@@ -38,7 +38,7 @@
 				{if $smarty.request.plan_type eq 4}
 					<td colspan=10>Итого % затрат (от оперативного плана на сеть): {if $npf.plan neq 0}{$sum_total/$npf.plan*100|num:2}{else}0.00{/if}%</td>
 				{else}
-					<td colspan=10>Итого % затрат: {if $sales_cur_year neq 0}{$sum_total/$sales_cur_year*100|num:2}{else}0.00{/if}%</td>
+					<td colspan=10>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
 				{/if}
 				<td align=right>{$sum_total|num:3}</td>
 				<td></td>
@@ -97,7 +97,7 @@
 				{if $smarty.request.plan_type eq 4}
 					<td colspan=10>Итого % затрат (от оперативного плана на сеть): {if $npf.plan neq 0}{$sum_total/$npf.plan*100|num:2}{else}0.00{/if}%</td>
 				{else}
-					<td colspan=10>Итого % затрат: {if $sales_cur_year neq 0}{$sum_total/$sales_cur_year*100|num:2}{else}0.00{/if}%</td>
+					<td colspan=10>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
 				{/if}
 				<td align=right>{$sum_total|num:3}</td>
 				<td></td>

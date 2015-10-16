@@ -17,8 +17,8 @@
 			<td>
 				Выберите сеть из списка
 				<br>
-				<select required name="nets" id="nets">
-					<option></option>
+				<select name="nets" id="nets">
+					<option value=0></option>
 					{foreach key=key item=item from=$nets}
 						<option value={$item.id_net}>{$item.net_name}</option>
 					{/foreach}
@@ -37,6 +37,8 @@
 <a href="?action=contract_conditions&calendar_years={$smarty.request.calendar_years}&nets={$smarty.request.nets}&generate=1&print=1&excel=1&filename=Согласование оперативного планирования">Экспорт в Excel</a>
 {/if}
 
+{if $smarty.request.nets}
+<p>
 Корректность данных проверена ФМ:
 {if ($is_fin_man) and not $smarty.request.print}
 	<select id="ok_fin_man" onChange="save_ok_fin_man({$smarty.request.calendar_years},{$smarty.request.nets},this.value);">
@@ -64,7 +66,8 @@
 {else}
 {if $nets_plan_year.ok_fin_man}да{else}нет{/if}
 {/if}
-
+</p>
+{/if}
 
 <table border=1>
 <tr style="font-weight:bold;text-align:center">

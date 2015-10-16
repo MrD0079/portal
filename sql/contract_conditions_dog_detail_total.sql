@@ -12,4 +12,4 @@ SELECT SUM (m.cnt) cnt,
        AND m.plan_type = 2
        AND m.statya = s.id
        AND s.parent = k.id
-       AND :nets = m.id_net
+       AND m.id_net = DECODE ( :nets, 0, m.id_net, :nets)

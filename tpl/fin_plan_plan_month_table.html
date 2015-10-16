@@ -43,7 +43,7 @@
 	{if $smarty.request.plan_type eq 4}
 	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат (от оперативного факта по сети с учетом базы расчета бонусов): {if $npft.plan neq 0}{$sum_total/$npft.fakt*100|num:2}{else}0.00{/if}%</td>
 	{else}
-	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат: {if $sales_cur_year neq 0}{$sum_total/$sales_cur_year*100|num:2}{else}0.00{/if}%</td>
+	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
 	{/if}
 
 	<td align=right>{$sum_total|num:3}</td>
@@ -143,7 +143,7 @@
 	{if $smarty.request.plan_type eq 4}
 	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат (от оперативного факта по сети с учетом базы расчета бонусов): {if $npft.plan neq 0}{$sum_total/$npft.fakt*100|num:2}{else}0.00{/if}%</td>
 	{else}
-	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат: {if $sales_cur_year neq 0}{$sum_total/$sales_cur_year*100|num:2}{else}0.00{/if}%</td>
+	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
 	{/if}
 	<td align=right>{$sum_total|num:3}</td>
 </tr>

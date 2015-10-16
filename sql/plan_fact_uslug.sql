@@ -42,7 +42,7 @@
                    id_net,
                    SUM (cnt) cnt,
                    SUM (total) total,
-                   SUM (bonus) bonus,
+                   avg (bonus) bonus,
                    payment_format
               FROM nets_plan_month m, statya s
              WHERE     plan_type = 3
@@ -59,7 +59,7 @@
                    id_net,
                    SUM (cnt) cnt,
                    SUM (total) total,
-                   SUM (bonus) bonus,
+                   avg (bonus) bonus,
                    payment_format
               FROM nets_plan_month m, statya s
              WHERE     plan_type = 4
@@ -94,7 +94,7 @@
                              67, :tn,
                              (SELECT pos_id
                                 FROM user_list
-                               WHERE tn = :tn AND is_super = 1), :tn))
+                               WHERE tn = :tn AND (is_super = 1 or is_admin=1)), :tn))
          AND DECODE (:tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
          AND DECODE (:tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
          AND DECODE (:nets, 0, n.id_net, :nets) = n.id_net

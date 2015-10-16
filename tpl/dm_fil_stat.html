@@ -72,6 +72,7 @@
 	<td style="background-color: #F5E3BF">% соотв по док</td>
 	<td style="background-color: #F5E3BF">% соотв по сумме</td>
 	<td style="background-color: #F5E3BF">Файл сверки</td>
+	<td style="background-color: #F5E3BF">Дата отчета</td>
 </tr>
 {foreach key=k item=i from=$list.data name=data_row}
 <tr>
@@ -103,6 +104,7 @@
 	{assign var=tabindex2 value=`$data_column*1000+$data_row+2000`}
 	{assign var=tabindex3 value=`$data_column*1000+$data_row+3000`}
 	{assign var=tabindex4 value=`$data_column*1000+$data_row+4000`}
+	{assign var=tabindex5 value=`$data_column*1000+$data_row+4000`}
 	<td id="td{$i.tn}{$i.bud_id}doc1c" style="background-color: #F5E3BF">
 		{if $tn eq $i.tn}
 		<input
@@ -163,7 +165,27 @@
 	<td id="td{$i.tn}{$i.bud_id}deltasum" style="background-color: #F5E3BF"></td>
 	<td id="td{$i.tn}{$i.bud_id}percdoc" style="background-color: #F5E3BF"></td>
 	<td id="td{$i.tn}{$i.bud_id}percsum" style="background-color: #F5E3BF"></td>
-	<td id="td{$i.tn}{$i.bud_id}fn" style="background-color: #F5E3BF"><input type=file disabled></td>
+	<td id="td{$i.tn}{$i.bud_id}fn" style="background-color: #F5E3BF">
+		{if $tn eq $i.tn}
+		<input DISABLED id="input{$i.tn}{$i.bud_id}fn" type=file onChange="send_file({$i.tn},{$i.bud_id},'{$smarty.request.month_list}');">
+		<!--<a href="javascript:void(0);" onClick="del_file({$i.tn},{$i.bud_id},'{$smarty.request.month_list}');">[x]</a>-->
+		{/if}
+		<a id="a{$i.tn}{$i.bud_id}fn" target=_blank href="files/{$i.fn}">{$i.fn}</a>
+	</td>
+	<td id="td{$i.tn}{$i.bud_id}datar" style="background-color: #F5E3BF">
+		{if $tn eq $i.tn}
+		<input
+			id="input{$i.tn}{$i.bud_id}datar"
+			tabindex="{$tabindex5}"
+			size=10
+			class="datepicker"
+			onchange="save_m({$i.tn},{$i.bud_id},'datar','{$smarty.request.month_list}',this.value);"
+		>
+		<script>$('#input{$i.tn}{$i.bud_id}datar').val('{$i.datar}');</script>
+		{else}
+		{$i.datar}
+		{/if}
+	</td>
 </tr>
 {/foreach}
 </table>
@@ -172,6 +194,56 @@
 
 <script>
 {literal}
+
+function del_file(tn,bud_id,dt)
+{
+	$('#input'+tn+bud_id+'fn').css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('tn',  tn);
+	fd.append('bud_id',  bud_id);
+	fd.append('fn', $('#a'+tn+bud_id+'fn').text());
+	//console.log($('#a'+tn+bud_id+'fn').text());
+	$.ajax({
+		type: 'POST',
+		url: '?action=dm_fil_stat&del_file=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#a'+tn+bud_id+'fn').attr("href", "");
+			$('#a'+tn+bud_id+'fn').text("");
+			$('#input'+tn+bud_id+'fn').css('background-color','white');
+		}
+	});
+}
+
+function send_file(tn,bud_id,dt)
+{
+	$('#input'+tn+bud_id+'fn').css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  dt);
+	fd.append('tn',  tn);
+	fd.append('bud_id',  bud_id);
+	fd.append('fn', $('#input'+tn+bud_id+'fn')[0].files[0]);
+	$.ajax({
+		type: 'POST',
+		url: '?action=dm_fil_stat&send_file=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#a'+tn+bud_id+'fn').attr("href", "files/"+data);
+			$('#a'+tn+bud_id+'fn').text(data);
+			$('#input'+tn+bud_id+'fn').css('background-color','white');
+		},
+		error: function(data) {
+			$('#a'+tn+bud_id+'fn').attr("href", "");
+			$('#a'+tn+bud_id+'fn').text(data);
+			$('#input'+tn+bud_id+'fn').css('background-color','red');
+		}
+	});
+}
 
 function save(tn,bud_id,k1,dt,val)
 {
