@@ -53,6 +53,27 @@ if (isset($_REQUEST["save_data"]))
 			Table_Update("routes_agents_pwd",array("login"=>$k),array("is_super"=>$v));
 		}
 	}
+	if (isset($_REQUEST["is_vf"]))
+	{
+		foreach ($_REQUEST["is_vf"] as $k=>$v)
+		{
+			Table_Update("routes_agents_pwd",array("login"=>$k),array("is_vf"=>$v));
+		}
+	}
+	if (isset($_REQUEST["is_so"]))
+	{
+		foreach ($_REQUEST["is_so"] as $k=>$v)
+		{
+			Table_Update("routes_agents_pwd",array("login"=>$k),array("is_so"=>$v));
+		}
+	}
+	if (isset($_REQUEST["stat"]))
+	{
+		foreach ($_REQUEST["stat"] as $k=>$v)
+		{
+			Table_Update("routes_agents_pwd",array("login"=>$k),array("stat"=>$v));
+		}
+	}
 	if (isset($_REQUEST["del"]))
 	{
 		foreach ($_REQUEST["del"] as $k=>$v)
@@ -75,6 +96,8 @@ $r2 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($r2 as $k=>$v){$d[$v["id"]]["head"]=$v;}
 foreach ($r1 as $k=>$v){$d[$v["id"]]["data"][$v["login"]]=$v;}
 isset($d) ? $smarty->assign('d', $d) : null;
+
+//print_r($d);
 
 $smarty->display('routes_agents_pwd.html');
 ?>

@@ -5,7 +5,7 @@
          s.password,
          h.comm,
          h.email,
-         h.is_super
+         h.is_super,h.is_so,h.is_vf,h.stat
     FROM routes_agents_pwd h, spr_users s, routes_agents a
    WHERE h.login = S.LOGIN AND a.id = h.ag_id
 ORDER BY a.name, h.login

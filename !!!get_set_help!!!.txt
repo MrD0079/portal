@@ -1,6 +1,3 @@
-1CC1DE0B3DC8
-1C:C1:DE:0B:3D:C8
-
 radio:
 <input type=radio id="ok_bonus" name="ok_bonus" value=1 checked>все ТП с торговыми условиями<br>
 <input type=radio id="ok_bonus" name="ok_bonus" value=2>планируется выдача бонуса<br>

@@ -1,1 +1,0 @@
-select * from may_types order by name

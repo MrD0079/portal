@@ -1,17 +1,33 @@
 <form target="_self" method="POST" name=selector id=selector>
 {if not $smarty.request.print}
-	<table width=100% cellpadding=5 cellspacing=0 style="text-align:center" border=0>
+	<table cellpadding=5 cellspacing=0 style="text-align:center" border=0>
 		<tr>
-			<td style="background-color:rgb(204,255,255)">
+			<td>
 				<h2>План/факт объема продаж по сети, тыс. {$valuta}:</h2>
 				<table cellpadding=5 cellspacing=0 width=100% border=1>
-					<tr>
-						<td style="font-weight:bold">План:</td>
+					<tr style="font-weight:bold;background-color:yellow">
+						<td style="font-weight:bold">План конд:</td>
 						<td>{$npf.plan|default:0|num:2}</td>
-						<td style="font-weight:bold">Факт:</td>
+						<td style="font-weight:bold">Факт конд:</td>
 						<td>{$npf.fakt|default:0|num:2}</td>
-						<td style="font-weight:bold">% выполнения:</td>
+						<td style="font-weight:bold">% выполнения конд:</td>
 						<td>{if $npf.plan neq 0}{$npf.fakt/$npf.plan*100|num:2}{else}{0|num:2}{/if}%</td>
+					</tr>
+					<tr style="font-weight:bold;background-color:olive">
+						<td style="font-weight:bold">План кофе:</td>
+						<td>{$npf.plan_coffee|default:0|num:2}</td>
+						<td style="font-weight:bold">Факт кофе:</td>
+						<td>{$npf.fakt_coffee|default:0|num:2}</td>
+						<td style="font-weight:bold">% выполнения кофе:</td>
+						<td>{if $npf.plan_coffee neq 0}{$npf.fakt_coffee/$npf.plan_coffee*100|num:2}{else}{0|num:2}{/if}%</td>
+					</tr>
+					<tr style="font-weight:bold;background-color:lightblue">
+						<td style="font-weight:bold">План НГ:</td>
+						<td>{$npf.plan_ng|default:0|num:2}</td>
+						<td style="font-weight:bold">Факт НГ:</td>
+						<td>{$npf.fakt_ng|default:0|num:2}</td>
+						<td style="font-weight:bold">% выполнения НГ:</td>
+						<td>{if $npf.plan_ng neq 0}{$npf.fakt_ng/$npf.plan_ng*100|num:2}{else}{0|num:2}{/if}%</td>
 					</tr>
 				</table>
 			</td>
@@ -21,14 +37,31 @@
 			<td style="background-color:rgb(255,255,204)">
 				<h2>База расчета бонусов:</h2>
 				<table cellpadding=5 cellspacing=0 width=100% border=1>
-					<tr>
-						<td><input {$disabled} type=radio value=0 name=db_type id=db_type onClick="$('#db_sum').attr('disabled',true);"> от объема продаж сети за месяц</td>
-						<td><input {$disabled} type=radio value=1 name=db_type id=db_type onClick="$('#db_sum').attr('disabled',false);"> от суммы возврата денежных средств тыс.{$valuta}.</td>
-						<td><input {$disabled} name=db_sum id=db_sum size=10 value="{$db.bonus_sum}"></td>
-						<script>$("input[name=sort][value='{$smarty.request.sort}']").attr('checked',true);</script>
+					<tr style="font-weight:bold;background-color:yellow">
+						<td><input {$disabled} type=radio value=0 name=db_type id=db_type onClick="$('#db_sum').attr('disabled',true);"> от объема продаж сети за месяц конд</td>
+						<td><input {$disabled} type=radio value=1 name=db_type id=db_type onClick="$('#db_sum').attr('disabled',false);"> от суммы возврата денежных средств тыс.{$valuta}. конд</td>
+						<td><input {$disabled} name=db_sum id=db_sum size=10 class="number3" value="{$db.bonus_sum}"></td>
 						<script>
 							{if $db.bonus_base eq 0}$('#db_sum').attr('disabled',true);{/if}
 							$("input[name=db_type][value='{$db.bonus_base}']").attr('checked',true);
+						</script>
+					</tr>
+					<tr style="font-weight:bold;background-color:olive">
+						<td><input {$disabled} type=radio value=0 name=db_type_coffee id=db_type_coffee onClick="$('#db_sum_coffee').attr('disabled',true);"> от объема продаж сети за месяц кофе</td>
+						<td><input {$disabled} type=radio value=1 name=db_type_coffee id=db_type_coffee onClick="$('#db_sum_coffee').attr('disabled',false);"> от суммы возврата денежных средств тыс.{$valuta}. кофе</td>
+						<td><input {$disabled} name=db_sum_coffee id=db_sum_coffee size=10 class="number3" value="{$db.bonus_sum_coffee}"></td>
+						<script>
+							{if $db.bonus_base_coffee eq 0}$('#db_sum_coffee').attr('disabled',true);{/if}
+							$("input[name=db_type_coffee][value='{$db.bonus_base_coffee}']").attr('checked',true);
+						</script>
+					</tr>
+					<tr style="font-weight:bold;background-color:lightblue">
+						<td><input {$disabled} type=radio value=0 name=db_type_ng id=db_type_ng onClick="$('#db_sum_ng').attr('disabled',true);"> от объема продаж сети за месяц НГ</td>
+						<td><input {$disabled} type=radio value=1 name=db_type_ng id=db_type_ng onClick="$('#db_sum_ng').attr('disabled',false);"> от суммы возврата денежных средств тыс.{$valuta}. НГ</td>
+						<td><input {$disabled} name=db_sum_ng id=db_sum_ng size=10 class="number3" value="{$db.bonus_sum_ng}"></td>
+						<script>
+							{if $db.bonus_base_ng eq 0}$('#db_sum_ng').attr('disabled',true);{/if}
+							$("input[name=db_type_ng][value='{$db.bonus_base_ng}']").attr('checked',true);
 						</script>
 					</tr>
 				</table>

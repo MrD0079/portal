@@ -1,12 +1,4 @@
-<table border="0" width="100%" cellpadding="0" cellspacing="0">
-	{foreach key=key item=item from=$news}
-	<tr style="text-align:center">
-		<td style="font-weight:bold;background-color: #F5E3BF">{$item.lu_t}</td>
-	</tr>
-	<tr>
-		<td>
-			{$item.text}
-		</td>
-	</tr>
-	{/foreach}
-</table>
+{foreach key=key item=item from=$news}
+<p style="text-align:left;font-weight:bold;background-color: #F5E3BF">{$item.lu_t}</p>
+<div style="text-align:left">{$item.text}</div>
+{/foreach}

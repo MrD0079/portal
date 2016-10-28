@@ -42,6 +42,7 @@
 											</div>
 										</td>
 										<td style="width:300px;text-align:left">
+											{if $item.c > 0 or $is_ma}
 											<a
 											id="load_comments_{$item.msr_file_id}"
 											href="javascript:void(0);"
@@ -57,6 +58,7 @@
 											>({$item.c})</font>{if $item.chat_closed eq 1} - задача закрыта{/if}{/if}</a>
 											<br>
 											<div style="display: inline;" id=div_comments_{$item.msr_file_id}></div>
+											{/if}
 										</td>
 									</tr>
 								</table>
@@ -69,6 +71,7 @@
 				{/foreach}
 			</td>
 										<td style="width:300px;text-align:left">
+											{if $i1.head.mc_c > 0 or $is_ma}
 											<a
 											id="load_comments_{$i.head.dt1}_{$i1.head.ag_id}_{$i.head.kodtp}"
 											href="javascript:void(0);"
@@ -84,6 +87,7 @@
 											>({$i1.head.mc_c})</font>{if $i1.head.mc_closed eq 1} - задача закрыта{/if}{/if}</a>
 											<br>
 											<div style="display: inline;" id=div_comments_{$i.head.dt1}_{$i1.head.ag_id}_{$i.head.kodtp}></div>
+											{/if}
 										</td>
 			</tr>
 

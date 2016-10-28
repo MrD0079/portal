@@ -16,26 +16,39 @@ if (isset($_REQUEST['save_m']))
 	Table_Update('dm_fil_stat_month', $keys,$vals);
 }
 else
+if (isset($_REQUEST['del_file']))
+{
+	unlink("files/".$_REQUEST['fn']);
+	$keys = array('id'=>$_REQUEST['id']);
+	Table_Update('dm_fil_stat_files', $keys,null);
+}
+else
 if (isset($_REQUEST['send_file']))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
-	if
-	(
-		is_uploaded_file($_FILES['fn']['tmp_name'])
-	)
+	foreach ($_FILES as $k=>$v)
 	{
-		$a=pathinfo($_FILES['fn']['name']);
-		$fn=get_new_file_id().'.'.$a['extension'];
-		$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']),'tn'=>$_REQUEST['tn'],'bud_id'=>$_REQUEST['bud_id']);
-		$vals = array('fn'=>$fn);
-		Table_Update('dm_fil_stat_month', $keys,$vals);
-		move_uploaded_file($_FILES['fn']['tmp_name'], 'files/'.$fn);
-		echo $fn;
-	}
-	else
-	{
-		echo 'Ошибка загрузки файла';
+		if
+		(
+			is_uploaded_file($v['tmp_name'])
+		)
+		{
+			$a=pathinfo($v['name']);
+			$id=get_new_file_id();
+			//$fn=$id.'_'.translit($v["name"]).'.'.$a['extension'];
+			$fn=$id.'_'.translit($v["name"]);
+			$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']),'tn'=>$_REQUEST['tn'],'bud_id'=>$_REQUEST['bud_id'],'fn'=>$fn,'id'=>$id);
+			Table_Update('dm_fil_stat_files', $keys,$keys);
+			move_uploaded_file($v['tmp_name'], 'files/'.$fn);
+			echo '<div style="display:inline" id="fn'.$id.'">
+			<br><a href="javascript:void(0);" onclick="del_file('.$id.',\''.$fn.'\')">[x]</a> <a target=_blank href="files/'.$fn.'">'.$fn.'</a>
+			</div>';
+		}
+		else
+		{
+			echo 'Ошибка загрузки файла';
+		}
 	}
 }
 else
@@ -62,6 +75,7 @@ else
 	{
 		$d['columns'][$v['data8']]['dm']=$v['dm'];
 		$d['columns'][$v['data8']]['dwtc']=$v['dwtc'];
+		$d['columns'][$v['data8']]['dw']=$v['dw'];
 		$d['columns'][$v['data8']]['current_week']=$v['current_week'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['tn']=$v['tn'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['bud_id']=$v['bud_id'];
@@ -86,7 +100,21 @@ else
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['docdm']=$v['docdm'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['sumdm']=$v['sumdm'];
 		$d['data'][$v['tn'].'.'.$v['bud_id']]['datar']=$v['datar'];
-		$d['data'][$v['tn'].'.'.$v['bud_id']]['fn']=$v['fn'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['doc_delta']=$v['doc_delta'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['sum_delta']=$v['sum_delta'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['doc_perc']=$v['doc_perc'];
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['sum_perc']=$v['sum_perc'];
+		//$d['data'][$v['tn'].'.'.$v['bud_id']]['fn']=$v['fn'];
+	}
+	$sql = rtrim(file_get_contents('sql/dm_fil_stat_files.sql'));
+	$sql=stritr($sql,$p);
+	//echo $sql;
+	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	//print_r($data);
+	//$d = [];
+	foreach ($data as $k => $v)
+	{
+		$d['data'][$v['tn'].'.'.$v['bud_id']]['files'][$v['id']]=$v['fn'];
 	}
 	//print_r($d);
 	$smarty->assign('list', $d);

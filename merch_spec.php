@@ -1,6 +1,6 @@
 <?php
 
-audit("вошел в загрузку спецификаций","merch_spec");
+//audit("вошел в загрузку спецификаций","merch_spec");
 
 InitRequestVar("routes_agents",0);
 InitRequestVar("merch_spec_nets",0);
@@ -36,6 +36,7 @@ if (isset($_REQUEST["save"]))
 	{
 		if ($_FILES['fn']["error"]==0)
 		{
+			audit("add spec head, fn: ".$_FILES['fn']["name"],"merch_spec");
 			$params = array(
 				$_REQUEST["routes_agents"],
 				$_REQUEST["merch_spec_nets"],
@@ -44,15 +45,13 @@ if (isset($_REQUEST["save"]))
 				OraDate2MDBDate($_REQUEST["merch_spec_sd"])
 			);
 			$res = $db->extended->execParam("begin pr_merch_spec_head_ins_new(?,?,?,?,?); end;", $params);
-
+			audit("add spec head, params: ".serialize($params),"merch_spec");
 			$inputFileName = $_FILES['fn']["tmp_name"];
 			$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
 			//echo 'Файл ',pathinfo($inputFileName,PATHINFO_BASENAME),' определен как ',$inputFileType,'<br>';
 			$objReader = PHPExcel_IOFactory::createReader($inputFileType);
 			$objPHPExcel = $objReader->load($inputFileName);
-
-//var_dump($objPHPExcel);
-//echo  1;
+			//var_dump($objPHPExcel);
 			$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 			$sheetData = recursive_iconv ('UTF-8', 'Windows-1251', $sheetData);
 			//var_dump($sheetData);
@@ -77,6 +76,7 @@ if (isset($_REQUEST["save"]))
 						$v1["G"]
 					);
 					$res = $db->extended->execParam("begin pr_merch_spec_body_ins_new(?,?,?,?,?,?,?,?,?,?,?,?); end;", $p);
+					audit("add spec body, params: ".serialize($p),"merch_spec");
 				}
 				$j++;
 			}
@@ -94,6 +94,7 @@ if (isset($_REQUEST["save"]))
 				OraDate2MDBDate($_REQUEST["merch_spec_sd"])
 			);
 			$res = $db->extended->execParam("begin pr_merch_spec_head_ins_new(?,?,?,?,?); end;", $params);
+			audit("del spec, params: ".serialize($params),"merch_spec");
 		}
 	}
 }

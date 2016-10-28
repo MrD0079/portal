@@ -31,6 +31,7 @@ if (isset($_REQUEST["new"]))
 		(
 			"name"=>$_REQUEST["new_name"],
 			"for_eta"=>$_REQUEST["new_for_eta"],
+			"for_prez"=>$_REQUEST["new_for_prez"],
 			"kod"=>$_REQUEST["new_kod"],
 			"max_stud"=>$_REQUEST["new_max_stud"],
 			"days"=>$_REQUEST["new_days"],

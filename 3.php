@@ -1,46 +1,40 @@
-<?
-
-//echo basename(__FILE__);
-
-
-//echo "<br>";
-
-
-//$filename = basename($file,'.'.$info['extension']);
-
-//$info = pathinfo(__FILE__);
-//echo pathinfo(__FILE__)["dirname"];
-echo pathinfo(__FILE__)["filename"];
-
-//print_r($info);
-
-
-//echo __LINE__;
-
-/*
-$scores = array (5,2,5,7,9);
-$scores = array (9,9,5,5,2);
-$n = count($scores);
-$places = array_fill (0, $n, 0);
-arsort($scores); //сортируем
-echo "<pre>";
-print_r($scores);
-print_r($places);
-echo "</pre>";
-$place = 1; //счетчик
-for ($i = 0; $i < $n; $i++)
-{
-   $places[$i] = $place;
-   for ($j = $i+1; $j < $n; $j++)
-   {
-         if ($scores[$i] == $scores[$j]) {$places[$j]=$place; $i++;}
-   }
-   $place++;
+<?php
+header('Content-Type: text/html; charset="UTF-8"');
+header("Cache-Control: no-store, no-cache,  must-revalidate"); 
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+?><pre><?
+$error=0;
+try {
+$client = new 
+    SoapClient( 
+        "http://10.10.1.4/CreateClient/ws/CreateClient?wsdl" 
+    ); 
+ } catch (Exception $e) { 
+$error=1;
 }
-echo "<hr>";
-echo "<pre>";
-print_r($scores);
-print_r($places);
-echo "</pre>";
-*/
+echo'error con=';
+print_r($error);
+echo "\n";
+$xmlStr='
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<CAgName>888</CAgName>
+<CAgShortName>3333</CAgShortName>
+<CAgNonresident>1</CAgNonresident>
+<CAgNotVATpayer></CAgNotVATpayer>
+<CAgBuyer></CAgBuyer>
+<CAgSeller></CAgSeller>
+<CAgNotNPpayer></CAgNotNPpayer>
+</root>
+';
+try { 
+$result = $client-> CreateClient1C($xmlStr);
+print_r($result);
+} catch (Exception $e) { 
+print_r($e);
+$error=1;
+}
+echo'error crt=';
+print_r($error);
+echo "\n";
 ?>

@@ -1,11 +1,13 @@
-/* Formatted on 23/09/2014 22:22:33 (QP5 v5.227.12220.39724) */
-  SELECT zf.id,
+/* Formatted on 22/02/2016 16:16:42 (QP5 v5.252.13127.32867) */
+  SELECT zf.z_id,
+         zf.id,
          zf.ff_id,
          zf.val_string,
          zf.val_textarea,
          zf.val_number_int,
          zf.val_number,
          zf.val_list,
+         zf.val_list_name,
          zf.val_formula,
          TO_CHAR (zf.val_datepicker, 'dd.mm.yyyy') val_datepicker,
          zf.val_file,
@@ -15,6 +17,7 @@
          zf.rep_val_number_int,
          zf.rep_val_number,
          zf.rep_val_list,
+         zf.rep_val_list_name,
          zf.rep_val_formula,
          TO_CHAR (zf.rep_val_datepicker, 'dd.mm.yyyy') rep_val_datepicker,
          zf.rep_val_file,
@@ -28,7 +31,12 @@
          f.formula,
          f.rep_formula,
          f.var_name,
-         f.rep_var_name
+         f.rep_var_name,
+         f.color,
+         f.bold,
+         f.autocomplete,
+         f.admin_id,
+         f.var1
     FROM bud_ru_zay_ff zf, bud_ru_ff f
    WHERE zf.z_id = :z_id AND zf.ff_id = f.id
 ORDER BY f.sort

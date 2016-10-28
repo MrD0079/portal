@@ -1,4 +1,0 @@
-/* Formatted on 10.01.2014 11:25:37 (QP5 v5.227.12220.39724) */
-  SELECT *
-    FROM a1407nto_PHOTO_FILES
-ORDER BY id

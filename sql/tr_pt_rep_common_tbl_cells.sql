@@ -15,6 +15,7 @@
          AND tr.id = th.tr
          AND th.dt_start BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
                              AND TO_DATE (:ed, 'dd.mm.yyyy')
+   and ((:tr_pt_rep_common_datauvol='all') or (:tr_pt_rep_common_datauvol='actual' and nvl(u.datauvol,trunc(sysdate))>=trunc(sysdate)))
 GROUP BY tr.id,
          tr.name,
          u.pos_id,

@@ -58,7 +58,10 @@
                               67, :tn,
                               (SELECT pos_id
                                  FROM user_list
-                                WHERE tn = :tn AND is_super = 1), :tn)))
+                                WHERE tn = :tn AND is_super = 1), :tn,
+                             (SELECT pos_id
+                                FROM user_list
+                               WHERE tn = :tn AND is_admin = 1), :tn)))
          AND m.payment_type NOT IN (1, 3)
 ORDER BY mk.MONTH,
          groupp,

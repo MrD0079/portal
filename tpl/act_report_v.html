@@ -1,116 +1,84 @@
 <h1>Отчет ВСТМ по акции "{$act_name}" {$m_cur}</h1>
-
 <form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
-
-<p>
-
-Акция бюджетируется из фонда
-
-{if $is_traid}
-
-<select required name=fund id=fund>
-<option></option>
-{foreach key=key item=item from=$bud_funds}
-<option value={$item.id}>{$item.name|escape}</option>
-{/foreach}
-</select>
-<script>
-$('#fund').val({$act.fund_id});
-</script>
-
-{else}
-
-{foreach key=key item=item from=$bud_funds}
-{if $act.fund_id eq $item.id}<b>{$item.name|escape}</b>{/if}
-{/foreach}
-
-{/if}
-
-</p>
-
-<p>
-
-Месяц, на который относятся затраты
-{if $is_traid}
-
-<select required name=m id=m>
-<option></option>
-{foreach key=key item=item from=$month_list}
-{if $item.acts_enabled}
-<option value="{$item.sd_c}">{$item.my}</option>
-{/if}
-{/foreach}
-</select>
-<script>
-$('#m').val('{$act.dtz}');
-</script>
-
-{else}
-
-{foreach key=key item=item from=$month_list}
-{if $act.dtz eq $item.sd_c}<b>{$item.my}</b>{/if}
-{/foreach}
-
-{/if}
-
-</p>
-
-
-
-
-
-
-
-
-
-<p>
-{if $is_traid}
-<input type=submit name=save id=save class=save value="Сохранить">
-{/if}
-</p>
-
-<table border=1 cellspacing=0 cellpadding=3>
-	<tr style="font-weight:bold; text-align:center">
-		<td>№ п/п</td>
-		<td>Держатель бюджета</td>
-		<td>Количество записей</td>
-		<td>Сумма бонусов, {$valuta}</td>
-		<td>Сумма по реестрам, {$valuta}</td>
-		<td>Подтверждение ВТСМ</td>
-	</tr>
-	{foreach key=list_key item=list_item from=$list name=list}
-	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
-		<td style="text-align:center">{$smarty.foreach.list.iteration}</td>
-		<td style="text-align:left">{$list_item.db_fio}</td>
-		<td style="text-align:center">{$list_item.rec_count}</td>
-		<td style="text-align:right">{$list_item.sum_bonus|num:2}</td>
-		<td style="text-align:right">{$list_item.sum_files|num:2}</td>
-		<td>
-			{if $is_traid}
-			<input type="checkbox"
-			onclick="
-			$('.ok_traid_{$list_item.db_tn}').attr('disabled',false);
-			$('#ok_traid_{$list_item.db_tn}').val(this.checked?1:0);
-			"
-			{if $list_item.ok_traid eq 1}checked{/if}
-			>
-			<input type=hidden disabled class=ok_traid_{$list_item.db_tn} name=data[{$list_item.db_tn}][ok_traid] id=ok_traid_{$list_item.db_tn}>
-			<input type=hidden disabled class=ok_traid_{$list_item.db_tn} name=data[{$list_item.db_tn}][ok_traid_fio] value="{$fio}">
-			<input type=hidden disabled class=ok_traid_{$list_item.db_tn} name=data[{$list_item.db_tn}][rec_count] value="{$list_item.rec_count}">
-			<input type=hidden disabled class=ok_traid_{$list_item.db_tn} name=data[{$list_item.db_tn}][sum_bonus] value="{$list_item.sum_bonus}">
-			<input type=hidden disabled class=ok_traid_{$list_item.db_tn} name=data[{$list_item.db_tn}][sum_files] value="{$list_item.sum_files}">
-			{/if}
-			{$list_item.ok_traid_fio} {$list_item.ok_traid_lu}
-		</td>
-	</tr>
-	{/foreach}
-</table>
-
-<p>
-{if $is_traid}
-<input type=submit name=save id=save class=save value="Сохранить">
-{/if}
-</p>
-
-
+	<p>
+		Акция бюджетируется из фонда
+		{if $is_traid}
+			<select name=fund id=fund>
+				<option></option>
+				{foreach key=key item=item from=$bud_funds}
+				<option value={$item.id}>{$item.name|escape}</option>
+				{/foreach}
+			</select>
+			<script>$('#fund').val({$act.fund_id});</script>
+		{else}
+			{foreach key=key item=item from=$bud_funds}
+				{if $act.fund_id eq $item.id}<b>{$item.name|escape}</b>{/if}
+			{/foreach}
+		{/if}
+	</p>
+	<p>
+		Месяц, на который относятся затраты
+		{if $is_traid}
+			<select name=m id=m>
+				<option></option>
+				{foreach key=key item=item from=$month_list}
+				{if $item.acts_enabled}
+				<option value="{$item.sd_c}">{$item.my}</option>
+				{/if}
+				{/foreach}
+			</select>
+			<script>$('#m').val('{$act.dtz}');</script>
+		{else}
+			{foreach key=key item=item from=$month_list}
+				{if $act.dtz eq $item.sd_c}<b>{$item.my}</b>{/if}
+			{/foreach}
+		{/if}
+	</p>
+	<p>{if $is_traid}<input type=submit name=save id=save class=save value="Сохранить">{/if}</p>
+	<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold; text-align:center">
+			<td>№ п/п</td>
+			<td>Держатель бюджета</td>
+			<td>Филиал</td>
+			<td>Количество записей</td>
+			<td>Сумма бонусов, {$valuta}</td>
+			<td>Сумма по реестрам, {$valuta}</td>
+			<td>Подтверждение ВТСМ</td>
+		</tr>
+		{foreach key=km item=im from=$list name=list}
+		{cycle assign=color values="#ccffff,#ffffcc"}
+		{assign var=cnt value=0}
+		{foreach key=k item=i from=$im name=im}
+			{assign var=cnt value=`$cnt+1`}
+		{/foreach}
+		{foreach key=k item=i from=$im name=im}
+		<tr bgcolor='{$color}'>
+			{if $smarty.foreach.im.iteration eq 1}<td style="text-align:center" rowspan="{$cnt}">{$smarty.foreach.list.iteration}</td>{/if}
+			<td style="text-align:left">{$i.db_fio}</td>
+			<td style="text-align:left">{$i.fil_name}</td>
+			<td style="text-align:center">{$i.rec_count}</td>
+			<td style="text-align:right">{$i.sum_bonus|num:2}</td>
+			{if $smarty.foreach.im.iteration eq 1}<td style="text-align:right" rowspan="{$cnt}">{$i.sum_files|num:2}</td>{/if}
+			<td>
+				{if $is_traid}
+				<input type="checkbox"
+				onclick="
+				$('.ok_traid_{$i.db_tn}{$i.fil|default:empty}').attr('disabled',false);
+				$('#ok_traid_{$i.db_tn}{$i.fil|default:empty}').val(this.checked?1:0);
+				"
+				{if $i.ok_traid eq 1}checked{/if}
+				>
+				<input type=hidden disabled class=ok_traid_{$i.db_tn}{$i.fil|default:empty} name=data[{$i.db_tn}][{$i.fil|default:empty}][ok_traid] id=ok_traid_{$i.db_tn}{$i.fil|default:empty}>
+				<input type=hidden disabled class=ok_traid_{$i.db_tn}{$i.fil|default:empty} name=data[{$i.db_tn}][{$i.fil|default:empty}][ok_traid_fio] value="{$fio}">
+				<input type=hidden disabled class=ok_traid_{$i.db_tn}{$i.fil|default:empty} name=data[{$i.db_tn}][{$i.fil|default:empty}][rec_count] value="{$i.rec_count}">
+				<input type=hidden disabled class=ok_traid_{$i.db_tn}{$i.fil|default:empty} name=data[{$i.db_tn}][{$i.fil|default:empty}][sum_bonus] value="{$i.sum_bonus}">
+				<input type=hidden disabled class=ok_traid_{$i.db_tn}{$i.fil|default:empty} name=data[{$i.db_tn}][{$i.fil|default:empty}][sum_files] value="{$i.sum_files}">
+				{/if}
+				{$i.ok_traid_fio} {$i.ok_traid_lu}
+			</td>
+		</tr>
+		{/foreach}
+		{/foreach}
+	</table>
+	<p>{if $is_traid}<input type=submit name=save id=save class=save value="Сохранить">{/if}</p>
 </form>

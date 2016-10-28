@@ -8,12 +8,14 @@ SELECT NVL (SUM (v.selected), 0) selected,
        COUNT (*) total
   FROM sh_o_2011 s, magic_tp_select v, spdtree st
  WHERE     s.tab_number = st.tab_num
-       AND st.svideninn IN (SELECT slave
-                                 FROM full
-                                WHERE master = DECODE (:exp_list_without_ts, 0, :tn, :exp_list_without_ts))
-       AND st.svideninn IN (SELECT slave
-                                 FROM full
-                                WHERE master = DECODE (:exp_list_only_ts, 0, :tn, :exp_list_only_ts))
+       AND (   :exp_list_without_ts = 0
+                      OR st.svideninn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+       AND (   :exp_list_only_ts = 0
+                      OR st.svideninn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
        AND s.kod_tp = v.kod_tp(+)
        AND v.selected = 1
        AND st.dpt_id = :dpt_id

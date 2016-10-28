@@ -1,0 +1,87 @@
+{if $is_admin}
+<h1 style="font-size:64px;">Предпочтения</h1>
+{literal}
+<style>
+.row1,.row2,.row3 {
+	cursor: pointer;
+	font-size:18px;
+	line-height:50px;
+	margin:auto;
+	width:300px;
+	height:50px;
+	/*padding:10px 10px 10px 10px;*/
+	/*background-color:red;*/
+	/*float:auto;*/
+	display: inline-block;
+	border-radius:10px;
+	/*text-shadow: 2px 2px 4px #000000;*/
+	box-shadow: 2px 2px 10px #000000;
+	display:none;
+}
+.prez_quad {
+	cursor: pointer;
+	line-height:100px;
+	margin:auto;
+	width:100px;
+	height:100px;
+	border-radius:5px;
+	/*text-shadow: 2px 2px 4px #000000;*/
+	box-shadow: 2px 2px 4px #000000;
+	font-size:22px;
+}
+.ball1,.ball2,.ball3 {
+	/*cursor: pointer;*/
+	font-size:36px;
+	line-height:60px;
+	/*margin:auto;*/
+	width:100px;
+	height:60px;
+	/*padding:10px 10px 10px 10px;*/
+	/*background-color:red;*/
+	/*float:auto;*/
+	display: inline-block;
+	border-radius:10px;
+	/*text-shadow: 2px 2px 4px #000000;*/
+	box-shadow: 2px 2px 4px #000000;
+}
+</style>
+{/literal}
+<table class="voiting" border=0 cellpadding=20 cellspacing=20 style="text-align:center;vertical-align:middle;/*width:100%;*/">
+<tbody>
+	<tr>
+		<td>
+			<div class="column1 row1 cell11">BARISTI Венская Обжарка</div>
+			<div class="column1 row2 cell12">BARISTI Итальянская Обжарка</div>
+			<div class="column1 row3 cell13">Jacobs Monarch</div>
+		</td>                             
+		<td>                              
+			<div class="column2 row1 cell21">BARISTI Венская Обжарка</div>
+			<div class="column2 row2 cell22">BARISTI Итальянская Обжарка</div>
+			<div class="column2 row3 cell23">Jacobs Monarch</div>
+		</td>                             
+		<td>                              
+			<div class="column3 row1 cell31">BARISTI Венская Обжарка</div>
+			<div class="column3 row2 cell32">BARISTI Итальянская Обжарка</div>
+			<div class="column3 row3 cell33">Jacobs Monarch</div>
+		</td>
+	</tr>
+	<tr>
+		<td><div class="prez_quad" onClick="$('.cell1{$balls.color1}').show();" style="background-color:#0000FF">Показать</div></td>
+		<td><div class="prez_quad" onClick="$('.cell2{$balls.color2}').show();" style="background-color:#008000">Показать</div></td>
+		<td><div class="prez_quad" onClick="$('.cell3{$balls.color3}').show();" style="background-color:#ffff00">Показать</div></td>
+	</tr>
+	<tr style="text-align:center">
+		<td>
+			<div class="ball1">{$balls.ball1|num:1}</div>
+		</td>
+		<td>
+			<div class="ball2">{$balls.ball2|num:1}</div>
+		</td>
+		<td>
+			<div class="ball3">{$balls.ball3|num:1}</div>
+		</td>
+	</tr>
+</tbody>
+</table>
+<p id="result"></p>
+{/if}

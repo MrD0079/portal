@@ -34,7 +34,7 @@
          AND t.h_url = s.h_url(+)
          AND (r.stelag > 0 OR r.tumb > 0)
          AND visitdate = TO_DATE (:dt, 'dd.mm.yyyy')
-         AND DECODE (:eta_list, '', t.h_fio_eta, :eta_list) = t.h_fio_eta
+         AND (:eta_list is null OR :eta_list = t.h_fio_eta)
          AND CASE
                 WHEN    :ok_visit = 1
                      OR :ok_visit = 2 AND t.visit = 1

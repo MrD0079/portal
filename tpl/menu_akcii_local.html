@@ -10,7 +10,7 @@
 {foreach key=k3 item=i3 from=$i2.data}
 <li><a href="javascript:void(0);"><span class="dir">{$i3.val_string}</span></a>
 <ul>
-<li><a href="?action=bud_ru_zay_reestr&z_id={$i3.id}&select=1">Заявка</a></li>
+<li><a href="?action=bud_ru_zay_reestr&tu={$i3.tu}&z_id={$i3.id}&select=1">Заявка</a></li>
 {if $is_db or $has_parent_db or $is_admin or $is_traid or $is_traid_kk}
 <li><a href="?action=akcii_local_report&z_id={$i3.id}">Отчет по акции</a></li>
 {/if}

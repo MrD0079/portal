@@ -14,6 +14,7 @@
 		<td>На отчет</td>
 		<td>ЛА</td>
 		<td>без АС</td>
+		<td>ТУ</td>
 		<td>Обязательные приложения</td>
 		<td>новая статья <input name=new[0][name] size=40></td>
 		<input type=hidden name=new[0][dpt_id] value="{$dpt_id}">
@@ -40,6 +41,13 @@
 {if $item.parent neq 0}
 <input type=checkbox {if $item.woac}checked{/if} onclick="$('#woac_{$item.id}').attr('disabled',false);$('#woac_{$item.id}').val(this.checked?1:null);">
 <input type=hidden disabled name=update[{$item.id}][woac] id=woac_{$item.id}>
+{/if}
+</td>
+
+<td>
+{if $item.parent neq 0}
+<input type=checkbox {if $item.tu}checked{/if} onclick="$('#tu_{$item.id}').attr('disabled',false);$('#tu_{$item.id}').val(this.checked?1:null);">
+<input type=hidden disabled name=update[{$item.id}][tu] id=tu_{$item.id}>
 {/if}
 </td>
 

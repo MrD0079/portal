@@ -1,0 +1,18 @@
+<table id=tms_ag_cat_{$smarty.request.id} border=0 cellpadding=0 cellspacing=0>
+	<tbody>
+		<tr>
+			<td>
+				<input size=30 id=cat_{$smarty.request.id}>
+				<a href="javascript:void(0);" onClick="add_ms_ag_cat({$smarty.request.id});">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$ms_ag_cat}
+		<tr id=ms_ag_cat_{$i.id}>
+			<td>
+				<a href='javascript:void(0);' onClick="del_ms_ag_cat({$i.id})">[x]</a>
+				<input id=d_{$i.id}_cat size=30 value="{$i.cat}" onChange="save_ms_ag_cat({$i.id},'cat',this.value);">
+			</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>

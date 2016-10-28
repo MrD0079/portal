@@ -179,7 +179,6 @@ if (isset($_REQUEST["add_chat"]))
 					$text.="Просьба ответить на комментарий/уточнение по данной заявке на проведение АЦ в разделе <a href=\"https://ps.avk.ua/?action=ac_accept\">Согласование заявки на проведение АЦ</a>";
 					$email=$v1["email"];
 					send_mail($email,$subj,$text);
-					//send_mail('denis.yakovenko@avk.ua',$subj,$text);
 				}
 			}
 		}

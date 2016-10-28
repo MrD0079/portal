@@ -119,7 +119,7 @@
 			<td align=right>{$item.price|default:0|num:3}</td>
 			<td align=right>{$item.bonus|default:0|num:3}</td>
 			<td align=right>{$item.total|default:0|num:3}</td>
-			<td align=right>{$item.nocover|default:0|num:3}</td>
+			<td align=right {if $item.nocover < 0}style="background-color:#FF99FF"{/if}>{$item.nocover|default:0|num:3}</td>
 			<td align=center {if $item.linked2invoice neq 0}style="background-color:rgb(51,255,51)"{/if}><input
 				{if $item.linked2invoice neq 0} checked {/if}
 				onclick="$('#ok1{$item.rid}').val(this.checked?1:0)"
@@ -129,7 +129,7 @@
 			<td>
 				<input name=summa[{$item.rid}]
 				onChange="$('#ok1{$item.rid}').val(1)"
-				value="{$item.invoice_summa|default:$item.nocover}">
+				value="{$item.invoice_summa|default:$item.nocover}" class=number5>
 			</td>
 		</tr>
 		{/foreach}

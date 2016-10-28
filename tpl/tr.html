@@ -22,7 +22,12 @@
 			<select name=data[{$item.id}][for_eta]>
 			<option value=0 {if $item.for_eta eq 0}selected{/if}>нет</option>
 			<option value=1 {if $item.for_eta eq 1}selected{/if}>да</option>
-			</select>
+			</select><br>
+			Преза<br>
+			<select name=data[{$item.id}][for_prez]>
+			<option value=0 {if $item.for_prez eq 0}selected{/if}>нет</option>
+			<option value=1 {if $item.for_prez eq 1}selected{/if}>да</option>
+			</select><br>
 		</td>
 		<td>
 			текст<br>
@@ -48,7 +53,12 @@
 			<select name=new_for_eta>
 			<option value=0>нет</option>
 			<option value=1>да</option>
-			</select>
+			</select><br>
+			Преза<br>
+			<select name=new_for_prez>
+			<option value=0>нет</option>
+			<option value=1>да</option>
+			</select><br>
 		</td>
 		<td>
 			текст<br>

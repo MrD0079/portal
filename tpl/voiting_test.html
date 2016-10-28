@@ -1,0 +1,30 @@
+<h1>Тестирование</h1>
+{if not $h.test_enabled}
+	<p>Благодарим Вас за прохождение теста!</p>
+{elseif $smarty.request.test_end}
+	{if $smarty.request.time_out}<p style="color:red">Время теста истекло. Все отмеченные Вами ответы сохранены</p>{/if}
+	<p>Благодарим Вас за прохождение теста!</p>
+{else}
+	{if $smarty.request.process}
+		{include file="voiting_test_process.html"}
+	{else}
+		<p>Тест к тренингу: {$h.name}</p>
+		<p>Время, которое дается на прохождение теста (в минутах): {$h.test_len_h}</p>
+		<p>
+		Помните, Вам дается только одна попытка на прохождение теста. Начав<br>
+		тестирование, Вы должны пройти его до конца. Кнопку "Сохранить и<br>
+		закончить тест" - необходимо нажимать после того, как Вы дали ответы на<br>
+		все вопросы.
+		</p>
+		<p>
+		В правом верхнем углу у Вас будет таймер, который отсчитывает секунды<br>
+		до окончания тестирования. После истечения времени, все ваши варианты<br>
+		ответов сохраняться, а тест закроется.<br>
+		Успехов!
+		</p>
+		<a href="javascript:void(0)" onclick="$('#form_test').submit();"><img style="width: 353px; height: 80px;" alt="Перейти к тестированию" src="design/startTest.png"></a>
+		<form target="_self" method="POST" name=form_test id=form_test>
+		<input type=hidden name=process value=true>
+		</form>
+	{/if}
+{/if}

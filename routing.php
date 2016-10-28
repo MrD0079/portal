@@ -24,6 +24,8 @@ $params=array(':dpt_id' => $_SESSION["dpt_id"],
 	":routes_weeks_list" => $routes_weeks_list_filter
 );
 
+//echo "test";
+
 $sql = rtrim(file_get_contents('sql/routing_childs_list.sql'));
 $sql=stritr($sql,$params);
 $exp_list_only_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -34,20 +36,26 @@ $sql=stritr($sql,$params);
 $exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list_without_ts', $exp_list_without_ts);
 
+$sql = rtrim(file_get_contents('sql/routing_eta_list.sql'));
+$sql=stritr($sql,$params);
+$routes_eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('routes_eta_list', $routes_eta_list);
+
 $sql = rtrim(file_get_contents('sql/routing_days_list.sql'));
 $sql=stritr($sql,$params);
 $routes_days_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_days_list', $routes_days_list);
+//$_REQUEST["sql1"]=$sql;
 
 $sql = rtrim(file_get_contents('sql/routing_days_list_1.sql'));
 $sql=stritr($sql,$params);
 $routes_days_list_1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_days_list_1', $routes_days_list_1);
+//$_REQUEST["sql2"]=$sql;
 
-$sql = rtrim(file_get_contents('sql/routing_eta_list.sql'));
-$sql=stritr($sql,$params);
-$routes_eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('routes_eta_list', $routes_eta_list);
+//ses_req();
+//exit;
+
 
 if (isset($_REQUEST["generate"]))
 {
@@ -55,18 +63,24 @@ $sql=rtrim(file_get_contents('sql/routing.sql'));
 $sql=stritr($sql,$params);
 $list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('list', $list);
+//$_REQUEST["sql11"]=$sql;
 
 $sql=rtrim(file_get_contents('sql/routing_adv.sql'));
 $sql=stritr($sql,$params);
 $list_adv = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($list_adv as $k=>$v){$d[$v["in_route_gr"]][$v["in_route_t"]][$v["day_gr"]][$v["day_t"]][$v["eta_gr"]][$v["eta_t"]]=$v["tp_cnt"];}
 isset($d) ? $smarty->assign('list_adv', $d) : null;
+//$_REQUEST["sql12"]=$sql;
 
 $sql=rtrim(file_get_contents('sql/routing_detail.sql'));
 $sql=stritr($sql,$params);
 $list_detail = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('list_detail', $list_detail);
+//$_REQUEST["sql13"]=$sql;
+
 }
+
+
 
 $smarty->display('routing.html');
 

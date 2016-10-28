@@ -1,7 +1,14 @@
 <?
 
 
-send_mail('denis.yakovenko@avk.ua','test','test');
+
+//$formula='$x=1;';
+$d1=1.0;
+$d2=1.0;
+$formula='$x=($d1==1?3:d2)+($d2==2?5:7);';
+
+@eval($formula);
+echo $x;
 
 
 exit;
@@ -18,7 +25,6 @@ $fn=array(
 "new_staff_files/foto Aver`yanov.JPG"
 );
 
-send_mail('denis.yakovenko@avk.ua','test','test',$fn);
 
 
 exit;

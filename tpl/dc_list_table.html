@@ -26,7 +26,7 @@
 				<b>Дата начала:</b> {$i.head.dt_start_t}<br>
 				<b>Локация:</b> {$i.head.loc_name}<br>
 				<b>Участников:</b> {$i.head.stud_cnt}<br>
-				{if $i.head.readonly neq 1 and ($is_admin or $pos_id eq 63)}
+				{if $i.head.readonly neq 1 and ($is_admin or $my_pos_id eq 63)}
 				<p><input type=checkbox name=del[] value={$i.head.id}>выбрать для удаления</p>
 				<p><a target=_blank href="?action=dc_order_edit&id={$i.head.id}">Редактировать</a></p>
 				<p><input type=submit name=ok_primary_retry value="Повторно оповестить" onClick="javascript:$('#form_tr').find('input[class=ok_primary_retry_id]').val({$i.head.id});$('#form_tr').submit();"></p>

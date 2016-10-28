@@ -61,7 +61,15 @@
 <tr style="font-weight:bold;text-align:center">
 	<td>Филиалы</td>
 	{foreach key=k item=i from=$list.columns}
-	<td {if $i.current_week}style="background-color:lightblue"{/if}>{$i.dm}<br>{$i.dwtc}</td>
+	<td
+		{if $i.dw eq 6 or $i.dw eq 7}
+			style="background-color:violet"
+		{else}
+			{if $i.current_week}
+				style="background-color:lightblue"
+			{/if}
+		{/if}
+	>{$i.dw}<br>{$i.dm}<br>{$i.dwtc}</td>
 	{/foreach}
 	<td style="background-color: #F5E3BF">Кол- во док 1С</td>
 	<td style="background-color: #F5E3BF">Сумма с НДС 1С, {$valuta}</td>
@@ -105,7 +113,7 @@
 	{assign var=tabindex3 value=`$data_column*1000+$data_row+3000`}
 	{assign var=tabindex4 value=`$data_column*1000+$data_row+4000`}
 	{assign var=tabindex5 value=`$data_column*1000+$data_row+4000`}
-	<td id="td{$i.tn}{$i.bud_id}doc1c" style="background-color: #F5E3BF">
+	<td id="td{$i.tn}{$i.bud_id}doc1c" style="background-color: #F5E3BF; text-align:right">
 		{if $tn eq $i.tn}
 		<input
 			id="input{$i.tn}{$i.bud_id}doc1c"
@@ -116,24 +124,24 @@
 		>
 		<script>$('#input{$i.tn}{$i.bud_id}doc1c').val({$i.doc1c});</script>
 		{else}
-		{$i.doc1c}
+		{$i.doc1c|num:-1}
 		{/if}
 	</td>
-	<td id="td{$i.tn}{$i.bud_id}sum1c" style="background-color: #F5E3BF">
+	<td id="td{$i.tn}{$i.bud_id}sum1c" style="background-color: #F5E3BF; text-align:right">
 		{if $tn eq $i.tn}
 		<input
 			id="input{$i.tn}{$i.bud_id}sum1c"
 			tabindex="{$tabindex2}"
-			size=5
+			size=10
 			class="number"
 			onchange="save_m({$i.tn},{$i.bud_id},'sum1c','{$smarty.request.month_list}',this.value);"
 		>
 		<script>$('#input{$i.tn}{$i.bud_id}sum1c').val({$i.sum1c});</script>
 		{else}
-		{$i.sum1c}
+		{$i.sum1c|num:2}
 		{/if}
 	</td>
-	<td id="td{$i.tn}{$i.bud_id}docdm" style="background-color: #F5E3BF">
+	<td id="td{$i.tn}{$i.bud_id}docdm" style="background-color: #F5E3BF; text-align:right">
 		{if $tn eq $i.tn}
 		<input
 			id="input{$i.tn}{$i.bud_id}docdm"
@@ -144,33 +152,38 @@
 		>
 		<script>$('#input{$i.tn}{$i.bud_id}docdm').val({$i.docdm});</script>
 		{else}
-		{$i.docdm}
+		{$i.docdm|num:-1}
 		{/if}
 	</td>
-	<td id="td{$i.tn}{$i.bud_id}sumdm" style="background-color: #F5E3BF">
+	<td id="td{$i.tn}{$i.bud_id}sumdm" style="background-color: #F5E3BF; text-align:right">
 		{if $tn eq $i.tn}
 		<input
 			id="input{$i.tn}{$i.bud_id}sumdm"
 			tabindex="{$tabindex4}"
-			size=5
+			size=10
 			class="number"
 			onchange="save_m({$i.tn},{$i.bud_id},'sumdm','{$smarty.request.month_list}',this.value);"
 		>
 		<script>$('#input{$i.tn}{$i.bud_id}sumdm').val({$i.sumdm});</script>
 		{else}
-		{$i.sumdm}
+		{$i.sumdm|num:2}
 		{/if}
 	</td>
-	<td id="td{$i.tn}{$i.bud_id}deltadoc" style="background-color: #F5E3BF"></td>
-	<td id="td{$i.tn}{$i.bud_id}deltasum" style="background-color: #F5E3BF"></td>
-	<td id="td{$i.tn}{$i.bud_id}percdoc" style="background-color: #F5E3BF"></td>
-	<td id="td{$i.tn}{$i.bud_id}percsum" style="background-color: #F5E3BF"></td>
-	<td id="td{$i.tn}{$i.bud_id}fn" style="background-color: #F5E3BF">
+	<td id="td{$i.tn}{$i.bud_id}deltadoc" style="background-color: #F5E3BF; text-align:right">{$i.doc_delta|num:-1}</td>
+	<td id="td{$i.tn}{$i.bud_id}deltasum" style="background-color: #F5E3BF; text-align:right">{$i.sum_delta|num:2}</td>
+	<td id="td{$i.tn}{$i.bud_id}percdoc" style="background-color: #F5E3BF; text-align:right">{$i.doc_perc|num:2}</td>
+	<td id="td{$i.tn}{$i.bud_id}percsum" style="background-color: #F5E3BF; text-align:right">{$i.sum_perc|num:2}</td>
+	<td id="td{$i.tn}{$i.bud_id}files" style="background-color: #F5E3BF">
 		{if $tn eq $i.tn}
-		<input DISABLED id="input{$i.tn}{$i.bud_id}fn" type=file onChange="send_file({$i.tn},{$i.bud_id},'{$smarty.request.month_list}');">
-		<!--<a href="javascript:void(0);" onClick="del_file({$i.tn},{$i.bud_id},'{$smarty.request.month_list}');">[x]</a>-->
+		<input id="input{$i.tn}{$i.bud_id}files" type=file multiple onChange="send_file({$i.tn},{$i.bud_id},'{$smarty.request.month_list}');">
 		{/if}
-		<a id="a{$i.tn}{$i.bud_id}fn" target=_blank href="files/{$i.fn}">{$i.fn}</a>
+		{foreach key=k1 item=i1 from=$i.files}
+			<div style="display:inline" id="fn{$k1}">
+				<br>
+				{if $tn eq $i.tn}<a href="javascript:void(0);" onclick="del_file({$k1},'{$i1}')">[x]</a>{/if}
+				<a target=_blank href="files/{$i1}">{$i1}</a>
+			</div>
+		{/foreach}
 	</td>
 	<td id="td{$i.tn}{$i.bud_id}datar" style="background-color: #F5E3BF">
 		{if $tn eq $i.tn}
@@ -195,15 +208,11 @@
 <script>
 {literal}
 
-function del_file(tn,bud_id,dt)
+function del_file(id,fn)
 {
-	$('#input'+tn+bud_id+'fn').css('background-color','red');
 	var fd = new FormData();
-	fd.append('dt',  dt);
-	fd.append('tn',  tn);
-	fd.append('bud_id',  bud_id);
-	fd.append('fn', $('#a'+tn+bud_id+'fn').text());
-	//console.log($('#a'+tn+bud_id+'fn').text());
+	fd.append('id', id);
+	fd.append('fn', fn);
 	$.ajax({
 		type: 'POST',
 		url: '?action=dm_fil_stat&del_file=1&nohead=1',
@@ -211,21 +220,25 @@ function del_file(tn,bud_id,dt)
 		processData: false,
 		contentType: false,
 		success: function(data) {
-			$('#a'+tn+bud_id+'fn').attr("href", "");
-			$('#a'+tn+bud_id+'fn').text("");
-			$('#input'+tn+bud_id+'fn').css('background-color','white');
+			$('#fn'+id).remove();
 		}
 	});
 }
 
 function send_file(tn,bud_id,dt)
 {
-	$('#input'+tn+bud_id+'fn').css('background-color','red');
+	$('#input'+tn+bud_id+'files').css('background-color','red');
 	var fd = new FormData();
 	fd.append('dt',  dt);
 	fd.append('tn',  tn);
 	fd.append('bud_id',  bud_id);
-	fd.append('fn', $('#input'+tn+bud_id+'fn')[0].files[0]);
+	var files = $('#input'+tn+bud_id+'files')[0].files;
+	for(var i=0; i<files.length; i++)
+	{
+		var f = files[i];
+		console.log(f.name);
+		fd.append('files'+i, f);
+	}
 	$.ajax({
 		type: 'POST',
 		url: '?action=dm_fil_stat&send_file=1&nohead=1',
@@ -233,16 +246,11 @@ function send_file(tn,bud_id,dt)
 		processData: false,
 		contentType: false,
 		success: function(data) {
-			$('#a'+tn+bud_id+'fn').attr("href", "files/"+data);
-			$('#a'+tn+bud_id+'fn').text(data);
-			$('#input'+tn+bud_id+'fn').css('background-color','white');
+			$('#td'+tn+bud_id+'files').append(""+data+"");
+			$('#input'+tn+bud_id+'files').css('background-color','#F5E3BF');
 		},
-		error: function(data) {
-			$('#a'+tn+bud_id+'fn').attr("href", "");
-			$('#a'+tn+bud_id+'fn').text(data);
-			$('#input'+tn+bud_id+'fn').css('background-color','red');
-		}
 	});
+
 }
 
 function save(tn,bud_id,k1,dt,val)

@@ -36,13 +36,32 @@
 	{
 		if ($v1["type"]=="formula")
 		{
-			$z = array('$'=>'$'.$prefix);
-			$data[$k1]["formula"]=stritr($data[$k1]["formula"],$z);
-			$data[$k1]["rep_formula"]=stritr($data[$k1]["rep_formula"],$z);
-			@eval('$x='.$data[$k1]["formula"].';');
-			@eval('$rx='.$data[$k1]["rep_formula"].';');
-			$data[$k1]["val_formula"]=$x;
-			$data[$k1]["rep_val_formula"]=$rx;
+			$zid = $v1["z_id"];
+			$fid = 0;
+			//echo $v1["z_id"]."*";
+			//echo $v1["id"]."*";
+			//echo $v1["ff_id"]."*";
+			$z = array('$'=>'$'.$prefix,'$zid'=>$zid,'$fid'=>$fid);
+			$data[$k1]["val_formula"]=null;
+			$data[$k1]["rep_val_formula"]=null;
+			if ($data[$k1]["formula"]!='')
+			{
+				$data[$k1]["formula"]=stritr($data[$k1]["formula"],$z);
+				//echo '$x='.$data[$k1]["formula"].';';
+				@eval('$x='.$data[$k1]["formula"].';');
+				isset($x)?$data[$k1]["val_formula"]=$x:null;
+			}
+			if ($data[$k1]["rep_formula"]!='')
+			{
+				$data[$k1]["rep_formula"]=stritr($data[$k1]["rep_formula"],$z);
+				//echo '$rx='.$data[$k1]["rep_formula"].';';
+				@eval('$rx='.$data[$k1]["rep_formula"].';');
+				isset($rx)?$data[$k1]["rep_val_formula"]=$rx:null;
+			}
+
+
+
 		}
 	}
+	//var_dump($data);
 ?>

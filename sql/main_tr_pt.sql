@@ -24,4 +24,4 @@ SELECT u.fio,
        AND u.h_eta = b.h_eta
        AND b.h_eta = pe.h_eta
        AND u.dpt_id = pe.dpt_id
-       AND DECODE (:eta, '', b.h_eta, :eta) = b.h_eta
+       AND (:eta is null OR :eta = b.h_eta)

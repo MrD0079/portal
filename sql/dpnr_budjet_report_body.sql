@@ -1,9 +1,9 @@
 /* Formatted on 15/09/2015 12:39:57 (QP5 v5.227.12220.39724) */
-  SELECT cid,
+  SELECT /*cid,*/
          cname,
-         spid,
+         /*spid,*/
          spname,
-         scid,
+         /*scid,*/
          scname,
          SUM (b.plan) plan,
          SUM (b.fakt) fakt,
@@ -202,10 +202,10 @@
                       OR :ok_chief = 2 AND h.ok_chief = 1
                       OR :ok_chief = 3 AND NVL (h.ok_chief, 0) <> 1)) b
    WHERE t.cid = b.cmp(+) AND t.scid = b.st(+)
-GROUP BY CUBE (cid, cname, spid, spname, scid, scname)
-ORDER BY cid,
+GROUP BY CUBE (/*cid, */cname, /*spid, */spname, /*scid, */scname)
+ORDER BY /*cid,*/
          cname,
-         spid,
+         /*spid,*/
          spname,
-         scid,
+         /*scid,*/
          scname

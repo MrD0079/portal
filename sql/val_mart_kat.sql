@@ -1,1 +1,0 @@
-select * from val_mart_kat order by kat_name

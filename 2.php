@@ -1,22 +1,40 @@
 <?php
-if( isset($_POST['submit']) ) {
-      include('SimpleImage.php');
-      $image = new SimpleImage();
-      $image->load($_FILES['uploaded_image']['tmp_name']);
-$fn=$_FILES['uploaded_image']['name'];
-$h=$image->getHeight();
-if ($image->getHeight()>800)
-{
-$image->resizeToHeight(800);
-echo $fn.": ".$h."=>".$image->getHeight();
+function placing($chars, $from=0, $to = 0){
+    $cnt = count($chars);
+    if(($from == 0) && ($to == 0)){
+        $from = 1;
+        $to = $cnt;
+    }
+    if($from == 0) $from = 1;
+    if($to == 0) $to = $from;
+    if($from < $to){
+        $plac = [];
+        for($num = $from; $num <= $to; $num++){
+            $plac = array_merge($plac, placing(["A","B","C","D"], $num));
+        }
+    }else{
+		print($from." ".$to);
+        $plac = [""];   
+        for($n = 0; $n < $from; $n++){
+            $plac_old = $plac;
+            $plac = [];
+            foreach($plac_old as $item){
+                $last = strlen($item);
+                for($m = $n; $m < $cnt; $m++){
+                    if($chars[$m] > $item[$last]){
+                        $plac[] = $item.$chars[$m];
+                    }
+                }
+            }
+        }
+    }
+    return $plac;
 }
-$image->save($_FILES['uploaded_image']['name']);
-}
+
+$plac = placing(["A","B","C","D"]);
+var_dump($plac);
+$plac = placing(["A","B","C","D"],2);
+var_dump($plac);
+$plac = placing(["A","B","C","D"],2,3);
+var_dump($plac);
 ?>
-   <form action="2.php" method="post" enctype="multipart/form-data">
-      <input type="file" name="uploaded_image" />
-      <input type="submit" name="submit" value="Upload" />
-   </form>
-<img src="<?echo $fn;?>">
-<br>
-<?echo $fn;?>

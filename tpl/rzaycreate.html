@@ -1,0 +1,67 @@
+<h3>Заявка на возврат</h3>
+<form target="_self" method="POST" name=form2 id=form2 enctype="multipart/form-data">
+{literal}
+<script>
+function ListLoad(val){$("#new_tp").load('?action=rzaycreate&gettplist=1&id_net='+val+'&nohead=1');}
+function AddFile(){$("<div><a href=\"javascript:void(0);\" onclick=\"$(this).parent().remove();\">[X]</a><input type=file name=\"new_files[]\"></div>").insertBefore($("#fn"));}
+</script>
+{/literal}
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+	<tr>
+		<td>Месяц отнесения</td>
+		<td>
+			<select name="new[dt]" id=dt>
+			{foreach key=key item=item from=$month_list}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+			</select>
+			<script>$("#dt option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+		</td>
+	</tr>
+	<tr>
+		<td>Плательщик</td>
+		<td>
+			<select name="new[payer]">
+				<option></option>
+				{foreach key=key item=item from=$payer}
+					<option value={$item.id}>{$item.name}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Сеть</td>
+		<td>
+			<select name="new[id_net]" onChange="ListLoad(this.value)">
+				<option></option>
+				{foreach key=key item=item from=$nets}
+					<option value={$item.id_net}>{$item.net_name}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>ТЗ</td>
+		<td><select name="new[tp]" id="new_tp"></select></td>
+	</tr>
+	<tr>
+		<td>Плановая сумма затрат, тыс.грн.</td>
+		<td><input size="10" name="new[summa]" class="number"></td>
+	</tr>
+	<tr>
+		<td>Комментарий</td>
+		<td><textarea name="new[comm]"></textarea></td>
+	</tr>
+	<tr>
+		<td>Сканкопии накладных</td>
+		<td>
+			<a id="add_file" href="javascript:void(0)" onclick="javascript:AddFile();">добавить файл</a>
+			<div id=fn></div>
+		</td>
+	</tr>
+</tbody>
+</table>
+<input value="Отправить на согласование" name="add" id=add type="submit">
+</form>
+

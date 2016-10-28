@@ -44,20 +44,14 @@
          a1509vs_tp_select tp,
          a1509vs_flag f
    WHERE     d.tab_num = st.tab_num
-         AND st.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND st.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   st.tn IN (SELECT slave
                              FROM full
                             WHERE master = DECODE (:tn, -1, master, :tn))
@@ -76,7 +70,6 @@
                         3, DECODE (an.bonus_dt1, NULL, 0, 1))
          AND d.tp_kod = f.tp_kod(+) and f.tp_kod is null
          AND TO_NUMBER (TO_CHAR (d.data, 'mm')) = :month
-         AND tp.m = :month
 ORDER BY parent_fio,
          ts_fio,
          fio_eta,

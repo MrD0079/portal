@@ -33,6 +33,13 @@ $p=array(
 	":flt_sum"=>$_REQUEST["flt_sum"],
 	":flt_pin"=>$_REQUEST["flt_pin"],
 );
+if (isset($_REQUEST["copy_pins"]))
+{
+	audit("скопировал pin'ы","mr_zp");
+	$sql = rtrim(file_get_contents('sql/mr_zp_copy_pins.sql'));
+	$sql=stritr($sql,$p);
+	$db->query($sql);
+}
 $sql = rtrim(file_get_contents('sql/mr_zp.sql'));
 $sql=stritr($sql,$p);
 $d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

@@ -3,7 +3,9 @@
 audit("открыл отчет М-Сервис дни визитов","ms_agenda");
 
 InitRequestVar("period",1);
-InitRequestVar("dates_list2");
+InitRequestVar("per_day",$now);
+InitRequestVar("per_week",$now_week);
+InitRequestVar("per_month",$now1);
 InitRequestVar("select_route_numb",0);
 InitRequestVar("select_route_fio_otv",0);
 InitRequestVar("svms_list",0);
@@ -11,6 +13,12 @@ InitRequestVar("oblast","0");
 InitRequestVar("nets",0);
 InitRequestVar("agent",0);
 InitRequestVar("city","0");
+
+switch ($_REQUEST["period"]) {
+	case 1: $period = $_REQUEST["per_day"]; break;
+	case 2: $period = $_REQUEST["per_week"]; break;
+	case 3: $period = $_REQUEST["per_month"]; break;
+}
 
 //ses_req();
 
@@ -27,7 +35,7 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('oblast', $data);
 
 $sql=rtrim(file_get_contents('sql/ms_agenda_nets.sql'));
-$p = array(":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p = array(":ed"=>"'".$period."'");
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('nets', $data);
@@ -43,7 +51,7 @@ $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_head_agents', $res);
 
 $sql = rtrim(file_get_contents('sql/merch_report_4admin_by_spec_new_city.sql'));
-$p=array(":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p=array(":ed"=>"'".$period."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('city', $res);
@@ -64,7 +72,7 @@ $p=array(
 //":select_route_numb"=>$_REQUEST["select_route_numb"],
 //":select_route_fio_otv"=>$_REQUEST["select_route_fio_otv"],
 ":svms_list"=>$_REQUEST["svms_list"],
-":ed"=>"'".$_REQUEST["dates_list2"]."'",
+":ed"=>"'".$period."'",
 ":city"=>"'".$_REQUEST["city"]."'",
 ":oblast"=>"'".$_REQUEST["oblast"]."'"
 );

@@ -96,11 +96,11 @@ SELECT SUM (m.cnt) cnt,
                        AND ff_id = (SELECT id
                                       FROM bud_ru_ff
                                      WHERE dpt_id = :dpt_id AND admin_id = 7))
-                  bud_z_tz_address
+                  bud_z_tz_address,i.urlic,ur.name ur_name
           FROM invoice_detail id,
                invoice i,
                bud_fil p,
-               nets_plan_month ms
+               nets_plan_month ms, urlic ur
          WHERE     i.id = id.invoice
                AND :plan_type IN (5, 7)
                AND i.oplachen = 1
@@ -108,7 +108,10 @@ SELECT SUM (m.cnt) cnt,
                AND DECODE ( :payer, 0, i.payer, :payer) = i.payer
                AND ms.id = id.statya
                AND (   ( :plan_type = 7 AND i.act_prov_month IS NOT NULL)
-                    OR :plan_type <> 7)) inv
+                    OR :plan_type <> 7)
+					and i.urlic=ur.id(+)
+					
+					) inv
  WHERE     (   :distr_compensation = 1
             OR :distr_compensation = 2 AND m.distr_compensation = 1
             OR :distr_compensation = 3 AND m.distr_compensation = 0)

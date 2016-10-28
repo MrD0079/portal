@@ -1,6 +1,6 @@
 /* Formatted on 09/04/2015 12:57:29 (QP5 v5.227.12220.39724) */
 BEGIN
-   INSERT INTO persik.p_prob_inst (prob_tn,
+   INSERT INTO p_prob_inst (prob_tn,
                                    inst_tn,
                                    data_start,
                                    data_end,

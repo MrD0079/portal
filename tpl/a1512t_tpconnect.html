@@ -1,0 +1,52 @@
+<h1>"ТОП 100" - Клиенты - ТП</h1>
+<form target="_self" method="POST" name=formT>
+<p>
+Клиент
+<select name=add[h_client]>
+	<option></option>
+	{foreach key=key item=item from=$client}
+	<option value={$item.h_client}>{$item.client}</option>
+	{/foreach}
+</select>
+</p>
+<p>Код ТП<input name=add[tp_kod]></p>
+<p><input type=submit name=new value="Добавить"></p>
+<p>
+По руководителю
+<select name=exp_list_without_ts id=exp_list_without_ts onchange="javascript:formT.submit()">
+	<option value=0></option>
+	{foreach key=key item=item from=$exp_list_without_ts}
+	<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+	{/foreach}
+</select>
+</p>
+<script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+<p>
+По клиенту
+<select id=filter_h_client name=filter_h_client onchange="javascript:formT.submit()">
+	<option></option>
+	{foreach key=key item=item from=$client}
+	<option value={$item.h_client}>{$item.client}</option>
+	{/foreach}
+</select>
+</p>
+<script>$("#filter_h_client option[value='{$smarty.request.filter_h_client}']").prop('selected', true);</script>
+<input type=hidden name=generate value=1></p>
+<p><input type=submit name=generate value="Построить отчет"></p>
+{if $smarty.request.generate}
+<table border=1 cellpadding=3 cellspacing=0>
+	<tr style="font-weight:bold;text-align:center">
+		<td><a href="javascript:void(0)" onclick="javascript:formT.submit()">[X]</a></td>
+		<td>Клиент</td>
+		<td>Код ТП</td>
+	</tr>
+	{foreach key=k item=i from=$emp_exp name=clients}
+	<tr>
+		<td><input type=checkbox name=del[] value="{$i.h_client},{$i.tp_kod}"></td>
+		<td>{$i.client}</td>
+		<td>{$i.tp_kod}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}
+</form>

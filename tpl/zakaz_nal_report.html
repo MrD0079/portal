@@ -3,24 +3,15 @@
 <form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
 	<table>
 		<tr>
-			<td>Сеть</td>
 			<td>Год</td>
 			<td>Месяц</td>
 			<td>НМКК</td>
 			<td>ТМ КК</td>
+			<td>Сеть</td>
 		</tr>
 		<tr>
 			<td>
-				<select name="nets" id="nets">
-					<option value=0></option>
-					{foreach key=key item=item from=$nets}
-							<option value={$item.id_net}>{$item.net_name}</option>
-					{/foreach}
-				</select>
-				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
-			</td>
-			<td>
-				<select name="calendar_years" id="calendar_years">
+				<select name="calendar_years" id="calendar_years" required>
 					<option value=0></option>
 					{foreach key=key item=item from=$calendar_years}
 						<option value={$item.y}>{$item.y}</option>
@@ -29,8 +20,8 @@
 				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
 			</td>
 			<td style="vertical-align: top;">
-				<select name="plan_month" id="plan_month">
-					<option value=0></option>
+				<select name="plan_month" id="plan_month" required>
+					<option></option>
 					{foreach key=key item=item from=$calendar_months}
 					<option value={$item.my}>{$item.mt}</option>
 					{/foreach}
@@ -55,92 +46,37 @@
 				</select>
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 			</td>
+			<td>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+							<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
 		</tr>
 	</table>
 	<input value="Построить отчет" name="generate" type="submit">
 </form>
-<hr><br>
 {/if}
 
 
-{if $smarty.request.calendar_years>0 and $smarty.request.generate}
+{if $smarty.request.generate}
 
 
 
 {if not $smarty.request.print}
 <a href="?action=zakaz_nal_report&generate=1&print=1&excel=1&filename=Заказ промобюджета">Экспорт в Excel</a>
+<!--
+<a target=_blank href="?action=zakaz_nal_report&generate=1&print=1&table=4send">4send</a>
+-->
 {/if}
 
-
-
-
-
-<table border=1 cellpadding=0 cellspacing=0>
-	<tr>
-		<td width=100px>НМКК</td>
-		<td>
-			<table border=1 cellpadding=0 cellspacing=0>
-				<tr>
-					<td width=100px>ТМ КК</td>
-					<td width=300px>
-						<table border=1 cellpadding=0 cellspacing=0>
-							<tr>
-								<td width=100px>Сеть</td>
-								<td width=100px>Форма 2, тыс.{$valuta}.       </td>
-								<td width=100px>Оплата товаром, тыс.{$valuta}.</td>
-							</tr>
-						</table>
-					</td>
-					<td width=100px>Итого по ТМ КК Форма 2, тыс.{$valuta}.       </td>
-					<td width=100px>Итого по ТМ КК Оплата товаром, тыс.{$valuta}.</td>
-				</tr>
-			</table>
-		</td>
-		<td width=100px>Итого по НМКК Форма 2, тыс.{$valuta}.       </td>
-		<td width=100px>Итого по НМКК Оплата товаром, тыс.{$valuta}.</td>
-	</tr>
-	{foreach key=key item=item from=$data_table name=data_table}
-	<tr>
-		<td width=100px>{$key}</td>
-		<td>
-			<table border=1 cellpadding=0 cellspacing=0>
-				{foreach key=key1 item=item1 from=$item.data name=item1}
-				<tr>
-					<td width=100px>{$key1}</td>
-					<td width=300px>
-						<table border=1 cellpadding=0 cellspacing=0>
-							{foreach key=key2 item=item2 from=$item1.data name=item2}
-							<tr>
-								<td width=100px>{$key2}</td>
-								<td width=100px style="text-align:right">{$item2.1.total|default:0|num:3}</td>
-								<td width=100px style="text-align:right">{$item2.3.total|default:0|num:3}</td>
-							</tr>
-							{/foreach}
-						</table>
-					</td>
-					<td width=100px style="text-align:right">{$item1.total.1|default:0|num:3}</td>
-					<td width=100px style="text-align:right">{$item1.total.3|default:0|num:3}</td>
-				</tr>
-				{/foreach}
-			</table>
-		</td>
-		<td width=100px style="text-align:right">{$item.total.1|default:0|num:3}</td>
-		<td width=100px style="text-align:right">{$item.total.3|default:0|num:3}</td>
-	</tr>
-	{/foreach}
-</table>
-<br>
-<table border=1 cellpadding=0 cellspacing=0>
-	<tr>
-		<td>Итого по НМКК Форма 2, тыс.{$valuta}.       </td>
-		<td>Итого по НМКК Оплата товаром, тыс.{$valuta}.</td>
-	</tr>
-	<tr>
-		<td style="text-align:right">{$d1.total.1|default:0|num:3}</td>
-		<td style="text-align:right">{$d1.total.3|default:0|num:3}</td>
-	</tr>
-</table>
-
-
+{if $smarty.request.table eq '4send'}
+{include file="zakaz_nal_report_table4send.html"}
+{else}
+{include file="zakaz_nal_report_table.html"}
+{/if}
 
 {/if}

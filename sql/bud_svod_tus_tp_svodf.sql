@@ -5,20 +5,14 @@
          u.fio fio_ts
     FROM sc_svodf d, user_list u
    WHERE     d.tn = u.tn
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)

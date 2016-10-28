@@ -8,6 +8,7 @@ InitRequestVar("ed",$_SESSION['month_list']);
 InitRequestVar("nets",0);
 InitRequestVar("tn_rmkk",0);
 InitRequestVar("tn_mkk",0);
+InitRequestVar("mgroups",1);
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -41,6 +42,7 @@ if (isset($_REQUEST["generate"]))
 		':tn_rmkk'=>$_REQUEST["tn_rmkk"],
 		':tn_mkk'=>$_REQUEST["tn_mkk"],
 		':tn'=>$tn,
+		':mgroups'=>$_REQUEST["mgroups"],
 	);
 	$sql=stritr($sql,$params);
 	$d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

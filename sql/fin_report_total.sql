@@ -1,4 +1,4 @@
-/* Formatted on 08/12/2014 12:40:21 (QP5 v5.227.12220.39724) */
+/* Formatted on 23/11/2015 5:36:47 PM (QP5 v5.252.13127.32867) */
   SELECT SUM (DECODE (y.no_budget, 1, 1, 0)) no_budget,
          SUM (NVL (y.sales_prev, 0)) prev_year_fakt,
          SUM (NVL (y.sales, 0)) year_plan,
@@ -13,6 +13,11 @@
                     AND m.plan_type = :plan_type
                     AND m.id_net = n.id_net))
             budget,
+         SUM (
+            (SELECT SUM (total)
+               FROM nets_plan_month m
+              WHERE m.YEAR = :y - 1 AND m.plan_type = 4 AND m.id_net = n.id_net))
+            prev_year_fou,
          SUM (
             (SELECT SUM (total)
                FROM nets_plan_month m
@@ -74,7 +79,10 @@
                              67, :tn,
                              (SELECT pos_id
                                 FROM user_list
-                               WHERE tn = :tn AND is_super = 1), :tn))
-         AND DECODE (:tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
-         AND DECODE (:tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
+                               WHERE tn = :tn AND is_super = 1), :tn,
+                             (SELECT pos_id
+                                FROM user_list
+                               WHERE tn = :tn AND is_admin = 1), :tn))
+         AND DECODE ( :tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
+         AND DECODE ( :tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
 ORDER BY n.net_name

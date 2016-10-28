@@ -1,4 +1,4 @@
-/* Formatted on 19/11/2014 17:57:40 (QP5 v5.227.12220.39724) */
+/* Formatted on 12/29/2015 10:53:00  (QP5 v5.252.13127.32867) */
   SELECT *
     FROM (SELECT *
             FROM ol_gr
@@ -21,4 +21,4 @@
                           1111 gr,
                           :dpt_id dpt_id
             FROM DUAL)
-ORDER BY gr
+ORDER BY gr NULLS FIRST

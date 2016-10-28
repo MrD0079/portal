@@ -91,6 +91,6 @@
                  AND z.kat = kat.id(+)
                  AND z.tn = :tn
                  AND z.report_data IS NOT NULL
-                 AND z.report_done IS NULL) z
+                 AND nvl(z.report_done,0) =0) z
    WHERE z_current_accepted_id = 1 AND srok_ok IS NULL
 ORDER BY created_dt, id

@@ -1,4 +1,4 @@
-/* Formatted on 18/05/2015 15:04:28 (QP5 v5.227.12220.39724) */
+/* Formatted on 11/05/2016 12:16:56 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) c,
        COUNT (DISTINCT tp_kod) tpc,
        SUM (summa) summa,
@@ -25,9 +25,10 @@ SELECT COUNT (*) c,
                  m.tp_type,
                  m.tp_ur,
                  m.tp_addr,
+                 m.tp_type,
                  zp.fil,
                  m.summa,
-                 m.skidka * m.summa / 100 skidka_val,
+                 m.summskidka skidka_val,
                  NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0) total,
                  act.bonus act_bonus,
                  act_local.bonus_sum act_local_bonus,
@@ -35,13 +36,19 @@ SELECT COUNT (*) c,
                    NVL (act.bonus, 0)
                  + NVL (act_local.bonus_sum, 0)
                  + NVL (zay.zat, 0)
+                 + NVL (sv.bonus_fakt, 0)
+                 + NVL (sv.fixed_fakt, 0)
+                 - NVL (m.summskidka, 0)
                     zat_total,
                  DECODE (
                     NVL (m.summa, 0),
                     0, 0,
                       (  NVL (act.bonus, 0)
                        + NVL (act_local.bonus_sum, 0)
-                       + NVL (zay.zat, 0))
+                       + NVL (zay.zat, 0)
+                       + NVL (sv.bonus_fakt, 0)
+                       + NVL (sv.fixed_fakt, 0)
+                       - NVL (m.summskidka, 0))
                     / m.summa
                     * 100)
                     zat_perc
@@ -50,8 +57,8 @@ SELECT COUNT (*) c,
                  departments d,
                  (SELECT DISTINCT TRUNC (data, 'mm') data, mt
                     FROM calendar
-                   WHERE data BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                  AND TO_DATE (:ed, 'dd.mm.yyyy')) c,
+                   WHERE data BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                  AND TO_DATE ( :ed, 'dd.mm.yyyy')) c,
                  user_list u1,
                  user_list pu,
                  parents p,
@@ -61,7 +68,7 @@ SELECT COUNT (*) c,
                      WHERE     f.act = st.act
                            AND st.dpt_id = :dpt_id
                            AND TO_CHAR (f.act_month, 'mm') = st.m
-                           AND DECODE (:st, 0, 0, 1) = 0
+                           AND DECODE ( :st, 0, 0, 1) = 0
                   GROUP BY f.act_month, st.tp_kod) act,
                  (  SELECT TRUNC (z.dt_start, 'mm') period,
                            tp.tp_kod,
@@ -81,8 +88,7 @@ SELECT COUNT (*) c,
                                                     (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
                                                       WHERE     z_id = z.id
-                                                            AND rep_accepted =
-                                                                   2),
+                                                            AND rep_accepted = 2),
                                                     0),
                                                  0, (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
@@ -92,30 +98,29 @@ SELECT COUNT (*) c,
                                                  (SELECT MAX (accept_order)
                                                     FROM bud_ru_zay_accept
                                                    WHERE     z_id = z.id
-                                                         AND rep_accepted =
-                                                                2))) =
+                                                         AND rep_accepted = 2))) =
                                   1
-                           AND DECODE (:st, 0, z.st, :st) = z.st
+                           AND DECODE ( :st, 0, z.st, :st) = z.st
                   GROUP BY TRUNC (z.dt_start, 'mm'), tp.tp_kod) act_local,
                  (  SELECT period, SUM (z_fakt) zat, tp_kod
                       FROM (SELECT TRUNC (z1.dt_start, 'mm') period,
                                    (SELECT rep_val_number * 1000
                                       FROM bud_ru_zay_ff
-                                     WHERE     ff_id IN
-                                                  (SELECT id
-                                                     FROM bud_ru_ff
-                                                    WHERE     dpt_id = :dpt_id
-                                                          AND rep_var_name IN
-                                                                 ('rv3', 'rv4'))
+                                     WHERE     ff_id IN (SELECT id
+                                                           FROM bud_ru_ff
+                                                          WHERE     dpt_id =
+                                                                       :dpt_id
+                                                                AND rep_var_name IN ('rv3',
+                                                                                     'rv4'))
                                            AND z_id = z1.id)
                                       z_fakt,
                                    (SELECT val_list
                                       FROM bud_ru_zay_ff
-                                     WHERE     ff_id IN
-                                                  (SELECT id
-                                                     FROM bud_ru_ff
-                                                    WHERE     dpt_id = :dpt_id
-                                                          AND admin_id = 4)
+                                     WHERE     ff_id IN (SELECT id
+                                                           FROM bud_ru_ff
+                                                          WHERE     dpt_id =
+                                                                       :dpt_id
+                                                                AND admin_id = 4)
                                            AND z_id = z1.id)
                                       tp_kod,
                                    DECODE (
@@ -135,8 +140,7 @@ SELECT COUNT (*) c,
                                                                    accept_order)
                                                            FROM bud_ru_zay_accept
                                                           WHERE     z_id = z1.id
-                                                                AND accepted =
-                                                                       2),
+                                                                AND accepted = 2),
                                                         0),
                                                      0, (SELECT MAX (
                                                                    accept_order)
@@ -145,19 +149,18 @@ SELECT COUNT (*) c,
                                                      (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z1.id
-                                                             AND accepted =
-                                                                    2)))
+                                                             AND accepted = 2)))
                                       current_accepted_id
                               FROM bud_ru_zay z1
                              WHERE     z1.kat NOT IN (SELECT id
                                                         FROM BUD_RU_st_ras
                                                        WHERE la = 1)
                                    AND z1.valid_no = 0
-                                   AND DECODE (:st, 0, z1.st, :st) = z1.st)
+                                   AND DECODE ( :st, 0, z1.st, :st) = z1.st)
                      WHERE current_accepted_id = 1 AND deleted = 0
                   GROUP BY period, tp_kod) zay
-           WHERE     zp.dt BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                               AND TO_DATE (:ed, 'dd.mm.yyyy')
+           WHERE     zp.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                               AND TO_DATE ( :ed, 'dd.mm.yyyy')
                  AND zp.dpt_id = :dpt_id
                  AND zp.fil IS NOT NULL
                  AND zp.h_eta = m.h_eta
@@ -175,20 +178,14 @@ SELECT COUNT (*) c,
                  AND m.tp_kod = act_local.tp_kod(+)
                  AND m.dt = zay.period(+)
                  AND m.tp_kod = zay.tp_kod(+)
-                 AND u1.tn IN
-                        (SELECT slave
-                           FROM full
-                          WHERE master =
-                                   DECODE (:exp_list_without_ts,
-                                           0, master,
-                                           :exp_list_without_ts))
-                 AND u1.tn IN
-                        (SELECT slave
-                           FROM full
-                          WHERE master =
-                                   DECODE (:exp_list_only_ts,
-                                           0, master,
-                                           :exp_list_only_ts))
+                 AND (   :exp_list_without_ts = 0
+                      OR u1.tn IN (SELECT slave
+                                     FROM full
+                                    WHERE master = :exp_list_without_ts))
+                 AND (   :exp_list_only_ts = 0
+                      OR u1.tn IN (SELECT slave
+                                     FROM full
+                                    WHERE master = :exp_list_only_ts))
                  AND (   u1.tn IN (SELECT slave
                                      FROM full
                                     WHERE master = :tn)
@@ -198,11 +195,11 @@ SELECT COUNT (*) c,
                       OR (SELECT NVL (is_traid_kk, 0)
                             FROM user_list
                            WHERE tn = :tn) = 1)
-                 AND DECODE (:eta_list, '', m.h_eta, :eta_list) = m.h_eta
-                 AND DECODE (:tp_kod, 0, m.tp_kod, :tp_kod) = m.tp_kod
+                 AND (:eta_list is null OR :eta_list = m.h_eta)
+                 AND DECODE ( :tp_kod, 0, m.tp_kod, :tp_kod) = m.tp_kod
                  AND d.manufak = m.country
                  AND d.dpt_id = :dpt_id
-        ORDER BY DECODE (:sort,  2, zat_total,  3, zat_perc,  NULL) DESC,
+        ORDER BY DECODE ( :sort,  2, zat_total,  3, zat_perc,  NULL) DESC,
                  pu.fio,
                  u1.fio,
                  m.eta,

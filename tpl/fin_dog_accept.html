@@ -65,32 +65,40 @@
 <table border=1 cellspacing=0 cellpadding=3>
 
 	<tr style="font-weight:bold;text-align:center">
-		<td colspan=7>Общая информация</td>
-		<td colspan={if not $smarty.request.print}7{else}6{/if} class="bg-l-blue">Финансовое планирование</td>
-		<td colspan={if not $smarty.request.print}7{else}6{/if} style="background-color: rgb(255, 255, 204);">Договорное планирование</td>
+		<td colspan=11>Общая информация</td>
+		<td colspan={if not $smarty.request.print}13{else}12{/if} class="bg-l-blue">Финансовое планирование</td>
+		<td colspan={if not $smarty.request.print}13{else}12{/if} style="background-color: rgb(255, 255, 204);">Договорное планирование</td>
 	</tr>
 
 	{foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
 
 
-	{if $fin_report_item.draw_head eq 1}
+	{if $smarty.foreach.fin_report.iteration%10 eq 1}
 	<tr style="font-weight:bold;text-align:center">
 		<td>№ п/п</td>
 		<td>ФИО НМКК</td>
 		<td>ФИО ТМКК</td>
 		<td>Факт. назв.сети</td>
 		<td>Сеть работает без бюджета</td>
-		<!--<td>Факт продаж пред. года, тыс. {$valuta}</td>-->
-		<td>Продажи без учета НГ, тыс.{$valuta}</td>
-		<td>% прироста продаж</td>
-		<!--<td>Бюджет пред. года, тыс.{$valuta}.</td>-->
+		<td>Продажи без учета НГ и кофе, тыс.{$valuta}</td>
+		<td>% роста продаж без учета НГ и кофе</td>
+		<td>Продажи НГ, тыс.{$valuta}</td>
+		<td>% роста продаж НГ</td>
+		<td>Продажи кофе, тыс.{$valuta}</td>
+		<td>% роста продаж кофе</td>
 
 		{if not $smarty.request.print}
 		<td style="background-color: rgb(204, 255, 255);">Переход</td>
 		{/if}
-		<td style="background-color: rgb(204, 255, 255);">Бюджет, тыс.{$valuta}.</td>
-		<td style="background-color: rgb(204, 255, 255);">% прироста бюджета</td>
-		<td style="background-color: rgb(204, 255, 255);">% затрат</td>
+		<td style="background-color: rgb(204, 255, 255);">Бюджет без учета НГ и кофе, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(204, 255, 255);">% роста бюджета без учета НГ и кофе</td>
+		<td style="background-color: rgb(204, 255, 255);">% затрат без учета НГ и кофе</td>
+		<td style="background-color: rgb(204, 255, 255);">Бюджет НГ, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(204, 255, 255);">% роста бюджета НГ</td>
+		<td style="background-color: rgb(204, 255, 255);">% затрат НГ</td>
+		<td style="background-color: rgb(204, 255, 255);">Бюджет кофе, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(204, 255, 255);">% роста бюджета кофе</td>
+		<td style="background-color: rgb(204, 255, 255);">% затрат кофе</td>
 		<td style="background-color: rgb(204, 255, 255);">НМКК</td>
 		<td style="background-color: rgb(204, 255, 255);">ФМ</td>
 		<td style="background-color: rgb(204, 255, 255);">ДП / ИП</td>
@@ -99,10 +107,16 @@
 		<td style="background-color: rgb(255, 255, 204);">Переход</td>
 		{/if}
 		<td style="background-color: rgb(255, 255, 204);">Договорная кампания завершена</td>
-		<td style="background-color: rgb(255, 255, 204);">Бюджет, тыс.{$valuta}.</td>
 		<td style="background-color: rgb(255, 255, 204);">Бюджет СДУ, тыс.{$valuta}.</td>
-		<td style="background-color: rgb(255, 255, 204);">% прироста бюджета</td>
-		<td style="background-color: rgb(255, 255, 204);">% затрат</td>
+		<td style="background-color: rgb(255, 255, 204);">Бюджет без учета НГ и кофе, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(255, 255, 204);">% роста бюджета без учета НГ и кофе</td>
+		<td style="background-color: rgb(255, 255, 204);">% затрат без учета НГ и кофе</td>
+		<td style="background-color: rgb(255, 255, 204);">Бюджет НГ, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(255, 255, 204);">% роста бюджета НГ</td>
+		<td style="background-color: rgb(255, 255, 204);">% затрат НГ</td>
+		<td style="background-color: rgb(255, 255, 204);">Бюджет кофе, тыс.{$valuta}.</td>
+		<td style="background-color: rgb(255, 255, 204);">% роста бюджета кофе</td>
+		<td style="background-color: rgb(255, 255, 204);">% затрат кофе</td>
 		<td style="background-color: rgb(255, 255, 204);">Проверено ФМ</td>
  
 
@@ -115,21 +129,28 @@
 		<td>{$fin_report_item.mkk}</td>
 		<td>{$fin_report_item.net_name}</td>
 		<td>{$fin_report_item.no_budget}</td>
-		<!--<td style="text-align:right">{$fin_report_item.prev_year_fakt|default:0|num:3}</td>-->
 		<td style="text-align:right">{$fin_report_item.year_plan|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item.perc_rost|default:0|num:2}</td>
-		<!--<td style="text-align:right">{$fin_report_item.prev_year_budget|default:0|num:3}</td>-->
+		<td style="text-align:right">{$fin_report_item.year_plan_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.perc_rost_ng|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item.year_plan_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item.perc_rost_coffee|default:0|num:2}</td>
 		{if not $smarty.request.print}
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if}/><a target=_blank href="?action=fin_plan&plan_type=1&nets={$fin_report_item.id_net}&calendar_years={$smarty.request.calendar_years}">Переход</a></td>
 		{/if}
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget|default:0|num:3}</td>
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget_rost|default:0|num:2}</td>
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr|default:0|num:2}</td>
-
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget_ng|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget_rost_ng|default:0|num:2}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr_ng|default:0|num:2}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget_coffee|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.budget_rost_coffee|default:0|num:2}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr_coffee|default:0|num:2}</td>
 
 		<td {if $fin_report_item.ok_rmkk_tmkk}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:center;">
 			{if not $smarty.request.print}
-			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_rmkk_tmkk'.val(this.checked?1:0)" 
+			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_rmkk_tmkk').val(this.checked?1:0)" 
 				{if $fin_report_item.ok_rmkk_tmkk}checked{/if}
 				{if not $is_rmkk}disabled{/if}
 			>
@@ -140,7 +161,7 @@
 		</td>
 		<td {if $fin_report_item.ok_fin_man}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:center;">
 			{if not $smarty.request.print}
-			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_fin_man'.val(this.checked?1:0)" 
+			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_fin_man').val(this.checked?1:0)" 
 				{if $fin_report_item.ok_fin_man}checked{/if}
 				{if not $is_fin_man}disabled{/if}
 			>
@@ -152,7 +173,7 @@
 
 		<td {if $fin_report_item.ok_dpu}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-l-blue"{/if} style="text-align:center;">
 			{if not $smarty.request.print}
-			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_dpu'.val(this.checked?1:0)" 
+			<input type=checkbox onclick="$('#ok_1_{$fin_report_item.id_net}_ok_dpu').val(this.checked?1:0)" 
 				{if $fin_report_item.ok_dpu}checked{/if}
 				{if not $is_dpu}disabled{/if}
 			>
@@ -166,14 +187,20 @@
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if}/><a target=_blank href="?action=fin_plan&plan_type=2&nets={$fin_report_item.id_net}&calendar_years={$smarty.request.calendar_years}">Переход</a></td>
 		{/if}
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/><nobr>{$fin_report_item.du_complete}</nobr></td>
-		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog|default:0|num:3}</td>
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_sdu|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog|default:0|num:3}</td>
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog_rost|default:0|num:3}</td>
 		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr_dog|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog_ng|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog_rost_ng|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr_dog_ng|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog_coffee|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.budget_dog_rost_coffee|default:0|num:3}</td>
+		<td {if $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:right"/>{$fin_report_item.perc_zatr_dog_coffee|default:0|num:3}</td>
 
 		<td {if $fin_report_item.ok_fin_man_dog}class="bg-green"{elseif $fin_report_item.no_budget eq 'да'}class="bg-yellow"{else}class="bg-broun"{/if} style="text-align:center;">
 			{if not $smarty.request.print}
-			<input type=checkbox onclick="$('#ok_2_{$fin_report_item.id_net}_ok_fin_man'.val(this.checked?1:0)" 
+			<input type=checkbox onclick="$('#ok_2_{$fin_report_item.id_net}_ok_fin_man').val(this.checked?1:0)" 
 				{if $fin_report_item.ok_fin_man_dog}checked{/if}
 				{if not $is_fin_man}disabled{/if}
 			>
@@ -190,16 +217,24 @@
 	<tr style="font-weight:bold">
 		<td colspan=4>Итого</td>
 		<td style="text-align:right">{$fin_report_item_total.no_budget}</td>
-		<!--<td style="text-align:right">{$fin_report_item_total.prev_year_fakt|default:0|num:3}</td>-->
 		<td style="text-align:right">{$fin_report_item_total.year_plan|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.perc_rost|default:0|num:2}</td>
-		<!--<td style="text-align:right">{$fin_report_item_total.prev_year_budget|default:0|num:3}</td>-->
+		<td style="text-align:right">{$fin_report_item_total.year_plan_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_rost_ng|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.year_plan_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_rost_coffee|default:0|num:2}</td>
 		{if not $smarty.request.print}
 		<td></td>
 		{/if}
 		<td style="text-align:right">{$fin_report_item_total.budget|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.budget_rost|default:0|num:2}</td>
 		<td style="text-align:right">{$fin_report_item_total.perc_zatr|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_rost_ng|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr_ng|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_rost_coffee|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr_coffee|default:0|num:2}</td>
 		<td style="text-align:right">{$fin_report_item_total.ok_rmkk_tmkk}</td>
 		<td style="text-align:right">{$fin_report_item_total.ok_fin_man}</td>
 		<td style="text-align:right">{$fin_report_item_total.ok_dpu}</td>
@@ -207,10 +242,16 @@
 		<td></td>
 		{/if}
 		<td style="text-align:right"><nobr>{$fin_report_item_total.du_complete}</nobr></td>
-		<td style="text-align:right">{$fin_report_item_total.budget_dog|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.budget_sdu|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.budget_dog_rost|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.perc_zatr_dog|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog_rost_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr_dog_ng|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.budget_dog_rost_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$fin_report_item_total.perc_zatr_dog_coffee|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.ok_fin_man_dog}</td>
 	</tr>
 	{/foreach}

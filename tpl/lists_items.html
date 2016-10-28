@@ -11,6 +11,7 @@
 		{foreach key=k item=i from=$lists}
 			<tr id=list_{$i.id}>
 				<td>
+					{$i.id}
 					<a href='javascript:void(0);' onClick="del_list({$i.id})">[x]</a>
 					<input id=d_{$i.id}_name size=50 value="{$i.name}" onChange="save_list({$i.id},'name',this.value);">
 					{if $smarty.request.id eq 0}

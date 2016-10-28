@@ -1,12 +1,12 @@
-/* Formatted on 08/12/2014 12:39:22 (QP5 v5.227.12220.39724) */
+/* Formatted on 23/11/2015 5:27:31 PM (QP5 v5.252.13127.32867) */
 SELECT ROWNUM,
        DECODE (ROUND (ROWNUM / 10 - 0.5) * 10 + 1 - ROWNUM, 0, 1, 0)
           draw_head,
        z.*
   FROM (  SELECT n.tn_rmkk,
                  n.tn_mkk,
-                 fn_getname ( n.tn_rmkk) rmkk,
-                 fn_getname ( n.tn_mkk) mkk,
+                 fn_getname (n.tn_rmkk) rmkk,
+                 fn_getname (n.tn_mkk) mkk,
                  n.net_name,
                  DECODE (y.no_budget, 1, 'да', '') no_budget,
                  NVL (y.sales_prev, 0) prev_year_fakt,
@@ -15,6 +15,12 @@ SELECT ROWNUM,
                          0, 0,
                          (y.sales / y.sales_prev - 1) * 100)
                     perc_rost,
+                 (SELECT NVL (SUM (total), 0)
+                    FROM nets_plan_month m
+                   WHERE     m.YEAR = :y - 1
+                         AND m.plan_type = 4
+                         AND m.id_net = n.id_net)
+                    prev_year_fou,
                  (SELECT NVL (SUM (total), 0)
                     FROM nets_plan_month m
                    WHERE     m.YEAR = :y
@@ -77,7 +83,10 @@ SELECT ROWNUM,
                                      67, :tn,
                                      (SELECT pos_id
                                         FROM user_list
-                                       WHERE tn = :tn AND is_super = 1), :tn))
-                 AND DECODE (:tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
-                 AND DECODE (:tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
+                                       WHERE tn = :tn AND is_super = 1), :tn,
+                                     (SELECT pos_id
+                                        FROM user_list
+                                       WHERE tn = :tn AND is_admin = 1), :tn))
+                 AND DECODE ( :tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
+                 AND DECODE ( :tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
         ORDER BY n.net_name) z

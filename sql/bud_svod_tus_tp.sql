@@ -1,4 +1,4 @@
-/* Formatted on 09/04/2015 17:44:05 (QP5 v5.227.12220.39724) */
+/* Formatted on 06/06/2016 14:16:44 (QP5 v5.252.13127.32867) */
   SELECT u.fio ts,
          s.h_eta,
          s.eta,
@@ -11,7 +11,7 @@
          t.discount,
          t.bonus,
          t.justification,
-         nvl(t.fixed,0) fixed,
+         NVL (t.fixed, 0) fixed,
          t.margin,
          (SELECT fn
             FROM sc_files
@@ -23,13 +23,13 @@
          s.summa,
          DECODE (sv.tp_kod, NULL, NULL, 1) selected,
          NVL (sv.summa_return, 0) summa_return,
-         NVL (sv.summa_return, 0) * t.bonus / 100 bonus_tp,
+         (s.summa) * t.bonus / 100 bonus_tp,
          NVL (sv.fixed_fakt, 0) fixed_fakt,
          NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0) total,
          DECODE (
-            NVL (s.summa, 0),
+            s.summa,
             0, 0,
-            (NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0)) / s.summa * 100)
+            (NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0)) / (s.summa) * 100)
             zat,
          (SELECT parent
             FROM parents
@@ -38,12 +38,11 @@
          sv.ok_db_tn,
          sv.ok_db_fio,
          TO_CHAR (sv.ok_db_lu, 'dd.mm.yyyy hh24:mi:ss') ok_db_lu,
-         s.skidka,
-         s.skidka * s.summa / 100 skidka_val,
+         s.skidka skidka,
+         -s.summskidka skidka_val,
          sv.bonus_fakt,
-         NVL (sv.fixed_fakt, 0)
-       + NVL (sv.summa_return, 0) * t.bonus / 100
-          maxtp,
+         NVL (sv.fixed_fakt, 0) + NVL (sv.summa_return, 0) * t.bonus / 100
+            maxtp,
          sv.cash,
          sv.comm,
            (NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0))
@@ -56,7 +55,7 @@
                     -   NVL (
                            (SELECT discount
                               FROM bud_fil_discount_body
-                             WHERE     dt = TO_DATE (:dt, 'dd.mm.yyyy')
+                             WHERE     dt = TO_DATE ( :dt, 'dd.mm.yyyy')
                                    AND distr = zp.fil),
                            0)
                       / 100)
@@ -70,49 +69,45 @@
                  m.tp_kod,
                  m.y,
                  m.m,
-                 m.summa,
+                 NVL (m.summa, 0) + NVL (m.coffee, 0) summa,
                  m.h_eta,
                  m.eta,
                  m.skidka,
+                 m.summskidka,
                  m.bedt_summ,
                  m.tp_type,
                  m.tp_ur,
-                 m.tp_addr
+                 m.tp_addr,
+                 m.coffee
             FROM a14mega m
-           WHERE m.dpt_id = :dpt_id AND TO_DATE (:dt, 'dd.mm.yyyy') = m.dt) s,
+           WHERE m.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt) s,
          user_list u,
          sc_tp t,
          sc_svod sv,
          (SELECT fil, h_eta
             FROM bud_svod_zp
-           WHERE     dt = TO_DATE (:dt, 'dd.mm.yyyy')
+           WHERE     dt = TO_DATE ( :dt, 'dd.mm.yyyy')
                  AND dpt_id = :dpt_id
                  AND fil IS NOT NULL) zp,
          (SELECT fil, ok_db_tn
             FROM bud_svod_taf
-           WHERE dt = TO_DATE (:dt, 'dd.mm.yyyy')) taf
+           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf
    WHERE     zp.fil = taf.fil(+)
          AND s.tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
          AND :dpt_id = t.dpt_id(+)
          AND s.tp_kod = t.tp_kod(+)
          AND s.tp_kod = sv.tp_kod(+)
-         AND sv.dt(+) = TO_DATE (:dt, 'dd.mm.yyyy')
+         AND sv.dt(+) = TO_DATE ( :dt, 'dd.mm.yyyy')
          AND :dpt_id = sv.dpt_id(+)
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+              OR u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+              OR u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)
@@ -122,12 +117,17 @@
               OR (SELECT NVL (is_traid_kk, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND DECODE (:eta_list, '', s.h_eta, :eta_list) = s.h_eta
-         AND (discount > 0 OR bonus > 0 OR fixed > 0 OR margin > 0)
-         AND DECODE (:ok_bonus,  1, 0,  2, sv.tp_kod) =
-                DECODE (:ok_bonus,  1, 0,  2, NVL (sv.tp_kod, 0))
-         AND DECODE (:cash, 1, 0, NVL (sv.cash, 0)) =
-                DECODE (:cash,  1, 0,  2, 1,  3, 0)
+         AND (:eta_list is null OR :eta_list = s.h_eta)
+         AND (   discount > 0
+              OR bonus > 0
+              OR fixed > 0
+              OR margin > 0
+              OR sv.bonus_fakt > 0
+              OR sv.fixed_fakt > 0)
+         AND DECODE ( :ok_bonus,  1, 0,  2, sv.tp_kod) =
+                DECODE ( :ok_bonus,  1, 0,  2, NVL (sv.tp_kod, 0))
+         AND DECODE ( :cash, 1, 0, NVL (sv.cash, 0)) =
+                DECODE ( :cash,  1, 0,  2, 1,  3, 0)
          AND DECODE (
                 :fakt_gt_plan,
                 1, 0,

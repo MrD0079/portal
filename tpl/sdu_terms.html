@@ -112,7 +112,7 @@
 
 	</tr>
 	<tr>
-		<td>Продажи без учета НГ, тыс.{$valuta}.</td>
+		<td>Продажи без учета НГ и кофе, тыс.{$valuta}.</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_cur_year|default:0|num:3}</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_cur_year|default:0|num:3}</td>
 		{foreach from=$sdu item=s_item key=s_key}
@@ -120,7 +120,7 @@
 		{/foreach}
 	</tr>
 	<tr style="color:grey">
-		<td>Продажи предыдущего года без учета НГ, тыс.{$valuta}.</td>
+		<td>Продажи предыдущего года без учета НГ и кофе, тыс.{$valuta}.</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_prev_year|default:0|num:3}</td>
 		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_prev_year|default:0|num:3}</td>
 		{foreach from=$sdu item=s_item key=s_key}
@@ -141,6 +141,22 @@
 		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_prev_year_ng|default:0|num:3}</td>
 		{foreach from=$sdu item=s_item key=s_key}
 		<td style="text-align:right">{$sdu_budjet[$s_item.ver].plan_prev_year_ng|default:0|num:3}</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Продажи кофе, тыс.{$valuta}.</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_cur_year_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_cur_year_coffee|default:0|num:3}</td>
+		{foreach from=$sdu item=s_item key=s_key}
+		<td style="text-align:right">{$sdu_budjet[$s_item.ver].plan_cur_year_coffee|default:0|num:3}</td>
+		{/foreach}
+	</tr>
+	<tr style="color:grey">
+		<td>Продажи предыдущего года кофе, тыс.{$valuta}.</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver2.plan_prev_year_coffee|default:0|num:3}</td>
+		<td style="text-align:right">{$sdu_budjet_last_ver1.plan_prev_year_coffee|default:0|num:3}</td>
+		{foreach from=$sdu item=s_item key=s_key}
+		<td style="text-align:right">{$sdu_budjet[$s_item.ver].plan_prev_year_coffee|default:0|num:3}</td>
 		{/foreach}
 	</tr>
 	<tr>

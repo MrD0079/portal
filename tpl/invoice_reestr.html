@@ -17,7 +17,7 @@
 
 <hr>
 
-<form target="_self" method="POST" name=form3 id=form3>
+<form target="_self" method="POST" name=form3 id=form3 enctype="multipart/form-data">
 <input type=hidden name=nets value={$smarty.request.nets}>
 <input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
 <input type=hidden name=calendar_months value={$smarty.request.calendar_months}>
@@ -31,13 +31,19 @@
 
 <h3>Реестр счетов</h3>
 <p><a href="?action=invoice_reestr&generate&print=1&excel=1&filename=Ресстр счетов">Экспорт в Excel</a></p>
-<p><input name="save" value="Сохранить" type="submit"></p>
+<p>
+<input name="save" value="Сохранить" type="submit">
+{if $is_fin_man}<input name="send_invoices" value="Отправить счета плательщикам" type="submit">{/if}
+</p>
 
 {/if}
 
 {include file="invoice_reestr_table.html"}
 
 {if not $smarty.request.print}
-<p><input name="save" value="Сохранить" type="submit"></p>
+<p>
+<input name="save" value="Сохранить" type="submit">
+{if $is_fin_man}<input name="send_invoices" value="Отправить счета плательщикам" type="submit">{/if}
+</p>
 </form>
 {/if}

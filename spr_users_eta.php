@@ -66,15 +66,18 @@ else
 	$sql=stritr($sql,$params);
 	$exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('exp_list_without_ts', $exp_list_without_ts);
-	$sql = rtrim(file_get_contents('sql/spr_users_eta.sql'));
-	$sql=stritr($sql,$params);
-	$r1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$sql = rtrim(file_get_contents('sql/spr_users_eta_total.sql'));
-	$sql=stritr($sql,$params);
-	$r2 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	foreach ($r2 as $k=>$v){$d[$v["tn"]]["head"]=$v;}
-	foreach ($r1 as $k=>$v){$d[$v["tn"]]["data"][$v["login"]]=$v;}
-	isset($d) ? $smarty->assign('d', $d) : null;
+	if (isset($_REQUEST["show"]))
+	{
+		$sql = rtrim(file_get_contents('sql/spr_users_eta.sql'));
+		$sql=stritr($sql,$params);
+		$r1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+		$sql = rtrim(file_get_contents('sql/spr_users_eta_total.sql'));
+		$sql=stritr($sql,$params);
+		$r2 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+		foreach ($r2 as $k=>$v){$d[$v["tn"]]["head"]=$v;}
+		foreach ($r1 as $k=>$v){$d[$v["tn"]]["data"][$v["login"]]=$v;}
+		isset($d) ? $smarty->assign('d', $d) : null;
+	}
 	$smarty->display('spr_users_eta.html');
 }
 ?>

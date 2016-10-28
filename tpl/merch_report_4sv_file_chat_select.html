@@ -104,10 +104,11 @@
 	<tr>
 		<td style="text-align:right">Залы</td>
 		<td>
-			<!--<input checked="checked" name="flt_chat" id="flt_chat" value="0" type="radio">все-->
-			<input checked="checked" name="flt_chat" id="flt_chat" value="1" type="radio">закрытые задачи
-			<input name="flt_chat" id="flt_chat" value="2" type="radio">последний МС
-			<input name="flt_chat" id="flt_chat" value="3" type="radio">последний заказчик
+			<input checked="checked" name="flt_chat" id="flt_chat" value="0" type="radio">все задачи
+			<input name="flt_chat" id="flt_chat" value="1" type="radio">закрытые задачи
+			<input name="flt_chat" id="flt_chat" value="2" type="radio">не закрытые задачи
+			<input name="flt_chat" id="flt_chat" value="3" type="radio">последний МС
+			<input name="flt_chat" id="flt_chat" value="4" type="radio">последний заказчик
 			<script>$('input[name=flt_chat][value={$smarty.request.flt_chat}]').attr('checked',true);</script>
 		</td>
 	</tr>

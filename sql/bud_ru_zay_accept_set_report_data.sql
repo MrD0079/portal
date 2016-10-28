@@ -4,7 +4,7 @@ UPDATE bud_ru_zay z
             z.dt_end
           + (SELECT days4report
                FROM bud_ru_st_ras
-              WHERE id = z.kat)
+              WHERE id = z.kat) - 1
  WHERE     z.id = :id
        AND z.kat IN (SELECT id
                        FROM bud_ru_st_ras

@@ -11,7 +11,7 @@ InitRequestVar("oblast","0");
 InitRequestVar("nets",0);
 InitRequestVar("agent",0);
 InitRequestVar("city","0");
-InitRequestVar("flt_chat",1);
+InitRequestVar("flt_chat",0);
 
 //ses_req();
 

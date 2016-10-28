@@ -2,7 +2,7 @@
 audit(pathinfo(__FILE__)["filename"],pathinfo(__FILE__)["filename"]);
 //audit("открыл табель М-Сервис","ms_tabel");
 
-InitRequestVar("dates_list2",$_REQUEST["dates_list"]);
+InitRequestVar("month_list",$_REQUEST["month_list"]);
 InitRequestVar("numb",0);
 InitRequestVar("fio_otv",0);
 InitRequestVar("svms_list",0);
@@ -14,7 +14,7 @@ $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
 $sql=rtrim(file_get_contents('sql/merch_report_4admin_by_spec_new_nets.sql'));
-$p = array(":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p = array(":ed"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('nets', $data);
@@ -26,13 +26,13 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('svms_list', $data);
 
 $sql = rtrim(file_get_contents('sql/ms_tabel_routes_head.sql'));
-$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_head', $res);
 
 $sql = rtrim(file_get_contents('sql/ms_tabel_routes_head_fio_otv.sql'));
-$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_head_fio_otv', $res);
@@ -48,7 +48,7 @@ $p=array(
 ":numb"=>$_REQUEST["numb"],
 ":fio_otv"=>"'".$_REQUEST["fio_otv"]."'",
 ":svms_list"=>$_REQUEST["svms_list"],
-":ed"=>"'".$_REQUEST["dates_list2"]."'",
+":ed"=>"'".$_REQUEST["month_list"]."'",
 );
 
 
@@ -79,8 +79,8 @@ $smarty->assign('days', $days);
 
 }
 
-$smarty->assign('ok_nmms', $db->getOne("select ok_nmms from ms_tabel_dt where dt=TO_DATE('".$_REQUEST["dates_list2"]."','dd.mm.yyyy')"));
-$smarty->assign('ok_nmms_lu', $db->getOne("select to_char(lu,'dd.mm.yyyy hh24:mi:ss') from ms_tabel_dt where dt=TO_DATE('".$_REQUEST["dates_list2"]."','dd.mm.yyyy')"));
+$smarty->assign('ok_nmms', $db->getOne("select ok_nmms from ms_tabel_dt where dt=TO_DATE('".$_REQUEST["month_list"]."','dd.mm.yyyy')"));
+$smarty->assign('ok_nmms_lu', $db->getOne("select to_char(lu,'dd.mm.yyyy hh24:mi:ss') from ms_tabel_dt where dt=TO_DATE('".$_REQUEST["month_list"]."','dd.mm.yyyy')"));
 
 $smarty->display('ms_tabel.html');
 

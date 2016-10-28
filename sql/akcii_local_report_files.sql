@@ -5,20 +5,14 @@
          AND f.tn = u.tn
          AND u.dpt_id = :dpt_id
          /*AND u.datauvol IS NULL*/
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (u.tn IN (SELECT slave
                          FROM full
                         WHERE master = :tn))

@@ -96,6 +96,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["plan_type"]))
 		':tn'=>$tn,
 	);
 	$sql=stritr($sql,$params);
+//print_r($params);
 //echo $sql;
 	$sql_total=stritr($sql_total,$params);
 //echo $sql_total;

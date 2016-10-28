@@ -12,12 +12,21 @@
       }
       #map {
         height: 100%;
-        width: 100%;
+        float: left;
+        width: 80%;
+        height: 100%;
+      }
+	  #right-panel {
         margin: 0px;
-        padding: 0px;
+        width: 20%;
+        height: 100%;
+        float: left;
+        text-align: left;
+        padding-top: 0;
+        padding-left: 0px;
       }
     </style>
-<script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&callback=initMap&key=AIzaSyBbLEaSn25--py9DT47vK_pLkJjkbTh_Ng"></script>
 <script>
 String.prototype.nl2br = function()
 {
@@ -30,8 +39,7 @@ function initMap() {
     center: new google.maps.LatLng(0, 0),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
-  map = new google.maps.Map(document.getElementById('map'),
-      mapOptions);
+  map = new google.maps.Map(document.getElementById('map'),mapOptions);
   var polyOptions = {
     strokeColor: '#000000',
     strokeOpacity: 1.0,
@@ -41,22 +49,21 @@ function initMap() {
 	poly.setMap(map);
 	var path = poly.getPath();
 	var latlngbounds = new google.maps.LatLngBounds();
-window.googlemapdata = [
-{/literal}
-{foreach key=list_detail_key item=list_detail_item from=$list_detail name=list_detail}
-{if
-	$list_item.day eq $list_detail_item.day
-	and $list_item.h_eta eq $list_detail_item.h_eta
-	and $list_item.ts eq $list_detail_item.ts
-	and $list_detail_item.latitude
-	and $list_detail_item.longitude
-}
-{$list_detail_item.googledata}
-{/if}
-{/foreach}
-{literal}
-];
-/**/
+	window.googlemapdata = [
+		{/literal}
+		{foreach key=list_detail_key item=list_detail_item from=$list_detail name=list_detail}
+		{if
+			$list_item.day eq $list_detail_item.day
+			and $list_item.h_eta eq $list_detail_item.h_eta
+			and $list_item.ts eq $list_detail_item.ts
+			and $list_detail_item.latitude
+			and $list_detail_item.longitude
+		}
+		{$list_detail_item.googledata}
+		{/if}
+		{/foreach}
+		{literal}
+	];
 	var markers = [];
 	var infowindow = new google.maps.InfoWindow();
 	for (var i = 0; i < googlemapdata.length; i++) {
@@ -87,10 +94,85 @@ window.googlemapdata = [
 		latlngbounds.extend(googlemapdata[i].latlng);
 	}
 	map.fitBounds(latlngbounds);
+	////////////////////////////////// calculating routes between all markers
+	var directionsService = new google.maps.DirectionsService();
+	var directionsDisplay = new google.maps.DirectionsRenderer();
+	var start;
+	var end;
+	var waypts = [];
+	var wayptsSegment = [];
+	function calcDistance(iteration,travelMode){
+		directionsService.route({
+			origin: start,
+			destination: end,
+			waypoints: wayptsSegment,
+			travelMode: travelMode
+		}, function(result, status) {
+			if (status == 'OK') {
+					directionsDisplay.setDirections(result);
+					var route = result.routes[0];
+					var summaryPanel = document.getElementById(travelMode+'-panel');
+					//summaryPanel.innerHTML = '';
+					// For each route, display summary information.
+					var distance = 0;
+					for (var i = 0; i < route.legs.length; i++) {
+					var routeSegment = i + 1;
+					//summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment + ', distance: '+'<font style="color:red">'+route.legs[i].distance.text+'</font></b><br>';
+					distance+=route.legs[i].distance.value;
+					//summaryPanel.innerHTML += ' val '+route.legs[i].distance.value + '<br>';
+					//summaryPanel.innerHTML += '<b>Start: </b>'+route.legs[i].start_address + '<br>';
+					//summaryPanel.innerHTML += '<b>Finish: </b>'+route.legs[i].end_address + '<br>';
+					}
+					//summaryPanel.innerHTML += '<b>Total distance: '+distance/1000 + 'km</b><br>';
+					for (var i = 0; i < window.travelModes.length; i++) {
+						if (window.travelModes[i].travelMode==travelMode) {
+						window.travelModes[i].distance+=distance
+						//console.log(window.travelModes[i].travelMode+" "+travelMode);
+						summaryPanel.innerHTML = window.travelModes[i].name+" маршрут - "+window.travelModes[i].distance+"м";
+						};
+					}
+					window.myDistance += distance;
+					//summaryPanel.innerHTML += ""+iteration+" "+window.myDistance+"<br>";
+					//summaryPanel.innerHTML += "длина сегмента "+distance+"м<br>";
+					//summaryPanel.innerHTML = "Приблизительная длина маршрута "+window.myDistance+"м<br>";
+					//googlemapdata[0].name+="\n"+window.myDistance+"m";
+					//console.log(iteration+" "+window.myDistance);
+			}
+		});
+	}
+	window.travelModes = [
+		{travelMode:'WALKING',distance:0,name:'Пешеходный'},
+		{travelMode:'DRIVING',distance:0,name:'Автомобильный'}
+	];
+	for (var x = 0; x < window.travelModes.length; x++) {
+	var rightpanel = document.getElementById('right-panel');
+	var newdiv = document.createElement('div');
+	newdiv.setAttribute('id',window.travelModes[x].travelMode+'-panel');
+	newdiv.innerHTML = window.travelModes[x].name+" маршрут - ...";
+	rightpanel.appendChild(newdiv);
+	window.myDistance = 0;
+	var max = googlemapdata.length-1;
+	var limit=9;
+	var startI = 0;
+	var endI = Math.min(limit,max);
+	var segment = 0;
+		while (true) {
+			wayptsSegment = [];
+			for (var i = startI+1; i < endI; i++) {wayptsSegment.push({location: googlemapdata[i].latlng,stopover: true});}
+			start = googlemapdata[startI].latlng;
+			end = googlemapdata[endI].latlng;
+			calcDistance(segment,window.travelModes[x].travelMode);
+			startI = endI;
+			endI = Math.min(endI+limit,max);
+			segment++;
+			if (startI==endI) break;
+		}
+	}  
 }
 </script>
 </head>
 <body>
 <div id="map"></div>
+<div id="right-panel"></div>
 </body>
 {/literal}

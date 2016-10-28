@@ -19,7 +19,5 @@ $d = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $subj='ќтклонено завершение отчета по отпуску';
 $text=$fio.' отклонил завершение вашего отчета по отпуску за период '.$d['v_from'].' - '.$d['v_to'].'.<br>¬ам необходимо св€затьс€ с данным сотрудником дл€ вы€снени€ причин отклонени€';
 $mail=$d['e_mail'].','.$d['replacement_mail'];
-//$subj=$mail.' *** '.$subj;
-//$mail='denis.yakovenko@avk.ua';
 send_mail($mail,$subj,$text,null,false);
 ?>

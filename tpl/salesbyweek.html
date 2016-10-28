@@ -1,0 +1,90 @@
+<h1>Продажи понедельно</h1>
+<form target="_self" method="POST" name=form_report id=form_report>
+
+<p>
+Месяц
+{if not $smarty.request.print}
+	<select name=month_list id=month_list>
+	{foreach key=key item=item from=$month_list}
+		<option value="{$item.sd_c}">{$item.my}</option>
+	{/foreach}
+	</select>
+	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+{else}
+	<b>
+	{foreach key=key item=item from=$month_list}
+		{if $item.sd_c eq $smarty.request.month_list}
+			{$item.my}
+		{/if}
+	{/foreach}
+	</b>
+{/if}
+</p>
+
+
+{if not $smarty.request.print}
+
+{if $is_ts neq 1 and $is_mkk neq 1 and $is_eta neq 1}
+
+По руководителю:
+<br>
+<select name=exp_list_without_ts id=exp_list_without_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_without_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+<br>
+
+По ТС/МКК:
+<br>
+<select name=exp_list_only_ts id=exp_list_only_ts>
+<option value=0></option>
+{foreach key=key item=item from=$exp_list_only_ts}
+<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+
+{/if}
+
+{if $is_eta neq 1}
+
+По ЭТА:
+<br>
+<select name=eta_list id=eta_list>
+<option value=''></option>
+{foreach key=key item=item from=$eta_list}
+<option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
+{/foreach}
+</select>
+
+<br>
+
+<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+{/if}
+
+<p>
+<input type=submit name=generate id=generate value="Построить отчет">
+</p>
+
+{/if}
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="?action=salesbyweek&generate=1&print=1">Версия для печати</a>
+</p>
+{/if}
+
+{if $smarty.request.generate}
+{include file="salesbyweek_detail.html"}
+{/if}
+
+</form>

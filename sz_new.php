@@ -1,6 +1,6 @@
 <?
 
-audit ("открыл форму создания/редактирования СЗ","sz");
+//audit ("открыл форму создания/редактирования СЗ","sz");
 
 
 if (isset($_REQUEST["debug"]))
@@ -52,21 +52,24 @@ if (isset($_REQUEST["save"]))
 		if ($v!=null)
 		{
 			Table_Update("sz_accept",$keys,$keys);
-			audit ("добавил в СЗ №".$id." согласователя ".$v,"sz");
+			//audit ("добавил в СЗ №".$id." согласователя ".$v,"sz");
 		}
 	}
+	audit ("добавил в СЗ №".$id." согласователей ".serialize($_REQUEST["sz_acceptors"]),"sz");
+	
 //	ses_req();
 	if (isset($_REQUEST["sz_executors"]))
 	{
-	foreach ($_REQUEST["sz_executors"] as $k=>$v)
-	{
-		$keys = array("sz_id"=>$id,"tn"=>$v);
-		if ($v!=null)
+		foreach ($_REQUEST["sz_executors"] as $k=>$v)
 		{
-			Table_Update("sz_executors",$keys,$keys);
-			audit ("добавил в СЗ №".$id." исполнителя ".$v,"sz");
+			$keys = array("sz_id"=>$id,"tn"=>$v);
+			if ($v!=null)
+			{
+				Table_Update("sz_executors",$keys,$keys);
+				//audit ("добавил в СЗ №".$id." исполнителя ".$v,"sz");
+			}
 		}
-	}
+		audit ("добавил в СЗ №".$id." исполнителей ".serialize($_REQUEST["sz_executors"]),"sz");
 	}
 
 	$sql=rtrim(file_get_contents('sql/sz_acceptors.sql'));
@@ -78,6 +81,7 @@ if (isset($_REQUEST["save"]))
 
 	if (isset($_FILES))
 	{
+		$files=array();
 		foreach ($_FILES as $k=>$v)
 		{
 			if (is_uploaded_file($v['tmp_name']))
@@ -86,10 +90,12 @@ if (isset($_REQUEST["save"]))
 				$fn="sz".get_new_file_id().".".$a["extension"];
 				move_uploaded_file($v["tmp_name"], "sz_files/".$fn);
 				$keys = array("sz_id"=>$id,"fn"=>$fn);
+				$files[]=$fn;
 				Table_Update ("sz_files", $keys, $keys);
-				audit ("добавил в СЗ №".$id." файл ".$fn,"sz");
+				//audit ("добавил в СЗ №".$id." файл ".$fn,"sz");
 			}
 		}
+		audit ("добавил в СЗ №".$id." файлы ".serialize($files),"sz");
 	}
 }
 

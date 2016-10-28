@@ -41,10 +41,10 @@
 				<br>
 				{$i.test_lu}
 				<br>
-				<!--{if ($is_admin or $pos_id eq 63 or $i.test_count eq 1) and (not $is_test_admin or $is_coach)}
+				<!--{if ($is_admin or $my_pos_id eq 63 or $i.test_count eq 1) and (not $is_test_admin or $is_coach)}
 					{if $i.test eq 2 or $i.test eq 3}<input type=submit name=b[{$i.id}] value='¬ключить повторно'>{/if}
 				{/if}-->
-				{if ($is_admin or $pos_id eq 63 or $i.test_count eq 1) and not $is_test_admin}
+				{if ($is_admin or $my_pos_id eq 63 or $i.test_count eq 1) and not $is_test_admin}
 					{if $i.test eq 2 or $i.test eq 3}<input type=submit name=b[{$i.id}] value='¬ключить повторно'>{/if}
 				{/if}
 			</td>

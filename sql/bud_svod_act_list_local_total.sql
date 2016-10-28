@@ -22,20 +22,14 @@ SELECT COUNT (*) c,
        AND u.dpt_id = :dpt_id
        AND t.z_id = :z_id
        /*AND (u.datauvol IS NULL or trunc(u.datauvol,'mm') >= TO_DATE (:dt, 'dd.mm.yyyy'))*/
-       AND u.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_without_ts,
-                                 0, master,
-                                 :exp_list_without_ts))
-       AND u.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_only_ts,
-                                 0, master,
-                                 :exp_list_only_ts))
+       AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+       AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
        AND (   u.tn IN (SELECT slave
                           FROM full
                          WHERE master = :tn)
@@ -45,7 +39,7 @@ SELECT COUNT (*) c,
             OR (SELECT NVL (is_traid_kk, 0)
                   FROM user_list
                  WHERE tn = :tn) = 1)
-       AND DECODE (:eta_list, '', s.h_eta, :eta_list) = s.h_eta
+       AND (:eta_list is null OR :eta_list = s.h_eta)
        AND z.tn = DECODE (:db, 0, z.tn, :db)
        AND DECODE (:fil, 0, z.fil, :fil) = z.fil
        AND (   z.fil IN (SELECT fil_id

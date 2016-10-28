@@ -34,23 +34,10 @@
 	<td>Услугу подтвердил</td>
 	{/if}
 </tr>
-{assign var=sum_total value=0}
-{foreach key=key item=item from=$nets_plan_month}
-{assign var=sum_total value=`$sum_total+$item.total`}
-{/foreach}
-<tr style="font-weight:bold;">
 
-	{if $smarty.request.plan_type eq 4}
-	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат (от оперативного факта по сети с учетом базы расчета бонусов): {if $npft.plan neq 0}{$sum_total/$npft.fakt*100|num:2}{else}0.00{/if}%</td>
-	{else}
-	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
-	{/if}
+{include file=fin_plan_plan_month_table_t.html}
 
-	<td align=right>{$sum_total|num:3}</td>
-</tr>
-{assign var=sum_total value=0}
 {foreach key=key item=item from=$nets_plan_month}
-{assign var=sum_total value=`$sum_total+$item.total`}
 <tr
 {if $item.is_zakaz_nal eq 1} style="background-color: gray;" {/if}
 {if $item.bud_z_id} style="background-color: yellow;" {/if}
@@ -139,14 +126,9 @@
 	{/if}
 </tr>
 {/foreach}
-<tr style="font-weight:bold">
-	{if $smarty.request.plan_type eq 4}
-	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат (от оперативного факта по сети с учетом базы расчета бонусов): {if $npft.plan neq 0}{$sum_total/$npft.fakt*100|num:2}{else}0.00{/if}%</td>
-	{else}
-	<td colspan={if $enabled}11{else}9{/if}>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
-	{/if}
-	<td align=right>{$sum_total|num:3}</td>
-</tr>
+
+{include file=fin_plan_plan_month_table_t.html}
+
 </table>
 </form>
 

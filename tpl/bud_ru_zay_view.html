@@ -14,7 +14,7 @@
 	<tr style="text-align:center;">
 		<td colspan=2>
 			<h3>
-			Заявка на проведение активности
+			{if $smarty.request.tu eq 1}Торговые условия{else}Заявка на проведение активности{/if}
 			</h3>
 		</td>
 	</tr>
@@ -37,15 +37,16 @@
 	{foreach key=k1 item=i1 from=$d.ff}
 		{if $i1.type neq 'file'}
 			{$i1.name}: <b>
-{$i1.val_formula|num:3}
-{$i1.val_list_name}
-{$i1.val_string}
-{$i1.val_textarea}
-{$i1.val_number_int|num:0}
-{$i1.val_number|num:5}
-{$i1.val_datepicker}
-{if $i1.type eq 'bool'}{if $i1.val_bool eq 1}да{else}нет{/if}{/if}
-</b><br>
+			{$i1.val_formula}
+			{$i1.val_list_name}
+			{$i1.val_string}
+			{$i1.val_textarea}
+			{$i1.val_number_int|num:0}
+			{$i1.val_number|num:5}
+			{$i1.val_datepicker}
+			{if $i1.type eq 'bool'}{if $i1.val_bool eq 1}да{else}нет{/if}{/if}
+			</b>
+			<br>
 		{/if}
 	{/foreach}
 </p>

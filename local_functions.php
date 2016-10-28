@@ -324,4 +324,14 @@ function recursive_iconv($in_charset, $out_charset, $arr)
 	return $ret;
 }
 
+function getZaySum($zid,$fid){
+	global $db;
+	return $db->getOne("SELECT getZaySum (".$zid.",".$fid.") FROM DUAL");
+}
+
+function getTPType($zid,$fid){
+	global $db;
+	return $db->getOne("SELECT getTPType (".$zid.",".$fid.") FROM DUAL");
+}
+
 ?>

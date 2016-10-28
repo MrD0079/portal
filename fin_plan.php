@@ -1,28 +1,24 @@
 <?
-
 //ses_req();
-
 audit("открыл fin_plan","fin_plan");
-
-
 InitRequestVar("nets");
 InitRequestVar("calendar_years");
 InitRequestVar("plan_month",0);
 InitRequestVar("plan_type");
-
-
-
+if ($_REQUEST["plan_type"]==1||$_REQUEST["plan_type"]==2)
+{
+	$_REQUEST["plan_month"]=0;
+}
 if (isset($_REQUEST["plan_type"]))
 {
 	$res = &$db->getOne('select name from nets_plan_type where id='.$_REQUEST["plan_type"]);
 	$smarty->assign('plan_type_name', $res);
 }
-
-
-
 if ($_REQUEST["plan_type"]==4&&isset($_REQUEST["plan_month"])&&isset($_REQUEST["save"]))
 {
 	!isset($_REQUEST["db_sum"]) ? $_REQUEST["db_sum"]=0: null;
+	!isset($_REQUEST["db_sum_coffee"]) ? $_REQUEST["db_sum_coffee"]=0: null;
+	!isset($_REQUEST["db_sum_ng"]) ? $_REQUEST["db_sum_ng"]=0: null;
 	$keys=array();
 	$vals=array();
 	$keys["year"]=$_REQUEST["calendar_years"];
@@ -30,15 +26,14 @@ if ($_REQUEST["plan_type"]==4&&isset($_REQUEST["plan_month"])&&isset($_REQUEST["
 	$keys["id_net"]=$_REQUEST["nets"];
 	$keys["month"]=$_REQUEST["plan_month"];
 	$vals["bonus_base"]=$_REQUEST["db_type"];
-	$vals["bonus_sum"]=str_replace(",", ".", $_REQUEST["db_sum"]);
+	$vals["bonus_base_coffee"]=$_REQUEST["db_type_coffee"];
+	$vals["bonus_base_ng"]=$_REQUEST["db_type_ng"];
+	$vals["bonus_sum"]=$_REQUEST["db_sum"];
+	$vals["bonus_sum_coffee"]=$_REQUEST["db_sum_coffee"];
+	$vals["bonus_sum_ng"]=$_REQUEST["db_sum_ng"];
 	Table_Update ("nets_plan_month_ok", $keys, $vals);
 	$db->query("BEGIN nets_plan_month_ok_update(".$_REQUEST["plan_type"].",".$_REQUEST["nets"].",".$_REQUEST["calendar_years"].",".$_REQUEST["plan_month"]."); END;");
 }
-
-
-
-
-
 if (isset($_REQUEST["fin_plan_month_ok"]))
 {
 	$table_name = 'nets_plan_month_ok';
@@ -63,8 +58,7 @@ if (isset($_REQUEST["fin_plan_month_ok"]))
 		}
 	}
 }
-
-if (isset($_REQUEST["save_year"])||isset($_REQUEST["nets_plan_year"]))
+if (isset($_REQUEST["save_year"])&&isset($_REQUEST["nets_plan_year"]))
 {
 	$params=array(
 		":net" => $_REQUEST["nets"],
@@ -72,7 +66,13 @@ if (isset($_REQUEST["save_year"])||isset($_REQUEST["nets_plan_year"]))
 		":y" => $_REQUEST["calendar_years"]
 	);
 	audit("сохранил годовой фин. план сети","fin_plan");
-	if (
+	$keys=array(
+		"id_net" => $_REQUEST["nets"],
+		"plan_type" => $_REQUEST["plan_type"],
+		"year" => $_REQUEST["calendar_years"]
+	);
+	Table_Update ("nets_plan_year", $keys, $_REQUEST['nets_plan_year']);
+	/*if (
 		isset($_REQUEST['nets_plan_year']["sales"])||
 		isset($_REQUEST['nets_plan_year']["sales_prev"])||
 		isset($_REQUEST['nets_plan_year']["sales_ng"])||
@@ -82,26 +82,47 @@ if (isset($_REQUEST["save_year"])||isset($_REQUEST["nets_plan_year"]))
 		$sql="update nets_plan_month set payment_format = 1 where plan_type=:plan_type and payment_format = 1 and id_net = :net and year = :y";
 		$sql=stritr($sql,$params);
 		$db->query($sql);
-	}
-	$keys=array(
-		"id_net" => $_REQUEST["nets"],
-		"plan_type" => $_REQUEST["plan_type"],
-		"year" => $_REQUEST["calendar_years"]
-	);
-	Table_Update ("nets_plan_year", $keys, $_REQUEST['nets_plan_year']);
+	}*/
 }
-
-
-
+if (isset($_REQUEST["save_month_on"])&&isset($_REQUEST["nets_month_on"]))
+{
+	if (isset($_REQUEST["nets_month_on"]))
+	{
+		foreach ($_REQUEST["nets_month_on"] as $k => $v)
+		{
+			$keys=array(
+				"id_net" => $_REQUEST["nets"],
+				"plan_type" => 1,
+				"year" => $_REQUEST["calendar_years"],
+				"month" => $k
+			);
+			$vals=array(
+				"ok_rmkk_tmkk" => $v
+			);
+			Table_Update ("nets_plan_month_ok", $keys, $vals);
+		}
+	}
+}
+if (isset($_REQUEST["save_year"])||isset($_REQUEST["save_month_on"]))
+{
+	$params=array(
+		":net" => $_REQUEST["nets"],
+		":plan_type" => 1,
+		":y" => $_REQUEST["calendar_years"]
+	);
+	$sql="update nets_plan_month set payment_format = 1 where plan_type=:plan_type and payment_format = 1 and id_net = :net and year = :y";
+	$sql=stritr($sql,$params);
+	$db->query($sql);
+}
 if (isset($_REQUEST["fin2dog"]))
 {
 	$sql=rtrim(file_get_contents('sql/copy_nets_plan_month_fin2dog.sql'));
 	$params=array(':year'=>$_REQUEST["calendar_years"],':id_net'=>$_REQUEST["nets"]);
 	$sql=stritr($sql,$params);
 	$data = $db->query($sql);
+	//echo $sql;
 	//print_r($data);
 }
-
 if (isset($_REQUEST["senddog2fm"]))
 {
 	$fm_email=$db->getOne("select e_mail from user_list where is_fin_man=1");
@@ -117,13 +138,9 @@ if (isset($_REQUEST["senddog2fm"]))
 	//$text.="<a href=https://ps.avk.ua:8080/?action=fin_plan&nets=".$_REQUEST["nets"]."&calendar_years=".$_REQUEST["calendar_years"]."&plan_type=".$_REQUEST["plan_type"].">Договорное планирование</a>";
 	send_mail($fm_email,$subj,$text,null);
 }
-
-
-
 if (isset($_REQUEST["save_month"]))
 {
 	audit("сохранил статью в месячный фин. план сети","fin_plan");
-
 	foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 	{
 		$keys=array("id" => $_REQUEST["edit"]);
@@ -153,14 +170,11 @@ if (isset($_REQUEST["save_month"]))
 	$_REQUEST["month"] = null;
 	$_REQUEST["edit"] = null;
 }
-
 if (isset($_REQUEST["cancel_month"]))
 {
 	$_REQUEST["month"] = null;
 	$_REQUEST["edit"] = null;
 }
-
-
 if (isset($_REQUEST["add_month"]))
 {
 	audit("добавил статьи в месячный фин. план сети","fin_plan");
@@ -180,28 +194,23 @@ if (isset($_REQUEST["add_month"]))
 				"payment_format" => $_REQUEST["payment_format"],
 				"cnt" => str_replace(",", ".", $_REQUEST["cnt"][$key]),
 				"payer" => $_REQUEST["payer"][$key],
-				"mkk_ter" => $_REQUEST["mkk_ter"][$key]
+				"mkk_ter" => $_REQUEST["mkk_ter"][$key],
+				"bonus" => $_REQUEST["bonus"][$key],
+				"price" => $_REQUEST["price"][$key]
 			);
-			if (isset($_REQUEST["bonus"]))
-			{
-				$values["bonus"] = str_replace(",", ".", $_REQUEST["bonus"][$key]);
-			}
-			if (isset($_REQUEST["price"]))
-			{
-				$values["price"] = str_replace(",", ".", $_REQUEST["price"][$key]);
-			}
 			if ($_REQUEST["statya_on_year"]==1)
 			{
 				$sql=rtrim(file_get_contents('sql/fin_plan_month_ok_assoc.sql'));
 				$p1=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
 				$sql=stritr($sql,$p1);
 				$d1 = $db->getAssoc($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-        
 				for ($i=1;$i<=12;$i++)
 				{
 					$values["month"] = $i;
 					if ($d1[$i]!=1)
 					{
+						//$_REQUEST["keys"]=$keys;
+						//$_REQUEST["values"]=$values;
 						Table_Update ("nets_plan_month", $keys, $values);
 					}
 				}
@@ -212,10 +221,10 @@ if (isset($_REQUEST["add_month"]))
 			}
 		}
 	}
+	//ses_req();
 	$_REQUEST["month"] = null;
 	$_REQUEST["edit"] = null;
 }
-
 if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
@@ -223,14 +232,6 @@ if (isset($_REQUEST["del"]))
 		$db->extended->autoExecute("nets_plan_month", null, MDB2_AUTOQUERY_DELETE, "id=".$v);
 	}
 }
-
-
-
-
-
-
-
-
 if (isset($_REQUEST["add_st"])&&isset($_REQUEST["st"]))
 {
 	foreach ($_REQUEST["st"] as $k=>$v)
@@ -239,24 +240,13 @@ if (isset($_REQUEST["add_st"])&&isset($_REQUEST["st"]))
 		$params=array(':id'=>$v,":plan_type" => $_REQUEST["plan_type"],":tn_confirmed"=>$tn);
 		$sql=stritr($sql,$params);
 		$data = $db->query($sql);
-/*
-		$keys=array();
-		$vals=array();
-		$keys["id"]=$v;
-		$vals["tn_confirmed"]=$tn;
-		Table_Update ("nets_plan_month", $keys, $vals);*/
 	}
 }
-
-
-
 $sql=rtrim(file_get_contents('sql/list_mkk_all.sql'));
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 $sql=stritr($sql,$params);
 $list_mkk_all = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('list_mkk_all', $list_mkk_all);
-
-
 if ($_REQUEST["plan_type"]==4)
 {
 $sql=rtrim(file_get_contents('sql/nets_ter.sql'));
@@ -269,18 +259,13 @@ $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('nets', $data);
-
 $sql=rtrim(file_get_contents('sql/calendar_years.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('calendar_years', $data);
-
 if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 {
 	if (($_REQUEST["calendar_years"]>0)&&($_REQUEST["nets"]>0))
 	{
-		$prev_year_wo_ng_enabled = $db->getOne("SELECT CASE WHEN TRUNC (SYSDATE) - TO_DATE ('26/01/' || ".$_REQUEST["calendar_years"].", 'dd.mm.yyyy') < 0 THEN 1 END FROM DUAL");
-		$smarty->assign('prev_year_wo_ng_enabled', $prev_year_wo_ng_enabled);
-
 		$sql=rtrim(file_get_contents('sql/nets_plan_year.sql'));
 		$params=array(':year'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],':net'=>$_REQUEST["nets"]);
 		$sql=stritr($sql,$params);
@@ -314,21 +299,18 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('month_prognoz',$data);
 
-		if ($_REQUEST["plan_type"]==4)
-		{
-		$sql=rtrim(file_get_contents('sql/nets_plan_month_4.sql'));
-		}
-		else
-		{
-		$sql=rtrim(file_get_contents('sql/nets_plan_month.sql'));
-		}
+		$sql=rtrim(file_get_contents('sql/fin_plan_month_'.$_REQUEST["plan_type"].'.sql'));
+		$sqlt=rtrim(file_get_contents('sql/fin_plan_month_'.$_REQUEST["plan_type"].'_total.sql'));
 
 		$params=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => $_REQUEST["plan_type"],":plan_month" => $_REQUEST["plan_month"],':net'=>$_REQUEST["nets"],':tn'=>$tn);
 		$sql=stritr($sql,$params);
+		$sqlt=stritr($sqlt,$params);
+		//print_r($params);
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+		$datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign("nets_plan_month", $data);
-		//print_r($data);
-
+		$smarty->assign("nets_plan_month_total", $datat);
+		//print_r($datat);
 
 		if (isset($_REQUEST["edit"]))
 		{
@@ -344,7 +326,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 				}
 			}
 		}
-
 		if (isset($_REQUEST["groupp"]))
 		{
 			if ($_REQUEST["groupp"]>0)
@@ -367,16 +348,18 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 				$smarty->assign('statya', $data);
 			}
 		}
-
 		if ($_REQUEST["plan_type"]==3&&isset($_REQUEST["plan_month"]))
 		{
-			$sql=rtrim(file_get_contents('sql/nets_plan_month.sql'));
+			$sql=rtrim(file_get_contents('sql/fin_plan_month_2.sql'));
+			$sqlt=rtrim(file_get_contents('sql/fin_plan_month_2_total.sql'));
 			$params=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => 2,":plan_month" => $_REQUEST["plan_month"],':net'=>$_REQUEST["nets"],':tn'=>$tn);
 			$sql=stritr($sql,$params);
+			$sqlt=stritr($sqlt,$params);
 			$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+			$datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign("nets_dog_plan_one_month", $data);
+			$smarty->assign("nets_dog_plan_one_month_total", $datat);
 			//echo $sql;
-
 			for($i=1;$i<=3;$i++)
 			{
 			$sql=rtrim(file_get_contents("sql/fin_plan_one_month_".$i.".sql"));
@@ -406,74 +389,62 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		if ($_REQUEST["plan_type"]==4&&isset($_REQUEST["plan_month"]))
 		{
 			!isset($_REQUEST["db_sum"]) ? $_REQUEST["db_sum"]=0: null;
-
-			$sql=rtrim(file_get_contents('sql/nets_plan_month_4.sql'));
+			!isset($_REQUEST["db_sum_coffee"]) ? $_REQUEST["db_sum_coffee"]=0: null;
+			!isset($_REQUEST["db_sum_ng"]) ? $_REQUEST["db_sum_ng"]=0: null;
+			$sql=rtrim(file_get_contents('sql/fin_plan_month_4.sql'));
+			$sqlt=rtrim(file_get_contents('sql/fin_plan_month_4_total.sql'));
 			$params=array(':y'=>$_REQUEST["calendar_years"],":plan_type" => 3,":plan_month" => $_REQUEST["plan_month"],':net'=>$_REQUEST["nets"],':tn'=>$tn);
 			$sql=stritr($sql,$params);
+			$sqlt=stritr($sqlt,$params);
 			$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+			$datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign("nets_dog_plan_one_month", $data);
-			//echo $sql;
-
+			$smarty->assign("nets_dog_plan_one_month_total", $datat);
+			//echo $sqlt;
 			$params=array(
 				':y'=>$_REQUEST["calendar_years"],
 				':m'=>$_REQUEST["plan_month"],
 				':plan_type'=>4,
 				':net'=>$_REQUEST["nets"]
 			);
-
-			$sql=rtrim(file_get_contents('sql/fakt_uslug_npf.sql'));
-			$sqlt=rtrim(file_get_contents('sql/fakt_uslug_npf_total.sql'));
+			$sql=rtrim(file_get_contents('sql/fin_plan_fakt_uslug_npf.sql'));
+			$sqlt=rtrim(file_get_contents('sql/fin_plan_fakt_uslug_npf_total.sql'));
 			$sql=stritr($sql,$params);
 			$sqlt=stritr($sqlt,$params);
-//echo $sql;
 			$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign('npf', $data);
 			$smarty->assign('npft', $datat);
-
-			$sql=rtrim(file_get_contents('sql/fakt_uslug_bonus_db.sql'));
+			$sql=rtrim(file_get_contents('sql/fin_plan_fakt_uslug_bonus_db.sql'));
 			$sql=stritr($sql,$params);
 			$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign('db', $data);
-
 			$params=array(
 				':y'=>$_REQUEST["calendar_years"],
 				':m'=>$_REQUEST["plan_month"],
 				':plan_type'=>3,
 				':net'=>$_REQUEST["nets"]
 			);
-
-			$sql=rtrim(file_get_contents('sql/fakt_uslug_ok.sql'));
+			$sql=rtrim(file_get_contents('sql/fin_plan_fakt_uslug_ok.sql'));
 			$sql=stritr($sql,$params);
 			$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign('fakt_uslug_ok', $data);
-
 		}
-
 	}
 }
-
 $sql=rtrim(file_get_contents('sql/calendar_months.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('calendar_months', $data);
-
 $sql=rtrim(file_get_contents('sql/groups.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('groups', $data);
-
 $sql=rtrim(file_get_contents('sql/payment_type.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('payment_type', $data);
-
 $sql=rtrim(file_get_contents('sql/payment_format.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('payment_format', $data);
-
 $smarty->display('kk_start.html');
 $smarty->display('fin_plan.html');
 $smarty->display('kk_end.html');
-
-
-//ses_req();
-
 ?>

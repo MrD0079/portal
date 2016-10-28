@@ -1,0 +1,154 @@
+<h3>Реестр</h3>
+<form target="_self" method="POST" name=form_bud_ru_zay_reestr id=form_bud_ru_zay_reestr>
+	<table>
+		<tr>
+			<td style="text-align:right">По дате с/по</td>
+			<td>
+				<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+				<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+				<script>
+				{if $smarty.request.select}
+					$('#dates_list1').val('{$smarty.request.dates_list1}');
+					$('#dates_list2').val('{$smarty.request.dates_list2}');
+				{else}
+					$('#dates_list1').val('{$t.createdmin}');
+					$('#dates_list2').val('{$t.createdmax}');
+				{/if}
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">По руководителю</td>
+			<td>
+				<select name=exp_list_without_ts id=exp_list_without_ts>
+					<option value=0></option>
+					{foreach key=key item=item from=$exp_list_without_ts}
+					<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+					{/foreach}
+				</select>
+				<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">По ДБ</td>
+			<td>
+				<select name=db id=db>
+					<option value=0></option>
+					{foreach key=key item=item from=$db}
+					<option value={$item.tn}><b>{$item.fio}</b> ({$item.pos_name}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+					{/foreach}
+				</select>
+				<script>$('#db option[value="{$smarty.request.db}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">Тип</td>
+			<td>
+				<input checked="checked" name="tptype" id="tptype" value="0" type="radio"> все
+				<input name="tptype" id="tptype" value="1" type="radio"> единичные
+				<input name="tptype" id="tptype" value="2" type="radio"> сетевые
+			<script>$("input[name=tptype][value={$smarty.request.tptype}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">Статус подтверждения</td>
+			<td>
+				<input checked="checked" name="status" id="status" value="0" type="radio"> все
+				<input name="status" id="status" value="1" type="radio"> еще не рассмотрены
+				<input name="status" id="status" value="2" type="radio"> подтверждены
+				<input name="status" id="status" value="3" type="radio"> отклонены
+				<script>$("input[name=status][value={$smarty.request.status}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">Поиск по названию</td>
+			<td>
+				<input name="zname" value="{$smarty.request.zname}">
+			</td>
+		</tr>
+	</table>
+	<p><input type="submit" name="select" id="select" value="Отобразить реестр"></p>
+</form>
+{if $smarty.request.select}
+	{literal}
+	<script>
+		function swfailure(id,val)
+		{
+			val==2?$('#div_'+id+'_failure').show():$('#div_'+id+'_failure').hide();
+		}
+		function del(id)
+		{
+			$('#tr'+id).css('background-color','red');
+			$('#ok').load('?action=scmovehistory&nohead=1',
+			{
+				del: id
+			}
+			,
+			function() {
+				$('#tr'+id).remove();
+			}
+			);
+		}
+		function save(id,field,val)
+		{
+			$('#e_'+id+'_'+field).css('background-color','red');
+			$('#ok').load('?action=scmovehistory&nohead=1',
+			{
+				save: 1,
+				id: id,
+				field: field,
+				val: val
+			}
+			,
+			function() {
+				$('#e_'+id+'_'+field).css('background-color','white');
+			}
+			);
+		}
+	</script>
+	{/literal}
+	<table border=1 cellpadding=5 cellspacing=0>
+		<tr style="text-align:center;font-weight:bold">
+			<td>Удал</td>
+			<td>Дата размещения</td>
+			<td>Название старого ТП</td>
+			<td>Название нового ТП</td>
+			<td>Кол-во ТП старого сетевого ТП</td>
+			<td>Кол-во ТП нового сетевого ТП</td>
+			<td>Комментарии</td>
+			<td>Подтверждение ВСТМ</td>
+			<td>Последнее изменение</td>
+		</tr>
+		{foreach key=k item=i from=$d}
+		<tr id="tr{$i.id}">
+			<td>{if $i.status eq 0 and ($is_traid or $is_admin)}<a href="javascript:void(0);" onClick="del({$i.id});">[x]</a>{/if}</td>
+			<td>{$i.created}</td>
+			<td style='background-color: rgb(255, 255, 204);'>{$i.tpnamefrom}{$i.netnamefrom}</td>
+			<td style='background-color: rgb(204, 255, 255);'>{$i.tpnameto}{$i.netnameto}</td>
+			<td style='background-color: rgb(255, 255, 204);'>{$i.nettpcfrom}</td>
+			<td style='background-color: rgb(204, 255, 255);'>{$i.nettpcto}</td>
+			<td>{$i.comm}</td>
+			<td id="e_{$i.id}_status">
+				<div id="radio_{$i.id}_status">
+				{if $i.status eq 0 and ($is_traid or $is_admin)}
+				{foreach key=k1 item=i1 from=$accept_types}
+				<input type=radio value='{$i1.id}' name='status{$i.id}' onClick="save({$i.id},'status',this.value); swfailure({$i.id},{$i1.id});
+				$('input[name=status{$i.id}]').attr('disabled',true);
+				">{$i1.name}<br>
+				{/foreach}
+				</div>
+				<script>$("input[name=status{$i.id}][value={$i.status}]").attr('checked',true);</script>
+				<div id="div_{$i.id}_failure">Причина отклонения:<br><textarea id="e_{$i.id}_failure" onChange="save({$i.id},'failure',this.value);">{$i.failure}</textarea></div>
+				<script>swfailure({$i.id},{$i.status});</script>
+				{else}
+					{$i.statusname}
+					{if $i.status eq 2}<br>причина отклонения: {$i.failure}{/if}
+				{/if}
+			</td>
+			<td>{$i.lu_fio} {$i.lu}</td>
+		</tr>
+		{/foreach}
+	</table>
+	<div id=ok></div>
+{/if}
+

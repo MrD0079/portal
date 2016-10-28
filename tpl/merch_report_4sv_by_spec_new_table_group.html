@@ -129,6 +129,7 @@
 											</div>
 										</td>
 										<td style="width:300px;text-align:left">
+											{if $item.c > 0 or $is_ma}
 											<a
 											id="load_comments_{$item.msr_file_id}"
 											href="javascript:void(0);"
@@ -144,6 +145,7 @@
 											>({$item.c})</font>{if $item.chat_closed eq 1} - задача закрыта{/if}{/if}</a>
 											<br>
 											<div style="display: inline;" id=div_comments_{$item.msr_file_id}></div>
+											{/if}
 										</td>
 									</tr>
 								</table>
@@ -156,12 +158,13 @@
 				{/foreach}
 			</td>
 										<td rowspan={$s3+1} style="width:300px;text-align:left">
+											{if $i2.head.mc_c > 0 or $is_ma}
 											<a
-											id="load_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i.head.kodtp}"
+											id="load_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i2.head.kodtp}"
 											href="javascript:void(0);"
 											onclick="
-												$('#div_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i.head.kodtp}').load(
-												'?action=merch_chat&nohead=1&dt={$i.head.dt}&ag_id={$i2.head.ag_id}&kod_tp={$i.head.kodtp}&chat_closed={$i2.head.mc_closed}'
+												$('#div_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i2.head.kodtp}').load(
+												'?action=merch_chat&nohead=1&dt={$i.head.dt}&ag_id={$i2.head.ag_id}&kod_tp={$i2.head.kodtp}&chat_closed={$i2.head.mc_closed}'
 												);
 												
 											"
@@ -170,7 +173,8 @@
 												{if $i2.head.mc_last_is_spd eq -1}style="color:red"{/if}
 											>({$i2.head.mc_c})</font>{if $i2.head.mc_closed eq 1} - задача закрыта{/if}{/if}</a>
 											<br>
-											<div style="display: inline;" id=div_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i.head.kodtp}></div>
+											<div style="display: inline;" id=div_comments_{$i.head.dt1}_{$i2.head.ag_id}_{$i2.head.kodtp}></div>
+											{/if}
 										</td>
 				{/if}
 			</tr>
@@ -206,6 +210,7 @@
 {if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
 {if $item1.tip eq 'text'}{$rb_total.$field_name|escape}{/if}
 {if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}
+{if $field_name eq 'msr_oos'} / {$rb_total.perc_oos|default:0|num:2}%{/if}
 </td>
 {/foreach}
 	</tr>

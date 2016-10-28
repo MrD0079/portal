@@ -1,0 +1,30 @@
+	  {literal}
+      <script>
+         $(function() {
+         $( "#project" ).autocomplete({
+            minLength: 1,
+            source: "autocomplete.php",
+            focus: function( event, ui ) {
+               $( "#project" ).val( ui.item.label );
+                  return false;
+               },
+            select: function( event, ui ) {
+               $( "#project" ).val( ui.item.label );
+               $( "#project-id" ).val( ui.item.value );
+               //$( "#project-description" ).html( ui.item.desc );
+               return false;
+            }
+         })
+         .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+            //.append( "<a>" + item.label/* + "<br>" + item.desc*/ + "</a>" )
+            .append( "<div style=\"width:100px\">" + item.label/* + "<br>" + item.desc*/ + "</div>" )
+            .appendTo( ul );
+         };
+         });
+      </script> 
+	  {/literal}
+	      <div id="project-label">Select a project (type "a" for a start):</div>
+         <input id="project">
+         <input type="hidden1" id="project-id">
+         <p id="project-description"></p>

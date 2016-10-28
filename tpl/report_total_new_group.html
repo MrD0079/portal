@@ -93,7 +93,7 @@
 			<td rowspan={$s1+1} {if $i1.total.is_red}bgcolor="red"{else}style="background-color: rgb(153, 255, 153);"{/if}>
 				{if $i1.total.plan > 10 or $i1.total.vv	eq 1}
 					{if $i1.head.in_out}
-						<nobr>Код агента: {$i1.head.kod_ag}</nobr>
+						<!--<nobr>Код агента: {$i1.head.kod_ag}</nobr>-->
 						<nobr>Вход/выход: {$i1.head.in_out}</nobr>
 					{/if}
 					<nobr>Отклонение: {$i1.total.gps_delta|num:-1} мин.</nobr>
@@ -120,23 +120,23 @@
 					{if $i2.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$i.head.dt}&spec_id={$i2.spec_id}&login={$i.head.login}">Специя</a>{/if}
 				{/if}
 			</td>
-			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep1}height:36px;width:36px;background-color:{$i2.reminders.rep1.color};{/if}">{if $i2.reminders.rep1}<img style="height:30px;width:30px;" src="design/mrc1.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep2}height:36px;width:36px;background-color:{$i2.reminders.rep2.color};{/if}">{if $i2.reminders.rep2}<img style="height:30px;width:30px;" src="design/mrc2.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep3}height:36px;width:36px;background-color:{$i2.reminders.rep3.color};{/if}">{if $i2.reminders.rep3}<img style="height:30px;width:30px;" src="design/mrc3.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep4}height:36px;width:36px;background-color:{$i2.reminders.rep4.color};{/if}">{if $i2.reminders.rep4}<img style="height:30px;width:30px;" src="design/mrc4.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep5}height:36px;width:36px;background-color:{$i2.reminders.rep5.color};{/if}">{if $i2.reminders.rep5}<img style="height:30px;width:30px;" src="design/mrc5.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep1}height:36px;width:36px;background-color:{$i2.reminders.rep1.color};{/if}">{if $i2.reminders.rep1}<img style="height:30px;width:30px;" src="files/{$i2.reminders.rep1.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep2}height:36px;width:36px;background-color:{$i2.reminders.rep2.color};{/if}">{if $i2.reminders.rep2}<img style="height:30px;width:30px;" src="files/{$i2.reminders.rep2.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep3}height:36px;width:36px;background-color:{$i2.reminders.rep3.color};{/if}">{if $i2.reminders.rep3}<img style="height:30px;width:30px;" src="files/{$i2.reminders.rep3.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep4}height:36px;width:36px;background-color:{$i2.reminders.rep4.color};{/if}">{if $i2.reminders.rep4}<img style="height:30px;width:30px;" src="files/{$i2.reminders.rep4.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep5}height:36px;width:36px;background-color:{$i2.reminders.rep5.color};{/if}">{if $i2.reminders.rep5}<img style="height:30px;width:30px;" src="files/{$i2.reminders.rep5.pict}">{/if}</td>
 			<td style="vertical-align:middle;text-align:center;{if $i2.reminders.rep6}height:36px;width:36px;background-color:{$i2.reminders.rep6.color};{/if}">
 				{if $i2.reminders.rep6}
 
 				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i2.spec_id}').show();">
-					<img style="height:29px;width:29px;" src="design/mrc6.png">
+					<img style="height:29px;width:29px;" src="files/{$i2.reminders.rep6.pict}">
 				</div>
 				<div style="display:none;width:300px;" id="text_{$i2.spec_id}">{$i2.reminders.rep6.text}</div>
 				<script>
 				/*$('#div{$i2.spec_id}').hide();*/
 				</script>
 
-					<!--<span title="{$i2.reminders.rep6.text}"><img src="design/mrc6.png"></span>-->
+					<!--<span title="{$i2.reminders.rep6.text}"><img src="files/{$i2.reminders.rep6.pict}"></span>-->
 				{/if}
 			</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_mr}</td>
@@ -150,7 +150,7 @@
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
 			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">
 			{if not $smarty.request.print}
-				<input {$disabled} size="20" name="rb[mr_text][{$i2.id}]" {if $i2.day_enabled_mr neq 1} disabled {/if} value="{$i2.mr_text|escape}">
+				<input {$disabled} size="50" name="rb[mr_text][{$i2.id}]" {if $i2.day_enabled_mr neq 1} disabled {/if} value="{$i2.mr_text|escape}">
 			{else}
 				{$i2.mr_text|escape}
 			{/if}

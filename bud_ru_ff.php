@@ -50,7 +50,6 @@ if (isset($_REQUEST["update_ff"]))
 	}
 }
 
-
 if (isset($_REQUEST["delete"]))
 {
 	foreach ($_REQUEST["delete"] as $k=>$v)
@@ -64,12 +63,32 @@ if (isset($_REQUEST["delete"]))
 }
 
 
+if (isset($_REQUEST["rebuild"]))
+{
+	ses_req();
+	foreach ($_REQUEST["rebuild"] as $k=>$v)
+	{
+		$sql=rtrim(file_get_contents('sql/bud_ru_ff_rebuild.sql'));
+		$params=array(':ff_id' => $k);
+		$sql=stritr($sql,$params);
+		$db->query($sql);
+	}
+}
+
 
 $sql=rtrim(file_get_contents('sql/bud_ru_ff.sql'));
 $params=array(':dpt_id' => $_SESSION["dpt_id"]);
 $sql=stritr($sql,$params);
 $bud_ru_ff = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+foreach($bud_ru_ff as $k=>$v){
+	$sql=rtrim(file_get_contents('sql/bud_ru_ff_parent_fields.sql'));
+	$params=array(':dpt_id' => $_SESSION["dpt_id"],':id' => $v["id"]);
+	$sql=stritr($sql,$params);
+	$parent_fields = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	$bud_ru_ff[$k]["parent_fields"] = $parent_fields;
+}
 $smarty->assign('bud_ru_ff', $bud_ru_ff);
+//print_r($bud_ru_ff);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_ff_st_ras.sql'));
 $params=array(':dpt_id' => $_SESSION["dpt_id"]);
@@ -90,6 +109,9 @@ $bud_ru_ff_subtypes = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_ff_subtypes', $bud_ru_ff_subtypes);
 
 
+$sql=rtrim(file_get_contents('sql/bud_ru_ff_admin_id_var1.sql'));
+$bud_ru_ff_admin_id_var1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('bud_ru_ff_admin_id_var1', $bud_ru_ff_admin_id_var1);
 
 
 $smarty->display('bud_ru_ff.html');

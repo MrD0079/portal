@@ -6,5 +6,6 @@
                 DECODE (:region_name, '0', '0', u.region_name)
          AND DECODE (:department_name, '0', '0', :department_name) =
                 DECODE (:department_name, '0', '0', u.department_name)
+   and ((:tr_rep_common_datauvol='all') or (:tr_rep_common_datauvol='actual' and nvl(u.datauvol,trunc(sysdate))>=trunc(sysdate)))
 GROUP BY pos_id, pos_name
 ORDER BY pos_id, pos_name

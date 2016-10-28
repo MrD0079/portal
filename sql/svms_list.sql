@@ -5,9 +5,9 @@
          AND dpt_id = :dpt_id
          AND ADD_MONTHS (TRUNC (NVL (datauvol, SYSDATE), 'mm'), +1) >=
                 TRUNC (SYSDATE, 'mm')
-         AND (   tn IN (SELECT emp_tn
-                          FROM who_full
-                         WHERE exp_tn = :tn)
+         AND (   tn IN (SELECT slave
+                          FROM full
+                         WHERE master = :tn)
               OR (SELECT is_admin
                     FROM user_list
                    WHERE tn = :tn) = 1

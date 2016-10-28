@@ -48,26 +48,32 @@ if (isset($_REQUEST['del_file']))
 	unlink('sc_files/'.$fn);
 }
 
-if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
+if (isset($_REQUEST["save"]))
 {
 	$_REQUEST["generate"]=1;
-	foreach ($_REQUEST["data"] as $k => $v)
+	if (isset($_REQUEST["data"]))
 	{
-		$keys = array('tp_kod'=>$k,'dpt_id'=>$_SESSION["dpt_id"]);
-		Table_Update ("sc_tp", $keys, $v);
-	}
-	foreach ($_FILES["files"]["name"]["fn"] as $k => $v)
-	{
-		if (is_uploaded_file($_FILES["files"]["tmp_name"]["fn"][$k]))
+		foreach ($_REQUEST["data"] as $k => $v)
 		{
-		$fn=get_new_file_id()."_".translit($v);
-		isset($_REQUEST["files"]["dt"][$k]) ? $_REQUEST["files"]["dt"][$k]=OraDate2MDBDate($_REQUEST["files"]["dt"][$k]) : null;
-		$dt=$_REQUEST["files"]["dt"][$k];
-		$keys = array('tp_kod'=>$k,'dpt_id'=>$_SESSION["dpt_id"],'fn'=>$fn,'dt'=>$dt,'lu'=>null);
-		Table_Update ("sc_files", $keys, $keys);
-	        $d1="sc_files";
-		if (!file_exists($d1)) {mkdir($d1,0777,true);}
-		move_uploaded_file($_FILES["files"]["tmp_name"]["fn"][$k], $d1."/".$fn);
+			$keys = array('tp_kod'=>$k,'dpt_id'=>$_SESSION["dpt_id"]);
+			Table_Update ("sc_tp", $keys, $v);
+		}
+	}
+	if (isset($_FILES["files"]))
+	{
+		foreach ($_FILES["files"]["name"]["fn"] as $k => $v)
+		{
+			if (is_uploaded_file($_FILES["files"]["tmp_name"]["fn"][$k]))
+			{
+			$fn=get_new_file_id()."_".translit($v);
+			isset($_REQUEST["files"]["dt"][$k]) ? $_REQUEST["files"]["dt"][$k]=OraDate2MDBDate($_REQUEST["files"]["dt"][$k]) : null;
+			$dt=$_REQUEST["files"]["dt"][$k];
+			$keys = array('tp_kod'=>$k,'dpt_id'=>$_SESSION["dpt_id"],'fn'=>$fn,'dt'=>$dt,'lu'=>null);
+			Table_Update ("sc_files", $keys, $keys);
+				$d1="sc_files";
+			if (!file_exists($d1)) {mkdir($d1,0777,true);}
+			move_uploaded_file($_FILES["files"]["tmp_name"]["fn"][$k], $d1."/".$fn);
+			}
 		}
 	}
 }

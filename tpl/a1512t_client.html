@@ -1,0 +1,26 @@
+<h1>"ТОП 100" - Клиенты</h1>
+<form target="_self" method="POST" name=formT>
+<p>
+Клиент<input name=add[client]>
+План<input name=add[plan] class=number>
+Бонус<input name=add[bonus] class=number>
+</p>
+<p><input type=submit name=new value="Добавить"></p>
+<p><input type=submit name=save value="Сохранить"></p>
+<table border=1 cellpadding=3 cellspacing=0>
+	<tr style="font-weight:bold;text-align:center">
+		<td><a href="javascript:void(0)" onclick="javascript:formT.submit()">[X]</a></td>
+		<td>Клиент</td>
+		<td>План</td>
+		<td>Бонус</td>
+	</tr>
+	{foreach key=k item=i from=$clients name=clients}
+	<tr>
+		<td><input type=checkbox name=del[] value="{$i.h_client}"></td>
+		<td>{$i.client}</td>
+		<td><input name=clients[{$i.h_client}][plan] value="{$i.plan}" class=number></td>
+		<td><input name=clients[{$i.h_client}][bonus] value="{$i.bonus}" class=number></td>
+	</tr>
+	{/foreach}
+</table>
+</form>

@@ -165,7 +165,7 @@ function StartTheTimer()
     }
     else
     {
-	$('#Timer').innerHTML=Sec2Str(secs)
+		$('#Timer').text(Sec2Str(secs))
         secs = secs - 1
         timerRunning = true
         timerID = self.setTimeout("StartTheTimer()", delay)

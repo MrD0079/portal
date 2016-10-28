@@ -38,11 +38,11 @@
 </tr>
 <tr>
 <td>Год образования</td>
-<td {if not $p.data_start}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_data_start" onchange="save_fil({$p.id},'data_start',this.value);" class="datepicker" size="8" value="{$p.data_start}">{else}{$p.data_start}{/if}</td>
+<td {if not $p.data_start}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_data_start" onchange="save_fil({$p.id},'data_start',this.value);" class="datepicker" size="10" value="{$p.data_start}">{else}{$p.data_start}{/if}</td>
 </tr>
 <tr>
 <td>Дата начала сотрудничества с "АВК"</td>
-<td {if not $p.data_start_avk}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_data_start_avk" onchange="save_fil({$p.id},'data_start_avk',this.value);" class="datepicker" size="8" value="{$p.data_start_avk}">{else}{$p.data_start_avk}{/if}</td>
+<td {if not $p.data_start_avk}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_data_start_avk" onchange="save_fil({$p.id},'data_start_avk',this.value);" class="datepicker" size="10" value="{$p.data_start_avk}">{else}{$p.data_start_avk}{/if}</td>
 </tr>
 <tr>
 <td>Род деятельности</td>
@@ -123,6 +123,14 @@ $("#div_{$p.id}_retailer").attr('checked','{$p.retailer}'=='1'?true:false);
 <tr>
 <td>Вэб-сайт дистрибутора</td>
 <td {if not $p.web}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_web" onChange="save_fil({$p.id},'web',this.value);" size="50" value="{$p.web}">{else}{$p.web}{/if}</td>
+</tr>
+<tr>
+<td>Адрес для счетов</td>
+<td {if not $p.invoice_mail}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_invoice_mail" onChange="save_fil({$p.id},'invoice_mail',this.value);" size="50" value="{$p.invoice_mail}">{else}{$p.invoice_mail}{/if}</td>
+</tr>
+<tr>
+<td>Адрес для возвратов</td>
+<td {if not $p.return_mail}style="background-color:red"{/if}>{if not $smarty.request.print}<input id="div_{$p.id}_return_mail" onChange="save_fil({$p.id},'return_mail',this.value);" size="50" value="{$p.return_mail}">{else}{$p.return_mail}{/if}</td>
 </tr>
 <tr>
 <td>Прочая информация</td>

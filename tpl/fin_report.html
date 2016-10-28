@@ -78,6 +78,7 @@
 		<td>Факт продаж пред. года, тыс. {$valuta}</td>
 		<td>План продаж, тыс.{$valuta}</td>
 		<td>% прироста продаж</td>
+		<td>Факт ОУ пред. года, тыс.{$valuta}.</td>
 		<td>Бюджет пред. года, тыс.{$valuta}.</td>
 		<td>Бюджет, тыс.{$valuta}.</td>
 		<td>% прироста бюджета</td>
@@ -93,24 +94,15 @@
 
 
 
-	<tr
-		{if $fin_report_item.no_budget eq 'да'}style="background-color: yellow;"{/if}
-		{
-		if $fin_report_item.no_budget eq ''
+	<tr style="background-color: 
+		{if $fin_report_item.no_budget eq 'да'}yellow{/if}
+		{if $fin_report_item.no_budget eq ''
 		and $fin_report_item.year_plan eq 0
 		and $fin_report_item.budget eq 0
 		and $fin_report_item.ok_rmkk_tmkk eq ''
-		}style="background-color: red;"{/if}
-
-		{
-		if $fin_report_item.budget_rost > $fin_report_item.perc_rost
-		}style="background-color: #8FFFFF;"{/if}
-
-
-
-
-
-	>
+		}red{/if}
+		{if $fin_report_item.budget_rost > $fin_report_item.perc_rost}#8FFFFF{/if}
+	">
 		<td>{$smarty.foreach.fin_report.iteration}</td>
 		<td>{$fin_report_item.rmkk}</td>
 		<td>{$fin_report_item.mkk}</td>
@@ -119,6 +111,7 @@
 		<td style="text-align:right">{$fin_report_item.prev_year_fakt|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item.year_plan|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item.perc_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item.prev_year_fou|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item.prev_year_budget|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item.budget|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item.budget_rost|default:0|num:2}</td>
@@ -136,6 +129,7 @@
 		<td style="text-align:right">{$fin_report_item_total.prev_year_fakt|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.year_plan|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.perc_rost|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_item_total.prev_year_fou|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.prev_year_budget|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.budget|default:0|num:3}</td>
 		<td style="text-align:right">{$fin_report_item_total.budget_rost|default:0|num:2}</td>

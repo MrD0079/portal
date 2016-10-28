@@ -20,8 +20,6 @@
 <script>$('#pos option[value="{$smarty.request.pos}"]').prop('selected', true);</script>
 <br>
 
-
-
 Причина увольнения
 <select name="seat" id="seat">
 <option value=0></option>
@@ -32,16 +30,21 @@
 <script>$('#seat option[value="{$smarty.request.seat}"]').prop('selected', true);</script>
 <br>
 
+Поиск по фамилии:  
+<input name=staff_fio id=staff_fio>
+<script>$('#staff_fio').val("{$smarty.request.staff_fio}");</script>
+<br>
 
-<input type=submit value="Отобразить реестр уволенных" name="generate">
+<input type=submit value="Показать" name="generate">
+
 
 {if $smarty.request.generate}
 
 <table cellpadding=3 border=1>
 	<tr>
+		<td>[x]</td>
 		<td>Ф.И.О. уволенного сотрудника</td>
 		<td>Должность</td>
-		<td>Территория</td>
 		<td>Дата увольнения</td>
 		<td>Причина увольнения</td>
 		<td>ФИО, должность замещающего сотрудника</td>
@@ -49,21 +52,13 @@
 		<td>ФИО сотрудника, сделавшего заявку</td>
 		<td>Дата заявки</td>
 		<td>Дата подтверждения заявки</td>
-
-
-
-
-
-
-
-
-
+		<td>Страна</td>
 	</tr>
 	{foreach key=key1 item=item1 from=$free_staff}
-	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+	<tr bgcolor='{cycle values="#ccffff,#ffffcc"}' id="tr{$item1.id}">
+		<td><a href="javascript:void(0);" onClick="removeStaff({$item1.id});">удалить</td>
 		<td>{$item1.fio}</td>
 		<td>{$item1.dolgn}</td>
-		<td></td>
 		<td>{$item1.datauvol}</td>
 		<td>{$item1.seat}</td>
 		<td>{$item1.fio_new}</td>
@@ -71,6 +66,7 @@
 		<td>{$item1.creator_name}</td>
 		<td>{$item1.created}</td>
 		<td>{$item1.accept_data}</td>
+		<td>{$item1.dpt_name}</td>
 	</tr>
 	{/foreach}
 </table>
@@ -78,3 +74,23 @@
 {/if}
 
 </form>
+
+{literal}
+<script>
+function removeStaff(id){
+	var fd = new FormData();
+	fd.append('del',  id);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=accepted_free_staff&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$("#tr"+id).remove();
+		}
+	});
+}
+</script>
+{/literal}

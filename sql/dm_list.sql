@@ -1,6 +1,5 @@
-/* Formatted on 28.09.2012 10:39:28 (QP5 v5.163.1008.3004) */
+/* Formatted on 27/10/2015 13:31:05 (QP5 v5.252.13127.32867) */
   SELECT *
     FROM user_list u
-   WHERE (u.is_dm = 1/* or u.is_admin = 1*/)
-     /*AND u.dpt_id=:dpt_id*/
-ORDER BY fio
+   WHERE u.is_dm = 1
+ORDER BY u.fio

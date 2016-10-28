@@ -30,22 +30,8 @@
 					<td>Подтвердить статью</td>
 				{/if}
 			</tr>
-			{assign var=sum_total value=0}
+			{include file=fin_plan_dog_plan_one_month_t.html}
 			{foreach key=key item=item from=$nets_dog_plan_one_month}
-			{assign var=sum_total value=`$sum_total+$item.total`}
-			{/foreach}
-			<tr style="font-weight:bold">
-				{if $smarty.request.plan_type eq 4}
-					<td colspan=10>Итого % затрат (от оперативного плана на сеть): {if $npf.plan neq 0}{$sum_total/$npf.plan*100|num:2}{else}0.00{/if}%</td>
-				{else}
-					<td colspan=10>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
-				{/if}
-				<td align=right>{$sum_total|num:3}</td>
-				<td></td>
-			</tr>
-			{assign var=sum_total value=0}
-			{foreach key=key item=item from=$nets_dog_plan_one_month}
-			{assign var=sum_total value=`$sum_total+$item.total`}
 			<tr {if $item.bud_z_id}style="background-color: yellow;"{/if}>
 				<td>{$item.month_name}</td>
 				<td><nobr>{$item.pay_format}</nobr></td>
@@ -93,15 +79,7 @@
 				</td>
 			</tr>
 			{/foreach}
-			<tr style="font-weight:bold">
-				{if $smarty.request.plan_type eq 4}
-					<td colspan=10>Итого % затрат (от оперативного плана на сеть): {if $npf.plan neq 0}{$sum_total/$npf.plan*100|num:2}{else}0.00{/if}%</td>
-				{else}
-					<td colspan=10>Итого % затрат: {if $sales.sales neq 0}{$sum_total/$sales.sales*100|num:2}{else}0.00{/if}%</td>
-				{/if}
-				<td align=right>{$sum_total|num:3}</td>
-				<td></td>
-			</tr>
+			{include file=fin_plan_dog_plan_one_month_t.html}
 		</table>
 		{if $smarty.request.plan_type eq 4}
 			<input type=submit name=add_st value="Сохранить и пересчитать">

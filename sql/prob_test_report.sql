@@ -1,4 +1,4 @@
-/* Formatted on 11.12.2014 23:43:58 (QP5 v5.227.12220.39724) */
+/* Formatted on 05/04/2016 19:45:07 (QP5 v5.252.13127.32867) */
   SELECT p.*,
          DECODE (
             SIGN (
@@ -36,13 +36,10 @@
    WHERE     p.tn = u.tn
          AND pa.tn = p.tn
          AND u1.tn = pa.parent
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
+         AND (   :exp_list_without_ts = 0
+              OR u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :exp_list_without_ts))
          AND u.tn IN (SELECT slave
                         FROM full
                        WHERE master = :tn)
@@ -56,7 +53,7 @@
                 1, DECODE (SIGN (stamp_employee - stamp_chief),
                            1, stamp_employee,
                            stamp_chief),
-                stamp_teacher) BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                   AND TO_DATE (:ed, 'dd.mm.yyyy')
-         AND p.tn = DECODE (:probs, 0, p.tn, :probs)
+                stamp_teacher) BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                   AND TO_DATE ( :ed, 'dd.mm.yyyy')
+         AND p.tn = DECODE ( :probs, 0, p.tn, :probs)
 ORDER BY u.fio

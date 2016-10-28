@@ -34,18 +34,14 @@
          AND h.h_eta = r.h_eta
          AND u.tab_num = r.tab_number
          AND u.dpt_id = :dpt_id
-         AND u.tn IN (SELECT slave
-                        FROM full
-                       WHERE master =
-                                DECODE ( :exp_list_without_ts,
-                                        0, :tn,
-                                        :exp_list_without_ts))
-         AND u.tn IN (SELECT slave
-                        FROM full
-                       WHERE master =
-                                DECODE ( :exp_list_only_ts,
-                                        0, :tn,
-                                        :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)

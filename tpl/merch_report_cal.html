@@ -18,39 +18,71 @@
 </p>
 
 
-<table border=1 cellspacing=0 cellpadding=3>
-	<tr style="font-weight:bold;text-align:center">
-		<td>№ п/п</td>
-		<td>Заказчик</td>
-		<td>№ п/п</td>
-		<td>Вид отчета</td>
-		<td>Частота</td>
-	</tr>
-	{foreach key=k item=i from=$d name=d}
-	{foreach key=k1 item=i1 from=$i.data name=i}
+<p>
+Заказчик<select id=ag_id>
+	<option></option>
+	{foreach key=fk item=fi from=$routes_agents}
+	<option value={$fi.id}>{$fi.name}</option>
 	{/foreach}
-	<tr style="font-weight:bold">
-		<td rowspan={$smarty.foreach.i.total+1} style="text-align:center">{$smarty.foreach.d.iteration}</td>
-		<td rowspan={$smarty.foreach.i.total+1} style="text-align:center">{$i.head.ag_name}</td>
-		<td colspan=6></td>
-	</tr>
-	{foreach key=k1 item=i1 from=$i.data name=i}
-	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
-		<td style="text-align:center">{$smarty.foreach.i.iteration}</td>
-		<td style="text-align:center">{$i1.rep_name}</td>
-		<td style="text-align:center">
-			<select id='d_{$k}_{$k1}' onchange="save($('#month_list').val(),{$k},{$k1},this.value);">
-				<option></option>
-				{foreach key=fk item=fi from=$freq}
-				<option value={$fi.id}>{$fi.name}</option>
+</select>
+Вид отчета<select id=rep_id>
+	<option></option>
+	{foreach key=fk item=fi from=$merch_report_cal_rep}
+	<option value={$fi.id}>{$fi.name}</option>
+	{/foreach}
+</select>
+Частота<select id=freq_id>
+	<option></option>
+	{foreach key=fk item=fi from=$freq}
+	<option value={$fi.id}>{$fi.name}</option>
+	{/foreach}
+</select>
+<a href="javascript:void(0);" onclick="save($('#month_list').val(),$('#ag_id').val(),$('#rep_id').val(),$('#freq_id').val());">Добавить</a>
+</p>
+
+<table cellpadding=3 cellspacing=3>
+	<tr style="vertical-align:top">
+		<td>
+			<table border=1 cellspacing=0 cellpadding=3>
+				<tr style="font-weight:bold;text-align:center">
+					<td>Изменено</td>
+					<td>Заказчик</td>
+					<td>Вид отчета</td>
+					<td>Частота</td>
+					<td>Области</td>
+					<td>Сети</td>
+				</tr>
+				{foreach key=k item=i from=$d name=d}
+				<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+					<td style="text-align:left">{$i.lu}</td>
+					<td style="text-align:left">{$i.ag_name}</td>
+					<td style="text-align:left">{$i.rep_name}</td>
+					<td style="text-align:left">{$i.freq_name}</td>
+					<td>
+						<a
+							class=aregions
+							id=aregions{$i.id}
+							href="javascript:void(0);"
+							onclick="show({$i.id},'regions','region','chains');"
+						>области</a>
+					</td>
+					<td>
+						<a
+							class=achains
+							id=achains{$i.id}
+							href="javascript:void(0);"
+							onclick="show({$i.id},'chains','chain','regions');"
+						>сети</a>
+					</td>
+				</tr>
 				{/foreach}
-			</select>
-			<script>$('#d_{$k}_{$k1} option[value="{$i1.freq_id}"]').prop('selected', true);</script>
+			</table>
 		</td>
+		<td id=regions></td>
+		<td id=chains></td>
 	</tr>
-	{/foreach}
-	{/foreach}
 </table>
+
 
 {literal}
 <script>
@@ -65,7 +97,8 @@ function fill_reminders(dt)
 }
 function save(dt,ag_id,rep_id,freq_id)
 {
-	$('#d_'+ag_id+'_'+rep_id).css('background-color','red');
+	if (ag_id==''||rep_id==''||freq_id=='') return;
+	//$('#d_'+ag_id+'_'+rep_id).css('background-color','red');
 	$('#ok').load('?action=merch_report_cal&save=1&nohead=1',
 	{
 		dt: dt,
@@ -74,7 +107,38 @@ function save(dt,ag_id,rep_id,freq_id)
 		freq_id: freq_id
 	},
 	function() {
-	$('#d_'+ag_id+'_'+rep_id).css('background-color','white');
+	$('#form_zat_month').submit();
+	//$('#d_'+ag_id+'_'+rep_id).css('background-color','white');
+	});
+}
+
+var currentSelected = 0;
+
+function show(id,type,field,typeoff)
+{
+	if (id != currentSelected)
+	{
+		$('#'+typeoff).html('');
+		$('.a'+typeoff).css('font-weight','normal');
+	}
+	$('#'+type).html('');
+	$('.a'+type).css('font-weight','normal');
+	$('#a'+type+id).css('font-weight','bold');
+	currentSelected = id;
+	var fd = new FormData();
+	fd.append('show', 1);
+	fd.append('id', id);
+	fd.append('type', type);
+	fd.append('field', field);
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_cal&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#'+type).html(''+data+'');
+		}
 	});
 }
 </script>

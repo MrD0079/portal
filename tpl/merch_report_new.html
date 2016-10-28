@@ -1,61 +1,6 @@
 {include file="server_is_down.html"}
 
-
-{if $zpm and $zpm.all_ok neq 1}
-<form target="_self" method="POST" name=formzp id=formzp>
-
-{if $zpm.part1_needed eq 1 and $zpm.part1_ok neq 1}
-<h3>{$zpm.period} - 1</h3>
-<table border=1>
-<tr>
-<td>ФИО</td>
-<td>Код подтверждения</td>
-<td>Дата</td>
-<td>PIN</td>
-</tr>
-{foreach key=k item=i from=$zp}
-{if $i.pin neq $i.part1_pin}
-<tr>
-<td><input name=zpm1 type=radio onChange="$('.fo1').attr('disabled',true);$('.fo1{$i.h_fio_otv}').attr('disabled',false);">{$i.fio_otv}</td>
-<td><input name="data[{$i.h_fio_otv}][part1_sum]" value="{$i.part1_sum}" required class="fo1 fo1{$i.h_fio_otv} number"></td>
-<td><input name="data[{$i.h_fio_otv}][part1_dt]"  value="{$i.part1_dt}"  required class="fo1 fo1{$i.h_fio_otv} datepicker"></td>
-<td><input name="data[{$i.h_fio_otv}][part1_pin]" value="{$i.part1_pin}" required class="fo1 fo1{$i.h_fio_otv} num4"></td>
-</tr>
-{/if}
-{/foreach}
-<table>
-<script>$("input[name=zpm1]").click();</script>
-{/if}
-
-{if $zpm.part2_needed eq 1 and $zpm.part2_ok neq 1}
-<h3>{$zpm.period} - 2</h3>
-<table border=1>
-<tr>
-<td>ФИО</td>
-<td>Код подтверждения</td>
-<td>Дата</td>
-<td>PIN</td>
-</tr>
-{foreach key=k item=i from=$zp}
-{if $i.pin neq $i.part2_pin}
-<tr>
-<td><input name=zpm2 type=radio onChange="$('.fo2').attr('disabled',true);$('.fo2{$i.h_fio_otv}').attr('disabled',false);">{$i.fio_otv}</td>
-<td><input name="data[{$i.h_fio_otv}][part2_sum]" value="{$i.part2_sum}" required class="fo2 fo2{$i.h_fio_otv} number"></td>
-<td><input name="data[{$i.h_fio_otv}][part2_dt]"  value="{$i.part2_dt}"  required class="fo2 fo2{$i.h_fio_otv} datepicker"></td>
-<td><input name="data[{$i.h_fio_otv}][part2_pin]" value="{$i.part2_pin}" required class="fo2 fo2{$i.h_fio_otv} num4"></td>
-</tr>
-{/if}
-{/foreach}
-<table>
-<script>$("input[name=zpm2]").click();</script>
-{/if}
-
-<input value="Сохранить" name="save_zp" type="submit">
-</form>
-<script>
-$('.num4').mask('9999');
-</script>
-{/if}
+{include file="merch_report_new_zp.html"}
 
 <form target="_self" method="POST" name=form1 id=form1>
 
@@ -63,6 +8,10 @@ $('.num4').mask('9999');
 {if $route.svms_ok eq 1}
 	{assign var=disabled value='disabled'}
 	<h2>Отчет подтвержден СВМС {$route.svms_ok_date}. Внесение данных запрещено</h2>
+{/if}
+{if $readonly eq 1}
+	{assign var=disabled value='disabled'}
+	<h2>Внесение данных запрещено</h2>
 {/if}
 
 <p>
@@ -136,23 +85,23 @@ $('.num4').mask('9999');
 		<tr>
 			<td>{$smarty.foreach.i.iteration}. {$i1.ag_name}</td>
 			<td>{if $i1.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dates_list}&spec_id={$i1.spec_id}">Специя</a>{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep1}height:36px;width:36px;background-color:{$i1.reminders.rep1.color};{/if}">{if $i1.reminders.rep1}<img style="height:30px;width:30px;" src="design/mrc1.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep2}height:36px;width:36px;background-color:{$i1.reminders.rep2.color};{/if}">{if $i1.reminders.rep2}<img style="height:30px;width:30px;" src="design/mrc2.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep3}height:36px;width:36px;background-color:{$i1.reminders.rep3.color};{/if}">{if $i1.reminders.rep3}<img style="height:30px;width:30px;" src="design/mrc3.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep4}height:36px;width:36px;background-color:{$i1.reminders.rep4.color};{/if}">{if $i1.reminders.rep4}<img style="height:30px;width:30px;" src="design/mrc4.png">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep5}height:36px;width:36px;background-color:{$i1.reminders.rep5.color};{/if}">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="design/mrc5.png">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep1}height:36px;width:36px;background-color:{$i1.reminders.rep1.color};{/if}">{if $i1.reminders.rep1}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep1.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep2}height:36px;width:36px;background-color:{$i1.reminders.rep2.color};{/if}">{if $i1.reminders.rep2}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep2.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep3}height:36px;width:36px;background-color:{$i1.reminders.rep3.color};{/if}">{if $i1.reminders.rep3}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep3.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep4}height:36px;width:36px;background-color:{$i1.reminders.rep4.color};{/if}">{if $i1.reminders.rep4}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep4.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep5}height:36px;width:36px;background-color:{$i1.reminders.rep5.color};{/if}">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep5.pict}">{/if}</td>
 			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep6}height:36px;width:36px;background-color:{$i1.reminders.rep6.color};{/if}">
 				{if $i1.reminders.rep6}
 
 				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i1.spec_id}').show();">
-					<img style="height:29px;width:29px;" src="design/mrc6.png">
+					<img style="height:29px;width:29px;" src="files/{$i1.reminders.rep6.pict}">
 				</div>
 				<div style="display:none;width:300px;" id="text_{$i1.spec_id}">{$i1.reminders.rep6.text}</div>
 				<script>
 				/*$('#div{$i1.spec_id}').hide();*/
 				</script>
 
-					<!--<span title="{$i1.reminders.rep6.text}"><img src="design/mrc6.png"></span>-->
+					<!--<span title="{$i1.reminders.rep6.text}"><img src="files/{$i1.reminders.rep6.pict}"></span>-->
 				{/if}
 			</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i1.vv eq 1}внеплановый визит{/if}{$i1.day_time_mr}</td>
@@ -202,15 +151,9 @@ $('.num4').mask('9999');
 
 <table id=vvt>
 <tbody>
-<tr>
+<tr style="text-align:center">
 <td>
 <a href="javascript:void(0);" onClick="VVAdd('{$smarty.request.dates_list}');">[+]</a>
-</td>
-<td>
-ТЗ (Область, сеть, название, адрес)
-</td>
-<td>
-Заказчик
 </td>
 </tr>
 </tbody>
@@ -247,10 +190,18 @@ function VVAdd(dates_list)
 <h1>Дополнительные отчеты</h1>
 
 <p>
+<a target=_blank href="{$ms_faq}">Надо знать</a>
+&nbsp&nbsp&nbsp
 <a target=_blank href="?action=merch_report_sb&dt={$smarty.request.dates_list}">Сроки/браки</a>
-&nbsp&nbsp&nbsp
-Торговое оборудование
-&nbsp&nbsp&nbsp
-Соответствие договорным условиям
 </p>
 
+{literal}
+<script>
+$(function(){
+$("#head-back-div").remove();
+$("#left-div").remove();
+$("#content-div").css("top","0px");
+$("#right-div").css("background-color", "#FFF");
+});
+</script>
+{/literal}

@@ -1,5 +1,7 @@
 /* Formatted on 28/09/2015 12:28:33 (QP5 v5.227.12220.39724) */
 SELECT COUNT (*) cnt,
+       SUM (z.part1_charged) part1_charged,
+       SUM (z.part2_charged) part2_charged,
        SUM (z.part1_sum) part1_sum,
        SUM (z.part2_sum) part2_sum,
        SUM (CASE WHEN z.pin = z.part1_pin THEN 1 END) part1_pin_ok,

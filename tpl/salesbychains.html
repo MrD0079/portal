@@ -1,0 +1,177 @@
+<h1>Продажи по сетям</h1>
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form_report id=form_report>
+	<p>
+		Отчетный месяц
+		<select required="true" name=sd id=sd>
+			{foreach key=key item=item from=$dt}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+		</select>
+		<select required="true" name=ed id=ed>
+			{foreach key=key item=item from=$dt}
+				<option value="{$item.sd_c}">{$item.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
+		<script>$('#ed option[value="{$smarty.request.ed}"]').prop('selected', true);</script>
+	</p>
+	{if $is_ts neq 1 and $is_eta neq 1}
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+		</p>
+	{/if}
+	{if $is_eta neq 1}
+		<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+		</p>
+	{/if}
+		<p>
+		По сети:
+		<select name=chains id=chains>
+			<option value=0></option>
+			{foreach key=key item=item from=$chains}
+			<option value={$item.net_kod}>{$item.net}</option>
+			{/foreach}
+		</select>
+		<script>$("#chains option[value='{$smarty.request.chains}']").prop('selected', true);</script>
+		</p>
+	<table border=0>
+		<tr>
+			<td>Вид отчета</td>
+			<td><input type=radio id="rep_type" name="rep_type" value='brief'>Общий
+			<input type=radio id="rep_type" name="rep_type" value='detailed'>Развернутый</td>
+		</tr>
+		<script>$("input[name=rep_type][value={$smarty.request.rep_type}]").attr('checked',true);</script>
+		<tr>
+			<td>По принадлежности ТП</td>
+			<td><input type=radio id="affiliation" name="affiliation" value='ter'>по территории сотрудника
+			<input type=radio id="affiliation" name="affiliation" value='all'>по всем ТП сети</td>
+		</tr>
+		<script>$("input[name=affiliation][value={$smarty.request.affiliation}]").attr('checked',true);</script>
+		<tr>
+			<td>Сортировать</td>
+			<td><input type=radio id="salesbychainssort" name="salesbychainssort" value='name'>по алфавитному порядку
+			<input type=radio id="salesbychainssort" name="salesbychainssort" value='sales'>по убыванию продаж</td>
+		</tr>
+		<script>$("input[name=salesbychainssort][value={$smarty.request.salesbychainssort}]").attr('checked',true);</script>
+		<tr>
+			<td>через РЦ</td>
+			<td><input type=radio id="salesbychainsisrc" name="salesbychainsisrc" value='all'>все
+			<input type=radio id="salesbychainsisrc" name="salesbychainsisrc" value='isrc'>через РЦ
+			<input type=radio id="salesbychainsisrc" name="salesbychainsisrc" value='bytp'>отдельно на ТП</td>
+		</tr>
+		<script>$("input[name=salesbychainsisrc][value={$smarty.request.salesbychainsisrc}]").attr('checked',true);</script>
+	</table>
+	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+	<p><a href="?action=salesbychains&print=1&excel=1&generate=1&filename=Стандарт ТО - статистика">Экспорт в Excel</a></p>
+	<input type=hidden name=generate value="Выбрать">
+{/if}
+
+{if $smarty.request.rep_type eq 'brief'}
+<table style="text-align: center;" border=1>
+<tbody>
+	<tr style="font-weight: bold;">
+		<td>Сеть</td>
+		<td>через РЦ</td>
+		<td>Месяц</td>
+		<td>Продажи, {$valuta}</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	{foreach key=k1 item=i1 from=$i.data name=d1}
+	{if $smarty.foreach.d1.iteration eq 1}
+	<tr>
+		<td rowspan="{$smarty.foreach.d1.total+1}" style="text-align: left;">{$i.net}: {$i.c} ТП</td>
+		<td rowspan="{$smarty.foreach.d1.total+1}" style="text-align: center;">{if $i.isrc eq 1}да{else}нет{/if}</td>
+	</tr>
+	{/if}
+	<tr>
+		<td>{$i1.dtt}</td>
+		<td style="text-align: right;">{$i1.summa|num:2}</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+</tbody>
+</table>
+{/if}
+{if $smarty.request.rep_type eq 'detailed'}
+<table style="text-align: center;" border=1>
+<tbody>
+	<tr style="font-weight: bold;">
+		<td>Сеть</td>
+		<td>через РЦ</td>
+		<td>Месяц</td>
+		<td>Код ТП</td>
+		<td>ФИО ТС</td>
+		<td>ФИО ЭТА</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>Тип ТП</td>
+		<td>Продажи, {$valuta}</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	
+	{assign var=d1 value=0}
+	{foreach key=k1 item=i1 from=$i.data name=d1}
+	{assign var=d1 value=`$d1+1`}
+	{foreach key=k2 item=i2 from=$i1.data name=d2}
+	{assign var=d1 value=`$d1+1`}
+	{/foreach}
+	{/foreach}
+	
+	{foreach key=k1 item=i1 from=$i.data name=d1}
+	{if $smarty.foreach.d1.iteration eq 1}
+	<tr>
+		<td rowspan="{$d1+1}" style="text-align: left;">{$i.net}: {$i.c|num:2} ТП</td>
+		<td rowspan="{$d1+1}" style="text-align: center;">{if $i.isrc eq 1}да{else}нет{/if}</td>
+	</tr>
+	{/if}
+	{foreach key=k2 item=i2 from=$i1.data name=d2}
+	{if $smarty.foreach.d2.iteration eq 1}
+	<tr>
+		<td rowspan="{$smarty.foreach.d2.total+1}">{$i2.dtt}</td>
+	</tr>
+	{/if}
+	<tr>
+		<td style="text-align: left;">{$i2.tp_kod}</td>
+		<td style="text-align: left;">{$i2.fio}</td>
+		<td style="text-align: left;">{$i2.eta}</td>
+		<td style="text-align: left;">{$i2.tp_ur}</td>
+		<td style="text-align: left;">{$i2.tp_addr}</td>
+		<td style="text-align: left;">{$i2.tp_type}</td>
+		<td style="text-align: right;">{$i2.summa|num:2}</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+	{/foreach}
+</tbody>
+</table>
+{/if}
+
+{if not $smarty.request.print}
+</form>
+{/if}

@@ -231,7 +231,7 @@
                                                                                            AND TO_DATE (
                                                                                                   :dates_list2,
                                                                                                   'dd.mm.yyyy')
-                         AND DECODE (:sz_id, 0, sz.id, :sz_id) = sz.id) z
+                         AND DECODE (':sz_id', '0', sz.id, '', sz.id, ':sz_id') = sz.id) z
            WHERE     DECODE (:status,
                              0, 0,
                              1, 1,
@@ -254,7 +254,7 @@
                         DECODE (
                            :who,
                            0, DECODE (
-                                 slaves1 + slaves2 + slaves3 + slaves4 + is_do,
+                                 slaves1 + slaves2 + slaves3 + slaves4 + is_do + i_am_is_acceptor,
                                  0, 0,
                                  1),
                            1, creator_tn,

@@ -1,5 +1,6 @@
 <tr id=list_{$id}>
 	<td>
+		{$id}
 		<a href='javascript:void(0);' onClick="del_list({$id})">[x]</a>
 		<input id=d_{$id}_name size=50 value="{$name}" onChange="save_list({$id},'name',this.value);">
 		{if $smarty.request.id eq 0}

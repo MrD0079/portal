@@ -58,7 +58,7 @@
 
 		{if $i.removed eq 1}
 		<td style="background-color: rgb(204, 255, 255); text-align:left">
-			<nobr><input type=radio name=data1_{$i.id}_removed onClick="$('#data_{$i.id}_removed').attr('disabled',false);$('#data_{$i.id}_removed').val(null);" value=0>не определено</nobr>
+			<nobr><input type=radio name=data1_{$i.id}_removed onClick="$('#data_{$i.id}_removed').attr('disabled',false);$('#data_{$i.id}_removed').val(0);" value=0>не определено</nobr>
 			<br>
 			<nobr><input type=radio name=data1_{$i.id}_removed onClick="$('#data_{$i.id}_removed').attr('disabled',false);$('#data_{$i.id}_removed').val(1);" value=1>снять</nobr>
 			<br>

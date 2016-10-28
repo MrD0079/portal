@@ -57,7 +57,10 @@ SELECT ROWNUM,
                                      67, :tn,
                                      (SELECT pos_id
                                         FROM user_list
-                                       WHERE tn = :tn AND is_super = 1), :tn))
+                                       WHERE tn = :tn AND is_super = 1), :tn,
+                                       (SELECT pos_id
+                                          FROM user_list
+                                         WHERE tn = :tn AND is_admin = 1), :tn))
                  AND DECODE (:net, 0, n.id_net, :net) = n.id_net
                  AND DECODE (:tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
                  AND DECODE (:tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk

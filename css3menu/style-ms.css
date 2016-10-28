@@ -60,9 +60,9 @@ ul#nav a
 	vertical-align:middle;
 	text-align:left;
 	text-decoration:none;
-	font:11px Times;
+	/*font:18px Times;*/
 	color: white/*#E53013*/;
-	font-size: 10pt;
+	font-size: 19px;
 	font-family: calibri;
 }
 ul#nav ul li
@@ -78,7 +78,7 @@ ul#nav span
 	background-repeat:no-repeat;
 	padding-right:17px;
 	color: white/*#E53013*/;
-	font-size: 10pt;
+	font-size: 19px;
 	font-family: calibri;
 }
 ul#nav ul span

@@ -140,7 +140,6 @@ if (isset($_REQUEST["save"])||isset($_REQUEST["ok_primary_retry"]))
 				$emails=stritr($emails,array("'"=>"''"));
 				$subj=stritr($subj,array("'"=>"''"));
 				$text=stritr($text,array("'"=>"''"));
-				//$sql="BEGIN add_job (96, 'BEGIN PERSIK.PR_SENDMAIL (''".$emails."'', ''".$subj."'', ''".$text."''); END;'); END;";
 				$sql="BEGIN add_job (96, 'DECLARE i INTEGER; BEGIN SELECT ok_final INTO i FROM tr_order_head WHERE id = ".$k."; IF i <> 1 THEN PERSIK.PR_SENDMAIL (''".$emails."'', ''".$subj."'', ''".$text."''); END IF;END;'); END;";
 				$db->query($sql);
 		}

@@ -57,8 +57,7 @@
                  AND d.H_TP_KOD_DATA_NAKL = an.H_TP_KOD_DATA_NAKL
                  AND d.tp_kod = tp.tp_kod
                  AND an.if1 = 1
-                 AND TO_NUMBER (TO_CHAR (d.data, 'mm')) = :month
-                 AND tp.m = :month) x
+                 AND TO_NUMBER (TO_CHAR (d.data, 'mm')) = :month) x
    WHERE     x.parent_tn = v.tn
          AND u.tn = x.parent_tn
          AND x.parent_tn = f.parent_tn(+)

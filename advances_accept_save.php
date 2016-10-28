@@ -12,7 +12,7 @@ $vals = array(
 
 Table_Update('advance_ok', $keys,$vals);
 
-if ($_REQUEST['field']=='ok_dpu'&&$_REQUEST['val']==1)
+if ($_REQUEST['field']=='ok_ndp'&&$_REQUEST['val']==1)
 {
 	$period=$db->getOne("select mt||' '||y from calendar where data=to_date('".$_REQUEST['dt']."','dd.mm.yyyy')");
 	$subj='Завершено согласование авансов на '.$period;

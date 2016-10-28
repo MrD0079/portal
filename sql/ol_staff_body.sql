@@ -52,7 +52,7 @@
                     FROM ol_staff
                    WHERE free_staff_id = :id AND tn = :tn) BETWEEN 901
                                                                AND 999
-              OR (SELECT NVL (is_admin, 0)
+              /*OR (SELECT NVL (is_admin, 0)
                     FROM user_list
-                   WHERE tn = :tn) = 1)
+                   WHERE tn = :tn) = 1*/)
 ORDER BY x.gruppa, x.num

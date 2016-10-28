@@ -1,0 +1,37 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>ФИО ТС
+		<td>ФИО ЭТА
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>План на ТП, {$valuta}</td>
+		<td>Продажи неделя 1, {$valuta}</td>
+		<td>Продажи неделя 2, {$valuta}</td>
+		<td>Продажи неделя 3, {$valuta}</td>
+		<td>Продажи неделя 4, {$valuta}</td>
+		<td>Продажи неделя 5, {$valuta}</td>
+	</tr>
+	{foreach key=k item=i from=$list}
+	<tr>
+		<td>{$i.ts}</td>
+		<td>{$i.eta}</td>
+		<td>{$i.tp_name}</td>
+		<td>{$i.address}</td>
+		<td style="text-align:right;">{$i.plan|num:2}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold;text-align:center">
+		<td colspan=4>Итого</td>
+		<td style="text-align:right;">{$listt.plan|num:2}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>

@@ -282,6 +282,7 @@
 		{if $smarty.request.plan_type eq 7}
 		<td>№ акта</td>
 		<td>Дата акта</td>
+		<td>Юр. лицо</td>
 		{/if}
 
 	</tr>
@@ -333,6 +334,7 @@
 		{if $smarty.request.plan_type eq 7}
 		<td>{$fin_plan_detail_item.inv_act_num}</td>
 		<td>{$fin_plan_detail_item.inv_act_dt}</td>
+		<td>{$fin_plan_detail_item.ur_name}</td>
 		{/if}
 	</tr>
 	{/foreach}

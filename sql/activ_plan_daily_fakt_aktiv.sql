@@ -5,5 +5,5 @@ SELECT a.*, u.tn
        AND u.dpt_id = :dpt_id
        AND u.dpt_id = a.dpt_id
        AND u.tn = :tn
-       AND a.tp_qty > 0
+       AND a.tp_qty >= 0
        AND a.dt = TO_DATE (:dt, 'dd.mm.yyyy')

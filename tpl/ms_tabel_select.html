@@ -5,14 +5,14 @@
 Дата
 </td>
 <td>
-	<select name=dates_list2 id=dates_list2>
+	<select name=month_list id=month_list>
 	{foreach key=key item=item from=$month_list}
-		{if $item.ms_agenda_enabled}<option value="{$item.sd_c}">{$item.my}</option>{/if}
+		<option value="{$item.sd_c}">{$item.my}</option>
 	{/foreach}
 	</select>
 </td>
 <script>
-	$("#dates_list2 option[value='{$smarty.request.dates_list2}']").prop('selected', true);
+	$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);
 </script>
 </tr>
 

@@ -1,4 +1,4 @@
-/* Formatted on 03/09/2015 12:40:08 (QP5 v5.227.12220.39724) */
+/* Formatted on 12/02/2016 11:56:35 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT c.y,
                   c.my,
                   c.mt,
@@ -7,7 +7,8 @@
                   z.fil,
                   f.name fil_name,
                   zff1.val_string,
-                  zff2.val_textarea
+                  zff2.val_textarea,
+                  NVL (kat.tu, 0) tu
     FROM calendar c,
          bud_ru_zay z,
          user_list u,
@@ -41,18 +42,16 @@
                WHERE     z_id = z.id
                      AND accept_order =
                             DECODE (
-                               NVL (
-                                  (SELECT MAX (accept_order)
-                                     FROM bud_ru_zay_accept
-                                    WHERE z_id = z.id AND accepted = 2),
-                                  0),
+                               NVL ( (SELECT MAX (accept_order)
+                                        FROM bud_ru_zay_accept
+                                       WHERE z_id = z.id AND accepted = 2),
+                                    0),
                                0, (SELECT MAX (accept_order)
                                      FROM bud_ru_zay_accept
                                     WHERE z_id = z.id),
                                (SELECT MAX (accept_order)
                                   FROM bud_ru_zay_accept
-                                 WHERE z_id = z.id AND accepted = 2))) =
-                1
+                                 WHERE z_id = z.id AND accepted = 2))) = 1
          AND valid_no = 0
          AND TRUNC (z.dt_start, 'mm') = c.data
          AND (   u.tn IN (SELECT slave

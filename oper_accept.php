@@ -1,24 +1,11 @@
 <?
-
-audit("открыл oper_accept","fin_plan");
-
-
-if (isset($_REQUEST["nets"])){$_SESSION["nets"]=$_REQUEST["nets"];}else{if (isset($_SESSION["nets"])){$_REQUEST["nets"]=$_SESSION["nets"];}}
-if (isset($_REQUEST["calendar_years"])){$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];}else{if (isset($_SESSION["calendar_years"])){$_REQUEST["calendar_years"]=$_SESSION["calendar_years"];}}
-if (isset($_REQUEST["tn_rmkk"])){$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];}else{if (isset($_SESSION["tn_rmkk"])){$_REQUEST["tn_rmkk"]=$_SESSION["tn_rmkk"];}}
-if (isset($_REQUEST["tn_mkk"])){$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];}else{if (isset($_SESSION["tn_mkk"])){$_REQUEST["tn_mkk"]=$_SESSION["tn_mkk"];}}
-if (isset($_REQUEST["calendar_months"])){$_SESSION["calendar_months"]=$_REQUEST["calendar_months"];}else{if (isset($_SESSION["calendar_months"])){$_REQUEST["calendar_months"]=$_SESSION["calendar_months"];}}
-if (isset($_REQUEST["ok_filter"])){$_SESSION["ok_filter"]=$_REQUEST["ok_filter"];}else{if (isset($_SESSION["ok_filter"])){$_REQUEST["ok_filter"]=$_SESSION["ok_filter"];}}
-
-
-!isset($_REQUEST["tn_rmkk"]) ? $_REQUEST["tn_rmkk"]=0: null;
-!isset($_REQUEST["tn_mkk"]) ? $_REQUEST["tn_mkk"]=0: null;
-!isset($_REQUEST["nets"]) ? $_REQUEST["nets"]=0: null;
-!isset($_REQUEST["calendar_months"]) ? $_REQUEST["calendar_months"]=0: null;
-!isset($_REQUEST["ok_filter"]) ? $_REQUEST["ok_filter"]=0: null;
-
-
-
+InitRequestVar("calendar_months",0);
+InitRequestVar("nets",0);
+InitRequestVar("tn_rmkk",0);
+InitRequestVar("tn_mkk",0);
+InitRequestVar("calendar_years");
+InitRequestVar("mgroups",1);
+InitRequestVar("ok_filter",0);
 if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 {
 	//ses_req();
@@ -45,13 +32,6 @@ if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 	}
 	$_REQUEST["generate"]=1;
 }
-
-
-
-
-
-
-
 
 if (
 	(
@@ -87,24 +67,10 @@ if (
 
 }
 
-
 if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 {
-	$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];
-	$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];
-	$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];
-	$_SESSION["nets"]=$_REQUEST["nets"];
-	$_SESSION["ok_filter"]=$_REQUEST["ok_filter"];
-
 	$sql=rtrim(file_get_contents('sql/oper_accept.sql'));
 	$sql_detail=rtrim(file_get_contents('sql/oper_accept_detail.sql'));
-
-
-//if (isset($_REQUEST["debug"])) {$sql_detail=rtrim(file_get_contents('sql/oper_accept_detail_debug.sql'));}
-
-
-
-
 	$sql_detail_total=rtrim(file_get_contents('sql/oper_accept_detail_total.sql'));
 	$params=array(
 		':dpt_id' => $_SESSION["dpt_id"],
@@ -114,7 +80,8 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 		':calendar_months'=>$_REQUEST["calendar_months"],
 		':tn_rmkk'=>$_REQUEST["tn_rmkk"],
 		':tn_mkk'=>$_REQUEST["tn_mkk"],
-		':tn'=>$tn
+		':tn'=>$tn,
+		':mgroups'=>$_REQUEST["mgroups"],
 	);
 	$sql=stritr($sql,$params);
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -144,12 +111,6 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 		//echo $sql;
 		$data[$k]["plan".$i] = $data1;
 		}
-                
-                
-
-
-
-
 	}
 	//print_r($data);
 	$smarty->assign('fin_report', $data);
@@ -169,9 +130,6 @@ $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('nets', $data);
-
-
-
 
 $sql=rtrim(file_get_contents('sql/list_rmkk.sql'));
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);

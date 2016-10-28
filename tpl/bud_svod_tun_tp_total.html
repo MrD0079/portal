@@ -1,0 +1,61 @@
+<h2>Итоги</h2>
+<table id=mytable style="text-align: left; width:600px" border="1" cellpadding="2" cellspacing="0">
+	<tbody>
+		<tr style="font-weight: bold;">
+			<td style="text-align: center;"></td>
+			<td style="text-align: center;">Сумма продаж, ден. ед.</td>
+			<td style="text-align: center;">ТС/СТС: планирую выдать бонус</td>
+			<td style="text-align: center;">Бонус расчетный ТП, {$valuta}</td>
+			<td style="text-align: center;">Бонус фактический, {$valuta}</td>
+			<td style="text-align: center;">Фикс. оплата в месяц ФАКТ, {$valuta}</td>
+			<td style="text-align: center;">Максимум по ТП, {$valuta}</td>
+			<td style="text-align: center; background-color: rgb(153, 255, 153);">ИТОГО</td>
+			<td style="text-align: center;">Бонус по форме 2</td>
+			<td style="text-align: center;background-color:#FFCC99;">Компенсация дистрибутору, {$valuta}</td>
+			<td style="text-align: center;">Затраты на ТП, %</td>
+			<td style="text-align: center;">сумма по реестрам</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Единичные</td>
+			<td style="text-align: right;">{$total.summa|num:2}</td>
+			<td style="text-align: right;">{$total.selected}</td>
+			<td style="text-align: right;">{$total.bonus_tp|num:2}</td>
+			<td style="text-align: right;">{$total.bonus_fakt|num:2}</td>
+			<td style="text-align: right;">{$total.fixed_fakt|num:2}</td>
+			<td style="text-align: right;">{$total.maxtp|num:2}</td>
+			<td style="text-align: right; background-color: rgb(153, 255, 153);">{$total.total|num:2}</td>
+			<td style="text-align: right;">{$total.cash}</td>
+			<td style="text-align: right;background-color:#FFCC99;">{$total.compens_distr|num:2}</td>
+			<td style="text-align: right;">{$total.zat|num:2}</td>
+			<td style="text-align: right;"></td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Сетевые</td>
+			<td style="text-align: right;">{$totaln.summa|num:2}</td>
+			<td style="text-align: right;">{$totaln.selected}</td>
+			<td style="text-align: right;">{$totaln.bonus_tp|num:2}</td>
+			<td style="text-align: right;">{$totaln.bonus_fakt|num:2}</td>
+			<td style="text-align: right;">{$totaln.fixed_fakt|num:2}</td>
+			<td style="text-align: right;">{$totaln.maxtp|num:2}</td>
+			<td style="text-align: right; background-color: rgb(153, 255, 153);">{$totaln.total|num:2}</td>
+			<td style="text-align: right;">{$totaln.cash}</td>
+			<td style="text-align: right;background-color:#FFCC99;">{$totaln.compens_distr|num:2}</td>
+			<td style="text-align: right;">{$totaln.zat|num:2}</td>
+			<td style="text-align: right;"></td>
+		</tr>
+		<tr id="total" style="font-weight: bold;">
+			<td style="text-align: center;">Итого</td>
+			<td style="text-align: right;">{$totalt.summa|num:2}</td>
+			<td style="text-align: right;">{$totalt.selected}</td>
+			<td style="text-align: right;">{$totalt.bonus_tp|num:2}</td>
+			<td style="text-align: right;">{$totalt.bonus_fakt|num:2}</td>
+			<td style="text-align: right;">{$totalt.fixed_fakt|num:2}</td>
+			<td style="text-align: right;">{$totalt.maxtp|num:2}</td>
+			<td style="text-align: right; background-color: rgb(153, 255, 153);">{$totalt.total|num:2}</td>
+			<td style="text-align: right;">{$totalt.cash}</td>
+			<td style="text-align: right;background-color:#FFCC99;">{$totalt.compens_distr|num:2}</td>
+			<td style="text-align: right;">{$totalt.zat|num:2}</td>
+			<td style="text-align: right;">{$svodf|num:2}</td>
+		</tr>
+	</tbody>
+</table>

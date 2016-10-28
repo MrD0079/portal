@@ -28,36 +28,14 @@
 			{/foreach}
 		</select>
 	</td>
-	<td style=" text-align:right;" id="d_{$id}_sales">
-		<input
-			class="number"
-			size="10"
-			name="sales[{$id}]"
-			id="sales_{$id}"
-			onChange="save_ag('{$id}','',1,'sales',this.value);"
-		>
-	</td>
-	<td style=" text-align:right;" id="d_{$id}_dz_return">
-		<input
-			class="number"
-			size="10"
-			name="dz_return[{$id}]"
-			id="dz_return_{$id}"
-			onChange="save_ag('{$id}','',1,'dz_return',this.value);"
-		>
-	</td>
+	<td style=" text-align:right" id="d_{$id}_sales"></td>
+	<td style=" text-align:right" id="d_{$id}_val_fact"></td>
+	<td style=" text-align:right" id="d_{$id}_dz_return"></td>
+	<td style=" text-align:right" id="d_{$id}_plan_perc"></td>
 	<td style=" text-align:right" id="d_{$id}_dz_return_norm"></td>
-	<td style=" text-align:right;" id="d_{$id}_akb_penalty">
-		<input
-			class="number"
-			size="10"
-			name="akb_penalty[{$id}]"
-			id="akb_penalty_{$id}"
-			onChange="save_ag('{$id}','',1,'akb_penalty',this.value);"
-		>
-	</td>
+	<!--<td style=" text-align:right" id="d_{$id}_akb_penalty"></td>-->
 	<td style=" text-align:right" id="d_{$id}_zp_plan"></td>
-	<td style=" text-align:right;" id="d_{$id}_zp_fakt">
+	<td style=" text-align:right" id="d_{$id}_zp_fakt">
 		<input
 			class="number"
 			size="10"
@@ -66,6 +44,5 @@
 			onChange="save_ag('{$id}','',1,'zp_fakt',this.value);"
 		>
 	</td>
-	<td style=" text-align:right" id="d_{$id}_dz_return_norm03"></td>
 	<td style=" text-align:right; background-color: #FFCC99" id="d_{$id}_sales_perc"></td>
 </tr>

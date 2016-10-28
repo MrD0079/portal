@@ -1,4 +1,4 @@
-/* Formatted on 25/05/2015 16:23:14 (QP5 v5.227.12220.39724) */
+/* Formatted on 05/04/2016 18:01:05 (QP5 v5.252.13127.32867) */
   SELECT h.*,
          TO_CHAR (h.created, 'dd.mm.yyyy hh24:mi:ss') created,
          b.*,
@@ -13,11 +13,10 @@
            WHERE     sz_id = h.sz_id
                  AND accept_order =
                         DECODE (
-                           NVL (
-                              (SELECT accept_order
-                                 FROM sz_accept
-                                WHERE sz_id = h.sz_id AND accepted = 2),
-                              0),
+                           NVL ( (SELECT accept_order
+                                    FROM sz_accept
+                                   WHERE sz_id = h.sz_id AND accepted = 2),
+                                0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = h.sz_id),
@@ -30,11 +29,10 @@
            WHERE     sz_id = h.sz_id
                  AND accept_order =
                         DECODE (
-                           NVL (
-                              (SELECT accept_order
-                                 FROM sz_accept
-                                WHERE sz_id = h.sz_id AND accepted = 2),
-                              0),
+                           NVL ( (SELECT accept_order
+                                    FROM sz_accept
+                                   WHERE sz_id = h.sz_id AND accepted = 2),
+                                0),
                            0, (SELECT MAX (accept_order)
                                  FROM sz_accept
                                 WHERE sz_id = h.sz_id),
@@ -62,21 +60,19 @@
                WHERE     sz_id = h.sz_id
                      AND accept_order =
                             DECODE (
-                               NVL (
-                                  (SELECT accept_order
-                                     FROM sz_accept
-                                    WHERE sz_id = h.sz_id AND accepted = 2),
-                                  0),
+                               NVL ( (SELECT accept_order
+                                        FROM sz_accept
+                                       WHERE sz_id = h.sz_id AND accepted = 2),
+                                    0),
                                0, (SELECT MAX (accept_order)
                                      FROM sz_accept
                                     WHERE sz_id = h.sz_id),
                                (SELECT accept_order
                                   FROM sz_accept
-                                 WHERE sz_id = h.sz_id AND accepted = 2))) =
-                1
+                                 WHERE sz_id = h.sz_id AND accepted = 2))) = 1
          AND (   (    :date_between = 'mz'
-                  AND (b.mz BETWEEN TO_DATE (:smz, 'dd.mm.yyyy')
-                                AND TO_DATE (:emz, 'dd.mm.yyyy')))
+                  AND (b.mz BETWEEN TO_DATE ( :smz, 'dd.mm.yyyy')
+                                AND TO_DATE ( :emz, 'dd.mm.yyyy')))
               OR (    :date_between = 'cr'
                   AND (TRUNC (
                           (SELECT lu
@@ -97,25 +93,20 @@
                                                FROM sz_accept
                                               WHERE     sz_id = h.sz_id
                                                     AND accepted = 2)))) BETWEEN TO_DATE (
-                                                                                         :scr,
-                                                                                         'dd.mm.yyyy')
-                                                                                  AND TO_DATE (
-                                                                                         :ecr,
-                                                                                         'dd.mm.yyyy'))))
-         AND NVL (b.tn, b.chief_tn) IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND NVL (b.tn, b.chief_tn) IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+                                                                                    :scr,
+                                                                                    'dd.mm.yyyy')
+                                                                             AND TO_DATE (
+                                                                                    :ecr,
+                                                                                    'dd.mm.yyyy'))))
+         AND (   :exp_list_without_ts = 0
+              OR NVL (b.tn, b.chief_tn) IN (SELECT slave
+                                              FROM full
+                                             WHERE master =
+                                                      :exp_list_without_ts))
+         AND (   :exp_list_without_ts = 0
+              OR NVL (b.tn, b.chief_tn) IN (SELECT slave
+                                              FROM full
+                                             WHERE master = :exp_list_only_ts))
          AND (   NVL (b.tn, b.chief_tn) IN (SELECT slave
                                               FROM full
                                              WHERE master = :tn)
@@ -129,9 +120,8 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND h.dpt_id = :dpt_id
-         AND DECODE (:eta_list, '', NVL (b.h_eta, '0'), :eta_list) =
-                NVL (b.h_eta, '0')
-         AND DECODE (:region_name, '0', '0', :region_name) =
-                DECODE (:region_name, '0', '0', b.region)
-         AND bst.id IN (:bst)
+         AND (:eta_list is null OR :eta_list = b.h_eta)
+         AND DECODE ( :region_name, '0', '0', :region_name) =
+                DECODE ( :region_name, '0', '0', b.region)
+         AND bst.id IN ( :bst)
 ORDER BY b.mz, b.fio

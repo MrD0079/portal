@@ -2,9 +2,9 @@
   SELECT rh.*, fn_getname (rh.tn) fio, rp.name pos
     FROM routes_head rh, routes_pos rp
    WHERE     TRUNC (data, 'mm') = TRUNC (TO_DATE (:ed, 'dd/mm/yyyy'), 'mm')
-         AND (   tn IN (SELECT emp_tn
-                          FROM who_full
-                         WHERE exp_tn = :tn)
+         AND (   tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1

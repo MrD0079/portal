@@ -1,5 +1,6 @@
 <?
 
+//ses_req();
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 {
@@ -7,21 +8,21 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 	{
 		Table_Update("merch_report_cal_rep", array("id"=>$k),$v);
 	}
-}
-
-
-
-if (isset($_REQUEST["del"]))
-{
-	foreach ($_REQUEST["del"] as $k=>$v)
+	if (isset($_FILES["files"]))
 	{
-		$db->extended->autoExecute("merch_report_cal_rep", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+		$z = $_FILES["files"];
+		foreach ($z['tmp_name'] as $k=>$v)
+		{
+			if (is_uploaded_file($z["tmp_name"][$k]))
+			{
+				$a=pathinfo($z["name"][$k]);
+				$fn="pict".get_new_file_id().".".$a["extension"];
+				move_uploaded_file($z["tmp_name"][$k], "files/".$fn);
+				$vals = array("pict"=>$fn);
+				Table_Update ("merch_report_cal_rep", array("id"=>$k), $vals);
+			}
+		}
 	}
-}
-
-if (isset($_REQUEST["new"]))
-{
-	$affectedRows = $db->extended->autoExecute("merch_report_cal_rep", array("name"=>$_REQUEST["new_name"]), MDB2_AUTOQUERY_INSERT);
 }
 
 $sql=rtrim(file_get_contents('sql/merch_report_cal_rep.sql'));

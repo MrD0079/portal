@@ -63,6 +63,31 @@ if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
 <script type="text/javascript" src="js/autoNumeric-1.9.27.js"></script>
 <script type="text/javascript" src="js/bud_fil_passport.js"></script>
 <script type="text/javascript" src="js/portal.js"></script>
+<script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="js/jscolor/jscolor.js"></script>
+<script type="text/javascript">
+tinymce.init({
+        selector: ".WYSIWYG",
+        plugins: [
+                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern",
+                "save"
+        ],
+        //autosave_ask_before_unload: false,
+        toolbar1: "newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
+        toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+        //toolbar4: "save",
+        menubar: false,
+        toolbar_items_size: 'small',
+	statusbar: false,
+        //save_enablewhendirty: true,
+	width: 1200,
+	height: 500,
+        /*save_onsavecallback: function() {console.log("Save");}*/
+});
+</script>
 <?
 }
 

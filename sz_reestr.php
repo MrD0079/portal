@@ -16,10 +16,13 @@ InitRequestVar("sz_pos_id",0);
 InitRequestVar("region_name","0");
 InitRequestVar("department_name","0");
 InitRequestVar("sz_id",0);
-
+/*
+if ($_REQUEST["sz_id"]=='')
+{
+	$_REQUEST["sz_id"]=0;
+}
+*/
 //ses_req();
-
-
 
 $params=array(':tn'=>$tn);
 

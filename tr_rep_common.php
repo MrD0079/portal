@@ -8,6 +8,7 @@ InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 InitRequestVar("region_name","0");
 InitRequestVar("department_name","0");
+InitRequestVar("tr_rep_common_datauvol",'all');
 
 
 $params=array(
@@ -17,6 +18,7 @@ $params=array(
 ":ed"=>"'".$_REQUEST["dates_list2"]."'",
 ":region_name"=>"'".$_REQUEST["region_name"]."'",
 ":department_name"=>"'".$_REQUEST["department_name"]."'",
+':tr_rep_common_datauvol'=>"'".$_REQUEST['tr_rep_common_datauvol']."'",
 );
 
 $sql = rtrim(file_get_contents('sql/sz_reestr_region_list.sql'));

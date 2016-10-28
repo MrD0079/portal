@@ -5,9 +5,9 @@
          fn_getname ( n.tn_mkk) mkk_name
     FROM nets n, coveringpointspos cpp
    WHERE     N.SW_KOD = cpp.id_net
-         AND n.tn_mkk IN (SELECT emp_tn
-                            FROM who_full
-                           WHERE exp_tn = :tn)
+         AND n.tn_mkk IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
          AND DECODE (:tz_eta_list, '', fio_eta, :tz_eta_list) = fio_eta
          AND TRUNC (cpp.DATA, 'mm') = TO_DATE (:sd, 'dd.mm.yyyy')
          AND :tn IN (DECODE ( (SELECT pos_id

@@ -20,11 +20,13 @@ if (isset($_REQUEST["replace_acceptors"]))
 
 	$f=$db->getOne("select fio from user_list where tn=".$_REQUEST["acceptors_from"]);
 	$t=$db->getOne("select fio from user_list where tn=".$_REQUEST["acceptors_to"]);
-	audit("заменил согласователя: ".$f." => ".$t." за период с ".$_REQUEST['dt_from']." по ".$_REQUEST['dt_to'],"sz_change");
+	//audit("заменил согласователя: ".$f." => ".$t." за период с ".$_REQUEST['dt_from']." по ".$_REQUEST['dt_to'],"sz_change");
+	audit("заменил согласователя: ".$f." => ".$t,"sz_change");
 
 	//isset($_REQUEST['dt_from'])?$_REQUEST['dt_from']=OraDate2MDBDate($_REQUEST['dt_from']):null;
 	//isset($_REQUEST['dt_to'])?$_REQUEST['dt_to']=OraDate2MDBDate($_REQUEST['dt_to']):null;
-	$sql="BEGIN SZREPLACCEPT (".$_REQUEST["acceptors_from"].", ".$_REQUEST["acceptors_to"].",TO_DATE ('".$_REQUEST['dt_from']."', 'dd.mm.yyyy'),TO_DATE ('".$_REQUEST['dt_to']."', 'dd.mm.yyyy')); END;";
+	//$sql="BEGIN SZREPLACCEPT (".$_REQUEST["acceptors_from"].", ".$_REQUEST["acceptors_to"].",TO_DATE ('".$_REQUEST['dt_from']."', 'dd.mm.yyyy'),TO_DATE ('".$_REQUEST['dt_to']."', 'dd.mm.yyyy')); END;";
+	$sql="BEGIN SZREPLACCEPT (".$_REQUEST["acceptors_from"].", ".$_REQUEST["acceptors_to"]."); END;";
 	//echo $sql;
 	$db->query($sql);
 	//ses_req();

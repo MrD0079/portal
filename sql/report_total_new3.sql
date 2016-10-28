@@ -129,9 +129,9 @@ SELECT COUNT (*) c,
                AND rha.ag_id IN ( :ha)
                AND DECODE ( :select_route_numb, 0, 0, rh.id) =
                       DECODE ( :select_route_numb, 0, 0, :select_route_numb)
-               AND (   rh.tn IN (SELECT emp_tn
-                                   FROM who_full
-                                  WHERE exp_tn = :tn)
+               AND (   rh.tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
                     OR (SELECT is_admin
                           FROM user_list
                          WHERE tn = :tn) = 1

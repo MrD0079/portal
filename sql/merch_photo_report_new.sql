@@ -29,9 +29,9 @@
                 DECODE (:oblast, '0', '0', :oblast)
          AND DECODE (:city, '0', '0', r.cpp1_city) =
                 DECODE (:city, '0', '0', :city)
-         AND (   r.rh_tn IN (SELECT emp_tn
-                               FROM who_full
-                              WHERE exp_tn = :tn)
+         AND (   r.rh_tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1)

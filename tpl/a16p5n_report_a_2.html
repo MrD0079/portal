@@ -1,0 +1,150 @@
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО руководителя</td>
+		<td>Сеть</td>
+		<td>ФИО ТС<br></td>
+		<td>ФИО ЭТА<br></td>
+		<td>Код/Название/Адрес ТП<br></td>
+		<td>ФАКТ март 2016,<br>{$valuta}</td>
+		<td>ПЛАН апрель 2016,<br>{$valuta}</td>
+		<td>ФАКТ апрель 2016,<br>{$valuta}</td>
+		<td>% выполнения</td>
+		<td>Бонус расчетный</td>
+		<td>Дата<br>выдачи<br>бонуса<br>
+			{if $is_ts and not $smarty.request.print}
+			{literal}
+			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+			{/literal}
+			{/if}
+		</td>
+		<td>Размер<br>бонуса,<br>{$valuta}</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list1}
+	{cycle assign="color" values='#ccffff,#ffffcc'}
+
+	<!--{$smarty.foreach.list1.iteration} {$list_item.h_net} <br>-->
+	
+	{foreach key=k1 item=i1 from=$list_item.tp name=tp}
+	<tr bgcolor="{$color}">
+		{if $smarty.foreach.tp.iteration eq 1}
+		<td rowspan={$smarty.foreach.tp.total}>{$smarty.foreach.list1.iteration}</td>
+		<td rowspan={$smarty.foreach.tp.total}>{$list_item.parent_fio}</td>
+		<td rowspan={$smarty.foreach.tp.total}>{$list_item.net}</td>
+		{/if}
+		<td>{$i1.ts_fio}</td>
+		<td>{$i1.fio_eta}</td>
+		<td>{$i1.tp_kod} {$i1.tp_ur} {$i1.tp_addr}</td>
+		{if $smarty.foreach.tp.iteration eq 1}
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.fakt3|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.plan4|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.fakt4|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.perc|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right; {if $list_item.bonus_sum1 > $list_item.max_bonus}background-color:red{/if}">{$list_item.max_bonus|default:0|num:2}</td>
+		{/if}
+		<td style="text-align:center">
+			{if not $smarty.request.print and $is_ts and $ok_chief_4ts.part2 neq 1 and $list_item.max_bonus and $i1.enabled}
+				<input
+				class="chk_all" type=checkbox
+				id=bonus_dt1_cb_{$i1.tp_kod}
+				{if $i1.bonus_dt1}checked{/if}
+				onClick="
+					$('#bonus_dt1{$i1.tp_kod}').attr('disabled',!this.checked);
+					$('#data{$i1.tp_kod}bonus_sum').attr('disabled',!this.checked);
+					(!this.checked)?$('#bonus_dt1_val{$i1.tp_kod}').val(''):$('#bonus_dt1_val{$i1.tp_kod}').val($('#bonus_dt1{$i1.tp_kod}').val());
+				"
+			>
+			<input required
+				{if $ok_chief_4ts.part2 eq 1 or not $i1.bonus_dt1}disabled{/if}
+				class="datepicker"
+				size=10
+				id=bonus_dt1{$i1.tp_kod} value="{$i1.bonus_dt1}"
+				onChange="
+					$('#bonus_dt1_val{$i1.tp_kod}').val($('#bonus_dt1{$i1.tp_kod}').val());
+				"
+			>
+			<input
+				type=hidden
+				name=data[{$i1.tp_kod}][bonus_dt1] id=bonus_dt1_val{$i1.tp_kod} value="{$i1.bonus_dt1}"
+			>
+			{else}
+			{$i1.bonus_dt1}
+			{/if}
+		</td>
+		<td {if $list_item.bonus_sum1 > $list_item.max_bonus} style="background-color:red"{/if}>
+			{if not $smarty.request.print and $is_ts and $ok_chief_4ts.part2 neq 1 and $list_item.max_bonus and $i1.enabled}
+			<input
+				{if not $i1.bonus_dt1}disabled{/if}
+				name=data[{$i1.tp_kod}][bonus_sum1]
+				id=data{$i1.tp_kod}bonus_sum
+				size=10
+				required
+				class="tp_group_{$list_item.h_net}"
+				onChange="checkBonuses({$i1.tp_kod},'tp_group_{$list_item.h_net}',{$list_item.max_bonus})"
+			>
+			<script>
+			$(
+				function()
+				{literal}{{/literal}
+					$(
+						'#data{$i1.tp_kod}bonus_sum').
+						autoNumeric(
+							'init',
+							{literal}{{/literal}
+								aSep: '',
+								mDec: 2,
+								vMin: 0.0,
+								vMax: {$list_item.max_bonus|default:0}
+							{literal}}{/literal}
+					);
+				{literal}}{/literal}
+			);
+			$('#data{$i1.tp_kod}bonus_sum').val("{$i1.bonus_sum1}");
+			</script>
+			{else}
+			{$i1.bonus_sum1|num:2}
+			{/if}
+		</td>
+	</tr>
+	{/foreach}
+	{/foreach}
+</table>
+
+
+<script>
+{literal}
+function checkBonuses(tp_kod,net,maxBonus)
+{
+	var classSum=0.0;
+	$('.'+net+':enabled').each(function(){
+		var x = parseFloat($(this).val());
+		isNaN(x) ? x = 0.0 : null;
+		classSum+=x;
+	});
+	console.log(classSum+' *** '+maxBonus);
+	if (classSum>maxBonus)
+	{
+		var currentVal = parseFloat($('#data'+tp_kod+'bonus_sum').val());
+		var delta = classSum - maxBonus;
+		var newVal = currentVal - delta;
+		$('#data'+tp_kod+'bonus_sum').val(newVal.toFixed(2));
+	}
+}
+{/literal}
+</script>
+
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+
+

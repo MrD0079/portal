@@ -1,8 +1,10 @@
-<h3>Согласование отчетов по активности</h3>
+<h3>{if $smarty.request.tu eq 1}Результаты переговоров{else}Отчеты по активности{/if}, согласование</h3>
+
+{$tooManyLines}
 
 <form target="_self" method="POST" name=form_bud_ru_zay_report_accept id=form_bud_ru_zay_report_accept enctype="multipart/form-data">
 
-<p>Вашего согласования ожидают следующие заявки на проведение активности:</p>
+<input type=hidden name=tu value={$smarty.request.tu}>
 
 <p>
 <input checked="checked" name="wait4myaccept" id="wait4myaccept" value="0" type="radio"> ожидают моего согласования
@@ -10,19 +12,33 @@
 <script>$("input[name=wait4myaccept][value={$smarty.request.wait4myaccept}]").attr('checked',true);</script>
 </p>
 
+<table>
+	{if $smarty.request.tu neq 1}
+	<tr>
+		<td style="text-align:right">Статья расходов</td>
+		<td>
+			<select name=st id=st>
+				<option value=0></option>
+				{foreach key=key item=item from=$st}
+				{if $item.parent eq 0}<option value={$item.id}>{$item.name}</option>{/if}
+				{/foreach}
+			</select>
+			<script>$('#st option[value="{$smarty.request.st}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	{/if}
+</table>
 
 <p>
 <input type="submit" name="refresh" id="refresh" value="Обновить страницу">
 <input type="submit" name="save" id="save" value="Сохранить">
 </p>
 
-
-
 <table border=1 cellpadding=5 cellspacing=0>
 	<tr style="text-align:center;font-weight:bold">
-		<td rowspan=2>Заголовок заявки</td>
-		<td rowspan=2>Поля заявки</td>
-		<td rowspan=2>Отчет по заявке</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Общая информация{else}Заголовок заявки{/if}</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Цели на переговоры{else}Поля заявки{/if}</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Результаты переговоров{else}Отчет по заявке{/if}</td>
 		<td colspan=3>Блок согласования</td>
 	</tr>
 	<tr style="text-align:center;font-weight:bold">
@@ -47,7 +63,8 @@
 	<tr style="background-color:{$color};vertical-align:top">
 		<td>
 			<input type="submit" name="save" id="save" value="Сохранить"><br>
-			<b>№ Заявки:</b>{$i.head.id}<br>
+			{if $smarty.request.tu eq 1}<a target=_blank href="?action=bud_ru_zay_sdu&z_id={$i.head.id}">Система договорных условий</a><br>{/if}
+			<b>№:</b>{$i.head.id}<br>
 {if $i.head.net_name}
 <p style="border:1px dotted red">
 			<b>Сеть:</b>{$i.head.net_name}<br>
@@ -57,8 +74,8 @@
 </p>
 {/if}
 			<b>Дата создания:</b>{$i.head.created}<br>
-			<b>Дата начала проведения активности:</b>{$i.head.dt_start}<br>
-			<b>Дата окончания проведения активности:</b>{$i.head.dt_end}<br>
+			<b>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_start}<br>
+			<b>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_end}<br>
 			<b>Регион / Подразделение:</b>{$i.head.region_name}<br>
 			<b>ФИО РМ:</b>{$i.head.rm_fio}<br>
 			<b>Мобильный телефон:</b>{$i.head.phone}<br>
@@ -67,21 +84,27 @@
 			<b>Статья:</b>{$i.head.st_name}<br>
 			<b>Категория:</b>{$i.head.kat_name}<br>
 			<b>Дистрибьютор:</b>{$i.head.fil_name}<br>
-			<b>Фонд:</b>{$i.head.funds_name}<br>
+			{if not $smarty.request.tu eq 1}<b>Фонд:</b>{$i.head.funds_name}<br>{/if}
 			<b>Инициатор:</b>{$i.head.creator_pos_name},{$i.head.creator_department_name},<font style="color:red">{$i.head.creator}</font><br>
 			<b>Адресат:</b>{$i.head.recipient_pos_name},{$i.head.recipient_department_name},<font style="color:red">{$i.head.recipient}</font><br>
-			<b>Дата отчета по заявке:</b><br>
+			<b>Исполнители:</b><br>
+			{foreach key=k1 item=i1 from=$i.executors name=ex}
+				{if $i1.executor_name neq null}
+				<b>{$smarty.foreach.ex.iteration}.</b> {$i1.executor_pos_name}, {$i1.executor_department_name}, <font style="color:red">{$i1.executor_name}</font><br>
+				{/if}
+			{/foreach}
+			<b>Дата {if $smarty.request.tu eq 1}внесения результатов переговоров{else}отчета по заявке{/if}:</b><br>
 			{if $i.head.report_data}
 				{$i.head.report_data}<br>
 				<font style="font-weight:bold;color:green">{$i.head.report_data_fio|escape} {$i.head.report_data_lu}</font><br>
 				{$i.head.report_data_text|nl2br}<br>
 			{/if}
-			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">Сокращенный отчет</font><br>{/if}
+			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}
 		</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.ff}
-				<b>{$i1.name}:&nbsp</b>
-				{if $i1.type eq 'formula'}	{$i1.val_formula|num:3}{/if}
+				<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
+				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 				{if $i1.type eq 'string'}	{$i1.val_string}{/if}
 				{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
@@ -98,7 +121,7 @@
 			{/foreach}
 		</td>
 		<td style="text-align:center">
-			<b>Срок подачи отчета:</b>
+			<b>Срок {if $smarty.request.tu eq 1}внесения результатов переговоров{else}подачи отчета{/if}:</b>
 			{if $i.head.srok_ok eq 1}
 				<font style="background-color:#66FF66">не истек</font>
 			{else}
@@ -106,11 +129,11 @@
 			{/if}
 			<br>
 			<b>Подтверждение:</b>
-			{if $i.head.current_status eq 0}<font style="background-color:#FFFF66">отчет на согласовании</font>{/if}
+			{if $i.head.current_status eq 0}<font style="background-color:#FFFF66">{if $smarty.request.tu eq 1}результаты переговоров{else}отчет{/if} на согласовании</font>{/if}
 			{if $i.head.current_status eq 1}<font style="background-color:#66FF66">подтвержден</font>{/if}
 			{if $i.head.current_status eq 2}<font style="background-color:#FFCC99">отклонен</font>{/if}
 			<br>
-			<b>Отчет заполнен: </b>
+			<b>{if $smarty.request.tu eq 1}Результаты переговоров внесены{else}Отчет заполнен{/if}: </b>
 			{if $i.head.creator_tn eq $tn and $i.head.not_seen}
 					<input
 						{if $i.head.report_done}checked{/if}
@@ -143,8 +166,8 @@
 				{if $i1.rep_r_visible}
 				<tr>
 					<td>
-					<b>{$i1.name}:&nbsp</b>
-					{if $i1.type eq 'formula'}	{$i1.val_formula|num:3}{/if}
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
+					{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 					{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 					{if $i1.type eq 'string'}	{$i1.val_string}{/if}
 					{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
@@ -159,7 +182,7 @@
 					{/if}
 						</td>
 						<td>
-					<b>{$i1.rep_name}:&nbsp</b>
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.rep_name}:&nbsp</span>
 					{if $i.head.creator_tn eq $tn and $i.head.not_seen}
 						{if $i1.type eq 'textarea'}
 							<textarea id=new_st_{$i1.id} name=new_st[{$i1.id}] {if $i1.rep_required}required{/if}>{$i1.rep_val_textarea}</textarea>
@@ -218,7 +241,7 @@
 								<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>&nbsp
 							{/foreach}
 						{/if}
-						{if $i1.type eq 'formula'}	{$i1.rep_val_formula|num:3}{/if}
+						{if $i1.type eq 'formula'}	{$i1.rep_val_formula}{/if}
 						{if $i1.type eq 'list'}		{$i1.rep_val_list_name}{/if}
 						{if $i1.type eq 'string'}	{$i1.rep_val_string}{/if}
 						{if $i1.type eq 'number_int'}	{$i1.rep_val_number_int|num:0}{/if}
@@ -280,15 +303,35 @@
 			{/foreach}
 		</td>
 		<td>
+			{if $i.zchat}
+			<p>
+			Комментарии по {if $smarty.request.tu eq 1}целям на переговоры{else}заявке{/if}:
+			<br>
+			{foreach key=k1 item=i1 from=$i.zchat}
+				<font style="color:red">{$i1.zchat_time}</font>
+				<font style="color:green">{$i1.zchater}:</font>
+				<font style="color:blue">{$i1.ztext}</font>
+				<br>
+			{/foreach}
+			</p>
+			{/if}
+			{if $i.chat}
+			<p>
+			Комментарии по {if $smarty.request.tu eq 1}торговым условиям{else}отчету{/if}:
+			<br>
 			{foreach key=k1 item=i1 from=$i.chat}
 				<font style="color:red">{$i1.chat_time}</font>
 				<font style="color:green">{$i1.chater}:</font>
 				<font style="color:blue">{$i1.text}</font>
 				<br>
 			{/foreach}
+			</p>
+			{/if}
+			<p>
 			<textarea rows=5 cols=20 name="bud_ru_zay_accept_chat[{$i.head.id}]"></textarea>
 			<br>
 			<input type="submit" name="add_chat" id="add_chat" value="Добавить">
+			</p>
 		</td>
 	</tr>
 

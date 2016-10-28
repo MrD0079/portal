@@ -1,0 +1,33 @@
+{if $tn eq 2885600038 and $is_admin and $it_tasks}
+{literal}
+<style>
+/* unvisited link */
+.it_tasks a:link {
+    color: #00FF00;
+}
+/* visited link */
+.it_tasks a:visited {
+    color: #00FF00;
+}
+</style>
+{/literal}
+<table class="main_works it_tasks" style="text-align:center; width:100%; link-color:#00FF00; color:#00FF00; background-color:#00FF00;">
+	<tr style="font-weight:bold; background-color:black;">
+		<td colspan=4><a href="?action=tasks">Actual IT tasks</a></td>
+	</tr>
+	<tr style="font-weight:bold; background-color:black;">
+		<td>Created/Updated</td>
+		<td>%</td>
+		<td>Link</td>
+	</tr>
+	{foreach key=k item=i from=$it_tasks}
+	<tr style="background-color:black;">
+		<td>
+			{$i.created_t}<br>{$i.lu_t}
+		</td>
+		<td style="text-align:right">{$i.perc}</td>
+		<td><a href="?action=tasks&id={$i.id}">{$i.name|escape}</a></td>
+	</tr>
+	{/foreach}
+</table>
+{/if}

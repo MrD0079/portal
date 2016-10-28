@@ -33,6 +33,8 @@
 				</select>
 				<script>$('#plan_month option[value="{$smarty.request.plan_month}"]').prop('selected', true);</script>
 			</td>
+		{else}
+			<input name="plan_month" id="plan_month" type=hidden value=0>
 		{/if}
 		</tr>
 	</table>

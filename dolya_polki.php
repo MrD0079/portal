@@ -153,12 +153,18 @@ $d_total[0]["data_my"][$v["my"]][$v["y"]]["total"]=$v["total"];
 
 
 
-	$smarty->assign('h', $h);
-	$smarty->assign('d1_total', $d1_total);
-	$smarty->assign('d2_total', $d2_total);
-	$smarty->assign('d3_total', $d3_total);
-	$smarty->assign('dolya_polki', $d);
+
+	isset($h)?$smarty->assign('h', $h):null;
+	isset($d1_total)?$smarty->assign('d1_total', $d1_total):null;
+	isset($d2_total)?$smarty->assign('d2_total', $d2_total):null;
+	isset($d3_total)?$smarty->assign('d3_total', $d3_total):null;
+	isset($d)?$smarty->assign('dolya_polki', $d):null;
 //	$smarty->assign('dolya_polki_total', $d_total);
+
+
+
+
+
 }
 
 $smarty->display('kk_start.html');

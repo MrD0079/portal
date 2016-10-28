@@ -1,7 +1,8 @@
-/* Formatted on 20/11/2014 14:08:10 (QP5 v5.227.12220.39724) */
+/* Formatted on 23/11/2015 2:30:32 PM (QP5 v5.252.13127.32867) */
   SELECT mc.my,
          DECODE (
-            NVL (mo.ok_rmkk_tmkk, 0) + NVL (mo.ok_dpu, 0),
+              DECODE ( :plan_type, 1, 0, NVL (mo.ok_rmkk_tmkk, 0))
+            + NVL (mo.ok_dpu, 0),
             0, 0,
             1)
             disabled

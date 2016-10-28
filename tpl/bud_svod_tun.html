@@ -1,0 +1,70 @@
+{if not $smarty.request.print}
+
+{include file="bud_svod_filter.html"}
+{include file="bud_svod_filter_fil.html"}
+{include file="bud_svod_filter_cluster.html"}
+
+<table border=0>
+	<tr style="vertical-align: top;">
+		<td>
+			<input onClick="$('#ok_bonus').val(this.value)" type=radio name="ok_bonus" value=1 checked>все ТП с торговыми условиями<br>
+			<input onClick="$('#ok_bonus').val(this.value)" type=radio name="ok_bonus" value=2>планируется выдача бонуса<br>
+			<script>
+				$("input[name=ok_bonus][value={$smarty.request.ok_bonus}]").attr('checked',true);
+			</script>
+		</td>
+	</tr>
+</table>
+
+<p><a href="javascript:void(0);" onClick="load_tp();">Показать список ТП</a></p>
+
+{/if}
+
+<input type=hidden id=exp_list_without_ts name=exp_list_without_ts value='{$smarty.request.exp_list_without_ts}'>
+<input type=hidden id=exp_list_only_ts name=exp_list_only_ts value='{$smarty.request.exp_list_only_ts}'>
+<input type=hidden id=eta_list name=eta_list value='{$smarty.request.eta_list}'>
+<input type=hidden id=ok_bonus name=ok_bonus value='{$smarty.request.ok_bonus}'>
+<input type=hidden id=fil name=fil value='{$smarty.request.fil}'>
+<input type=hidden id=clusters name=clusters value='{$smarty.request.clusters}'>
+<input type=hidden id=print name=print value='{$smarty.request.print}'>
+
+<div id="tp" style="display: inline;"></div>
+
+<script>
+v_dt='{$smarty.request.dt}';
+{literal}
+function load_tp()
+{
+x=loadwait_show('tp');
+$('#tp').load('?action=bud_svod_tun_tp&nohead=1',
+{
+	print: $('#print').val(),
+	eta_list: $('#eta_list').val(),
+	ok_bonus: $('#ok_bonus').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	exp_list_only_ts: $('#exp_list_only_ts').val(),
+	fil: $('#fil').val(),
+	clusters: $('#clusters').val(),
+	dt: v_dt
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+
+{/literal}
+
+{if $smarty.request.print}
+$("#exp_list_without_ts").val("{$smarty.request.exp_list_without_ts}");
+$("#exp_list_only_ts").val("{$smarty.request.exp_list_only_ts}");
+$("#eta_list").val("{$smarty.request.eta_list}");
+$("#ok_bonus").val("{$smarty.request.ok_bonus}");
+$("#fil").val("{$smarty.request.fil}");
+$("#clusters").val("{$smarty.request.clusters}");
+//load_tp();
+{/if}
+
+</script>

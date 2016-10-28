@@ -1,0 +1,157 @@
+<h1>Реестр возвратов</h1>
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form1 id=form1>
+		<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+			<tr>
+				<td>Начало/окончания периода</td>
+				<td>
+					с
+					<select name="sd" id="sd">
+						<option></option>
+						{foreach key=key1 item=i1 from=$month_list}
+							<option value="{$i1.sd_c}">{$i1.my}</option>
+						{/foreach}
+					</select>
+					<script>$('#sd option[value="{$smarty.request.sd|default:$now1}"]').prop('selected', true);</script>
+					по
+					<select name="ed" id="ed">
+						<option></option>
+						{foreach key=key1 item=i1 from=$month_list}
+							<option value="{$i1.sd_c}">{$i1.my}</option>
+						{/foreach}
+					</select>
+					<script>$('#ed option[value="{$smarty.request.ed|default:$now1}"]').prop('selected', true);</script>
+				</td>
+			</tr>
+			<tr>
+				<td>НМКК</td>
+				<td style="vertical-align: top;">
+						<select name=tn_rmkk id=tn_rmkk>
+							<option value=0></option>
+							{foreach key=rmkk_key item=rmkk_i from=$list_rmkk}
+							<option value={$rmkk_i.tn}>{$rmkk_i.fio} ({$rmkk_i.tn})</option>
+							{/foreach}
+						</select>
+						<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+				</td>
+			</tr>
+			<tr>
+				<td>Ответственный ТМ КК</td>
+				<td style="vertical-align: top;">
+							<select name=tn_mkk id=tn_mkk>
+								<option value=0></option>
+								{foreach key=mkk_key item=mkk_i from=$list_mkk}
+								<option value={$mkk_i.tn}>{$mkk_i.fio} ({$mkk_i.tn})</option>
+								{/foreach}
+							</select>
+							<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+				</td>
+			</tr>
+			<tr>
+				<td>Сеть</td>
+				<td style="vertical-align: top;">
+							<select name="nets" id="nets">
+								<option value=0></option>
+								{foreach key=key item=i from=$nets}
+									<option value={$i.id_net}>{$i.net_name}</option>
+								{/foreach}
+							</select>
+							<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+				</td>
+			</tr>
+			<tr>
+				<td>Статус подтверждения</td>
+				<td>
+					<input name="acceptstatus" id="acceptstatus" value="0" type="radio" checked="checked">все
+					<input name="acceptstatus" id="acceptstatus" value="1" type="radio">не подтверждены
+					<input name="acceptstatus" id="acceptstatus" value="2" type="radio">подтверждены
+				</td>
+			</tr>
+			<tr>
+				<td>Статус отправки</td>
+				<td>
+					<input name="sendstatus" id="sendstatus" value=0 type="radio" checked="checked">все
+					<input name="sendstatus" id="sendstatus" value=1 type="radio">не отправлены
+					<input name="sendstatus" id="sendstatus" value=2 type="radio">отправлены
+				</td>
+			</tr>
+		</table>
+		{if $smarty.request.acceptstatus}<script>$("input[name=acceptstatus][value={$smarty.request.acceptstatus}]").attr('checked',true);</script>{/if}
+		{if $smarty.request.sendstatus}<script>$("input[name=sendstatus][value={$smarty.request.sendstatus}]").attr('checked',true);</script>{/if}
+		<p><input name="generate" value="Построить отчет" type="submit"></p>
+		<p><a href="?action=rzayreestr&generate&print=1&excel=1&filename=Реестр возвратов">Экспорт в Excel</a></p>
+	</form>
+{/if}
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form2 id=form2>
+	<p><input name="save" value="Сохранить" type="submit"></p>
+	{if not $smarty.request.print and $is_rmkk}<p><input name="send" value="Отправить" type="submit"></p>{/if}
+	<input type=hidden name=nets value="{$smarty.request.nets}">
+	<input type=hidden name=sd value="{$smarty.request.sd}">
+	<input type=hidden name=ed value="{$smarty.request.ed}">
+	<input type=hidden name=tn_mkk value="{$smarty.request.tn_mkk}">
+	<input type=hidden name=tn_rmkk value="{$smarty.request.tn_rmkk}">
+	<input type=hidden name=acceptstatus value="{$smarty.request.acceptstatus}">
+	<input type=hidden name=sendstatus value="{$smarty.request.sendstatus}">
+	{if $smarty.request.generate}<input type=hidden name=generate value="{$smarty.request.generate}">{/if}
+{/if}
+<table style="text-align: left; width: 100%; outline-color: navy; outline-width: 2px;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold;text-align: center;">
+		<td>Удал.</td>
+		<td>Месяц отнесения</td>
+		<td>Плательщик</td>
+		<td>Сеть</td>
+		<td>Адрес ТЗ</td>
+		<td>ФИО НМКК</td>
+		<td>ФИО ТМКК</td>
+		<td>Сканкопии накладных</td>
+		<td>Плановая сумма возврата, тыс.{$valuta}.<br>      </td>
+		<td>Подтверждение НМКК</td>
+		<td>Фактическая сумма, тыс.{$valuta}.<br>      </td>
+		<td>Отправлено плательщику</td>
+	</tr>
+	{foreach key=key item=i from=$invoice name=invoice}
+	<tr>
+		<td><input type=checkbox name=del[{$i.id}]></td>
+		<td>{$i.period}</td>
+		<td>{$i.payer_name}</td>
+		<td>{$i.net_name}</td>
+		<td>{$i.tp_name}</td>
+		<td>{$i.rmkk}</td>
+		<td>{$i.mkk}</td>
+		<td>
+			{foreach key=key1 item=i1 from=$i.files}
+			<a target=blank_ href="files/{$i1.fn}">{$i1.fn}</a><br>
+			{/foreach}
+		</td>
+		<td style="text-align:right">{$i.summa|default:0|num:3}</td>
+		<td style="text-align: center;{if $i.acceptstatus eq 1}background-color: rgb(51, 255, 51);{/if}">
+			{if not $smarty.request.print and $is_rmkk}
+				<input onclick="$('#data{$i.id}acceptstatus').val(this.checked?1:0);$('#data{$i.id}summafact').attr('disabled',!this.checked)" {if $i.acceptstatus eq 1}checked="checked"{/if} type="checkbox">
+				<input type=hidden name=data[{$i.id}][acceptstatus] id=data{$i.id}acceptstatus value="{$i.acceptstatus}">
+			{else}
+				{if $i.acceptstatus eq 1}да {$i.acceptstatuslut}{/if}
+			{/if}
+		</td>
+		<td style="text-align:right">
+			{if not $smarty.request.print and ($is_mkk or $is_rmkk)}
+				<input name=data[{$i.id}][summafact] id=data{$i.id}summafact value="{$i.summafact}" class=number3 {if $i.acceptstatus neq 1}disabled="disabled"{/if}>
+			{else}
+				{$i.summafact|default:0|num:3}
+			{/if}
+		</td>
+		<td style="text-align:center">{if $i.sendstatus}да{/if}</td>
+	</tr>
+	{/foreach}
+	<tr  style="font-weight:bold;">
+		<td colspan=8>Итого</td>
+		<td style="text-align:right">{$total.summa|default:0|num:3}</td>
+		<td style="text-align:right">{$total.acceptstatus|default:0|num:0}</td>
+		<td style="text-align:right">{$total.summafact|default:0|num:3}</td>
+		<td style="text-align:right">{$total.sendstatus|default:0|num:0}</td>
+	</tr>
+</table>
+{if not $smarty.request.print}
+	<p><input name="save" value="Сохранить" type="submit"></p>
+	</form>
+{/if}

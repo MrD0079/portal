@@ -1,0 +1,74 @@
+{if $zp}
+<h1>Полученные баллы</h1>
+<form target="_self" method="POST" name=formzp id=formzp>
+	<table border=1>
+		<tr style="text-align:center; font-weight:bold;">
+			<td rowspan=2>период</td>
+			<td rowspan=2>ФИО</td>
+			<td colspan=4>часть 1</td>
+			<td colspan=4>часть 2</td>
+		</tr>
+		<tr style="text-align:center; font-weight:bold;">
+			<td>Отв.</td>
+			<td>Код<br>подтв.</td>
+			<td>Дата</td>
+			<td>PIN</td>
+			<td>Отв.</td>
+			<td>Код<br>подтв.</td>
+			<td>Дата</td>
+			<td>PIN</td>
+		</tr>
+		{foreach key=k item=i from=$zp}
+		{if
+			(
+				$i.pin neq $i.part1_pin and $i.part1 eq 1 and $i.part1_ok neq 1
+			)
+			or
+			(
+				$i.pin neq $i.part2_pin and $i.part2 eq 1 and $i.part2_ok neq 1
+			)
+		}
+		<tr>
+			<input {if $i.part1 neq 1}disabled{/if} type=hidden name="data[{$i.head_id}{$i.h_fio_otv}][head_id]" value="{$i.head_id}" required class="fo1{$i.head_id} fo1{$i.head_id}{$i.h_fio_otv} head_id">
+			<input {if $i.part1 neq 1}disabled{/if} type=hidden name="data[{$i.head_id}{$i.h_fio_otv}][h_fio_otv]" value="{$i.h_fio_otv}" required class="fo1{$i.head_id} fo1{$i.head_id}{$i.h_fio_otv} h_fio_otv">
+			<input {if $i.part2 neq 1}disabled{/if} type=hidden name="data[{$i.head_id}{$i.h_fio_otv}][head_id]" value="{$i.head_id}" required class="fo2{$i.head_id} fo2{$i.head_id}{$i.h_fio_otv} head_id">
+			<input {if $i.part2 neq 1}disabled{/if} type=hidden name="data[{$i.head_id}{$i.h_fio_otv}][h_fio_otv]" value="{$i.h_fio_otv}" required class="fo2{$i.head_id} fo2{$i.head_id}{$i.h_fio_otv} h_fio_otv">
+			<td>{$i.period}</td>
+			<td>{$i.fio_otv}</td>
+		{if
+				$i.pin neq $i.part1_pin and $i.part1 eq 1 and $i.part1_ok neq 1
+		}
+			<td><input {if $i.part1 neq 1}disabled{/if} name=zpm1{$i.head_id} type=radio onChange="$('.fo1{$i.head_id}').attr('disabled',true);$('.fo1{$i.head_id}{$i.h_fio_otv}').attr('disabled',false);"></td>
+			<td><input {if $i.part1 neq 1}disabled{/if} name="data[{$i.head_id}{$i.h_fio_otv}][part1_sum]" value="{$i.part1_sum}" size=5 required class="fo1{$i.head_id} fo1{$i.head_id}{$i.h_fio_otv} number"></td>
+			<td><input {if $i.part1 neq 1}disabled{/if} name="data[{$i.head_id}{$i.h_fio_otv}][part1_dt]"  value="{$i.part1_dt}"  size=8 required class="fo1{$i.head_id} fo1{$i.head_id}{$i.h_fio_otv} datepicker"></td>
+			<td><input {if $i.part1 neq 1}disabled{/if} name="data[{$i.head_id}{$i.h_fio_otv}][part1_pin]" value="{$i.part1_pin}" size=4 required class="fo1{$i.head_id} fo1{$i.head_id}{$i.h_fio_otv} num4"></td>
+		{else}
+			<td></td>
+			<td>{$i.part1_sum}</td>
+			<td>{$i.part1_dt}</td>
+			<td>{if $i.part1_pin}****{/if}</td>
+		{/if}
+		{if
+				$i.pin neq $i.part2_pin and $i.part2 eq 1 and $i.part2_ok neq 1
+		}
+			<td><input {if $i.part2 neq 1}disabled{/if} name=zpm2{$i.head_id} type=radio onChange="$('.fo2{$i.head_id}').attr('disabled',true);$('.fo2{$i.head_id}{$i.h_fio_otv}').attr('disabled',false);"></td>
+			<td><input {if $i.part2 neq 1}disabled{/if} name="data[{$i.head_id}{$i.h_fio_otv}][part2_sum]" value="{$i.part2_sum}" size=5 required class="fo2{$i.head_id} fo2{$i.head_id}{$i.h_fio_otv} number"></td>
+			<td><input {if $i.part2 neq 1}disabled{/if} name="data[{$i.head_id}{$i.h_fio_otv}][part2_dt]"  value="{$i.part2_dt}"  size=8 required class="fo2{$i.head_id} fo2{$i.head_id}{$i.h_fio_otv} datepicker"></td>
+			<td><input {if $i.part2 neq 1}disabled{/if} name="data[{$i.head_id}{$i.h_fio_otv}][part2_pin]" value="{$i.part2_pin}" size=4 required class="fo2{$i.head_id} fo2{$i.head_id}{$i.h_fio_otv} num4"></td>
+		{else}
+			<td></td>
+			<td>{$i.part2_sum}</td>
+			<td>{$i.part2_dt}</td>
+			<td>{if $i.part2_pin}****{/if}</td>
+		{/if}
+		</tr>
+		<script>$("input[name=zpm1{$i.head_id}]").click();</script>
+		<script>$("input[name=zpm2{$i.head_id}]").click();</script>
+		{/if}
+		{/foreach}
+	<table>
+	<input value="Сохранить" name="save_zp" type="submit">
+</form>
+<script>$('.num4').mask('9999');</script>
+{/if}
+

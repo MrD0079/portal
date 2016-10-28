@@ -1,4 +1,4 @@
-/* Formatted on 06/10/2015 17:41:04 (QP5 v5.252.13127.32867) */
+/* Formatted on 04/11/2015 11:10:58 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT l.tn,
                   l.bud_id,
                   l.data,
@@ -6,6 +6,7 @@
                   l.data8,
                   l.dm,
                   l.dwtc,
+                  l.dw,
                   l.current_week,
                   s.val,
                   u.fio,
@@ -15,6 +16,7 @@
                  TO_CHAR (c.data, 'ddmmyyyy') data8,
                  c.dm,
                  c.dwtc,
+                 c.dw,
                  CASE
                     WHEN c.wy = (SELECT wy
                                    FROM calendar

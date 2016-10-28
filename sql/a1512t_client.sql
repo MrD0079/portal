@@ -1,0 +1,4 @@
+/* Formatted on 12.30.2015 12:38:28  (QP5 v5.252.13127.32867) */
+  SELECT *
+    FROM A1512T_XLS_SALESPLAN
+ORDER BY client

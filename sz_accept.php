@@ -2,7 +2,7 @@
 
 //ses_req();
 
-audit ("открыл форму согласования СЗ","sz");
+//audit ("открыл форму согласования СЗ","sz");
 InitRequestVar("wait4myaccept",0);
 
 
@@ -12,8 +12,8 @@ if (isset($_REQUEST["save"]))
 	{
 		foreach ($_REQUEST["sz_accept"] as $k=>$v)
 		{
-			$sz_accept_exist = $db->getOne('select count(*) from sz_accept where id='.$k);
-			if ($sz_accept_exist>0)
+			$cnt = $db->getOne('select count(*) from sz_accept where id='.$k);
+			if ($cnt==1)
 			{
 				Table_Update("sz_accept",array("id"=>$k),$v);
 				$sql=rtrim(file_get_contents('sql/sz_accept_sz_head.sql'));
@@ -115,7 +115,6 @@ if (isset($_REQUEST["save"]))
 							{
 								$email=$v2["e_mail"];
 								send_mail($email,$subj,$text,$fn);
-								//send_mail("denis.yakovenko@avk.ua",$subj,$text,$fn);
 							}
 						}
 						if ($h["cat"]==927679)
@@ -142,8 +141,7 @@ if (isset($_REQUEST["save"]))
 					//print_r($data);
 					foreach ($data as $k1=>$v1)
 					{
-						$text=$h["dpt_name"].".<br> Здравствуйте ".$v1["fio"]."<br>".$fio." отклонил(а) СЗ №".$h["id"]." ".$now_date_time."<br>
-						Причина отклонения: ".$v["failure"]."<br>";
+						$text=$h["dpt_name"].".<br> Здравствуйте ".$v1["fio"]."<br>".$fio." отклонил(а) СЗ №".$h["id"]." ".$now_date_time."<br>Причина отклонения: ".$v["failure"]."<br>";
 						$email=$v1["email"];
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
 						send_mail($email,$subj,$text);

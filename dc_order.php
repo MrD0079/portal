@@ -66,7 +66,6 @@ if (isset($_REQUEST["SendNBT"])&&isset($_REQUEST["table"]))
 				<p>Комментарий - ".$d["text"]."</p>
 				";
 			send_mail($v["c_mail"],$subj,$text);
-			//send_mail('denis.yakovenko@avk.ua',$subj,$text);
 		}
 
 		$sql=rtrim(file_get_contents('sql/dc_order_emails_parents.sql'));
@@ -85,7 +84,6 @@ if (isset($_REQUEST["SendNBT"])&&isset($_REQUEST["table"]))
 				По возникшим вопросам - обращайтесь к начальнику департамента персонала.
 				";
 			send_mail($v["p_mail"],$subj,$text);
-			//send_mail('denis.yakovenko@avk.ua',$subj,$text);
 		}
 
 		$sql=rtrim(file_get_contents('sql/dc_order_emails_treners.sql'));
@@ -111,7 +109,6 @@ if (isset($_REQUEST["SendNBT"])&&isset($_REQUEST["table"]))
 				$text.="<p>Комментарии - ".$d["loc_text"]."</p>";
 				$text.="<p>Комментарий - ".$d["text"]."</p>";
 				send_mail($v["mail"],$subj,$text);
-				//send_mail('denis.yakovenko@avk.ua',$subj,$text);
 			}
 		}
 	}

@@ -1,22 +1,16 @@
 <?
-
 //ses_req();
-
-	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
-	$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']));
-	$vals = array($_REQUEST['field']=>$_REQUEST['val']);
-	//$_REQUEST['table']=='m'?$keys['dpt_id']=$_SESSION['dpt_id']:null;
-	$_REQUEST['table']=='f'?$keys['fil']=$_REQUEST['key2']:null;
-	//$_REQUEST['table']=='f'&&$_REQUEST['val']==null&&$_REQUEST['field']=='coach'?$vals=null:null;
-	Table_Update('bud_svod_ta'.$_REQUEST['table'], $keys,$vals);
-
+$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
+$keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']));
+$vals = array($_REQUEST['field']=>$_REQUEST['val']);
+//$_REQUEST['table']=='m'?$keys['dpt_id']=$_SESSION['dpt_id']:null;
+$_REQUEST['table']=='f'?$keys['fil']=$_REQUEST['key2']:null;
+//$_REQUEST['table']=='f'&&$_REQUEST['val']==null&&$_REQUEST['field']=='coach'?$vals=null:null;
+Table_Update('bud_svod_ta'.$_REQUEST['table'], $keys,$vals);
 if (isset($_FILES['file']))
 {
-$_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
-	if
-	(
-		is_uploaded_file($_FILES['file']['tmp_name'])
-	)
+	$_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
+	if (is_uploaded_file($_FILES['file']['tmp_name']))
 	{
 		$a=pathinfo($_FILES['file']['name']);
 		$id=get_new_file_id();
@@ -28,11 +22,8 @@ $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
 		move_uploaded_file($_FILES['file']['tmp_name'], 'bud_svod_ta_files/'.$fn);
 	}
 	else
-	{
-		echo 'Ошибка загрузки файла<br>';
-	}
+	{echo 'Ошибка загрузки файла<br>';}
 }
-
 /*
 	if ($_REQUEST['field']=='ok_dpu_tn'&&$_REQUEST['val']!='')
 	{
@@ -48,6 +39,4 @@ $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
 		foreach ($x as $k=>$v){send_mail($v['e_mail'],$subj,'Отчет за '.$period.' согласован ЗГДП',null);}
 	}
 */
-
-
 ?>

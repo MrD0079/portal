@@ -37,47 +37,44 @@
 		<td>Название</td>
 		<td>Адрес</td>
 		<td>Код ТП</td>
+		<td>Код ТП (новый)</td>
 		<td>Сеть</td>
 		<td>Город</td>
 		<td>Учитывать в отчете GPS</td>
 	</tr>
-	{foreach key=cpp_key item=cpp_item from=$cpp_all}
-			{if $cpp_item.id eq $smarty.request.id}
-				<input type=hidden name=edit_id value="{$smarty.request.id}">
-				<tr>
-					<td>
-						<select name=edit[tz_oblast] id=edit[tz_oblast]>
-							<option></option>
-							{foreach key=k item=i from=$oblast}
-							<option value="{$i.tz_oblast}">{$i.tz_oblast}</option>
-							{/foreach}
-						</select>
-						<script>document.form_cpp["edit[tz_oblast]"].value="{$cpp_item.tz_oblast}";</script>
-					</td>
-					<td><input size=30 name=edit[ur_tz_name] value="{$cpp_item.ur_tz_name}"></td>
-					<td><input size=30 name=edit[tz_address] value="{$cpp_item.tz_address}"></td>
-					<td><input size=30 name=edit[kodtp] value="{$cpp_item.kodtp}"></td>
-					<td>
-						<select name=edit[id_net] id=edit[id_net]>
-							<option></option>
-							{foreach key=k item=i from=$nets}
-							<option value={$i.id_net}>{$i.net_name}</option>
-							{/foreach}
-						</select>
-						<script>document.form_cpp["edit[id_net]"].value={$cpp_item.id_net};</script>
-					</td>
-					<td><input size=30 name=edit[city] value="{$cpp_item.city}"></td>
-					<td>
-						<select name=edit[gps] id=edit[gps]>
-							<option value=1>да</option>
-							<option value=0>нет</option>
-						</select>
-						<script>document.form_cpp["edit[gps]"].value={$cpp_item.gps};</script>
-					</td>
-				</tr>
-
-			{/if}
-	{/foreach}
+	<input type=hidden name=edit_id value="{$smarty.request.id}">
+	<tr>
+		<td>
+			<select required name=edit[tz_oblast] id=edit[tz_oblast]>
+				<option></option>
+				{foreach key=k item=i from=$oblast}
+				<option value="{$i.tz_oblast}">{$i.tz_oblast}</option>
+				{/foreach}
+			</select>
+			<script>document.form_cpp["edit[tz_oblast]"].value="{$cpp_one.tz_oblast}";</script>
+		</td>
+		<td><input required size=30 name=edit[ur_tz_name] value="{$cpp_one.ur_tz_name}"></td>
+		<td><input required size=30 name=edit[tz_address] value="{$cpp_one.tz_address}"></td>
+		<td><input required class=number_int size=30 name=edit[kodtp] value="{$cpp_one.kodtp}"></td>
+		<td><input size=30 class=number_int name=edit[kodtp_new] value="{$cpp_one.kodtp_new}"></td>
+		<td>
+			<select required name=edit[id_net] id=edit[id_net]>
+				<option></option>
+				{foreach key=k item=i from=$nets}
+				<option value={$i.id_net}>{$i.net_name}</option>
+				{/foreach}
+			</select>
+			<script>document.form_cpp["edit[id_net]"].value={$cpp_one.id_net};</script>
+		</td>
+		<td><input required size=30 name=edit[city] value="{$cpp_one.city}"></td>
+		<td>
+			<select name=edit[gps] id=edit[gps]>
+				<option value=1>да</option>
+				<option value=0>нет</option>
+			</select>
+			<script>document.form_cpp["edit[gps]"].value={$cpp_one.gps};</script>
+		</td>
+	</tr>
 </table>
 <input type=submit name=save id=save class=save value="Сохранить">
 {/if}
@@ -93,7 +90,8 @@
 		<td>Область</td>
 		<td>Название</td>
 		<td>Адрес</td>
-		<td>Код ТП</td>
+		<td>Код ТП SW</td>
+		<td>Код ТП DM</td>
 		<td>Сеть</td>
 		<td>Город</td>
 		<td>Учитывать в отчете GPS</td>
@@ -107,6 +105,7 @@
 			<td>{$cpp_item.ur_tz_name}</td>
 			<td>{$cpp_item.tz_address}</td>
 			<td>{$cpp_item.kodtp}</td>
+			<td>{$cpp_item.kodtp_new}</td>
 			<td>{$cpp_item.net_name}</td>
 			<td>{$cpp_item.city}</td>
 			<td>{if $cpp_item.gps eq 1}да{/if}</td>

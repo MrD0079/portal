@@ -1,10 +1,10 @@
-<h3>Согласование заявок на проведение активности</h3>
+<h3>{if $smarty.request.tu eq 1}Цели на переговоры{else}Заявки на активность{/if}, согласование</h3>
 
-
-<p>Вашего согласования ожидают следующие заявки на проведение активности:</p>
-
+{$tooManyLines}
 
 <form target="_self" method="POST" name=form_bud_ru_zay_accept id=form_bud_ru_zay_accept>
+
+<input type=hidden name=tu value={$smarty.request.tu}>
 
 <p>
 <input checked="checked" name="wait4myaccept" id="wait4myaccept" value="0" type="radio"> ожидают моего согласования
@@ -12,19 +12,33 @@
 <script>$("input[name=wait4myaccept][value={$smarty.request.wait4myaccept}]").attr('checked',true);</script>
 </p>
 
+<table>
+	{if $smarty.request.tu neq 1}
+	<tr>
+		<td style="text-align:right">Статья расходов</td>
+		<td>
+			<select name=st id=st>
+				<option value=0></option>
+				{foreach key=key item=item from=$st}
+				{if $item.parent eq 0}<option value={$item.id}>{$item.name}</option>{/if}
+				{/foreach}
+			</select>
+			<script>$('#st option[value="{$smarty.request.st}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+	{/if}
+</table>
+
 
 <p>
 <input type="submit" name="refresh" id="refresh" value="Обновить страницу">
 <input type="submit" name="save" id="save" value="Сохранить">
 </p>
 
-
-
-
 <table border=1 cellpadding=5 cellspacing=0>
 	<tr style="text-align:center;font-weight:bold">
-		<td rowspan=2>Заголовок заявки</td>
-		<td rowspan=2>Поля заявки</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Общая информация{else}Заголовок заявки{/if}</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Цели на переговоры{else}Поля заявки{/if}</td>
 		<td colspan=3>Блок согласования</td>
 	</tr>
 	<tr style="text-align:center;font-weight:bold">
@@ -42,7 +56,8 @@
 	{if $i.head.current_status eq 2}{assign var=color value="#FFCC99"}{/if}
 	<tr style="background-color:{$color};vertical-align:top">
 		<td>
-			№{$i.head.id}
+			{if $smarty.request.tu eq 1}<a target=_blank href="?action=bud_ru_zay_sdu&z_id={$i.head.id}">Система договорных условий</a><br>{/if}
+			<b>№:</b>{$i.head.id}<br>
 {if $i.head.net_name}
 <p style="border:1px dotted red">
 			<b>Сеть:</b>{$i.head.net_name}<br>
@@ -52,8 +67,8 @@
 </p>
 {/if}
 			<b>Дата создания:</b>{$i.head.created}<br>
-			<b>Дата начала проведения активности:</b>{$i.head.dt_start}<br>
-			<b>Дата окончания проведения активности:</b>{$i.head.dt_end}<br>
+			<b>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_start}<br>
+			<b>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_end}<br>
 			<b>Регион / Подразделение:</b>{$i.head.region_name}<br>
 			<b>ФИО РМ:</b>{$i.head.rm_fio}<br>
 			<b>Мобильный телефон:</b>{$i.head.phone}<br>
@@ -62,14 +77,20 @@
 			<b>Статья:</b>{$i.head.st_name}<br>
 			<b>Категория:</b>{$i.head.kat_name}<br>
 			<b>Дистрибьютор:</b>{$i.head.fil_name}<br>
-			<b>Фонд:</b>{$i.head.funds_name}<br>
+			{if not $smarty.request.tu eq 1}<b>Фонд:</b>{$i.head.funds_name}<br>{/if}
 			<b>Инициатор:</b>{$i.head.creator_pos_name},{$i.head.creator_department_name},<font style="color:red">{$i.head.creator}</font><br>
 			<b>Адресат:</b>{$i.head.recipient_pos_name},{$i.head.recipient_department_name},<font style="color:red">{$i.head.recipient}</font><br>
+			<b>Исполнители:</b><br>
+			{foreach key=k1 item=i1 from=$i.executors name=ex}
+				{if $i1.executor_name neq null}
+				<b>{$smarty.foreach.ex.iteration}.</b> {$i1.executor_pos_name}, {$i1.executor_department_name}, <font style="color:red">{$i1.executor_name}</font><br>
+				{/if}
+			{/foreach}
 		</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.ff}
-				<b>{$i1.name}:&nbsp</b>
-				{if $i1.type eq 'formula'}	{$i1.val_formula|num:3}{/if}
+				<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
+				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 				{if $i1.type eq 'string'}	{$i1.val_string}{/if}
 				{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}

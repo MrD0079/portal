@@ -1,17 +1,16 @@
-/* Formatted on 19.08.2014 16:22:12 (QP5 v5.227.12220.39724) */
-  SELECT DISTINCT w.slave emp_svid,
-                  u.fio emp_name,
-                  u.pos_name emp_pos,
-                  TO_CHAR (u.datauvol, 'dd.mm.yyyy') datauvol,
-                  u.is_ts
-    FROM full w, user_list u
+/* Formatted on 23/05/2016 11:30:53 (QP5 v5.252.13127.32867) */
+  SELECT u.tn emp_svid,
+         u.fio emp_name,
+         u.pos_name emp_pos,
+         TO_CHAR (u.datauvol, 'dd.mm.yyyy') datauvol,
+         u.is_ts
+    FROM user_list u
    WHERE     u.dpt_id = :dpt_id
-         AND u.tn = w.slave
-         AND (   w.master IN (SELECT parent
-                                FROM assist
-                               WHERE child = :tn
-                              UNION
-                              SELECT :tn FROM DUAL)
+         AND (   u.tn IN (SELECT parent
+                            FROM assist
+                           WHERE child = :tn
+                          UNION
+                          SELECT :tn FROM DUAL)
               OR (SELECT NVL (is_admin, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1
@@ -26,4 +25,8 @@
                    WHERE tn = :tn) = 1)
          AND NVL (u.is_ts, 0) <> 1
          AND u.datauvol IS NULL
+         AND EXISTS
+                (SELECT *
+                   FROM parents
+                  WHERE parent = u.tn)
 ORDER BY emp_name

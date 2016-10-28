@@ -1,0 +1,34 @@
+{if $is_admin or $is_test_admin}
+<form name=form id=form target=_self method=post>
+	<p>
+		Выбор тренинга
+		<select name=tr id=tr onchange="javascript:this.form.submit()">
+			<option value=0></option>
+			{foreach key=key item=i from=$tr}
+				<option value={$i.id}>{$i.name}</option>
+			{/foreach}
+		</select>
+		<script>$("#tr option[value='{$smarty.request.tr}']").prop('selected', true);</script>
+	</p>
+	{if $smarty.request.tr neq 0}
+	<h1>Включение теста</h1>
+	<table border=1 cellspacing=0 cellpadding=3>
+		{foreach key=test_list_key item=test_list_item from=$test_list}
+		<tr>
+			<td>
+			{if $test_list_item.tr}
+				включен
+			{else}
+				<input type=checkbox name=test_on[{$test_list_item.tn}] value="{$test_list_item.tn}">
+			{/if}
+			</td>
+			<td>{$test_list_item.fio}</td>
+		</tr>
+		{/foreach}
+	</table>
+	<p><input type=submit name=save id=save value="Сохранить"></p>
+	<p><input type=submit name=test_all_on id=test_all_on value="Включить тест всем"></p>
+	<p><input type=submit name=test_all_off id=test_all_off value="Выключить тест всем"></p>
+	{/if}
+</form>
+{/if}

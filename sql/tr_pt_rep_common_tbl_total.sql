@@ -13,3 +13,4 @@ SELECT COUNT (*) cnt
                            AND TO_DATE (:ed, 'dd.mm.yyyy')
        AND tr.id IN (:tr)
        AND u.pos_id IN (:pos)
+	      and ((:tr_pt_rep_common_datauvol='all') or (:tr_pt_rep_common_datauvol='actual' and nvl(u.datauvol,trunc(sysdate))>=trunc(sysdate)))

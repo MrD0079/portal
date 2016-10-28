@@ -1,4 +1,4 @@
-/* Formatted on 18/05/2015 15:02:37 (QP5 v5.227.12220.39724) */
+/* Formatted on 20/05/2016 17:45:01 (QP5 v5.252.13127.32867) */
   SELECT z.id,
          z.dt_start,
          z.fil fil_id,
@@ -10,7 +10,7 @@
          t.summa,
          t.bonus_sum,
          t.compens_distr,
-t.compens_db,
+         t.compens_db,
          f.name fil_name,
          zff1.val_string,
          zff2.val_textarea,
@@ -19,7 +19,24 @@ t.compens_db,
          (SELECT mt || ' ' || y
             FROM calendar
            WHERE data = t.period)
-            period_text
+            period_text,
+         NVL (kat.tu, 0) tu,
+         (SELECT rep_accepted
+            FROM bud_ru_zay_accept
+           WHERE     z_id = z.id
+                 AND accept_order =
+                        DECODE (
+                           NVL ( (SELECT MAX (accept_order)
+                                    FROM bud_ru_zay_accept
+                                   WHERE z_id = z.id AND rep_accepted = 2),
+                                0),
+                           0, (SELECT MAX (accept_order)
+                                 FROM bud_ru_zay_accept
+                                WHERE z_id = z.id AND rep_accepted IS NOT NULL),
+                           (SELECT MAX (accept_order)
+                              FROM bud_ru_zay_accept
+                             WHERE z_id = z.id AND rep_accepted = 2)))
+            rep_current_accepted_id
     FROM bud_ru_zay z,
          user_list u,
          BUD_RU_st_ras st,
@@ -42,25 +59,23 @@ t.compens_db,
                         WHEN NVL (
                                 (SELECT val_bool
                                    FROM bud_ru_zay_ff
-                                  WHERE     ff_id IN
-                                               (SELECT id
-                                                  FROM bud_ru_ff
-                                                 WHERE     dpt_id = :dpt_id
-                                                       AND admin_id = 9)
+                                  WHERE     ff_id IN (SELECT id
+                                                        FROM bud_ru_ff
+                                                       WHERE     dpt_id = :dpt_id
+                                                             AND admin_id = 9)
                                         AND z_id = z.id),
-                                0) = 1 
+                                0) = 1
                         THEN
                            0
                         WHEN NVL (
                                 (SELECT val_bool
                                    FROM bud_ru_zay_ff
-                                  WHERE     ff_id IN
-                                               (SELECT id
-                                                  FROM bud_ru_ff
-                                                 WHERE     dpt_id = :dpt_id
-                                                       AND admin_id = 8)
+                                  WHERE     ff_id IN (SELECT id
+                                                        FROM bud_ru_ff
+                                                       WHERE     dpt_id = :dpt_id
+                                                             AND admin_id = 8)
                                         AND z_id = z.id),
-                                0) = 0 
+                                0) = 0
                         THEN
                            1
                         ELSE
@@ -82,13 +97,12 @@ t.compens_db,
                         WHEN NVL (
                                 (SELECT val_bool
                                    FROM bud_ru_zay_ff
-                                  WHERE     ff_id IN
-                                               (SELECT id
-                                                  FROM bud_ru_ff
-                                                 WHERE     dpt_id = :dpt_id
-                                                       AND admin_id = 9)
+                                  WHERE     ff_id IN (SELECT id
+                                                        FROM bud_ru_ff
+                                                       WHERE     dpt_id = :dpt_id
+                                                             AND admin_id = 9)
                                         AND z_id = z.id),
-                                0) = 1 
+                                0) = 1
                         THEN
                            1
                      END
@@ -104,15 +118,15 @@ t.compens_db,
                            m.eta
                       FROM a14mega m
                      WHERE     m.dpt_id = :dpt_id
-                           AND m.dt BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                        AND TO_DATE (:ed, 'dd.mm.yyyy')) s,
+                           AND m.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                        AND TO_DATE ( :ed, 'dd.mm.yyyy')) s,
                    akcii_local_tp t,
                    bud_ru_zay z
              WHERE     s.tp_kod = t.tp_kod
                    AND t.z_id = z.id
-                   AND DECODE (:eta_list, '', s.h_eta, :eta_list) = s.h_eta
-                   AND DECODE (:fil, 0, z.fil, :fil) = z.fil
-                   AND z.funds = DECODE (:funds, 0, z.funds, :funds)
+                   AND (:eta_list is null OR :eta_list = s.h_eta)
+                   AND DECODE ( :fil, 0, z.fil, :fil) = z.fil
+                   AND z.funds = DECODE ( :funds, 0, z.funds, :funds)
                    AND (   z.fil IN (SELECT fil_id
                                        FROM clusters_fils
                                       WHERE :clusters = CLUSTER_ID)
@@ -123,7 +137,7 @@ t.compens_db,
          AND z.id_net = n.id_net(+)
          AND z.fil = f.id
          AND z.funds = fu.id
-         AND z.funds = DECODE (:funds, 0, z.funds, :funds)
+         AND z.funds = DECODE ( :funds, 0, z.funds, :funds)
          AND z.tn = u.tn
          AND u.dpt_id = :dpt_id
          AND z.st = st.id(+)
@@ -143,36 +157,28 @@ t.compens_db,
                WHERE     z_id = z.id
                      AND accept_order =
                             DECODE (
-                               NVL (
-                                  (SELECT MAX (accept_order)
-                                     FROM bud_ru_zay_accept
-                                    WHERE z_id = z.id AND accepted = 2),
-                                  0),
+                               NVL ( (SELECT MAX (accept_order)
+                                        FROM bud_ru_zay_accept
+                                       WHERE z_id = z.id AND accepted = 2),
+                                    0),
                                0, (SELECT MAX (accept_order)
                                      FROM bud_ru_zay_accept
                                     WHERE z_id = z.id),
                                (SELECT MAX (accept_order)
                                   FROM bud_ru_zay_accept
-                                 WHERE z_id = z.id AND accepted = 2))) =
-                1
+                                 WHERE z_id = z.id AND accepted = 2))) = 1
          AND z.valid_no = 0
-         AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                          AND TO_DATE (:ed, 'dd.mm.yyyy')
-         AND u.tn = DECODE (:db, 0, u.tn, :db)
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                          AND TO_DATE ( :ed, 'dd.mm.yyyy')
+         AND u.tn = DECODE ( :db, 0, u.tn, :db)
+         AND (   :exp_list_without_ts = 0
+              OR u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+              OR u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)
@@ -182,6 +188,6 @@ t.compens_db,
               OR (SELECT NVL (is_traid_kk, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND DECODE (:st, 0, z.st, :st) = z.st
+         AND DECODE ( :st, 0, z.st, :st) = z.st
          AND TRUNC (z.dt_start, 'mm') = t.period
 ORDER BY t.period, val_string, fil_name

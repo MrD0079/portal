@@ -76,8 +76,8 @@ $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('paided', $x);
 
 
-$smarty->assign('vac_eta', $db->getOne('select vac_eta from pos where pos_id='.$_SESSION["pos_id"]));
-$smarty->assign('vac_spd', $db->getOne('select vac_spd from pos where pos_id='.$_SESSION["pos_id"]));
+$smarty->assign('vac_eta', $db->getOne('select vac_eta from pos where pos_id='.$_SESSION["my_pos_id"]));
+$smarty->assign('vac_spd', $db->getOne('select vac_spd from pos where pos_id='.$_SESSION["my_pos_id"]));
 
 $smarty->display('vacation_create.html');
 

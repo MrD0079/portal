@@ -6,6 +6,11 @@ $sql=rtrim(file_get_contents('sql/akcii_local_report.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign("act_head", $data);
+/*
+$_REQUEST['z']=$data;
+$_REQUEST['z1']=$sql;
+ses_req();
+*/
 
 $sql=rtrim(file_get_contents('sql/akcii_local_report_z_head.sql'));
 $sql=stritr($sql,$params);
@@ -21,7 +26,7 @@ foreach ($data as $k1=>$v1)
 	{
 		$data[$k1]["val_file"]=explode("\n",$v1["val_file"]);
 	}
-	if ($v1['type']=='list')
+	/*if ($v1['type']=='list')
 	{
 		if ($v1['val_list'])
 		{
@@ -31,7 +36,7 @@ foreach ($data as $k1=>$v1)
 		$list = $db->getOne($sql);
 		$data[$k1]['val_list_name'] = $list;
 		}
-	}
+	}*/
 }
 $smarty->assign("z_ff", $data);
 
@@ -65,7 +70,7 @@ $sql=stritr($sql,$params);
 $eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('eta_list', $eta_list);
 
-$period=$db->getOne("SELECT c.mt || ' ' || c.y FROM calendar c, bud_ru_zay z WHERE z.id = ".$_REQUEST["z_id"]." AND TRUNC (z.dt_end, 'mm') = c.data");
+$period=$db->getOne("SELECT c.mt || ' ' || c.y FROM calendar c, bud_ru_zay z WHERE z.id = ".$_REQUEST["z_id"]." AND TRUNC (z.dt_start, 'mm') = c.data");
 $smarty->assign('period', $period);
 
 if (isset($_REQUEST['generate']))
@@ -75,6 +80,12 @@ $sql = rtrim(file_get_contents('sql/akcii_local_report_sales.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('sales', $x);
+/*
+$_REQUEST['z']=$x;
+$_REQUEST['z1']=$sql;
+ses_req();
+*/
+
 
 $sql = rtrim(file_get_contents('sql/akcii_local_report_sales_total.sql'));
 $sql=stritr($sql,$params);

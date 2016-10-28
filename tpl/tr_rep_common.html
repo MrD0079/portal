@@ -82,6 +82,12 @@
 	<script>$("#department_name option[value='{$smarty.request.department_name}']").prop('selected', true);</script>
 </p>
 
+		<p>
+			<input type=radio id="tr_rep_common_datauvol" name="tr_rep_common_datauvol" value='all'>все
+			<input type=radio id="tr_rep_common_datauvol" name="tr_rep_common_datauvol" value='actual'>работающие
+		</p>
+		<script>$("input[name=tr_rep_common_datauvol][value={$smarty.request.tr_rep_common_datauvol}]").attr('checked',true);</script>
+
 <p>
 <input type="submit" name="select" id="select" value="Построить отчет">
 </p>

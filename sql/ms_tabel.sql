@@ -80,9 +80,9 @@
                           DECODE (:fio_otv, '0', '0', :fio_otv)
                    AND DECODE (:numb, '0', '0', rh.id) =
                           DECODE (:numb, '0', '0', :numb)
-                   AND (   rh.tn IN (SELECT emp_tn
-                                       FROM who_full
-                                      WHERE exp_tn = :tn)
+                   AND (   rh.tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
                         OR (SELECT is_ma
                               FROM user_list
                              WHERE tn = :tn) = 1

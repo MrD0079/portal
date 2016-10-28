@@ -247,7 +247,8 @@
                                 f.name fil_name,
                                 fu.name funds_name,
                                 n.net_name,
-                                z.report_short
+                                z.report_short,
+               z.report_zero_cost,z.report_fakt_equal_plan
                            FROM bud_ru_zay z,
                                 bud_ru_zay_accept za,
                                 accept_types zat,
@@ -260,10 +261,17 @@
                                 bud_fil f,
                                 bud_funds fu,
                                 nets n
-                          WHERE     z.id_net = n.id_net(+)
-                                AND z.fil = f.id
-                                AND z.funds = fu.id
+                          WHERE   (SELECT NVL (tu, 0)
+                        FROM bud_ru_st_ras
+                       WHERE id = z.kat) = :tu
+                 AND      z.id_net = n.id_net(+)
+                                AND z.fil = f.id(+)
+                                AND z.funds = fu.id(+)
                                 AND z.tn = u.tn
+								AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
                                 AND za.tn = u1.tn
                                 AND z.recipient = u2.tn
                                 AND u.dpt_id =
@@ -293,8 +301,12 @@
                         AND :report_done_flt =
                                DECODE (:report_done_flt,
                                        0, 0,
-                                       DECODE (report_done, NULL, 2, 1))
-         AND DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
+                                       DECODE (nvl(report_done,0), 0, 2, 1))
+             AND :report_zero_cost =
+                DECODE ( :report_zero_cost,
+                        0, 0,
+                        NVL (report_zero_cost, 0))
+     AND DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
                 DECODE (:status,
                         0, 0,
                         1, current_accepted_id,
@@ -354,5 +366,5 @@
                                        0, z.current_acceptor_tn,
                                        0)
                         AND DECODE (:wait4myaccept, 0, 1, 0) =
-                               DECODE (:wait4myaccept, 0, report_done, 0))
+                               DECODE (:wait4myaccept, 0, nvl(report_done,0), 0))
 GROUP BY zf.ff_id, z.st

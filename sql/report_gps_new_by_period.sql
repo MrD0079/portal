@@ -154,9 +154,9 @@
                                               DECODE (:otv_list, '0', '0', :otv_list)
                                        AND DECODE (:num_list, '0', '0', rh.num) =
                                               DECODE (:num_list, '0', '0', :num_list)
-                                       AND (   rh.tn IN (SELECT emp_tn
-                                                           FROM who_full
-                                                          WHERE exp_tn = :tn)
+                                       AND (   rh.tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
                                             OR (SELECT is_ma
                                                   FROM user_list
                                                  WHERE tn = :tn) = 1 OR (SELECT is_admin

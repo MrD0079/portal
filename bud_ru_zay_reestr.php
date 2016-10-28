@@ -1,9 +1,5 @@
 <?
-
-//audit ("открыл реестр заявок на проведение активности","bud_ru_zay");
-
-//ses_req();
-
+$_REQUEST["tu"]==1?$doc_str="цели на переговоры":$doc_str="заявка на проведение активности";
 $dyn_flt='';
 if (isset($_REQUEST["dyn_flt"]))
 {
@@ -13,8 +9,11 @@ if (isset($_REQUEST["dyn_flt"]))
 		($v["subtype"]!=null)&&($v["item"]!=null)?$a1[]=$v["item"]:null;
 	}
 	(count($a1)>0)?$dyn_flt='AND bud_ru_zay.id IN (SELECT z_id FROM bud_ru_zay_ff WHERE val_list IN ('.join($a1,',').') HAVING COUNT (*) = '.count($a1).' GROUP BY z_id)':$dyn_flt='';
+	//ses_req();
+	//print_r($dyn_flt);
 }
 
+InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 InitRequestVar("who",0);
@@ -34,9 +33,15 @@ InitRequestVar("department_name","0");
 InitRequestVar("z_id",0);
 InitRequestVar("date_between_brzr","dt12");
 
+
 //ses_req();
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
+
+$sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
+$sql=stritr($sql,$params);
+$exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('exp_list_without_ts', $exp_list_without_ts);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_st_ras.sql'));
 $sql=stritr($sql,$params);
@@ -86,24 +91,21 @@ if (isset($_REQUEST["del_bud_ru_zay"]))
 		foreach($_REQUEST["del"] as $k=>$v)
 		{
 			Table_Update("bud_ru_zay",array("id"=>$v),null);
-			audit ("удалил заявку на проведение активности №".$v,"bud_ru_zay");
 		}
 	}
 }
 
-
-
-
+if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
+{
+	$_REQUEST["select"]=1;
+	$db->query("update bud_ru_zay_accept set accepted=0 where z_id=".$_REQUEST["reset_z_id"]);
+	$db->query("delete from nets_plan_month where bud_z_id=".$_REQUEST["reset_z_id"]." and plan_type=3");
+}
 
 if (isset($_REQUEST["save"]))
 {
-
-
 //ses_req();
 	$_REQUEST["select"]=1;
-
-
-
 // 5. В ВИДЕ ИСКЛЮЧЕНИЯ:
 // на всех заявках (согласованных и в процессе согласования) дать возможность ДБ выставить клиентов из выпадающего списка в поле "Клиент",
 // у которого будет выставлен тип "Выпадающий список-КЛИЕНТЫ". 
@@ -134,6 +136,7 @@ if (isset($_REQUEST["save"]))
 
 
 $params=array(
+':exp_list_without_ts' => $_REQUEST["exp_list_without_ts"],
 ':tn' => $tn,
 ':dpt_id' => $_SESSION["dpt_id"],
 ":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
@@ -155,6 +158,7 @@ $params=array(
 "/*dyn_flt*/"=>$dyn_flt,
 ":z_id"=>$_REQUEST["z_id"],
 ':date_between_brzr' => "'".$_REQUEST["date_between_brzr"]."'",
+':tu'=>$_REQUEST['tu']
 );
 
 
@@ -176,7 +180,7 @@ if ($_REQUEST["z_id"]!=0)
 		$params[":st"]=0;
 		$params[":kat"]=0;
 		$params[":creator"]=0;
-		$params[":country"]="'".$_SESSION["cnt_kod"]."'";
+		$params[":country"]="0"/*"'".$_SESSION["cnt_kod"]."'"*/;
 		$params[":orderby"]=1;
 		$params[":r_pos_id"]=0;
 		$params[":fil"]=0;
@@ -184,25 +188,27 @@ if ($_REQUEST["z_id"]!=0)
 		$params[":id_net"]=0;
 		$params[":region_name"]="0";
 		$params[":department_name"]="0";
+		$params[":tu"]=$_REQUEST["tu"];
+		
 	}
 }
 
-if (isset($_REQUEST["select"]))
+if (isset($_REQUEST["select"])&&(!isset($_REQUEST["showonlysvod"])))
 {
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr.sql'));
 $sql=stritr($sql,$params);
 
-$_REQUEST["SQL"]=$sql;
-
-ses_req();
-
+//$_REQUEST["SQL"]=$sql;
+//ses_req();
+//exit;
 
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($data as $k=>$v)
 {
 $d[$v["id"]]["head"]=$v;
+$d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
 $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
 if ($v["chat_id"]!="")
 {
@@ -218,6 +224,8 @@ foreach ($d as $k=>$v)
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
 	$p=array(':z_id' => $k);
 	$sql=stritr($sql,$p);
+	//$_REQUEST["SQL"]=$sql;
+	//ses_req();
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($data as $k1=>$v1)
 	{
@@ -225,7 +233,7 @@ foreach ($d as $k=>$v)
 		{
 			$data[$k1]["val_file"]=explode("\n",$v1["val_file"]);
 		}
-		if ($v1['type']=='list')
+		/*if ($v1['type']=='list')
 		{
 			if ($v1['val_list'])
 			{
@@ -235,11 +243,11 @@ foreach ($d as $k=>$v)
 			$list = $db->getOne($sql);
 			$data[$k1]['val_list_name'] = $list;
 			}
-		}
+		}*/
 		// 5. В ВИДЕ ИСКЛЮЧЕНИЯ:
 		// на всех заявках (согласованных и в процессе согласования) дать возможность ДБ выставить клиентов из выпадающего списка в поле "Клиент",
 		// у которого будет выставлен тип "Выпадающий список-КЛИЕНТЫ". 
-		if ($v1['type']=='list')
+		/*if ($v1['type']=='list')
 		{
 			$sql=$db->getOne('select get_list from bud_ru_ff_subtypes where id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
 			$p=array(':tn'=>$d[$k]['head']['creator_tn']);
@@ -247,13 +255,14 @@ foreach ($d as $k=>$v)
 			//echo "<p>".$sql."</p>";
 			$list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$data[$k1]['list'] = $list;
-		}
+		}*/
 		// 5. В ВИДЕ ИСКЛЮЧЕНИЯ:
 		// на всех заявках (согласованных и в процессе согласования) дать возможность ДБ выставить клиентов из выпадающего списка в поле "Клиент",
 		// у которого будет выставлен тип "Выпадающий список-КЛИЕНТЫ". 
 	}
 	include "bud_ru_zay_formula.php";
 	$d[$k]["ff"]=$data;
+	//unset($data);
 }
 }
 
@@ -266,7 +275,12 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('d1', $data);
 //print_r($data);
 
-$params[":status"]=1;
+}
+
+if (isset($_REQUEST["select"]))
+{
+
+//$params[":status"]=1;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr_ff.sql'));
 $sql=stritr($sql,$params);

@@ -16,7 +16,8 @@ $params=array(
 	':tn_rmkk'=>0,
 	':tn_mkk'=>0,
 	':tn'=>$tn,
-	':ok_filter'=>0
+	':ok_filter'=>0,
+	':mgroups'=>0,
 );
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

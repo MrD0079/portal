@@ -1,17 +1,19 @@
-<h1>Заявка на активность, создание (шаг 1)</h1>
+<h1>{if $smarty.request.tu eq 1}Цели на переговоры{else}Заявка на активность{/if}, создание (шаг 1)</h1>
 
-{if $is_db}
-{if not $bud_ru_zay_report}
+{if $is_db or $smarty.request.tu eq 1}
+{if not $bud_ru_zay_reportor or $smarty.request.tu eq 1}
 
 <form target="_self" method="POST" name=form1 id=form1 action="?action=bud_ru_zay_create_2">
 
+<input type=hidden name=tu value={$smarty.request.tu}>
+
 <table style="text-align: left;">
 	<tr>
-		<td style="text-align: right;">Дата создания заявки</td>
+		<td style="text-align: right;">Дата создания {if $smarty.request.tu eq 1}ТУ{else}заявки{/if}</td>
 		<td>{$now}</td>
 	</tr>
 	<tr>
-		<td style="text-align: right;">Дата начала проведения активности</td>
+		<td style="text-align: right;">Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}</td>
 		<td>
 			<input
 				required
@@ -24,7 +26,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td style="text-align: right;">Дата окончания проведения активности</td>
+		<td style="text-align: right;">Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}</td>
 		<td>
 			<input
 				required
@@ -43,10 +45,16 @@
 			>
 			<option></option>
 			{foreach key=key item=item from=$bud_ru_st_ras}
+	{if
+		($smarty.request.tu eq 1 and ($item.tu eq 1 or $item.tu_child_cnt > 0))
+		or
+		($smarty.request.tu neq 1 and $item.tu neq 1 and $item.tu_child_cnt eq 0)
+	}
 				<option
 					{if $item.parent eq 0}disabled style="background-color: rgb(200, 200, 200);"{/if}
 					value="{$item.id}"
 				>{$item.name|escape}</option>
+	{/if}
 			{/foreach}
 			</select>
 			<script>$('#new_kat option[value="{$smarty.request.new.kat}"]').prop('selected', true);</script>
@@ -66,6 +74,7 @@
 			<script>$('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{if not $smarty.request.tu eq 1}
 	<tr>
 		<td style="text-align: right;">Фонд</td>
 		<td>
@@ -80,6 +89,8 @@
 			<script>$('#new_funds option[value="{$smarty.request.new.funds}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{/if}
+	{if not $smarty.request.tu eq 1}
 	<tr>
 		<td style="text-align: right;">Для КК</td>
 		<td>
@@ -158,6 +169,7 @@
 			<script>$('#statya option[value="{$smarty.request.new.statya}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{/if}
 </table>
 
 <script>
@@ -166,16 +178,36 @@ $(
 	function()
 	{
 		//$('#master').datepicker('option', 'minDate', -154);
-		$('#master').datepicker('option', 'minDate', '01.01.2015');
+		//$('#master').datepicker('option', 'minDate', '01.01.2015');
+		$('#master').datepicker('option', 'minDate', '{/literal}{$now1}{literal}');
 		//$('#master').datepicker('option', 'minDate', -5);
-		$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+		{/literal}
+		{if $smarty.request.tu eq 1}
+			$('#master').change();
+		{else}
+			$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+		{/if}
+		{literal}
 	}
 )
 $('#master').change(
 	function()
 	{
 		$('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
-		$('#slave').val($('#master').val());
+		{/literal}
+		{if $smarty.request.tu eq 1}
+			var dts = $('#master').val().split(".");
+			var dtd = new Date(
+					parseInt(dts[2], 10),
+					parseInt(dts[1], 10) - 1,
+					parseInt(dts[0], 10));
+			dtd.setDate(dtd.getDate() + 365); 
+			var formatted = $.datepicker.formatDate("dd.mm.yy", dtd);
+			$('#slave').datepicker('option', 'minDate', formatted);
+		{else}
+			$('#slave').val($('#master').val());
+		{/if}
+		{literal}
 	}
 );
 

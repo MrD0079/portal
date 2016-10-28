@@ -1,9 +1,15 @@
-/* Formatted on 17/06/2015 12:56:17 (QP5 v5.227.12220.39724) */
+/* Formatted on 03/02/2016 18:10:25 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) exist,
        NVL (
           AVG (
              DECODE (
-                slaves1 + slaves2 + slaves3 + is_do + is_traid + is_traid_kk,
+                  slaves1
+                + slaves2
+                + slaves3
+                + slaves4
+                + is_do
+                + is_traid
+                + is_traid_kk,
                 0, 0,
                 1)),
           0)
@@ -62,11 +68,10 @@ SELECT COUNT (*) exist,
                  WHERE     z_id = z.id
                        AND accept_order =
                               DECODE (
-                                 NVL (
-                                    (SELECT MAX (accept_order)
-                                       FROM bud_ru_zay_accept
-                                      WHERE z_id = z.id AND accepted = 2),
-                                    0),
+                                 NVL ( (SELECT MAX (accept_order)
+                                          FROM bud_ru_zay_accept
+                                         WHERE z_id = z.id AND accepted = 2),
+                                      0),
                                  0, (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
                                       WHERE z_id = z.id),
@@ -82,16 +87,14 @@ SELECT COUNT (*) exist,
                                  NVL (
                                     (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
-                                      WHERE     z_id = z.id
-                                            AND rep_accepted = 2),
+                                      WHERE z_id = z.id AND rep_accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
                                       WHERE z_id = z.id),
                                  (SELECT MAX (accept_order)
                                     FROM bud_ru_zay_accept
-                                   WHERE     z_id = z.id
-                                         AND rep_accepted = 2)))
+                                   WHERE z_id = z.id AND rep_accepted = 2)))
                   current_accepted_id,
                (SELECT tn
                   FROM bud_ru_zay_accept
@@ -117,16 +120,14 @@ SELECT COUNT (*) exist,
                                  NVL (
                                     (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
-                                      WHERE     z_id = z.id
-                                            AND rep_accepted = 2),
+                                      WHERE z_id = z.id AND rep_accepted = 2),
                                     0),
                                  0, (SELECT MAX (accept_order)
                                        FROM bud_ru_zay_accept
                                       WHERE z_id = z.id),
                                  (SELECT MAX (accept_order)
                                     FROM bud_ru_zay_accept
-                                   WHERE     z_id = z.id
-                                         AND rep_accepted = 2)))
+                                   WHERE z_id = z.id AND rep_accepted = 2)))
                   current_accepted_date,
                (SELECT COUNT (tn)
                   FROM bud_ru_zay_accept
@@ -156,6 +157,10 @@ SELECT COUNT (*) exist,
                                        FROM user_list
                                       WHERE tn = z.tn))
                   slaves3,
+               (SELECT COUNT (*)
+                  FROM bud_ru_zay_executors
+                 WHERE tn = :tn AND z_id = z.id)
+                  slaves4,
                z.st st_id,
                z.kat kat_id,
                st.name st_name,
@@ -203,9 +208,19 @@ SELECT COUNT (*) exist,
                n.net_name,
                z.report_short,
                pt.pay_type payment_type_name,
-               ss.cost_item statya_name,z.distr_compensation
+               ss.cost_item statya_name,
+               z.distr_compensation,
+               z.report_zero_cost,z.report_fakt_equal_plan,
+               bud_ru_zay_executors.tn executor_tn,
+               fn_getname (bud_ru_zay_executors.tn) executor_name,
+               bud_ru_zay_executors.execute_order,
+               bud_ru_zay_executors.pos_name executor_pos_name,
+               bud_ru_zay_executors.department_name executor_department_name
           FROM bud_ru_zay z,
                bud_ru_zay_accept za,
+               (SELECT sze.*, szu.pos_name, szu.department_name
+                  FROM bud_ru_zay_executors sze, user_list szu
+                 WHERE sze.tn = szu.tn) bud_ru_zay_executors,
                accept_types zat,
                user_list u,
                user_list u1,
@@ -219,15 +234,19 @@ SELECT COUNT (*) exist,
                nets n,
                payment_type pt,
                statya ss
-         WHERE     z.id_net = n.id_net(+)
+         WHERE     (SELECT NVL (tu, 0)
+                      FROM bud_ru_st_ras
+                     WHERE id = z.kat) = :tu
+               AND z.id_net = n.id_net(+)
                AND z.payment_type = pt.id(+)
                AND z.statya = ss.id(+)
-               AND z.fil = f.id
+               AND z.fil = f.id(+)
                AND z.funds = fu.id
                AND z.tn = u.tn
                AND za.tn = u1.tn
                AND z.recipient = u2.tn
                AND z.id = za.z_id(+)
+               AND z.id = bud_ru_zay_executors.z_id(+)
                AND za.rep_accepted = zat.id(+)
                AND za.rep_accepted IS NOT NULL
                AND a.z_id(+) = z.id

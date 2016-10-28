@@ -1,0 +1,37 @@
+{if $box_dpu and $tn eq 2923402273}
+	<p>
+		{foreach key=k item=i from=$box_dpu}
+			<div style="text-align:left; background-color:lightgreen;">
+			{$i.head.creator_pos_name}<br>
+			{$i.head.creator_department_name}<br>
+			{$i.head.creator_fio}<br>
+			оставил вам предложение по теме:
+			<a href="javascript:void(0);" onclick="$('#box_dpu{$i.head.id}').toggle();"><font style="color:blue">{$i.head.subj}</font></a>
+			<table id=box_dpu{$i.head.id}>
+				<tr>
+					<td colspan=3>
+						история переписки:
+					</td>
+				</tr>
+				{foreach key=k1 item=i1 from=$i.chat}
+				<tr style="vertical-align:top">
+					<td><font style="color:red"><nobr>{$i1.lu}</nobr></font></td>
+					<td><font style="color:green">{$i1.who}</font></td>
+					<td><font style="color:blue">{$i1.text|nl2br}</font></td>
+				</tr>
+				{/foreach}
+				<tr>
+					<td colspan=3>
+						<textarea cols="35" rows="3" name="box_dpu_text{$i.head.id}" id="box_dpu_text{$i.head.id}"></textarea><br>
+						<a href="javascript:void(0);" onclick="box_dpu_answer({$i.head.id},$('#box_dpu_text{$i.head.id}').val());">Отправить ответ</a>
+						<a href="javascript:void(0);" onclick="box_dpu_close({$i.head.id},'closed_dp');">Закрыть тему обсуждения</a>
+					</td>
+				</tr>
+			</table>
+			<script>$('#box_dpu{$i.head.id}').hide();</script>
+			<p id="box_dpu_result{$i.head.id}" style="color:red"></p>
+			</div>
+			<p></p>
+		{/foreach}
+	</p>
+{/if}

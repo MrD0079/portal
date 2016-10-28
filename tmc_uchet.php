@@ -25,11 +25,14 @@ if (isset($_REQUEST["add"]))
 		if ($_REQUEST["tmc_new"]["name"]!=''&&$_REQUEST["tmc_new"]["tmcs"]!='')
 		{
 			$_REQUEST["tmc_new"] = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST["tmc_new"]);
-			if (is_uploaded_file($_FILES["tmc_new"]["tmp_name"]["fn"]))
+			if (isset($_FILES["tmc_new"]))
 			{
-				$fn=get_new_file_id()."_".translit($_FILES["tmc_new"]["name"]["fn"]);
-				move_uploaded_file($_FILES["tmc_new"]["tmp_name"]["fn"], "files/".$fn);
-				$_REQUEST["tmc_new"]["fn"] = $fn;
+				if (is_uploaded_file($_FILES["tmc_new"]["tmp_name"]["fn"]))
+				{
+					$fn=get_new_file_id()."_".translit($_FILES["tmc_new"]["name"]["fn"]);
+					move_uploaded_file($_FILES["tmc_new"]["tmp_name"]["fn"], "files/".$fn);
+					$_REQUEST["tmc_new"]["fn"] = $fn;
+				}
 			}
 			isset($_REQUEST["tmc_new"]["dtv"]) ? $_REQUEST["tmc_new"]["dtv"]=OraDate2MDBDate($_REQUEST["tmc_new"]["dtv"]) : null;
 			isset($_REQUEST["tmc_new"]["zakup_dt"]) ? $_REQUEST["tmc_new"]["zakup_dt"]=OraDate2MDBDate($_REQUEST["tmc_new"]["zakup_dt"]) : null;

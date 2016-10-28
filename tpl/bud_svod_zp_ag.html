@@ -4,25 +4,25 @@
 Заработная плата
 </h3>
 
-<table id=mytable style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<table id=mytable style="text-align: left;" border="1">
 <tbody>
 <tr style="font-weight:bold;text-align: center;">
 <td>№ п/п</td>
-<td>не-<br>спи-<br>соч-<br>ный</td>
+<td>несписочный</td>
 <td>ЭТА ФИО</td>
 <td>ЭТА т.н.</td>
 <td>ТС ФИО</td>
 <td>ТС т.н.</td>
 <td>Дистрибьютор/филиал</td>
-<td>Продажи<br>за<br>месяц,<br>{$valuta}</td>
-<td>Возвращенная<br>ДЗ,<br>{$valuta}</td>
-<td>{$norm_zp}%<br>от<br>возвращенной<br>ДЗ,<br>{$valuta}</td>
-<td>Штраф<br>за ПДЗ,<br>{$valuta}</td>
-<td>ЗП<br>расчетная,<br>{$valuta}</td>
-<td>ЗП<br>фактическая<br>на руки,<br>{$valuta}</td>
-<td>Возвращенная<br>ДЗ * 0.003,<br>{$valuta}</td>
-<!--<td>0.3*{$norm_zp}%<br>от<br>возвращенной<br>ДЗ,<br>{$valuta}</td>-->
-<td>%<br>от<br>продаж</td>
+<td><!--sales-->Продажи за месяц (без учета акций),{$valuta}</td>
+<td><!--val_fact-->Продажи за месяц (с учетом акций),{$valuta}</td>
+<td><!--dz_return-->План продаж,{$valuta}</td>
+<td><!--plan_perc-->% выполнения плана</td>
+<td><!--dz_return_norm--><!--{$norm_zp}-->% от продаж,{$valuta}</td>
+<!--<td>/*akb_penalty*/Штраф за ПДЗ,{$valuta}</td>-->
+<td><!--zp_plan-->ЗП расчетная,{$valuta}</td>
+<td><!--zp_fakt-->ЗП фактическая на руки,{$valuta}</td>
+<td><!--sales_perc-->% от продаж</td>
 </tr>
 
 {foreach key=k item=i from=$ag name=ag}
@@ -44,9 +44,7 @@
 						id="fio_{$i.id}"
 						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'fio',this.value);"
 					>
-					<script>
-						$('#fio_{$i.id}').val('{$i.eta}');
-					</script>
+					<script>$('#fio_{$i.id}').val('{$i.eta}');</script>
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.id}_eta_tab_number">
@@ -60,9 +58,7 @@
 						id="eta_tab_number_{$i.id}"
 						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'eta_tab_number',this.value);"
 					>
-					<script>
-						$('#eta_tab_number_{$i.id}').val({$i.eta_tab_number});
-					</script>
+					<script>$('#eta_tab_number_{$i.id}').val({$i.eta_tab_number});</script>
 				{/if}
 			</td>
 			<td style="text-align:left">{$i.ts}</td>
@@ -71,79 +67,35 @@
 				{if not $is_ts or $i.ok_db_tn}
 					{$i.fil_name}
 				{else}
-					<select id="fil_{$i.id}" onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'fil',this.value);">
+					<select id="fil_{$i.id}" onChange="
+													save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'fil',this.value);
+													save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'dz_return','{$i.dz_return}');
+													save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'sales','{$i.summa}');
+												">
 						<option></option>
 						{foreach key=k1 item=i1 from=$fil_list}
 						<option value="{$i1.id}">{$i1.name}</option>
 						{/foreach}
 					</select>
-					<script>
-						$("#fil_{$i.id} option[value='{$i.fil}']").prop('selected', true);
-					</script>
+					<script>$("#fil_{$i.id} option[value='{$i.fil}']").prop('selected', true);</script>
 				{/if}
 			</td>
-			<td style=" text-align:right;" id="d_{$i.id}_sales">
-				{if not $is_ts or $i.ok_db_tn}
-					{$i.sales|num:3}
-				{else}
-					<a href="javascript:void(0);" onclick="$('#sales_{$i.id}').val({$i.summa});$('#sales_{$i.id}').change();">{$i.summa|num:3} =></a>
-					<input
-						class="number"
-						size="10"
-						name="sales[{$i.id}]"
-						id="sales_{$i.id}"
-						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'sales',this.value);"
-					>
-					<script>
-						$('#sales_{$i.id}').val({$i.sales});
-					</script>
-				{/if}
-			</td>
-			<td style=" text-align:right;" id="d_{$i.id}_dz_return">
-				{if not $is_ts or $i.ok_db_tn}
-					{$i.dz_return|num:3}
-				{else}
-					<input
-						class="number"
-						size="10"
-						name="dz_return[{$i.id}]"
-						id="dz_return_{$i.id}"
-						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'dz_return',this.value);"
-					>
-					<script>
-						$('#dz_return_{$i.id}').val({$i.dz_return});
-					</script>
-				{/if}
-			</td>
-			<td style=" text-align:right" id="d_{$i.id}_dz_return_norm">{$i.dz_return_norm|num:3}</td>
-			<td
-				style=
-					"
-						text-align:right;
-						{if $i.akb_penalty > $i.dz_return_norm03}background-color:yellow;{/if}
-					"
-				id="d_{$i.id}_akb_penalty"
-			>
-				{if not $is_ts or $i.ok_db_tn}
-					{$i.akb_penalty|num:3}
-				{else}
-					<input
-						class="number"
-						size="10"
-						name="akb_penalty[{$i.id}]"
-						id="akb_penalty_{$i.id}"
-						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'akb_penalty',this.value);"
-					>
-					<script>
-						$('#akb_penalty_{$i.id}').val({$i.akb_penalty});
-					</script>
-				{/if}
-			</td>
-			<td style=" text-align:right" id="d_{$i.id}_zp_plan">{$i.zp_plan|num:3}</td>
-			<td style=" text-align:right;" id="d_{$i.id}_zp_fakt">
+			<td style="text-align:right" id="d_{$i.id}_sales">{$i.sales|num:3}</td>
+			<td style="text-align:right" id="d_{$i.id}_val_fact">{$i.val_fact|num:3}</td>
+			<td style="text-align:right" id="d_{$i.id}_dz_return">{$i.dz_return|num:3}</td>
+			<td style="text-align:right" id="d_{$i.id}_plan_perc">{$i.plan_perc|num:3}</td>
+			<td style="text-align:right" id="d_{$i.id}_dz_return_norm">{$i.dz_return_norm|num:3}</td>
+			<!--<td style="text-align:right" id="d_{$i.id}_akb_penalty"></td>-->
+			<td style="text-align:right" id="d_{$i.id}_zp_plan">{$i.zp_plan|num:3}</td>
+			<td style="text-align:right" id="d_{$i.id}_zp_fakt">
 				{if not $is_ts or $i.ok_db_tn}
 					{$i.zp_fakt|num:3}
 				{else}
+					<nobr>
+					{if $i.unscheduled eq 0}
+					<a href="javascript:void(0);" onClick="$('#zp_fakt_{$i.id}').val('{$i.zp_fakt_def}');$('#zp_fakt_{$i.id}').change();">{$i.zp_fakt_def}</a>
+					=>
+					{/if}
 					<input
 						class="number"
 						size="10"
@@ -151,13 +103,11 @@
 						id="zp_fakt_{$i.id}"
 						onChange="save_ag('{$i.id}','{$i.h_eta}',{$i.unscheduled},'zp_fakt',this.value);"
 					>
-					<script>
-						$('#zp_fakt_{$i.id}').val({$i.zp_fakt});
-					</script>
+					</nobr>
+					<script>$('#zp_fakt_{$i.id}').val({$i.zp_fakt});</script>
 				{/if}
 			</td>
-			<td style=" text-align:right" id="d_{$i.id}_dz_return_norm03">{$i.dz_return_norm03|num:3}</td>
-			<td style=" text-align:right; background-color: #FFCC99" id="d_{$i.id}_sales_perc">{$i.sales_perc|num:3}</td>
+			<td style="text-align:right; background-color: #FFCC99" id="d_{$i.id}_sales_perc">{$i.sales_perc|num:3}</td>
 </tr>
 {/foreach}
 

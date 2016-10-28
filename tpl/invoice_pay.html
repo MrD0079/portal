@@ -4,20 +4,8 @@
 
 <form target="_self" method="POST" name=form1 id=form1>
 <table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
 <tr>
-<td>
-НМКК</td>
-<td>
-Ответственный ТМ КК</td>
-<td>
-Сеть</td>
-<td>
-Начало периода</td>
-<td>
-Окончание периода</td>
-</tr>
-<tr>
+<td>НМКК</td>
       <td style="vertical-align: top;">
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>
@@ -27,6 +15,9 @@
 				</select>
 				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
       </td>
+</tr>
+<tr>
+<td>Ответственный ТМ КК</td>
       <td style="vertical-align: top;">
 				<select name=tn_mkk id=tn_mkk>
 					<option value=0></option>
@@ -36,6 +27,9 @@
 				</select>
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
       </td>
+</tr>
+<tr>
+<td>Сеть</td>
       <td style="vertical-align: top;">
 				<select name="nets" id="nets">
 					<option value=0></option>
@@ -45,81 +39,63 @@
 				</select>
 				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
       </td>
+</tr>
 
 
-		<td>
-			<select name=sd id=sd>
-			{foreach key=key item=item from=$month_list}
-				<option value="{$item.sd_c}">{$item.my}</option>
+<tr>
+	<td>Начало/окончания периода</td>
+	<td>
+		с
+		<select name="sd" id="sd">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
 			{/foreach}
-			</select>
-			<script>$('#sd').val("{if $smarty.request.sd}{$smarty.request.sd}{else}{$smarty.request.month_list}{/if}");</script>
-		</td>
-		<td>
-			<select name=ed id=ed>
-			{foreach key=key item=item from=$month_list}
-				<option value="{$item.sd_c}">{$item.my}</option>
+		</select>
+		<script>$('#sd option[value="{$smarty.request.sd|default:$now1}"]').prop('selected', true);</script>
+		по
+		<select name="ed" id="ed">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
 			{/foreach}
-			</select>
-			<script>$('#ed').val("{if $smarty.request.ed}{$smarty.request.ed}{else}{$smarty.request.month_list}{/if}");</script>
-		</td>
+		</select>
+		<script>$('#ed option[value="{$smarty.request.ed|default:$now1}"]').prop('selected', true);</script>
+	</td>
+</tr>
 
 
 
 
-    </tr>
+
     <tr>
-<td colspan=5>
+<td>
 Выводить по:
+</td>
+<td>
 <input checked="checked" name="sort" id="sort" value="0" type="radio">дате выставления счета
-<input name="sort" id="sort" value="1" type="radio">
-дате оплаты счета
+<input name="sort" id="sort" value="1" type="radio">дате оплаты счета
 <input name="sort" id="sort" value="2" type="radio">дате передачи счета на оплату
-<br>
-Показать счета:
-<input name="show" id="show" value="all" type="radio" checked="checked">все
-<input name="show" id="show" value="opl" type="radio">
-оплаченные
-<input name="show" id="show" value="noopl" type="radio">
-неоплаченные
-<input name="show" id="show" value="dolg_act" type="radio">с задолженностью по актам
-<input name="show" id="show" value="dolg_nal" type="radio">с задолженностью по НН
-
-{if $smarty.request.sort}
-	<script>$("input[name=sort][value={$smarty.request.sort}]").attr('checked',true);</script>
-{/if}
-{if $smarty.request.show}
-	<script>$("input[name=show][value={$smarty.request.show}]").attr('checked',true);</script>
-{/if}
-
 </td>
     </tr>
-    <tr>
-</tr>
-</tbody>
-</table>
-
-
-<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
 <tr>
 <td>
+Показать счета:
 </td>
-</tr>
-</table>
-
-<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2">
+<td>
+<input name="show" id="show" value="all" type="radio" checked="checked">все
+<input name="show" id="show" value="opl" type="radio">оплаченные
+<input name="show" id="show" value="noopl" type="radio">неоплаченные
+<input name="show" id="show" value="dolg_act" type="radio">с задолженностью по актам
+<input name="show" id="show" value="dolg_nal" type="radio">с задолженностью по НН
+{if $smarty.request.sort}<script>$("input[name=sort][value={$smarty.request.sort}]").attr('checked',true);</script>{/if}
+{if $smarty.request.show}<script>$("input[name=show][value={$smarty.request.show}]").attr('checked',true);</script>{/if}
+</td>
+    </tr>
 <tr>
 <td>
 Юридическое лицо
 </td>
-<td>
-Месяц проведения акта
-</td>
-<td>
-Месяц оплаты счета
-</td>
-</tr>
-<tr>
 <td>
 			<select name=urlic id=urlic>
 				<option value=0></option>
@@ -129,25 +105,85 @@
 			</select>
 			<script>$('#urlic option[value="{$smarty.request.urlic}"]').prop('selected', true);</script>
 </td>
-<td>
-			<select name=act_prov_month id=act_prov_month>
-			<option value=0></option>
-			{foreach key=key item=item from=$month_list}
-				<option value="{$item.sd_c}">{$item.my}</option>
-			{/foreach}
-			</select>
-			<script>$('#act_prov_month option[value="{$smarty.request.act_prov_month}"]').prop('selected', true);</script>
-</td>
-<td>
-			<select name=oplata_date id=oplata_date>
-			<option value=0></option>
-			{foreach key=key item=item from=$month_list}
-				<option value="{$item.sd_c}">{$item.my}</option>
-			{/foreach}
-			</select>
-			<script>$('#oplata_date option[value="{$smarty.request.oplata_date}"]').prop('selected', true);</script>
-</td>
 </tr>
+
+
+<tr>
+	<td>Месяц проведения акта</td>
+	<td>
+		с
+		<select name="act_prov_month_s" id="act_prov_month_s">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#act_prov_month_s option[value="{$smarty.request.act_prov_month_s}"]').prop('selected', true);</script>
+		по
+		<select name="act_prov_month_e" id="act_prov_month_e">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#act_prov_month_e option[value="{$smarty.request.act_prov_month_e}"]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Месяц оплаты счета</td>
+	<td>
+		с
+		<select name="oplata_date_s" id="oplata_date_s">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#oplata_date_s option[value="{$smarty.request.oplata_date_s}"]').prop('selected', true);</script>
+		по
+		<select name="oplata_date_e" id="oplata_date_e">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#oplata_date_e option[value="{$smarty.request.oplata_date_e}"]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Месяц отправки счета</td>
+	<td>
+		с
+		<select name="invoice_sended_s" id="invoice_sended_s">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#invoice_sended_s option[value="{$smarty.request.invoice_sended_s}"]').prop('selected', true);</script>
+		по
+		<select name="invoice_sended_e" id="invoice_sended_e">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#invoice_sended_e option[value="{$smarty.request.invoice_sended_e}"]').prop('selected', true);</script>
+	</td>
+</tr>
+
+		<tr>
+			<td>Плательщик</td>
+			<td>
+				<select name="payer" id="payer">
+					<option value=0></option>
+					{foreach key=key item=item from=$payer}
+						<option value={$item.id}>{$item.name}</option>
+					{/foreach}
+				</select>
+				<script>$('#payer option[value={$smarty.request.payer}]').prop('selected', true);</script>
+			</td>
+		</tr>
 </table>
 
 
@@ -235,7 +271,9 @@
 	</tr>
 	{foreach key=key item=item from=$invoice name=invoice}
 	<tr
-		{if $item.st_count eq 0}
+		{if $item.nocover_cnt > 0}
+			style="background-color:#FF99FF"
+		{elseif $item.st_count eq 0}
 			bgcolor="red"
 		{else}
 			{if $color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
@@ -250,8 +288,19 @@
 		<td>{$item.mkk}</td>
 		<td style="text-align:right">{$item.st_total|default:0|num:3}</td>
 		<td style="text-align:right">{$item.summa|default:0|num:3}</td>
-		<td>{$item.nmkk_lu_t}<br>      </td>
-		<td>{$item.payer_name}</td>
+		<td>{$item.invoice_sended_lu_t}</td>
+		<td>
+			{if $is_fin_man and not $smarty.request.print}
+				<select name=data[{$item.id}][payer] id="data{$item.id}payer">
+					<option value=0></option>
+					{foreach key=k1 item=i1 from=$payer}
+						<option {if $i1.id eq $item.payer}selected{/if} value={$i1.id}>{$i1.name}</option>
+					{/foreach}
+				</select>
+			{else}
+				{$item.payer_name}
+			{/if}
+		</td>
 		<td style="text-align: center;{if $item.dolg_act eq 1}background-color: red;{/if}">
 			{if not $smarty.request.print}
 				<input onclick="$('#data{$item.id}dolg_act').val(this.checked?1:0)" {if not $is_fin_man}disabled{/if} {if $item.dolg_act eq 1}checked="checked"{/if} type="checkbox">
@@ -277,14 +326,14 @@
 			{/if}
 		</td>
 		<td>
-			{if not $item.act_prov_month and ($is_fin_man or $is_mkk)}
+			{if not $item.act_prov_month and ($is_fin_man or $is_mkk) and not $smarty.request.print}
 				<input name=data[{$item.id}][act_num] value="{$item.act_num}" size=10>
 			{else}
 				{$item.act_num}
 			{/if}
 		</td>
 		<td>
-			{if not $item.act_prov_month and ($is_fin_man or $is_mkk)}
+			{if not $item.act_prov_month and ($is_fin_man or $is_mkk) and not $smarty.request.print}
 				<input name=data[{$item.id}][act_dt] value="{$item.act_dt_t}" size=10 class="datepicker">
 			{else}
 				{$item.act_dt_t}
@@ -293,7 +342,7 @@
 		<td>
 			{if not $smarty.request.print}
 				<input {if not $is_fin_man or $item.oplachen neq 1}disabled{/if} class="datepicker" value="{$item.oplata_date}"
-				name=data[{$item.id}][oplata_date] name=data{$item.id}oplata_date size=8>
+				name=data[{$item.id}][oplata_date] id=data{$item.id}oplata_date size=8>
 			{else}
 				{$item.oplata_date}
 			{/if}
@@ -303,10 +352,9 @@
 				<select {if not $is_fin_man}disabled{/if} name=data[{$item.id}][act_prov_month] id=data_{$item.id}_act_prov_month>
 				{if not $item.act_prov_month}<option></option>{/if}
 				{foreach key=key1 item=item1 from=$month_list}
-					<option value="{$item1.sd_c}">{$item1.my}</option>
+					<option {if $item1.sd_c eq $item.act_prov_month}selected{/if} value="{$item1.sd_c}">{$item1.my}</option>
 				{/foreach}
 				</select>
-				<script>$('#data_{$item.id}_act_prov_month option[value="{$item.act_prov_month}"]').prop('selected', true);</script>
 			{else}
 				{$item.act_prov_month}
 			{/if}
@@ -332,6 +380,19 @@
 		<td style="text-align:right">{$invoice_total.oplachen|default:0|num:3}</td>
 	</tr>
 </table>
+
+<script>
+	{foreach key=key item=item from=$invoice name=invoice}
+			{if not $smarty.request.print}
+					$('#data_{$item.id}_act_prov_month').on('focus', function() {literal}{{/literal}
+						$(this).val()==''
+						?
+						$('#data_{$item.id}_act_prov_month option[value="{$now1}"]').prop('selected', true)
+						:null;
+					{literal}}{/literal});
+			{/if}
+	{/foreach}
+</script>
 
 {if not $smarty.request.print}
 

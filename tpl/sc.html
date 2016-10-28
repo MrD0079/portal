@@ -1,6 +1,10 @@
 <h1>Торговые условия работы с ТП</h1>
 
-{if not $is_ts and not $is_admin}
+<!--
+if /*not $is_ts and*/ not $is_admin
+-->
+
+{if not $is_admin}
 	{assign var=disabled value='disabled'}
 {/if}
 
@@ -124,16 +128,12 @@
 		<td>Отсрочка</td>
 		<td>Скидка,<br>%</td>
 		<td>Бонус,<br>%</td>
-		<td>Фикс.<br>оплата<br>в<br>месяц,<br>{$valuta}</td>
+		<td>Фикс./<br>единораз<br>оплата<br>в месяц,<br>{$valuta}</td>
 		<td>Наценка,<br>%</td>
-		<td>Обоснование<br>предоставления<br>скидки/бонуса</td>
-
+		<td>Обоснование<br>предоставления<br>скидки/бонуса/оплаты</td>
 		{if not $smarty.request.print}
-
 		<td>Протокол<br>условий<br>сотрудничества,<br>срок<br>начала<br>его<br>действия</td>
-
 		{/if}
-
 	</tr>
 	{foreach key=k item=i from=$list name=list}
 		<tr>
@@ -143,13 +143,35 @@
 			<td>{$i.head.tp_kod} {$i.head.tp_name} {$i.head.tp_address}</td>
 
 			{if not $smarty.request.print and not $disabled}
+				<td><input class="number_int" size=4 name=data[{$i.head.tp_kod}][delay] value="{$i.head.delay}"></td>
+				<td><input class="number" size=4 name=data[{$i.head.tp_kod}][discount] value="{$i.head.discount}"></td>
+				<td><input class="number" size=4 name=data[{$i.head.tp_kod}][bonus] value="{$i.head.bonus}"></td>
+			{else}
+				<td style="text-align:right">{$i.head.delay}</td>
+				<td style="text-align:right">{$i.head.discount|num:2}</td>
+				<td style="text-align:right">{$i.head.bonus|num:2}</td>
+			{/if}
 
-			<td><input class="number_int" size=4 name=data[{$i.head.tp_kod}][delay] value="{$i.head.delay}"></td>
-			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][discount] value="{$i.head.discount}"></td>
-			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][bonus] value="{$i.head.bonus}"></td>
-			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][fixed] value="{$i.head.fixed}"></td>
+			{if not $smarty.request.print and $is_admin}
+			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][fixed] value="{$i.head.fixed}"><br><font style="color:red">{$i.head.fixed_lu}</font></td>
+			{else}
+			<td style="text-align:right">{$i.head.fixed|num:2}<br><font style="color:red">{$i.head.fixed_lu}</font></td>
+			{/if}
+
+			
+			{if not $smarty.request.print and not $disabled}
 			<td><input class="number" size=4 name=data[{$i.head.tp_kod}][margin] value="{$i.head.margin}"></td>
-			<td><textarea cols=20 rows=2 name=data[{$i.head.tp_kod}][justification]>{$i.head.justification}</textarea></td>
+			{else}
+			<td style="text-align:right">{$i.head.margin|num:2}</td>
+			{/if}
+
+			{if not $smarty.request.print and ($is_ts or $is_admin)}
+			<td><textarea cols=20 rows=2 name=data[{$i.head.tp_kod}][justification]>{$i.head.justification}</textarea><br><font style="color:red">{$i.head.justification_lu}</font></td>
+			{else}
+			<td>{$i.head.justification|nl2br}<br><font style="color:red">{$i.head.justification_lu}</font></td>
+			{/if}
+			
+			{if not $smarty.request.print and not $disabled}
 			<td>
 				{foreach key=k1 item=i1 from=$i.files name=files}
 					<div id="uploadOutput{$k1}" style="display: inline;">
@@ -169,15 +191,7 @@
 				<input type=file name=files[fn][{$i.head.tp_kod}]>
 				<input class="datepicker" size=8 name=files[dt][{$i.head.tp_kod}]>
 			</td>
-
 			{else}
-
-			<td style="text-align:right">{$i.head.delay}</td>
-			<td style="text-align:right">{$i.head.discount|num:2}</td>
-			<td style="text-align:right">{$i.head.bonus|num:2}</td>
-			<td style="text-align:right">{$i.head.fixed|num:2}</td>
-			<td style="text-align:right">{$i.head.margin|num:2}</td>
-			<td>{$i.head.justification|nl2br}</td>
 			<td>
 				{foreach key=k1 item=i1 from=$i.files name=files}
 					<nobr>
@@ -187,9 +201,7 @@
 					<br>
 				{/foreach}
 			</td>
-
 			{/if}
-
 		</tr>
 	{/foreach}
 </table>

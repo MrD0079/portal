@@ -1,6 +1,17 @@
-<table border="0" width="100%" cellpadding="0" cellspacing="0">
+<table class="main_works">
 	<tr style="text-align:center; color:red;">
 		<td>
+			{if $scmovezayexist > 0 and $is_traid}
+			<p><a href="?action=scmovehistory&status=1&select=1">Подтверждение переноса ТУ</a></p>
+			{/if}
+
+			{if $is_prez}
+			<h1>Конференция КОФЕ</h1>
+			<h1><a href="?action=voiting">Голосование по потребительским предпочтениям</a></h1>
+			{foreach key=k item=i from=$voiting_test_list}
+			<h1><a href="?action=voiting_test&id={$i.id}">{$i.name}</a></h1>
+			{/foreach}
+			{/if}
 
 			{if $dzc_accept}
 			<p>
@@ -11,7 +22,7 @@
 			</p>
 			{/if}
 
-
+			<!--
 			{if $advance_ok_dpu and $is_dpu}
 			<p>
 			Подтверждение авансов
@@ -20,8 +31,9 @@
 			{/foreach}
 			</p>
 			{/if}
+			-->
 
-
+			<!--
 			{if $my_advance.enabled}
 			<p>
 			<input
@@ -119,50 +131,10 @@
 			<p id="adv_result" style="color:red"></p>
 			</p>
 			{/if}
+			-->
 
-			{if $box_dpu and $tn eq 2923402273}
-			<p>
-			{foreach key=k item=i from=$box_dpu}
-			<div style="text-align:left; background-color:lightgreen;">
-			{$i.head.creator_pos_name}<br>
-			{$i.head.creator_department_name}<br>
-			{$i.head.creator_fio}<br>
-			оставил вам предложение по теме: <a href="javascript:void(0);" onclick="$('#box{$i.head.id}').toggle();"><font style="color:blue">{$i.head.subj}</font></a>
-			<table id=box{$i.head.id}>
-				<tr>
-					<td colspan=3>
-						история переписки:
-					</td>
-				</tr>
-				{foreach key=k1 item=i1 from=$i.chat}
-				<tr style="vertical-align:top">
-					<td>
-						<font style="color:red"><nobr>{$i1.lu}</nobr></font>
-					</td>
-					<td>
-						<font style="color:green">{$i1.who}</font>
-					</td>
-					<td>
-						<font style="color:blue">{$i1.text|nl2br}</font>
-					</td>
-				</tr>
-				{/foreach}
-				<tr>
-					<td colspan=3>
-						<textarea cols="35" rows="3" name="box_text{$i.head.id}" id="box_text{$i.head.id}"></textarea><br>
-						<a href="javascript:void(0);" onclick="box_answer({$i.head.id},$('#box_text{$i.head.id}').val());">Отправить ответ</a>
-						<a href="javascript:void(0);" onclick="box_close({$i.head.id},'closed_dp');">Закрыть тему обсуждения</a>
-
-					</td>
-				</tr>
-			</table>
-			<script>$('#box{$i.head.id}').hide();</script>
-			<p id="box_result{$i.head.id}" style="color:red"></p>
-			</div>
-			<p></p>
-			{/foreach}
-			</p>
-			{/if}
+			{include file="main_center_box_dpu.html"}
+			{include file="main_center_box_dm.html"}
 
 			{if $kc_dpu and $is_dpu}
 			<p>
@@ -207,7 +179,7 @@
 				{if $i.math_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_math}">Ссылка для прохождения теста по АЦ - МАТЕМАТИКА</a></p>{/if}
 			{/foreach}
 
-			{if $is_admin and $error > 0}
+			{if $tn eq 2885600038 and $is_admin and $error > 0}
 				<p style="font-weight:bold"><a href="?action=log&prg=error&select=1">Лог ошибок ({$error})</a></p>
 			{/if}
 

@@ -1,0 +1,170 @@
+<h1>Долг по документам</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+{if not $smarty.request.print}
+	<table>
+		<tr>
+			<td>
+				Год
+			</td>
+			<td>
+				<select required name=y id=y>
+					<option></option>
+					{foreach key=key item=item from=$y}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#y option[value="{$smarty.request.y}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Месяц
+			</td>
+			<td>
+				<select required name="m" id="m">
+					<option></option>
+					{foreach key=key item=item from=$m}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#m option[value="{$smarty.request.m}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				НМКК
+			</td>
+			<td>
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Ответственный ТМ КК
+			</td>
+			<td>
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Сеть
+			</td>
+			<td>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr style="vertical-align:top">
+			<td>
+				Форма оплаты
+			</td>
+			<td>
+				<select name="payment_type" id="payment_type">
+					<option value=0></option>
+					{foreach key=key item=item from=$payment_type}
+					<option value={$item.id}>{$item.pay_type}</option>
+					{/foreach}
+				<script>$('#payment_type option[value="{$smarty.request.payment_type}"]').prop('selected', true);</script>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Плательщик</td>
+			<td>
+				<select name="payer" id="payer">
+					<option value=0></option>
+					{foreach key=key item=item from=$payer}
+						<option value={$item.id}>{$item.name}</option>
+					{/foreach}
+				</select>
+				<script>$('#payer option[value={$smarty.request.payer}]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Группа затрат
+			</td>
+			<td>
+				<input type=radio id=mgroups name=mgroups value=1>КОНД<br>
+				<input type=radio id=mgroups name=mgroups value=2>КОФЕ<br>
+				<input type=radio id=mgroups name=mgroups value=3>НГ<br>
+				<script>$("input[name=mgroups][value={$smarty.request.mgroups}]").attr('checked',true);</script>
+			</td>
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+<br>
+{/if}
+{if $smarty.request.y and $smarty.request.generate}
+
+{if not $smarty.request.print}
+<a href="?action=doc_debit&generate=1&print=1&excel=1&filename=Долг по документам">Экспорт в Excel</a>
+{/if}
+
+	<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>Сеть</td>
+		<td>Плательщик</td>
+		<td>Опер<br>план<br>продаж,<br>тыс. {$valuta}</td>
+		<td>Факт<br>продаж,<br>тыс. {$valuta}</td>
+		<td>Опер<br>план<br>затрат,<br>тыс. {$valuta}</td>
+		<td>Факт<br>оказ<br>услуг,<br>тыс. {$valuta}</td>
+		<td>Факт<br>оплач<br>услуг,<br>тыс. {$valuta}</td>
+		<td>Бухгалт<br>учет,<br>тыс. {$valuta}</td>
+		<td>Долг<br>(УУ-БУ),<br>тыс. {$valuta}</td>
+		<td>%<br>выполнения<br>продаж</td>
+		<td>%<br>выполнения<br>услуг</td>
+		<td>%<br>проводки<br>в БУ услуг</td>
+	</tr>
+	{foreach key=k item=i from=$finreport name=finreport}
+	{cycle values="#ccffff,#ffffcc" assign=bgcolor}
+	{foreach key=k1 item=i1 from=$i.data name=detail}
+		<tr bgcolor="{$bgcolor}" style="text-align:right">
+			{if $smarty.foreach.detail.iteration eq 1}<td rowspan={$smarty.foreach.detail.total} /* +1 */ style="text-align:left;font-weight:bold">{$i.head.net_name}</td>{/if}
+			<td style="text-align:left">{$i1.fil_name}</td>
+			{if $smarty.foreach.detail.iteration eq 1}<td rowspan={$smarty.foreach.detail.total} /* +1 */ style="font-weight:bold">{$i1.plan|num:5}</td>{/if}
+			{if $smarty.foreach.detail.iteration eq 1}<td rowspan={$smarty.foreach.detail.total} /* +1 */ style="font-weight:bold">{$i1.fakt|num:5}</td>{/if}
+			<td>{$i1.oper_plan_zat_total|num:5}</td>
+			<td>{$i1.fakt_okaz_uslug_total|num:5}</td>
+			<td>{$i1.fakt_oplach_uslug_total|num:5}</td>
+			<td>{$i1.buh_uchet_total|num:5}</td>
+			<td>{$i1.dolg_uu_bu|num:5}</td>
+			{if $smarty.foreach.detail.iteration eq 1}<td rowspan={$smarty.foreach.detail.total} /* +1 */ style="font-weight:bold">{$i1.perc_vipoln_sales|num:2}</td>{/if}
+			<td>{$i1.perc_vipoln_uslug|num:2}</td>
+			<td>{$i1.perc_provod_bu_uslug|num:2}</td>
+		</tr>
+		{if $smarty.foreach.detail.iteration eq $smarty.foreach.detail.total}
+		<!--<tr bgcolor="{$bgcolor}" style="text-align:right;font-weight:bold">
+			<td>ИТОГО</td>
+			<td>{$i.head.o_total|num:5}</td>
+			<td>{$i.head.plan|num:3}</td>
+			<td>{$i.head.ef_plan|num:2}</td>
+			<td>{$i.head.fu_total|num:5}</td>
+			<td>{$i.head.fakt|num:5}</td>
+			<td>{$i.head.ef_fakt|num:2}</td>
+			<td>{$i.head.fu_total-$i.head.o_total|num:5}</td>
+		</tr>-->
+		{/if}
+	{/foreach}
+	{/foreach}
+	</table>
+{/if}
+</form>

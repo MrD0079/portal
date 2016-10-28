@@ -1,0 +1,28 @@
+{if not $smarty.request.print}
+<table style="width:500px;text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td>Количество ТП всего </td>
+		<td>Количество акционных накладных </td>
+		<td>Сумма продаж по акционным накладным, {$valuta} </td>
+		<td>Количество подарка №20, шт</td>
+		<td>Количество подарка №21, шт</td>
+		<td>Количество подарка №22, шт</td>
+		<td>Бонус выдан</td>
+		<!--<td style="background-color: rgb(153, 255, 153); font-weight: bold;">Бонус расчетный, {$valuta}</td>-->
+		<td style="background-color: rgb(153, 255, 153); font-weight: bold;"><!--Бонус фактический-->Сумма бонуса ИТОГО, {$valuta}</td>
+		<!--<td style="background-color: rgb(204, 255, 255); font-weight: bold;">Затраты на акцию, % </td>-->
+	</tr>
+	<tr style="text-align:right">
+		<td>{$itogi.cnt_tp|default:0}</td>
+		<td>{$itogi.cnt_nakl|default:0}</td>
+		<td>{$itogi.nakl_summ|default:0|num:2}</td>
+		<td>{$itogi.ng1|default:0|num:0}</td>
+		<td>{$itogi.ng2|default:0|num:0}</td>
+		<td>{$itogi.ng3|default:0|num:0}</td>
+		<td>{$itogi.bonus_dt_cnt|default:0|num:0}</td>
+		<!--<td style="background-color: rgb(153, 255, 153);">{$itogi.bonus_plan|default:0|num:0}</td>-->
+		<td style="background-color: rgb(153, 255, 153);">{$itogi.bonus_sum|default:0|num:0}</td>
+		<!--<td style="background-color: rgb(204, 255, 255); font-weight: bold;">{$itogi.zat|default:0|num:2}</td>-->
+	</tr>
+</table>
+{/if}

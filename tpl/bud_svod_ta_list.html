@@ -22,7 +22,7 @@
 
 {if $is_db and $zp_ag_total.fil_null}<p style="color:red;">Не привязаны к филиалам {$zp_ag_total.fil_null} агентов(-а)</p>{/if}
 
-{if $dp.ok_dp_tn or ($is_db and $zp_ag_total.fil_null)}
+{if $is_db and $zp_ag_total.fil_null}
 {assign var=disabled value='disabled'}
 {else}
 {assign var=enabled value=1}
@@ -31,7 +31,8 @@
 <table border=1 style="width:300px">
 <tr style="font-weight:bold; text-align:center">
 <td>Дистрибутор / филиал</td>
-<td>Объем продаж</td>
+<td>Объем продаж общий</td>
+<td>Объем продаж по ДБ</td>
 <td>{$funds.zp.fund_name}</td>
 <td>{$funds.gbo.fund_name}</td>
 <td>{$funds.svs.fund_name}</td>
@@ -46,6 +47,7 @@
 <tr>
 <td><nobr>{$i.fil_name}</nobr></td>
 <td style="text-align:right">{$i.sales_fact|num:2}</td>
+<td style="text-align:right">{$i.sales|num:2}</td>
 <td style="text-align:right">{$i.zp_total|num:2}</td>
 <td style="text-align:right">{$i.gsm_total|num:2}</td>
 <td style="text-align:right">{$i.svs_total|num:2}</td>
@@ -75,15 +77,6 @@
 	{$i.ok_db_fio}
 </td>
 <td id=td_ok_pr_tn{$i.fil_id} style="text-align:center">
-<!--
-$dp.ok_dp_tn*{$dp.ok_dp_tn}<br>
-$is_db*{$is_db}<br>
-$zp_ag_total.fil_null*{$zp_ag_total.fil_null}<br>
-$enabled*{$enabled}<br>
-$tn*{$tn}<br>
-$i.tn_pr*{$i.tn_pr}<br>
-$i.ok_t1_tn*{$i.ok_t1_tn}<br>
--->
 	{if $tn eq $i.tn_pr and not $i.ok_t1_tn and $enabled}
 	<input
 		type=checkbox
@@ -95,7 +88,7 @@ $i.ok_t1_tn*{$i.ok_t1_tn}<br>
 	{$i.ok_pr_fio}
 </td>
 <td id=td_ok_t1_tn{$i.fil_id} style="text-align:center">
-	{if ($is_traid or $is_traid_kk) and $i.ok_pr_tn and not $i.ok_t2_tn and $enabled}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_pr_tn and not $i.ok_t2_tn and $enabled}
 	<input
 		type=checkbox
 		{if $i.ok_t1_tn}checked{/if}
@@ -106,7 +99,7 @@ $i.ok_t1_tn*{$i.ok_t1_tn}<br>
 	{$i.ok_t1_fio}
 </td>
 <td id=td_ok_t2_tn{$i.fil_id} style="text-align:center">
-	{if ($is_traid or $is_traid_kk) and $i.ok_t1_tn and $enabled}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_t1_tn and $enabled}
 	<input
 		type=checkbox
 		{if $i.ok_t2_tn}checked{/if}
@@ -121,6 +114,7 @@ $i.ok_t1_tn*{$i.ok_t1_tn}<br>
 <tr style="font-weight:bold; text-align:center">
 <td>ИТОГО</td>
 <td style="text-align:right">{$xt.sales_fact|num:2}</td>
+<td style="text-align:right">{$xt.sales|num:2}</td>
 <td style="text-align:right">{$xt.zp_total|num:2}</td>
 <td style="text-align:right">{$xt.gsm_total|num:2}</td>
 <td style="text-align:right">{$xt.svs_total|num:2}</td>
@@ -128,11 +122,8 @@ $i.ok_t1_tn*{$i.ok_t1_tn}<br>
 <td style="text-align:right;background-color: rgb(204, 255, 255);">{$xt.compens_db|num:2}</td>
 </tr>
 </table>
-
-<p id=td_ok_dp_tn>
-Подтверждение ЗГДП
-{if $is_dpu}
-<input {if $dp.ok_dp_tn}checked{/if} type=checkbox onChange="save('{$smarty.request.dt}','m','ok_dp_tn',this.checked?{$tn}:'','');">
-{/if}
-<b>{$dp.ok_dp_fio} {$dp.ok_dp_lu}</b>
-</p>
+<!--
+{$d1}<br>
+{$d2}<br>
+{$d3}<br>
+-->

@@ -1,0 +1,12 @@
+<h1>Бухгалтерский учет по дистрибуторам</h1>
+<form target="_self" method="POST" name=form3 id=form3>
+	{if not $smarty.request.print}
+		{include file="bu_distr_select.html"}
+	{/if}
+	{if $smarty.request.generate}
+		{if not $smarty.request.print}
+			<p><a href="?action=bu_distr&generate=1&print=1&excel=1&filename=Бухгалтерский учет по дистрибуторам">Экспорт в Excel</a></p>
+		{/if}
+		{include file="bu_distr_table.html"}
+	{/if}
+</form>

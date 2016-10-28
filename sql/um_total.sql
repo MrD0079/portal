@@ -40,20 +40,15 @@ SELECT SUM (ts_visa) ts_visa,
          um.um_posted
     FROM um, user_list u
    WHERE     um.tab_num = u.tab_num
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+		 and um.dpt_id=u.dpt_id
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = DECODE (:tn, -1, master, :tn))
@@ -64,6 +59,6 @@ SELECT SUM (ts_visa) ts_visa,
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND u.dpt_id = :dpt_id
-         AND DECODE (:eta_list, '', um.h_eta, :eta_list) = um.h_eta
+         AND (:eta_list is null OR :eta_list = um.h_eta)
          AND um_date = TO_DATE (:dt, 'dd.mm.yyyy')
 ORDER BY chief_fio, fio_ts, fio_eta)

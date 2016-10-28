@@ -48,7 +48,8 @@
 <tr>
 <td>Плательщик</td>
 <td>
-	<select name="new[payer]" id="new[payer]">
+	<select required="required" name="new[payer]" id="new[payer]">
+		<option></option>
 		{foreach key=key item=item from=$payer}
 			<option value={$item.id}>{$item.name}</option>
 		{/foreach}

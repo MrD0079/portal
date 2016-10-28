@@ -27,7 +27,6 @@ SELECT SUM (selected)
                  AND st.dpt_id = :dpt_id
                  AND a.tp_kod = f.tp_kod(+) and f.tp_kod is null
                  AND TO_NUMBER (TO_CHAR (a.data, 'mm')) = :month
-                 AND tp.m(+) = :month
         GROUP BY a.tab_num,
                  st.fio,
                  a.fio_eta,

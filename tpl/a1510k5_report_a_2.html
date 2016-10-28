@@ -1,0 +1,153 @@
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО руководителя</td>
+		<td>ФИО ТС<br></td>
+		<td>ФИО ЭТА<br></td>
+		<td>Название ТП<br></td>
+		<td>Адрес ТП<br></td>
+		<td>Дата<br>накладной<br></td>
+		<td>Номер<br>накладной<br></td>
+		<td>Сумма по<br>накладной,<br>{$valuta}</td>
+		<td>Количество<br>единиц<br>акц. ассорт.<br></td>
+		<td>Размер<br>бонуса</td>
+		<td>Дата<br>выдачи<br>бонуса<br>
+			{if $is_ts and not $smarty.request.print}
+			{literal}
+			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+			<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+			{/literal}
+			{/if}
+		</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}"
+		{if $list_item.fakt_bonus > $list_item.bonus_plan}style="background-color: red"{/if}
+		{if $list_item.is_act eq 1}style="background-color: rgb(51, 255, 51)"{/if}
+	>
+		<td>
+			{$smarty.foreach.list.iteration}
+
+			{if not $smarty.request.print and $is_ts and $list_item.ok_chief neq 1}
+			<input type=checkbox name=del[{$list_item.id}]>
+			{/if}
+
+		</td>
+		<td>{$list_item.parent_fio}</td>
+		<td>{$list_item.ts_fio}</td>
+		<td>{$list_item.fio_eta}</td>
+		<td>{$list_item.tp_kod} {$list_item.tp_ur}</td>
+		<td>{$list_item.tp_addr}</td>
+		<td>{$list_item.data}</td>
+		<td>{$list_item.nakl}</td>
+		<td style="text-align:right">{$list_item.nakl_summ|default:0|num:2}</td>
+		<td style="text-align:right">{$list_item.act_summ|default:0|num:2}</td>
+		<td {if $list_item.bonus_sum1 > $list_item.max_bonus} style="background-color:red"{/if}>
+			{if not $smarty.request.print and $is_ts and $list_item.ok_chief neq 1}
+			<input
+				name=data[{$list_item.id}][bonus_sum1]
+				id=data{$list_item.id}bonus_sum
+				size=10
+			>
+			<script>
+			$(
+				function()
+				{literal}{{/literal}
+					$(
+						'#data{$list_item.id}bonus_sum').
+						autoNumeric(
+							'init',
+							{literal}{{/literal}
+								aSep: '',
+								mDec: 2,
+								vMin: 0.0,
+								vMax: {$list_item.max_bonus}
+							{literal}}{/literal}
+					);
+				{literal}}{/literal}
+			);
+			$('#data{$list_item.id}bonus_sum').val("{$list_item.bonus_sum1}");
+			</script>
+			{else}
+			{$list_item.bonus_sum1|num:2} {$valuta}
+			{/if}
+		</td>
+		<td style="text-align:center">
+			{if not $smarty.request.print and $is_ts and $list_item.ok_chief neq 1}
+				<input
+				class="chk_all" type=checkbox
+				id=bonus_dt1_cb_{$list_item.id}
+				{if $list_item.bonus_dt1}checked{/if}
+				onclick="
+					$('#bonus_dt1{$list_item.id}').attr('disabled',!this.checked);
+					(!this.checked)?$('#bonus_dt1_val{$list_item.id}').val(''):$('#bonus_dt1_val{$list_item.id}').val($('#bonus_dt1{$list_item.id}').val());
+				"
+			>
+			<input required
+				{if $list_item.ok_chief eq 1 or ($list_item.selected_if1 neq 1 and $list_item.selected_if1 neq 1) or not $list_item.bonus_dt1}disabled{/if}
+				class="datepicker"
+				size=10
+				id=bonus_dt1{$list_item.id} value="{$list_item.bonus_dt1}"
+				onchange="
+					$('#bonus_dt1_val{$list_item.id}').val($('#bonus_dt1{$list_item.id}').val());
+				"
+			>
+			<input
+				type=hidden
+				name=data[{$list_item.id}][bonus_dt1] id=bonus_dt1_val{$list_item.id} value="{$list_item.bonus_dt1}"
+			>
+			{else}
+			{$list_item.bonus_dt1}
+			{/if}
+		</td>
+<!--
+		<td>
+			{if not $smarty.request.print and $list_item.parent_tn eq $tn}
+			<input class="chk_all" type="checkbox"
+			onclick="
+			$('#ok_chief_{$list_item.id}').attr('disabled',false);
+			$('#ok_chief_{$list_item.id}').val(this.checked?1:0);
+			"
+			{if $list_item.ok_chief eq 1}checked{/if}
+			{if $list_item.ok_traid eq 1 or $list_item.parent_tn neq $tn or (not $list_item.bonus_dt1 and not $list_item.bonus_dt2)}disabled{/if}
+			>
+			<input type=hidden name=data[{$list_item.id}][ok_chief] id=ok_chief_{$list_item.id} disabled>
+			{/if}
+			{if $list_item.ok_chief eq 1}{$list_item.parent_fio} {$list_item.ok_chief_date}{/if}
+		</td>
+		<td>
+			{if not $smarty.request.print and $is_traid and $list_item.ok_chief eq 1}
+			<input class="chk_all" type="checkbox"
+			onclick="
+			$('#ok_traid_{$list_item.id}').attr('disabled',false);
+			$('#ok_traid_{$list_item.id}').val(this.checked?1:0);
+			$('#ok_traid_fio_{$list_item.id}').attr('disabled',!this.checked);
+			"
+			{if $list_item.ok_traid eq 1}checked{/if}
+			{if $list_item.ok_chief neq 1 or not $list_item.bonus_dt1}disabled{/if}
+			>
+			<input type=hidden name=data[{$list_item.id}][ok_traid] id=ok_traid_{$list_item.id} disabled>
+			<input type=hidden name=data[{$list_item.id}][ok_traid_fio] id=ok_traid_fio_{$list_item.id} value="{$fio}" disabled>
+			{/if}
+			{if $list_item.ok_traid eq 1}{$list_item.ok_traid_fio} {$list_item.ok_traid_date}{/if}
+
+		</td>
+-->
+	</tr>
+	{/foreach}
+</table>
+
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+
+

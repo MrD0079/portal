@@ -49,6 +49,5 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND al.h_eta = eta_parents.h_eta(+)
-         AND DECODE (:eta_list, '', NVL (al.h_eta, ' '), :eta_list) =
-                NVL (al.h_eta, ' ')
+         AND (:eta_list is null OR :eta_list = al.h_eta)
 ORDER BY u.fio, u.pos_name, l.name

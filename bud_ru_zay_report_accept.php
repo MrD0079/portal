@@ -1,12 +1,14 @@
 <?
-
-//audit ("открыл реестр отчетов по активности","bud_ru_zay");
-
-//ses_req();
-
+InitRequestVar("st",0);
 InitRequestVar("wait4myaccept",1);
+$_REQUEST["tu"]==1?$doc_str="торговые условия":$doc_str="отчет по заявке на проведение активности";
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
+
+$sql=rtrim(file_get_contents('sql/bud_ru_st_ras.sql'));
+$sql=stritr($sql,$params);
+$st = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('st', $st);
 
 $sql=rtrim(file_get_contents('sql/accept_types.sql'));
 $sql=stritr($sql,$params);
@@ -52,8 +54,7 @@ if (isset($_REQUEST["save"]))
 			{
 				unlink($v1);
 				$del_array[]=$k1;
-				audit ("удалил из отчета по активности №".$id." файл ".$v1,"bud_ru_zay");
-			}
+		}
 			$vals = array("rep_val_file"=>implode(array_diff($ov,$del_array),"\n"));
 			Table_Update("bud_ru_zay_ff",$keys,$vals);
 		}
@@ -82,7 +83,6 @@ if (isset($_REQUEST["save"]))
 				$keys = array("id"=>$k);
 				$vals = array("rep_val_file"=>$ss.$old_val);
 				Table_Update("bud_ru_zay_ff",$keys,$vals);
-				audit ("добавил в отчет по активности №".$id." файл ".$fn,"bud_ru_zay");
 			}
 			}
 		}
@@ -101,7 +101,6 @@ if (isset($_REQUEST["save"]))
 			{
 				unlink($v1);
 				$del_array[]=$k1;
-				audit ("удалил из отчета по активности №".$k." подтверждающий документ ".$v1,"bud_ru_zay");
 			}
 			$vals = array("sup_doc"=>implode(array_diff($ov,$del_array),"\n"));
 			Table_Update("bud_ru_zay",$keys,$vals);
@@ -129,7 +128,6 @@ if (isset($_REQUEST["save"]))
 				$keys = array("id"=>$k);
 				$vals = array("sup_doc"=>$ss.$old_val);
 				Table_Update("bud_ru_zay",$keys,$vals);
-				audit ("добавил в отчет по активности №".$k." подтверждающий документ ".$fn,"bud_ru_zay");
 			}
 			}
 		}
@@ -139,92 +137,112 @@ if (isset($_REQUEST["save"]))
 	{
 		foreach ($_REQUEST["bud_ru_zay_accept"] as $k=>$v)
 		{
-
-			Table_Update("bud_ru_zay_accept",array("id"=>$k),$v);
-			$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_bud_ru_zay_head.sql'));
-			$params=array(':accept_id' => $k);
-			$sql=stritr($sql,$params);
-			$h = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
-			if ($v["rep_accepted"]==1)
+			$cnt = $db->getOne('select count(*) from bud_ru_zay_accept where id='.$k);
+			if ($cnt==1)
 			{
-
-				if ($h["rep_bud_ru_zay_ok"]==1)
-				{
-					// Связь с бюджетами КК
-					// После завершения согласования отчета по заявке добавляется запись в факт оказанных услуг соответствующей сети. 
-					$db->query("BEGIN BUD_ZAY_REP2FINPLAN (".$h["id"]."); END;");
-				}
-				if ($h["rep_bud_ru_zay_ok"]==1)
-				{
-					$subj="Завершено согласование отчета по активности №".$h["id"]." от ".$h["created"];
-				}
-				else
-				{
-					$subj="Подтверждение отчета по активности №".$h["id"]." от ".$h["created"];
-				}
-				audit ("согласовал отчет по активности №".$h["id"],"bud_ru_zay");
-				echo "<font style=\"color: red;\">отчет по активности №".$h["id"]." от ".$h["created"]." Вами подтвержден</font>";
-				echo "<br><font style=\"color: red;\">Информирование об этом отправлено:</font><br>";
-				if ($h["rep_bud_ru_zay_ok"]==1)
-				{
-					$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_yes.sql'));
-				}
-				else
-				{
-					$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_yes_next.sql'));
-				}
+				Table_Update("bud_ru_zay_accept",array("id"=>$k),$v);
+				$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_bud_ru_zay_head.sql'));
 				$params=array(':accept_id' => $k);
 				$sql=stritr($sql,$params);
-				$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-				foreach ($data as $k1=>$v1)
+				$h = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+						
+				$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_executors.sql'));
+				$params=array(':accept_id' => $k);
+				$sql=stritr($sql,$params);
+				$e = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	
+				if ($v["rep_accepted"]==1)
 				{
-					$text="Здравствуйте ".$v1["fio"]."<br>".$fio." согласовал(а) отчет по активности №".$h["id"]." ".$now_date_time."<br>";
+	
 					if ($h["rep_bud_ru_zay_ok"]==1)
 					{
-						$text.="<font style=\"color: green; font-weight:bold\">Согласование отчета по активности завершено</font><br>";
+						// Связь с бюджетами КК
+						// После завершения согласования отчета по заявке добавляется запись в факт оказанных услуг соответствующей сети. 
+						$db->query("BEGIN BUD_ZAY_REP2FINPLAN (".$h["id"]."); END;");
+					}
+					if ($h["rep_bud_ru_zay_ok"]==1)
+					{
+						$subj=$doc_str." №".$h["id"]." от ".$h["created"].". Завершено согласование";
 					}
 					else
 					{
-						$text.="Далее согласование должно пройти у:<br>";
-						$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_yes_other.sql'));
-						$params=array(':accept_id' => $k);
-						$sql=stritr($sql,$params);
-						$data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-						foreach ($data1 as $k2=>$v2)
+						$subj=$doc_str." №".$h["id"]." от ".$h["created"].". Подтверждение";
+					}
+					echo "<font style=\"color: red;\">".$doc_str." №".$h["id"]." от ".$h["created"].". подтверждено вами.</font>";
+					echo "<br><font style=\"color: red;\">Информирование об этом отправлено:</font><br>";
+					if ($h["rep_bud_ru_zay_ok"]==1)
+					{
+						$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_yes.sql'));
+					}
+					else
+					{
+						$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_yes_next.sql'));
+					}
+					$params=array(':accept_id' => $k);
+					$sql=stritr($sql,$params);
+					$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+					foreach ($data as $k1=>$v1)
+					{
+						$text="Здравствуйте ".$v1["fio"]."<br>";
+						$text.=$doc_str." №".$h["id"].". ".$fio." согласовал(а) ".$now_date_time."<br>";
+						if ($h["rep_bud_ru_zay_ok"]==1)
 						{
-							$text.=$v2["fio"]."<br>";
+							$text.="<font style=\"color: green; font-weight:bold\">".$doc_str." №".$h["id"]." от ".$h["created"].". завершено согласование.</font><br>";
+						}
+						else
+						{
+							$text.="Далее согласование должно пройти у:<br>";
+							$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_yes_other.sql'));
+							$params=array(':accept_id' => $k);
+							$sql=stritr($sql,$params);
+							$data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+							foreach ($data1 as $k2=>$v2)
+							{
+								$text.=$v2["fio"]."<br>";
+							}
+						}
+						$email=$v1["email"];
+						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
+						send_mail($email,$subj,$text);
+					}
+					if ($h["rep_bud_ru_zay_ok"]==1)
+					{
+						if (count($e)>0)
+						{
+							$text=$doc_str." №".$h["id"]." от ".$h["created"].". Вы назначены исполнителем";
+							foreach ($e as $k2=>$v2)
+							{
+								$email=$v2["e_mail"];
+								send_mail($email,$subj,$text,$fn);
+							}
 						}
 					}
-					$email=$v1["email"];
-					echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
-					send_mail($email,$subj,$text);
 				}
-			}
-			if ($v["rep_accepted"]==2)
-			{
-				$subj="Отклонение отчета по активности №".$h["id"]." от ".$h["created"];
-				audit ("отклонил отчет по активности №".$h["id"],"bud_ru_zay");
-				echo "<font style=\"color: red;\">отчет по активности №".$h["id"]." от ".$h["created"]." Вами НЕ подтвержден</font>";
-				echo "<br><font style=\"color: red;\">Информирование об этом отправлено:</font><br>";
-				$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_no.sql'));
-				$params=array(':accept_id' => $k);
-				$sql=stritr($sql,$params);
-				//echo $sql;
-				$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-				//print_r($data);
-				foreach ($data as $k1=>$v1)
+				if ($v["rep_accepted"]==2)
 				{
-					$text="Здравствуйте ".$v1["fio"]."<br>".$fio." отклонил(а) отчет по активности №".$h["id"]." ".$now_date_time."<br>
-					Причина отклонения: ".$v["rep_failure"]."<br>";
-					$email=$v1["email"];
-					echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
-					send_mail($email,$subj,$text);
+					$subj=$doc_str." №".$h["id"]." от ".$h["created"].". Отклонение";
+					echo "<font style=\"color: red;\">".$doc_str." №".$h["id"]." от ".$h["created"].". Вами НЕ подтверждена</font>";
+					echo "<br><font style=\"color: red;\">Информирование об этом отправлено:</font><br>";
+					$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_no.sql'));
+					$params=array(':accept_id' => $k);
+					$sql=stritr($sql,$params);
+					//echo $sql;
+					$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+					//print_r($data);
+					foreach ($data as $k1=>$v1)
+					{
+						$text="Здравствуйте ".$v1["fio"]."<br>";
+						$text.=$doc_str." №".$h["id"].". ".$fio." отклонил(а) ".$now_date_time."<br>";
+						$text.="Причина отклонения: ".$v["rep_failure"]."<br>";
+						$email=$v1["email"];
+						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
+						send_mail($email,$subj,$text);
+					}
 				}
-			}
-			if ($v["rep_accepted"]!=0)
-			{
-				echo "<hr>";
+				if ($v["rep_accepted"]!=0)
+				{
+					echo "<hr>";
+				}
 			}
 		}
 	}
@@ -242,18 +260,17 @@ if (isset($_REQUEST["add_chat"]))
 			if ($v!="")
 			{
 				Table_Update("bud_ru_zay_rep_chat",array("tn"=>$tn,"z_id"=>$k,"text"=>$v),array("tn"=>$tn,"z_id"=>$k,"text"=>$v));
-				audit ("оставил по отчету по активности №".$k." комментарий: ".$v,"bud_ru_zay");
 				$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_chat.sql'));
 				$params=array(':z_id' => $k,':tn' => $tn);
 				$sql=stritr($sql,$params);
 				$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 				foreach ($data as $k1=>$v1)
 				{
-					$subj="Уточнение по отчету по активности №".$v1["z_id"]." от ".$v1["created"];
+					$subj=$doc_str." №".$v1["z_id"]." от ".$v1["created"].". Уточнение";
 					$text="Здравствуйте ".$v1["fio"]."<br>";
-					$text.="По отчету по активности №".$v1["z_id"]." от ".$v1["created"]."<br>";
+					$text.=$doc_str." №".$v1["z_id"]." от ".$v1["created"]."<br>";
 					$text.=$fio." оставил(а) комментарий/уточнение: ".$v."<br>";
-					$text.="Просьба ответить на комментарий/уточнение по отчету по активности в разделе <a href=\"https://ps.avk.ua/?action=bud_ru_zay_report_accept\">Реестр отчетов по активности</a>";
+					$text.="Просьба ответить на комментарий/уточнение <a href=\"https://ps.avk.ua/?action=bud_ru_zay_report_accept&tu=".$_REQUEST["tu"]."\">Здесь</a>";
 					$email=$v1["email"];
 					send_mail($email,$subj,$text);
 				}
@@ -262,14 +279,12 @@ if (isset($_REQUEST["add_chat"]))
 	}
 }
 
-
 $params=array(
-':tn' => $tn,
-':wait4myaccept'=>$_REQUEST['wait4myaccept']
+	':tn' => $tn,
+	':wait4myaccept'=>$_REQUEST['wait4myaccept'],
+	':tu'=>$_REQUEST['tu'],
+	':st'=>$_REQUEST["st"],
 );
-
-
-//print_r($params);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept.sql'));
 $sql=stritr($sql,$params);
@@ -277,16 +292,34 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($data as $k=>$v)
 {
-$d[$v["id"]]["head"]=$v;
-$d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
-if ($v["chat_id"]!="")
-{
-$d[$v["id"]]["chat"][$v["chat_id"]]=$v;
+	$d[$v["id"]]["head"]=$v;
+	$d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
+	$d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
+	if ($v["chat_id"]!="")
+	{
+		$d[$v["id"]]["chat"][$v["chat_id"]]=$v;
+	}
+	if ($v["zchat_id"]!="")
+	{
+		$d[$v["id"]]["zchat"][$v["zchat_id"]]=$v;
+	}
 }
-}
-
 if (isset($d))
 {
+
+$max=100;
+$i=0;
+foreach ($d as $k=>$v)
+{
+	$i++;
+	if ($i>$max) {
+		unset($d[$k]);
+	}
+}
+if ($i>$max){
+	$smarty->assign('tooManyLines','<p style="color:red">Отображены не все документы, '.$max.' из '.$i.'. Остальные документы будут отображены после согласования отображенных.</p>');
+}
+
 foreach ($d as $k=>$v)
 {
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
@@ -300,7 +333,7 @@ foreach ($d as $k=>$v)
 			$v1["val_file"]!=null?$data[$k1]["val_file"]=explode("\n",$v1["val_file"]):null;
 			$v1["rep_val_file"]!=null?$data[$k1]["rep_val_file"]=explode("\n",$v1["rep_val_file"]):null;
 		}
-		if ($v1['type']=='list')
+		/*if ($v1['type']=='list')
 		{
 			$sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
 			$params[':id'] = $v1['val_list'];
@@ -313,7 +346,7 @@ foreach ($d as $k=>$v)
 			$sql=stritr($sql,$params);
 			$list = $db->getOne($sql);
 			$data[$k1]['rep_val_list_name'] = $list;
-		}
+		}*/
 	}
 	include "bud_ru_zay_formula.php";
 	$d[$k]["ff"]=$data;

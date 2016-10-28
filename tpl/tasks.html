@@ -1,0 +1,89 @@
+{if $smarty.request.full}
+	<table cellpadding=5>
+		{foreach key=key item=i from=$tasks}
+			<tr>
+				<td
+					{if $i.perc < 1}style="background-color:#FF8888"{/if}
+					{if $i.perc eq 100}style="background-color:lightgreen"{/if}
+					{if $i.perc > 0 and $i.perc < 100}style="background-color:yellow"{/if}
+				>
+					<a href="?action=tasks&id={$i.id}">{$i.created_t} / {$i.lu_t} / {$i.perc}% / {$i.name|escape}</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{$i.text}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{foreach key=fk item=fi from=$i.files}
+						<a target=_blank href="files/{$fi.fn}">{$fi.fn}</a><br>
+					{/foreach}
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+{else}
+<form target="_self" method="POST" name=form3 id=form3 enctype="multipart/form-data">
+		<input value="Refresh" name="refresh" type="submit">
+		Created/Updated/Progress/Name
+		<select name=id id=id onChange="javascript:form3.submit()">
+			<option></option>
+			{foreach key=key item=i from=$tasks}
+			<option
+				{if $i.perc < 1}style="background-color:#FF8888"{/if}
+				{if $i.perc eq 100}style="background-color:lightgreen"{/if}
+				{if $i.perc > 0 and $i.perc < 100}style="background-color:yellow"{/if}
+				value={$i.id}>{$i.created_t} / {$i.lu_t} / {$i.perc}% / {$i.name|escape|truncate:77}</option>
+			{/foreach}
+		</select>
+	<script>$('#id option[value="{$smarty.request.id}"]').prop('selected', true);</script>
+		<a href="?action=tasks&full=1">Show all tasks</a>
+	<table style="border-spacing:5px; border-collapse: separate;">
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>
+				{if $smarty.request.id}
+				<input value="Delete" name="del" type="submit">
+				{/if}
+			</td>
+			<td style="font-weight:bold">Task name <input required name=task[name] size=200 value="{$task.name|escape}"></td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>
+				{if not $smarty.request.id}
+				<input value="Add" name="add" type="submit">
+				{else}
+				<input value="Save" name="save" type="submit">
+				{/if}
+			</td>
+			<td rowspan=7><textarea class="WYSIWYG" name=task[text]>{$task.text|escape}</textarea></td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>% completed<br><input name=task[perc] size=8 value="{$task.perc}" class="number_int"></td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>Start date<br><input name=task[dt_start] size=8 value="{$task.dt_start}" class="datepicker"></td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>End date<br><input name=task[dt_end] size=8 value="{$task.dt_end}" class="datepicker"></td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>Created<br>{$task.created_t}</td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td>Updated<br>{$task.lu_t}</td>
+		</tr>
+		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
+			<td id=files>Files<br>
+				<p>
+					<a href="javascript:void(0);" onClick="$('#files').append($('<input type=file name=files[]><br>'));">Add new file</a><br>
+				</p>
+				{foreach key=fk item=fi from=$task_files}
+					<input type=checkbox name=del_files[{$fi.id}]><a target=_blank href="files/{$fi.fn}">{$fi.fn}</a><br>
+				{/foreach}
+			</td>
+		</tr>
+	</table>
+</form>
+{/if}

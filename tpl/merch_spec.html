@@ -79,6 +79,8 @@ $('#routes_agents').val()!=''?$('#merch_spec_fldag').load('?action=merch_spec_fl
 }
 function fn_load_tz_list()
 {
+loadwait_show('t');
+loadwait_show('t2');
 $('#t').load('?action=merch_spec_tz_list&nohead=1&merch_spec_nets='+$('#merch_spec_nets').val()+'&merch_spec_oblast='+$('#merch_spec_oblast').val(),function() {});
 $('#routes_agents').val()!=''?$('#t2').load('?action=merch_spec_tz&nohead=1&merch_spec_nets='+$('#merch_spec_nets').val()+'&merch_spec_oblast='+$('#merch_spec_oblast').val()+'&routes_agents='+$('#routes_agents').val(),function() {}):$('#t2').html('');
 }

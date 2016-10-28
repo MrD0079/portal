@@ -19,8 +19,7 @@
               FROM a14to t
              WHERE     t.visitdate BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
                                        AND TO_DATE (:ed, 'dd.mm.yyyy')
-                   AND DECODE (:eta_list, '', t.h_fio_eta, :eta_list) =
-                          t.h_fio_eta
+                   AND (:eta_list is null OR :eta_list = t.h_fio_eta)
             HAVING     SUM (DECODE (url, NULL, 0, 1)) = 0
                    AND CASE
                           WHEN    :ok_visit = 1
@@ -55,20 +54,14 @@
                                AND */
             u.tab_num = t.tab_num
          AND u.dpt_id = :dpt_id
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   u.tn IN
                     (SELECT slave
                        FROM full

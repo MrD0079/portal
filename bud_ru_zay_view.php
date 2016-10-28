@@ -10,8 +10,9 @@ $db->loadModule('Extended');
 $db->loadModule('Function');
 }
 
+$_REQUEST["tu"]==1?$doc_str="торговые условия":$doc_str="заявка на проведение активности";
+
 $tn=$_REQUEST["tn"];
-audit ("открыл просмотр/экспорт заявки на проведение активности №".$_REQUEST["id"],"bud_ru_zay");
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_view.sql'));
 $params=array(':id' => $_REQUEST["id"]);
@@ -29,7 +30,7 @@ $sql=stritr($sql,$params);
 $chat = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $d["chat"]=$chat;
 $url="";
-$url.="Заявка на проведение активности №".$d["head"]["id"]." от ".$d["head"]["created_dt"];
+$url.=$doc_str." №".$d["head"]["id"]." от ".$d["head"]["created_dt"];
 $url.="\nСогласовано:";
 foreach ($d["data"] as $k=>$v)
 {
@@ -52,7 +53,7 @@ QRcode::png($url, "bud_ru_zay_files/chart".$_REQUEST["id"].".png", "L", 2, 2);
 		{
 			$data[$k1]["val_file"]=explode("\n",$v1["val_file"]);
 		}
-		if ($v1['type']=='list')
+		/*if ($v1['type']=='list')
 		{
 			if ($v1['val_list'])
 			{
@@ -62,7 +63,7 @@ QRcode::png($url, "bud_ru_zay_files/chart".$_REQUEST["id"].".png", "L", 2, 2);
 			$list = $db->getOne($sql);
 			$data[$k1]['val_list_name'] = $list;
 			}
-		}
+		}*/
 	}
 	include "bud_ru_zay_formula.php";
 	$d["ff"]=$data;

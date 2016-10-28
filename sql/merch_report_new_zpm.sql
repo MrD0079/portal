@@ -1,4 +1,4 @@
-/* Formatted on 25/09/2015 18:53:41 (QP5 v5.227.12220.39724) */
+/* Formatted on 12/11/2015 11:52:44 (QP5 v5.252.13127.32867) */
   SELECT m.part1 part1_needed,
          m.part2 part2_needed,
          c.mt || ' ' || c.y period,
@@ -27,11 +27,15 @@
          mr_zpm m,
          calendar c,
          routes_head h
-   WHERE     m.dt = TRUNC (TO_DATE (:month_list, 'dd.mm.yyyy'), 'mm')
-         AND m.dt = c.data
+   WHERE /*m.dt = TRUNC (TO_DATE (:month_list, 'dd.mm.yyyy'), 'mm')
+     AND */
+        m    .dt = c.data
          AND h.id = z.head_id
          AND m.dt = h.data
-         AND z.head_id = :head_id
+         AND z.head_id IN (    SELECT id
+                                FROM routes_head
+                          START WITH id = :head_id
+                          CONNECT BY PRIOR parent = id)
          AND z.pin IS NOT NULL
 /*
          AND (   (m.part1 = 1 AND NVL (z.pin, 0) <> NVL (z.part1_pin, 0))
@@ -41,3 +45,4 @@ GROUP BY m.part1,
          m.part2,
          c.mt,
          c.y
+ORDER BY c.y, c.mt

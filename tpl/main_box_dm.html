@@ -1,0 +1,112 @@
+<p style="background-color: rgb(255, 255, 204); text-align:center; font-weight:bold">
+<a href="javascript:void(0);" onClick="$('#box_dm_div').toggle();">Получить техническую консультацию / помощь от координатора DM</a>
+</p>
+
+<div style="background-color: rgb(255, 255, 204); text-align:center; display:none;" id="box_dm_div">
+<form method="post" name="box_dm" id="box_dm" enctype="multipart/form-data">
+<p>Выберите вашего координатора</p>
+<p>
+<select id="box_dm_dm">
+	<option></option>
+	{foreach key=key item=item from=$dm_list}
+	<option value={$item.tn}>{$item.fio}</option>
+	{/foreach}
+</select>
+</p>Техническая проблема у агента?</p>
+<p>
+<select id="box_dm_ag_problem" onclick="console.log(this.value);$('.ag_problem').attr('disabled',this.value==1?false:true)">
+<option value=0>нет</option>
+<option value=1>да</option>
+</select>
+</p>
+<p>Агент отправил базу координатору<br>(опция "Сообщить об ошибке")?</p>
+<p>
+<select id="box_dm_ag_send_db" class="ag_problem" disabled><option value=0>нет</option><option value=1>да</option></select>
+</p>
+<p>На каком филиале работает агент?</p>
+<p>
+<select id="box_dm_ag_fil" class="ag_problem" disabled>
+	<option></option>
+	{foreach key=key item=item from=$fil_list}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+</p>
+<p>Категория вопроса</p>
+<p>
+<select id="box_dm_cat_appeal">
+	<option></option>
+	{foreach key=key item=item from=$dm_cat_appeals}
+	<option value={$item.id}>{$item.name}</option>
+	{/foreach}
+</select>
+</p>
+<p>Детальное описание проблемы</p>
+<p>
+<textarea cols="35" rows="3" id="box_dm_text"></textarea>
+</p>
+<p>Приложения</p>
+<p>
+<input type=file multiple id="box_dm_files">
+</p>
+<p>
+<a href="javascript:void(0);" onclick="box_dm_new();">Отправить сообщение координатору</a>
+</p>
+<p id="box_dm_result" style="color:red"></p>
+</form>
+</div>
+
+{if $box_dm_creator}
+{foreach key=k item=i from=$box_dm_creator}
+<div style="text-align:left; background-color:lightgreen;">
+Координатор ДМ ответил на ваше сообщение: <font style="color:blue">
+	Техническая проблема у агента? <b>{if $i.head.ag_problem}да{else}нет{/if}</b>
+	{if $i.head.ag_problem}
+	Агент отправил базу координатору(опция "Сообщить об ошибке")? <b>{if $i.head.ag_send_db}да{else}нет{/if}</b>
+	На каком филиале работает агент? <b>{$i.head.fil_name}</b>
+	{/if}
+	Категория вопроса <b>{$i.head.cat_appeal_name}</b>
+</font>
+<table id=box{$i.head.id} border=0>
+	<tr>
+		<td colspan=3>
+			история переписки:
+		</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.chat}
+	<tr style="vertical-align:top">
+		<td>
+			<font style="color:red"><nobr>{$i1.lu}</nobr></font>
+		</td>
+		<td>
+			<font style="color:green">{$i1.who}</font>
+		</td>
+		<td>
+			<font style="color:blue">{$i1.text|nl2br}</font>
+		</td>
+	</tr>
+	{/foreach}
+	<tr>
+		<td colspan=3>
+			приложения:
+		</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.files}
+	<tr style="vertical-align:top">
+		<td colspan=3>
+			<a target=_blank href="files/{$i1}">{$i1}</a>
+		</td>
+	</tr>
+	{/foreach}
+	<tr>
+		<td colspan=3>
+			<textarea cols="35" rows="3" name="box_dm_text{$i.head.id}" id="box_dm_text{$i.head.id}"></textarea><br>
+			<a href="javascript:void(0);" onclick="box_dm_answer({$i.head.id},$('#box_dm_text{$i.head.id}').val());">Отправить ответ</a>
+			<a href="javascript:void(0);" onclick="box_dm_close({$i.head.id},'closed_init');">Закрыть тему обсуждения</a>
+		</td>
+	</tr>
+</table>
+<p id="box_dm_result{$i.head.id}" style="color:red"></p>
+</div>
+{/foreach}
+{/if}

@@ -1,0 +1,495 @@
+{if $zp_ag_total.fil_null}<p style="color:red;">Не привязаны к филиалам {$zp_ag_total.fil_null} агентов(-а)</p>{/if}
+
+{if not $smarty.request.print}
+<p>
+<a target=_blank href="
+?action=bud_svod
+&page=tun
+&print=1
+&dt={$smarty.request.dt}
+&fil={$smarty.request.fil}
+&clusters={$smarty.request.clusters}
+&exp_list_without_ts={$smarty.request.exp_list_without_ts}
+&exp_list_only_ts={$smarty.request.exp_list_only_ts}
+&eta_list={$smarty.request.eta_list}
+&ok_bonus={$smarty.request.ok_bonus}
+&excel=1
+&filename=Сводный отчет - торговые условия - {$smarty.request.dt}
+">Excel</a>
+</p>
+{/if}
+
+
+<h3>
+Торговые условия
+</h3>
+
+<p>
+<div id="total"></div>
+</p>
+
+<h2>Детализация</h2>
+
+
+<!--
+ФИО ТС                                     ts
+ФИО ЭТА                                    eta
+Код ТП                                     tp_kod
+Юридическое название ТП                    tp_name
+Фактический адрес ТП                       tp_addr
+Тип ТП                                     tp_type
+*Отсрочка                                   delay
+*Скидка, %                                  discount
+Фактическая скидка, %                      skidka
+Фактическая скидка, {$valuta}              skidka_val
+*Бонус, %                                   bonus
+*Фикс. оплата в месяц, {$valuta}            fixed
+*Наценка, %                                 margin
+Последние загруженные условия              last_fn
+Сумма продаж, ден. ед.                     summa
+Бонус расчетный ТП, {$valuta}              bonus_tp
+Максимум по ТП, {$valuta}                  maxtp
+ТС/СТС: планирую выдать бонус              selected
+Бонус фактический, {$valuta}               bonus_fakt
+Фикс. оплата в месяц ФАКТ, {$valuta}       fixed_fakt
+ИТОГО                                      total
+Бонус по форме 2                           cash
+Компенсация дистрибутору, {$valuta}        compens_distr
+Затраты на ТП, %                           zat
+Последние изменения                       lu/lu_fio
+-->
+<p>Единичные ТП</p>
+<table id=mytable style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold">
+<td style="text-align: center;">№ п/п</td>
+<td style="text-align: center;">ФИО ТС</td>
+<td style="text-align: center;">ФИО ЭТА</td>
+<td style="text-align: center;">Код ТП</td>
+<td style="text-align: center;">Юридическое название ТП</td>
+<td style="text-align: center;">Фактический адрес ТП</td>
+<td style="text-align: center;">Тип ТП</td>
+<td style="text-align: center;">Отсрочка</td>
+<td style="text-align: center;">Скидка, %</td>
+<td style="text-align: center; background-color: rgb(255, 255, 204);">Фактическая скидка, %</td>
+<td style="text-align: center; background-color: rgb(255, 255, 204);">Фактическая скидка, {$valuta}</td>
+<td style="text-align: center;">Бонус, %</td>
+<td style="text-align: center;">Фикс. оплата в месяц, {$valuta}</td>
+<td style="text-align: center;">Наценка, %</td>
+<td style="text-align: center;">Последние загруженные условия</td>
+<td style="text-align: center;">Сумма продаж, ден. ед.</td>
+<td style="text-align: center;">Бонус расчетный ТП, {$valuta}</td>
+<td style="text-align: center;background-color: rgb(255, 255, 204);">Максимум по ТП, {$valuta}</td>
+<td style="text-align: center;">ТС/СТС: планирую выдать бонус</td>
+<td style="text-align: center;">Бонус фактический, {$valuta}</td>
+<td style="text-align: center;">Фикс. оплата в месяц ФАКТ, {$valuta}</td>
+<td style="text-align: center; background-color: rgb(153, 255, 153);">ИТОГО</td>
+<td style="text-align: center;">Бонус по форме 2</td>
+<td style="text-align: center;background-color:#FFCC99;">Компенсация дистрибутору, {$valuta}</td>
+<td style="text-align: center;">Затраты на ТП, %</td>
+<td style="text-align: center;">Последние изменения</td>
+</tr>
+
+{foreach key=k item=i from=$tp name=tp}
+<tr>
+
+
+
+			<td style="text-align:center">{$smarty.foreach.tp.iteration}</td>
+			<td>{$i.ts}</td>
+			<td>{$i.eta}</td>
+			<td>{$i.tp_kod}</td>
+			<td>{$i.tp_name}</td>
+			<td>{$i.tp_addr}</td>
+			<td>{$i.tp_type}</td>
+			<td style="text-align:center">{$i.delay}</td>
+			<td style="text-align:center">{$i.discount|num:3}</td>
+			<td style="text-align:center; background-color: rgb(255, 255, 204);">{$i.skidka|num:6}</td>
+			<td style="text-align:center; background-color: rgb(255, 255, 204);">{$i.skidka_val|num:2}</td>
+			<td style="text-align:center">{$i.bonus|num:2}</td>
+			<td style="text-align:center">{$i.fixed|num:2}</td>
+			<td style="text-align:center">{$i.margin}</td>
+			<td><a target=_blank href="sc_files/{$i.last_fn}">{$i.last_fn}</a></td>
+			<td style="text-align:right">{$i.summa|num:2}</td>
+			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_tp">{$i.bonus_tp|num:2}</td>
+			<td style=" text-align:right ; {if $i.total > $i.maxtp} background-color:red {else} background-color: rgb(255, 255, 204) {/if} " id="d_{$i.tp_kod}_maxtp">{$i.maxtp|num:2}</td>
+			<td style=" text-align: center;" id="d_{$i.tp_kod}_tp_kod">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{if $i.selected}да{/if}
+				{else}
+					<input
+						name="selected[{$i.tp_kod}]"
+						id="selected_{$i.tp_kod}" type="checkbox"
+						onChange="
+							this.checked?null:$('#fixed_fakt_{$i.tp_kod}').val('');
+							$('#fixed_fakt_{$i.tp_kod}').attr('disabled',!this.checked);
+							$('#bonus_fakt_{$i.tp_kod}').attr('disabled',!this.checked);
+							$('#cash_{$i.tp_kod}').attr('disabled',!this.checked);
+							save_tp('{$i.tp_kod}','{$i.tp_kod}','tp_kod',this.checked?1:0);
+							this.checked?save_tp('{$i.tp_kod}','{$i.tp_kod}','bonus_fakt','{$i.bonus_fakt}'):null;
+							this.checked?save_tp('{$i.tp_kod}','{$i.tp_kod}','fixed_fakt','{$i.fixed_fakt}'):null;
+							this.checked?save_tp('{$i.tp_kod}','{$i.tp_kod}','cash','{$i.cash}'):null;
+							/*after_save('{$i.tp_kod}');*/
+						"
+					>
+					<script>
+						$('#selected_{$i.tp_kod}').prop('checked','{$i.selected}'==1?true:false);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.tp_kod}_bonus_fakt">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i.bonus_fakt|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="bonus_fakt[{$i.tp_kod}]"
+						id="bonus_fakt_{$i.tp_kod}"
+						onChange="save_tp('{$i.tp_kod}','{$i.tp_kod}','bonus_fakt',this.value);/*after_save('{$i.tp_kod}');*/"
+					>
+					<script>
+						$('#bonus_fakt_{$i.tp_kod}').val({$i.bonus_fakt});
+						$('#bonus_fakt_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.tp_kod}_fixed_fakt">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i.fixed_fakt|num:2}
+				{else}
+					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.tp_kod}').val({$i.fixed});$('#fixed_fakt_{$i.tp_kod}').change();">{$i.fixed|num:3} =></a>
+					<input
+						class="number"
+						size="10"
+						name="fixed_fakt[{$i.tp_kod}]"
+						id="fixed_fakt_{$i.tp_kod}"
+						onChange="save_tp('{$i.tp_kod}','{$i.tp_kod}','fixed_fakt',this.value);/*after_save('{$i.tp_kod}');*/"
+					>
+					<script>
+						$('#fixed_fakt_{$i.tp_kod}').val({$i.fixed_fakt});
+						$('#fixed_fakt_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right ;{if $i.total > $i.maxtp} background-color:red {else}background-color: rgb(153, 255, 153){/if}" id="d_{$i.tp_kod}_total">{$i.total|num:2}</td>
+			<td style=" text-align:center" id="d_{$i.tp_kod}_cash">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{if $i.cash}да{/if}
+				{else}
+					<input
+						name="cash[{$i.tp_kod}]"
+						id="cash_{$i.tp_kod}" type="checkbox"
+						onChange="save_tp('{$i.tp_kod}','{$i.tp_kod}','cash',this.checked?1:0);"
+					>
+					<script>
+						$('#cash_{$i.tp_kod}').prop('checked','{$i.cash}'==1?true:false);
+						$('#cash_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;background-color:#FFCC99;" id="d_{$i.tp_kod}_compens_distr">{$i.compens_distr|num:2}</td>
+			<td style=" text-align:right" id="d_{$i.tp_kod}_zat">{$i.zat|num:2}</td>
+			<td style=" text-align:center;">{$i.lu_fio} {$i.lu}</td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+
+<p>Сетевые ТП</p>
+<table id=mytable style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold">
+<td style="text-align: center;">№ п/п</td>
+<td style="text-align: center;">Название сети</td>
+<td style="text-align: center;">Через РЦ?</td>
+<td style="text-align: center;">Количество ТП</td>
+<td style="text-align: center;">Отсрочка</td>
+<td style="text-align: center;">Скидка, %</td>
+<td style="text-align: center; background-color: rgb(255, 255, 204);">Фактическая скидка, %</td>
+<td style="text-align: center; background-color: rgb(255, 255, 204);">Фактическая скидка, {$valuta}</td>
+<td style="text-align: center;">Бонус, %</td>
+<td style="text-align: center;">Фикс. оплата в месяц, {$valuta}</td>
+<td style="text-align: center;">Наценка, %</td>
+<td style="text-align: center;">Последние загруженные условия</td>
+<td style="text-align: center;">Сумма продаж, ден. ед.</td>
+<td style="text-align: center;">Бонус расчетный ТП, {$valuta}</td>
+<td style="text-align: center;background-color: rgb(255, 255, 204);">Максимум по сети, {$valuta}</td>
+<td style="text-align: center;">Затраты филиала</td>
+<td style="text-align: center;">ТС/СТС: планирую выдать бонус</td>
+<td style="text-align: center;">Бонус фактический, {$valuta}</td>
+<td style="text-align: center;">Фикс. оплата в месяц ФАКТ, {$valuta}</td>
+<td style="text-align: center; background-color: rgb(153, 255, 153);">ИТОГО</td>
+<td style="text-align: center;">Бонус по форме 2</td>
+<td style="text-align: center;background-color:#FFCC99;">Компенсация дистрибутору, {$valuta}</td>
+<td style="text-align: center;">Затраты на сеть, %</td>
+<td style="text-align: center;">Последние изменения</td>
+</tr>
+
+{foreach key=k item=i from=$tpn name=tpn}
+{foreach key=k1 item=i1 from=$i.det name=det}
+<tr>
+{if $smarty.foreach.det.iteration eq 1}
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$smarty.foreach.tpn.iteration}</td>
+			<td rowspan={$i.fil_cnt}>{$i.net}<!--
+				<br>total {$i.total|num:2}
+				<br>compens_distr {$i.compens_distr|num:2}-->
+			</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$i.isrc}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">
+				<a target=_blank href="?action=salesbychains&affiliation=ter&sd={$smarty.request.dt}&ed={$smarty.request.dt}&generate=1&chains={$i.net_kod}">{$i.tp_cnt}</a>
+			</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$i.delay}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$i.discount|num:3}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center; background-color: rgb(255, 255, 204);">{$i.skidka|num:6}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center; background-color: rgb(255, 255, 204);">{$i.skidka_val|num:2}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$i.bonus|num:2}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$i.fixed|num:2}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:center">{$i.margin}</td>
+			<td rowspan={$i.fil_cnt}><a target=_blank href="sc_files/{$i.last_fn}">{$i.last_fn}</a></td>
+			<td rowspan={$i.fil_cnt} style="text-align:right">{$i.summa|num:2}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:right" id="d_{$i.net_kod}_{$i.db}_bonus_tp">{$i.bonus_tp|num:2}</td>
+			<td rowspan={$i.fil_cnt} style="text-align:right;background-color:{if $i.total > $i.maxtp}red{else}rgb(255, 255, 204){/if}" id="d_{$i.net_kod}_{$i.db}_maxtp">{$i.maxtp|num:2}</td>
+{/if}
+			<td style=" text-align: center;">{$i1.fname}</td>
+			<td style=" text-align: center;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_net_kod_db_fil">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{if $i1.selected}да{/if}
+				{else}
+					<input
+						name="selected[{$i.net_kod}_{$i.db}_{$i1.fil}]"
+						id="selected_{$i.net_kod}_{$i.db}_{$i1.fil}" type="checkbox"
+						onChange="
+							this.checked?null:$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').val('');
+							$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').attr('disabled',!this.checked);
+							$('#bonus_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').attr('disabled',!this.checked);
+							$('#cash_{$i.net_kod}_{$i.db}_{$i1.fil}').attr('disabled',!this.checked);
+							save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','net_kod_db_fil',this.checked?1:0);
+							this.checked?save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','bonus_fakt','{$i1.bonus_fakt}'):null;
+							this.checked?save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','fixed_fakt','{$i1.fixed_fakt}'):null;
+							this.checked?save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','cash','{$i1.cash}'):null;
+							/*after_save('{$i.net_kod}_{$i.db}_{$i1.fil}');*/
+						"
+					>
+					<script>
+						$('#selected_{$i.net_kod}_{$i.db}_{$i1.fil}').prop('checked','{$i1.selected}'==1?true:false);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_bonus_fakt">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i1.bonus_fakt|num:2}
+				{else}
+					<input
+						class="number"
+						size="10"
+						name="bonus_fakt[{$i.net_kod}_{$i.db}_{$i1.fil}]"
+						id="bonus_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}"
+						onChange="save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','bonus_fakt',this.value);/*after_save('{$i.net_kod}_{$i.db}_{$i1.fil}');*/"
+					>
+					<script>
+						$('#bonus_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').val({$i1.bonus_fakt});
+						$('#bonus_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').attr('disabled','{$i1.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_fixed_fakt">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{$i1.fixed_fakt|num:2}
+				{else}
+					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').val({$i1.fixed});$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').change();">{$i1.fixed|num:3} =></a>
+					<input
+						class="number"
+						size="10"
+						name="fixed_fakt[{$i.net_kod}_{$i.db}_{$i1.fil}]"
+						id="fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}"
+						onChange="save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','fixed_fakt',this.value);/*after_save('{$i.net_kod}_{$i.db}_{$i1.fil}');*/"
+					>
+					<script>
+						$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').val({$i1.fixed_fakt});
+						$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').attr('disabled','{$i1.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right ;{if $i.total > $i.maxtp} background-color:red {else}background-color: rgb(153, 255, 153) {/if}" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_total">{$i1.total|num:2}</td>
+			<td style=" text-align:center" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_cash">
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+					{if $i1.cash}да{/if}
+				{else}
+					<input
+						name="cash[{$i.net_kod}_{$i.db}_{$i1.fil}]"
+						id="cash_{$i.net_kod}_{$i.db}_{$i1.fil}" type="checkbox"
+						onChange="save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','cash',this.checked?1:0);"
+					>
+					<script>
+						$('#cash_{$i.net_kod}_{$i.db}_{$i1.fil}').prop('checked','{$i1.cash}'==1?true:false);
+						$('#cash_{$i.net_kod}_{$i.db}_{$i1.fil}').attr('disabled','{$i1.selected}'==1?false:true);
+					</script>
+				{/if}
+			</td>
+			<td style=" text-align:right;background-color:#FFCC99;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_compens_distr">{$i1.compens_distr|num:2}</td>
+{if $smarty.foreach.det.iteration eq 1}
+			<td rowspan={$i.fil_cnt} style=" text-align:right" id="d_{$i.net_kod}_{$i.db}_zat">{$i.zat|num:2}</td>
+{/if}
+			<td style=" text-align:center;">{$i1.lu_fio} {$i1.lu}</td>
+</tr>
+{/foreach}
+{/foreach}
+</tbody>
+</table>
+
+<p>
+<div id="svodf"></div>
+</p>
+
+
+
+<div id="ok" style="display: inline;"></div>
+
+
+<script>
+v_dt='{$smarty.request.dt}';
+{literal}
+function save_tp(id,id1,field,val)
+{
+	//console.log(id+' '+field+' '+val);
+	$('#d_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	fd.append('dt',  v_dt);
+	$.ajax({
+	type: 'POST',
+	url: '?action=bud_svod_tun_tp_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+	$('#ok').html(''+data+'');
+	get_val(id1,id1,'bonus_tp');
+	get_val(id1,id1,'maxtp');
+	get_val(id1,id,'total');
+	get_val(id1,id,'compens_distr');
+	get_val(id1,id1,'zat');
+	load_tp_total();
+	$('#d_'+id+'_'+field).css('background-color','white');
+}});
+}
+
+function get_val(key,key1,field)
+{
+	$('#d_'+key1+'_'+field).load('?action=bud_svod_tun_tp_get_val&nohead=1',
+	{
+		key: key,
+		key1: key1,
+		field: field,
+		dt: v_dt
+	});
+}
+
+function save_reestr()
+{
+	$('#reestr_load').css('background-color','red');
+	var fd = new FormData();
+	fd.append('dt',  v_dt);
+	fd.append('file', $('#reestr_fn')[0].files[0]);
+	fd.append('summa', $('#reestr_sum').val());
+	$.ajax({
+	type: 'POST',
+	url: '?action=bud_svod_tun_tp_svodf_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+	$('#ok').html(''+data+'');
+	load_tp_svodf();
+	$('#reestr_load').css('background-color','white');
+}});
+}
+
+function del_reestr(id)
+{
+	$('#reestr_tr_'+id).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	$.ajax({
+	type: 'POST',
+	url: '?action=bud_svod_tun_tp_svodf_save&nohead=1',
+	data: fd,
+	processData: false,
+	contentType: false,
+	success: function(data) {
+	$('#ok').html(''+data+'');
+	$('#reestr_tr_'+id).remove();
+	load_tp_svodf();
+}});
+}
+
+function load_tp_total()
+{
+var fd = new FormData();
+fd.append('eta_list',  $('#eta_list').val());
+fd.append('ok_bonus',  $('#ok_bonus').val());
+fd.append('exp_list_without_ts',  $('#exp_list_without_ts').val());
+fd.append('exp_list_only_ts',  $('#exp_list_only_ts').val());
+fd.append('fil',  $('#fil').val());
+fd.append('clusters',  $('#clusters').val());
+fd.append('dt',  v_dt);
+$.ajax({
+  type: 'POST',
+  url: '?action=bud_svod_tun_tp_total&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+//$('#total').remove();
+//$('#mytable>tbody:last').append('<tr id="total" style="font-weight: bold;">'+data+'</tr>');
+$('#total').html(''+data+'');
+//$('#total').html(''+data+'');
+  }
+});
+}
+
+
+function load_tp_svodf()
+{
+var fd = new FormData();
+fd.append('eta_list',  $('#eta_list').val());
+fd.append('ok_bonus',  $('#ok_bonus').val());
+fd.append('exp_list_without_ts',  $('#exp_list_without_ts').val());
+fd.append('exp_list_only_ts',  $('#exp_list_only_ts').val());
+fd.append('fil',  $('#fil').val());
+fd.append('clusters',  $('#clusters').val());
+fd.append('dt',  v_dt);
+$.ajax({
+  type: 'POST',
+  url: '?action=bud_svod_tun_tp_svodf&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+//$('#total').remove();
+//$('#mytable>tbody:last').append('<tr id="total" style="font-weight: bold;">'+data+'</tr>');
+$('#svodf').html(''+data+'');
+//$('#total').html(''+data+'');
+  }
+});
+}
+
+
+
+{/literal}
+
+
+{if not $smarty.request.print}
+load_tp_total();
+load_tp_svodf();
+{/if}
+
+</script>
+
+
+
+
+

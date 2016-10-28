@@ -3,30 +3,54 @@
 <p><input type=submit value="сохранить"></p>
 
 <p style="color:red">
-пример формулы: $переменна€1 + $переменна€2 - $переменна€3 * $переменна€4 / $переменна€5
+пример формулы: <b>$п1 + ($п2==2.34?$п3:$п1) - $п3 * ($п4==123?($п3/5):$п1) / $п5</b>
+<br>
+где <b>($п2==2.34?$п3:$п1)</b> - условие, если п2 равно 2.34, то результат выражени€ равен п3, иначе п1
 <br>
 названи€ переменных указываютс€ в пол€х "переменна€ за€вки" и "переменна€ отчета" без значка доллара
 <br>
 в формуле могут быть задействованы только числовые пол€
 </p>
 
+<p>справка по ключевым значени€м:</p>
+<table border=1>
+	<tr style="font-weight:bold;text-align:center">
+		<td>name</td>
+		<td>admin_id</td>
+		<td>var1</td>
+		<td>dpt_id</td>
+		<td>cnt_name</td>
+	</tr>
+	{foreach key=k item=i from=$bud_ru_ff_admin_id_var1}
+	<tr>
+		<td>{$i.name}</td>
+		<td style="text-align:center">{$i.admin_id}</td>
+		<td style="text-align:center">{$i.var1}</td>
+		<td style="text-align:center">{$i.dpt_id}</td>
+		<td>{$i.cnt_name}</td>
+	</tr>
+	{/foreach}
+</table>
+
 <p>новое поле <input name=new[0][name] size=40><input type=hidden name=new[0][dpt_id] value="{$dpt_id}"></p>
 <table border=1 cellspacing=5 cellpadding=5 style="width:600px">
 	{foreach key=key item=item from=$bud_ru_ff name=ff}
 	{if $smarty.foreach.ff.iteration%5 eq 1}
 	<tr style="font-weight:bold;text-align:center">
-		<td rowspan=2>удалить / пор€док / тип / Admin_Id / Var1</td>
+		<td rowspan=2>удалить / пор€док / тип / Admin_Id / Var1 / родительское поле / значение в родительском поле</td>
 		<td rowspan=2>
 			<div style="background-color:#80FFFF;display:inline">название пол€ за€вки / об€зательное поле за€вки / выводить в реестре</div>
 			<br>
 			<div style="background-color:#FFFF80;display:inline">название пол€ отчета / об€зательное поле отчета / выводить в отчете</div>
 		</td>
 		{foreach key=key1 item=item1 from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}{/foreach}
-		<td colspan="{$smarty.foreach.bud_ru_ff_st_ras.total}">cтатьи расходов</td>
+		<td colspan="{$smarty.foreach.bud_ru_ff_st_ras.total}"><a href="?action=bud_ru_ff">cтатьи расходов</a></td>
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 	{foreach key=key1 item=item1 from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
-		<td>{$item1.name}</td>
+		{if $smarty.request.show_st eq null or $smarty.request.show_st eq $item1.id}
+		<td><a href="?action=bud_ru_ff&show_st={$item1.id}">{$item1.name}</a></td>
+		{/if}
 	{/foreach}
 	</tr>
 	{/if}
@@ -43,6 +67,7 @@
 				$('#subtype_{$item.id}_select').val(0);
 				this.value=='formula'?$('#update_{$item.id}_formula').show():$('#update_{$item.id}_formula').hide();
 				this.value=='formula'?$('#update_{$item.id}_rep_formula').show():$('#update_{$item.id}_rep_formula').hide();
+				this.value=='list'?$('#autocomplete{$item.id}').show():$('#autocomplete{$item.id}').hide();
 				"
 			>
 				<option value="string">—трока</option>
@@ -63,19 +88,65 @@
 			</select>
 			<input name=update[{$item.id}][formula] id=update_{$item.id}_formula value="{$item.formula}" size=30>
 			<input name=update[{$item.id}][rep_formula] id=update_{$item.id}_rep_formula value="{$item.rep_formula}" size=30>
-			<script>
-				$('#update_{$item.id}_type').val("{$item.type}"==""?"string":"{$item.type}");
-				$('#subtype_{$item.id}_select').val({$item.subtype});
-				"{$item.type}"!="list"?$('#subtype_{$item.id}_select').hide():null;
-				"{$item.type}"!="formula"?$('#update_{$item.id}_formula').hide():null;
-				"{$item.type}"!="formula"?$('#update_{$item.id}_rep_formula').hide():null;
-			</script>
 			<nobr>admin_id<input {if not $is_admin}disabled{/if} name=update[{$item.id}][admin_id] size=1 value="{$item.admin_id}"></nobr>
 			<nobr>var1<input {if not $is_admin}disabled{/if} name=update[{$item.id}][var1] size=1 value="{$item.var1}"></nobr>
-			{if $item.type eq 'number' or $item.type eq 'number_int'}
+			{if $item.type eq 'number' or $item.type eq 'number_int' or $item.type eq 'list'}
 			<nobr>переменна€ за€вки<input {if not $is_admin}disabled{/if} name=update[{$item.id}][var_name] size=5 value="{$item.var_name}"></nobr>
 			<nobr>переменна€ отчета<input {if not $is_admin}disabled{/if} name=update[{$item.id}][rep_var_name] size=5 value="{$item.rep_var_name}"></nobr>
 			{/if}
+			<nobr>родительское поле
+			<select {if not $is_admin}disabled{/if} name=update[{$item.id}][parent_field] id="parent_field_{$item.id}_select">
+				<option></option>
+				{foreach key=key1 item=item1 from=$item.parent_fields}
+				<option value={$item1.id}>{$item1.name}</option>
+				{/foreach}
+			</select>
+			</nobr>
+			<nobr>
+			значение в родительском поле, при котором данное поле доступно дл€ ввода
+			<input {if not $is_admin}disabled{/if} name=update[{$item.id}][parent_field_val] size=10 value="{$item.parent_field_val}">
+			</nobr>
+			<nobr>
+			цвет фона пол€
+			<input {if not $is_admin}disabled{/if} name=update[{$item.id}][color] size=10 value="{$item.color}" class="color">
+			</nobr>
+			<nobr>
+			тип шрифта жирный
+			<input
+				type=checkbox
+				id=chk_{$item.id}_bold
+				onclick="
+					$('#update_{$item.id}_bold').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_bold').prop('checked','{$item.bold}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][bold] id=update_{$item.id}_bold value="{$item.bold}">
+			</nobr>
+			<nobr id=autocomplete{$item.id}>
+			автозаполнение (дл€ полей типа "список")
+			<input
+				type=checkbox
+				id=chk_{$item.id}_autocomplete
+				onclick="
+					$('#update_{$item.id}_autocomplete').val(this.checked?1:0);
+				"
+			>
+			<script>$('#chk_{$item.id}_autocomplete').prop('checked','{$item.autocomplete}'=='1'?true:false);</script>
+			<input type=hidden name=update[{$item.id}][autocomplete] id=update_{$item.id}_autocomplete value="{$item.autocomplete}">
+			</nobr>
+			<script>
+				$('#update_{$item.id}_type').val("{$item.type}"==""?"string":"{$item.type}");
+				$('#subtype_{$item.id}_select').val({$item.subtype});
+				$('#parent_field_{$item.id}_select').val({$item.parent_field});
+				"{$item.type}"!="list"?$('#subtype_{$item.id}_select').hide():null;
+				"{$item.type}"!="list"?$('#autocomplete{$item.id}').hide():null;
+				"{$item.type}"!="formula"?$('#update_{$item.id}_formula').hide():null;
+				"{$item.type}"!="formula"?$('#update_{$item.id}_rep_formula').hide():null;
+			</script>
+			<nobr>
+				ƒобавить данное поле в существующие за€вки/отчеты
+				<input type=checkbox name=rebuild[{$item.id}]>
+			</nobr>
 		</td>
 		<td style="background-color:#80FFFF">
 			<nobr>
@@ -101,6 +172,7 @@
 			</nobr>
 		</td>
 		{foreach key=bk item=bi from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
+			{if $smarty.request.show_st eq null or $smarty.request.show_st eq $bi.id}
 			{assign var="x" value="0"}
 			{foreach key=sk item=si from=$bud_ru_ff_st name=bud_ru_ff_st}
 				{if $si.ff eq $item.id and $si.st eq $bi.id}
@@ -120,6 +192,7 @@
 			<script>$('#chk_ff_{$bi.id}_{$item.id}').prop('checked','{$x}'=='1'?true:false);</script>
 			<input type=hidden name=update_ff[{$bi.id}][{$item.id}] id=update_ff_{$bi.id}_{$item.id} value="{$x}">
 			</td>
+			{/if}
 		{/foreach}
 	</tr>
 	<tr style="text-align:center">

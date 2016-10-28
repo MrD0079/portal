@@ -34,15 +34,21 @@
 
 {/if}
 
-{if $cnt_kod eq "ua" and not $is_eta and $cnt_kod neq 'nr'}
+{if ($cnt_kod eq "ua" or $cnt_kod eq "md") and not $is_eta and $cnt_kod neq 'nr'}
 
 <li><a href="javascript:void(0);"><span class="dir">Стандарт ТО</span></a>
 	<ul>
-		{if $is_ts}
-		<li><a href="?action=a14to_report">Вечерний отчет</a></li>
+		{if $cnt_kod eq "ua"}
+			{if $is_ts}<li><a href="?action=a14to_report2">Вечерний отчет</a></li>{/if}
+			<li><a href="?action=a14to_accept2">Подтверждение</a></li>
+			<li><a href="?action=a14to_stat2et">Статистика</a></li>
+			<li><a href="?action=a14to_stat2traid">Статистика (для анализа результатов)</a></li>
 		{/if}
-		<li><a href="?action=a14to_accept">Подтверждение</a></li>
-		<li><a href="?action=a14to_stat">Статистика</a></li>
+		{if $cnt_kod eq "md"}
+			{if $is_ts}<li><a href="?action=a14to_report">Вечерний отчет</a></li>{/if}
+			<li><a href="?action=a14to_accept">Подтверждение</a></li>
+			<li><a href="?action=a14to_stat">Статистика</a></li>
+		{/if}
 		<li><a href="?action=a14to_nophoto">Нет фото</a></li>
 	</ul>
 </li>
@@ -149,11 +155,23 @@
 		<li><a href="?action=rep_spd_head">Отчет</a></li>
 		<li><a href="?action=rep_spdms_list&valid=1">СПД МС</a></li>
 		<li><a href="?action=rep_spdms_head">Отчет МС</a></li>
+		<li><a href="?action=rep_spddnkf_list&valid=1">СПД ДнКФ</a></li>
+		<li><a href="?action=rep_spddnkf_head">Отчет ДнКФ</a></li>
 	</ul>
 </li>
 {/if}
 
-<li><a href="?action=salesbytp">Нагрузка на ТП</a></li>
+{if $cnt_kod neq 'nr'}
+<li><a href="javascript:void(0);"><span class="dir">Работа с ТП</span></a>
+	<ul>
+		{if not $is_eta}
+		<li><a href="?action=salesbytp">Нагрузка на ТП</a></li>
+		<li><a href="?action=tpplan">Планы по ТП</a></li>
+		{/if}
+		<li><a href="?action=salesbyweek">Продажи понедельно</a></li>
+	</ul>
+</li>
+{/if}
 
 {if not $is_eta and $cnt_kod neq 'nr'}
 <li><a href="javascript:void(0);"><span class="dir">Координаторы</span></a>
@@ -165,6 +183,13 @@
 		<li><a href="?action=dm_fil_stat">Статистика по филиалам</a></li>
 		{/if}
 		<li><a href="?action=main">Доска обращений</a></li>
+		{if $is_admin or $is_test_admin}
+		<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+			<ul>
+				<li><a href="?action=dm_cat_appeals">Категории обращений</a></li>
+			</ul>
+		</li>
+		{/if}
 	</ul>
 </li>
 {/if}

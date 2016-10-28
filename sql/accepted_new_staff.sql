@@ -31,6 +31,9 @@
                    WHERE tn = :tn) = 1
               OR (SELECT is_coach
                     FROM user_list
+                   WHERE tn = :tn) = 1
+              OR (SELECT is_admin
+                    FROM user_list
                    WHERE tn = :tn) = 1)
          AND TRUNC (created) BETWEEN TO_DATE (:sd, 'dd.mm.yyyy') AND TO_DATE (:ed, 'dd.mm.yyyy')
          AND DECODE (:pos_id, 0, NVL (pos_id, 0), :pos_id) = NVL (pos_id, 0)

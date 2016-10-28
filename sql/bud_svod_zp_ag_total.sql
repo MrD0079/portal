@@ -1,8 +1,7 @@
-/* Formatted on 18/05/2015 19:28:23 (QP5 v5.227.12220.39724) */
+/* Formatted on 22/06/2016 12:02:04 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) c,
        SUM (dz_return) dz_return,
        SUM (dz_return_norm) dz_return_norm,
-       SUM (akb_penalty) akb_penalty,
        SUM (fal_payment) fal_payment,
        SUM (zp_plan) zp_plan,
        SUM (zp_fakt) zp_fakt,
@@ -17,21 +16,72 @@ SELECT COUNT (*) c,
        SUM (DECODE (fil_id, NULL, 1, 0)) fil_null,
        SUM (DECODE (fil_id, NULL, 0, 1)) fil_not_null,
        SUM (summa) summa,
-       SUM (sales) sales
+       SUM (sales) sales,
+       SUM (val_fact) val_fact,
+       DECODE (SUM (sales), 0, 0, SUM (dz_return) / SUM (sales) * 100)
+          plan_perc
   FROM (SELECT NVL (sv.id, FN_GET_NEW_ID) id,
                u.fio ts,
+               u.tab_num ts_tn,
                s.h_eta h_eta,
                s.eta eta,
-               sv.dz_return,
-               sv.dz_return * n.norm / 100 dz_return_norm,
-               sv.dz_return * 0.003 dz_return_norm03,
-               DECODE (NVL (sv.sales, 0),
-                       0, 0,
-                       sv.dz_return * n.norm / 100 / sv.sales * 100)
+               NVL (vp.val_fact, 0) val_fact,
+               vp.val_plan dz_return,
+                 CASE
+                    WHEN DECODE (NVL (vp.val_plan, 0),
+                                 0, 0,
+                                 (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
+                            80
+                    THEN
+                       0.01
+                    ELSE
+                       0.02
+                 END
+               * sv.sales
+                  dz_return_norm,
+                 CASE
+                    WHEN DECODE (NVL (vp.val_plan, 0),
+                                 0, 0,
+                                 (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
+                            80
+                    THEN
+                       0.01
+                    ELSE
+                       0.02
+                 END
+               * 100
                   sales_perc,
-               sv.akb_penalty,
+               DECODE (NVL (vp.val_plan, 0),
+                       0, 0,
+                       (NVL (vp.val_fact, 0)) / vp.val_plan * 100)
+                  plan_perc,
                sv.fal_payment,
-               sv.dz_return * n.norm / 100 - NVL (sv.akb_penalty, 0) zp_plan,
+                 CASE
+                    WHEN DECODE (NVL (vp.val_plan, 0),
+                                 0, 0,
+                                 (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
+                            80
+                    THEN
+                       0.01
+                    ELSE
+                       0.02
+                 END
+               * sv.sales
+                  zp_plan,
+               ROUND (
+                    CASE
+                       WHEN DECODE (
+                               NVL (vp.val_plan, 0),
+                               0, 0,
+                               (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
+                               80
+                       THEN
+                          0.01
+                       ELSE
+                          0.02
+                    END
+                  * sv.sales)
+                  zp_fakt_def,
                sv.zp_fakt,
                NVL (sv.unscheduled, 0) unscheduled,
                s.eta_tab_number,
@@ -48,7 +98,7 @@ SELECT COUNT (*) c,
                   total1,
                sv.fil,
                sv.sales,
-               s.summa,
+               NVL (s.summa, 0) + NVL (s.coffee, 0) summa,
                f.name fil_name,
                f.id fil_id,
                taf.ok_db_tn
@@ -56,10 +106,11 @@ SELECT COUNT (*) c,
                          m.h_eta,
                          m.eta,
                          m.eta_tab_number,
-                         SUM (m.summa) summa
+                         SUM (m.summa) summa,
+                         SUM (m.coffee) coffee
                     FROM a14mega m
                    WHERE     m.dpt_id = :dpt_id
-                         AND TO_DATE (:dt, 'dd.mm.yyyy') = m.dt
+                         AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt
                 GROUP BY m.tab_num,
                          m.h_eta,
                          m.eta,
@@ -69,41 +120,42 @@ SELECT COUNT (*) c,
                bud_fil f,
                (SELECT fil, ok_db_tn
                   FROM bud_svod_taf
-                 WHERE dt = TO_DATE (:dt, 'dd.mm.yyyy')) taf,
+                 WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf,
                (SELECT n1.norm,
                        n1.dt,
                        n1.fund,
                        f1.kod
                   FROM bud_funds_norm n1, bud_funds f1
-                 WHERE n1.fund = f1.id AND f1.dpt_id = :dpt_id) n
+                 WHERE n1.fund = f1.id AND f1.dpt_id = :dpt_id) n,
+               (SELECT h_eta,
+                       (NVL (val_plan, 0) + NVL (coffee_plan, 0)) * 1000
+                          val_plan,
+                       (NVL (val_fact, 0) + NVL (coffee_fact, 0)) * 1000
+                          val_fact
+                  FROM kpr k
+                 WHERE     k.dpt_id = :dpt_id
+                       AND TO_DATE ( :dt, 'dd.mm.yyyy') = k.dt) vp
          WHERE     sv.fil = f.id(+)
                AND sv.fil = taf.fil(+)
-               /*AND DECODE (:fil, 0, sv.fil, :fil) = sv.fil*/
-               AND (:fil = sv.fil OR :fil = 0)
+               AND ( :fil = sv.fil OR :fil = 0)
                AND (   sv.fil IN (SELECT fil_id
                                     FROM clusters_fils
                                    WHERE :clusters = CLUSTER_ID)
                     OR :clusters = 0)
                AND s.tab_num = u.tab_num
-               /*AND u.datauvol IS NULL*/
                AND u.dpt_id = :dpt_id
-               AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
+               AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
                AND :dpt_id = sv.dpt_id(+)
                AND s.h_eta = sv.h_eta(+)
-               AND u.tn IN
-                      (SELECT slave
-                         FROM full
-                        WHERE master =
-                                 DECODE (:exp_list_without_ts,
-                                         0, master,
-                                         :exp_list_without_ts))
-               AND u.tn IN
-                      (SELECT slave
-                         FROM full
-                        WHERE master =
-                                 DECODE (:exp_list_only_ts,
-                                         0, master,
-                                         :exp_list_only_ts))
+               AND s.h_eta = vp.h_eta(+)
+               AND (   :exp_list_without_ts = 0
+                    OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+               AND (   :exp_list_only_ts = 0
+                    OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
                AND (   u.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :tn)
@@ -113,25 +165,24 @@ SELECT COUNT (*) c,
                     OR (SELECT NVL (is_traid_kk, 0)
                           FROM user_list
                          WHERE tn = :tn) = 1)
-               AND DECODE (:eta_list, '', s.h_eta, :eta_list) = s.h_eta
+               AND (:eta_list is null OR :eta_list = s.h_eta)
                AND sv.unscheduled(+) = 0
                AND sv.dt = n.dt(+)
                AND n.kod(+) = 'zp'
         UNION
         SELECT sv.id,
                u.fio ts,
+               u.tab_num ts_tn,
                sv.h_eta,
                sv.fio eta,
-               sv.dz_return,
-               sv.dz_return * n.norm / 100 dz_return_norm,
-               sv.dz_return * n.norm / 100 * 0.3 dz_return_norm03,
-               DECODE (NVL (sv.sales, 0),
-                       0, 0,
-                       sv.dz_return * n.norm / 100 / sv.sales * 100)
-                  sales_perc,
-               sv.akb_penalty,
+               NULL val_fact,
+               NULL dz_return,
+               NULL dz_return_norm,
+               NULL sales_perc,
+               NULL plan_perc,
                sv.fal_payment,
-               sv.dz_return / 100 - NVL (sv.akb_penalty, 0) gsm_plan,
+               NULL zp_plan,
+               NULL zp_fakt_def,
                sv.zp_fakt,
                NVL (sv.unscheduled, 0) unscheduled,
                sv.eta_tab_number,
@@ -157,7 +208,7 @@ SELECT COUNT (*) c,
                bud_fil f,
                (SELECT fil, ok_db_tn
                   FROM bud_svod_taf
-                 WHERE dt = TO_DATE (:dt, 'dd.mm.yyyy')) taf,
+                 WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf,
                (SELECT n1.norm,
                        n1.dt,
                        n1.fund,
@@ -166,30 +217,22 @@ SELECT COUNT (*) c,
                  WHERE n1.fund = f1.id AND f1.dpt_id = :dpt_id) n
          WHERE     sv.fil = f.id(+)
                AND sv.fil = taf.fil(+)
-               /*AND DECODE (:fil, 0, sv.fil, :fil) = sv.fil*/
-               AND (:fil = sv.fil OR :fil = 0)
+               AND ( :fil = sv.fil OR :fil = 0)
                AND (   sv.fil IN (SELECT fil_id
                                     FROM clusters_fils
                                    WHERE :clusters = CLUSTER_ID)
                     OR :clusters = 0)
                AND sv.tn = u.tn
-               /*AND u.datauvol IS NULL*/
                AND u.dpt_id = sv.dpt_id
-               AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
-               AND u.tn IN
-                      (SELECT slave
-                         FROM full
-                        WHERE master =
-                                 DECODE (:exp_list_without_ts,
-                                         0, master,
-                                         :exp_list_without_ts))
-               AND u.tn IN
-                      (SELECT slave
-                         FROM full
-                        WHERE master =
-                                 DECODE (:exp_list_only_ts,
-                                         0, master,
-                                         :exp_list_only_ts))
+               AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
+               AND (   :exp_list_without_ts = 0
+                    OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+               AND (   :exp_list_only_ts = 0
+                    OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
                AND (   u.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :tn)
@@ -199,9 +242,7 @@ SELECT COUNT (*) c,
                     OR (SELECT NVL (is_traid_kk, 0)
                           FROM user_list
                          WHERE tn = :tn) = 1)
-               AND DECODE (:eta_list, '', sv.h_eta, :eta_list) = sv.h_eta
                AND sv.unscheduled(+) = 1
                AND sv.dt = n.dt(+)
                AND n.kod(+) = 'zp'
-        ORDER BY unscheduled NULLS FIRST,                             /*ts, */
-                                         eta)
+        ORDER BY unscheduled NULLS FIRST, eta)

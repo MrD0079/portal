@@ -1,8 +1,6 @@
 <?
 $params = array();
-if (isset($_REQUEST["id"])
-&&(!isset($_REQUEST["save"]))
-)
+if (isset($_REQUEST["id"]))
 {
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_head.sql'));
 	$p=array(':z_id' => $_REQUEST["id"]);
@@ -11,8 +9,7 @@ if (isset($_REQUEST["id"])
 	$params[":tn"]=$z["tn"];
 	$params[":fil"]=$z["fil"];
 	$params[":dpt_id"]=$z["dpt_id"];
-	$_REQUEST["new"]=$z;
-
+	!isset($_REQUEST["save"])?$_REQUEST["new"]=$z:null;
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
 	$p=array(':z_id' => $_REQUEST["id"]);
 	$sql=stritr($sql,$p);
@@ -25,15 +22,20 @@ if (isset($_REQUEST["id"])
 		}
 	}
 	include "bud_ru_zay_formula.php";
-	//$d[$k]["ff"]=$data;
-	//print_r($data);
-	$_REQUEST["edit_st"]=$data;
+	!isset($_REQUEST["save"])?$_REQUEST["edit_st"]=$data:null;
 
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_edit_acceptors.sql'));
 	$params[":id"]=$_REQUEST["id"];
 	$sql=stritr($sql,$params);
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('bud_ru_zay_edit_acceptors', $data);
+
+	$sql=rtrim(file_get_contents('sql/bud_ru_zay_edit_executors.sql'));
+	$params[":id"]=$_REQUEST["id"];
+	$sql=stritr($sql,$params);
+	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	$smarty->assign('bud_ru_zay_edit_executors', $data);
+
 }
 else
 {
@@ -50,11 +52,14 @@ $smarty->assign('me', $me);
 
 if (isset($_REQUEST["save"]))
 {
-	foreach ($_REQUEST["bud_ru_acceptors"] as $k=>$v)
+	if (!isset($_REQUEST["admin"]))
 	{
-		if ($v!=null)
+		foreach ($_REQUEST["bud_ru_acceptors"] as $k=>$v)
 		{
-			$_REQUEST["new"]["recipient"]=$v;
+			if ($v!=null)
+			{
+				$_REQUEST["new"]["recipient"]=$v;
+			}
 		}
 	}
 	if (isset($_REQUEST["id"]))
@@ -69,16 +74,29 @@ if (isset($_REQUEST["save"]))
 	isset($_REQUEST["new"]["dt_start"]) ? $_REQUEST["new"]["dt_start"]=OraDate2MDBDate($_REQUEST["new"]["dt_start"]) : null;
 	isset($_REQUEST["new"]["dt_end"]) ? $_REQUEST["new"]["dt_end"]=OraDate2MDBDate($_REQUEST["new"]["dt_end"]) : null;
 	Table_Update("bud_ru_zay",$keys,$_REQUEST["new"]);
-	audit ("добавил заявку на проведение активности №".$id,"bud_ru_zay");
 	$keys = array("z_id"=>$id);
-	Table_Update("bud_ru_zay_accept",$keys,null);
-	foreach ($_REQUEST["bud_ru_acceptors"] as $k=>$v)
+	if (!isset($_REQUEST["admin"]))
 	{
-		$keys = array("z_id"=>$id,"tn"=>$v);
-		if ($v!=null)
+		Table_Update("bud_ru_zay_accept",$keys,null);
+		Table_Update("bud_ru_zay_executors",$keys,null);
+		foreach ($_REQUEST["bud_ru_acceptors"] as $k=>$v)
 		{
-			Table_Update("bud_ru_zay_accept",$keys,$keys);
-			audit ("добавил в заявку на проведение активности №".$id." согласователя ".$v,"bud_ru_zay");
+			$keys = array("z_id"=>$id,"tn"=>$v);
+			if ($v!=null)
+			{
+				Table_Update("bud_ru_zay_accept",$keys,$keys);
+			}
+		}
+		if (isset($_REQUEST["bud_ru_executors"]))
+		{
+			foreach ($_REQUEST["bud_ru_executors"] as $k=>$v)
+			{
+				$keys = array("z_id"=>$id,"tn"=>$v);
+				if ($v!=null)
+				{
+					Table_Update("bud_ru_zay_executors",$keys,$keys);
+				}
+			}
 		}
 	}
 	if (isset($_REQUEST["new_st"]))
@@ -104,7 +122,6 @@ if (isset($_REQUEST["save"]))
 			{
 				unlink($v1);
 				$del_array[]=$k1;
-				audit ("удалил из заявки на проведение активности №".$id." файл ".$v1,"bud_ru_zay");
 			}
 			$vals = array("val_file"=>implode(array_diff($ov,$del_array),"\n"));
 			Table_Update("bud_ru_zay_ff",$keys,$vals);
@@ -131,7 +148,6 @@ if (isset($_REQUEST["save"]))
 				$keys = array("z_id"=>$id,"ff_id"=>$k);
 				$vals = array("val_file"=>$ss.$old_val);
 				Table_Update("bud_ru_zay_ff",$keys,$vals);
-				audit ("добавил в заявку на проведение активности №".$id." файл ".$fn,"bud_ru_zay");
 			}
 			}
 		}
@@ -161,21 +177,31 @@ $sql=stritr($sql,$params);
 $rm = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('rm', $rm);
 
-$params[':kat']=$_REQUEST["new"]["kat"];
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_create_ff.sql'));
-$sql=stritr($sql,$params);
-$st = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-foreach ($st as $k=>$v)
+if (!isset($_REQUEST["save"]))
 {
-	if ($v['type']=='list')
+	$params[':kat']=$_REQUEST["new"]["kat"];
+	$sql=rtrim(file_get_contents('sql/bud_ru_zay_create_ff.sql'));
+	$sql=stritr($sql,$params);
+	$st = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	foreach ($st as $k=>$v)
 	{
-		$sql=$db->getOne('select get_list from bud_ru_ff_subtypes where id='.$v['subtype']);
-		$sql=stritr($sql,$params);
-		$list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		$st[$k]['list'] = $list;
+		if ($v['type']=='list')
+		{
+			$sql=$db->getOne('select get_list from bud_ru_ff_subtypes where id='.$v['subtype']);
+			$sql=stritr($sql,$params);
+			$list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+			$st[$k]['list'] = $list;
+		}
+		if ($v['parent_field']!==null&&$v['parent_field_val']!==null)
+		{
+			$linked_fields[$v['parent_field']][$v['id']]=$v;
+		}
 	}
+	isset($linked_fields)?$smarty->assign('linked_fields', $linked_fields):null;
+	$smarty->assign('st', $st);
 }
-$smarty->assign('st', $st);
+//$_REQUEST["zzz"]=$st;
+//ses_req();
 
 $sql = rtrim(file_get_contents('sql/emp_exp_spd_list.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

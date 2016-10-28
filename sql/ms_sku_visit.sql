@@ -1,4 +1,4 @@
-/* Formatted on 14/07/2015 16:06:44 (QP5 v5.227.12220.39724) */
+/* Formatted on 12/05/2016 16:27:21 (QP5 v5.252.13127.32867) */
   SELECT n.id_net,
          rb.ag_id,
          rb.kodtp,
@@ -22,7 +22,7 @@
             visits_plan,
          COUNT (
             DISTINCT CASE
-                        WHEN (NVL (mr.mr_fakt, 0) > 0 /*OR NVL (mr.f_fakt, 0) > 0*/)
+                        WHEN (NVL (mr.mr_fakt, 0) > 0)
                         THEN
                            cpp1.kodtp || '-' || c.data || '-' || 1
                      END)
@@ -31,8 +31,7 @@
            COUNT (DISTINCT msb.name)
          * COUNT (
               DISTINCT CASE
-                          WHEN (   NVL (mr.mr_fakt, 0) > 0
-                                /*OR NVL (mr.f_fakt, 0) > 0*/)
+                          WHEN (NVL (mr.mr_fakt, 0) > 0)
                           THEN
                              cpp1.kodtp || '-' || c.data || '-' || 1
                        END)
@@ -40,8 +39,7 @@
            COUNT (DISTINCT msb.name)
          * COUNT (
               DISTINCT CASE
-                          WHEN (   NVL (mr.mr_fakt, 0) > 0
-                                /*OR NVL (mr.f_fakt, 0) > 0*/)
+                          WHEN (NVL (mr.mr_fakt, 0) > 0)
                           THEN
                              cpp1.kodtp || '-' || c.data || '-' || 1
                        END)
@@ -69,8 +67,8 @@
               OR (SELECT is_admin
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND TRUNC (rh.data, 'mm') = TRUNC (TO_DATE (:ed, 'dd/mm/yyyy'), 'mm')
-         AND TRUNC (c.data, 'mm') = TRUNC (TO_DATE (:ed, 'dd/mm/yyyy'), 'mm')
+         --AND TRUNC (rh.data, 'mm') = TRUNC (TO_DATE ( :ed, 'dd/mm/yyyy'), 'mm')
+         --AND TRUNC (c.data, 'mm') = TRUNC (TO_DATE ( :ed, 'dd/mm/yyyy'), 'mm')
          AND msh.sd =
                 fn_get_spec_dt (
                    msh.id_net,
@@ -79,20 +77,19 @@
                    CASE
                       WHEN :period = 1
                       THEN
-                         TO_DATE (:ed, 'dd.mm.yyyy')
+                         TO_DATE ( :ed, 'dd.mm.yyyy')
                       WHEN :period = 2
                       THEN
                          (SELECT MAX (c2.data)
                             FROM calendar c1, calendar c2
-                           WHERE     c1.data = TO_DATE (:ed, 'dd.mm.yyyy')
+                           WHERE     c1.data = TO_DATE ( :ed, 'dd.mm.yyyy')
                                  AND c1.y = c2.y
                                  AND c1.wy = c2.wy)
                       WHEN :period = 3
                       THEN
-                         LAST_DAY (TO_DATE (:ed, 'dd.mm.yyyy'))
+                         LAST_DAY (TO_DATE ( :ed, 'dd.mm.yyyy'))
                    END)
-         AND (rb.DAY_ENABLED_MR = 1 /*OR rb.DAY_ENABLED_F = 1*/)
-         /*AND (NVL (mr.mr_fakt, 0) > 0 OR NVL (mr.f_fakt, 0) > 0)*/
+         AND (rb.DAY_ENABLED_MR = 1)
          AND rb.id = mr.rb_id(+)
          AND c.dm = rb.day_num
          AND rh.id = rha.head_id
@@ -110,27 +107,36 @@
          AND rb.kodtp = cpp1.kodtp
          AND rh.tn = s.tn
          AND cpp1.tz_oblast = s.oblast
-         AND (   (c.data IN (TO_DATE (:ed, 'dd.mm.yyyy')) AND :period = 1)
-              OR (    c.data IN
-                         (SELECT c2.data
-                            FROM calendar c1, calendar c2
-                           WHERE     c1.data = TO_DATE (:ed, 'dd.mm.yyyy')
-                                 AND c1.y = c2.y
-                                 AND c1.wy = c2.wy)
-                  AND :period = 2)
-              OR (    TRUNC (c.data, 'mm') = TO_DATE (:ed, 'dd.mm.yyyy')
-                  AND :period = 3))
-         AND DECODE (:svms_list, 0, 0, rh.tn) =
-                DECODE (:svms_list, 0, 0, :svms_list)
-         AND DECODE (:agent, 0, 0, rb.ag_id) = DECODE (:agent, 0, 0, :agent)
-         AND DECODE (:nets, 0, 0, n.id_net) = DECODE (:nets, 0, 0, :nets)
-         AND DECODE (:oblast, '0', '0', cpp1.tz_oblast) =
-                DECODE (:oblast, '0', '0', :oblast)
-         AND DECODE (:city, '0', '0', cpp1.city) =
-                DECODE (:city, '0', '0', :city)
+         AND (   (    c.data IN (TO_DATE ( :ed, 'dd.mm.yyyy'))
+                  AND :period = 1
+                  AND rh.data = TRUNC (TO_DATE ( :ed, 'dd.mm.yyyy'), 'mm'))
+              OR (    c.data IN (SELECT c2.data
+                                   FROM calendar c1, calendar c2
+                                  WHERE     c1.data =
+                                               TO_DATE ( :ed, 'dd.mm.yyyy')
+                                        AND c1.y = c2.y
+                                        AND c1.wy = c2.wy)
+                  AND :period = 2
+                  AND rh.data IN (SELECT DISTINCT TRUNC (c2.data, 'mm')
+                                    FROM calendar c1, calendar c2
+                                   WHERE     c1.data =
+                                                TO_DATE ( :ed, 'dd.mm.yyyy')
+                                         AND c1.y = c2.y
+                                         AND c1.wy = c2.wy))
+              OR (    TRUNC (c.data, 'mm') = TO_DATE ( :ed, 'dd.mm.yyyy')
+                  AND :period = 3
+                  AND rh.data = TO_DATE ( :ed, 'dd.mm.yyyy')))
+         AND DECODE ( :svms_list, 0, 0, rh.tn) =
+                DECODE ( :svms_list, 0, 0, :svms_list)
+         AND DECODE ( :agent, 0, 0, rb.ag_id) = DECODE ( :agent, 0, 0, :agent)
+         AND DECODE ( :nets, 0, 0, n.id_net) = DECODE ( :nets, 0, 0, :nets)
+         AND DECODE ( :oblast, '0', '0', cpp1.tz_oblast) =
+                DECODE ( :oblast, '0', '0', :oblast)
+         AND DECODE ( :city, '0', '0', cpp1.city) =
+                DECODE ( :city, '0', '0', :city)
          AND n.id_net = cpp1.id_net
          AND rb.ag_id = mda.ag_id(+)
-         AND TRUNC (TO_DATE (:ed, 'dd.mm.yyyy'), 'mm') = mda.dt(+)
+         AND TRUNC (TO_DATE ( :ed, 'dd.mm.yyyy'), 'mm') = mda.dt(+)
 GROUP BY n.id_net,
          rb.ag_id,
          rb.kodtp,

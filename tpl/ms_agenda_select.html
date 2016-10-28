@@ -5,16 +5,16 @@
 ѕериод
 </td>
 <td>
-	<input type=radio name=period value=1 onClick="$('#per_day').attr('disabled',false);$('#week_list').attr('disabled',true);$('#dates_list2').attr('disabled',true);">день
-	<input name=dates_list2 id=per_day class="datepicker datepicker_prev1" size=10>
-	<input type=radio name=period value=2 onClick="$('#per_day').attr('disabled',true);$('#week_list').attr('disabled',false);$('#dates_list2').attr('disabled',true);">недел€
-	<select name=dates_list2 id=week_list>
+	<input type=radio name=period value=1 onClick="$('#per_day').attr('disabled',false);$('#per_week').attr('disabled',true);$('#per_month').attr('disabled',true);">день
+	<input name=per_day id=per_day class="datepicker datepicker_prev1" size=10>
+	<input type=radio name=period value=2 onClick="$('#per_day').attr('disabled',true);$('#per_week').attr('disabled',false);$('#per_month').attr('disabled',true);">недел€
+	<select name=per_week id=per_week>
 	{foreach key=key item=item from=$week_list}
 		{if $item.ms_agenda_enabled}<option value="{$item.w_start}">є {$item.wy} - {$item.w_start} - {$item.w_end}</option>{/if}
 	{/foreach}
 	</select>
-	<input type=radio name=period value=3 onClick="$('#per_day').attr('disabled',true);$('#week_list').attr('disabled',true);$('#dates_list2').attr('disabled',false);">мес€ц
-	<select name=dates_list2 id=dates_list2>
+	<input type=radio name=period value=3 onClick="$('#per_day').attr('disabled',true);$('#per_week').attr('disabled',true);$('#per_month').attr('disabled',false);">мес€ц
+	<select name=per_month id=per_month>
 	{foreach key=key item=item from=$month_list}
 		{if $item.ms_agenda_enabled}<option value="{$item.sd_c}">{$item.my}</option>{/if}
 	{/foreach}
@@ -30,9 +30,9 @@
 			}
 		)
 		{/literal}
-		$("#week_list option[value='{$smarty.request.dates_list2}']").prop('selected', true);
-		$("#dates_list2 option[value='{$smarty.request.dates_list2}']").prop('selected', true);
-		$("#per_day").val('{$smarty.request.dates_list2}');
+		$("#per_day").val('{$smarty.request.per_day}');
+		$("#per_week option[value='{$smarty.request.per_week}']").prop('selected', true);
+		$("#per_month option[value='{$smarty.request.per_month}']").prop('selected', true);
 		$("input[name=period][value={$smarty.request.period}]").attr('checked',true);
 		$("input[name=period][value={$smarty.request.period}]").click();
 	</script>

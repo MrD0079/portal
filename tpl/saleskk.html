@@ -67,6 +67,19 @@
 				<script>$('#ed').val('{$smarty.request.ed}');</script>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				Группа затрат
+			</td>
+			<td>
+				<input type=radio id=mgroups name=mgroups value=1>КОНД
+				<br>
+				<input type=radio id=mgroups name=mgroups value=2>КОФЕ
+				<br>
+				<input type=radio id=mgroups name=mgroups value=3>НГ
+				<script>$("input[name=mgroups][value={$smarty.request.mgroups}]").attr('checked',true);</script>
+			</td>
+		</tr>
 	</table>
 <br>
 
@@ -88,7 +101,7 @@
 		<td>ТМ КК</td>
 		<td>Сеть</td>
 		<td>Период</td>
-		<td style="text-align:right">Сумма продаж, {$valuta}</td>
+		<td style="text-align:right">Сумма продаж, тыс. {$valuta}</td>
 	</tr>
 	{foreach key=k item=i from=$d}
 	<tr>

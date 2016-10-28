@@ -31,20 +31,14 @@
     FROM a1503plpr_tp_select tps, user_list st, a1503plpr lpr
    WHERE     lpr.tp_kod = tps.tp_kod
          AND lpr.tab_num = st.tab_num
-         AND st.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND st.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   st.tn IN (SELECT slave
                              FROM full
                             WHERE master = DECODE (:tn, -1, master, :tn))

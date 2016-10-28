@@ -6,7 +6,7 @@
 		<tr>
 			<td>ћес€ц предоставлени€ услуги</td>
 			<td>
-				<select required name="month" id="month" onChange="$('#fin_plan_month').submit();">
+				<select required name="month" id="month" onChange="{literal}$('#fin_plan_month').find(':input').each(function(){$(this).attr('required',false);});$('#fin_plan_month').submit();{/literal}">
 					<option></option>
 					{foreach key=key item=item from=$calendar_months}
 					<option
@@ -45,7 +45,7 @@
 		<tr>
 			<td>—тать€ дествует ежемес€чно целый год</td>
 			<td>
-				<select name="statya_on_year" id="statya_on_year" onChange="$('#fin_plan_month').submit();">
+				<select name="statya_on_year" id="statya_on_year" onChange="{literal}$('#fin_plan_month').find(':input').each(function(){$(this).attr('required',false);});$('#fin_plan_month').submit();{/literal}">
 					<option value=0>нет</option><option value=1>да</option>
 				</select>
 			</td>
@@ -55,7 +55,7 @@
 			<td>‘ормат оплаты</td>
 			<td>
 				{foreach key=key item=item from=$payment_format}
-					<input required {if $item.id eq 1}checked{/if} id="payment_format" name="payment_format" value={$item.id} type="radio" onClick="$('#fin_plan_month').submit();">{$item.pay_format}
+					<input required {if $item.id eq 1}checked{/if} id="payment_format" name="payment_format" value={$item.id} type="radio" onClick="{literal}$('#fin_plan_month').find(':input').each(function(){$(this).attr('required',false);});$('#fin_plan_month').submit();{/literal}">{$item.pay_format}
 				{/foreach}
 			</td>
 		</tr>
@@ -184,53 +184,6 @@
 				{/if}
 			{/foreach}
 		{else}
-/*			{if !$smarty.request.save_month}
-				{if $smarty.request.statya_enabled}
-					{foreach key=key item=item from=$smarty.request.statya_enabled}
-						$("#statya_enabled{$key}").prop('checked',true);
-					{/foreach}
-				{/if}
-				{if $smarty.request.cnt}
-					{foreach key=key item=item from=$smarty.request.cnt}
-					$('#cnt{$key}').val({$item});
-						$('#cnt{$key}').val({$item});
-					{/foreach}
-				{/if}
-				{if $smarty.request.mkk_ter}
-					{foreach key=key item=item from=$smarty.request.mkk_ter}
-						{if $item}$("#mkk_ter{$key} option[value='{$item}']").prop('selected', true);{/if}
-					{/foreach}
-				{/if}
-				{if $smarty.request.payer}
-					{foreach key=key item=item from=$smarty.request.payer}
-						{if $item neq null}$("#payer{$key} option[value='{$item}']").prop('selected', true);{/if}
-					{/foreach}
-				{/if}
-				{if $smarty.request.payment_format eq 1}
-					{if $smarty.request.bonus}
-						{assign var=w1 value=0}
-						$('#total_bonus').val(0);
-						{foreach key=key item=item from=$smarty.request.bonus}
-							{if $item}
-								$('#bonus{$key}').val("{$item}");
-								{assign var=w1 value=`$w1+$item`}
-	                                
-							{/if}
-						{/foreach}
-						{if $w1>0}
-						$('#total_bonus').val({$w1});
-						{/if}
-					{/if}
-				{/if}
-				{if $smarty.request.payment_format eq 2}
-					{if $smarty.request.price}
-						{foreach key=key item=item from=$smarty.request.price}
-							{if $item}$('#price{$key}').val("{$item}");{/if}
-						{/foreach}
-					{/if}
-				{/if}
-			{/if}
-*/
 		{/if}
 	</script>
 	{if $smarty.request.month}

@@ -6,6 +6,7 @@ audit ("открыл отчет по тренингам common","tr");
 
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
+InitRequestVar("tr_pt_rep_common_datauvol",'all');
 
 //':h_eta'=>"'".$_SESSION["h_eta"]."'",
 
@@ -14,6 +15,7 @@ $params=array(
 ':dpt_id' => $_SESSION["dpt_id"],
 ":sd"=>"'".$_REQUEST["dates_list1"]."'",
 ":ed"=>"'".$_REQUEST["dates_list2"]."'",
+':tr_pt_rep_common_datauvol'=>"'".$_REQUEST['tr_pt_rep_common_datauvol']."'",
 );
 
 $sql=rtrim(file_get_contents('sql/tr_pt_rep_common_select_pos.sql'));

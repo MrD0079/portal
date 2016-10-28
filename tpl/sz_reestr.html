@@ -198,24 +198,29 @@
 		<td style="text-align:center">
 			{$i.head.id}
 			</br>
-			{if ($i.head.creator_tn eq $tn or ($is_do or $is_admin)) and ($i.head.current_status eq 2 or $i.head.not_seen eq 1)}
+			{if ($i.head.creator_tn eq $tn or ($is_do or $is_admin)) and ($i.head.current_status eq 2 or $i.head.not_seen eq 1) and $i.head.cat_id neq 927679}
 				<nobr>удал.<input type=checkbox name=del[] value={$i.head.id}></nobr>
 				</br>
 			{/if}
 			{if
 				(
-					$i.head.creator_tn eq $tn
-					and
 					(
-						$i.head.current_status eq 2
-						or
-						$i.head.not_seen eq 1
+						$i.head.creator_tn eq $tn
+						and
+						(
+							$i.head.current_status eq 2
+							or
+							$i.head.not_seen eq 1
+						)
 					)
-					and
-					$i.head.cat_id neq 927679
+					or
+					(
+						($is_do or $is_admin)
+						and
+						$i.head.current_status neq 1
+					)
 				)
-				or
-				(($is_do or $is_admin) and $i.head.current_status neq 1)
+				 and $i.head.cat_id neq 927679
 			}
 				<a target=_blank href="?action=sz_new&id={$i.head.id}">ред.</a>
 				</br>
@@ -271,7 +276,12 @@
 				<font style="color:blue">{$i.head.valid_lu}</font>
 				<br>
 			{/if}
-			{if $i.head.current_status eq 1 and ((($is_do or $is_admin) and $i.head.valid_no neq 1) or $is_admin)}
+			{if
+				(
+					$i.head.current_status eq 1 and ((($is_do or $is_admin) and $i.head.valid_no neq 1) or $is_admin)
+				)
+				and $i.head.cat_id neq 927679
+			}
 				<input onclick="
 				$('#valid_no_{$i.head.id}').val(this.checked?1:0);
 				$('#valid_text_{$i.head.id}').attr('disabled',!this.checked);

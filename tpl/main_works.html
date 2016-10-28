@@ -1,16 +1,16 @@
-<table class="main_works" style="text-align: center; width:300px" cellpadding="1" cellspacing="1">
+<table class="main_works" style="text-align: center; width:330px;">
     <tr style="font-weight:bold;background-color: #F5E3BF">
-      <td style="width:120px" rowspan=2>Статусы</td>
-      <td style="width:30px" rowspan=2>Я</td>
-      <td style="width:150px" colspan=2>Подчиненные</td>
+      <td rowspan=2>Статусы</td>
+      <td rowspan=2>Я</td>
+      <td colspan=2>Подчиненные</td>
     </tr>
     <tr style="font-weight:bold;background-color: #F5E3BF">
-      <td style="width:75px">Прямые</td>
-      <td style="width:75px">Непрямые</td>
+      <td>Прямые</td>
+      <td>Непрямые</td>
     </tr>
     <tr style="background-color: rgb(204, 255, 255);">
       <td>Всего сотр.</td>
-      <td><!--{foreach item=i key=k from=$pr_count}{if $i.full eq -2}{$i.c}{/if}{/foreach}-->1</td>
+      <td></td>
       <td>{foreach item=i key=k from=$pr_count}{if $i.full eq 1}{$i.c}{/if}{/foreach}</td>
       <td>{foreach item=i key=k from=$pr_count}{if $i.full eq 0}{$i.c}{/if}{/foreach}</td>
     </tr>
@@ -68,6 +68,7 @@
     <tr style="background-color: rgb(204, 204, 255);">
       <td style="font-weight:bold" colspan="4" rowspan="1">Документы на подтверждение</td>
     </tr>
+<!--
     <tr style="background-color: rgb(204, 204, 255);">
       <td>Участие в ДЦ</td>
       <td>{foreach item=i key=k from=$dc}{if $i.full eq -2}{$i.c}{/if}{/foreach}</td>
@@ -96,10 +97,13 @@
       <td></td>
       <td></td>
     </tr>
+	-->
+	
+	
     <tr style="background-color: rgb(204, 204, 255);">
       <td>СЗ</td>
-      <td><a href="?action=sz_accept">{$sz_my_creator.c}</a></td>
-      <td colspan=2 {if $sz_my_acceptor.c > 0}style="background-color:red"{/if}><a href="?action=sz_accept">{$sz_my_acceptor.c}</a></td>
+<!--      <td><a href="?action=sz_accept">{$sz_my_creator.c}</a></td>-->
+      <td colspan=3 {if $sz_my_acceptor.c > 0}style="background-color:red"{/if}><a href="?action=sz_accept">{$sz_my_acceptor.c}</a></td>
     </tr>
 <!--
     <tr style="background-color: rgb(204, 204, 255);">
@@ -111,7 +115,7 @@
       <td>Обходные листы</td>
       <td colspan="3" {if $ol_staff > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=ol_staff">{$ol_staff}</a></td>
     </tr>
-    <tr style="background-color: rgb(204, 204, 255);">
+<!--    <tr style="background-color: rgb(204, 204, 255);">
       <td>Протоколы</td>
       <td colspan="3" {if $distr_prot > 0}style="background-color:red"{/if} rowspan="1"><a href="?action=distr_prot&refresh=1
 &da_deleted=0
@@ -131,6 +135,29 @@
 &da_full=1
 ">{$distr_prot}</a></td>
     </tr>
+-->
+	
+    <tr style="background-color:#FFCC66">
+      <td style="font-weight:bold" colspan="4" rowspan="1">Торговые условия</td>
+    </tr>
+	<tr style="background-color:#FFCC66">
+		<td>Цели на переговоры</td>
+		<td colspan=3 {if $bud_ru_zay_accept_total_tu1.c > 0}style="background-color:red"{/if}><a href="?action=bud_ru_zay_accept&wait4myaccept=0&tu=1">{$bud_ru_zay_accept_total_tu1.c}</a></td>
+	</tr>
+	<tr style="background-color:#FFCC66">
+		<td>Ожидаются переговоры</td>
+		<td {if $bud_ru_zay_report_total1_i_tu1.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&tu=1&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=1&select=1&dates_list1={$bud_ru_zay_report_total1_i_tu1.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_i_tu1.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_i_tu1.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total1_o_tu1.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&tu=1&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total1_o_tu1.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_o_tu1.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_o_tu1.c|default:0}</a></td>
+	</tr>
+	<tr style="background-color:#FFCC66">
+		<td>Результаты переговоров</td>
+		<td colspan=3 {if $bud_ru_zay_report_accept_total_tu1.c > 0}style="background-color:red"{/if}><a href="?action=bud_ru_zay_report_accept&wait4myaccept=0&select=1&tu=1">{$bud_ru_zay_report_accept_total_tu1.c|default:0}</a></td>
+	</tr>
+	<tr style="background-color:#FFCC66">
+		<td>Загрузить КС</td>
+		<td></td>
+		<td colspan=2></td>
+	</tr>
 
 
     <tr style="background-color: rgb(153, 255, 153)">
@@ -138,30 +165,30 @@
     </tr>
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Согласование заявки</td>
-		<td colspan=3 {if $bud_ru_zay_accept_total.c > 0}style="background-color:red"{/if}><a href="?action=bud_ru_zay_accept&wait4myaccept=0">{$bud_ru_zay_accept_total.c}</a></td>
+		<td colspan=3 {if $bud_ru_zay_accept_total_tu0.c > 0}style="background-color:red"{/if}><a href="?action=bud_ru_zay_accept&wait4myaccept=0&tu=0">{$bud_ru_zay_accept_total_tu0.c}</a></td>
 	</tr>
 	{if $is_traid or $is_traid_kk}
 	{/if}
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Нет срока подачи отчета</td>
-		<td {if $bud_ru_zay_reestr_total_i.c > 0}style="background-color:red"{/if}>           <a href="?action=bud_ru_zay_reestr&status=1&report_data=2&who=1&select=1&dates_list1={$bud_ru_zay_reestr_total_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_reestr_total_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_reestr_total_i.full2|default:0}</a></td>
-		<td {if $bud_ru_zay_reestr_total_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_reestr&status=1&report_data=2&who=2&select=1&dates_list1={$bud_ru_zay_reestr_total_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_reestr_total_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_reestr_total_o.full01|default:0}</a></td>
+		<td {if $bud_ru_zay_reestr_total_i.c > 0}style="background-color:red"{/if}>           <a href="?action=bud_ru_zay_reestr&tu=0&status=1&report_data=2&who=1&select=1&dates_list1={$bud_ru_zay_reestr_total_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_reestr_total_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_reestr_total_i.full2|default:0}</a></td>
+		<td {if $bud_ru_zay_reestr_total_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_reestr&tu=0&status=1&report_data=2&who=2&select=1&dates_list1={$bud_ru_zay_reestr_total_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_reestr_total_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_reestr_total_o.full01|default:0}</a></td>
 	</tr>
 	{if $is_db}
 	{/if}
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Ожидают отчета</td>
-		<td {if $bud_ru_zay_report_total1_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=1&select=1&dates_list1={$bud_ru_zay_report_total1_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_i.c|default:0}</a></td>
-		<td {if $bud_ru_zay_report_total1_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total1_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_o.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total1_i_tu0.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&tu=0&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=1&select=1&dates_list1={$bud_ru_zay_report_total1_i_tu0.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_i_tu0.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_i_tu0.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total1_o_tu0.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&tu=0&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=0&who=2&select=1&dates_list1={$bud_ru_zay_report_total1_o_tu0.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total1_o_tu0.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total1_o_tu0.c|default:0}</a></td>
 	</tr>
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Отчет просрочен</td>
-		<td {if $bud_ru_zay_report_total3_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=2&who=1&select=1&dates_list1={$bud_ru_zay_report_total3_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_i.c|default:0}</a></td>
-		<td {if $bud_ru_zay_report_total3_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=2&who=2&select=1&dates_list1={$bud_ru_zay_report_total3_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_o.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total3_i.c > 0}style="background-color:red"{/if}>          <a href="?action=bud_ru_zay_report&tu=0&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=2&who=1&select=1&dates_list1={$bud_ru_zay_report_total3_i.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_i.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_i.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_total3_o.c > 0}style="background-color:red"{/if} colspan=2><a href="?action=bud_ru_zay_report&tu=0&wait4myaccept=1&status=2&report_done_flt=2&srok_ok=2&who=2&select=1&dates_list1={$bud_ru_zay_report_total3_o.min_dt|default:$smarty.request.dates_list1}&dates_list2={$bud_ru_zay_report_total3_o.max_dt|default:$smarty.request.dates_list2}">{$bud_ru_zay_report_total3_o.c|default:0}</a></td>
 	</tr>
 	<tr style="background-color: rgb(153, 255, 153);">
 		<td>Согласование отчета</td>
-		<td {if $bud_ru_zay_report_accept_total.c > 0}style="background-color:red"{/if} colspan=3><a href="?action=bud_ru_zay_report_accept&wait4myaccept=0&select=1">{$bud_ru_zay_report_accept_total.c|default:0}</a></td>
+		<td {if $bud_ru_zay_report_accept_total_tu0.c > 0}style="background-color:red"{/if} colspan=3><a href="?action=bud_ru_zay_report_accept&wait4myaccept=0&select=1&tu=0">{$bud_ru_zay_report_accept_total_tu0.c|default:0}</a></td>
 	</tr>
     <tr style="background-color: #FFCCFF;">
       <td style="font-weight:bold" colspan="4" rowspan="1">Реализация задач</td>

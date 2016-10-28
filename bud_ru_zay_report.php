@@ -1,10 +1,5 @@
 <?
-
-
-//ses_req();
-
-//audit ("открыл реестр отчетов по активности","bud_ru_zay");
-
+$_REQUEST["tu"]==1?$doc_str="торговые условия":$doc_str="заявка на проведение активности";
 $dyn_flt='';
 if (isset($_REQUEST["dyn_flt"]))
 {
@@ -16,12 +11,14 @@ if (isset($_REQUEST["dyn_flt"]))
 	(count($a1)>0)?$dyn_flt='AND z.id IN (SELECT z_id FROM bud_ru_zay_ff WHERE val_list IN ('.join($a1,',').') HAVING COUNT (*) = '.count($a1).' GROUP BY z_id)':$dyn_flt='';
 }
 
+InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 InitRequestVar("who",0);
 InitRequestVar("status",0);
 InitRequestVar("srok_ok",0);
 InitRequestVar("report_done_flt",0);
+InitRequestVar("report_zero_cost_flt",0);
 InitRequestVar("st",0);
 InitRequestVar("kat",0);
 InitRequestVar("creator",0);
@@ -37,6 +34,11 @@ InitRequestVar("wait4myaccept",1);
 InitRequestVar("date_between_brzr","dt12");
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
+
+$sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
+$sql=stritr($sql,$params);
+$exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('exp_list_without_ts', $exp_list_without_ts);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_st_ras.sql'));
 $sql=stritr($sql,$params);
@@ -78,6 +80,22 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('department_list', $data);
 
+if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
+{
+	//ses_req();
+	$_REQUEST["select"]=1;
+	$keys = array("id"=>$_REQUEST["reset_z_id"]);
+	$vals = array("report_done"=>null,"report_zero_cost"=>null);
+	Table_Update("bud_ru_zay",$keys,$vals);
+	$keys = array("z_id"=>$_REQUEST["reset_z_id"]);
+	$vals = array("rep_accepted"=>0);
+	Table_Update("bud_ru_zay_accept",$keys,$vals);
+	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"],"plan_type"=>4);
+	Table_Update("nets_plan_month",$keys,null);
+	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"]);
+	Table_Update("invoice",$keys,null);
+}
+
 if (isset($_REQUEST["save"]))
 {
 	//ses_req();
@@ -89,6 +107,68 @@ if (isset($_REQUEST["save"]))
 			$keys = array("id"=>$k);
 			$vals = array("report_done"=>$v);
 			Table_Update("bud_ru_zay",$keys,$vals);
+		}
+	}
+	if (isset($_REQUEST["report_zero_cost"]))
+	{
+		//ses_req();
+		foreach ($_REQUEST["report_zero_cost"] as $k=>$v)
+		{
+			$keys = array("id"=>$k);
+			$vals = array("report_zero_cost"=>$v);
+			Table_Update("bud_ru_zay",$keys,$vals);
+			if ($v==1)
+			{
+				$keys = array("id"=>$k);
+				$vals = array("report_done"=>1);
+				Table_Update("bud_ru_zay",$keys,$vals);
+				$keys = array("z_id"=>$k);
+				$vals = array("rep_accepted"=>1);
+				Table_Update("bud_ru_zay_accept",$keys,$vals);
+				$keys = array("z_id"=>$k,"tn"=>$tn);
+				$vals = array("text"=>"Данный отчет по активности был подтвержден автоматически, так как отображает нулевые затраты");
+				Table_Update("bud_ru_zay_rep_chat",$keys,$vals);
+			}
+		}
+	}
+	if (isset($_REQUEST["report_fakt_equal_plan"]))
+	{
+		foreach ($_REQUEST["report_fakt_equal_plan"] as $k=>$v)
+		{
+			$keys = array("id"=>$k);
+			$vals = array("report_fakt_equal_plan"=>$v);
+			Table_Update("bud_ru_zay",$keys,$vals);
+			if ($v==1)
+			{
+				$keys = array("id"=>$k);
+				$vals = array("report_done"=>1);
+				Table_Update("bud_ru_zay",$keys,$vals);
+				$keys = array("z_id"=>$k);
+				$vals = array("rep_accepted"=>1);
+				Table_Update("bud_ru_zay_accept",$keys,$vals);
+				$keys = array("z_id"=>$k,"tn"=>$tn);
+				$vals = array("text"=>"Результаты переговоров были подтверждены автоматически, так как полностью соответствуют целям на переговоры");
+				Table_Update("bud_ru_zay_rep_chat",$keys,$vals);
+				$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_copy_plan2fakt.sql'));
+				$params=array(':z_id' => $k);
+				$sql=stritr($sql,$params);
+				$data = $db->query($sql);
+				$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_copy_plan2fakt_files.sql'));
+				$p=array(':z_id' => $k);
+				$sql=stritr($sql,$p);
+				$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+				foreach ($data as $k1=>$v1)
+				{
+					$a=explode("\n",$v1["val_file"]);
+					foreach ($a as $v)
+					{
+						$pathFrom="bud_ru_zay_files/".$k."/".$v1['ff_id'];
+						$pathTo="bud_ru_zay_files/".$k."/".$v1['ff_id']."/report";
+						if (!file_exists($pathTo)) {mkdir($pathTo,0777,true);}
+						copy($pathFrom."/".$v, $pathTo."/".$v);
+					}
+				}
+			}
 		}
 	}
 	if (isset($_REQUEST["new_st"]))
@@ -117,7 +197,6 @@ if (isset($_REQUEST["save"]))
 			{
 				unlink($v1);
 				$del_array[]=$k1;
-				audit ("удалил из отчета по активности №".$id." файл ".$v1,"bud_ru_zay");
 			}
 			$vals = array("rep_val_file"=>implode(array_diff($ov,$del_array),"\n"));
 			Table_Update("bud_ru_zay_ff",$keys,$vals);
@@ -147,7 +226,6 @@ if (isset($_REQUEST["save"]))
 				$keys = array("id"=>$k);
 				$vals = array("rep_val_file"=>$ss.$old_val);
 				Table_Update("bud_ru_zay_ff",$keys,$vals);
-				audit ("добавил в отчет по активности №".$id." файл ".$fn,"bud_ru_zay");
 			}
 			}
 		}
@@ -166,7 +244,6 @@ if (isset($_REQUEST["save"]))
 			{
 				unlink($v1);
 				$del_array[]=$k1;
-				audit ("удалил из отчета по активности №".$k." подтверждающий документ ".$v1,"bud_ru_zay");
 			}
 			$vals = array("sup_doc"=>implode(array_diff($ov,$del_array),"\n"));
 			Table_Update("bud_ru_zay",$keys,$vals);
@@ -194,7 +271,6 @@ if (isset($_REQUEST["save"]))
 				$keys = array("id"=>$k);
 				$vals = array("sup_doc"=>$ss.$old_val);
 				Table_Update("bud_ru_zay",$keys,$vals);
-				audit ("добавил в отчет по активности №".$k." подтверждающий документ ".$fn,"bud_ru_zay");
 			}
 			}
 		}
@@ -213,18 +289,17 @@ if (isset($_REQUEST["add_chat"]))
 			if ($v!="")
 			{
 				Table_Update("bud_ru_zay_rep_chat",array("tn"=>$tn,"z_id"=>$k,"text"=>$v),array("tn"=>$tn,"z_id"=>$k,"text"=>$v));
-				audit ("оставил по отчету по активности №".$k." комментарий: ".$v,"bud_ru_zay");
 				$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_chat.sql'));
 				$params=array(':z_id' => $k,':tn' => $tn);
 				$sql=stritr($sql,$params);
 				$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 				foreach ($data as $k1=>$v1)
 				{
-					$subj="Уточнение по отчету по активности №".$v1["z_id"]." от ".$v1["created"];
+					$subj=$doc_str." №".$v1["z_id"]." от ".$v1["created"].". Уточнение";
 					$text="Здравствуйте ".$v1["fio"]."<br>";
-					$text.="По отчету по активности №".$v1["z_id"]." от ".$v1["created"]."<br>";
+					$text.=$doc_str." №".$v1["z_id"]." от ".$v1["created"]."<br>";
 					$text.=$fio." оставил(а) комментарий/уточнение: ".$v."<br>";
-					$text.="Просьба ответить на комментарий/уточнение по отчету по активности в разделе <a href=\"https://ps.avk.ua/?action=bud_ru_zay_report\">Реестр отчетов по активности</a>";
+					$text.="Просьба ответить на комментарий/уточнение <a href=\"https://ps.avk.ua/?action=bud_ru_zay_report&tu=".$_REQUEST["tu"]."\">Здесь</a>";
 					$email=$v1["email"];
 					send_mail($email,$subj,$text);
 				}
@@ -235,6 +310,7 @@ if (isset($_REQUEST["add_chat"]))
 
 
 $params=array(
+':exp_list_without_ts' => $_REQUEST["exp_list_without_ts"],
 ':tn' => $tn,
 ':dpt_id' => $_SESSION["dpt_id"],
 ":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
@@ -242,6 +318,7 @@ $params=array(
 ":status"=>$_REQUEST["status"],
 ":srok_ok"=>$_REQUEST["srok_ok"],
 ":report_done_flt"=>$_REQUEST["report_done_flt"],
+":report_zero_cost"=>$_REQUEST["report_zero_cost_flt"],
 ":st"=>$_REQUEST["st"],
 ":kat"=>$_REQUEST["kat"],
 ":creator"=>$_REQUEST["creator"],
@@ -257,6 +334,7 @@ $params=array(
 "/*dyn_flt*/"=>$dyn_flt,
 ":z_id"=>$_REQUEST["z_id"],
 ':date_between_brzr' => "'".$_REQUEST["date_between_brzr"]."'",
+':tu'=>$_REQUEST['tu']
 );
 
 
@@ -277,10 +355,11 @@ if ($_REQUEST["z_id"]!=0)
 		$params[":status"]=0;
 		$params[":srok_ok"]=0;
 		$params[":report_done_flt"]=0;
+		$params[":report_zero_cost"]=0;
 		$params[":st"]=0;
 		$params[":kat"]=0;
 		$params[":creator"]=0;
-		$params[":country"]="'".$_SESSION["cnt_kod"]."'";
+		$params[":country"]="0"/*"'".$_SESSION["cnt_kod"]."'"*/;
 		$params[":bud_ru_zay_pos_id"]=0;
 		$params[":fil"]=0;
 		$params[":funds"]=0;
@@ -288,10 +367,11 @@ if ($_REQUEST["z_id"]!=0)
 		$params[":region_name"]="0";
 		$params[":department_name"]="0";
 		$params[":wait4myaccept"]=1;
+		$params[":tu"]=$_REQUEST["tu"];
 	}
 }
 
-if (isset($_REQUEST["select"]))
+if (isset($_REQUEST["select"])&&(!isset($_REQUEST["showonlysvod"])))
 {
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report.sql'));
@@ -302,6 +382,7 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($data as $k=>$v)
 {
 $d[$v["id"]]["head"]=$v;
+$d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
 $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
 if ($v["chat_id"]!="")
 {
@@ -329,7 +410,7 @@ foreach ($d as $k=>$v)
 			$v1["val_file"]!=null?$data[$k1]["val_file"]=explode("\n",$v1["val_file"]):null;
 			$v1["rep_val_file"]!=null?$data[$k1]["rep_val_file"]=explode("\n",$v1["rep_val_file"]):null;
 		}
-		if ($v1['type']=='list')
+		/*if ($v1['type']=='list')
 		{
 			if ($v1['val_list'])
 			{
@@ -349,16 +430,15 @@ foreach ($d as $k=>$v)
 			$data[$k1]['rep_val_list_name'] = $list;
 			}
 
-		}
-/*
-		if ($v1['type']=='list')
+		}*/
+		if (($v1['type']=='list')&&($v1['autocomplete']!=1))
 		{
 			$sql=$db->getOne('select get_list from bud_ru_ff_subtypes where id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
 			$sql=stritr($sql,$params);
 			$list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$data[$k1]['list'] = $list;
 		}
-*/
+
 	}
 	include "bud_ru_zay_formula.php";
 	$d[$k]["ff"]=$data;
@@ -369,7 +449,8 @@ foreach ($d as $k=>$v)
 
 //print_r($d);
 
-
+//$_REQUEST["d"]=$d;
+//ses_req();
 
 //print_r($params);
 
@@ -381,26 +462,35 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('d1', $data);
 
+}
+
+if (isset($_REQUEST["select"]))
+{
 
 
 
-$params[":status"]=1;
+//$params[":status"]=1;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_ff.sql'));
 $sql=stritr($sql,$params);
 $bud_ru_ff = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_ff', $bud_ru_ff);
 
+//echo $sql;
+
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_ff_st_ras.sql'));
 $sql=stritr($sql,$params);
 $bud_ru_ff_st_ras = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_ff_st_ras', $bud_ru_ff_st_ras);
+
+//echo $sql;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_ff_st.sql'));
 $sql=stritr($sql,$params);
 $bud_ru_ff_st = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_ff_st', $bud_ru_ff_st);
 
+//echo $sql;
 
 
 

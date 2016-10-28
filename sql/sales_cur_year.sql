@@ -1,4 +1,4 @@
-/* Formatted on 08/10/2015 12:22:07 (QP5 v5.252.13127.32867) */
+/* Formatted on 20/11/2015 9:48:29 AM (QP5 v5.252.13127.32867) */
   SELECT DECODE ( :plan_type,
                  3, (SELECT NVL (SUM (PLAN), 0)
                        FROM networkplanfact
@@ -17,6 +17,15 @@
                             AND YEAR = :YEAR),
                  y.sales_ng)
             sales_ng,
+         DECODE ( :plan_type,
+                 3, (SELECT NVL (SUM (PLAN), 0)
+                       FROM networkplanfact
+                      WHERE     id_net = (SELECT sw_kod
+                                            FROM nets
+                                           WHERE id_net = :net)
+                            AND YEAR = :YEAR),
+                 y.sales_coffee)
+            sales_coffee,
          SUM (m.total) zatr,
            DECODE (DECODE ( :plan_type,
                            3, (SELECT NVL (SUM (PLAN), 0)
@@ -41,7 +50,8 @@
          y.ok_rmkk_tmkk,
          y.ok_fin_man,
          y.sales_prev,
-         y.sales_prev_ng
+         y.sales_prev_ng,
+         y.sales_prev_coffee
     FROM nets_plan_year y,
          nets_plan_month m,
          (SELECT DISTINCT y
@@ -58,5 +68,7 @@ GROUP BY c.y,
          y.sales_prev,
          y.sales_ng,
          y.sales_prev_ng,
+         y.sales_coffee,
+         y.sales_prev_coffee,
          y.ok_rmkk_tmkk,
          y.ok_fin_man

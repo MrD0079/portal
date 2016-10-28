@@ -4,7 +4,7 @@
 
 
 
-$sql=rtrim(file_get_contents('sql/bud_ru_ff_subtypes.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_ff_subfields.sql'));
 $params=array(':dpt_id' => $_SESSION["dpt_id"]);
 $params[":tn"]=$tn;
 $sql=stritr($sql,$params);

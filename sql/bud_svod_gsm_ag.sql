@@ -54,20 +54,14 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
        AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
        AND :dpt_id = sv.dpt_id(+)
        AND r.h_eta = sv.h_eta(+)
-       AND u.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_without_ts,
-                                 0, master,
-                                 :exp_list_without_ts))
-       AND u.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_only_ts,
-                                 0, master,
-                                 :exp_list_only_ts))
+       AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+       AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
        AND (   u.tn IN (SELECT slave
                           FROM full
                          WHERE master = :tn)
@@ -77,7 +71,8 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
             OR (SELECT NVL (is_traid_kk, 0)
                   FROM user_list
                  WHERE tn = :tn) = 1)
-       AND DECODE (:eta_list, '', r.h_eta, :eta_list) = r.h_eta
+       AND (:eta_list is null OR :eta_list = r.h_eta)
+       AND sv.unscheduled = 0
 UNION
 SELECT sv.id,
        u.fio ts,
@@ -126,20 +121,14 @@ SELECT sv.id,
        /*AND u.datauvol IS NULL*/
        AND u.dpt_id = sv.dpt_id
        AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
-       AND u.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_without_ts,
-                                 0, master,
-                                 :exp_list_without_ts))
-       AND u.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_only_ts,
-                                 0, master,
-                                 :exp_list_only_ts))
+       AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+       AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
        AND (   u.tn IN (SELECT slave
                           FROM full
                          WHERE master = :tn)
@@ -149,4 +138,5 @@ SELECT sv.id,
             OR (SELECT NVL (is_traid_kk, 0)
                   FROM user_list
                  WHERE tn = :tn) = 1)
+       AND sv.unscheduled = 1
 ORDER BY unscheduled NULLS FIRST, ts, eta

@@ -36,20 +36,14 @@
          AND u.dpt_id = :dpt_id
          AND s.dpt_id = :dpt_id
          AND s.db_tn = DECODE (:db, 0, s.db_tn, :db)
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)
@@ -59,7 +53,7 @@
               OR (SELECT NVL (is_traid_kk, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND DECODE (:eta_list, '', s.h_fio_eta, :eta_list) = s.h_fio_eta
+         AND (:eta_list is null OR :eta_list = s.h_fio_eta)
          AND zp.h_eta = s.h_fio_eta
          AND DECODE (:fil, 0, zp.fil, :fil) = zp.fil
          AND z.fund_id = DECODE (:funds, 0, z.fund_id, :funds)

@@ -1,7 +1,5 @@
 <?
-
 require_once "bud_svod_zp_ag_total_getRow.php";
-
 InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("db",0);
 InitRequestVar("eta_list",$_SESSION["h_eta"]);
@@ -13,7 +11,6 @@ InitRequestVar("ok_db",1);
 InitRequestVar("ok_t1",1);
 InitRequestVar("ok_pr",1);
 InitRequestVar("ok_t2",1);
-
 $params=array(
 	':tn' => $tn,
 	':dpt_id' => $_SESSION["dpt_id"],
@@ -27,69 +24,33 @@ $params=array(
 	':ok_pr' => $_REQUEST["ok_pr"],
 	':ok_t2' => $_REQUEST["ok_t2"],
 );
-
 $sql = rtrim(file_get_contents('sql/bud_funds.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
 foreach ($x as $k=>$v)
 {
 	$d[$v['kod']]['fund_name']=$v['name'];
 }
-
 isset($d)?$smarty->assign('funds', $d):null;
 
-/*
+$d1=date("Y-m-d H:i:s");
+$smarty->assign('d1', $d1);
 
 $sql = rtrim(file_get_contents('sql/bud_svod_ta_list.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
-foreach ($x as $k=>$v)
-{
-	$d['funds']['fund'.$v['fund_id']]['fund_name']=$v['fund_name'];
-	$d['data'][$v['fil_id']]['head']['fil_name']=$v['fil_name'];
-	$d['data'][$v['fil_id']]['fund'.$v['fund_id']]=$v;
-}
-
-*/
-$sql = rtrim(file_get_contents('sql/bud_svod_ta_list.sql'));
-$sql=stritr($sql,$params);
-$x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
-
-//echo $sql;
-
-/*
-foreach ($x as $k=>$v)
-{
-	$d['data'][$v['fil_id']]['total']=$v['total'];
-	$d['data'][$v['fil_id']]['sales_fact']=$v['sales_fact'];
-}
-*/
-
-//isset($d)?$smarty->assign('x', $d):null;
-
-
 $smarty->assign('x', $x);
+
+$d2=date("Y-m-d H:i:s");
+$smarty->assign('d2', $d2);
 
 $sql = rtrim(file_get_contents('sql/bud_svod_ta_list_total.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('xt', $x);
 
-$sql = rtrim(file_get_contents('sql/bud_svod_ta_list_dp.sql'));
-$sql=stritr($sql,$params);
-$x = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('dp', $x);
+$d3=date("Y-m-d H:i:s");
+$smarty->assign('d3', $d3);
 
 $smarty->display('bud_svod_ta_list.html');
-
-
-//print_r($d);
-
-
-
-
-
 ?>

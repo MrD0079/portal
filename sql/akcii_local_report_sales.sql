@@ -51,20 +51,14 @@
          AND s.tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
          /*AND u.datauvol IS NULL*/
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_without_ts,
-                                   0, master,
-                                   :exp_list_without_ts))
-         AND u.tn IN
-                (SELECT slave
-                   FROM full
-                  WHERE master =
-                           DECODE (:exp_list_only_ts,
-                                   0, master,
-                                   :exp_list_only_ts))
+         AND (   :exp_list_without_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_only_ts = 0
+                      OR u.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
          AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :tn)
@@ -74,7 +68,7 @@
               OR (SELECT NVL (is_traid_kk, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND DECODE (:eta_list, '', s.h_eta, :eta_list) = s.h_eta
+         AND (:eta_list is null OR :eta_list = s.h_eta)
          AND DECODE (:ok_selected,  1, 0,  2, t.tp_kod) =
                 DECODE (:ok_selected,  1, 0,  2, NVL (t.tp_kod, 0))
 ORDER BY ts,

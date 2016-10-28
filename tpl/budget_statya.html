@@ -184,7 +184,7 @@
 			<table border=0 width=100%>
 				{foreach key=key2 item=item2 from=$item1}
 				<tr>
-					<td style="text-align:right">{$item2.total|default:0|num:2}</td>
+					<td style="text-align:right">{$item2.total|num:2}</td>
 				</tr>
 				{/foreach}
 			</table>
@@ -192,23 +192,20 @@
 		{/foreach}
 	</tr>
 	{/foreach}
-	{foreach key=key item=item from=$budget_statya_total}
 	<tr style="font-weight:bold">
 		<td colspan=2>Итого</td>
-
-		<td><table>{foreach key=key1 item=item1 from=$item.data_y}<tr><td>{$key1}</td></tr>{/foreach}</table></td>
-		{foreach key=key1 item=item1 from=$item.data_my}
+		<td><table>{foreach key=key1 item=item1 from=$budget_statya_total.data_y}<tr><td>{$key1}</td></tr>{/foreach}</table></td>
+		{foreach key=key1 item=item1 from=$budget_statya_total.data_my}
 		<td>
 			<table border=0 width=100%>
 				{foreach key=key2 item=item2 from=$item1}
 				<tr>
-					<td style="text-align:right">{$item2.total|default:0|num:2}</td>
+					<td style="text-align:right">{$item2.total|num:2}</td>
 				</tr>
 				{/foreach}
 			</table>
 		</td>
 		{/foreach}
 	</tr>
-	{/foreach}
 </table>
 {/if}

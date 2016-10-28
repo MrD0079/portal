@@ -1,6 +1,6 @@
 <p id=ok_nmms>
 {if not $smarty.request.print and $is_nmms}
-	<input type=checkbox {$disabled} {if $ok_nmms}checked{/if} onChange="save_tabel_dt('{$smarty.request.dates_list2}','ok_nmms',this.checked?1:0)">
+	<input type=checkbox {$disabled} {if $ok_nmms}checked{/if} onChange="save_tabel_dt('{$smarty.request.month_list}','ok_nmms',this.checked?1:0)">
 {/if}
 {if $ok_nmms}
 Месяц закрыт для изменений НМ МС

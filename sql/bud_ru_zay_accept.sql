@@ -1,4 +1,4 @@
-/* Formatted on 17/06/2015 12:50:03 (QP5 v5.227.12220.39724) */
+/* Formatted on 19/02/2016 17:02:35 (QP5 v5.252.13127.32867) */
   SELECT z.*, DECODE (z.current_acceptor_tn, :tn, 1, 0) allow_status_change
     FROM (SELECT bud_ru_zay.id,
                  TO_CHAR (bud_ru_zay.created, 'dd.mm.yyyy hh24:mi:ss') created,
@@ -41,8 +41,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM bud_ru_zay_accept
-                                  WHERE     z_id = bud_ru_zay.id
-                                        AND accepted = 0))
+                                  WHERE z_id = bud_ru_zay.id AND accepted = 0))
                     current_acceptor_tn,
                  fn_getname (
                     (SELECT tn
@@ -77,8 +76,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM bud_ru_zay_accept
-                                  WHERE     z_id = bud_ru_zay.id
-                                        AND accepted = 0))
+                                  WHERE z_id = bud_ru_zay.id AND accepted = 0))
                     current_accept_id,
                  (SELECT accept_order
                     FROM bud_ru_zay_accept
@@ -86,8 +84,7 @@
                          AND accept_order =
                                 (SELECT MIN (accept_order)
                                    FROM bud_ru_zay_accept
-                                  WHERE     z_id = bud_ru_zay.id
-                                        AND accepted = 0))
+                                  WHERE z_id = bud_ru_zay.id AND accepted = 0))
                     current_accept_order,
                  (SELECT id
                     FROM bud_ru_zay_accept
@@ -138,9 +135,18 @@
                  fu.name funds_name,
                  n.net_name,
                  pt.pay_type payment_type_name,
-                 ss.cost_item statya_name,bud_ru_zay.distr_compensation
+                 ss.cost_item statya_name,
+                 bud_ru_zay.distr_compensation,
+                 bud_ru_zay_executors.tn executor_tn,
+                 fn_getname (bud_ru_zay_executors.tn) executor_name,
+                 bud_ru_zay_executors.execute_order,
+                 bud_ru_zay_executors.pos_name executor_pos_name,
+                 bud_ru_zay_executors.department_name executor_department_name
             FROM bud_ru_zay,
                  bud_ru_zay_accept,
+                 (SELECT sze.*, szu.pos_name, szu.department_name
+                    FROM bud_ru_zay_executors sze, user_list szu
+                   WHERE sze.tn = szu.tn) bud_ru_zay_executors,
                  accept_types bud_ru_zayat,
                  BUD_RU_st_ras st,
                  BUD_RU_st_ras kat,
@@ -153,15 +159,19 @@
                  nets n,
                  payment_type pt,
                  statya ss
-           WHERE     bud_ru_zay.id_net = n.id_net(+)
+           WHERE     (SELECT NVL (tu, 0)
+                        FROM bud_ru_st_ras
+                       WHERE id = bud_ru_zay.kat) = :tu
+                 AND bud_ru_zay.id_net = n.id_net(+)
                  AND bud_ru_zay.payment_type = pt.id(+)
                  AND bud_ru_zay.statya = ss.id(+)
-                 AND bud_ru_zay.fil = f.id
-                 AND bud_ru_zay.funds = fu.id
+                 AND bud_ru_zay.fil = f.id(+)
+                 AND bud_ru_zay.funds = fu.id(+)
                  AND bud_ru_zay.tn = u.tn
                  AND bud_ru_zay_accept.tn = u1.tn
                  AND bud_ru_zay.recipient = u2.tn
                  AND bud_ru_zay.id = bud_ru_zay_accept.z_id(+)
+                 AND bud_ru_zay.id = bud_ru_zay_executors.z_id(+)
                  AND bud_ru_zay_accept.accepted = bud_ru_zayat.id(+)
                  AND a.z_id(+) = bud_ru_zay.id
                  AND BUD_RU_ZAY.st = st.id(+)
@@ -186,12 +196,11 @@
                              (SELECT accept_order
                                 FROM bud_ru_zay_accept
                                WHERE z_id = bud_ru_zay.id AND tn = :tn)))
-                 AND DECODE (
-                        (SELECT COUNT (*)
-                           FROM bud_ru_zay_accept
-                          WHERE z_id = bud_ru_zay.id AND accepted = 2),
-                        0, 0,
-                        1) = 0
+                 AND DECODE ( (SELECT COUNT (*)
+                                 FROM bud_ru_zay_accept
+                                WHERE z_id = bud_ru_zay.id AND accepted = 2),
+                             0, 0,
+                             1) = 0
                  AND NVL (
                         (SELECT accepted
                            FROM bud_ru_zay_accept
@@ -212,7 +221,9 @@
                                             WHERE     z_id = bud_ru_zay.id
                                                   AND accepted = 2))),
                         0) <> 1
-                 AND bud_ru_zay.valid_no = 0) z
-   WHERE DECODE (:wait4myaccept, 0, :tn, 0) =
-            DECODE (:wait4myaccept, 0, z.current_acceptor_tn, 0)
+                 AND bud_ru_zay.valid_no = 0
+                 AND DECODE ( :st, 0, 0, :st) =
+                        DECODE ( :st, 0, 0, bud_ru_zay.st)) z
+   WHERE DECODE ( :wait4myaccept, 0, :tn, 0) =
+            DECODE ( :wait4myaccept, 0, z.current_acceptor_tn, 0)
 ORDER BY z.id, z.accept_order, z.chat_time_d

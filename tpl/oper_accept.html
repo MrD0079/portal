@@ -3,8 +3,10 @@
 {if not $smarty.request.print}
 	<table>
 		<tr>
-			<td colspan=10>
+			<td>
 				Подтверждение
+			</td>
+			<td>
 				<input checked="checked" name="ok_filter" value="0" type="radio">Все
 				<input name="ok_filter" value="1" type="radio">Не подтверждено НМКК
 				<input name="ok_filter" value="2" type="radio">Не подтверждено ФМ
@@ -15,7 +17,8 @@
 		<tr>
 			<td>
 				Год
-				<br>
+			</td>
+			<td>
 				<select name=calendar_years id=calendar_years>
 					<option></option>
 					{foreach key=key item=item from=$calendar_years}
@@ -24,9 +27,12 @@
 				</select>
 				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Месяц
-				<br>
+			</td>
+			<td>
 				<select name="calendar_months" id="calendar_months">
 					<option value=0></option>
 					{foreach key=key item=item from=$calendar_months}
@@ -35,9 +41,12 @@
 				</select>
 				<script>$('#calendar_months option[value="{$smarty.request.calendar_months}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Выберите сеть из списка
-				<br>
+			</td>
+			<td>
 				<select name="nets" id="nets">
 					<option value=0></option>
 					{foreach key=key item=item from=$nets}
@@ -51,7 +60,8 @@
 			{if not $is_mkk}
 			<td>
 				НМКК
-				<br>
+			</td>
+			<td>
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>
 					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
@@ -60,9 +70,12 @@
 				</select>
 				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Ответственный ТМКК
-				<br>
+			</td>
+			<td>
 				<select name=tn_mkk id=tn_mkk>
 					<option value=0></option>
 					{foreach key=mkk_key item=mkk_item from=$list_mkk}
@@ -72,6 +85,18 @@
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 			</td>
 			{/if}
+		</tr>
+		<tr>
+			<td>
+				Группа затрат
+			</td>
+			<td>
+				<input type=radio id=mgroups name=mgroups value=0>все
+				<input type=radio id=mgroups name=mgroups value=1>КОНД
+				<input type=radio id=mgroups name=mgroups value=2>КОФЕ
+				<input type=radio id=mgroups name=mgroups value=3>НГ
+				<script>$("input[name=mgroups][value={$smarty.request.mgroups}]").attr('checked',true);</script>
+			</td>
 		</tr>
 	</table>
 	<input value="Построить отчет" name="generate" type="submit">
@@ -253,15 +278,45 @@
 	</tr>
 	<tr style="font-weight:bold">
 		<td>План продаж месяца, тыс.{$valuta}.</td>
-		<td class="bg-f" colspan=4 style="text-align:right">{$fin_report_item.plan1.plan|default:0|num:3}</td>
-		<td class="bg-d" colspan=4 style="text-align:right">{$fin_report_item.plan2.plan|default:0|num:3}</td>
-		<td class="bg-o" colspan=4 style="text-align:right">{$fin_report_item.plan3.plan|default:0|num:3}</td>
+		<td class="bg-f" colspan=4 style="text-align:right">
+			{if $smarty.request.mgroups eq 0}{$fin_report_item.plan1.plan_all|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 1}{$fin_report_item.plan1.plan|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 2}{$fin_report_item.plan1.plan_coffee|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 3}{$fin_report_item.plan1.plan_ng|default:0|num:3}{/if}
+		</td>
+		<td class="bg-d" colspan=4 style="text-align:right">
+			{if $smarty.request.mgroups eq 0}{$fin_report_item.plan2.plan_all|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 1}{$fin_report_item.plan2.plan|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 2}{$fin_report_item.plan2.plan_coffee|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 3}{$fin_report_item.plan2.plan_ng|default:0|num:3}{/if}
+		</td>
+		<td class="bg-o" colspan=4 style="text-align:right">
+			{if $smarty.request.mgroups eq 0}{$fin_report_item.plan3.plan_all|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 1}{$fin_report_item.plan3.plan|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 2}{$fin_report_item.plan3.plan_coffee|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 3}{$fin_report_item.plan3.plan_ng|default:0|num:3}{/if}
+		</td>
 	</tr>
 	<tr style="font-weight:bold">
 		<td>Затраты, %</td>
-		<td class="bg-f" colspan=4 style="text-align:right">{$fin_report_item.plan1.perc_zatr|default:0|num:3}</td>
-		<td class="bg-d" colspan=4 style="text-align:right">{$fin_report_item.plan2.perc_zatr|default:0|num:3}</td>
-		<td class="bg-o" colspan=4 style="text-align:right">{$fin_report_item.plan3.perc_zatr|default:0|num:3}</td>
+		<td class="bg-f" colspan=4 style="text-align:right">
+			{if $smarty.request.mgroups eq 0}{$fin_report_item.plan1.perc_zatr_all|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 1}{$fin_report_item.plan1.perc_zatr|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 2}{$fin_report_item.plan1.perc_zatr_coffee|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 3}{$fin_report_item.plan1.perc_zatr_ng|default:0|num:3}{/if}
+		</td>
+		<td class="bg-d" colspan=4 style="text-align:right">
+			{if $smarty.request.mgroups eq 0}{$fin_report_item.plan2.perc_zatr_all|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 1}{$fin_report_item.plan2.perc_zatr|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 2}{$fin_report_item.plan2.perc_zatr_coffee|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 3}{$fin_report_item.plan2.perc_zatr_ng|default:0|num:3}{/if}
+		</td>
+		<td class="bg-o" colspan=4 style="text-align:right">
+			{if $smarty.request.mgroups eq 0}{$fin_report_item.plan3.perc_zatr_all|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 1}{$fin_report_item.plan3.perc_zatr|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 2}{$fin_report_item.plan3.perc_zatr_coffee|default:0|num:3}{/if}
+			{if $smarty.request.mgroups eq 3}{$fin_report_item.plan3.perc_zatr_ng|default:0|num:3}{/if}
+		</td>
 	</tr>
 	</table>
 	{/foreach}

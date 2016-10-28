@@ -43,12 +43,13 @@
 <tr>
 <td>Общая сумма по счету, тыс.{$valuta}.</td>
 <td>
-<input required="required" size="10" name="new[summa]" class="number3"></td>
+<input required="required" size="10" name="new[summa]" class="number5"></td>
 </tr>
 <tr>
 <td>Плательщик</td>
 <td>
-	<select name="new[payer]" id="new[payer]">
+	<select required="required" name="new[payer]" id="new[payer]">
+		<option></option>
 		{foreach key=key item=item from=$payer}
 			<option value={$item.id}>{$item.name}</option>
 		{/foreach}
@@ -56,9 +57,12 @@
 </td>
 </tr>
 <tr>
-<td>Файлы</td>
-<td>
-<input type=file name="new_files[]" id="new_files" multiple></td>
+	<td>Счета и другие документы</td>
+	<td><input type=file name="new_files[]" id="new_files" multiple></td>
+</tr>
+<tr>
+	<td>Акты</td>
+	<td><input type=file name="new_acts[]" id="new_acts" multiple></td>
 </tr>
 <tr>
 <td>№ акта</td>

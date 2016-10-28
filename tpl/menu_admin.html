@@ -1,3 +1,6 @@
+{if $is_admin}
+<li><a href="?action=tasks">IT tasks</a></li>
+{/if}
 
 {if $is_admin or $is_acceptor or $is_test_admin}
 
@@ -39,6 +42,15 @@
 		<li><a href="?action=os_spr">Справочник для формы ОС ДЦ</a></li>
 		<li><a href="?action=os_ac_spr">Справочник для формы ОС АЦ</a></li>
 		<li><a href="?action=tmcs">Типы ТМЦ</a></li>
+		<li><a href="javascript:void(0);"><span class="dir">Презентации</span></a>
+			<ul>
+				<li><a href="?action=voiting_avg_balls">Предпочтения</a></li>
+				<li><a href="?action=voiting_tastes">Вкусы</a></li>
+				<li><a href="?action=voiting_summary_by_users">Итог по сотрудникам</a></li>
+				<li><a href="?action=voiting_summary_by_questions">Итог по вопросам</a></li>
+				<li><a href="?action=voiting_prod_color">Админка</a></li>
+			</ul>
+		</li>
 
 		{/if}
 
@@ -76,7 +88,7 @@
 
 {/if}
 
-{if $is_admin or $is_do}
+{if $is_admin or $is_do or $is_test_admin}
 
 <li><a href="javascript:void(0);"><span class="dir">Служебные записки</span></a>
 	<ul>
@@ -98,6 +110,12 @@
 		<li><a href="?action=ocenka_criteria&type=4">Критерии должностей</a></li>
 		<li><a href="?action=ocenka_test_list">Включение теста</a></li>
 		<li><a href="?action=ocenka_criteria&type=5">Вопросы теста</a></li>
+		<li><a href="javascript:void(0);"><span class="dir">Тестирование</span></a>
+			<ul>
+				<li><a href="?action=voiting_test_onoff">Включение теста</a></li>
+				<li><a href="?action=voiting_test_result">Результаты теста</a></li>
+			</ul>
+		</li>
 	</ul>
 </li>
 <li><a href="javascript:void(0);"><span class="dir">Планы активности</span></a>
@@ -140,6 +158,8 @@
 			<li><a href="?action=atd_tz">Торговые залы</a></li>
 		</ul>
 		</li>
+		<li><a href="?action=a1512t_client">"ТОП 100" - Клиенты</a></li>
+		<li><a href="?action=a1512t_tpconnect">"ТОП 100" - Клиенты - ТП</a></li>
 	</ul>
 </li>
 

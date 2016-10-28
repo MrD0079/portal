@@ -1,0 +1,152 @@
+
+<table border=1 cellpadding=0 cellspacing=0>
+	<tr style="text-align:center">
+		<td>НМКК</td>
+		<td>ТМ КК</td>
+		<td>Сеть</td>
+		<td>Форма 2,<br>тыс.{$valuta}.</td>
+		<td>Факт<br>оплаченных<br>услуг<br>по форме 2,<br>тыс.{$valuta}.</td>
+		<!--<td>Оплата товаром, тыс.{$valuta}.</td>-->
+		<!--<td>Остаток по фонду 2 на начало месяца, тыс.{$valuta}</td>-->
+		<td>Итого<br>по ТМ КК<br>Форма 2,<br>тыс.{$valuta}.</td>
+		<!--<td>Итого по ТМ КК Оплата товаром, тыс.{$valuta}.</td>-->
+		<td style="background-color: rgb(255, 255, 204);">Итого<br>по ТМ КК<br>остаток<br>по фонду 2<br>на начало месяца,<br>тыс.{$valuta}</td>
+		<td style="background-color: rgb(255, 255, 204);">Необходимая<br>к перечислению<br>сумма<br>по форме 2,<br>тыс.{$valuta}.</td>
+		<td style="background-color: rgb(255, 255, 204);">ФИО<br>получателя</td>
+		<td>Итого<br>по НМКК<br>Форма 2,<br>тыс.{$valuta}.</td>
+		<!--<td>Итого по НМКК Оплата товаром, тыс.{$valuta}.</td>-->
+		<td>Итого<br>по НМКК<br>остаток<br>по фонду 2<br>на начало месяца,<br>тыс.{$valuta}</td>
+	</tr>
+	{foreach key=key item=item from=$data_table name=data_table}
+		<tr style="vertical-align:middle;">
+		{assign var=s1 value=0}
+		{foreach key=key1 item=item1 from=$item.data}
+			{assign var=s1 value=`$s1+1`}
+			{foreach key=key2 item=item2 from=$item1.data}
+				{assign var=s1 value=`$s1+1`}
+			{/foreach}
+		{/foreach}
+		<td rowspan={$s1+1} style="text-align:center">
+			{$item.head.rmkk_name}
+			<p id="input{$key}ok">
+			Подтверждаю:
+			{if $tn eq $key and not $smarty.request.print}
+				<input
+					{if $item.head.nm_ok}checked{/if}
+					type=checkbox
+					onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok',this.checked?1:'');"
+				>
+			{/if}
+			<br>
+			{$item.head.nm_lu}
+			</p>
+		</td>
+		<td colspan=8></td>
+		<td rowspan={$s1+1} style="text-align:center">
+		<a target=_blank
+		href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk=0&nets=0">
+		{$item.head.total1|default:0|num:3}
+		</a>
+		</td>
+		<td rowspan={$s1+1} style="text-align:center">{$item.head.remain|default:0|num:3}</td>
+		</tr>
+		{foreach key=key1 item=item1 from=$item.data}
+			<tr style="vertical-align:middle;">
+				{assign var=s1 value=0}
+				{foreach key=key2 item=item2 from=$item1.data}
+					{assign var=s1 value=`$s1+1`}
+				{/foreach}
+				<td rowspan={$s1+1} style="text-align:center">{$item1.head.mkk_name}</td>
+				<td colspan=3></td>
+				<td rowspan={$s1+1} style="text-align:center">
+				<a target=_blank
+				href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets=0">
+				{$item1.head.total1|default:0|num:3}
+				</a>
+				</td>
+				<td rowspan={$s1+1} style="text-align:center;background-color: rgb(255, 255, 204);">{$item1.head.remain}</td>
+				<td rowspan={$s1+1} style="text-align:center;background-color: rgb(255, 255, 204);">
+					{if not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print}
+					<input
+						id="input{$key1}sum_per"
+						onchange="save('tm',{$key1},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','sum_per',this.value);"
+						class="number3"
+						size=10
+					>
+					<script>
+						$('#input{$key1}sum_per').val({$item1.head.sum_per});
+					</script>
+					{else}
+					{$item1.head.sum_per|num:3}
+					{/if}
+				</td>
+				<td rowspan={$s1+1} style="text-align:center;background-color: rgb(255, 255, 204);">
+					{if not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print}
+					<a href="javascript:void(0);" onClick="$('#input{$key1}recipient option[value={$key1}]').prop('selected', true);$('#input{$key1}recipient').change();">По умолчанию</a>
+					<select
+						id="input{$key1}recipient"
+						onchange="save('tm',{$key1},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','recipient',this.value);"
+					>
+						<option></option>
+						{foreach key=key2 item=item2 from=$spd_list}
+						<option value="{$item2.tn}">{$item2.fio}</option>
+						{/foreach}
+					</select>
+					<script>
+						$('#input{$key1}recipient option[value="{$item1.head.recipient}"]').prop('selected', true);
+					</script>
+					{else}
+					{$item1.head.recipient_fio}
+					{/if}
+				</td>
+			</tr>
+			{foreach key=key2 item=item2 from=$item1.data}
+				<tr style="vertical-align:middle;">
+					<td style="{if $item2.head.mkk_diff}background-color:red;{/if}">{$item2.head.net_name}</td>
+					<td style="text-align:center">
+					<a target=_blank
+					href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets={$key2}">
+					{$item2.head.total1|default:0|num:3}
+					</a>
+					</td>
+					<td style="text-align:center">{$item2.head.fou_total|default:0|num:3}</td>
+				</tr>
+			{/foreach}
+		{/foreach}
+	{/foreach}
+</table>
+
+{if not $smarty.request.print}
+
+<script>
+{literal}
+
+function save(table,tn,year,month,field,val)
+{
+	$('#input'+tn+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('table',  table);
+	fd.append('tn',  tn);
+	fd.append('year',  year);
+	fd.append('month',  month);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=zakaz_nal_report&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#input'+tn+field).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+
+{/literal}
+</script>
+
+<div id=ok></div>
+
+{/if}

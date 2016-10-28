@@ -33,7 +33,7 @@ $('#body').load('?action=vacation_create_load_parts&nohead=1&id='+id,function() 
 <input name=new_vacation[id] id=vac_id type=hidden disabled>
 
 
-{if not ($is_ts and $pos_id neq 76) and not $is_mkk}
+{if not ($is_ts and $my_pos_id neq 76) and not $is_mkk}
 {literal}<script>function fn_change(v){(v=='')?$('#mail').val(''):$.get('vacation_get_mail.php?tn='+v, function(result){$('#mail').val(result);});}</script>{/literal}
 {/if}
 

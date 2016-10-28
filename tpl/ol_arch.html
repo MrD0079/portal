@@ -112,7 +112,13 @@ $("."+p_old).attr('disabled',true);
 <tr><td style="text-align:right;vertical-align:top">Должность</td><td style="text-align:left;vertical-align:top"><b>{$i.pos_name}</b><br>
 <tr><td style="text-align:right;vertical-align:top">Дата начала работы в компании</td><td style="text-align:left;vertical-align:top"><b>{$i.start_company}</b></td></tr>
 <tr><td style="text-align:right;vertical-align:top">Дата начала работы в должности</td><td style="text-align:left;vertical-align:top"><b>{$i.start_pos}</b></td></tr>
-<tr><td style="text-align:right;vertical-align:top">Дата увольнения</td><td style="text-align:left;vertical-align:top"><b>{$i.datauvol}</b></td></tr>
+<tr><td style="text-align:right;vertical-align:top">Дата увольнения</td><td style="text-align:left;vertical-align:top">
+{if $is_do or $is_admin}
+<input id="datauvol{$i.id}" class="datepicker" value="{$i.datauvol}" onChange="save({$i.id},'datauvol',this.value,'free_staff');">
+{else}
+{$i.datauvol}
+{/if}
+</td></tr>
 <tr><td style="text-align:right;vertical-align:top">Категория сотрудника</td><td style="text-align:left;vertical-align:top"><b>{$i.oplatakat}</b></td></tr>
 <tr><td style="text-align:right;vertical-align:top">Причина увольнения</td><td style="text-align:left;vertical-align:top"><b>{$i.seat}</b></td></tr>
 <tr><td style="text-align:right;vertical-align:top">Комментарии</td><td style="text-align:left;vertical-align:top;width:300px"><b>{$i.params}</b></td></tr>
@@ -144,7 +150,7 @@ $("."+p_old).attr('disabled',true);
 		<td style="">{$i1.fio}</td>
 		<td style="text-align: center;">{$i1.sum_plus|num:2}</td>
 		<td style="text-align: center;">{$i1.sum_minus|num:2}</td>
-		<td style="text-align: left;">{if $is_do and $i.not_accepted_cnt > 0}<textarea id="text{$i1.id}" onChange="save({$i1.id},'text',this.value);" cols="30" rows="5" name="data[{$i1.id}][text]">{$i1.text}</textarea>{else}{$i1.text|nl2br}{/if}</td>
+		<td style="text-align: left;">{if $is_do and $i.not_accepted_cnt > 0}<textarea id="text{$i1.id}" onChange="save({$i1.id},'text',this.value,'ol_staff');" cols="30" rows="5" name="data[{$i1.id}][text]">{$i1.text}</textarea>{else}{$i1.text|nl2br}{/if}</td>
 		{if not $smarty.request.print}
 		<td style="">
 			{foreach key=k2 item=i2 from=$i1.fl}
@@ -168,13 +174,14 @@ $("."+p_old).attr('disabled',true);
 
 {literal}
 <script>
-function save(id,field,val)
+function save(id,field,val,table)
 {
-	$('#text'+id).css('background-color','red');
+	$('#'+field+id).css('background-color','red');
 	var fd = new FormData();
 	fd.append('id',  id);
 	fd.append('field',  field);
 	fd.append('val',  val);
+	fd.append('table',  table);
 	$.ajax
 	({
 		type: 'POST',
@@ -184,7 +191,7 @@ function save(id,field,val)
 		contentType: false,
 		success: function(data) {
 			//alert(data);
-			$('#text'+id).css('background-color','white');
+			$('#'+field+id).css('background-color','white');
 		}
 	});
 }

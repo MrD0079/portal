@@ -4,7 +4,8 @@ SELECT SUM (msb.weight) msb_weight,
        SUM (msr.r_oos) msr_oos,
        SUM (msr.r_fcount) msr_fcount,
        SUM (msr.r_price) msr_price,
-       COUNT (*) c
+       COUNT (*) c,
+	   decode(count(*),0,0,SUM (msr.r_oos)/ COUNT (*) * 100) perc_oos
     FROM ms_rep_hbr msr,
          MS_REP_HBR_DT msh,
          merch_spec_body msb,
@@ -52,9 +53,9 @@ SELECT SUM (msb.weight) msb_weight,
          AND DECODE (:tp, 0, 0, ms_rep_routes1.rb_kodtp) =
                 DECODE (:tp, 0, 0, :tp)
 
-         AND (ms_rep_routes1.rh_tn IN (SELECT emp_tn
-                          FROM who_full
-                         WHERE exp_tn = :tn)
+         AND (ms_rep_routes1.rh_tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1 OR (SELECT is_admin

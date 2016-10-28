@@ -21,9 +21,9 @@
          SUM (CASE WHEN c1.dw = 6 THEN 1 ELSE 0 END) d6,
          SUM (CASE WHEN c1.dw = 7 THEN 1 ELSE 0 END) d7
     FROM ms_rep_routes1 r, calendar c, calendar c1
-   WHERE     (   r.rh_tn IN (SELECT emp_tn
-                               FROM who_full
-                              WHERE exp_tn = :tn)
+   WHERE     (   r.rh_tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1 OR (SELECT is_admin

@@ -37,8 +37,7 @@ SELECT DECODE (NVL (SUM (DECODE (visit, 1, stelag + tumb, 0)), 0),
                  AND t.h_url = s.h_url(+)
                  AND (r.stelag > 0 OR r.tumb > 0)
                  AND visitdate = TO_DATE (:dt, 'dd.mm.yyyy')
-                 AND DECODE (:eta_list, '', t.h_fio_eta, :eta_list) =
-                        t.h_fio_eta
+                 AND (:eta_list is null OR :eta_list = t.h_fio_eta)
         GROUP BY t.fio_ts,
                  t.fio_eta,
                  t.tp_kod_key,

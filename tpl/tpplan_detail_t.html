@@ -1,0 +1,61 @@
+	<tr style="font-weight:bold;text-align:center">
+		<td colspan={if not $smarty.request.print}7{else}3{/if}>ÏËÀÍ ïğîäàæ</td>
+		<td style="text-align:right">{$listts.val_plan3*1000|num:2}</td>
+		<td style="text-align:right">{$listts.val_plan2*1000|num:2}</td>
+		<td style="text-align:right">{$listts.val_plan1*1000|num:2}</td>
+		<td style="text-align:right">{$listts.val_plan_avg*1000|num:2}</td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);">{$listt.plan|num:2}</td>
+		<td style="text-align:right;background-color:rgb(255, 255, 204);">{$listts.val_plan*1000|num:2}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);"></td>
+		<td style="text-align:right;"></td>
+	</tr>
+        <tr style="font-weight:bold;text-align:center">
+		<td colspan={if not $smarty.request.print}7{else}3{/if}>ÔÀÊÒ ïğîäàæ {$listt.c}</td>
+		<td style="text-align:right">{$listt.summa3|num:2}</td>
+		<td style="text-align:right">{$listt.summa2|num:2}</td>
+		<td style="text-align:right">{$listt.summa1|num:2}</td>
+		<td style="text-align:right">{$listt.summa_avg|num:2}</td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);"></td>
+		<td style="text-align:right;background-color:rgb(255, 255, 204);">{$listt.summa|num:2}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);"><font style="color:red">{$listt.perc|num:2}</font></td>
+		<td style="text-align:right;">{$listt.shortfall|num:2}</td>
+	</tr>
+        <tr style="font-weight:bold;text-align:center;">
+		<td colspan={if not $smarty.request.print}7{else}3{/if}><font style="color:red">% âûï-èÿ {$listt.c}</font></td>
+		<td style="text-align:right"><font style="color:red">{if $listts.val_plan3}{$listt.summa3/$listts.val_plan3/1000*100|num:2}{/if}</font></td>
+		<td style="text-align:right"><font style="color:red">{if $listts.val_plan2}{$listt.summa2/$listts.val_plan2/1000*100|num:2}{/if}</font></td>
+		<td style="text-align:right"><font style="color:red">{if $listts.val_plan1}{$listt.summa1/$listts.val_plan1/1000*100|num:2}{/if}</font></td>
+		<td style="text-align:right"><font style="color:red">{if $listts.val_plan_avg}{$listt.summa_avg/$listts.val_plan_avg/1000*100|num:2}{/if}</font></td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);"></td>
+		<td style="text-align:right;background-color:rgb(255, 255, 204);"><font style="color:red">{if $listts.val_plan}{$listt.summa/$listts.val_plan/1000*100|num:2}{/if}</font></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);"></td>
+		<td style="text-align:right;"></td>
+	</tr>
+
+	<tr style="font-weight:bold;text-align:center">
+		<td colspan={if not $smarty.request.print}7{else}3{/if}>Ïëàí/ôàêò ÀÊÁ</td>
+		<td style="text-align:right">{$listts.akb_plan3|num:-1} / {$listts.akb_fact3|num:-1}</td>
+		<td style="text-align:right">{$listts.akb_plan2|num:-1} / {$listts.akb_fact2|num:-1}</td>
+		<td style="text-align:right">{$listts.akb_plan1|num:-1} / {$listts.akb_fact1|num:-1}</td>
+		<td style="text-align:right">{$listts.akb_plan_avg|num:-1} / {$listts.akb_fact_avg|num:-1}</td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);"></td>
+		<td style="text-align:right;background-color:rgb(255, 255, 204);">{$listts.akb_plan|num:-1} / {$listts.akb_fact|num:-1}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);"></td>
+		<td style="text-align:right;"></td>
+	</tr>

@@ -1,0 +1,83 @@
+<h3>Категории обращений</h3>
+
+<table id=tbl>
+	<tbody>                                                                                              	
+		<tr>
+			<td>
+				<a href="javascript:void(0);" onClick="add_dm_cat_appeals();">Добавить</a>
+			</td>
+		</tr>
+		{foreach key=k item=i from=$dm_cat_appeals}
+			<tr id=dm_cat_appeals_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_dm_cat_appeals({$i.id})">[x]</a>
+					название <input id=d_{$i.id}_name size=50 value="{$i.name|escape}" onChange="save_dm_cat_appeals({$i.id},'name',this.value);">
+					приоритет <input id=d_{$i.id}_priority size=50 value="{$i.priority|escape}" onChange="save_dm_cat_appeals({$i.id},'priority',this.value);">
+					нормативное время <input id=d_{$i.id}_norm_time size=8 value="{$i.norm_time}" class="number_int" onChange="save_dm_cat_appeals({$i.id},'norm_time',this.value);">
+					<div style="margin-left:50px" id=detail_{$i.id}></div>
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>
+
+{literal}
+<script>
+
+function add_dm_cat_appeals()
+{
+	var fd = new FormData();
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=dm_cat_appeals&new=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#tbl>tbody:last').append(''+data+'');
+		}
+	});
+}
+
+function save_dm_cat_appeals(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=dm_cat_appeals&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#d_'+id+'_'+field).css('background-color','white');
+		}
+	});
+}
+
+function del_dm_cat_appeals(id)
+{
+	var fd = new FormData();
+	fd.append('id',  id);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=dm_cat_appeals&del=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#dm_cat_appeals_'+id).remove();
+		}
+	});
+}
+
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

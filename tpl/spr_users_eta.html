@@ -47,6 +47,9 @@
 
 {/if}
 
+
+{if $smarty.request.show}
+
 {if not $smarty.request.print}
 
 <table border=1 cellspacing=0 cellpadding=3>
@@ -141,6 +144,9 @@
 		{/foreach}
 	{/foreach}
 </table>
+
+{/if}
+
 {/if}
 
 {if not $smarty.request.print}
@@ -155,6 +161,7 @@
 function save_vals(login,field,val)
 {
 $('#v_'+login+'_'+field).css('background-color','red');
+console.log(login+field+val);
 var fd = new FormData();
 fd.append('login',  login);
 fd.append('field',  field);

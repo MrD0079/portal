@@ -1,0 +1,37 @@
+<h2>Сканкопии подтверждающих документов</h2>
+{if $is_ts and not $smarty.request.print}
+	<p>
+		<input type=submit name=save id=save value="Сохранить">
+	</p>
+{/if}
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td></td>
+		<td>ФИО<br>ТС</td>
+		<td>Название<br>файла-сканкопии</td>
+		<td>Сумма к компенсации дистрибутору<br>согласно данному реестру, {$valuta}</td>
+	</tr>
+	{foreach key=key item=item from=$file_list}
+	{foreach key=file_list_key item=file_list_item from=$item.data}
+	<tr style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{if $is_ts and not $smarty.request.print and $ok_chief_4ts.part1 neq 1}<input type=checkbox name=del_file[{$file_list_item.id}]>{/if}</td>
+		<td style="text-align:left">{$file_list_item.fio_ts}</td>
+		<td><a target=_blank href="files/{$file_list_item.fn}">{$file_list_item.fn}</a></td>
+		<td>{$file_list_item.bonus|default:0|num:2}</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td colspan=3>Итого</td>
+		<td>{$item.data_total.bonus|default:0|num:2}</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold; background-color: rgb(51, 255, 51)">
+		<td colspan=3>Итого по всем ТС</td>
+		<td>{$file_list_total.bonus|default:0|num:2}</td>
+	</tr>
+</table>
+
+
+
+
+

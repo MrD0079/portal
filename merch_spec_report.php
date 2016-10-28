@@ -21,10 +21,13 @@ $sql = rtrim(file_get_contents('sql/merch_report_head.sql'));
 $p=array(":data"=>"'".$_REQUEST["dt"]."'",":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $h=$db->GetRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-//print_r($h);
 
+/*
+print_r($r);
+print_r($h);
+*/
 
-function sok($rep_id)
+function sok($rep_id, $remove_rep = 0)
 {
 	if ($rep_id==null) {return null;};
 	global $h,$r;
@@ -36,7 +39,15 @@ function sok($rep_id)
 		'rep_id'=>$rep_id
 	);
 	$_REQUEST["keys"][$rep_id]=$keys;
-	Table_Update ('MERCH_REPORT_CAL_SOK', $keys, $keys);
+	if ($remove_rep==0)
+	{
+		$vals=$keys;
+	}
+	else
+	{
+		$vals=null;
+	}
+	Table_Update ('MERCH_REPORT_CAL_SOK', $keys, $vals);
 }
 
 
@@ -83,7 +94,11 @@ if (isset($_REQUEST["del_file"]))
 	$path_parts = pathinfo($_REQUEST["del_file"]); 
 	$keys = array("dt"=>OraDate2MDBDate($_REQUEST["dt"]),"ag_id"=>$r["ag_id"],"kod_tp"=>$r["kod_tp"],"fn"=>$path_parts["basename"]);
 	Table_Update ("merch_spec_report_files", $keys, null);
-	sok(1);
+	$files_cnt = $db->getOne("SELECT count(*) FROM merch_spec_report_files WHERE ag_id = ".$r["ag_id"]." AND dt = TO_DATE('".$_REQUEST["dt"]."','dd.mm.yyyy') AND kod_tp = ".$r["kod_tp"]);
+	if ($files_cnt==0)
+	{
+	sok(1,1);
+	}
 }
 if (!file_exists($d1)) {mkdir($d1);}
 if (!file_exists($d2)) {mkdir($d2);}

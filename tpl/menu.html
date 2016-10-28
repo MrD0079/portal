@@ -23,7 +23,7 @@ margin-top: 0px;
 <h3>
 	{foreach key=key item=item from=$countries}
 		{if $item.checked eq 1}
-			<a {if $item.cnt_name eq $cnt_name}style="font-size:18px"{/if} href="?action={$smarty.request.action}&select_country={$item.cnt_kod}">{$item.cnt_name}</a>
+			<a {if $item.cnt_name eq $cnt_name}style="font-size:18px"{/if} href="?action=main&select_country={$item.cnt_kod}">{$item.cnt_name}</a>
 		{/if}
 	{/foreach}
 </h3>

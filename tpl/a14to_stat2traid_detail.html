@@ -1,0 +1,26 @@
+<table style="text-align: left;" border=1>
+<tbody>
+	<tr style="text-align: center;font-weight: bold;">
+		<td>ФИО<br>ТС</td>
+		<td>ФИО<br>ЭТА</td>
+		<td>Название/Адрес ТП</td>
+		<td>Продажи<br>за месяц</td>
+		<td>Засчитан<br>ТМ (да/нет)</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	{cycle assign='color' values='#ccffff,#ffffcc'}
+	<tr
+		{if $smarty.request.sttype eq 'all' and ($i.sttobytpplus eq 1 or $i.ok_st_tmplus eq 1)}
+			{assign var='color' value='green'}
+		{/if}
+		style="background-color:{$color}"
+	>
+		<td>{$i.fio_ts}</td>
+		<td>{$i.fio_eta}</td>
+		<td>{$i.tp_ur} {$i.tp_addr}</td>
+		<td style="text-align: right;">{$i.summa|num:2}</td>
+		<td style="text-align: center;">{if $i.nok_st_tm}да{else}нет{/if}</td>
+	</tr>
+	{/foreach}
+</tbody>
+</table>

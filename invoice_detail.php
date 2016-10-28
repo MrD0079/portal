@@ -63,7 +63,7 @@ $sql = rtrim(file_get_contents('sql/month_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
-$sql=rtrim(file_get_contents('sql/distr_prot_di.sql'));
+$sql=rtrim(file_get_contents('sql/distr_prot_di_kk.sql'));
 $p = array(":dpt_id" => $_SESSION["dpt_id"],':tn'=>$tn);
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

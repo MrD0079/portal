@@ -32,6 +32,39 @@
 
 <h2>Детализация</h2>
 
+
+<!--
+ФИО ТС                                     ts
+ФИО ЭТА                                    eta
+Код ТП                                     tp_kod
+Юридическое название ТП                    tp_name
+Фактический адрес ТП                       tp_addr
+Тип ТП                                     tp_type
+Отсрочка                                   delay
+Скидка, %                                  discount
+Фактическая скидка, %                      skidka
+Фактическая скидка, {$valuta}              skidka_val
+Бонус, %                                   bonus
+Фикс. оплата в месяц, {$valuta}            fixed
+Наценка, %                                 margin
+Обоснование предоставления
+	скидки/бонуса/оплаты                   justification
+Последние загруженные условия              last_fn
+Сумма продаж, ден. ед.                     summa
+ТС/СТС: планирую выдать бонус              selected
+Возврат денежных средств, {$valuta}        summa_return
+Бонус расчетный ТП, {$valuta}              bonus_tp
+Бонус фактический, {$valuta}               bonus_fakt
+Фикс. оплата в месяц ФАКТ, {$valuta}       fixed_fakt
+Максимум по ТП, {$valuta}                  maxtp
+ИТОГО                                      total
+Бонус по форме 2                           cash
+Компенсация дистрибутору, {$valuta}        compens_distr
+Затраты на ТП, %                           zat
+ДБ: выдачу подтверждаю                     ok_db_tn
+Комментарий                                comm
+-->
+
 <table id=mytable style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
 <tbody>
 <tr style="font-weight:bold">
@@ -49,6 +82,7 @@
 <td style="text-align: center;">Бонус, %</td>
 <td style="text-align: center;">Фикс. оплата в месяц, {$valuta}</td>
 <td style="text-align: center;">Наценка, %</td>
+<td style="text-align: center;">Обоснование предоставления скидки/бонуса/оплаты</td>
 <td style="text-align: center;">Последние загруженные условия</td>
 <td style="text-align: center;">Сумма продаж, ден. ед.</td>
 <td style="text-align: center;">ТС/СТС: планирую выдать бонус</td>
@@ -84,6 +118,7 @@
 			<td style="text-align:center">{$i.bonus|num:2}</td>
 			<td style="text-align:center">{$i.fixed|num:2}</td>
 			<td style="text-align:center">{$i.margin}</td>
+			<td style="text-align:center">{$i.justification}</td>
 			<td><a target=_blank href="sc_files/{$i.last_fn}">{$i.last_fn}</a></td>
 			<td style="text-align:right">{$i.summa|num:2}</td>
 			<td style=" text-align: center;" id="d_{$i.tp_kod}_tp_kod">
@@ -102,7 +137,8 @@
 							$('#cash_{$i.tp_kod}').attr('disabled',!this.checked);
 							$('#comm_{$i.tp_kod}').attr('disabled',!this.checked);
 							save_tp('{$i.tp_kod}','tp_kod',this.checked?1:0);
-							this.checked?save_tp('{$i.tp_kod}','summa_return','{$i.summa_return}'):null;
+							/*this.checked?$('#summa_return_{$i.tp_kod}').val({$i.bedt_summ}):null;*/
+							this.checked?save_tp('{$i.tp_kod}','summa_return','{$i.bedt_summ}'):null;
 							this.checked?save_tp('{$i.tp_kod}','bonus_fakt','{$i.bonus_fakt}'):null;
 							this.checked?save_tp('{$i.tp_kod}','fixed_fakt','{$i.fixed_fakt}'):null;
 							this.checked?save_tp('{$i.tp_kod}','cash','{$i.cash}'):null;
@@ -115,27 +151,9 @@
 					</script>
 				{/if}
 			</td>
-			<td style=" text-align:right;" id="d_{$i.tp_kod}_summa_return">
-				<!--*{$is_ts}*{$i.ok_db_tn}*{$smarty.request.print}*{$i.taf_ok_db_tn}*-->
-				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
-					{$i.summa_return|num:2}
-				{else}
-					<a href="javascript:void(0);" onclick="$('#summa_return_{$i.tp_kod}').val({$i.bedt_summ});$('#summa_return_{$i.tp_kod}').change();">{$i.bedt_summ|num:3} =></a>
-					<input
-						class="number"
-						size="10"
-						name="summa_return[{$i.tp_kod}]"
-						id="summa_return_{$i.tp_kod}"
-						onChange="save_tp('{$i.tp_kod}','summa_return',this.value);/*after_save('{$i.tp_kod}');*/"
-					>
-					<script>
-						$('#summa_return_{$i.tp_kod}').val({$i.summa_return});
-						$('#summa_return_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
-					</script>
-				{/if}
-			</td>
+			<td style=" text-align:right" id="d_{$i.tp_kod}_summa_return">{$i.summa_return|num:2}</td>
 			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_tp">{$i.bonus_tp|num:2}</td>
-			<td style=" text-align:right;" id="d_{$i.tp_kod}_bonus_fakt">
+			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_fakt">
 				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
 					{$i.bonus_fakt|num:2}
 				{else}
@@ -214,9 +232,8 @@
 						name="comm[{$i.tp_kod}]"
 						id="comm_{$i.tp_kod}"
 						onChange="save_tp('{$i.tp_kod}','comm',this.value);"
-					></textarea>
+					>{$i.comm}</textarea>
 					<script>
-						$('#comm_{$i.tp_kod}').val('{$i.comm}');
 						$('#comm_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
 					</script>
 				{/if}
@@ -255,6 +272,7 @@ function save_tp(tp_kod,field,val)
 	contentType: false,
 	success: function(data) {
 	$('#ok').html(''+data+'');
+	get_val(tp_kod,'summa_return');
 	get_val(tp_kod,'bonus_tp');
 	get_val(tp_kod,'maxtp');
 	get_val(tp_kod,'total');

@@ -1,0 +1,139 @@
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold; text-align:center">
+		<td>№ п/п</td>
+		<td>ФИО руководителя</td>
+		<td>Клиент</td>
+		<td>ФИО ТС</td>
+		<td>ФИО ЭТА</td>
+		<td>Код ТП</td>
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		<td>ПЛАН ноябрь + декабрь, {$valuta}</td>
+		<td>ФАКТ ноябрь + декабрь, {$valuta}</td>
+		<td>% выполнения</td>
+		<td>Бонус по клиенту, {$valuta}</td>
+		<td>Бонус выдан</td>
+		<td>Фактическая сумма бонуса, {$valuta}</td>
+		<td>Бонус компенсировать дистрибутору</td>
+	</tr>
+	{foreach key=list_key item=list_item from=$list name=list}
+	{cycle assign="color" values='#ccffff,#ffffcc'}
+	{foreach key=k1 item=i1 from=$list_item.tp name=tp}
+	<tr style="vertical-align:top; background-color: {if $list_item.perc >= 100}rgb(51, 255, 51){else}{$color}{/if}">
+		{if $smarty.foreach.tp.iteration eq 1}
+		<td rowspan={$smarty.foreach.tp.total}>{$smarty.foreach.list.iteration}</td>
+		<td rowspan={$smarty.foreach.tp.total}>{$list_item.parent_fio}</td>
+		<td rowspan={$smarty.foreach.tp.total}>{$list_item.client}</td>
+		{/if}
+		<td>{$i1.ts_fio}</td>
+		<td>{$i1.fio_eta}</td>
+		<td>{$i1.tp_kod}</td>
+		<td>{$i1.tp_ur}</td>
+		<td>{$i1.tp_addr}</td>
+		{if $smarty.foreach.tp.iteration eq 1}
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.plan|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.sales|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.perc|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.bonus|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} style="text-align:center">
+			{if not $smarty.request.print and ($is_ts or $list_item.parent_tn eq $tn) and $list_item.ok_chief neq 1 and $list_item.perc >= 100}
+				<input
+				class="chk_all" type=checkbox
+				id=bonus_dt1_cb_{$list_item.h_client}
+				{if $list_item.bonus_dt1}checked{/if}
+				onclick="
+					$('#bonus_dt1{$list_item.h_client}').attr('disabled',!this.checked);
+					$('#bonus_sum1{$list_item.h_client}').attr('disabled',!this.checked);
+					$('#fil{$list_item.h_client}').attr('disabled',!this.checked);
+					(!this.checked)?$('#bonus_dt1_val{$list_item.h_client}').val(''):$('#bonus_dt1_val{$list_item.h_client}').val($('#bonus_dt1{$list_item.h_client}').val());
+					(!this.checked)?$('#bonus_sum1{$list_item.h_client}').val(''):$('#bonus_sum1{$list_item.h_client}').val($('#bonus_sum1{$list_item.h_client}').val());
+					(!this.checked)?$('#fil{$list_item.h_client}').val(''):$('#fil{$list_item.h_client}').val($('#fil{$list_item.h_client}').val());
+				"
+			>
+			<input required
+				{if $list_item.ok_chief eq 1 or not $list_item.bonus_dt1}disabled{/if}
+				class="datepicker"
+				size=10
+				id=bonus_dt1{$list_item.h_client} value="{$list_item.bonus_dt1}"
+				onChange="
+					$('#bonus_dt1_val{$list_item.h_client}').val($('#bonus_dt1{$list_item.h_client}').val());
+				"
+			>
+			<input
+				type=hidden
+				name=data[{$list_item.h_client}][bonus_dt1] id=bonus_dt1_val{$list_item.h_client} value="{$list_item.bonus_dt1}"
+			>
+			{else}
+			{$list_item.bonus_dt1}
+			{/if}
+		</td>
+		<td rowspan={$smarty.foreach.tp.total}>
+			{if not $smarty.request.print and ($is_ts or $list_item.parent_tn eq $tn) and $list_item.ok_chief neq 1 and $list_item.perc >= 100}
+			<input required
+				{if $list_item.ok_chief eq 1 or not $list_item.bonus_dt1}disabled{/if}
+				name=data[{$list_item.h_client}][bonus_sum1]
+				id=bonus_sum1{$list_item.h_client}
+				size=10
+			>
+			<script>
+			$(
+				function()
+				{literal}{{/literal}
+					$(
+						'#bonus_sum1{$list_item.h_client}').
+						autoNumeric(
+							'init',
+							{literal}{{/literal}
+								aSep: '',
+								mDec: 2,
+								vMin: 0.0,
+								vMax: {$list_item.bonus}
+							{literal}}{/literal}
+					);
+				{literal}}{/literal}
+			);
+			$('#bonus_sum1{$list_item.h_client}').val("{$list_item.bonus_sum1}");
+			</script>
+			{else}
+			{$list_item.bonus_sum1|num:2} {$valuta}
+			{/if}
+		</td>
+		<td rowspan={$smarty.foreach.tp.total}>
+			{if not $smarty.request.print and $list_item.parent_tn eq $tn and $list_item.ok_chief neq 1 and $list_item.perc >= 100}
+			<select required
+				{if $list_item.ok_chief eq 1 or not $list_item.bonus_dt1}disabled{/if}
+				name=data[{$list_item.h_client}][fil]
+				id=fil{$list_item.h_client}
+			>
+				<option></option>
+				{foreach key=key item=item from=$fil}
+				<option value="{$item.bud_id}">{$item.bud_name|escape}</option>
+				{/foreach}
+			</select>
+			<script>
+			$('#fil{$list_item.h_client} option[value="{$list_item.fil}"]').prop('selected', true);
+			</script>
+			{else}
+			{$list_item.fil_name}
+			{/if}
+		</td>
+		{/if}
+	</tr>
+	{/foreach}
+	{/foreach}
+</table>
+
+<p>
+{if not $smarty.request.print and not $is_eta eq 1}
+<input type=submit name=save id=save class=save value="Сохранить">
+{/if}
+</p>
+
+
+

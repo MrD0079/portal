@@ -1,4 +1,4 @@
-/* Formatted on 17/06/2015 13:07:06 (QP5 v5.227.12220.39724) */
+/* Formatted on 27/11/2015 6:04:31 PM (QP5 v5.252.13127.32867) */
   SELECT sc.my,
          sc.mt,
          sc.plan_type,
@@ -18,8 +18,13 @@
                     FROM calendar
                    WHERE y = :y) c
            WHERE     s.PARENT <> 0
-                 AND s.PARENT IN (:GROUPS)
-                 AND DECODE (:statya_list, 0, s.ID, :statya_list) = s.ID) sc,
+                 /*AND s.PARENT IN ( :GROUPS)*/
+                 AND CASE
+                        WHEN s.parent NOT IN (42, 96882041) THEN 1
+                        WHEN s.parent = 42 THEN 3
+                        WHEN s.parent = 96882041 THEN 2
+                     END IN ( :mgroups)
+                 AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID) sc,
          (  SELECT SUM (total) total,
                    m.statya,
                    m.YEAR,
@@ -37,19 +42,21 @@
                                        67, :tn,
                                        (SELECT pos_id
                                           FROM user_list
-                                         WHERE tn = :tn AND is_super = 1), :tn))
-                   AND DECODE (:net, 0, n.id_net, :net) = n.id_net
-                   AND (   n.id_net IN
-                              (SELECT kk_flt_nets_detail.id_net
-                                 FROM kk_flt_nets, kk_flt_nets_detail
-                                WHERE     kk_flt_nets.id = :flt_id
-                                      AND kk_flt_nets.id =
-                                             kk_flt_nets_detail.id_flt)
+                                         WHERE tn = :tn AND is_super = 1), :tn,
+                                       (SELECT pos_id
+                                          FROM user_list
+                                         WHERE tn = :tn AND is_admin = 1), :tn))
+                   AND DECODE ( :net, 0, n.id_net, :net) = n.id_net
+                   AND (   n.id_net IN (SELECT kk_flt_nets_detail.id_net
+                                          FROM kk_flt_nets, kk_flt_nets_detail
+                                         WHERE     kk_flt_nets.id = :flt_id
+                                               AND kk_flt_nets.id =
+                                                      kk_flt_nets_detail.id_flt)
                         OR :flt_id = 0)
-                   AND DECODE (:tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
-                   AND DECODE (:tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
+                   AND DECODE ( :tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
+                   AND DECODE ( :tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
                    AND m.YEAR = :y
-                   AND DECODE (:payment_type, 0, m.payment_type, :payment_type) =
+                   AND DECODE ( :payment_type, 0, m.payment_type, :payment_type) =
                           m.payment_type
           GROUP BY m.statya,
                    m.YEAR,

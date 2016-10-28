@@ -36,8 +36,7 @@ if (isset($_REQUEST["add"]))
 	$n=$_REQUEST["new"];
 	$keys = array('tn'=>$n["tn"],'data'=>$n["data"]);
 	$n["data"]=OraDate2MDBDate($n["data"]);
-	$n['summa']=str_replace(",", ".", $n["summa"]);
-	$n['summa_p']=str_replace(",", ".", round($n["summa"]*($n["perc"]/100+1)));
+	$n['summa_p']=round($n["summa"]*($n["perc"]/100+1));
 	Table_Update ("perech", $keys, $n);
 }
 

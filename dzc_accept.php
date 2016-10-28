@@ -70,7 +70,6 @@ if (isset($_REQUEST["save"]))
 						$email=$v1["email"];
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
 						send_mail($email,$subj,$text);
-						//send_mail("denis.yakovenko@avk.ua".$email.' '.$subj,$text);
 					}
 					if ($h["dzc_ok"]==1)
 					{
@@ -145,7 +144,6 @@ if (isset($_REQUEST["save"]))
 						$email=$v1["email"];
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
 						send_mail($email,$subj,$text);
-						//send_mail("denis.yakovenko@avk.ua".$email.' '.$subj,$text);
 					}
 				}
 				if ($v["accepted"]!=0)
@@ -183,7 +181,6 @@ if (isset($_REQUEST["add_chat"]))
 					$text.="Просьба ответить на комментарий/уточнение по данной заявке на компенсацию дистрибутору в разделе <a href=\"https://ps.avk.ua/?action=dzc_accept\">Согласование заявок на компенсацию дистрибутору</a>";
 					$email=$v1["email"];
 					send_mail($email,$subj,$text);
-					//send_mail("denis.yakovenko@avk.ua".$email.' '.$subj,$text);
 				}
 			}
 		}

@@ -1,5 +1,4 @@
 <?
-
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 
@@ -12,6 +11,23 @@ $params=array(
 
 //$x=microtime(true);
 
+$data = $db->getAll("
+SELECT tr.id, tr.name
+FROM voiting_test_onoff t, user_list u, tr
+WHERE     u.is_prez = 1
+AND u.tn = t.tn
+AND u.tn = ".$tn."
+AND tr.for_prez = 1
+AND tr.id = t.tr
+ORDER BY tr.name
+", null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('voiting_test_list', $data);
+
+$smarty->assign('scmovezayexist', $db->getOne("SELECT COUNT (*) FROM scmovezay WHERE dpt_id = ".$_SESSION['dpt_id']." AND status = 0"));
+
+$sql=rtrim(file_get_contents('sql/main_it_tasks.sql'));
+$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('it_tasks', $data);
 
 $sql=rtrim(file_get_contents('sql/main_dzc_accept.sql'));
 $params[':wait4myaccept']=0;
@@ -94,8 +110,10 @@ $params1=array(
 ':wait4myaccept'=>1,
 ":z_id"=>0,
 ':date_between_brzr' => "'dt12'",
+':tu'=>0,
+":exp_list_without_ts"=>0,
+':report_zero_cost'=>0,
 );
-
 
 
 $params1[":who"]=1;
@@ -104,6 +122,9 @@ $sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr_total.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_zay_reestr_total_i', $data);
+
+//$_REQUEST["sql"] = $sql;
+//ses_req();
 
 $params1[":who"]=2;
 
@@ -120,20 +141,39 @@ $smarty->assign('bud_ru_zay_reestr_total_o', $data);
 $params1[":status"]=2;
 $params1[":srok_ok"]=0;
 $params1[":report_done_flt"]=2;
+$params1[":report_zero_cost"]=0;
 
 $params1[":who"]=1;
+$params1[":tu"]=0;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total1_i', $data);
+$smarty->assign('bud_ru_zay_report_total1_i_tu0', $data);
 
 $params1[":who"]=2;
+$params1[":tu"]=0;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total1_o', $data);
+$smarty->assign('bud_ru_zay_report_total1_o_tu0', $data);
+
+$params1[":who"]=1;
+$params1[":tu"]=1;
+
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql = stritr($sql, $params1);
+$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('bud_ru_zay_report_total1_i_tu1', $data);
+
+$params1[":who"]=2;
+$params1[":tu"]=1;
+
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql = stritr($sql, $params1);
+$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('bud_ru_zay_report_total1_o_tu1', $data);
 
 $params1[":status"]=2;
 $params1[":srok_ok"]=2;
@@ -154,19 +194,37 @@ $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_zay_report_total3_o', $data);
 
 $params1[":wait4myaccept"]=0;
+$params1[":tu"]=0;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_total.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_accept_total', $data);
+$smarty->assign('bud_ru_zay_accept_total_tu0', $data);
 
 
 $params1[":wait4myaccept"]=0;
+$params1[":tu"]=1;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_total.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_accept_total', $data);
+$smarty->assign('bud_ru_zay_accept_total_tu1', $data);
+
+$params1[":wait4myaccept"]=0;
+$params1[":tu"]=0;
+
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total_main.sql'));
+$sql = stritr($sql, $params1);
+$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('bud_ru_zay_report_accept_total_tu0', $data);
+
+$params1[":wait4myaccept"]=0;
+$params1[":tu"]=1;
+
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total_main.sql'));
+$sql = stritr($sql, $params1);
+$data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('bud_ru_zay_report_accept_total_tu1', $data);
 
 $params1[':da_deleted']=0;
 $params1[':da_db']=0;
@@ -184,13 +242,13 @@ $params1[':da_cat']=0;
 $params1[':da_conq']=0;
 $params1[':da_full']=1;
 $params1[':prot_id']=0;
-
+/*
 $sql=rtrim(file_get_contents('sql/distr_prot.sql'));
 $sql=stritr($sql,$params1);
 //echo $sql;
 $distr_prot = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('distr_prot', count($distr_prot));
-
+*/
 if ($_SESSION['is_eta']==1)
 {
 $sql=rtrim(file_get_contents('sql/news_eta.sql'));
@@ -269,7 +327,7 @@ $sql=rtrim(file_get_contents('sql/main_tasks_probs.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('probs', $data);
-
+/*
 $sql=rtrim(file_get_contents('sql/main_tasks_project_my.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
@@ -289,7 +347,7 @@ $sql=rtrim(file_get_contents('sql/main_tasks_project_report_chk.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
 $smarty->assign('project_report_chk', $data);
-
+*/
 $sql=rtrim(file_get_contents('sql/main_tasks_fw_count.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -362,6 +420,7 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dc', $data);
 
+/*
 $sql=rtrim(file_get_contents('sql/main_tasks_reestr_dc.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
@@ -371,52 +430,28 @@ $sql=rtrim(file_get_contents('sql/main_tasks_reestr_dc_os.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
 $smarty->assign('reestr_dc_os', $data);
-
+*/
 $sql=rtrim(file_get_contents('sql/main_tasks_ol_staff.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getOne($sql);
 $smarty->assign('ol_staff', $data);
+
+require_once "main_box_dm.php";
+require_once "main_box_dpu.php";
+
 /*
-$sql=rtrim(file_get_contents('sql/main_tasks_iv_cnt.sql'));
-$sql=stritr($sql,$params);
-$data = $db->getOne($sql);
-$smarty->assign('iv_cnt', $data);
-*/
-
-$sql=rtrim(file_get_contents('sql/main_box_dpu.sql'));
-$sql=stritr($sql,$params);
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$x=array();
-foreach ($data as $k=>$v)
-{
-$x[$v["id"]]["head"]=$v;
-$x[$v["id"]]["chat"][$v["cid"]]=$v;
-}
-$smarty->assign('box_dpu', $x);
-
-$sql=rtrim(file_get_contents('sql/main_box_creator.sql'));
-$sql=stritr($sql,$params);
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$x=array();
-foreach ($data as $k=>$v)
-{
-$x[$v["id"]]["head"]=$v;
-$x[$v["id"]]["chat"][$v["cid"]]=$v;
-}
-$smarty->assign('box_creator', $x);
-
-
-
-
 $sql=rtrim(file_get_contents('sql/main_advance_pos_my.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('my_advance', $x);
+*/
 
+/*
 $sql=rtrim(file_get_contents('sql/main_advance_ok_dpu.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('advance_ok_dpu', $x);
+*/
 
 //echo $sql;
 
@@ -447,7 +482,6 @@ if ($d)
 if ($_SESSION['is_eta']==1&&isset($_REQUEST["eta_comment"])&&isset($_REQUEST["eta_comment_send"]))
 {
 $sql="
-/* Formatted on 06/04/2015 12:04:33 (QP5 v5.227.12220.39724) */
 SELECT DISTINCT r.tab_number,
                 r.eta,
                 r.h_eta,
@@ -472,7 +506,6 @@ $subj="Горячая линия руководства дирекции по продажам. Новое сообщение от ЭТА - 
 $text=nl2br($_REQUEST["eta_comment"]);
 $text.="<p>Руководитель ЭТА - ".$chief["fio"].", ".$chief["dpt_name"].", ".$chief["region_name"].", ".$chief["department_name"]."</p>";
 send_mail($parameters["eta_inform"]["val_string"],$subj,$text,null,false);
-//send_mail("denis.yakovenko@avk.ua",$subj,$text,null,false);
 }
 
 $sql=rtrim(file_get_contents('sql/error.sql'));

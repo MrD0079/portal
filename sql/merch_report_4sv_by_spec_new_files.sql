@@ -76,9 +76,9 @@ f.chat_closed,
          AND f.dt = ms_rep_routes1.rb_data
          AND f.ag_id = ms_rep_routes1.rb_ag_id
          AND F.KOD_TP = ms_rep_routes1.rb_kodtp
-         AND (ms_rep_routes1.rh_tn IN (SELECT emp_tn
-                          FROM who_full
-                         WHERE exp_tn = :tn)
+         AND (ms_rep_routes1.rh_tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1 OR (SELECT is_admin

@@ -25,6 +25,7 @@
 				<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
 					<ul>
 						<li><a href="?action=statyas">Группы / статьи затрат</a></li>
+						<li><a href="?action=nets_list&activ=1">Сети</a></li>
 					</ul>
 				</li>
 		
@@ -38,7 +39,6 @@
 						<li><a href="?action=fin_plan&plan_type=3">Оперативное</a></li>
 						<li><a href="?action=fin_dog_accept">Согласование финансового / договорного планирования</a></li>
 						<li><a href="?action=oper_accept">Согласование оперативного планирования</a></li>
-						<li><a href="?action=zakaz_nal&plan_type=3">Заказ промобюджета</a></li>
 					</ul>
 				</li>
 				<li>
@@ -69,6 +69,15 @@
 					</ul>
 				</li>
 				<li>
+					<a href="javascript:void(0);"><span class="dir">Возврат</span></a>
+					<ul>
+						{if $is_admin or $is_mkk}
+							<li><a href="?action=rzaycreate">Заявка на возврат</a></li>
+						{/if}
+						<li><a href="?action=rzayreestr">Реестр возвратов</a></li>
+					</ul>
+				</li>
+				<li>
 					<a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
 					<ul>
 						<li>
@@ -95,10 +104,19 @@
 								<li><a href="?action=year_kpr">Годовые КПР</a></li>
 								<li><a href="?action=saleskk">Продажи по сетям</a></li>
 								<li><a href="?action=dolya_polki">Доля полочного пространства</a></li>
+								<li><a href="?action=operfact">Оперативный факт</a></li>
+								{if $is_admin or $is_fin_man or $is_rmkk}
+								<li><a href="?action=bu_distr">БУ дистрибутора</a></li>
+								<li><a href="?action=doc_debit">Долг по документам</a></li>
+								<li><a href="?action=bud_income">Бюджет КК с учетом дохода</a></li>
+								{/if}
 							</ul>
 						</li>
 						<li><a href="?action=outlets">Торговые залы</a></li>
 						<li><a href="?action=zakaz_nal_report">Заказ промобюджета</a></li>
+						{if $is_admin or $is_fin_man}
+						<li><a href="?action=zakaz_nal_income">Приход промобюджета</a></li>
+						{/if}
 					</ul>
 				</li>
 				<li>
@@ -112,24 +130,30 @@
                 
 		{/if}
 
+		<li><a href="javascript:void(0);"><span class="dir">Торговые условия</span></a>
+			<ul>
+				<li><a href="?action=bud_ru_zay_create&tu=1">Цели на переговоры</a></li>
+				<li><a href="?action=bud_ru_zay_reestr&tu=1">Реестр целей на переговоры</a></li>
+				<li><a href="?action=bud_ru_zay_report&tu=1">Результаты переговоров</a></li>
+				<li><a href="?action=salesbychains">Продажи по сетям</a></li>
+				{if $is_db or $has_child_db or $is_super or $is_admin}
+				<li><a href="?action=scmovezay">Заявка на перенос ТУ</a></li>
+				<li><a href="?action=scmovehistory">История переноса ТУ</a></li>
+				{/if}
+			</ul>
+		</li>
 		<li><a href="?action=sc">Торговые условия работы с ТП</a></li>
 		<li><a href="javascript:void(0);"><span class="dir">Заявка на активность</span></a>
 			<ul>
-
-				{if $is_db}
-
-				<li><a href="?action=bud_ru_zay_create">Создание</a></li>
-
-				{/if}
-
-				<li><a href="?action=bud_ru_zay_accept">Согласование</a></li>
-				<li><a href="?action=bud_ru_zay_reestr">Реестр</a></li>
+				{if $is_db}<li><a href="?action=bud_ru_zay_create&tu=0">Создание</a></li>{/if}
+				<li><a href="?action=bud_ru_zay_accept&tu=0">Согласование</a></li>
+				<li><a href="?action=bud_ru_zay_reestr&tu=0">Реестр</a></li>
 			</ul>
 		</li>
 		<li><a href="javascript:void(0);"><span class="dir">Подтверждение затрат</span></a>
 			<ul>
-				<li><a href="?action=bud_ru_zay_report_accept">Согласование отчетов по активностям</a></li>
-				<li><a href="?action=bud_ru_zay_report">Реестр отчетов по активностям</a></li>
+				<li><a href="?action=bud_ru_zay_report_accept&tu=0">Согласование отчетов по активностям</a></li>
+				<li><a href="?action=bud_ru_zay_report&tu=0">Реестр отчетов по активностям</a></li>
 			</ul>
 		</li>
 		<li><a href="?action=bud_svod">Отчет по фондам</a></li>
@@ -168,7 +192,6 @@
 				<li><a href="?action=bud_pay">Формы оплаты</a></li>
 				<li><a href="?action=bud_nd">Национальные подразделения</a></li>
 				<li><a href="?action=bud_funds">Фонды</a></li>
-				<li><a href="?action=bud_replace_ts">Замена ТС</a></li>
 				<li><a href="?action=bud_replace_db">Замена ДБ</a></li>
 				<li><a href="?action=bud_fil">Дистрибуторы/Филиалы</a></li>
 				<li><a href="?action=bud_tn_fil">Привязка ДБ к дистрибуторам/филиалам</a></li>
@@ -176,7 +199,6 @@
 				<li><a href="?action=bud_ru_st_pri">Статьи приходов</a></li>
 				<li><a href="?action=bud_ru_ff">Поля заявки/отчета</a></li>
 				<li><a href="?action=bud_db">ДБ</a></li>
-				<li><a href="?action=nets_list&activ=1">Сети</a></li>
 				<li><a href="?action=lists">Списки</a></li>
 				<li><a href="?action=bud_fil_contacts_dolgn">Обязательные контакты дистрибьюторов</a></li>
 			</ul>

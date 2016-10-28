@@ -1,0 +1,18 @@
+{if $is_admin}
+<h1 style="font-size:60px;">Вкусы</h1>
+<table border=1 cellpadding=1 cellspacing=1 style="font-size:18px;text-align:center;vertical-align:middle;/*width:100%;*/">
+<tbody>
+	<tr style="font-weight:bold;">
+		<td>ФИО сотрудника</td>
+		<td>количество<br>совпадений<br>с правильными ответами</td>
+	</tr>
+	{foreach key=k item=i from=$voiting_tastes}
+	<tr>
+		<td style="text-align:left">{$i.fio}</td>
+		<td>{$i.same}</td>
+	</tr>
+	{/foreach}
+</tbody>
+</table>
+<p></p>
+{/if}

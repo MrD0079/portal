@@ -1,4 +1,4 @@
-/* Formatted on 15/06/2015 13:46:50 (QP5 v5.227.12220.39724) */
+/* Formatted on 06/06/2016 17:11:03 (QP5 v5.252.13127.32867) */
   SELECT st.statya,
          NVL (fin.cnt, 0) f_cnt,
          DECODE (NVL (fin.cnt, 0), 0, 0, fin.total / fin.cnt) f_price,
@@ -17,12 +17,11 @@
             FROM statya
            WHERE id = sn.parent)
             cost_item_parent
-    FROM (SELECT DISTINCT statya, payment_format
+    FROM (SELECT DISTINCT statya
             FROM nets_plan_month
            WHERE year = :y AND month = :calendar_months AND id_net = :nets) st,
          statya sn,
          (  SELECT statya,
-                   payment_format,
                    SUM (cnt) cnt,
                    SUM (total) total,
                    SUM (bonus) bonus
@@ -31,9 +30,8 @@
                    AND month = :calendar_months
                    AND id_net = :nets
                    AND plan_type = 1
-          GROUP BY statya, payment_format) fin,
+          GROUP BY statya) fin,
          (  SELECT statya,
-                   payment_format,
                    SUM (cnt) cnt,
                    SUM (total) total,
                    SUM (bonus) bonus
@@ -42,9 +40,8 @@
                    AND month = :calendar_months
                    AND id_net = :nets
                    AND plan_type = 3
-          GROUP BY statya, payment_format) oper,
+          GROUP BY statya) oper,
          (  SELECT statya,
-                   payment_format,
                    SUM (cnt) cnt,
                    SUM (total) total,
                    SUM (bonus) bonus
@@ -53,12 +50,9 @@
                    AND month = :calendar_months
                    AND id_net = :nets
                    AND plan_type = 4
-          GROUP BY statya, payment_format) fou
+          GROUP BY statya) fou
    WHERE     sn.id = st.statya
          AND st.statya = fin.statya(+)
          AND st.statya = oper.statya(+)
          AND st.statya = fou.statya(+)
-         AND st.payment_format = fin.payment_format(+)
-         AND st.payment_format = oper.payment_format(+)
-         AND st.payment_format = fou.payment_format(+)
 ORDER BY sn.cost_item, st.statya

@@ -1,0 +1,105 @@
+<h1>Приход промобюджета</h1>
+
+<form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
+	<table>
+		<tr>
+			<td>Год</td>
+			<td>Месяц</td>
+		</tr>
+		<tr>
+			<td>
+				<select name="calendar_years" id="calendar_years" required>
+					<option value=0></option>
+					{foreach key=key item=item from=$calendar_years}
+						<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+			<td style="vertical-align: top;">
+				<select name="plan_month" id="plan_month" required>
+					<option></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#plan_month option[value="{$smarty.request.plan_month}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+	</table>
+	<input value="Построить отчет" name="generate" type="submit">
+</form>
+
+{if $smarty.request.generate}
+
+<table border=1 cellpadding=0 cellspacing=0>
+	<tr style="font-weight:bold">
+		<td>ТМ КК</td>
+		<td>Сумма прихода, тыс.{$valuta}.</td>
+		<td>Дата прихода</td>
+	</tr>
+	{foreach key=key item=item from=$d}
+		<tr>
+			<td>{$item.fio}</td>
+			<td>
+				<input
+					id="input{$item.tn}income_sum"
+					onchange="save('tm',{$item.tn},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','income_sum',this.value);"
+					class="number3"
+					size=10
+				>
+				<script>
+					$('#input{$item.tn}income_sum').val({$item.income_sum});
+				</script>
+			</td>
+			<td>
+				<input
+					id="input{$item.tn}income_dt"
+					onchange="save('tm',{$item.tn},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','income_dt',this.value);"
+					class="datepicker"
+					size=10
+				>
+				<script>
+					$('#input{$item.tn}income_dt').val('{$item.income_dt}');
+				</script>
+			</td>
+		</tr>
+	{/foreach}
+		<tr style="font-weight:bold">
+			<td>Итого: {$dt.c}</td>
+			<td>{$dt.income_sum|num:3}</td>
+		</tr>
+</table>
+
+<script>
+{literal}
+
+function save(table,tn,year,month,field,val)
+{
+	$('#input'+tn+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('table',  table);
+	fd.append('tn',  tn);
+	fd.append('year',  year);
+	fd.append('month',  month);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=zakaz_nal_income&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#input'+tn+field).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+
+{/literal}
+</script>
+
+<div id=ok></div>
+
+{/if}

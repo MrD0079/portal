@@ -1,26 +1,38 @@
-<h3>Реестр отчетов по активности</h3>
+<h3>{if $smarty.request.tu eq 1}Результаты переговоров{else}Реестр отчетов по активности{/if}</h3>
 <form target="_self" method="POST" name=form_bud_ru_zay_report id=form_bud_ru_zay_report enctype="multipart/form-data">
+
+<input type=hidden name=tu value={$smarty.request.tu}>
 
 <table>
 	<tr>
 		<td style="text-align:right">По дате с/по</td>
 		<td>
 			<input type=radio name=date_between_brzr value='dt12'>
-			заявки
+			создания
 			<input type=radio name=date_between_brzr value='dt34'>
-			начала активности
+			начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}
 			<input size=10 class="dt12 datepicker" name=dates_list1 id=dates_list1>
 			<input size=10 class="dt12 datepicker" name=dates_list2 id=dates_list2>
 			<script>
 				$('#dates_list1').val('{$smarty.request.dates_list1}');
 				$('#dates_list2').val('{$smarty.request.dates_list2}');
+				$("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").attr('checked',true);
+				$("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").click();
 			</script>
 		</td>
 	</tr>
-<script>
-$("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").attr('checked',true);
-$("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").click();
-</script>
+	<tr>
+		<td style="text-align:right">По руководителю</td>
+		<td>
+			<select name=exp_list_without_ts id=exp_list_without_ts>
+				<option value=0></option>
+				{foreach key=key item=item from=$exp_list_without_ts}
+				<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+				{/foreach}
+			</select>
+			<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		</td>
+	</tr>
 	<tr>
 		<td style="text-align:right">Инициатор</td>
 		<td>
@@ -33,6 +45,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<script>$('#creator option[value="{$smarty.request.creator}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{if $smarty.request.tu neq 1}
 	<tr>
 		<td style="text-align:right">Статья расходов</td>
 		<td>
@@ -60,6 +73,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<script>$('#kat option[value="{$smarty.request.kat}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{/if}
 	<tr>
 		<td style="text-align:right">Дистрибьютор</td>
 		<td>
@@ -72,6 +86,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<script>$('#fil option[value="{$smarty.request.fil}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{if $smarty.request.tu neq 1}
 	<tr>
 		<td style="text-align:right">Фонд</td>
 		<td>
@@ -84,6 +99,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<script>$('#funds option[value="{$smarty.request.funds}"]').prop('selected', true);</script>
 		</td>
 	</tr>
+	{/if}
 	<tr>
 		<td style="text-align:right">Сеть</td>
 		<td>
@@ -181,16 +197,16 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 		</td>
 	</tr>
 	<tr>
-		<td style="text-align:right">Фильтр по предоставлению отчета</td>
+		<td style="text-align:right">Фильтр по предоставлению {if $smarty.request.tu eq 1}результатов переговоров{else}отчета{/if}</td>
 		<td>
 			<input checked="checked" name="report_done_flt" id="report_done_flt" value="0" type="radio"> все
-			<input name="report_done_flt" id="report_done_flt" value="1" type="radio"> отчет предоставлен
-			<input name="report_done_flt" id="report_done_flt" value="2" type="radio"> отчет не предоставлен
+			<input name="report_done_flt" id="report_done_flt" value="1" type="radio"> {if $smarty.request.tu eq 1}переговоры завершены{else}отчет предоставлен{/if}
+			<input name="report_done_flt" id="report_done_flt" value="2" type="radio"> {if $smarty.request.tu eq 1}переговоры не завершены{else}отчет не предоставлен{/if}
 			<script>$('input[name=report_done_flt][value={$smarty.request.report_done_flt}]').attr('checked',true);</script>
 		</td>
 	</tr>
 	<tr>
-		<td style="text-align:right">Фильтр по сроку подачи отчета</td>
+		<td style="text-align:right">Фильтр по сроку {if $smarty.request.tu eq 1}внесения результатов переговоров{else}подачи отчета{/if}</td>
 		<td>
 			<input checked="checked" name="srok_ok" id="srok_ok" value="0" type="radio"> все
 			<input name="srok_ok" id="srok_ok" value="1" type="radio"> срок не истек
@@ -198,39 +214,47 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<script>$('input[name=srok_ok][value={$smarty.request.srok_ok}]').attr('checked',true);</script>
 		</td>
 	</tr>
+	{if $smarty.request.tu neq 1}
 	<tr>
-		<td style="text-align:right;vertical-align:top">Динамический фильтр по полям ЗАЯВКИ</td>
+		<td style="text-align:right">Фильтр по затратам</td>
+		<td>
+			<input checked="checked" name="report_zero_cost_flt" id="report_zero_cost_flt" value="0" type="radio"> все
+			<input name="report_zero_cost_flt" id="report_zero_cost_flt" value="1" type="radio"> с нулевыми затратами
+			<script>$('input[name=report_zero_cost_flt][value={$smarty.request.report_zero_cost_flt}]').attr('checked',true);</script>
+		</td>
+	</tr>
+	{/if}
+	<tr>
+		<td style="text-align:right;vertical-align:top">Динамический фильтр по полям</td>
 		<td id="td1">
 			<a href="javascript:void(0);" onClick="f1();">добавить фильтр</a><br>
 			<script>
-			var a=1;
-			{literal}
-
-			function get_list(id,v,item)
-			{
-			x=loadwait_show('subtype_list_'+id);
-			$('#subtype_list_'+id).load(
-			'?action=bud_ru_ff_subtypes_get_list&nohead=1&id='+id+'&subtype='+v+'&item='+item
-			,
-			{
-			}
-			,
-			function() {
-				loadwait_hide(x);
-				
-			}
-			);
-			}
-
-			function f1(val1,val2)
-			{
-				$('#td1').append('<div style="display:inline" id=st'+a+'></div>');
-				$('#st'+a).load('?action=bud_ru_ff_subtypes&nohead=1',{id: a, subtype: val1, item: val2});
-				a++;
-			}
-			{/literal}
-			{foreach key=k item=i from=$smarty.request.dyn_flt}{if $i.subtype and $i.item}f1({$i.subtype},{$i.item});{/if}{/foreach}
-
+				var a=1;
+				{literal}
+				function get_list(id,v,item)
+				{
+					x=loadwait_show('subtype_list_'+id);
+					$('#subtype_list_'+id).load(
+						'?action=bud_ru_ff_subtypes_get_list&nohead=1&id='+id+'&subtype='+v+'&item='+item,{},function() {loadwait_hide(x);}
+					);
+				}
+				function f1(val1,val2)
+				{
+					$('#td1').append('<div style="display:inline" id=st'+a+'></div>');
+					$('#st'+a).load('?action=bud_ru_ff_subtypes&nohead=1',{id: a, subtype: val1, item: val2});
+					a++;
+				}
+				{/literal}
+				{foreach key=k item=i from=$smarty.request.dyn_flt}{if $i.subtype and $i.item}f1({$i.subtype},{$i.item});{/if}{/foreach}
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Показывать только сводные данные</td>
+		<td>
+			<input type=checkbox name="showonlysvod" id="showonlysvod" value="1">
+			<script>
+			$("#showonlysvod").prop('checked','{$smarty.request.showonlysvod}'=='1'?true:false);
 			</script>
 		</td>
 	</tr>
@@ -240,10 +264,10 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<input onChange="this.value==''?this.value=0:null;" class="number_int" name="z_id" value="{$smarty.request.z_id}">
 			{if $find_bud_ru_zay}
 				{if $find_bud_ru_zay.exist eq 0}
-					<font style="font-weight:bold;color:red">Заявка с указанным номером не найдена</font>
+					<font style="font-weight:bold;color:red">Документ с указанным номером не найден</font>
 				{else}
 					{if $find_bud_ru_zay.visible eq 0}
-						<font style="font-weight:bold;color:red">Заявка в реестре найдена, но у вас нет прав для ее просмотра</font>
+						<font style="font-weight:bold;color:red">Документ в реестре найден, но у вас нет прав для его просмотра</font>
 					{/if}
 				{/if}
 			{/if}
@@ -273,6 +297,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 		<td rowspan=2>название</td>
 		{foreach key=key item=item from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}{/foreach}
 		<td colspan="{$smarty.foreach.bud_ru_ff_st_ras.total}">cтатьи расходов (план / факт)</td>
+		<td rowspan=2>кол-во документов</td>
 	</tr>
 
 	<tr style="font-weight:bold;text-align:center">
@@ -293,21 +318,22 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			{/foreach}
 			<td>{$x} / {$rep_x}</td>
 		{/foreach}
+		<td>{$item.z_cnt}</td>
 	</tr>
 	{/foreach}
 </table>
 
 {/if}
 
-{if $smarty.request.select or $smarty.request.z_id}
+{if ($smarty.request.select or $smarty.request.z_id) and not $smarty.request.showonlysvod}
 
 <h3>Реестр</h3>
 
 <table border=1 cellpadding=5 cellspacing=0>
 	<tr style="text-align:center;font-weight:bold">
-		<td rowspan=2>Заголовок заявки</td>
-		<td rowspan=2>Поля заявки</td>
-		<td rowspan=2>Отчет по заявке</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Общая информация{else}Заголовок заявки{/if}</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Цели на переговоры{else}Поля заявки{/if}</td>
+		<td rowspan=2>{if $smarty.request.tu eq 1}Результаты переговоров{else}Отчет по заявке{/if}</td>
 		<td colspan=3>Блок согласования</td>
 	</tr>
 	<tr style="text-align:center;font-weight:bold">
@@ -332,9 +358,19 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 
 	<tr style="background-color:{$color};vertical-align:top">
 		<td>
-	{if $is_do or $is_traid or $is_traid_kk or $is_db}
+	{if $is_do or $is_traid or $is_traid_kk or $is_db or $is_admin}
 		<input type="submit" name="save" id="save" value="Сохранить"><br>
+		<!--
+		<a href="javascript:void(0);" onClick='$("#form{$i.head.id} input").prop("disabled", true);'>test</a>
+		<a href="javascript:void(0);" onClick='$(".required{$i.head.id}").attr("disabled","disabled");'>test</a>
+		-->
 	{/if}
+
+	{if $is_admin}
+		<input type="submit" name="reset" id="reset" value="Сбросить подтверждения"><br>
+		<input type=hidden name='reset_z_id' value='{$i.head.id}'>
+	{/if}
+
 {if $i.head.net_name}
 <p style="border:1px dotted red">
 			<b>Сеть:</b>{$i.head.net_name}<br>
@@ -343,10 +379,10 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<b>Возмещение дистрибутору:</b>{if $i.head.distr_compensation eq 1}да{else}нет{/if}<br>
 </p>
 {/if}
-			<b>№ Заявки:</b>{$i.head.id}<br>
+			<b>№:</b>{$i.head.id}<br>
 			<b>Дата создания:</b>{$i.head.created}<br>
-			<b>Дата начала проведения активности:</b>{$i.head.dt_start}<br>
-			<b>Дата окончания проведения активности:</b>{$i.head.dt_end}<br>
+			<b>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_start}<br>
+			<b>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_end}<br>
 			<b>Регион / Подразделение:</b>{$i.head.region_name}<br>
 			<b>ФИО РМ:</b>{$i.head.rm_fio}<br>
 			<b>Мобильный телефон:</b>{$i.head.phone}<br>
@@ -358,18 +394,24 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			<b>Фонд:</b>{$i.head.funds_name}<br>
 			<b>Инициатор:</b>{$i.head.creator_pos_name},{$i.head.creator_department_name},<font style="color:red">{$i.head.creator}</font><br>
 			<b>Адресат:</b>{$i.head.recipient_pos_name},{$i.head.recipient_department_name},<font style="color:red">{$i.head.recipient}</font><br>
-			<b>Дата отчета по заявке:</b><br>
+			<b>Исполнители:</b><br>
+			{foreach key=k1 item=i1 from=$i.executors name=ex}
+				{if $i1.executor_name neq null}
+				<b>{$smarty.foreach.ex.iteration}.</b> {$i1.executor_pos_name}, {$i1.executor_department_name}, <font style="color:red">{$i1.executor_name}</font><br>
+				{/if}
+			{/foreach}
+			<b>Дата {if $smarty.request.tu eq 1}внесения результатов переговоров{else}отчета по заявке{/if}:</b><br>
 			{if $i.head.report_data}
 				{$i.head.report_data}<br>
 				<font style="font-weight:bold;color:green">{$i.head.report_data_fio|escape} {$i.head.report_data_lu}</font><br>
 				{$i.head.report_data_text|nl2br}<br>
 			{/if}
-			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">Сокращенный отчет</font><br>{/if}
+			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}
 		</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.ff}
-				<b>{$i1.name}:&nbsp</b>
-				{if $i1.type eq 'formula'}	{$i1.val_formula|num:3}{/if}
+				<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
+				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 				{if $i1.type eq 'string'}	{$i1.val_string}{/if}
 				{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
@@ -386,7 +428,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			{/foreach}
 		</td>
 		<td style="text-align:center">
-			<b>Срок подачи отчета:</b>
+			<b>Срок {if $smarty.request.tu eq 1}внесения результатов переговоров{else}подачи отчета{/if}:</b>
 			{if $i.head.srok_ok eq 1}
 				<font style="background-color:#66FF66">не истек</font>
 			{else}
@@ -394,17 +436,22 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			{/if}
 			<br>
 			<b>Подтверждение:</b>
-			{if $i.head.current_status eq 0}<font style="background-color:#FFFF66">отчет на согласовании</font>{/if}
+			{if $i.head.current_status eq 0}<font style="background-color:#FFFF66">{if $smarty.request.tu eq 1}результаты переговоров{else}отчет{/if} на согласовании</font>{/if}
 			{if $i.head.current_status eq 1}<font style="background-color:#66FF66">подтвержден</font>{/if}
 			{if $i.head.current_status eq 2}<font style="background-color:#FFCC99">отклонен</font>{/if}
 			<br>
-			<b>Отчет заполнен: </b>
+			<b>{if $smarty.request.tu eq 1}Переговоры завершены, результаты отличны от целей{else}Отчет заполнен{/if}: </b>
 			{if $i.head.creator_tn eq $tn and $i.head.not_seen}
 					<input
 						{if $i.head.report_done}checked{/if}
 						onClick="
 							$('#report_done_{$i.head.id}').attr('disabled',false);
 							$('#report_done_{$i.head.id}').val(this.checked?1:0);
+							$('.required{$i.head.id}').prop('required',
+									/*this.checked
+										&&*/
+									$('#report_fakt_equal_plan_{$i.head.id}').val()==false
+								);
 						"
 						type="checkbox"
 					>
@@ -421,7 +468,65 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			{else}
 				<font style="background-color:#FFCC99">нет</font>
 			{/if}
-			<br>
+			{if $smarty.request.tu neq 1}
+				<br>
+				<b>Отчет с нулевыми затратами: </b>
+				{if $i.head.creator_tn eq $tn and $i.head.report_done and $i.head.report_zero_cost neq 1}
+						<input
+							{if $i.head.report_zero_cost}checked{/if}
+							onClick="
+								$('#report_zero_cost_{$i.head.id}').attr('disabled',false);
+								$('#report_zero_cost_{$i.head.id}').val(this.checked?1:0);
+							"
+							type="checkbox"
+						>
+						<input
+							{if $i.head.report_zero_cost}value=1{/if}
+							disabled
+							name="report_zero_cost[{$i.head.id}]"
+							id="report_zero_cost_{$i.head.id}"
+							type="hidden"
+						>
+				{/if}
+				{if $i.head.report_zero_cost}
+					<font style="background-color:#66FF66">да</font>
+				{else}
+					<font style="background-color:#FFCC99">нет</font>
+				{/if}
+				<br>
+			{/if}
+			{if $smarty.request.tu eq 1}
+				<br>
+				<b>Переговоры завершены, результаты соответствуют целям: </b>
+				{if $i.head.creator_tn eq $tn and $i.head.not_seen}
+						<input
+							{if $i.head.report_fakt_equal_plan}checked{/if}
+							onClick="
+								$('#report_fakt_equal_plan_{$i.head.id}').attr('disabled',false);
+								$('#report_fakt_equal_plan_{$i.head.id}').val(this.checked?1:0);
+								$('.required{$i.head.id}').prop('required',
+									!this.checked
+										/*&&
+									$('#report_done_{$i.head.id}').val()==true*/
+								);
+							"
+							type="checkbox"
+						>
+						<input
+							{if $i.head.report_fakt_equal_plan}value=1{/if}
+							disabled
+							name="report_fakt_equal_plan[{$i.head.id}]"
+							id="report_fakt_equal_plan_{$i.head.id}"
+							type="hidden"
+						>
+				{/if}
+				{if $i.head.report_fakt_equal_plan}
+					<font style="background-color:#66FF66">да</font>
+				{else}
+					<font style="background-color:#FFCC99">нет</font>
+				{/if}
+				<br>
+			{/if}
 			<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
 				<tr style="font-weight:bold">
 					<td style="vertical-align: top;">Плановый показатель<br></td>
@@ -431,8 +536,8 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 				{if $i1.rep_r_visible}
 				<tr>
 					<td>
-					<b>{$i1.name}:&nbsp</b>
-					{if $i1.type eq 'formula'}	{$i1.val_formula|num:3}{/if}
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
+					{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 					{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 					{if $i1.type eq 'string'}	{$i1.val_string}{/if}
 					{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
@@ -447,48 +552,50 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 					{/if}
 						</td>
 						<td>
-					<b>{$i1.rep_name}:&nbsp</b>
-					{if $i.head.creator_tn eq $tn and $i.head.not_seen}
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.rep_name}:&nbsp</span>
+					{if $i.head.creator_tn eq $tn and $i.head.not_seen and $i.head.report_done neq 1}
 						{if $i1.type eq 'textarea'}
-							<textarea id=new_st_{$i1.id} name=new_st[{$i1.id}] {if $i1.rep_required}required{/if}>{$i1.rep_val_textarea}</textarea>
+							<textarea id=new_st_{$i1.id} name=new_st[{$i1.id}] class="required{$i.head.id}" {if $i1.rep_required}required{/if}>{$i1.rep_val_textarea}</textarea>
 						{else}
 							{if $i1.type eq 'file'}
-								<input id=new_st_{$i1.id} name=new_st[{$i1.id}][] type=file multiple {if $i1.rep_required and not $i1.rep_val_file}required{/if}>
+								<input id=new_st_{$i1.id} name=new_st[{$i1.id}][] type=file multiple class="required{$i.head.id}" {if $i1.rep_required and not $i1.rep_val_file}required{/if}>
 								{foreach key=k2 item=i2 from=$i1.rep_val_file}
 									<br><input type=checkbox name="bud_ru_zay_files_del[{$i1.id}][{$i2}]" value="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>
 								{/foreach}
 								{if $i1.rep_val_file}<br>Выбрать для удаления{/if}
 							{else}
 								{if $i1.type eq 'list'}
-									<select id=new_st_{$i1.id} name=new_st[{$i1.id}] {if $i1.required}required{/if}>
+									<select id=new_st_{$i1.id} name=new_st[{$i1.id}] class="required{$i.head.id}" {if $i1.rep_required}required{/if}>
 										<option></option>
 										{foreach key=lk item=li from=$i1.list}	
 											<option value={$li.id}>{$li.name}</option>
 										{/foreach}
 									</select>
 									<script>
-										$('#new_st_{$i1.id} option[value={$i1.rep_val_list}]').prop('selected', true);
+										$('#new_st_{$i1.id} option[value="{$i1.rep_val_list}"]').prop('selected', true);
 									</script>
 								{else}
 									{if $i1.type eq 'bool'}
 										<input
 											type=checkbox
 											id=new_st_{$i1.id}_cb
-											{if $i1.required}required{/if}
+											class="required{$i.head.id}"
+											{if $i1.rep_required}required{/if}
 											onChange="$('#new_st_{$i1.id}_val').val(this.checked?1:'');"
 										>
 										<input
 											type=hidden
 											id=new_st_{$i1.id}_val
 											name=new_st[{$i1.id}]
-											{if $i1.required}required{/if}
+											class="required{$i.head.id}"
+											{if $i1.rep_required}required{/if}
 										>
 										<script>
 											$("#new_st_{$i1.id}_cb").attr('checked','{$i1.rep_val_bool}'=='1'?true:false);
 											$("#new_st_{$i1.id}_val").val({$i1.rep_val_bool});
 										</script>
 									{else}
-                                                        			{if $i1.type eq 'formula'}
+                                        {if $i1.type eq 'formula'}
 											<input type=hidden name=new_st[{$i1.id}] value=0>
 											<!--
 											{$i1.formula}
@@ -505,12 +612,12 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 											<input
 												id=new_st_{$i1.id}
 												name=new_st[{$i1.id}]
-												class="{$i1.class}"
-												{if $i1.required}required{/if}
-												onKeyUp="calc_formula();"
+												class="{$i1.class} required{$i.head.id}"
+												{if $i1.rep_required}required{/if}
+												onKeyUp="calc_formula({$i.head.id});"
 											>
 											<!--
-											<input id=new_st_{$i1.id} name=new_st[{$i1.id}] class="{$i1.class}" {if $i1.required}required{/if}>
+											<input id=new_st_{$i1.id} name=new_st[{$i1.id}] class="{$i1.class} required{$i.head.id}" {if $i1.rep_required}required{/if}>
 											-->
 											<script>
 												{if $i1.type eq 'string'}$('#new_st_{$i1.id}').val("{$i1.rep_val_string}");{/if}
@@ -530,7 +637,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 								<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>&nbsp
 							{/foreach}
 						{/if}
-						{if $i1.type eq 'formula'}	{$i1.rep_val_formula|num:3}{/if}
+						{if $i1.type eq 'formula'}	{$i1.rep_val_formula}{/if}
 						{if $i1.type eq 'list'}		{$i1.rep_val_list_name}{/if}
 						{if $i1.type eq 'string'}	{$i1.rep_val_string}{/if}
 						{if $i1.type eq 'number_int'}	{$i1.rep_val_number_int|num:0}{/if}
@@ -543,18 +650,20 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 				{/if}
 				{/foreach}
 			</table>
-			{if $i.head.creator_tn eq $tn and $i.head.not_seen}
-				<b>Подтверждающие документы:&nbsp;</b> <input id="sup_doc_{$i.head.id}" name="sup_doc[{$i.head.id}][]" multiple="" type="file">
-				{foreach key=k2 item=i2 from=$i.head.sup_doc}
-					<br><input type=checkbox name="sup_doc_del[{$i.head.id}][{$i2}]" value="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>
-				{/foreach}
-				{if $i.head.sup_doc}<br>Выбрать для удаления{/if}
-			{else}
-				{if $i.head.sup_doc}
-				<b>Подтверждающие документы:&nbsp;</b>
-				{foreach key=k2 item=i2 from=$i.head.sup_doc}
-					<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>&nbsp
-				{/foreach}
+			{if $smarty.request.tu neq 1}
+				{if $i.head.creator_tn eq $tn and $i.head.not_seen and $i.head.report_done neq 1}
+					<b>Подтверждающие документы:&nbsp;</b> <input id="sup_doc_{$i.head.id}" name="sup_doc[{$i.head.id}][]" multiple="" type="file">
+					{foreach key=k2 item=i2 from=$i.head.sup_doc}
+						<br><input type=checkbox name="sup_doc_del[{$i.head.id}][{$i2}]" value="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>
+					{/foreach}
+					{if $i.head.sup_doc}<br>Выбрать для удаления{/if}
+				{else}
+					{if $i.head.sup_doc}
+					<b>Подтверждающие документы:&nbsp;</b>
+					{foreach key=k2 item=i2 from=$i.head.sup_doc}
+						<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>&nbsp
+					{/foreach}
+					{/if}
 				{/if}
 			{/if}
 		</td>
@@ -577,7 +686,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 		<td>
 			{if $i.zchat}
 			<p>
-			Комментарии по заявке:
+			Комментарии по {if $smarty.request.tu eq 1}целям на переговоры{else}заявке{/if}:
 			<br>
 			{foreach key=k1 item=i1 from=$i.zchat}
 				<font style="color:red">{$i1.zchat_time}</font>
@@ -589,7 +698,7 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 			{/if}
 			{if $i.chat}
 			<p>
-			Комментарии по отчету:
+			Комментарии по {if $smarty.request.tu eq 1}торговым условиям{else}отчету{/if}:
 			<br>
 			{foreach key=k1 item=i1 from=$i.chat}
 				<font style="color:red">{$i1.chat_time}</font>
@@ -633,11 +742,11 @@ $("input[name=date_between_brzr][value={$smarty.request.date_between_brzr}]").cl
 
 
 <script>
-function calc_formula ()
+function calc_formula (zid)
 {literal}{{/literal}
 	{foreach key=k item=i from=$d}
 		{foreach key=k1 item=i1 from=$i.ff}
-			{if $i1.type eq 'number' or $i1.type eq 'number_int'}
+			{if $i1.type eq 'number' or $i1.type eq 'number_int' and $i1.rep_var_name}
 				var {$i1.rep_var_name}=parseFloat($('#new_st_{$i1.id}').val());
 			{/if}
 		{/foreach}
@@ -648,6 +757,7 @@ function calc_formula ()
 				var r=eval(f);
 				r!=r?r=null:r=r.toFixed(3);
 				$('#new_st_{$i1.id}').val(r);
+				$("input[name='new_st[{$i1.id}]']").val(r);
 			{/if}
 		{/foreach}
 	{/foreach}

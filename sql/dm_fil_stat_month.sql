@@ -1,14 +1,24 @@
-/* Formatted on 15/10/2015 17:59:33 (QP5 v5.252.13127.32867) */
-  SELECT DISTINCT s.doc1c,
-                  s.sum1c,
-                  s.docdm,
-                  s.sumdm,
-                  s.fn,
-                  TO_CHAR ( s.datar, 'dd.mm.yyyy') datar,
-                  l.tn,
-                  l.bud_id,
-                  u.fio,
-                  bud.name bud_name
+/* Formatted on 04/11/2015 10:09:04 (QP5 v5.252.13127.32867) */
+  SELECT DISTINCT
+         s.doc1c,
+         s.sum1c,
+         s.docdm,
+         s.sumdm,
+         NVL (s.doc1c, 0) - NVL (s.docdm, 0) doc_delta,
+         NVL (s.sum1c, 0) - NVL (s.sumdm, 0) sum_delta,
+         DECODE (NVL (s.doc1c, 0),
+                 0, 0,
+                 NVL (s.docdm, 0) / NVL (s.doc1c, 0) * 100)
+            doc_perc,
+         DECODE (NVL (s.sum1c, 0),
+                 0, 0,
+                 NVL (s.sumdm, 0) / NVL (s.sum1c, 0) * 100)
+            sum_perc,
+         TO_CHAR (s.datar, 'dd.mm.yyyy') datar,
+         l.tn,
+         l.bud_id,
+         u.fio,
+         bud.name bud_name
     FROM dm_fil l,
          user_list u,
          bud_fil bud,

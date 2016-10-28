@@ -44,8 +44,6 @@ if (isset($_REQUEST['save'])&&isset($_REQUEST['data']))
 					$text.="Детализацию вы можете посмотреть в разделе Реестры / Обходные листы";
 					send_mail($accept1,$subj,$text,$fn);
 					send_mail($accept2,$subj,$text,$fn);
-//					send_mail('denis.yakovenko@avk.ua',$subj,$text,$fn);
-//					send_mail('dmytro.kalashnikov@avk.com.ua',$subj,$text,$fn);
 				}
 				else
 				{

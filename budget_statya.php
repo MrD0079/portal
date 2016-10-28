@@ -135,14 +135,25 @@ $d[$v["id"]]["cost_item"]=$v["cost_item"];
 $d[$v["id"]]["data_y"][$v["y"]][$v["my"]]["mt"]=$v["mt"];
 $d[$v["id"]]["data_y"][$v["y"]][$v["my"]]["total"]=$v["total"];
 $d[$v["id"]]["data_my"][$v["my"]][$v["y"]]["total"]=$v["total"];
+isset($d[$v["id"]]["total"]) ? $d[$v["id"]]["total"]+=$v["total"] : $d[$v["id"]]["total"] = 0;
 }
+
+
+foreach ($d as $k=>$v)
+{
+if ($v["total"]==0)
+{
+unset($d[$k]);
+}
+}
+
 //print_r($d);
 
 
 foreach ($data_total as $k=>$v)
 {
-$d_total[0]["data_y"][$v["y"]][$v["my"]]["total"]=$v["total"];
-$d_total[0]["data_my"][$v["my"]][$v["y"]]["total"]=$v["total"];
+$d_total["data_y"][$v["y"]][$v["my"]]["total"]=$v["total"];
+$d_total["data_my"][$v["my"]][$v["y"]]["total"]=$v["total"];
 }
 
 //print_r($d_total);

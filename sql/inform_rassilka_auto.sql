@@ -14,7 +14,7 @@ BEGIN
                     ORDER BY ul.pos_name)
    LOOP
       UTL_MAIL.send(sender          => '<Информационная система АВК> robot@avk.ua',
-                    recipients      => 'deniska@avk.ua',
+                    recipients      => 'someone@avk.ua',
                     subject         => 'Сроки подачи отчетности',
                     MESSAGE         => a.pos_msg,
                     mime_type       => 'text/html; charset="Windows-1251"'

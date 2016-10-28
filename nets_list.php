@@ -1,11 +1,6 @@
 <?php
-
-
 audit("вошел в список сетей");
-
 //ses_req();
-
-
 if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
@@ -13,9 +8,6 @@ if (isset($_REQUEST["del"]))
 		Table_update("nets",array("id_net"=>$v),null);
 	}
 }
-
-
-
 
 if (isset($_REQUEST["id_net"]))
 {
@@ -34,10 +26,6 @@ if (isset($_REQUEST["id_net"]))
 		$_POST["id_net"]=$new_id;
 	}
 }
-
-
-
-
 
 if (isset($_REQUEST["activ_changed"]))
 {
@@ -69,8 +57,6 @@ if (isset($_REQUEST["cat_a_changed"]))
 	}
 }
 
-
-
 if (isset($_REQUEST["edit"]))
 {
 	audit("изменил параметры сети ".$_REQUEST["edit_id_net"]);
@@ -78,6 +64,7 @@ if (isset($_REQUEST["edit"]))
 	$fields_values = $_REQUEST["edit"];
 	$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'id_net='.$_REQUEST["edit_id_net"]);
 	if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
+	//print_r($affectedRows);
 }
 
 
@@ -85,22 +72,28 @@ if (isset($_REQUEST["edit"]))
 if (isset($_REQUEST["replace"]))
 {
 	audit("изменил ответственных сети");
-	$table_name = 'nets';
-
-//	ses_req();
-
+	/*$table_name = 'nets';*/
 	if (($_REQUEST["rmkk_from"]!='')&&($_REQUEST["rmkk_to"]!=''))
 	{
+		/*
 		$fields_values = array('tn_rmkk'=>$_REQUEST["rmkk_to"]);
 		$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'tn_rmkk='.$_REQUEST["rmkk_from"]);
 		if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
+		*/
+		Table_update("nets", array("tn_rmkk"=>$_REQUEST["rmkk_from"]), array("tn_rmkk"=>$_REQUEST["rmkk_to"]));
 	}
 
 	if (($_REQUEST["mkk_from"]!='')&&($_REQUEST["mkk_to"]!=''))
 	{
+		/*
 		$fields_values = array('tn_mkk'=>$_REQUEST["mkk_to"]);
 		$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'tn_mkk='.$_REQUEST["mkk_from"]);
 		if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
+		*/
+		Table_update("nets", array("tn_mkk"=>$_REQUEST["mkk_from"]), array("tn_mkk"=>$_REQUEST["mkk_to"]));
+		Table_update("promo_tm", array("tn"=>$_REQUEST["mkk_from"]), array("tn"=>$_REQUEST["mkk_to"]));
+		Table_update("nets_plan_month", array("payment_type"=>1, "plan_type"=>3, "mkk_ter"=>$_REQUEST["mkk_from"]), array("mkk_ter"=>$_REQUEST["mkk_to"]));
+		Table_update("nets_plan_month", array("payment_type"=>3, "plan_type"=>3, "mkk_ter"=>$_REQUEST["mkk_from"]), array("mkk_ter"=>$_REQUEST["mkk_to"]));
 	}
 }
 

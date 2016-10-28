@@ -42,20 +42,14 @@ INSERT INTO act_svodt (act,
                        db_tn
                FROM a15return d, a15return_action_nakl an, user_list st
               WHERE     d.tab_num = st.tab_num
-                    AND st.tn IN
-                           (SELECT slave
-                              FROM full
-                             WHERE master =
-                                      DECODE (:exp_list_without_ts,
-                                              0, master,
-                                              :exp_list_without_ts))
-                    AND st.tn IN
-                           (SELECT slave
-                              FROM full
-                             WHERE master =
-                                      DECODE (:exp_list_only_ts,
-                                              0, master,
-                                              :exp_list_only_ts))
+                    AND (   :exp_list_without_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+                    AND (   :exp_list_only_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
                     AND (   st.tn IN
                                (SELECT slave
                                   FROM full

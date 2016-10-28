@@ -1,10 +1,6 @@
-<form target="_self" method="POST" name=form1 id=form1>
 <h1>З/п за месяц</h1>
-
-
-
-
-
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form1 id=form1>
 <table>
 
 	<tr>
@@ -61,36 +57,69 @@
 		</td>
 	</tr>
 </table>
-
+<p>
 <input value="Выбрать" name="select_month" type="submit">
+</p>
+<p>
+<input value="Скопировать из предыдущего месяца" name="copy_pins" type="submit">
+</p>
 </form>
+{/if}
+
+{if $smarty.request.select_month}
+	{if not $smarty.request.print}
+		<p><a target=_blank href="
+			?action=mr_zp
+			&month_list={$smarty.request.month_list}
+			&svms_list={$smarty.request.svms_list}
+			&select_route_numb={$smarty.request.select_route_numb}
+			&flt_sum={$smarty.request.flt_sum}
+			&flt_pin={$smarty.request.flt_pin}
+			&print=1&select_month=1&excel=1&filename=З/п за месяц">Экспорт в Excel</a></p>
+		<input type=hidden name=generate value="Выбрать">
+	{/if}
+{/if}
+
+
 
 <div id=hpart1>
 часть 1
+{if not $smarty.request.print}
 <input
 	type=checkbox
 	id=hpart1val
 	value="{$h.part1}"
 	onChange="savem('{$smarty.request.month_list}','part1',this.checked?1:0);"
 >
+{else}
+{if $h.part1}да{/if}
+{/if}
+
 {$h.part1_lu}
 {$h.part1_lu_fio}
 </div>
 <div id=hpart2>
 часть 2
+{if not $smarty.request.print}
 <input
 	type=checkbox
 	id=hpart2val
 	value="{$h.part2}"
 	onChange="savem('{$smarty.request.month_list}','part2',this.checked?1:0);"
 >
+{else}
+{if $h.part2}да{/if}
+{/if}
+
 {$h.part2_lu}
 {$h.part2_lu_fio}
 </div>
+{if not $smarty.request.print}
 <script>
 $("#hpart1val").prop('checked','{$h.part1}'=='1'?true:false);
 $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 </script>
+{/if}
 
 {assign var=color1 value="#ccffff"}
 {assign var=color2 value="#ffffcc"}
@@ -123,6 +152,7 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 			<td>{$i.num}</td>
 			<td>{$i.fio_otv}</td>
 			<td>
+				{if not $smarty.request.print}
 				<input
 					class="num4"
 					id=data{$i.id}pin
@@ -130,10 +160,13 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 					onChange="save({$i.id},'pin',this.value);"
 					size=5
 				>
+				{else}
+					{$i.pin}
+				{/if}
 			</td>
 			<td>{$i.pin_lu} {$i.pin_lu_fio}</td>
 			<td style="background-color: {$color1}; text-align:right">
-				{if $is_admin or $is_ma}
+				{if ($is_admin or $is_ma) and not $smarty.request.print}
 				<input
 					class="number"
 					id=data{$i.id}part1_charged
@@ -149,7 +182,7 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 			<td style="background-color: {if $i.part1_pin_ok}{$color1}{else}red{/if}">{if $i.part1_pin_ok}да{else}нет{/if}</td>
 			<td style="background-color: {$color1};">{$i.part1_lu}</td>
 			<td style="background-color: {$color2}; text-align:right">
-				{if $is_admin or $is_ma}
+				{if ($is_admin or $is_ma) and not $smarty.request.print}
 				<input
 					class="number"
 					id=data{$i.id}part2_charged
@@ -168,11 +201,11 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 	{/foreach}
 		<tr style="font-weight:bold;text-align:right">
 			<td style="text-align:center" colspan=6>ИТОГО:{$zpt.cnt}</td>
-			<td style="background-color: {$color1};"></td>
+			<td style="background-color: {$color1};">{$zpt.part1_charged|num:2}</td>
 			<td style="background-color: {$color1};">{$zpt.part1_sum|num:2}</td>
 			<td style="background-color: {$color1};">{$zpt.part1_pin_ok}</td>
 			<td style="background-color: {$color1};"></td>
-			<td style="background-color: {$color2};"></td>
+			<td style="background-color: {$color2};">{$zpt.part2_charged|num:2}</td>
 			<td style="background-color: {$color2};">{$zpt.part2_sum|num:2}</td>
 			<td style="background-color: {$color2};">{$zpt.part2_pin_ok}</td>
 			<td style="background-color: {$color2};"></td>
@@ -181,6 +214,7 @@ $("#hpart2val").prop('checked','{$h.part2}'=='1'?true:false);
 
 
 
+{if not $smarty.request.print}
 {literal}
 <script>
 $('.num4').mask('9999');
@@ -212,5 +246,5 @@ function savem(dt,field,val)
 }
 </script>
 {/literal}
-
 <div id="ok" style="display: inline;"></div>
+{/if}

@@ -36,3 +36,20 @@
 </form>
 
 
+
+
+
+<div style="display: inline;" id=div1></div>
+
+
+
+
+
+
+<script>
+{literal}
+	$(document).ready(function() {
+		$('#div1').load('?action=log&prg=replace_ts&select=1&nohead=1&dates_list1=01.01.2000&dates_list2=31.12.2100');
+	}); 
+{/literal}
+</script> 

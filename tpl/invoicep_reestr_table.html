@@ -112,7 +112,7 @@ function() {
 				{if $item.ok_fm neq 1 and $item.bud_z_id and ($is_mkk or $is_rmkk or $is_fin_man or $is_admin)}
 					<input type=checkbox name=del_files[{$item1.id}] value={$item1.id}>
 				{/if}
-				<a target=_blank href="invoice_files/{$item1.fn}">{$item1.fn}</a>
+				<a target=_blank href="files/{$item1.fn}">{$item1.fn}</a>
 			</nobr>
 			<br>
 		{/foreach}

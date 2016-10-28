@@ -1,5 +1,9 @@
 <a href="javascript:void(0);" onClick="$('#st{$smarty.request.id}').remove();">[x]</a>
-<select name=dyn_flt[{$smarty.request.id}][subtype] id="dyn_flt_{$smarty.request.id}" onChange="this.value>0?get_list('{$smarty.request.id}',this.value,'{$smarty.request.item}'):$('#st_list').text('');">
+<select
+	name=dyn_flt[{$smarty.request.id}][subtype]
+	id="dyn_flt_{$smarty.request.id}"
+	onChange="this.value>0?get_list('{$smarty.request.id}',this.value,'{$smarty.request.item}'):$('#st_list').text('');"
+>
 	<option></option>
 	{foreach key=key1 item=item1 from=$bud_ru_ff_subtypes}
 	<option value={$item1.id}>{$item1.name}</option>
@@ -7,8 +11,7 @@
 </select>
 <div style="display:inline" id=subtype_list_{$smarty.request.id}></div>
 <script>
-/*$('#subtype_list_{$smarty.request.id}').load('?action=bud_ru_ff_subtypes_get_list&nohead=1&id={$smarty.request.id}&subtype='+this.value+'&item={$smarty.request.item}')*/
-$('#dyn_flt_{$smarty.request.id} option[value={$smarty.request.subtype}]').prop('selected', true);
+$('#dyn_flt_{$smarty.request.id} option[value="{$smarty.request.subtype}"]').prop('selected', true);
 $('#dyn_flt_{$smarty.request.id}').change();
 </script>
 <br>

@@ -1,1 +1,0 @@
-select * from akr_balls order by sort

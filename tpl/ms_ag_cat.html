@@ -1,0 +1,83 @@
+<h3>Заказчик - Категория</h3>
+
+<table id=tms_ag_cat_{$smarty.request.id} border=0 cellpadding=0 cellspacing=0>
+	<tbody>
+		{foreach key=k item=i from=$agents}
+			<tr id=ms_ag_cat_{$i.id}>
+				<td>
+					{$i.name}
+					<a href='javascript:void(0);' onClick="show_cat_items({$i.id})">категории</a>
+					<div style="margin-left:10px" id=detail_{$i.id}></div>
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>
+
+{literal}
+<script>
+
+function add_ms_ag_cat(id)
+{
+var fd = new FormData();
+fd.append('ag_id', id);
+fd.append('cat', $('#cat_'+id).val());
+$.ajax({
+  type: 'POST',
+  url: '?action=ms_ag_cat&new=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#tms_ag_cat_'+id+'>tbody:last').append(''+data+'');
+  }
+});
+}
+
+function save_ms_ag_cat(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax
+	({
+		type: 'POST',
+		url: '?action=ms_ag_cat&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#d_'+id+'_'+field).css('background-color','white');
+		}
+	});
+}
+
+function del_ms_ag_cat(id)
+{
+save_ms_ag_cat(id,'id',0);
+$('#ms_ag_cat_'+id).remove();
+}
+
+function show_cat_items(id)
+{
+var fd = new FormData();
+fd.append('id', id);
+$.ajax({
+  type: 'POST',
+  url: '?action=ms_ag_cat&items=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  $('#detail_'+id).html('');
+  $('#detail_'+id).append(''+data+'');
+  }
+});
+}
+
+</script>
+{/literal}
+
+<div id="ok" style="display: inline;"></div>

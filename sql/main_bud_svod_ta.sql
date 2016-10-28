@@ -1,4 +1,4 @@
-/* Formatted on 26.06.2015 14:03:09 (QP5 v5.227.12220.39724) */
+/* Formatted on 16/11/2015 16:50:38 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT c.mt || ' ' || c.y period,
                   TO_CHAR (t.dt, 'dd.mm.yyyy') dt_txt,
                   t.dt,
@@ -15,5 +15,12 @@
                          FROM user_list
                         WHERE tn = :tn) = 1
                   AND t.ok_pr_tn IS NOT NULL
-                  AND (t.ok_t1_tn IS NULL OR t.ok_t2_tn IS NULL)))
+                  AND (t.ok_t1_tn IS NULL OR t.ok_t2_tn IS NULL)
+                  AND NVL (u.is_kk, 0) <> 1)
+              OR (    (SELECT is_traid_kk
+                         FROM user_list
+                        WHERE tn = :tn) = 1
+                  AND t.ok_pr_tn IS NOT NULL
+                  AND (t.ok_t1_tn IS NULL OR t.ok_t2_tn IS NULL)
+                  AND NVL (u.is_kk, 0) = 1))
 ORDER BY t.dt, u.fio

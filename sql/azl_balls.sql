@@ -1,1 +1,0 @@
-select * from azl_balls order by sort

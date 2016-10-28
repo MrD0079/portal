@@ -43,6 +43,7 @@ if ($_REQUEST["tp_kod"]!=0)
 
 $sql = rtrim(file_get_contents('sql/bud_svod_zat_tp_list.sql'));
 $sql=stritr($sql,$params);
+//echo $sql;
 $xx = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('xx', $xx);
 

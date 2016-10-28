@@ -1,0 +1,239 @@
+<h3>
+{foreach key=k item=i from=$z.ff}
+{if $i.admin_id eq 4}{$i.name}: {$i.val_list_name}{/if}
+{if $i.admin_id eq 14}
+	{$i.name}: {$i.val_list_name} ({$cnt} ТП)
+	{assign var=is_chain value=1}
+{/if}
+{/foreach}
+</h3>
+
+{if $is_chain eq 1}
+<table border=1>
+	<tr style="font-weight:bold">
+		<td>Продажи и затраты по месяцам</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:center;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.mt} {$i.y}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Продажи, {$valuta}</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.summa|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Затраты нац. акции, {$valuta}</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.act_bonus|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Затраты лок. акции, {$valuta}</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.act_local_bonus|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Затраты ТМА, {$valuta}</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.zay_zat|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold">
+		<td>Затраты ИТОГО, {$valuta}</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.zat_total|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Торговые условия, {$valuta}</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.total|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>% затрат</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.zat_perc|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Количество отгруженных SKU</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.sku|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Скидка(-) / Наценка(+)</td>
+		{foreach key=k item=i from=$sales_t}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.skidka|num:1}
+		</td>
+		{/foreach}
+	</tr>
+</table>
+
+<h3>Детально по каждой ТП</h3>
+
+{/if}
+
+<table border=1>
+{foreach key=k1 item=i1 from=$sales}
+	<tr style="font-weight:bold">
+		<td colspan=99 style="background-color:lightgrey">
+			{$i1.head.tp_ur} {$i1.head.tp_addr}
+		</td>
+	</tr>
+
+	<tr style="font-weight:bold">
+		<td>Продажи и затраты по месяцам</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:center;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.mt} {$i.y}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Продажи, {$valuta}</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.summa|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Затраты нац. акции, {$valuta}</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.act_bonus|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Затраты лок. акции, {$valuta}</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.act_local_bonus|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Затраты ТМА, {$valuta}</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.zay_zat|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight:bold">
+		<td>Затраты ИТОГО, {$valuta}</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.zat_total|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Торговые условия, {$valuta}</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.total|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>% затрат</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.zat_perc|num:2}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Количество отгруженных SKU</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.sku}
+		</td>
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Скидка(-) / Наценка(+)</td>
+		{foreach key=k item=i from=$i1.data}
+		<td style="text-align:right;background-color:{if $i.y eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+		{$i.skidka|num:1}
+		</td>
+		{/foreach}
+	</tr>
+{/foreach}
+</table>
+
+<p>Система договорных условий <a href="javascript:void(0);" onClick="$('#tbl_sdu').toggle();">Показать/Скрыть</a></p>
+
+<table border=1 id=tbl_sdu style="display:none">
+	<tr style="font-weight:bold">
+			<td>Цели на переговоры</td>
+			{assign var=v_year value=0}
+			{assign var=v_ver value=0}
+			{foreach key=k item=i from=$d name=d}
+				{if $i.status eq 1 or ($i.status eq 0 and $i.id eq $goals_max0id)}
+					{if $i.year neq $v_year}
+								{assign var=v_year value=$i.year}
+					{/if}
+					{if $i.year neq $v_year or $v_year eq 0}
+								{assign var=v_ver value=0}
+					{else}
+								{assign var=v_ver value=$v_ver+1}
+					{/if}
+					<td style="background-color:{if $i.year eq $now_year}#FFFFCC{else}#CCFFFF{/if}">год {$i.year}, версия {$v_ver}, №{$i.id}</td>
+				{/if}
+			{/foreach}
+	</tr>
+	{foreach key=k item=i from=$ff}
+	<tr>
+			<td>{$i}:</td>
+			{foreach key=k1 item=i1 from=$d}
+				{if $i1.status eq 1 or ($i1.status eq 0 and $i1.id eq $goals_max0id)}
+					<td style="background-color:{if $i1.year eq $now_year}#FFFFCC{else}#CCFFFF{/if}">
+					{foreach key=k2 item=i2 from=$i1.ff}
+						{if $k eq $i2.ff_id}
+							{$i2.val_formula}
+							{$i2.val_list_name}
+							{$i2.val_string}
+							{$i2.val_textarea}
+							{$i2.val_number_int|num:0}
+							{$i2.val_number|num:5}
+							{$i2.val_datepicker}
+							{if $i2.type eq 'bool'}{if $i2.val_bool eq 1}да{else}нет{/if}{/if}
+							{if $i2.type eq 'file'}
+								{foreach key=k3 item=i3 from=$i2.val_file}
+									<nobr><a target=_blank href="bud_ru_zay_files/{$i1.id}/{$i2.ff_id}/{$i3}">{$i3}</a></nobr><br>
+								{/foreach}
+							{/if}
+						{/if}
+					{/foreach}
+					</td>
+				{/if}
+			{/foreach}
+	</tr>
+	{/foreach}
+</table>

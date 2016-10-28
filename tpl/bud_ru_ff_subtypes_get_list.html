@@ -1,10 +1,35 @@
-<select name=dyn_flt[{$smarty.request.id}][item] id="dyn_flt_{$smarty.request.subtype}_item">
-	<option></option>
-	{foreach key=key1 item=item1 from=$list}
-	<option value={$item1.id}>{$item1.name}</option>
-	{/foreach}
-</select>
-
-<script>
-	$('#dyn_flt_{$smarty.request.subtype}_item option[value={$smarty.request.item}]').prop('selected', true);
-</script>
+{if $autocomplete eq 1}
+	<input size=70 id=dyn_flt_select_{$smarty.request.subtype} value="{$item_name}">
+	<input type="hidden" id=dyn_flt{$smarty.request.subtype} name=dyn_flt[{$smarty.request.id}][item] value="{$smarty.request.item}">
+	<script>
+	{literal}
+	$(function() {
+	$( "#dyn_flt_select_{/literal}{$smarty.request.subtype}{literal}" ).autocomplete({
+		minLength: 0,
+		source: "?action=bud_ru_zay_autocomplete&nohead=1&ff_id={/literal}{$smarty.request.subtype}{literal}&tn={/literal}{$tn}{literal}",
+		focus: function( event, ui ) {
+			$( "#dyn_flt_select_{/literal}{$smarty.request.subtype}{literal}" ).val( ui.item.label );
+				return false;
+			},
+		select: function( event, ui ) {
+			$( "#dyn_flt_select_{/literal}{$smarty.request.subtype}{literal}" ).val( ui.item.label );
+			$( "#dyn_flt{/literal}{$smarty.request.subtype}{literal}" ).val( ui.item.value );
+			return false;
+		}
+	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $("<div style=\"width:600px\">" + item.label + "</div>").appendTo( ul );
+	};
+	});
+	{/literal}
+	</script>
+{else}
+	<select name=dyn_flt[{$smarty.request.id}][item] id="dyn_flt_{$smarty.request.subtype}_item">
+		<option></option>
+		{foreach key=key1 item=item1 from=$list}
+		<option value={$item1.id}>{$item1.name}</option>
+		{/foreach}
+	</select>
+	<script>
+		$('#dyn_flt_{$smarty.request.subtype}_item option[value="{$smarty.request.item}"]').prop('selected', true);
+	</script>
+{/if}

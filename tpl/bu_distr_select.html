@@ -1,0 +1,17 @@
+<table>
+<tbody>
+<tr>
+	<td>Год</td>
+	<td>
+		<select name=calendar_years id=calendar_years>
+			<option></option>
+			{foreach key=key item=item from=$calendar_years}
+			<option value={$item.y}>{$item.y}</option>
+			{/foreach}
+		</select>
+		<script>$('#calendar_years option[value={$smarty.request.calendar_years}]').prop('selected', true);</script>
+	</td>
+</tr>
+</tbody>
+</table>
+<input name="generate" value="Отобразить" type="submit">

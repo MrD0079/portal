@@ -10,12 +10,13 @@ td.bg-u {background-color: lightblue;}
 body {background-attachment: fixed;font-size: 12px;}
 table,select,input,textarea {font-size: 12px;}
 table {border-collapse:collapse;}
-table.main_works td {border-width: 1px;border-style: dotted;border-color: grey;}
-.top_right_dotted {border-top: 1px dotted grey;border-right: 1px dotted grey;}
+table.main_works {border-spacing:1px; border-collapse:separate;}
+
+/*.top_right_dotted {border-top: 1px dotted grey;border-right: 1px dotted grey;}*/
 form input[type="submit"] {padding:12px;clear:left;font-size:12px;font-weight:normal;padding:0 0 0;margin:5;}
 .link{cursor:pointer;}
 
-#head-back-div {margin-left: auto;margin-right: auto;text-align: center;background-color: #F5E3BF;height: 75px;position: absolute;left: 0px;top: 0px;right: 0px;}
+#head-back-div {margin-left: auto;margin-right: auto;text-align: center;background-color: #F5E3BF;height: 76px;position: absolute;left: 0px;top: 0px;right: 0px;}
 #left-div {margin-left: 0;text-align: center;background-color: #F5E3BF;border: 0px dotted red; position: absolute;left: 0px;top: 0px;}
 #right-div {margin-right: 0;text-align: right;background-color: #F5E3BF;border: 0px dotted red; width: 200px;position: absolute;right: 10px;top: 10px;font-weight: bold;}
 #center-div {margin-left: auto;margin-right: auto;text-align: center;background-color: #F5E3BF;position: absolute;left: 50%;top: 0px;width:0px;margin-left: 0px;margin-top: 0px;}
@@ -35,16 +36,29 @@ a#toTop:active{}
 /* disable datepicker "done" button */
 button.ui-datepicker-close {display: none;}
 
-.cb_container{
- /*border: 1px solid red;*/
+.cb_container_2{
  width: 100%;
  overflow: hidden;
+ -moz-column-count: 2;
+ -webkit-column-count: 2;
+ column-count: 2;
+}
+.cb_container_3{
+ width: 100%;
+ overflow: hidden;
+ -moz-column-count: 3;
+ -webkit-column-count: 3;
+ column-count: 3;
+}
+.cb_container_7{
+ width: 100%;
+ overflow: hidden;
+ -moz-column-count: 7;
+ -webkit-column-count: 7;
+ column-count: 7;
 }
 .cb_block{
- /*border: 1px solid green;*/
- width:200px; 
- height:20px; 
- float:left; 
  overflow:hidden;
  text-align:left;
 }
+

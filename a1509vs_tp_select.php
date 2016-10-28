@@ -10,7 +10,7 @@ if (isset($_REQUEST["save"]))
 		{
 			if ($val!=null)
 			{
-				$keys = array('tp_kod'=>$key, 'm'=>$_REQUEST['month']);
+				$keys = array('tp_kod'=>$key);
 				($val==1)?$values=$keys:$values=null;
 				Table_Update ($table_name, $keys, $values);
 			}
@@ -20,7 +20,7 @@ if (isset($_REQUEST["save"]))
 	{
 		foreach ($_REQUEST["contact_lpr"] as $key => $val)
 		{
-				$keys = array('tp_kod'=>$key, 'm'=>$_REQUEST['month']);
+				$keys = array('tp_kod'=>$key);
 				$values = array('contact_lpr'=>$val);
 			Table_Update ($table_name, $keys, $values);
 		}

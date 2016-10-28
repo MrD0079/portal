@@ -11,6 +11,8 @@ InitRequestVar("dt",$_SESSION["month_list"]);
 $params=array(
 	':tn' => $tn,
 	':dpt_id' => $_SESSION["dpt_id"],
+	':sd' => "'".$_REQUEST["dt"]."'",
+	':ed' => "'".$_REQUEST["dt"]."'",
 	':dt' => "'".$_REQUEST["dt"]."'",
 	':login' => "'".$login."'",
 );

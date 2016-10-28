@@ -5,6 +5,6 @@ SELECT p.param_name,
        TO_CHAR(p.val_date, 'dd.mm.yyyy') val_date,
        p.ID,
        p.lu
-  FROM persik.PARAMETERS p
+  FROM PARAMETERS p
   where dpt_id=:dpt_id
 order by p.param_name

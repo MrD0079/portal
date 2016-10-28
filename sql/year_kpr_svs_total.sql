@@ -17,7 +17,10 @@ SELECT SUM (total) total
                                                 67, :tn,
                                                 (SELECT pos_id
                                                    FROM user_list
-                                                  WHERE tn = :tn AND is_super = 1), :tn))
+                                                  WHERE tn = :tn AND is_super = 1), :tn,
+                                        (SELECT pos_id
+                                           FROM user_list
+                                          WHERE tn = :tn AND is_admin = 1), :tn))
                            AND DECODE (:net, 0, n.id_net, :net) = n.id_net
                            AND (n.id_net IN (SELECT kk_flt_nets_detail.id_net
                                                FROM kk_flt_nets, kk_flt_nets_detail

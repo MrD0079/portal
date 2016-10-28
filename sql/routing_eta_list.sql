@@ -1,36 +1,25 @@
-/* Formatted on 09/04/2015 17:37:46 (QP5 v5.227.12220.39724) */
+/* Formatted on 06/04/2016 14:46:22 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT r.h_eta, r.eta
-    FROM routes r, full w, user_list u
+    FROM routes r, user_list u
    WHERE     r.olstatus = 1
          AND r.dpt_id = u.dpt_id
          AND r.tab_number = u.tab_num
          AND u.dpt_id = :dpt_id
-         AND u.tn = w.slave
-         AND (   w.master = DECODE (:tn,
-                                    -1, (SELECT MAX (tn)
-                                           FROM user_list
-                                          WHERE is_admin = 1),
-                                    :tn)
+         AND u.datauvol IS NULL
+         AND (   u.tn IN (SELECT slave
+                            FROM full
+                           WHERE master = :tn)
+              OR (SELECT NVL (is_admin, 0)
+                    FROM user_list
+                   WHERE tn = :tn) = 1
               OR (SELECT NVL (is_traid, 0)
                     FROM user_list
-                   WHERE tn = DECODE (:tn,
-                                      -1, (SELECT MAX (tn)
-                                             FROM user_list
-                                            WHERE is_admin = 1),
-                                      :tn)) = 1
+                   WHERE tn = :tn) = 1
               OR (SELECT NVL (is_super, 0)
                     FROM user_list
-                   WHERE tn = DECODE (:tn,
-                                      -1, (SELECT MAX (tn)
-                                             FROM user_list
-                                            WHERE is_admin = 1),
-                                      :tn)) = 1
+                   WHERE tn = :tn) = 1
               OR (SELECT NVL (is_kpr, 0)
                     FROM user_list
-                   WHERE tn = DECODE (:tn,
-                                      -1, (SELECT MAX (tn)
-                                             FROM user_list
-                                            WHERE is_admin = 1),
-                                      :tn)) = 1)
-         AND u.datauvol IS NULL
+                   WHERE tn = :tn) = 1
+              OR :tn = -1)
 ORDER BY r.eta

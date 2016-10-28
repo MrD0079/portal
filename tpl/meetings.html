@@ -80,10 +80,10 @@ disabled: {$disabled}.
 				{if $nets_plan_year.du_complete eq 1}checked{/if}
 				onclick="$('#du_complete').val(this.checked?1:0);$('#du_complete_date').attr('disabled',!this.checked);"
 			>
-			<input type=hidden name=du_complete value="">
+			<input type=hidden name=du_complete id=du_complete value="{$nets_plan_year.du_complete}">
 			Дата
 			<input
-				{$disabled} class="datepicker" name=du_complete_date size=11
+				{$disabled} class="datepicker" name=du_complete_date id=du_complete_date size=11
 				value="{$nets_plan_year.du_complete_date}"
 				{if $nets_plan_year.du_complete neq 1}disabled{/if}
 				required

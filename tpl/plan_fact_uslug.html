@@ -5,7 +5,8 @@
 		<tr>
 			<td>
 				Год
-				<br>
+			</td>
+			<td>
 				<select name=calendar_years id=calendar_years>
 					<option></option>
 					{foreach key=key item=item from=$calendar_years}
@@ -14,9 +15,12 @@
 				</select>
 				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Месяц
-				<br>
+			</td>
+			<td>
 				<select name="calendar_months" id="calendar_months">
 					<option value=0></option>
 					{foreach key=key item=item from=$calendar_months}
@@ -25,9 +29,12 @@
 				</select>
 				<script>$('#calendar_months option[value="{$smarty.request.calendar_months}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Выберите сеть из списка
-				<br>
+			</td>
+			<td>
 				<select name="nets" id="nets">
 					<option value=0></option>
 					{foreach key=key item=item from=$nets}
@@ -37,11 +44,12 @@
 				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
 			</td>
 		</tr>
+		{if not $is_mkk}
 		<tr>
-			{if not $is_mkk}
 			<td>
 				НМКК
-				<br>
+			</td>
+			<td>
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>
 					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
@@ -50,9 +58,12 @@
 				</select>
 				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Ответственный ТМ КК
-				<br>
+			</td>
+			<td>
 				<select name=tn_mkk id=tn_mkk>
 					<option value=0></option>
 					{foreach key=mkk_key item=mkk_item from=$list_mkk}
@@ -61,12 +72,13 @@
 				</select>
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 			</td>
-			{/if}
 		</tr>
+		{/if}
 		<tr>
 			<td>
 				Форма оплаты
-				<br>
+			</td>
+			<td>
 				<select name="payment_type" id="payment_type">
 					<option value=0></option>
 					{foreach key=key item=item from=$payment_type}
@@ -75,9 +87,12 @@
 				<script>$('#payment_type option[value="{$smarty.request.payment_type}"]').prop('selected', true);</script>
 				</select>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Статья затрат
-				<br>
+			</td>
+			<td>
 				<select required name="statya_list" id="statya_list">
 					<option value=0></option>
 					{foreach key=key item=item from=$statya_list}
@@ -86,41 +101,25 @@
 				</select>
 				<script>$('#statya_list option[value="{$smarty.request.statya_list}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
 			<td>
 				Группа затрат
+			</td>
+			<td>
+				<input type=radio id=mgroups name=mgroups value=1>КОНД
 				<br>
-				<!--
-				<select required name="groupp" id="groupp">
-					<option value=0></option>
-					{foreach key=key item=item from=$groups}
-					<option value={$item.id}>{$item.gr_name}</option>
-					{/foreach}
-				</select>
-				<script>$('#groupp option[value="{$smarty.request.groupp}"]').prop('selected', true);</script>
+				<input type=radio id=mgroups name=mgroups value=2>КОФЕ
 				<br>
-				-->
-				{foreach key=key item=item from=$groups}
-				<input type=checkbox id=groups_{$item.id} name=groups[{$item.id}] value={$item.id}>{$item.gr_name}
-				<br>
-				{/foreach}
-				<script>
-				{if not $smarty.request.generate}
-					{foreach key=key item=item from=$groups}
-						$("#groups_{$item.id}").prop('checked',true);
-					{/foreach}
-				{/if}
-				{foreach key=key item=item from=$groups}
-					{if $smarty.request.groups[$item.id]}
-						$("#groups_{$item.id}").prop('checked',true);
-					{/if}
-				{/foreach}
-				</script>
+				<input type=radio id=mgroups name=mgroups value=3>НГ
+				<script>$("input[name=mgroups][value={$smarty.request.mgroups}]").attr('checked',true);</script>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				По фильтру сетей:
-				<br>
+			</td>
+			<td>
 				<select name=flt_id id=flt_id>
 					<option value=0></option>
 					{foreach key=key item=item from=$kk_flt_nets}
@@ -128,6 +127,17 @@
 					{/foreach}
 				</select>
 				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Алгоритм расчета
+			</td>
+			<td>
+				<input type=radio id=alg name=alg value=1>по месяцу
+				<br>
+				<input type=radio id=alg name=alg value=2>накопительно
+				<script>$("input[name=alg][value={$smarty.request.alg}]").attr('checked',true);</script>
 			</td>
 		</tr>
 	</table>
@@ -144,94 +154,156 @@
 	<tr style="font-weight:bold;text-align:center">
 		<td rowspan=2>№ п/п</td>
 		<td rowspan=2>Сеть</td>
+		<td rowspan=2>Формат оплаты</td>
 		<td rowspan=2>Статьи затрат</td>
-		<td colspan=4>Оперативное планирование</td>
-		<td colspan=4>Факт оказанных услуг</td>
+		<td colspan=5>финансовое планирование</td>
+		<td colspan=5>Оперативное планирование</td>
+		<td colspan=5>Факт оказанных услуг</td>
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 		<td>Кол-во<br>единиц</td>
-		<td>Цена<br>единицы,<br>тыс.<br>{$valuta}</td>
+		<!--<td>Цена<br>единицы,<br>тыс.<br>{$valuta}</td>-->
 		<td>Бонус<br>%</td>
 		<td>ИТОГО,<br>тыс.<br>{$valuta}</td>
+		<td>План продаж,<br>тыс.<br>{$valuta}</td>
+		<td>% затрат</td>
 		<td>Кол-во<br>единиц</td>
-		<td>Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>
+		<!--<td>Цена<br>единицы,<br>тыс.<br>{$valuta}</td>-->
 		<td>Бонус<br>%</td>
 		<td>ИТОГО,<br>тыс.<br>{$valuta}</td>
+		<td>План продаж,<br>тыс.<br>{$valuta}</td>
+		<td>% затрат</td>
+		<td>Кол-во<br>единиц</td>
+		<!--<td>Стоимость<br>единицы,<br>тыс.<br>{$valuta}</td>-->
+		<td>Бонус<br>%</td>
+		<td>ИТОГО,<br>тыс.<br>{$valuta}</td>
+		<td>Факт продаж,<br>тыс.<br>{$valuta}</td>
+		<td>% затрат</td>
 	</tr>
-
-
-
-
-
-
-	{foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
-	{foreach key=k1 item=i1 from=$fin_report_item.data name=detail}
-	<tr>
-		{if $smarty.foreach.detail.iteration eq 1}
-
-		{cycle values="#ccffff,#ffffcc" assign=bgcolor}
-
-		<td rowspan={$smarty.foreach.detail.total} style="text-align:center;"  /*bgcolor="{$bgcolor}"*/>
-			{$smarty.foreach.fin_report.iteration}
-		</td>
-		<td rowspan={$smarty.foreach.detail.total} style="text-align:center;"  /*bgcolor="{$bgcolor}"*/>
-			{$fin_report_item.net_name}
-		</td>
-		{/if}
-		<td /*bgcolor="{$bgcolor}"*/>{$i1.cost_item}</td>
-
-		{if $bgcolor eq "#ccffff"}
-			{assign var=bgcolor1 value="#ffffcc"}
-		{else}
-			{assign var=bgcolor1 value="#ccffff"}
-		{/if}
-
-		<td bgcolor="{$bgcolor1}" style="text-align:right">{if $i1.o_cnt neq null}{$i1.o_cnt|num:3}{/if}</td>
-		<td bgcolor="{$bgcolor1}" style="text-align:right">{if $i1.o_price neq null}{$i1.o_price|num:3}{/if}</td>
-		<td bgcolor="{$bgcolor1}" style="text-align:right">{if $i1.o_bonus neq null}{$i1.o_bonus|num:3}{/if}</td>
-		<td bgcolor="{$bgcolor1}" style="text-align:right">{if $i1.o_total neq null}{$i1.o_total|num:3}{/if}</td>
-
-
-		{if ($i1.fu_cnt neq 0 and $i1.fu_cnt < $i1.o_cnt) }{assign var=bgcolor2cnt value="red"}{else}{assign var=bgcolor2cnt value=$bgcolor}{/if}
-		{if ($i1.fu_price neq 0 and $i1.fu_price > $i1.o_price) }{assign var=bgcolor2price value="red"}{else}{assign var=bgcolor2price value=$bgcolor}{/if}
-		{if ($i1.fu_bonus neq 0 and $i1.fu_bonus > $i1.o_bonus) }{assign var=bgcolor2bonus value="red"}{else}{assign var=bgcolor2bonus value=$bgcolor}{/if}
-		{if ($i1.fu_total neq 0 and $i1.fu_total > $i1.o_total) }{assign var=bgcolor2total value="red"}{else}{assign var=bgcolor2total value=$bgcolor}{/if}
-
-		<td bgcolor="{$bgcolor2cnt}" style="text-align:right">{if $i1.fu_cnt neq null}{$i1.fu_cnt|num:3}{/if}</td>
-		<td bgcolor="{$bgcolor2price}" style="text-align:right">{if $i1.fu_price neq null}{$i1.fu_price|num:3}{/if}</td>
-		<td bgcolor="{$bgcolor2bonus}" style="text-align:right">{if $i1.fu_bonus neq null}{$i1.fu_bonus|num:3}{/if}</td>
-		<td bgcolor="{$bgcolor2total}" style="text-align:right">{if $i1.fu_total neq null}{$i1.fu_total|num:3}{/if}</td>
-	</tr>
+	{foreach key=k item=i from=$fin_report name=fin_report}
+		{assign var=s value=0}
+		{foreach key=k1 item=i1 from=$i.data name=detail}
+			{assign var=s value=`$s+1`}
+			{foreach key=k2 item=i2 from=$i1.data name=detail2}
+				{assign var=s value=`$s+1`}
+			{/foreach}
+		{/foreach}
+		{cycle values="#ccffff,#ffffcc" assign=bgcolor name=bgcolor}
+		<tr style="background-color:{$bgcolor};font-weight:bold">
+			<td rowspan={$s+1} style="text-align:center;">{$smarty.foreach.fin_report.iteration}</td>
+			<td rowspan={$s+1} style="text-align:center;">{$i.net_name}</td>
+			<td colspan=2>Итого по сети</td>
+			<td style="text-align:right"></td>
+			<!--<td style="text-align:right"></td>-->
+			<td style="text-align:right"></td>
+			<td style="text-align:right">{$i.total.fin_total|num:5}</td>
+			<td rowspan={$s+1} style="text-align:right;">{$i.total.fin_plan|num:3}</td>
+			<td style="text-align:right;">{$i.total.ef_fin_plan|num:2}</td>
+			<td style="text-align:right"></td>
+			<!--<td style="text-align:right"></td>-->
+			<td style="text-align:right"></td>
+			<td style="text-align:right">{$i.total.o_total|num:5}</td>
+			<td rowspan={$s+1} style="text-align:right;">{$i.total.plan|num:3}</td>
+			<td style="text-align:right;">{$i.total.ef_plan|num:2}</td>
+			<td style="text-align:right"></td>
+			<!--<td style="text-align:right"></td>-->
+			<td style="text-align:right"></td>
+			<td style="text-align:right">{$i.total.fu_total|num:5}</td>
+			<td rowspan={$s+1} style="text-align:right;">{$i.total.fakt|num:3}</td>
+			<td style="text-align:right;">{$i.total.ef_fakt|num:2}</td>
+		</tr>
+		{foreach key=k1 item=i1 from=$i.data name=detail}
+			{assign var=s value=0}
+			{foreach key=k2 item=i2 from=$i1.data name=detail2}
+				{assign var=s value=`$s+1`}
+			{/foreach}
+			<tr style="background-color:{$bgcolor};font-weight:bold">
+				<td rowspan={$s+1} style="text-align:center;">{$i1.total.pay_format}</td>
+				<td>Итого по формату оплаты</td>
+				<td style="text-align:right"></td>
+				<!--<td style="text-align:right"></td>-->
+				<td style="text-align:right"></td>
+				<td style="text-align:right">{$i1.total.fin_total|num:5}</td>
+				<td rowspan={$s+1} style="text-align:right;">{$i1.total.ef_fin_plan|num:2}</td>
+				<td style="text-align:right"></td>
+				<!--<td style="text-align:right"></td>-->
+				<td style="text-align:right"></td>
+				<td style="text-align:right">{$i1.total.o_total|num:5}</td>
+				<td rowspan={$s+1} style="text-align:right;">{$i1.total.ef_plan|num:2}</td>
+				<td style="text-align:right"></td>
+				<!--<td style="text-align:right"></td>-->
+				<td style="text-align:right"></td>
+				<td style="text-align:right">{$i1.total.fu_total|num:5}</td>
+				<td rowspan={$s+1} style="text-align:right;">{$i1.total.ef_fakt|num:2}</td>
+			</tr>
+			{foreach key=k2 item=i2 from=$i1.data name=detail2}
+				<tr style="background-color:{$bgcolor}">
+					<td>{$i2.cost_item}</td>
+					<td style="text-align:right">{$i2.fin_cnt|num:3}</td>
+					<!--<td style="text-align:right">{$i2.fin_price|num:5}</td>-->
+					<td style="text-align:right">{$i2.fin_bonus|num:2}</td>
+					<td style="text-align:right">{$i2.fin_total|num:5}</td>
+					<td style="text-align:right">{$i2.fin_cnt|num:3}</td>
+					<!--<td style="text-align:right">{$i2.o_price|num:5}</td>-->
+					<td style="text-align:right">{$i2.o_bonus|num:2}</td>
+					<td style="text-align:right">{$i2.o_total|num:5}</td>
+					{if ($i2.fu_cnt neq 0 and $i2.fu_cnt < $i2.o_cnt)}{assign var=bgcolor2cnt value="red"}{else}{assign var=bgcolor2cnt value=$bgcolor}{/if}
+					<!--{if ($i2.fu_price neq 0 and $i2.fu_price > $i2.o_price) }{assign var=bgcolor2price value="red"}{else}{assign var=bgcolor2price value=$bgcolor}{/if}-->
+					{if ($i2.fu_bonus neq 0 and $i2.fu_bonus > $i2.o_bonus) }{assign var=bgcolor2bonus value="red"}{else}{assign var=bgcolor2bonus value=$bgcolor}{/if}
+					{if ($i2.fu_total neq 0 and $i2.fu_total > $i2.o_total) }{assign var=bgcolor2total value="red"}{else}{assign var=bgcolor2total value=$bgcolor}{/if}
+					<td bgcolor="{$bgcolor2cnt}" style="text-align:right">{$i2.fu_cnt|num:3}</td>
+					<!--<td bgcolor="{$bgcolor2price}" style="text-align:right">{$i2.fu_price|num:5}</td>-->
+					<td bgcolor="{$bgcolor2bonus}" style="text-align:right">{$i2.fu_bonus|num:2}</td>
+					<td bgcolor="{$bgcolor2total}" style="text-align:right">{$i2.fu_total|num:5}</td>
+				</tr>
+			{/foreach}
+		{/foreach}
 	{/foreach}
-	{/foreach}
-
+	{foreach key=k item=i from=$fin_report_st name=fin_report_st}
 	<tr style="font-weight:bold;">
-		<td colspan=3 style="text-align:center;">ИТОГО</td>
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td colspan=3 rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+		<td>{$i.cost_item}</td>
+		<td style="text-align:right">{$i.fin_cnt|num:3}</td>
+		<!--<td style="text-align:right"></td>-->
+		<td style="text-align:right">{$i.fin_bonus|num:2}</td>
+		<td style="text-align:right">{$i.fin_total|num:5}</td>
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td style="text-align:right" rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td style="text-align:right" rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+		<td style="text-align:right">{$i.o_cnt|num:3}</td>
+		<!--<td style="text-align:right"></td>-->
+		<td style="text-align:right">{$i.o_bonus|num:2}</td>
+		<td style="text-align:right">{$i.o_total|num:5}</td>
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td style="text-align:right" rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td style="text-align:right" rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+		<td style="text-align:right">{$i.fu_cnt|num:3}</td>
+		<!--<td style="text-align:right"></td>-->
+		<td style="text-align:right">{$i.fu_bonus|num:2}</td>
+		<td style="text-align:right">{$i.fu_total|num:5}</td>
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td style="text-align:right" rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+		{if $smarty.foreach.fin_report_st.iteration eq 1}<td style="text-align:right" rowspan="{$smarty.foreach.fin_report_st.total}"></td>{/if}
+	</tr>
+	{/foreach}
+	<tr style="font-weight:bold;">
+		<td colspan=4 style="text-align:center;">ИТОГО</td>
+		<td style="text-align:right">{$fin_report_total.fin_cnt|default:0|num:3}</td>
+		<!--<td style="text-align:right"></td>-->
+		<td style="text-align:right">{$fin_report_total.fin_bonus|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_total.fin_total|default:0|num:5}</td>
+		<td style="text-align:right">{$fin_report_total.fin_plan|default:0|num:5}</td>
+		<td style="text-align:right">{$fin_report_total.ef_fin_plan|default:0|num:2}</td>
 		<td style="text-align:right">{$fin_report_total.o_cnt|default:0|num:3}</td>
-		<td style="text-align:right"></td>
-		<td style="text-align:right"></td>
-		<td style="text-align:right">{$fin_report_total.o_total|default:0|num:3}</td>
+		<!--<td style="text-align:right"></td>-->
+		<td style="text-align:right">{$fin_report_total.o_bonus|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_total.o_total|default:0|num:5}</td>
+		<td style="text-align:right">{$fin_report_total.plan|default:0|num:5}</td>
+		<td style="text-align:right">{$fin_report_total.ef_plan|default:0|num:2}</td>
 		<td style="text-align:right">{$fin_report_total.fu_cnt|default:0|num:3}</td>
-		<td style="text-align:right"></td>
-		<td style="text-align:right"></td>
-		<td style="text-align:right">{$fin_report_total.fu_total|default:0|num:3}</td>
+		<!--<td style="text-align:right"></td>-->
+		<td style="text-align:right">{$fin_report_total.fu_bonus|default:0|num:2}</td>
+		<td style="text-align:right">{$fin_report_total.fu_total|default:0|num:5}</td>
+		<td style="text-align:right">{$fin_report_total.fakt|default:0|num:5}</td>
+		<td style="text-align:right">{$fin_report_total.ef_fakt|default:0|num:2}</td>
 	</tr>
-
-	<tr style="font-weight:bold;">
-		<td colspan=3 style="text-align:center;">Эффективность</td>
-		<td colspan=2 style="text-align:right">Оперативный план, тыс.{$valuta}.: {$fin_report_total.plan|default:0|num:3}</td>
-		<td colspan=2 style="text-align:right">% затрат: {$fin_report_total.ef_plan|default:0|num:3}</td>
-		<td colspan=2 style="text-align:right">Факт продаж, тыс.{$valuta}.: {$fin_report_total.fakt|default:0|num:3}</td>
-		<td colspan=2 style="text-align:right">% затрат: {$fin_report_total.ef_fakt|default:0|num:3}</td>
-	</tr>
-
-
 	</table>
-<!--
-Эффективность 	Оперативный план, тыс.{$valuta}.: sum ($oper_plan)
-	% затрат: //сумма ИТОГО затрат / сумма ОПЕРПЛАН
-	Факт продаж, тыс.{$valuta}.: sum ($fact_prodazh)
-	% затрат: сумма ИТОГО затрат / сумма ФАКТ ПРОДАЖ
--->
 {/if}
 </form>

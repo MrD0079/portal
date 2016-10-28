@@ -1,0 +1,50 @@
+<table border="1" cellspacing="0" cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td>№ п/п<br></td>
+		<td>Дата<br>накладной</td>
+		<td>Номер<br>накладной</td>
+		<td>Сумма<br>по<br>накладной,<br>{$valuta}</td>
+		<td>Количество подарка №20, шт</td>
+		<td>Количество подарка №21, шт</td>
+		<td>Количество подарка №25, шт</td>
+		<td>Акционная<br>накладная</td>
+	</tr>
+	{foreach key=nakl_list_key item=nakl_list_item from=$nakl_list name=nakl_list}
+	<tr {if $nakl_list_item.action_nakl eq 1}bgcolor="#00ff00"{/if} bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<td>{$smarty.foreach.nakl_list.iteration}</td>
+		<td>{$nakl_list_item.data}</td>
+		<td>{$nakl_list_item.nakl}</td>
+		<td style="text-align:right">{$nakl_list_item.nakl_summ|default:0|num:2}</td>
+		<td style="text-align:right">{$nakl_list_item.ng1|default:0|num:2}</td>
+		<td style="text-align:right">{$nakl_list_item.ng2|default:0|num:2}</td>
+		<td style="text-align:right">{$nakl_list_item.ng3|default:0|num:2}</td>
+		<td {if $nakl_list_item.if1 eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
+			<input
+				{if $nakl_list_item.ok_chief eq 1 or $nakl_list_item.if1 neq 1} disabled {/if}
+				onclick="$('#if1{$nakl_list_item.h_tp_kod_data_nakl}').val(this.checked?1:0);"
+				type=checkbox
+				{if $nakl_list_item.selected_if1 eq 1}checked{/if}
+			>
+			<input
+				type=hidden
+				id=if1{$nakl_list_item.h_tp_kod_data_nakl}
+				name=data_s[{$nakl_list_item.h_tp_kod_data_nakl}][if1]
+				{if $nakl_list_item.ok_chief eq 1 or $nakl_list_item.if1 neq 1} disabled {/if}
+			>
+			<script>$('#if1{$nakl_list_item.h_tp_kod_data_nakl}').val({$nakl_list_item.selected_if1});</script>
+
+		</td>
+		<input
+			type=hidden
+			{if $nakl_list_item.ok_chief eq 1 or $nakl_list_item.if1 neq 1} disabled {/if}
+			id=selected{$nakl_list_item.h_tp_kod_data_nakl}
+			name=keys[{$nakl_list_item.h_tp_kod_data_nakl}]
+		>
+	</tr>
+	{/foreach}
+</table>
+
+<p>
+<input type=submit name=add id=add value="Добавить накладные в акцию">
+</p>
+

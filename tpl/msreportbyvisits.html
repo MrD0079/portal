@@ -1,0 +1,91 @@
+<h1>Отчет по визитам {$smarty.request.dates_list1}-{$smarty.request.dates_list2}</h1>
+{if not $smarty.request.print}
+	<form name=form_select id=form_select target=_self method=post>
+		<b>
+			Дата
+			с <input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+			по <input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+		</b>
+		<script>
+			$('#dates_list1').val('{$smarty.request.dates_list1}');
+			$('#dates_list2').val('{$smarty.request.dates_list2}');
+		</script>
+		<br>
+		<b>СВ МС</b>
+		<select name=svms_list id=svms_list>
+			<option value=0></option>
+			{foreach key=key item=item from=$svms_list}
+				<option value="{$item.tn}">{$item.fio} ({$item.tn})</option>
+			{/foreach}
+		</select>
+		<script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+		<br>
+		<b>Маршрут</b>
+		<select name="select_route_numb" id="select_route_numb">
+			<option value=0></option>
+			{foreach key=key item=item from=$routes_head}
+				<option value="{$item.id}">{$item.fio} - {$item.num} - {$item.fio_otv} - {$item.period}</option>
+			{/foreach}
+		</select>
+		<script>$('#select_route_numb option[value={$smarty.request.select_route_numb}]').prop('selected', true);</script>
+		<br>
+		<b>Заказчики</b>
+		<br>
+		{literal}
+		<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',false);$(this).click();});">[+]</a>
+		<a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
+		{/literal}
+		{assign var=s value=0}
+		{foreach key=key1 item=item1 from=$smarty.request.head_agents}{assign var=s value=1}{/foreach}
+		{foreach key=key item=item from=$routes_head_agents name=d}
+			{math assign="color" equation='y' y=$smarty.foreach.d.iteration%4} 
+			{if $color eq 1}<br>{/if}
+			<input class=chk_all name=head_agents[{$item.id}] id="head_agents_{$item.id}" type=checkbox {foreach key=key1 item=item1 from=$smarty.request.head_agents}{if $item.id eq $key1}checked{/if}{/foreach} {if $s eq 0}checked{/if}>
+			{$item.name|escape}
+		{/foreach}
+		<br>
+		<input type=submit name=select value="Построить отчет">
+	</form>
+	{if $smarty.request.select}
+		<p><a target=_blank href="?action=msreportbyvisits&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=Отчет по визитам {$smarty.request.dates_list1}-{$smarty.request.dates_list2}&select=1&tpl=1">экспорт в Excel</a></p>
+	{/if}
+{/if}
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="0">
+    <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+      <td>Дата</td>
+      <td>Маршрут</td>
+      <td>СВ МС</td>
+      <td>Ф.И.О. отв.</td>
+      <td>Область<br>      </td>
+      <td>Сеть</td>
+      <td>Адрес ТЗ<br></td>
+      <td>Заказчик<br></td>
+      <td style="background-color: rgb(204, 255, 255);">План по визитам</td>
+      <td style="background-color: rgb(204, 255, 255);">План по визитам, мин</td>
+      <td style="background-color: rgb(204, 255, 255);">Факт по визитам</td>
+      <td style="background-color: rgb(204, 255, 255);">Факт по визитам, мин</td>
+    </tr>
+	{foreach key=k item=i from=$d name=d}
+	<tr>
+		<td>{$i.dt}</td>
+		<td>{$i.num}</td>
+		<td>{$i.fio}</td>
+		<td>{$i.fio_otv}</td>
+		<td>{$i.tz_oblast}</td>
+		<td>{$i.net_name}</td>
+		<td>{$i.tz_address}</td>
+		<td>{$i.ag_name}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i.plan_mr}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i.vv eq 1}внеплановый визит{/if}{$i.plan_minutes}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i.fakt_mr}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i.fakt_minutes}</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align: center;font-weight:bold">
+		<td colspan="8" style="">ИТОГО</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$t.plan_mr}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$t.plan_minutes}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$t.fakt_mr}</td>
+		<td style="background-color: rgb(204, 255, 255);text-align: center;">{$t.fakt_minutes}</td>
+	</tr>
+</table>

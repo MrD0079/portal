@@ -2,20 +2,14 @@
 SELECT SUM (cnt) cnt, SUM (bonus) bonus
   FROM act_files f, user_list st
  WHERE     f.tn = st.tn
-       AND st.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_without_ts,
-                                 0, master,
-                                 :exp_list_without_ts))
-       AND st.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_only_ts,
-                                 0, master,
-                                 :exp_list_only_ts))
+       AND (   :exp_list_without_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+       AND (   :exp_list_only_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
        AND (   st.tn IN (SELECT slave
                            FROM full
                           WHERE master = :tn)

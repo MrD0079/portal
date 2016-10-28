@@ -1,0 +1,271 @@
+<h1>Стандарт - подтверждение {$smarty.request.sd}-{$smarty.request.ed}</h1>
+
+{if not $smarty.request.print}
+
+<form target="_self" method="POST" name=form_report id=form_report>
+
+<p>
+Дата
+с
+<input id=sd name=sd class=datepicker value='{$smarty.request.sd}'>
+по
+<input id=ed name=ed class=datepicker value='{$smarty.request.ed}'>
+</p>
+
+	{if $is_ts neq 1 and $is_eta neq 1}
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+
+		</p>
+	{/if}
+	{if $is_eta neq 1}
+		<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+		</p>
+	{/if}
+	<p>
+	<table border=0>
+		<tr>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=1>все</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=2>есть фото</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=3>нет фото</td>
+		</tr>
+		<script>$("input[name=ok_photo][value={$smarty.request.ok_photo}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=1>все</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=2>был визит</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=3>не было визита</td>
+		</tr>
+		<script>$("input[name=ok_visit][value={$smarty.request.ok_visit}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_ts" name="ok_ts" value=1>все</td>
+			<td><input type=radio id="ok_ts" name="ok_ts" value=2>проверил ТС</td>
+			<td><input type=radio id="ok_ts" name="ok_ts" value=3>не проверил ТС</td>
+		</tr>
+		<script>$("input[name=ok_ts][value={$smarty.request.ok_ts}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_auditor" name="ok_auditor" value=1>все</td>
+			<td><input type=radio id="ok_auditor" name="ok_auditor" value=2>проверил ТМ</td>
+			<td><input type=radio id="ok_auditor" name="ok_auditor" value=3>не проверил ТМ</td>
+		</tr>
+		<script>$("input[name=ok_auditor][value={$smarty.request.ok_auditor}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="st_ts" name="st_ts" value=1>все</td>
+			<td><input type=radio id="st_ts" name="st_ts" value=2>соответствует стандарту - ТС</td>
+			<td><input type=radio id="st_ts" name="st_ts" value=3>не соответствует стандарту - ТС</td>
+		</tr>
+		<script>$("input[name=st_ts][value={$smarty.request.st_ts}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="st_auditor" name="st_auditor" value=1>все</td>
+			<td><input type=radio id="st_auditor" name="st_auditor" value=2>соответствует стандарту - ТМ</td>
+			<td><input type=radio id="st_auditor" name="st_auditor" value=3>не соответствует стандарту - ТМ</td>
+		</tr>
+		<script>$("input[name=st_auditor][value={$smarty.request.st_auditor}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="standart" name="standart" value=1>все</td>
+			<td><input type=radio id="standart" name="standart" value=2>A-стандарт</td>
+			<td><input type=radio id="standart" name="standart" value=3>B-стандарт</td>
+		</tr>
+		<script>$("input[name=standart][value={$smarty.request.standart}]").attr('checked',true);</script>
+	</table>
+	</p>
+	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+
+{if $smarty.request.generate}
+	<p><a href="?action=a14to_accept2&print=1&excel=1&generate=1&filename=Стандарт - подтверждение {$smarty.request.sd}-{$smarty.request.ed}">Экспорт в Excel</a></p>
+{/if}
+
+{/if}
+
+<table style="text-align: center; width:800px;" border=1>
+<tbody>
+<tr style="font-weight: bold;">
+<td>Визитов в ТП с СТО по маршруту ПЛАН</td>
+<td>Совершено визитов</td>
+<td>Стеллажи</td>
+<td>Витрины</td>
+<td>ИТОГО СТО</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">Стандарт - ТС</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">Стандарт - ТМ</td>
+<td>Не проверено - ТС</td>
+<td>Не проверено - ТМ</td>
+</tr>
+<tr>
+<td>{$t.tp_cnt}</td>
+<td>{$t.visit_cnt}</td>
+<td>{$t1.stelag}</td>
+<td>{$t1.tumb}</td>
+<td>{$t1.sto_total}</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$t1.ts}</td>
+<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$t1.auditor}</td>
+<td>{$t1.tsnull}</td>
+<td>{$t1.auditornull}</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<table border=1>
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2>№ п/п</td>
+		<td rowspan=2>Дата визита</td>
+		<td rowspan=2>ТС</td>
+		<td rowspan=2>ЭТА</td>
+		<td rowspan=2>Код ТП</td>
+		<td rowspan=2>Название/Адрес ТП</td>
+		<td rowspan=2>Тип ТП</td>
+		<td rowspan=2>Стеллажи</td>
+		<td rowspan=2>Витрины</td>
+		<td rowspan=2>Визит</td>
+		<td rowspan=2>Тип стандарта</td>
+		<td rowspan=2>Фото</td>
+		<td colspan=5>Выполнение стандарта</td>
+		<td colspan=2>Задачи</td>
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td>ТС</td>
+		<td>ТМ</td>
+		<td>Коммент ТС</td>
+		<td>Коммент ТМ</td>
+		<td>Коммент ВСТМ</td>
+		<td>ассортимент</td>
+		<td>мерчандайзинг</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+			<tr>
+				<td>{$smarty.foreach.d.iteration}</td>
+				<td>{$i.vd}</td>
+				<td>{$i.fio_ts}</td>
+				<td>{$i.fio_eta}</td>
+				<td>{$i.tp_kod_key}</td>
+				<td>{$i.tp_ur} / {$i.tp_addr}</td>
+				<td>{$i.tp_type}</td>
+				<td style="text-align:center">{$i.stelag}</td>
+				<td style="text-align:center">{$i.tumb}</td>
+				<td style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
+		<td style="text-align:center">{$i.standart}</td>
+				<td {if $i.urls eq 0}bgcolor="red"{/if}>
+					{foreach key=k1 item=i1 from=$i.photos name=photos}
+						<nobr><a target="_blank" href="{$i1.url}">Фото {$smarty.foreach.photos.iteration}</a></nobr><br>
+					{/foreach}
+				</td>
+				<td
+					id=td_{$i.h_url}_ts
+					{if $i.ts eq 1}bgcolor="lightgreen"{/if}
+					{if $i.ts eq 2}bgcolor="red"{/if}
+				>
+					{if $i.ts eq 1}соответствует{/if}
+					{if $i.ts eq 2}не соответствует{/if}
+				</td>
+				<td
+					id=td_{$i.visitdate_key}_{$i.tp_kod_key}_auditor
+					{if $i.auditor eq 1}bgcolor="lightgreen"{/if}
+					{if $i.auditor eq 2}bgcolor="red"{/if}
+				>
+					{if ($is_tm) and not $smarty.request.print}
+						<nobr><input type=radio id="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" name="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" value=1 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor',this.value);save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor_fio','{$fio}')">соответствует</nobr>
+						<br>
+						<nobr><input type=radio id="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" name="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" value=2 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor',this.value);save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor_fio','{$fio}')">не соответствует</nobr>
+						<script>$("input[name=auditor_{$i.visitdate_key}_{$i.tp_kod_key}][value={$i.auditor}]").attr('checked',true);</script>
+					{else}
+						{if $i.auditor eq 1}соответствует{/if}
+						{if $i.auditor eq 2}не соответствует{/if}
+					{/if}
+					{if $i.auditor}<br>{/if}{$i.auditor_fio} {$i.auditor_lu}
+				</td>
+				<td>
+					{$i.ts_comm|nl2br}
+				</td>
+				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_auditor_comm>
+					{if ($is_tm) and not $smarty.request.print}
+						<textarea id="auditor_comm_{$i.visitdate_key}_{$i.tp_kod_key}" name="auditor_comm_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor_comm',this.value)">{$i.auditor_comm}</textarea>
+					{else}
+						{$i.auditor_comm|nl2br}
+					{/if}
+				</td>
+				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_traid_comm>
+					{if ($is_traid) and not $smarty.request.print}
+						<textarea
+							id="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
+							name="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
+						>{$i.traid_comm}</textarea>
+						<br>
+						<a
+							href="javascript:void(0);"
+							onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','traid_comm',$('#traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}').val())"
+						>Сохранить</a>
+					{else}
+						{$i.traid_comm|nl2br}
+					{/if}
+				</td>
+				<td>
+					{$i.tasks_assort|nl2br}
+				</td>
+				<td>
+					{$i.tasks_mr|nl2br}
+				</td>
+			</tr>
+	{/foreach}
+</table>
+
+{if not $smarty.request.print}
+
+</form>
+
+<script>
+{literal}
+function save(visitdate,visitdate_key,tp_kod,field,val)
+{
+$('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','red');
+var fd = new FormData();
+fd.append('visitdate',  visitdate);
+fd.append('tp_kod',  tp_kod);
+fd.append('field',  field);
+fd.append('val',  val);
+$.ajax({
+  type: 'POST',
+  url: '?action=a14to_accept2&save=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+   if (field=='auditor')
+   {
+    (val==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','lightgreen') : null;
+    (val==2) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','red') : null;
+   }
+   else
+   {
+    $('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','white');
+   }
+  }
+});
+}
+{/literal}
+</script>
+
+{/if}

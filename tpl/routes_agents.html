@@ -1,17 +1,21 @@
 <h1>Заказчики М-Сервис</h1>
-<form target="_self" method="POST" name=form1 id=form1>
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
 <input type=submit name=save value="Сохранить">
 <table border=1 cellpadding=3 cellspacing=0>
 <tr style="font-weight:bold">
 <td>[x]</td>
 <td>название</td>
 <td>контакт АВК</td>
+<td>Logo</td>
 </tr>
 {foreach key=key item=item from=$routes_agents}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
 <td><input name=data[{$item.id}][name] size=40 value="{$item.name|escape}"></td>
 <td><input name=data[{$item.id}][contact_avk] size=100 value="{$item.contact_avk|escape}"></td>
+<td>
+<img src="files/{$item.logo}" alt="">
+<input name=logo[{$item.id}] type=file></td>
 </tr>
 {/foreach}
 </table>

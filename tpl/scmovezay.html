@@ -1,0 +1,166 @@
+<h1>Заявка на перенос торговых условий</h1>
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+	<p><input type='submit' id='save' name='save' value="Отправить заявку"></p>
+	<table border="0">
+		<tr>
+			<td>
+				Единичное / сетевое ТП
+			</td>
+			<td>
+				<select id=tptype name=tptype required>
+					<option></option>
+					<option value='tp'>Единичное</option>
+					<option value='net'>Сетевое</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Старое единичное ТП</td>
+			<td>
+				<input size=100 id=tpfrominput>
+				<input type="hidden" id=tpfrom name=new[tpfrom] required>
+				<script>
+				{literal}
+					$(function() {
+						$( "#tpfrominput" ).autocomplete({
+							minLength: 0,
+							source: "?action=bud_ru_zay_autocomplete&nohead=1&ff_id={/literal}{$ffidtp}{literal}&tn={/literal}{$tn}{literal}",
+							focus: function( event, ui ) {
+								$( "#tpfrominput" ).val( ui.item.label );
+									return false;
+								},
+							select: function( event, ui ) {
+								$( "#tpfrominput" ).val( ui.item.label );
+								$( "#tpfrom" ).val( ui.item.value );
+								return false;
+							}
+						}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+							return $("<div style=\"width:600px\">" + item.label + "</div>").appendTo( ul );
+						};
+					});
+				{/literal}					
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>Новое единичное ТП</td>
+			<td>
+				<input size=100 id=tptoinput>
+				<input type="hidden" id=tpto name=new[tpto] required>
+				<script>
+				{literal}
+					$(function() {
+						$( "#tptoinput" ).autocomplete({
+							minLength: 0,
+							source: "?action=bud_ru_zay_autocomplete&nohead=1&ff_id={/literal}{$ffidtp}{literal}&tn={/literal}{$tn}{literal}",
+							focus: function( event, ui ) {
+								$( "#tptoinput" ).val( ui.item.label );
+									return false;
+								},
+							select: function( event, ui ) {
+								$( "#tptoinput" ).val( ui.item.label );
+								$( "#tpto" ).val( ui.item.value );
+								return false;
+							}
+						}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+							return $("<div style=\"width:600px\">" + item.label + "</div>").appendTo( ul );
+						};
+					});
+				{/literal}					
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>Старое сетевое ТП</td>
+			<td>
+				<input size=100 id=netfrominput>
+				<input type="hidden" id=netfrom name=new[netfrom] required>
+				<script>
+				{literal}
+					$(function() {
+						$( "#netfrominput" ).autocomplete({
+							minLength: 0,
+							source: "?action=bud_ru_zay_autocomplete&nohead=1&ff_id={/literal}{$ffidnet}{literal}&tn={/literal}{$tn}{literal}",
+							focus: function( event, ui ) {
+								$( "#netfrominput" ).val( ui.item.label );
+									return false;
+								},
+							select: function( event, ui ) {
+								$( "#netfrominput" ).val( ui.item.label );
+								$( "#netfrom" ).val( ui.item.value );
+								return false;
+							}
+						}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+							return $("<div style=\"width:600px\">" + item.label + "</div>").appendTo( ul );
+						};
+					});
+				{/literal}
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>Новое сетевое ТП</td>
+			<td>
+				<input size=100 id=nettoinput>
+				<input type="hidden" id=netto name=new[netto] required>
+				<script>
+				{literal}
+					$(function() {
+						$( "#nettoinput" ).autocomplete({
+							minLength: 0,
+							source: "?action=bud_ru_zay_autocomplete&nohead=1&ff_id={/literal}{$ffidnet}{literal}&tn={/literal}{$tn}{literal}",
+							focus: function( event, ui ) {
+								$( "#nettoinput" ).val( ui.item.label );
+									return false;
+								},
+							select: function( event, ui ) {
+								$( "#nettoinput" ).val( ui.item.label );
+								$( "#netto" ).val( ui.item.value );
+								return false;
+							}
+						}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+							return $("<div style=\"width:600px\">" + item.label + "</div>").appendTo( ul );
+						};
+					});
+				{/literal}
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>Комментарии к замене</td>
+			<td><textarea rows="5" cols="50" name=new[comm]></textarea></td>
+		</tr>
+</table>
+</form>
+<script>
+{literal}
+	$('#tptype').click(
+		function()
+		{
+				$('#tpfrominput').attr('disabled',true);
+				$('#tpfrom').attr('disabled',true);
+				$('#tptoinput').attr('disabled',true);
+				$('#tpto').attr('disabled',true);
+				$('#netfrominput').attr('disabled',true);
+				$('#netfrom').attr('disabled',true);
+				$('#nettoinput').attr('disabled',true);
+				$('#netto').attr('disabled',true);
+				if ($('#tptype').val()=='net')
+				{
+					$('#netfrominput').attr('disabled',false);
+					$('#netfrom').attr('disabled',false);
+					$('#nettoinput').attr('disabled',false);
+					$('#netto').attr('disabled',false);
+				}
+				if ($('#tptype').val()=='tp')
+				{
+					$('#tpfrominput').attr('disabled',false);
+					$('#tpfrom').attr('disabled',false);
+					$('#tptoinput').attr('disabled',false);
+					$('#tpto').attr('disabled',false);
+				}
+		}
+	);
+	$('#tptype').click();
+{/literal}
+</script>

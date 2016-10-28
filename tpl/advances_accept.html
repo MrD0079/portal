@@ -66,20 +66,11 @@
 
 <p id=td_ok_ndp>
 Подтверждение НДП
-{if $is_ndp and not $ok.ok_dpu}
+{if $is_ndp}
 <input {if $ok.ok_ndp}checked{/if} type=checkbox onChange="adv_ok_save('{$smarty.request.sd}','ok_ndp',this.checked?1:0);">
 {/if}
 <b>{$ok.ok_ndp_fio} {$ok.ok_ndp_lu}</b>
 </p>
-
-<p id=td_ok_dpu>
-Подтверждение ДП
-{if $is_dpu and not $ok.ok_dpu}
-<input {if $ok.ok_dpu}checked{/if} type=checkbox onChange="adv_ok_save('{$smarty.request.sd}','ok_dpu',this.checked?1:0);">
-{/if}
-<b>{$ok.ok_dpu_fio} {$ok.ok_dpu_lu}</b>
-</p>
-
 
 <script>
 {literal}

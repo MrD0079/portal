@@ -1,0 +1,28 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold;text-align: center;">
+	<td>Плательщик</td>
+	{foreach key=k1 item=i1 from=$listm}
+		<td style="text-align:right">{$i1}</td>
+	{/foreach}
+	<td style="background-color: rgb(255, 204, 153);">Итого</td>
+</tr>
+{foreach key=k item=i from=$d}
+	{cycle assign=bgcolor values="#ccffff,#ffffcc"}
+	<tr bgcolor="{$bgcolor}">
+		<td style="text-align: left;">{$i.total.payer_name}</td>
+		{foreach key=k1 item=i1 from=$listm}
+		<td style="text-align:right">
+		{if not $smarty.request.print}
+		<a target=_blank href="?action=invoice_pay&sd=01.01.2010&ed=01.12.2020&act_prov_month={$i.detail.$k1.datat}&payer={$k}&generate=1">{$i.detail.$k1.summa|num:3}</a>
+		{else}
+		{$i.detail.$k1.summa|num:3}
+		{/if}
+		</td>
+		{/foreach}
+		<td style="text-align: right;background-color: rgb(255, 204, 153);">{$i.total.summa|num:3}</td>
+	</tr>
+{/foreach}
+</tbody>
+</table>
+

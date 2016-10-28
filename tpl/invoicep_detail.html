@@ -129,7 +129,7 @@
 			<td>
 				<input name=summa[{$item.rid}]
 				onChange="$('#ok1{$item.rid}').val(1)"
-				value="{$item.invoice_summa|default:$item.nocover}">
+				value="{$item.invoice_summa|default:$item.nocover}" class=number5>
 			</td>
 		</tr>
 		{/foreach}

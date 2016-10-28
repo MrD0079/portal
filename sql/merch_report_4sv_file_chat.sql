@@ -1,4 +1,4 @@
-/* Formatted on 01/09/2015 16:23:15 (QP5 v5.227.12220.39724) */
+/* Formatted on 05/11/2015 15:43:26 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT TO_CHAR (x.data, 'dd.mm.yyyy') dt,
                   TO_CHAR (x.data, 'yyyymmdd') dt1,
                   x.ag_id,
@@ -31,16 +31,16 @@
                  routes_agents a,
                  ms_nets m
            WHERE     cpp.id_net = m.id_net
-                 AND DECODE (:agent, 0, 0, a.id) =
-                        DECODE (:agent, 0, 0, :agent)
-                 AND calendar.data BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                       AND TO_DATE (:ed, 'dd.mm.yyyy')
-                 AND DECODE (:oblast, '0', '0', cpp.h_tz_oblast) =
-                        DECODE (:oblast, '0', '0', :oblast)
-                 AND DECODE (:city, '0', '0', cpp.h_city) =
-                        DECODE (:city, '0', '0', :city)
-                 AND DECODE (:nets, 0, 0, cpp.id_net) =
-                        DECODE (:nets, 0, 0, :nets)) x,
+                 AND DECODE ( :agent, 0, 0, a.id) =
+                        DECODE ( :agent, 0, 0, :agent)
+                 AND calendar.data BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                       AND TO_DATE ( :ed, 'dd.mm.yyyy')
+                 AND DECODE ( :oblast, '0', '0', cpp.h_tz_oblast) =
+                        DECODE ( :oblast, '0', '0', :oblast)
+                 AND DECODE ( :city, '0', '0', cpp.h_city) =
+                        DECODE ( :city, '0', '0', :city)
+                 AND DECODE ( :nets, 0, 0, cpp.id_net) =
+                        DECODE ( :nets, 0, 0, :nets)) x,
          merch_spec_report_files f,
          merch_chat c
    WHERE     x.data = f.dt(+)
@@ -56,23 +56,40 @@
                 THEN
                    1
                 WHEN     :flt_chat = 1
-                     AND (   NVL (f.chat_closed, 0) = 1
-                          OR FN_GET_mc_closed (x.data, x.ag_id, x.kodtp) = 1)
+                     AND (   (    NVL (f.chat_closed, 0) = 1
+                              AND FN_GET_msrfc_cnt (f.id) > 0)
+                          OR (    FN_GET_mc_closed (x.data, x.ag_id, x.kodtp) =
+                                     1
+                              AND FN_GET_mc_cnt (x.data, x.ag_id, x.kodtp) > 0))
                 THEN
                    1
                 WHEN     :flt_chat = 2
-                     AND (   (f.last_is_spd = 1 AND NVL (f.chat_closed, 0) = 0)
-                          OR (    FN_GET_mc_last (x.data, x.ag_id, x.kodtp) = 1
-                              AND FN_GET_mc_closed (x.data, x.ag_id, x.kodtp) =
-                                     0))
+                     AND (   (    NVL (f.chat_closed, 0) = 0
+                              AND FN_GET_msrfc_cnt (f.id) > 0)
+                          OR (    FN_GET_mc_closed (x.data, x.ag_id, x.kodtp) =
+                                     0
+                              AND FN_GET_mc_cnt (x.data, x.ag_id, x.kodtp) > 0))
                 THEN
                    1
                 WHEN     :flt_chat = 3
-                     AND (   (f.last_is_spd = -1 AND NVL (f.chat_closed, 0) = 0)
+                     AND (   (    f.last_is_spd = 1
+                              AND (NVL (f.chat_closed, 0) = 0)
+                              AND FN_GET_msrfc_cnt (f.id) > 0)
+                          OR (    FN_GET_mc_last (x.data, x.ag_id, x.kodtp) = 1
+                              AND FN_GET_mc_closed (x.data, x.ag_id, x.kodtp) =
+                                     0
+                              AND FN_GET_mc_cnt (x.data, x.ag_id, x.kodtp) > 0))
+                THEN
+                   1
+                WHEN     :flt_chat = 4
+                     AND (   (    f.last_is_spd = -1
+                              AND (NVL (f.chat_closed, 0) = 0)
+                              AND FN_GET_msrfc_cnt (f.id) > 0)
                           OR (    FN_GET_mc_last (x.data, x.ag_id, x.kodtp) =
                                      -1
                               AND FN_GET_mc_closed (x.data, x.ag_id, x.kodtp) =
-                                     0))
+                                     0
+                              AND FN_GET_mc_cnt (x.data, x.ag_id, x.kodtp) > 0))
                 THEN
                    1
              END = 1

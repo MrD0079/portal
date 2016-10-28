@@ -28,7 +28,7 @@
 			>
 			<input
 				type=checkbox
-				onclick="$('#plan_month_ok_ok_rmkk_tmkk_{$item.my}'.val(this.checked?1:0)"
+				onclick="$('#plan_month_ok_ok_rmkk_tmkk_{$item.my}').val(this.checked?1:0)"
 				{if $item.ok_rmkk_tmkk eq 1}checked{/if}
 				{if not $is_rmkk or $item.ok_dpu eq 1}disabled{/if}
 			>
@@ -46,7 +46,7 @@
 			>
 			<input
 				type=checkbox
-				onclick="$('#plan_month_ok_ok_fm_{$item.my}'.val(this.checked?1:0)"
+				onclick="$('#plan_month_ok_ok_fm_{$item.my}').val(this.checked?1:0)"
 				{if $item.ok_fm eq 1}checked{/if}
 				{if not $is_fin_man or $item.ok_dpu eq 1}disabled{/if}
 			>
@@ -56,7 +56,7 @@
         </tr>
         <tr>
             <td style="VERTICAL-ALIGN: top">
-                гцдо<br />
+                до/хо<br />
             </td>
 		{foreach from=$fin_plan_month_ok key=key item=item}
 	            <td
@@ -64,7 +64,7 @@
 			>
 			<input
 				type=checkbox
-				onclick="$('#plan_month_ok_ok_dpu_{$item.my}'.val(this.checked?1:0)"
+				onclick="$('#plan_month_ok_ok_dpu_{$item.my}').val(this.checked?1:0)"
 				{if $item.ok_dpu eq 1}checked{/if}
 				{if not $is_dpu}disabled{/if}
 			>
@@ -78,5 +78,5 @@
 	{/if}
 </form>
 
-<hr><br>
+<hr>
 

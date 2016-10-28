@@ -1,0 +1,26 @@
+{if not $smarty.request.print}
+<table style="width:500px;text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td>Клиентов в акции</td>
+		<td>Выполнили условие</td>
+		<td>ПЛАН ноябрь + декабрь, {$valuta}</td>
+		<td>ФАКТ ноябрь + декабрь, {$valuta}</td>
+		<td>Бонус по клиентам, {$valuta}</td>
+		<td>Бонус фактический, {$valuta}</td>
+		<td>Бонус выдан, кол-во клиентов</td>
+		<td>Сумма по всем загруженным реестрам</td>
+		<td>Затраты на акцию, %</td>
+	</tr>
+	<tr style="text-align:right">
+		<td>{$itogi.cnt_client|default:0}</td>
+		<td>{$itogi.cnt_act_client|default:0}</td>
+		<td>{$itogi.plan|default:0|num:2}</td>
+		<td>{$itogi.sales|default:0|num:2}</td>
+		<td>{$itogi.bonus|default:0|num:2}</td>
+		<td>{$itogi.bonus_sum|default:0|num:2}</td>
+		<td>{$itogi.bonus_dt_cnt|default:0|num:0}</td>
+		<td>{$itogi_files.bonus|default:0|num:2}</td>
+		<td>{$itogi.zat|default:0|num:2}</td>
+	</tr>
+</table>
+{/if}

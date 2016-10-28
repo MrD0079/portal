@@ -1,0 +1,60 @@
+<p style="background-color:lightgreen; text-align:center; font-weight:bold">
+<a href="javascript:void(0);" onClick="$('#box_dpu_div').toggle();">Горячая линия обращений к исполнительному директору</a>
+</p>
+
+<div style="background-color:lightgreen; text-align:center; display:none;" id="box_dpu_div">
+<form method="post" name="box_dpu" id="box_dpu">
+<p>
+Тема предложения:
+</p>
+<p>
+<input name="box_dpu_subj" id="box_dpu_subj" size=50>
+</p>
+<p>
+Текст предложения (не более 1000 символов):
+</p>
+<p>
+<textarea cols="35" rows="3" name="box_dpu_text" id="box_dpu_text"></textarea>
+</p>
+<p>
+<a href="javascript:void(0);" onclick="box_dpu_new();">Отправить предложение ДП</a>
+</p>
+<p id="box_dpu_result" style="color:red"></p>
+</form>
+</div>
+
+{if $box_dpu_creator}
+{foreach key=k item=i from=$box_dpu_creator}
+<div style="text-align:left; background-color:lightgreen;">
+ДП ответил на ваш запрос по теме: <font style="color:blue">{$i.head.subj}</font>
+<table id=box{$i.head.id} border=0>
+	<tr>
+		<td colspan=3>
+			история переписки:
+		</td>
+	</tr>
+	{foreach key=k1 item=i1 from=$i.chat}
+	<tr style="vertical-align:top">
+		<td>
+			<font style="color:red"><nobr>{$i1.lu}</nobr></font>
+		</td>
+		<td>
+			<font style="color:green">{$i1.who}</font>
+		</td>
+		<td>
+			<font style="color:blue">{$i1.text|nl2br}</font>
+		</td>
+	</tr>
+	{/foreach}
+	<tr>
+		<td colspan=3>
+			<textarea cols="35" rows="3" name="box_dpu_text{$i.head.id}" id="box_dpu_text{$i.head.id}"></textarea><br>
+			<a href="javascript:void(0);" onclick="box_dpu_answer({$i.head.id},$('#box_dpu_text{$i.head.id}').val());">Отправить ответ</a>
+			<a href="javascript:void(0);" onclick="box_dpu_close({$i.head.id},'closed_init');">Закрыть тему обсуждения</a>
+		</td>
+	</tr>
+</table>
+<p id="box_dpu_result{$i.head.id}" style="color:red"></p>
+</div>
+{/foreach}
+{/if}

@@ -1,0 +1,116 @@
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		{if not $smarty.request.print}
+		<td>ФИО ТС
+		{/if}
+		<td>ФИО ЭТА
+		{if not $smarty.request.print}
+		<td>Код ТП</td>
+		{/if}
+		<td>Название ТП</td>
+		<td>Адрес ТП</td>
+		{if not $smarty.request.print}
+		<td>Расположение</td>
+		<td>Тип ТП</td>
+		{/if}
+		<td>ВАЛ {$prev_month_name_3}, {$valuta}</td>
+		<td>ВАЛ {$prev_month_name_2}, {$valuta}</td>
+		<td>ВАЛ {$prev_month_name_1}, {$valuta}</td>
+		<td>Средние продажи за 3 месяца</td>
+		<td>Склад</td>
+		<td style="background-color:rgb(204, 255, 255);">План команды ({$this_month_name}), {$valuta}</td>
+		<td style="background-color:rgb(255, 255, 204);">Данные DM ({$this_month_name}), {$valuta}</td>
+		<td>Скидка, %</td>
+		<td>Фактич. скидка, %</td>
+		<td>Бонус, %</td>
+		<td style="background-color:rgb(255, 204, 153);">% вып-ия (команда)</td>
+		<td>Осталось, {$valuta}</td>
+	</tr>
+	{include file="tpplan_detail_t.html"}
+	{foreach key=k item=i from=$list}
+	<tr>
+		{if not $smarty.request.print}
+		<td>{$i.ts}</td>
+		{/if}
+		<td>{$i.eta}</td>
+		{if not $smarty.request.print}
+		<td>{$i.tp_kod}</td>
+		{/if}
+		<td>{$i.tp_name}</td>
+		<td>{$i.address}</td>
+		{if not $smarty.request.print}
+		<td>{$i.tp_place}</td>
+		<td>{$i.tp_type}</td>
+		{/if}
+		<td style="text-align:right">{$i.summa3|num:2}</td>
+		<td style="text-align:right">{$i.summa2|num:2}</td>
+		<td style="text-align:right">{$i.summa1|num:2}</td>
+		<td style="text-align:right">{$i.summa_avg|num:2}</td>
+		<td style="text-align:center" id="input{$i.tp_kod}rc">
+			{if not $smarty.request.print and ($is_ts or $is_eta)}
+				<input
+					type=checkbox
+					{if $i.rc}checked{/if}
+					onchange="save({$i.tp_kod},'rc','{$smarty.request.month_list}',this.checked?1:0);"
+				>
+			{else}
+				{if $i.rc}да{/if}
+			{/if}
+		</td>
+		<td style="text-align:right;background-color:rgb(204, 255, 255);">
+			{if not $smarty.request.print and ($is_ts or $is_eta)}
+				<input
+					id="input{$i.tp_kod}plan"
+					size=10
+					class="number"
+					onchange="save({$i.tp_kod},'plan','{$smarty.request.month_list}',this.value);"
+				>
+				<script>$('#input{$i.tp_kod}plan').val({$i.plan});</script>
+			{else}
+				{$i.plan|num:2}
+			{/if}
+		</td>
+		<td style="text-align:right;background-color:rgb(255, 255, 204);">{$i.summa|num:2}</td>
+		<td style="text-align:right;">{$i.discount|num:3}</td>
+		<td style="text-align:right;">{$i.skidka|num:6}</td>
+		<td style="text-align:right;">{$i.bonus|num:2}</td>
+		<td style="text-align:right;background-color:rgb(255, 204, 153);">{$i.perc|num:2}</td>
+		<td style="text-align:right;">{$i.shortfall|num:2}</td>
+	</tr>
+	{/foreach}
+	{include file="tpplan_detail_t.html"}
+</table>
+
+{if not $smarty.request.print}
+
+<script>
+{literal}
+
+function save(tp_kod,key,dt,val)
+{
+	$('#input'+tp_kod+key).css('background-color','red');
+	var fd = new FormData();
+	fd.append('tp_kod',  tp_kod);
+	fd.append('key',  key);
+	fd.append('dt',  dt);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=tpplan&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#input'+tp_kod+key).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+
+
+{/literal}
+</script>
+
+<div id=ok></div>
+
+{/if}

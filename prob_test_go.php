@@ -59,7 +59,6 @@ if (isset($_REQUEST["test_end"]))
 		$text.="Сотруднику в ближайшее время будет назначено повторное прохождение тестирования.";
 	}
 	send_mail($parent_email,$subj,$text);
-	//send_mail("denis.yakovenko@avk.ua",$parent_email.'-'.$subj,$text);
 }
 
 $p = array();

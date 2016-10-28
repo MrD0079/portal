@@ -29,12 +29,12 @@
 <table border=1 cellspacing=0 cellpadding=2>
 	{foreach key=k item=i from=$admin_list name=admin_list}
 	{if $i.draw_head eq 1}
-	<tr style="font-weight:bold;">
+	<tr style="font-weight:bold; text-align:center">
 		<td>№ п/п</td>
 		<td>Сотрудник</td>
 		<td>Логин</td>
 		<td>Пароль</td>
-		<td></td>
+		<td>Отправить<br>на почту<br>сотруднику</td>
 		<td align=center>Доступ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 		<td align=center>Супер<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 		<td align=center>Ассептор<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
@@ -60,19 +60,27 @@
 		<td align=center>Бег<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 		<td align=center>Дон<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 		<td align=center>ДМ<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
+		<td align=center>Преза<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
 	</tr>
 	{/if}
 	<tr style="text-align:center">
 		<td>{$smarty.foreach.admin_list.iteration}</td>
 		<td style="text-align:left"><a target=_blank href="?action=spdtree_edit&id={$i.id}">{$i.fio}</a></td>
 		<td><a target=_blank href="https://ps2.avk.ua/?username={$i.login}&password={$i.password}">{$i.login}</a></td>
-		<td>{$i.password}</td>
+		<td>
+			<div style="display: inline;" id=div_pwd_{$i.tn}>{$i.password}</div>
+			<a
+				href="javascript:void(0);"
+				onclick="$('#div_pwd_{$i.tn}').load('?action=admin_list_change_pwd&nohead=1&tn='+'{$i.tn}');">
+				Сменить пароль
+			</a>
+		</td>
 		<td>
 			<div style="display: inline;" id=div_{$i.tn}>
 			<a
 				href="javascript:void(0);"
 				onclick="$('#div_{$i.tn}').load('?action=admin_list_send_pwd&nohead=1&tn='+'{$i.tn}');">
-				<img title="Отправить логин/пароль" src="/design/send_pwd.jpg">
+				Отправить логин/пароль
 			</a>
 			</div>
 		</td>
@@ -101,6 +109,7 @@
 		<td {if $i.is_run eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p24_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_run eq 1}checked{/if}>			<input type=hidden id=p24_{$i.tn} name=ds[spdtree][svideninn][is_run][{$i.tn}]>			</td>
 		<td {if $i.is_don eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p26_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_don eq 1}checked{/if}>			<input type=hidden id=p26_{$i.tn} name=ds[spdtree][svideninn][is_don][{$i.tn}]>		</td>
 		<td {if $i.is_dm eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p27_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_dm eq 1}checked{/if}>			<input type=hidden id=p27_{$i.tn} name=ds[spdtree][svideninn][is_dm][{$i.tn}]>		</td>
+		<td {if $i.is_prez eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p28_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_prez eq 1}checked{/if}>			<input type=hidden id=p28_{$i.tn} name=ds[spdtree][svideninn][is_prez][{$i.tn}]>		</td>
 	</tr>
 	{/foreach}
 </table>

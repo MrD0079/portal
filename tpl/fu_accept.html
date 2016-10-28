@@ -14,7 +14,7 @@
 			<td>
 				Год
 				<br>
-				<select name=calendar_years id=calendar_years>
+				<select required name=calendar_years id=calendar_years>
 					<option></option>
 					{foreach key=key item=item from=$calendar_years}
 					<option value={$item.y}>{$item.y}</option>
@@ -75,10 +75,9 @@
 	<input value="Построить отчет" name="generate" type="submit">
 <br>
 {/if}
-{if $smarty.request.calendar_years}
 
 {if not $smarty.request.print}
-<a href="?action=fu_accept&print=1&excel=1&filename=Подтверждение факта ОУ">Экспорт в Excel</a>
+<a href="?action=fu_accept&generate=1&print=1&excel=1&filename=Подтверждение факта ОУ">Экспорт в Excel</a>
 <p style="text-align:center"><input value="Сохранить" name="save" type="submit"></p>
 {/if}
 
@@ -98,7 +97,7 @@
 		<td class="bg-o" colspan=4>Оперативное</td>
 		<td class="bg-u" colspan=4>ОУ</td>
 		<td>Подтверждение<br>факта<br>ОУ</td>
-		{if not $is_mkk}
+		{if not $is_mkk and not $smarty.request.print}
 		<td rowspan=2>
 			<b>Текст сообщения</b>
 			<br>
@@ -140,10 +139,10 @@
 		<td class="bg-o" style="text-align:right">{if $i1.o_price neq 0}{$i1.o_price|default:0|num:3}{/if}</td>
 		<td class="bg-o" style="text-align:right">{if $i1.o_bonus neq 0}{$i1.o_bonus|default:0|num:3}{/if}</td>
 		<td class="bg-o" style="text-align:right">{if $i1.o_total neq 0}{$i1.o_total|default:0|num:3}{/if}</td>
-		<td {if ($i1.f_cnt   neq 0 and $i1.f_cnt   > $i1.u_cnt  ) or ($i1.d_cnt   neq 0 and $i1.d_cnt   > $i1.u_cnt  )}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_cnt   neq 0}{$i1.u_cnt  |default:0|num:3}{/if}</td>
-		<td {if ($i1.f_price neq 0 and $i1.f_price < $i1.u_price) or ($i1.d_price neq 0 and $i1.d_price < $i1.u_price)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_price neq 0}{$i1.u_price|default:0|num:3}{/if}</td>
-		<td {if ($i1.f_bonus neq 0 and $i1.f_bonus < $i1.u_bonus) or ($i1.d_bonus neq 0 and $i1.d_bonus < $i1.u_bonus)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_bonus neq 0}{$i1.u_bonus|default:0|num:3}{/if}</td>
-		<td {if ($i1.f_total neq 0 and $i1.f_total < $i1.u_total) or ($i1.d_total neq 0 and $i1.d_total < $i1.u_total)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_total neq 0}{$i1.u_total|default:0|num:3}{/if}</td>
+		<td {if ($i1.o_cnt   neq 0 and $i1.o_cnt   > $i1.u_cnt  ) or ($i1.d_cnt   neq 0 and $i1.d_cnt   > $i1.u_cnt  )}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_cnt   neq 0}{$i1.u_cnt  |default:0|num:3}{/if}</td>
+		<td {if ($i1.o_price neq 0 and $i1.o_price < $i1.u_price) or ($i1.d_price neq 0 and $i1.d_price < $i1.u_price)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_price neq 0}{$i1.u_price|default:0|num:3}{/if}</td>
+		<td {if ($i1.o_bonus neq 0 and $i1.o_bonus < $i1.u_bonus) or ($i1.d_bonus neq 0 and $i1.d_bonus < $i1.u_bonus)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_bonus neq 0}{$i1.u_bonus|default:0|num:3}{/if}</td>
+		<td {if ($i1.o_total neq 0 and $i1.o_total < $i1.u_total) or ($i1.d_total neq 0 and $i1.d_total < $i1.u_total)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_total neq 0}{$i1.u_total|default:0|num:3}{/if}</td>
 		{if $smarty.foreach.detail.iteration eq 1}
 		<td rowspan={$smarty.foreach.detail.total+3} {if $fin_report_item.ok_fm}class="bg-green"{/if} style="text-align:center;">
 			{if not $smarty.request.print}
@@ -162,26 +161,118 @@
 	<tr style="font-weight:bold">
 		<td>ИТОГО</td>
 		<td class="bg-f" style="text-align:right">{$fin_report_item.detail_total.f_cnt|default:0|num:3}</td>
-		<td class="bg-f" style="text-align:center" colspan=2><a target=_blank href="?action=fin_plan_detail&plan_type=1&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a></td>
+		<td class="bg-f" style="text-align:center" colspan=2>{if not $smarty.request.print}<a target=_blank href="?action=fin_plan_detail&plan_type=1&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a>{/if}</td>
 		<td class="bg-f" style="text-align:right">{$fin_report_item.detail_total.f_total|default:0|num:3}</td>
 		<td class="bg-o" style="text-align:right">{$fin_report_item.detail_total.o_cnt|default:0|num:3}</td>
-		<td class="bg-o" style="text-align:center" colspan=2><a target=_blank href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a></td>
+		<td class="bg-o" style="text-align:center" colspan=2>{if not $smarty.request.print}<a target=_blank href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a>{/if}</td>
 		<td class="bg-o" style="text-align:right">{$fin_report_item.detail_total.o_total|default:0|num:3}</td>
 		<td class="bg-u" style="text-align:right">{$fin_report_item.detail_total.u_cnt|default:0|num:3}</td>
-		<td class="bg-u" style="text-align:center" colspan=2><a target=_blank href="?action=fin_plan_detail&plan_type=4&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a></td>
+		<td class="bg-u" style="text-align:center" colspan=2>{if not $smarty.request.print}<a target=_blank href="?action=fin_plan_detail&plan_type=4&calendar_years={$smarty.request.calendar_years}&nets={$fin_report_item.id_net}&month={$fin_report_item.my}&statya_list=0&payment_type=0&tn_rmkk=0&tn_mkk=0&flt_id=0">Детализация</a>{/if}</td>
 		<td class="bg-u" style="text-align:right">{$fin_report_item.detail_total.u_total|default:0|num:3}</td>
 	</tr>
 	<tr style="font-weight:bold">
 		<td>План/факт продаж месяца, тыс.{$valuta}.</td>
-		<td class="bg-f" colspan=4 style="text-align:right">{$fin_report_item.plan1.plan|default:0|num:3}</td>
-		<td class="bg-o" colspan=4 style="text-align:right">{$fin_report_item.plan3.plan|default:0|num:3}</td>
-		<td class="bg-u" colspan=4 style="text-align:right">{$fin_report_item.plan4.fakt|default:0|num:3}</td>
+		<td class="bg-f" colspan=4 style="text-align:right">
+<!--
+			{$fin_report_item.plan1.plan|default:0|num:3}
++
+			{$fin_report_item.plan1.plan_ng|default:0|num:3}
++
+			{$fin_report_item.plan1.plan_coffee|default:0|num:3}
+=
+-->
+			{$fin_report_item.plan1.plan_all|default:0|num:3}
+		</td>
+		<td class="bg-o" colspan=4 style="text-align:right">
+<!--
+			{$fin_report_item.plan3.plan|default:0|num:3}
++
+			{$fin_report_item.plan3.plan_ng|default:0|num:3}
++
+			{$fin_report_item.plan3.plan_coffee|default:0|num:3}
+=
+-->
+			{$fin_report_item.plan3.plan_all|default:0|num:3}
+		</td>
+		<td class="bg-u" colspan=4 style="text-align:right">
+<!--
+			{$fin_report_item.plan4.fakt/1000|default:0|num:3}
++
+			{$fin_report_item.plan4.fakt_ng/1000|default:0|num:3}
++
+			{$fin_report_item.plan4.fakt_coffee/1000|default:0|num:3}
+=
+-->
+			{$fin_report_item.plan4.fakt_all/1000|default:0|num:3}
+		</td>
 	</tr>
 	<tr style="font-weight:bold">
 		<td>Затраты, %</td>
-		<td class="bg-f" colspan=4 style="text-align:right">{$fin_report_item.plan1.perc_zatr|default:0|num:3}</td>
-		<td class="bg-o" colspan=4 style="text-align:right">{$fin_report_item.plan3.perc_zatr|default:0|num:3}</td>
-		<td class="bg-u" colspan=4 style="text-align:right">{$fin_report_item.plan4.perc_zatr|default:0|num:3}</td>
+		<td class="bg-f" colspan=4 style="text-align:right">
+<!--
+			{$fin_report_item.plan1.perc_zatr|default:0|num:2}
++
+			{$fin_report_item.plan1.perc_zatr_ng|default:0|num:2}
++
+			{$fin_report_item.plan1.perc_zatr_coffee|default:0|num:2}
+=
+-->
+			{$fin_report_item.plan1.perc_zatr_all|default:0|num:2}
+		</td>
+		<td class="bg-o" colspan=4 style="text-align:right">
+<!--
+			{$fin_report_item.plan3.perc_zatr|default:0|num:2}
++
+			{$fin_report_item.plan3.perc_zatr_ng|default:0|num:2}
++
+			{$fin_report_item.plan3.perc_zatr_coffee|default:0|num:2}
+=
+-->
+			{$fin_report_item.plan3.perc_zatr_all|default:0|num:2}
+		</td>
+		<td class="bg-u" colspan=4 style="text-align:right">
+<!--
+			{$fin_report_item.plan4.perc_zatr*1000|default:0|num:2}
++
+			{$fin_report_item.plan4.perc_zatr_ng*1000|default:0|num:2}
++
+			{$fin_report_item.plan4.perc_zatr_coffee*1000|default:0|num:2}
+=
+-->
+			{$fin_report_item.plan4.perc_zatr_all*1000|default:0|num:2}
+		</td>
+	</tr>
+<!--
+	<tr style="font-weight:bold">
+		<td>Затраты, ГРН</td>
+		<td class="bg-f" colspan=4 style="text-align:right">
+			{$fin_report_item.plan1.zatr|default:0|num:2}
++
+			{$fin_report_item.plan1.zatr_ng|default:0|num:2}
++
+			{$fin_report_item.plan1.zatr_coffee|default:0|num:2}
+=
+			{$fin_report_item.plan1.zatr_all|default:0|num:2}
+		</td>
+		<td class="bg-o" colspan=4 style="text-align:right">
+			{$fin_report_item.plan3.zatr|default:0|num:2}
++
+			{$fin_report_item.plan3.zatr_ng|default:0|num:2}
++
+			{$fin_report_item.plan3.zatr_coffee|default:0|num:2}
+=
+			{$fin_report_item.plan3.zatr_all|default:0|num:2}
+		</td>
+		<td class="bg-u" colspan=4 style="text-align:right">
+			{$fin_report_item.plan4.zatr|default:0|num:2}
++
+			{$fin_report_item.plan4.zatr_ng|default:0|num:2}
++
+			{$fin_report_item.plan4.zatr_coffee|default:0|num:2}
+=
+			{$fin_report_item.plan4.zatr_all|default:0|num:2}
+		</td>
+-->
 	</tr>
 	</table>
 	{/foreach}
@@ -189,5 +280,5 @@
 {if not $smarty.request.print}
 <p style="text-align:center"><input value="Сохранить" name="save" type="submit"></p>
 {/if}
-{/if}
+
 </form>

@@ -61,7 +61,7 @@ $sql=rtrim(file_get_contents('sql/'.$_REQUEST['act'].'_report_a_photo_files.sql'
 $sql=stritr($sql,$params);
 $listf = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-if (isset($list)&&isset($listf))
+if (isset($list)&&isset($listf)&&isset($d))
 {
 	foreach ($d as $k=>$v)
 	{

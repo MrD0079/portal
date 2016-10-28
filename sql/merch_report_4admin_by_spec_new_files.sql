@@ -19,23 +19,20 @@
             FROM merch_spec_report_files_chat
            WHERE msr_file_id = f.id)
             c
-    FROM (SELECT r_id,
-                 r_spec_id,
-                 r_dt,
-                 r_remain,
-                 r_oos,
-                 r_fcount,
-                 r_price,
-                 r_text
-            FROM ms_rep_hbr,
-                 (  SELECT h_id, MAX (r_dt) dt
-                      FROM ms_rep_hbr
-                     WHERE     r_dt BETWEEN TO_DATE (:ed, 'dd/mm/yyyy') - 30
-                                        AND TO_DATE (:ed, 'dd/mm/yyyy')
-                           AND msv_dt BETWEEN TO_DATE (:ed, 'dd/mm/yyyy') - 30
-                                          AND TO_DATE (:ed, 'dd/mm/yyyy')
-                  GROUP BY h_id) h1
-           WHERE ms_rep_hbr.b_head_id = h1.h_id AND ms_rep_hbr.r_dt = h1.dt) msr,
+    FROM /*( SELECT r_id,
+         r_spec_id,
+         r_dt,
+         r_remain,
+         r_oos,
+         r_fcount,
+         r_price,
+         r_text
+    FROM ms_rep_hbr,
+         (  SELECT h_id, MAX (r_dt) dt
+              FROM ms_rep_hbr
+             WHERE TO_DATE ( :ed, 'dd/mm/yyyy') - msv_dt <= 3
+          GROUP BY h_id) h1
+   WHERE ms_rep_hbr.b_head_id = h1.h_id AND ms_rep_hbr.r_dt = h1.dt)*/ms_rep_hbr_max_dt msr,
          MS_REP_HBR_DT msh,
          merch_spec_body msb,
          merch_report mr,
@@ -49,6 +46,7 @@
          AND msr.r_spec_id = msb.id
          AND ms_rep_routes1.rb_id = mr.rb_id
          AND msh.data = TO_DATE (:ed, 'dd.mm.yyyy')
+                 AND msr.dt = TO_DATE (:ed, 'dd.mm.yyyy')
          AND DECODE (:svms_list, 0, 0, ms_rep_routes1.rh_tn) =
                 DECODE (:svms_list, 0, 0, :svms_list)
          AND DECODE (:agent, 0, 0, ms_rep_routes1.rb_ag_id) =

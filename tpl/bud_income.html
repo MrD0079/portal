@@ -1,0 +1,354 @@
+<h1>Бюджет КК с учетом дохода</h1>
+<form target="_self" method="POST" name=form3 id=form3 enctype="multipart/form-data">
+{if not $smarty.request.print}
+	<table>
+		<tr>
+			<td>
+				Год
+			</td>
+			<td>
+				<select required name=y id=y>
+					<option></option>
+					{foreach key=key item=item from=$y}
+					<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#y option[value="{$smarty.request.y}"]').prop('selected', true);</script>
+			</td>
+			<td style="width:20px;"></td>
+			<td rowspan=99 style="border:0px dotted red">
+				{if $is_fin_man}
+					Выбрать файл для загрузки<br>
+					<input type=file name=fn><br>
+					<input value="Загрузить файл" name="generate" type="submit">
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Месяц
+			</td>
+			<td>
+				<select name="m" id="m">
+					<option value=0></option>
+					{foreach key=key item=item from=$m}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#m option[value="{$smarty.request.m}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Вид отчета
+			</td>
+			<td>
+				<input type=radio id=reptype name=reptype value=1>краткий<br>
+				<input type=radio id=reptype name=reptype value=2>детальный<br>
+				<script>$("input[name=reptype][value={$smarty.request.reptype}]").attr('checked',true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=2>
+				<input value="Построить отчет" name="generate" type="submit">
+			</td>
+		</tr>
+		{if $smarty.request.y and $smarty.request.generate}
+			<tr>
+				<td colspan=2>
+					<a href="?action=bud_income&y={$smarty.request.y}&m={$smarty.request.m}&reptype={$smarty.request.reptype}&generate=1&print=1&excel=1&filename=Бюджет КК с учетом дохода">Экспорт в Excel</a>
+				</td>
+			</tr>
+		{/if}
+	</table>
+<br>
+{/if}
+{if $smarty.request.y and $smarty.request.generate}
+	{if $smarty.request.reptype eq 1}
+		<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold;text-align:center">
+			<td>1</td>
+			<td>2</td>
+			<td>3</td>
+			<td>4</td>
+			<td>5</td>
+			<td>6</td>
+			<td>7</td>
+			<td>8</td>
+			<td>9</td>
+			<td>10</td>
+			<td>11</td>
+			<td>12</td>
+			<td>13</td>
+			<td>14</td>
+			<td>15</td>
+			<td>16</td>
+			<td>17</td>
+			<td>18</td>
+			<td>19</td>
+			<td>20</td>
+		</tr>
+		<tr style="font-weight:bold;text-align:center">
+			<td>Табл №1</td>
+			<td></td>
+			<td colspan=4 style="background-color:rgb(217,217,217)">Опер плана затрат</td>
+			<td colspan=4 style="background-color:rgb(218,238,243)">Факт оказанных услуг</td>
+			<td colspan=5 style="background-color:rgb(196,189,151)">Бухгалтерский учет привязан к месяцу оказания услуг</td>
+			<td>Доход КК</td>
+			<td>Компенсация / списание / др СЗ.</td>
+			<td>Баланс БУ с учетом дохода</td>
+			<td>Баланс УУ с учетом дохода</td>
+			<td>Баланс: Факт оказ услуг минус БУ</td>
+		</tr>
+		<tr style="font-weight:bold;text-align:center">
+			<td>Месяц оказ услуги</br>
+			<td>Дистрибутор</br>
+			<td>форма 1</br>
+			<td>товаром</br>
+			<td>форма 2</br>
+			<td style="background-color:rgb(217,217,217)">Итого ОП, тыс грн</br>
+			<td>форма 1</br>
+			<td>товаром</br>
+			<td>форма 2</br>
+			<td style="background-color:rgb(218,238,243)">Итого УУ, тыс грн</br>
+			<td>форма 1</br>
+			<td>товаром</br>
+			<td>форма 2</br>
+			<td>Фонд другое (возврат и тд)</br>
+			<td style="background-color:rgb(196,189,151)">Итого БУ, тыс. грнр</br>
+			<td>Данные вносятся вручную ФМ</br>
+			<td>Данные вносятся вручную ФМ</br>
+			<td>формула = "Доход КК" + "Коменсация" -"Итого БУ"</br>
+			<td>Формула = Факт УУ" - (Доход КК + Компенсация)</br>
+			<td>Формула = Итого УУ - Итого БУ</br>
+		</tr>
+		{foreach key=k item=i from=$finreport name=finreport}
+		{cycle values="#ccffff,#ffffcc" assign=bgcolor}
+			{assign var=s1 value=0}
+			{foreach key=k1 item=i1 from=$i.data}
+				{assign var=s1 value=`$s1+1`}
+			{/foreach}
+			{foreach key=k1 item=i1 from=$i.data name=detail1}
+				<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
+					<!--1-->{if $smarty.foreach.detail1.iteration eq 1}<td rowspan={$s1} style="text-align:left;vertical-align:top">{$i.head.mt}</td>{/if}
+					<!--2--><td style="text-align:left;vertical-align:top">{$i1.fil_name}</td>
+					<!--3--><td>{$i1.opz_pt_f1|num:2}</td>
+					<!--4--><td>{$i1.opz_pt_t|num:2}</td>
+					<!--5--><td>{$i1.opz_pt_f2|num:2}</td>
+					<!--6--><td style="background-color:rgb(217,217,217)">{$i1.opz_total|num:2}</td>
+					<!--7--><td>{$i1.fou_pt_f1|num:2}</td>
+					<!--8--><td>{$i1.fou_pt_t|num:2}</td>
+					<!--9--><td>{$i1.fou_pt_f2|num:2}</td>
+					<!--10--><td style="background-color:rgb(218,238,243)">{$i1.fou_total|num:2}</td>
+					<!--11--><td>{$i1.bu_pt_f1|num:2}</td>
+					<!--12--><td>{$i1.bu_pt_t|num:2}</td>
+					<!--13--><td>{$i1.bu_pt_f2|num:2}</td>
+					<!--14--><td>{if not $smarty.request.print and $is_fin_man}<input id="input_{$i.head.y}_{$i.head.my}_{$i1.fil_id}_fund_other" onchange="save({$i.head.y},{$i.head.my},{$i1.fil_id},'fund_other',this.value);" value="{$i1.fund_other}" class="number" size=5>{else}{$i1.fund_other|num:2}{/if}</td>
+					<!--15--><td style="background-color:rgb(196,189,151)">{$i1.bu_total|num:2}</td>
+					<!--16--><td>{if not $smarty.request.print and $is_fin_man}<input id="input_{$i.head.y}_{$i.head.my}_{$i1.fil_id}_kk_income" onchange="save({$i.head.y},{$i.head.my},{$i1.fil_id},'kk_income',this.value);" value="{$i1.kk_income}" class="number" size=5>{else}{$i1.kk_income|num:2}{/if}</td>
+					<!--17--><td>{if not $smarty.request.print and $is_fin_man}<input id="input_{$i.head.y}_{$i.head.my}_{$i1.fil_id}_compensation" onchange="save({$i.head.y},{$i.head.my},{$i1.fil_id},'compensation',this.value);" value="{$i1.compensation}" class="number" size=5>{else}{$i1.compensation|num:2}{/if}</td>
+					<!--18--><td>{$i1.bu_balans|num:2}</td>
+					<!--19--><td>{$i1.uu_balans|num:2}</td>
+					<!--20--><td>{$i1.balans|num:2}</td>
+				</tr>
+				{if $smarty.foreach.detail1.iteration eq $smarty.foreach.detail1.total}
+				<!--<tr bgcolor="{$bgcolor}" style="text-align:right;font-weight:bold">
+					<td>ИТОГО</td>
+					<td>{$i.head.o_total|num:2}</td>
+					<td>{$i.head.plan|num:3}</td>
+					<td>{$i.head.ef_plan|num:2}</td>
+					<td>{$i.head.fu_total|num:2}</td>
+					<td>{$i.head.fakt|num:2}</td>
+					<td>{$i.head.ef_fakt|num:2}</td>
+					<td>{$i.head.fu_total-$i.head.o_total|num:2}</td>
+				</tr>-->
+				{/if}
+			{/foreach}
+		{/foreach}
+		</table>
+	{/if}
+	{if $smarty.request.reptype eq 2}
+		<table border=1 cellspacing=0 cellpadding=3>
+		<tr style="font-weight:bold;text-align:center">
+			<td>1</td>
+			<td>2</td>
+			<td>2.1</td>
+			<td>3</td>
+			<td>4</td>
+			<td>5</td>
+			<td>6</td>
+			<td>7</td>
+			<td>8</td>
+			<td>9</td>
+			<td>10</td>
+			<td>11</td>
+			<td>12</td>
+			<td>13</td>
+			<td>14</td>
+			<td>15</td>
+			<td>15.1</td>
+			<td>16</td>
+			<td>17</td>
+			<td>18</td>
+			<td>19</td>
+			<td>20</td>
+		</tr>
+		<tr style="font-weight:bold;text-align:center">
+			<td>Табл №1</td>
+			<td></td>
+			<td>"Развернутый вариант БУ"</td>
+			<td colspan=4 style="background-color:rgb(217,217,217)">Опер плана затрат</td>
+			<td colspan=4 style="background-color:rgb(218,238,243)">Факт оказанных услуг</td>
+			<td colspan=6 style="background-color:rgb(196,189,151)">Бухгалтерский учет привязан к месяцу оказания услуг</td>
+			<td>Доход КК</td>
+			<td>Компенсация / списание / др СЗ.</td>
+			<td>Баланс БУ с учетом дохода</td>
+			<td>Баланс УУ с учетом дохода</td>
+			<td>Баланс: Факт оказ услуг минус БУ</td>
+		</tr>
+		<tr style="font-weight:bold;text-align:center">
+			<td>Месяц оказ услуги</br>
+			<td>Дистрибутор</br>
+			<td>Сеть</br>
+			<td>форма 1</br>
+			<td>товаром</br>
+			<td>форма 2</br>
+			<td style="background-color:rgb(217,217,217)">Итого ОП, тыс грн</br>
+			<td>форма 1</br>
+			<td>товаром</br>
+			<td>форма 2</br>
+			<td style="background-color:rgb(218,238,243)">Итого УУ, тыс грн</br>
+			<td>форма 1</br>
+			<td>товаром</br>
+			<td>форма 2</br>
+			<td>Фонд другое (возврат и тд)</br>
+			<td style="background-color:rgb(196,189,151)">Итого БУ, тыс. грнр</br>
+			<td>Месяц проведения услуги в БУ</br>
+			<td>Данные вносятся вручную ФМ</br>
+			<td>Данные вносятся вручную ФМ</br>
+			<td>формула = "Доход КК" + "Коменсация" -"Итого БУ"</br>
+			<td>Формула = Факт УУ" - (Доход КК + Компенсация)</br>
+			<td>Формула = Итого УУ - Итого БУ</br>
+		</tr>
+		{foreach key=k item=i from=$finreport name=finreport}
+		{cycle values="#ccffff,#ffffcc" assign=bgcolor}
+			{assign var=s1 value=0}
+			{foreach key=k1 item=i1 from=$i.data}
+				{foreach key=k2 item=i2 from=$i1.data}
+					{assign var=s1 value=`$s1+1`}
+				{/foreach}
+				{assign var=s1 value=`$s1+1`}
+			{/foreach}
+			{assign var=s1 value=`$s1+1`}
+			<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
+				<td rowspan={$s1} style="text-align:left;vertical-align:top">{$i.head.mt}</td>
+				<td colspan=99 style="display: none;"></td>
+			</tr>
+			{foreach key=k1 item=i1 from=$i.data name=detail1}
+				{assign var=s2 value=0}
+				{foreach key=k2 item=i2 from=$i1.data}
+					{assign var=s2 value=`$s2+1`}
+				{/foreach}
+				{assign var=s2 value=`$s2+1`}
+				<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
+					<!--2--><td rowspan={$s2} style="text-align:left;vertical-align:top">{$i1.head.fil_name}</td>
+					<!--2.1--><td style="text-align:left"></td>
+					<!--3--><td>{$i1.head.opz_pt_f1|num:2}</td>
+					<!--4--><td>{$i1.head.opz_pt_t|num:2}</td>
+					<!--5--><td>{$i1.head.opz_pt_f2|num:2}</td>
+					<!--6--><td style="background-color:rgb(217,217,217)">{$i1.head.opz_total|num:2}</td>
+					<!--7--><td>{$i1.head.fou_pt_f1|num:2}</td>
+					<!--8--><td>{$i1.head.fou_pt_t|num:2}</td>
+					<!--9--><td>{$i1.head.fou_pt_f2|num:2}</td>
+					<!--10--><td style="background-color:rgb(218,238,243)">{$i1.head.fou_total|num:2}</td>
+					<!--11--><td>{$i1.head.bu_pt_f1|num:2}</td>
+					<!--12--><td>{$i1.head.bu_pt_t|num:2}</td>
+					<!--13--><td>{$i1.head.bu_pt_f2|num:2}</td>
+					<!--14--><td>{if not $smarty.request.print and $is_fin_man}<input id="input_{$i.head.y}_{$i.head.my}_{$i1.head.fil_id}_fund_other" onchange="save({$i.head.y},{$i.head.my},{$i1.head.fil_id},'fund_other',this.value);" value="{$i1.head.fund_other}" class="number" size=5>{else}{$i1.head.fund_other|num:2}{/if}</td>
+					<!--15--><td style="background-color:rgb(196,189,151)">{$i1.head.bu_total|num:2}</td>
+					<!--15.1--><td style="text-align:left">{$i1.head.bu_act_prov_month}</td>
+					<!--16--><td>{if not $smarty.request.print and $is_fin_man}<input id="input_{$i.head.y}_{$i.head.my}_{$i1.head.fil_id}_kk_income" onchange="save({$i.head.y},{$i.head.my},{$i1.head.fil_id},'kk_income',this.value);" value="{$i1.head.kk_income}" class="number" size=5>{else}{$i1.head.kk_income|num:2}{/if}</td>
+					<!--17--><td>{if not $smarty.request.print and $is_fin_man}<input id="input_{$i.head.y}_{$i.head.my}_{$i1.head.fil_id}_compensation" onchange="save({$i.head.y},{$i.head.my},{$i1.head.fil_id},'compensation',this.value);" value="{$i1.head.compensation}" class="number" size=5>{else}{$i1.head.compensation|num:2}{/if}</td>
+					<!--18--><td>{$i1.head.bu_balans|num:2}</td>
+					<!--19--><td>{$i1.head.uu_balans|num:2}</td>
+					<!--20--><td>{$i1.head.balans|num:2}</td>
+				</tr>
+				{foreach key=k2 item=i2 from=$i1.data name=detail2}
+					<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
+						<!--2.1--><td style="text-align:left">{$i2.net_name}</td>
+						<!--3--><td>{$i2.opz_pt_f1|num:2}</td>
+						<!--4--><td>{$i2.opz_pt_t|num:2}</td>
+						<!--5--><td>{$i2.opz_pt_f2|num:2}</td>
+						<!--6--><td style="background-color:rgb(217,217,217)">{$i2.opz_total|num:2}</td>
+						<!--7--><td>{$i2.fou_pt_f1|num:2}</td>
+						<!--8--><td>{$i2.fou_pt_t|num:2}</td>
+						<!--9--><td>{$i2.fou_pt_f2|num:2}</td>
+						<!--10--><td style="background-color:rgb(218,238,243)">{$i2.fou_total|num:2}</td>
+						<!--11--><td>{$i2.bu_pt_f1|num:2}</td>
+						<!--12--><td>{$i2.bu_pt_t|num:2}</td>
+						<!--13--><td>{$i2.bu_pt_f2|num:2}</td>
+						<!--14--><td></td>
+						<!--15--><td style="background-color:rgb(196,189,151)"></td>
+						<!--15.1--><td style="text-align:left">{$i2.bu_act_prov_month}</td>
+						<!--16--><td></td>
+						<!--17--><td></td>
+						<!--18--><td></td>
+						<!--19--><td></td>
+						<!--20--><td></td>
+					</tr>
+					{if $smarty.foreach.detail1.iteration eq $smarty.foreach.detail1.total}
+					<!--<tr bgcolor="{$bgcolor}" style="text-align:right;font-weight:bold">
+						<td>ИТОГО</td>
+						<td>{$i.head.o_total|num:2}</td>
+						<td>{$i.head.plan|num:3}</td>
+						<td>{$i.head.ef_plan|num:2}</td>
+						<td>{$i.head.fu_total|num:2}</td>
+						<td>{$i.head.fakt|num:2}</td>
+						<td>{$i.head.ef_fakt|num:2}</td>
+						<td>{$i.head.fu_total-$i.head.o_total|num:2}</td>
+					</tr>-->
+					{/if}
+				{/foreach}
+			{/foreach}
+		{/foreach}
+		</table>
+	{/if}
+{/if}
+</form>
+
+
+
+{if not $smarty.request.print}
+
+<script>
+{literal}
+
+function save(y,m,fil,field,val)
+{
+	$('#input_'+y+'_'+m+'_'+fil+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('y',  y);
+	fd.append('m',  m);
+	fd.append('fil_id',  fil);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=bud_income&save=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#input_'+y+'_'+m+'_'+fil+'_'+field).css('background-color','white');
+			$('#ok').html(data);
+		}
+	});
+}
+
+
+{/literal}
+</script>
+
+<div id=ok></div>
+
+{/if}

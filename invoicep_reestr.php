@@ -49,8 +49,7 @@ if (isset($_REQUEST["add"]))
 						'fn'=>$fn
 					);
 					Table_Update('invoice_files', $vals,$vals);
-					if (!file_exists('invoice_files')) {mkdir('invoice_files',0777,true);}
-					move_uploaded_file($_FILES['new_files']['tmp_name'][$k], 'invoice_files/'.$fn);
+					move_uploaded_file($_FILES['new_files']['tmp_name'][$k], 'files/'.$fn);
 				}
 			}
 		}
@@ -98,8 +97,7 @@ if (isset($_FILES['files']))
 				'fn'=>$fn
 			);
 			Table_Update('invoice_files', $vals,$vals);
-			if (!file_exists('invoice_files')) {mkdir('invoice_files',0777,true);}
-			move_uploaded_file($_FILES['files']['tmp_name'][$k][$k1], 'invoice_files/'.$fn);
+			move_uploaded_file($_FILES['files']['tmp_name'][$k][$k1], 'files/'.$fn);
 		}
 	}
 	}
@@ -179,7 +177,7 @@ if (($_REQUEST["calendar_years"]!=0)&&(isset($_REQUEST["generate"])))
 	$smarty->assign('invoice', $data);
 }
 
-$sql=rtrim(file_get_contents('sql/distr_prot_di.sql'));
+$sql=rtrim(file_get_contents('sql/distr_prot_di_kk.sql'));
 $p = array(":dpt_id" => $_SESSION["dpt_id"],':tn'=>$tn);
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

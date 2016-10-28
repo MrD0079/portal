@@ -1,0 +1,37 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+		<td>СВ МС</td>
+		<td>Область</td>
+		<td>Город</td>
+		<td>Сеть</td>
+		<td>Юридическое название ТЗ</td>
+		<td>Адрес ТЗ</td>
+		<td>Заказчик</td>
+		<td>Всего<br>задач<br>за<br>выбранный<br>период</td>
+		<td>Отвеченные<br>в<br>течение<br>суток</td>
+		<td>Не<br>отвеченные<br>в<br>течение<br>суток</td>
+		<td style="background-color: rgb(255, 204, 153);">%<br>отвеченных<br>в<br>срок</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+	<tr bgcolor='{cycle values="#ccffff,#ffffcc"}'>
+		<td>{$i.svms_name}</td>
+		<td>{$i.tz_oblast}</td>
+		<td>{$i.city}</td>
+		<td>{$i.net_name}</td>
+		<td>{$i.ur_tz_name}</td>
+		<td>{$i.tz_address}</td>
+		<td>{$i.ag_name}</td>
+		<td style="text-align:right">{$i.tsk_total}</td>
+		<td style="text-align:right">{$i.tsk_good}</td>
+		<td style="text-align:right">{$i.tsk_bad}</td>
+		<td style="text-align:right;background-color: rgb(255, 204, 153);">{$i.tsk_good_perc|num:2}</td>
+	</tr>
+	{/foreach}
+	<tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
+		<td colspan=7>Итого</td>
+		<td style="text-align:right">{$t.tsk_total}</td>
+		<td style="text-align:right">{$t.tsk_good}</td>
+		<td style="text-align:right">{$t.tsk_bad}</td>
+		<td style="text-align:right;background-color: rgb(255, 204, 153);">{$t.tsk_good_perc|num:2}</td>
+	</tr>
+</table>

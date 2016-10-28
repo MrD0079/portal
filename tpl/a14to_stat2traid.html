@@ -1,0 +1,154 @@
+<h1>Стандарт ТО - Статистика (для анализа результатов)</h1>
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form_report id=form_report>
+	<p>
+	Дата
+	с
+		<select name="sd" id="sd">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#sd option[value="{$smarty.request.sd|default:$now1}"]').prop('selected', true);</script>
+	по
+		<select name="ed" id="ed">
+			<option></option>
+			{foreach key=key1 item=item1 from=$month_list}
+				<option value="{$item1.sd_c}">{$item1.my}</option>
+			{/foreach}
+		</select>
+		<script>$('#ed option[value="{$smarty.request.ed|default:$now1}"]').prop('selected', true);</script>
+	</p>
+	{if $is_ts neq 1 and $is_eta neq 1}
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+		</p>
+	{/if}
+	{if $is_eta neq 1}
+		<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+		</p>
+	{/if}
+		<p>
+			<input type=radio id="standart" name="standart" value=1>все
+			<input type=radio id="standart" name="standart" value=2>A-стандарт
+			<input type=radio id="standart" name="standart" value=3>B-стандарт
+		</p>
+		<script>$("input[name=standart][value={$smarty.request.standart}]").attr('checked',true);</script>
+	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+	<p><input type=submit name=save id=save value="Сохранить"></p>
+	</form>
+{/if}
+{if $smarty.request.generate}
+<table style="text-align: center;" border=1>
+<tbody>
+	<tr style="font-weight: bold;">
+		<td rowspan=2>Критерии</td>
+		{foreach key=k item=i from=$d name=d}
+		{cycle name='color1' assign='color1' values='#ccffff,#ffffcc'}
+		<td bgcolor="{$color1}" {if $k>0}colspan=4{/if}>{$i.mt} {$i.y}</td>
+		{/foreach}
+	</tr>
+	<tr style="font-weight: bold;">
+		{foreach key=k item=i from=$d name=d}
+		{cycle name='color2' assign='color2' values='#ccffff,#ffffcc'}
+		<td bgcolor="{$color2}"><a href="javascript:void(0);" onclick="load_detail('all','{$i.cdt}');">Факт</a></td>
+		{if $k>0}
+		<td bgcolor="{$color2}">Прирост общий</td>
+		<td bgcolor="{$color2}"><a href="javascript:void(0);" onclick="load_detail('plus','{$i.cdt}');">Достигнут стандарт</a></td>
+		<td bgcolor="{$color2}"><a href="javascript:void(0);" onclick="load_detail('minus','{$i.cdt}');">Потерян стандарт</a></td>
+		{/if}
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Стандарт "по визитам"</td>
+		{foreach key=k item=i from=$d name=d}
+		{cycle name='color3' assign='color3' values='#ccffff,#ffffcc'}
+		<td bgcolor="{$color3}">{$i.data.ntpcbytp}</td>
+		{if $k>0}
+		<td bgcolor="{$color3}">{$i.data.prirosttpcbytp}</td>
+		<td bgcolor="{$color3}">{$i.data.sttobytpplus}</td>
+		<td bgcolor="{$color3}">{$i.data.sttobytpminus}</td>
+		{/if}
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Стандарт "засчитан ТМ"</td>
+		{foreach key=k item=i from=$d name=d}
+		{cycle name='color4' assign='color4' values='#ccffff,#ffffcc'}
+		<td bgcolor="{$color4}">{$i.data.ntpcbytm}</td>
+		{if $k>0}
+		<td bgcolor="{$color4}">{$i.data.prirosttpcbytm}</td>
+		<td bgcolor="{$color4}">{$i.data.ok_st_tmplus}</td>
+		<td bgcolor="{$color4}">{$i.data.ok_st_tmminus}</td>
+		{/if}
+		{/foreach}
+	</tr>
+	<tr>
+		<td>Всего стандартов</td>
+		{foreach key=k item=i from=$d name=d}
+		{cycle name='color5' assign='color5' values='#ccffff,#ffffcc'}
+		<td bgcolor="{$color5}">{$i.data.ntpstc}</td>
+		{if $k>0}
+		<td bgcolor="{$color5}">{$i.data.prirosttpstc}</td>
+		<td bgcolor="{$color5}">{$i.data.stplus}</td>
+		<td bgcolor="{$color5}">{$i.data.stminus}</td>
+		{/if}
+		{/foreach}
+	</tr>
+</tbody>
+</table>
+<p></p>
+<div id=st_detail></div>
+{literal}
+<script>
+//v_dt='{$smarty.request.dt}';
+{literal}
+function load_detail(sttype,ed)
+{
+x=loadwait_show('st_detail');
+$('#st_detail').load('?action=a14to_stat2traid&nohead=1',
+{
+	detail: 1,
+	sttype: sttype,
+	eta_list: $('#eta_list').val(),
+	exp_list_without_ts: $('#exp_list_without_ts').val(),
+	exp_list_only_ts: $('#exp_list_only_ts').val(),
+	sd: $('#sd').val(),
+	ed: ed,
+}
+,
+function() {
+	loadwait_hide(x);
+	
+}
+);
+}
+</script>
+{/literal}
+{/if}

@@ -2,7 +2,7 @@
 SELECT COUNT (*) exist,
        NVL (
           AVG (
-             DECODE (slaves1 + slaves2 + slaves3 + slaves4 + is_do, 0, 0, 1)),
+             DECODE (slaves1 + slaves2 + slaves3 + slaves4 + is_do + i_am_is_acceptor, 0, 0, 1)),
           0)
           visible
   FROM (SELECT sz.id,

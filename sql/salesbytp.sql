@@ -19,20 +19,14 @@ SELECT SUM (m.summa) summa,
  WHERE     m.tab_num = st.tab_num
        AND m.dpt_id = st.dpt_id
        AND m.dpt_id = :dpt_id
-       AND st.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_without_ts,
-                                 0, master,
-                                 :exp_list_without_ts))
-       AND st.tn IN
-              (SELECT slave
-                 FROM full
-                WHERE master =
-                         DECODE (:exp_list_only_ts,
-                                 0, master,
-                                 :exp_list_only_ts))
+       AND (   :exp_list_without_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_without_ts))
+       AND (   :exp_list_only_ts = 0
+                      OR st.tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = :exp_list_only_ts))
        AND (   st.tn IN (SELECT slave
                            FROM full
                           WHERE master = :tn)

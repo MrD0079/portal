@@ -1,0 +1,9 @@
+<tr id=dm_cat_appeals_{$id}>
+	<td>
+		<a href='javascript:void(0);' onClick="del_dm_cat_appeals({$id})">[x]</a>
+		название <input id=d_{$id}_name size=50 onChange="save_dm_cat_appeals({$id},'name',this.value);">
+		приоритет <input id=d_{$id}_priority size=50 onChange="save_dm_cat_appeals({$id},'priority',this.value);">
+		нормативное время <input id=d_{$id}_norm_time size=8 class="number_int" onChange="save_dm_cat_appeals({$id},'norm_time',this.value);">
+		<div style="margin-left:50px" id=detail_{$id}></div>
+	</td>
+</tr>

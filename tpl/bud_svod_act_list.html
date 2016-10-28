@@ -45,7 +45,7 @@
 {foreach key=k item=i from=$akcii_local}
 
 <p>
-<a target=_blank href="?action=bud_ru_zay_report&z_id={$i.id}&select=1">{$i.id}</a>
+<a target=_blank href="?action=bud_ru_zay_report&tu={$i.tu}&z_id={$i.id}&select=1">{$i.id}</a>
 <a target=_blank href="?action=akcii_local_report&z_id={$i.id}&ok_selected=2">{$i.val_string}</a>
 {$i.fil_name}
 </p>

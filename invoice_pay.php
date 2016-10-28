@@ -11,8 +11,13 @@ InitRequestVar("show");
 InitRequestVar("urlic");
 InitRequestVar("sd",$_REQUEST["month_list"]);
 InitRequestVar("ed",$_REQUEST["month_list"]);
-InitRequestVar("act_prov_month"/*,$_REQUEST["month_list"]*/);
-InitRequestVar("oplata_date"/*,$_REQUEST["month_list"]*/);
+InitRequestVar("oplata_date_s");
+InitRequestVar("oplata_date_e");
+InitRequestVar("act_prov_month_s");
+InitRequestVar("act_prov_month_e");
+InitRequestVar("invoice_sended_s");
+InitRequestVar("invoice_sended_e");
+InitRequestVar('payer',0);
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 {
@@ -59,14 +64,19 @@ if (isset($_REQUEST["generate"]))
 	$params=array(
 		':sd'=>"'".$_REQUEST["sd"]."'",
 		':ed'=>"'".$_REQUEST["ed"]."'",
-		":oplata_date"=>"'".$_REQUEST["oplata_date"]."'",
-		":act_prov_month"=>"'".$_REQUEST["act_prov_month"]."'",
+		":oplata_date_s"=>"'".$_REQUEST["oplata_date_s"]."'",
+		":oplata_date_e"=>"'".$_REQUEST["oplata_date_e"]."'",
+		":act_prov_month_s"=>"'".$_REQUEST["act_prov_month_s"]."'",
+		":act_prov_month_e"=>"'".$_REQUEST["act_prov_month_e"]."'",
+		":invoice_sended_s"=>"'".$_REQUEST["invoice_sended_s"]."'",
+		":invoice_sended_e"=>"'".$_REQUEST["invoice_sended_e"]."'",
 		':nets'=>$_REQUEST["nets"],
 		':urlic'=>$_REQUEST["urlic"],
 		':sort'=>$_REQUEST["sort"],
 		':show'=>"'".$_REQUEST["show"]."'",
 		':tn_rmkk'=>$_REQUEST["tn_rmkk"],
 		':tn_mkk'=>$_REQUEST["tn_mkk"],
+		':payer'=>$_REQUEST["payer"],
 		':tn'=>$tn
 	);
 	$sql=stritr($sql,$params);
@@ -104,6 +114,11 @@ $sql=rtrim(file_get_contents('sql/urlic.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('list_urlic', $res);
 
+$sql=rtrim(file_get_contents('sql/distr_prot_di_kk.sql'));
+$p = array(":dpt_id" => $_SESSION["dpt_id"],':tn'=>$tn);
+$sql=stritr($sql,$p);
+$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('payer', $data);
 
 $smarty->display('kk_start.html');
 $smarty->display('invoice_pay.html');

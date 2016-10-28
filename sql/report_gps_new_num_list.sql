@@ -6,9 +6,9 @@
          AND ADD_MONTHS (TRUNC (NVL (u.datauvol, SYSDATE), 'mm'), +1) >=
                 TRUNC (SYSDATE, 'mm')
          AND u.tn = rh.tn
-         AND (   u.tn IN (SELECT emp_tn
-                            FROM who_full
-                           WHERE exp_tn = :tn)
+         AND (   u.tn IN (SELECT slave
+                               FROM full
+                              WHERE master = :tn)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1 OR (SELECT is_admin

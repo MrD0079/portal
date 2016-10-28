@@ -25,14 +25,9 @@ $params=array(
 	':db' => $_REQUEST["db"],
 	':st' => $_REQUEST["st"],
 );
-
-
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_list_fil.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
-//echo $sql;
-
 
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_list.sql'));
 $sql=stritr($sql,$params);
@@ -132,6 +127,7 @@ foreach ($x as $k=>$v)
 }
 
 $smarty->assign('list', $x);
+
 
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_list_total.sql'));
 $sql=stritr($sql,$params);

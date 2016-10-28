@@ -1,14 +1,15 @@
 <h1>Редактор новостей</h1>
 <form target="_self" method="POST" name=form3 id=form3>
+	<p>
 	<select name=id id=id onChange="javascript:form3.submit()">
 		<option value=0></option>
 		{foreach key=key item=item from=$news_admin}
 		<option value={$item.id}>{$item.lu_t} - {$item.text_ss|escape}</option>
 		{/foreach}
 	</select>
-	<br>
+	</p>
 	<script>$('#id option[value="{$smarty.request.id}"]').prop('selected', true);</script>
-	<textarea name=text id=text cols=80 rows=20>{foreach key=key item=item from=$news_admin}{if $item.id eq $smarty.request.id}{$item.text|escape}{/if}{/foreach}</textarea>
+	<textarea class="WYSIWYG" name=text id=text cols=80 rows=20>{foreach key=key item=item from=$news_admin}{if $item.id eq $smarty.request.id}{$item.text|escape}{/if}{/foreach}</textarea>
 	<br>
 	<input value="Сохранить" name="save" type="submit">
 	<input value="Добавить" name="add" type="submit">

@@ -93,12 +93,40 @@
 	</td>
 </tr>
 <tr>
-	<td>Подтверждено НМКК</td>
+	<td>Акты</td>
 	<td>
-		<input checked="checked" name="oknmkk" id="oknmkk" value="all" type="radio"> все
-		<input name="oknmkk" id="oknmkk" value="no" type="radio"> не подтверждено
-		<input name="oknmkk" id="oknmkk" value="ok" type="radio"> подтверждено
-		<script>$("input[name=oknmkk][value={$smarty.request.oknmkk}]").attr('checked',true);</script>
+		<input checked="checked" name="ok_acts_redisplayed" id="ok_acts_redisplayed" value="all" type="radio"> все
+		<input name="ok_acts_redisplayed" id="ok_acts_redisplayed" value="ok" type="radio"> перевыставлены
+		<input name="ok_acts_redisplayed" id="ok_acts_redisplayed" value="no" type="radio"> не перевыставлены
+		<script>$("input[name=ok_acts_redisplayed][value={$smarty.request.ok_acts_redisplayed}]").attr('checked',true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Счет отправлен</td>
+	<td>
+		<input checked="checked" name="invoice_sended" id="invoice_sended" value="all" type="radio"> все
+		<input name="invoice_sended" id="invoice_sended" value="no" type="radio"> не отправлен
+		<input name="invoice_sended" id="invoice_sended" value="ok" type="radio"> отправлен
+		<script>$("input[name=invoice_sended][value={$smarty.request.invoice_sended}]").attr('checked',true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Юр.лицо</td>
+	<td>
+		<select name="urlic" id="urlic">
+			<option value=0></option>
+			{foreach key=key item=item from=$list_urlic}
+				<option value={$item.id}>{$item.name}</option>
+			{/foreach}
+		</select>
+		<script>$('#urlic option[value={$smarty.request.urlic}]').prop('selected', true);</script>
+	</td>
+</tr>
+<tr>
+	<td>№ счета</td>
+	<td>
+		<input name="num" id="num">
+		<script>$('#num').val('{$smarty.request.num}');</script>
 	</td>
 </tr>
 </tbody>

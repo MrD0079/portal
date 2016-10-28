@@ -12,9 +12,9 @@
 		<td>Т.н. отпускника</td>
 		<td>Ф.И.О. отпускника</td>
 		{if
-		(not ($is_ts and $pos_id neq 76) and not $is_mkk and ($vacation_replacement or $vacation_replacement_colleagues))
+		(not ($is_ts and $my_pos_id neq 76) and not $is_mkk and ($vacation_replacement or $vacation_replacement_colleagues))
 		or
-		((($is_ts and $pos_id neq 76) or $is_mkk) and $vacation_replacement_h_eta)
+		((($is_ts and $my_pos_id neq 76) or $is_mkk) and $vacation_replacement_h_eta)
 		}
 		<td>Ответственный<br>на период<br>отпуска</td>
 		<td>Задачи<br>ответственного<br>на период<br>отпуска</td>
@@ -40,9 +40,9 @@
 		<td>{$i.tn}</td>
 		<td>{$i.fio}</td>
 		{if
-		(not ($is_ts and $pos_id neq 76) and not $is_mkk and ($vacation_replacement or $vacation_replacement_colleagues))
+		(not ($is_ts and $my_pos_id neq 76) and not $is_mkk and ($vacation_replacement or $vacation_replacement_colleagues))
 		or
-		((($is_ts and $pos_id neq 76) or $is_mkk) and $vacation_replacement_h_eta)
+		((($is_ts and $my_pos_id neq 76) or $is_mkk) and $vacation_replacement_h_eta)
 		}
 		<td>{$i.replacement_fio}</td>
 		<td style="text-align:center">

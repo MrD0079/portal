@@ -1,18 +1,12 @@
 <?
 audit("открыл fu_accept","fin_plan");
 
-if (isset($_REQUEST["nets"])){$_SESSION["nets"]=$_REQUEST["nets"];}else{if (isset($_SESSION["nets"])){$_REQUEST["nets"]=$_SESSION["nets"];}}
-if (isset($_REQUEST["calendar_years"])){$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];}else{if (isset($_SESSION["calendar_years"])){$_REQUEST["calendar_years"]=$_SESSION["calendar_years"];}}
-if (isset($_REQUEST["tn_rmkk"])){$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];}else{if (isset($_SESSION["tn_rmkk"])){$_REQUEST["tn_rmkk"]=$_SESSION["tn_rmkk"];}}
-if (isset($_REQUEST["tn_mkk"])){$_SESSION["tn_mkk"]=$_REQUEST["tn_mkk"];}else{if (isset($_SESSION["tn_mkk"])){$_REQUEST["tn_mkk"]=$_SESSION["tn_mkk"];}}
-if (isset($_REQUEST["calendar_months"])){$_SESSION["calendar_months"]=$_REQUEST["calendar_months"];}else{if (isset($_SESSION["calendar_months"])){$_REQUEST["calendar_months"]=$_SESSION["calendar_months"];}}
-if (isset($_REQUEST["ok_filter"])){$_SESSION["ok_filter"]=$_REQUEST["ok_filter"];}else{if (isset($_SESSION["ok_filter"])){$_REQUEST["ok_filter"]=$_SESSION["ok_filter"];}}
-
-!isset($_REQUEST["tn_rmkk"]) ? $_REQUEST["tn_rmkk"]=0: null;
-!isset($_REQUEST["tn_mkk"]) ? $_REQUEST["tn_mkk"]=0: null;
-!isset($_REQUEST["nets"]) ? $_REQUEST["nets"]=0: null;
-!isset($_REQUEST["calendar_months"]) ? $_REQUEST["calendar_months"]=0: null;
-!isset($_REQUEST["ok_filter"]) ? $_REQUEST["ok_filter"]=0: null;
+InitRequestVar("nets",0);
+InitRequestVar("calendar_years",0);
+InitRequestVar("tn_rmkk",0);
+InitRequestVar("tn_mkk",0);
+InitRequestVar("calendar_months",0);
+InitRequestVar("ok_filter",0);
 
 if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 {
@@ -73,7 +67,7 @@ if (
 	$_REQUEST["generate"]=1;
 }
 
-if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
+if (isset($_REQUEST["generate"]))
 {
 	$_SESSION["calendar_years"]=$_REQUEST["calendar_years"];
 	$_SESSION["tn_rmkk"]=$_REQUEST["tn_rmkk"];
@@ -116,6 +110,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 		$data[$k]["plan".$i] = $data1;
 		}
 	}
+	//print_r($data);
 	$smarty->assign('fin_report', $data);
 }
 

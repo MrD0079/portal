@@ -55,6 +55,7 @@ $p=array(
 
 $sql = rtrim(file_get_contents('sql/merch_report_4admin_by_spec_new.sql'));
 $sql=stritr($sql,$p);
+//$_REQUEST["sql"]=$sql;
 //echo $sql;
 //exit;
 $rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -74,8 +75,9 @@ if (!isset($_REQUEST["print"]))
 $sql = rtrim(file_get_contents('sql/merch_report_4admin_by_spec_new_files.sql'));
 $sql=stritr($sql,$p);
 $files = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+//$_REQUEST["sqlf"]=$sql;
 
-
+//ses_req();
 
 recursive_remove_directory("merch_spec_report_archives/".$tn,true);
 if (!file_exists("merch_spec_report_archives/".$tn)) {mkdir("merch_spec_report_archives/".$tn,0777,true);}
@@ -105,6 +107,9 @@ $sql = rtrim(file_get_contents('sql/merch_report_4admin_by_spec_new5.sql'));
 $sql=stritr($sql,$p);
 $res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('rb_total', $res);
+//$_REQUEST["sqlt"]=$sql;
+
+//ses_req();
 
 $sql = rtrim(file_get_contents('sql/merch_spec_report_fields.sql'));
 $p=array(":ag_id"=>$_REQUEST["agent"]);

@@ -1,4 +1,4 @@
-/* Formatted on 24/09/2015 17:05:36 (QP5 v5.227.12220.39724) */
+/* Formatted on 05/04/2016 18:59:55 (QP5 v5.252.13127.32867) */
   SELECT current_status,
          (SELECT name1
             FROM accept_types
@@ -177,17 +177,21 @@
                                                 WHERE tn = z.tn))
                             slaves3,
                          (SELECT COUNT (*)
+                            FROM bud_ru_zay_executors
+                           WHERE tn = :tn AND z_id = z.id)
+                            slaves4,
+                         (SELECT COUNT (*)
                             FROM full
-                           WHERE     master IN
-                                        (SELECT tn
-                                           FROM user_list
-                                          WHERE DECODE (
-                                                   :department_name,
-                                                   '0', '0',
-                                                   :department_name) =
-                                                   DECODE (:department_name,
-                                                           '0', '0',
-                                                           department_name))
+                           WHERE     master IN (SELECT tn
+                                                  FROM user_list
+                                                 WHERE DECODE (
+                                                          :department_name,
+                                                          '0', '0',
+                                                          :department_name) =
+                                                          DECODE (
+                                                             :department_name,
+                                                             '0', '0',
+                                                             department_name))
                                  AND slave = z.tn)
                             slaves5,
                          z.st st_id,
@@ -239,9 +243,20 @@
                          z.report_short,
                          pt.pay_type payment_type_name,
                          ss.cost_item statya_name,
-                         z.distr_compensation
+                         z.distr_compensation,
+                         z.report_zero_cost,
+                         z.report_fakt_equal_plan,
+                         bud_ru_zay_executors.tn executor_tn,
+                         fn_getname (bud_ru_zay_executors.tn) executor_name,
+                         bud_ru_zay_executors.execute_order,
+                         bud_ru_zay_executors.pos_name executor_pos_name,
+                         bud_ru_zay_executors.department_name
+                            executor_department_name
                     FROM bud_ru_zay z,
                          bud_ru_zay_accept za,
+                         (SELECT sze.*, szu.pos_name, szu.department_name
+                            FROM bud_ru_zay_executors sze, user_list szu
+                           WHERE sze.tn = szu.tn) bud_ru_zay_executors,
                          accept_types zat,
                          user_list u,
                          user_list u1,
@@ -255,21 +270,29 @@
                          nets n,
                          payment_type pt,
                          statya ss
-                   WHERE     z.id_net = n.id_net(+)
+                   WHERE     (SELECT NVL (tu, 0)
+                                FROM bud_ru_st_ras
+                               WHERE id = z.kat) = :tu
+                         AND z.id_net = n.id_net(+)
                          /*dyn_flt*/
                          AND z.payment_type = pt.id(+)
                          AND z.statya = ss.id(+)
-                         AND z.fil = f.id
-                         AND z.funds = fu.id
+                         AND z.fil = f.id(+)
+                         AND z.funds = fu.id(+)
                          AND z.tn = u.tn
+                         AND (   :exp_list_without_ts = 0
+                              OR u.tn IN (SELECT slave
+                                          FROM full
+                                         WHERE master = :exp_list_without_ts))
                          AND za.tn = u1.tn
                          AND z.recipient = u2.tn
-                         AND u.dpt_id = DECODE (:country,
+                         AND u.dpt_id = DECODE ( :country,
                                                 '0', u.dpt_id,
                                                 (SELECT dpt_id
                                                    FROM departments
                                                   WHERE cnt_kod = :country))
                          AND z.id = za.z_id(+)
+                         AND z.id = bud_ru_zay_executors.z_id(+)
                          AND za.rep_accepted = zat.id(+)
                          AND za.rep_accepted IS NOT NULL
                          AND a.z_id(+) = z.id
@@ -283,34 +306,39 @@
                                 WHEN :date_between_brzr = 'dt34'
                                 THEN
                                    z.dt_start
-                             END BETWEEN TO_DATE (:dates_list1, 'dd.mm.yyyy')
-                                     AND TO_DATE (:dates_list2, 'dd.mm.yyyy')
-                         AND DECODE (:z_id, 0, z.id, :z_id) = z.id) z
+                             END BETWEEN TO_DATE ( :dates_list1, 'dd.mm.yyyy')
+                                     AND TO_DATE ( :dates_list2, 'dd.mm.yyyy')
+                         AND DECODE ( :z_id, 0, z.id, :z_id) = z.id) z
            WHERE     1 = z_current_accepted_id
                  AND report_data IS NOT NULL
                  AND :srok_ok =
-                        DECODE (:srok_ok, 0, 0, DECODE (srok_ok, NULL, 2, 1))
+                        DECODE ( :srok_ok, 0, 0, DECODE (srok_ok, NULL, 2, 1))
                  AND :report_done_flt =
-                        DECODE (:report_done_flt,
+                        DECODE ( :report_done_flt,
                                 0, 0,
-                                DECODE (report_done, NULL, 2, 1))
-                 AND DECODE (:status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
-                        DECODE (:status,
+                                DECODE (nvl(report_done,0), 0, 2, 1))
+                 AND :report_zero_cost =
+                        DECODE ( :report_zero_cost,
+                                0, 0,
+                                NVL (report_zero_cost, 0))
+                 AND DECODE ( :status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
+                        DECODE ( :status,
                                 0, 0,
                                 1, current_accepted_id,
                                 2, NVL (current_accepted_id, 0),
                                 3, 0,
                                 4, 0)
-                 AND DECODE (:status, 3, 1, 0) =
-                        DECODE (:status, 3, deleted, 0)
-                 AND DECODE (:status, 4, 1, 0) = NVL (valid_no, 0)
-                 AND DECODE (:who,  0, 1,  1, :tn,  2, 1) =
+                 AND DECODE ( :status, 3, 1, 0) =
+                        DECODE ( :status, 3, deleted, 0)
+                 AND DECODE ( :status, 4, 1, 0) = NVL (valid_no, 0)
+                 AND DECODE ( :who,  0, 1,  1, :tn,  2, 1) =
                         DECODE (
                            :who,
                            0, DECODE (
                                    slaves1
                                  + slaves2
                                  + slaves3
+                                 + slaves4
                                  + is_do
                                  + is_traid
                                  + is_traid_kk,
@@ -318,25 +346,25 @@
                                  1),
                            1, creator_tn,
                            2, DECODE (i_am_is_acceptor, 0, 0, 1))
-                 AND DECODE (:st, 0, 0, :st) = DECODE (:st, 0, 0, st_id)
-                 AND DECODE (:kat, 0, 0, :kat) = DECODE (:kat, 0, 0, kat_id)
-                 AND DECODE (:creator, 0, 0, :creator) =
-                        DECODE (:creator, 0, 0, creator_tn)
-                 AND DECODE (:bud_ru_zay_pos_id, 0, 0, :bud_ru_zay_pos_id) =
-                        DECODE (:bud_ru_zay_pos_id, 0, 0, pos_id)
-                 AND DECODE (:region_name, '0', '0', :region_name) =
-                        DECODE (:region_name, '0', '0', region_name)
-                 AND DECODE (:department_name, '0', 0, 1) =
-                        DECODE (:department_name,
+                 AND DECODE ( :st, 0, 0, :st) = DECODE ( :st, 0, 0, st_id)
+                 AND DECODE ( :kat, 0, 0, :kat) = DECODE ( :kat, 0, 0, kat_id)
+                 AND DECODE ( :creator, 0, 0, :creator) =
+                        DECODE ( :creator, 0, 0, creator_tn)
+                 AND DECODE ( :bud_ru_zay_pos_id, 0, 0, :bud_ru_zay_pos_id) =
+                        DECODE ( :bud_ru_zay_pos_id, 0, 0, pos_id)
+                 AND DECODE ( :region_name, '0', '0', :region_name) =
+                        DECODE ( :region_name, '0', '0', region_name)
+                 AND DECODE ( :department_name, '0', 0, 1) =
+                        DECODE ( :department_name,
                                 '0', 0,
                                 DECODE (slaves5, 0, 0, 1))
-                 AND DECODE (:fil, 0, 0, :fil) = DECODE (:fil, 0, 0, fil)
-                 AND DECODE (:funds, 0, 0, :funds) =
-                        DECODE (:funds, 0, 0, funds)
-                 AND DECODE (:id_net, 0, 0, :id_net) =
-                        DECODE (:id_net, 0, 0, id_net)
-                 AND DECODE (:wait4myaccept, 0, :tn, 0) =
-                        DECODE (:wait4myaccept, 0, z.current_acceptor_tn, 0)
-                 AND DECODE (:wait4myaccept, 0, 1, 0) =
-                        DECODE (:wait4myaccept, 0, report_done, 0)) z
+                 AND DECODE ( :fil, 0, 0, :fil) = DECODE ( :fil, 0, 0, fil)
+                 AND DECODE ( :funds, 0, 0, :funds) =
+                        DECODE ( :funds, 0, 0, funds)
+                 AND DECODE ( :id_net, 0, 0, :id_net) =
+                        DECODE ( :id_net, 0, 0, id_net)
+                 AND DECODE ( :wait4myaccept, 0, :tn, 0) =
+                        DECODE ( :wait4myaccept, 0, z.current_acceptor_tn, 0)
+                 AND DECODE ( :wait4myaccept, 0, 1, 0) =
+                        DECODE ( :wait4myaccept, 0, nvl(report_done,0), 0)) z
 GROUP BY current_status

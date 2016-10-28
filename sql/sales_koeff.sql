@@ -15,5 +15,14 @@ SELECT ROUND (
              FROM nets_plan_year
             WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net),
           2)
-          percent_ng
+          percent_ng,
+       ROUND (
+          (SELECT DECODE (
+                     NVL (sales_prev_coffee, 0),
+                     0, 0,
+                     (NVL (sales_coffee, 0) / NVL (sales_prev_coffee, 0) - 1) * 100)
+             FROM nets_plan_year
+            WHERE YEAR = :YEAR AND plan_type = :plan_type AND id_net = :net),
+          2)
+          percent_coffee
   FROM DUAL

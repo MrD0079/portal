@@ -1,0 +1,128 @@
+<h3>СПД ДнКФ</h3>
+
+<p>
+<a href="?action=rep_spddnkf_list&valid=1">все</a>
+<a href="?action=rep_spddnkf_list&valid=2">действующие</a>
+<a href="?action=rep_spddnkf_list&valid=3">не действующие</a>
+</p>
+
+<p>
+Соотношение АВК/МС:
+<input id=p_ratio_dnkf_avk value="{$parameters.ratio_dnkf_avk.val_number}" class="number_int" size=5 onChange="save_param('ratio_dnkf_avk',this.value);">
+/
+<input id=p_ratio_dnkf_ms value="{$parameters.ratio_dnkf_ms.val_number}" class="number_int" size=5 onChange="save_param('ratio_dnkf_ms',this.value);">
+</p>
+
+<table id=trep_spddnkf_list border=1 width=600px>
+	<tbody>
+		<tr style="font-weight:bold">
+			<td>Действие</td>
+			<td>ФИО</td>
+			<td>ИНН</td>
+			<td>Область</td>
+			<td>Последний месяц оказания услуг</td>
+		</tr>
+		{foreach key=k item=i from=$rep_spddnkf_list}
+			<tr id=list_{$i.id}>
+				<td>
+					<a href='javascript:void(0);' onClick="del_item({$i.id})">[-]</a>
+				</td>
+				<td>
+					<input id=d_{$i.id}_fio size=30 value="{$i.fio}" onChange="save_item({$i.id},'fio',this.value);">
+				</td>
+				<td>
+					<input id=d_{$i.id}_tn size=15 value="{$i.tn}" onChange="save_item({$i.id},'tn',this.value);" class="number_int">
+				</td>
+				<td>
+					<select
+						id="d_{$i.id}_h_tz_oblast"
+						onChange="save_item({$i.id},'h_tz_oblast',this.value);"
+					>
+					<option></option>
+					{foreach key=k1 item=i1 from=$oblast_list}
+					<option value="{$i1.h_tz_oblast}">{$i1.tz_oblast}</option>
+					{/foreach}
+					</select>
+					<script>$('#d_{$i.id}_h_tz_oblast option[value="{$i.h_tz_oblast}"]').prop('selected', true);</script>
+				</td>
+				<td>
+					<select
+						id="d_{$i.id}_last_month"
+						onChange="save_item({$i.id},'last_month',this.value);"
+					>
+					<option></option>
+					{foreach key=k1 item=i1 from=$dt}
+					<option value={$i1.sd_c}>{$i1.my}</option>
+					{/foreach}
+					</select>
+					<script>$('#d_{$i.id}_last_month option[value="{$i.last_month}"]').prop('selected', true);</script>
+				</td>
+			</tr>
+		{/foreach}
+		<tr id="last_row">
+			<td>
+				<a href="javascript:void(0);" onClick="add_item();">[+]</a>
+			</td>
+			<td>
+				<input size=30 id=new_fio>
+			</td>
+			<td>
+				<input size=15 id=new_tn class="number_int">
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{literal}
+<script>
+function add_item()
+{
+var fd = new FormData();
+fd.append('new_fio', $('#new_fio').val());
+fd.append('new_tn', $('#new_tn').val());
+$.ajax({
+  type: 'POST',
+  url: '?action=rep_spddnkf_list&new=1&nohead=1',
+  data: fd,
+  processData: false,
+  contentType: false,
+  success: function(data) {
+  //$('#trep_spddnkf_list>tbody:last').append(''+data+'');
+  //$('#trep_spddnkf_list>tbody:last').prev().append(''+data+'');
+  $('#trep_spddnkf_list tr:last').before(''+data+'');
+  }
+});
+}
+function save_item(id,field,val)
+{
+	$('#d_'+id+'_'+field).css('background-color','red');
+	$('#ok').load('?action=rep_spddnkf_list&save=1&nohead=1',
+	{
+		id: id,
+		field: field,
+		val: val
+	},
+	function() {
+	$('#d_'+id+'_'+field).css('background-color','white');
+	});
+}
+function save_param(id,val)
+{
+	$('#p_'+id).css('background-color','red');
+	$('#ok').load('?action=rep_spddnkf_list&save_param=1&nohead=1',
+	{
+		id: id,
+		val: val
+	},
+	function() {
+	$('#p_'+id).css('background-color','white');
+	});
+}
+function del_item(id)
+{
+save_item(id,'id',0);
+$('#list_'+id).remove();
+}
+</script>
+{/literal}
+<div id="ok" style="display: inline;"></div>

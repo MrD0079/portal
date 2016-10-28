@@ -1,4 +1,4 @@
-/* Formatted on 21.03.2012 11:47:40 (QP5 v5.163.1008.3004) */
+/* Formatted on 24/06/2016 13:02:04 (QP5 v5.252.13127.32867) */
   SELECT st.statya,
          NVL (fin.cnt, 0) f_cnt,
          DECODE (NVL (fin.cnt, 0), 0, 0, fin.total / fin.cnt) f_price,
@@ -61,4 +61,10 @@
          AND st.payment_format = fin.payment_format(+)
          AND st.payment_format = dog.payment_format(+)
          AND st.payment_format = oper.payment_format(+)
+         AND CASE
+                WHEN :mgroups = 0 THEN 0
+                WHEN sn.parent NOT IN (42, 96882041) THEN 1
+                WHEN sn.parent = 96882041 THEN 2
+                WHEN sn.parent = 42 THEN 3
+             END IN ( :mgroups)
 ORDER BY sn.cost_item, st.statya
