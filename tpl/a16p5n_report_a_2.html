@@ -47,7 +47,14 @@
 		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.plan4|default:0|num:2}</td>
 		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.fakt4|default:0|num:2}</td>
 		<td rowspan={$smarty.foreach.tp.total} style="text-align:right">{$list_item.perc|default:0|num:2}</td>
-		<td rowspan={$smarty.foreach.tp.total} style="text-align:right; {if $list_item.bonus_sum1 > $list_item.max_bonus}background-color:red{/if}">{$list_item.max_bonus|default:0|num:2}</td>
+		<td rowspan={$smarty.foreach.tp.total} 
+                    style="text-align:right; "
+                    {if $list_item.bonus_sum1 > $list_item.max_bonus}
+                    style="text-align:right; background-color:red"
+                    {else}
+                    style="text-align:right; "
+                    {/if}
+                    >{$list_item.max_bonus|default:0|num:2}</td>
 		{/if}
 		<td style="text-align:center">
 			{if not $smarty.request.print and $is_ts and $ok_chief_4ts.part2 neq 1 and $list_item.max_bonus and $i1.enabled}

@@ -19,7 +19,7 @@
 <td>Подтвердил<br>ДП</td>
 </tr>
 {foreach key=k item=i from=$distr_prot}
-<tr style="text-align:center;{if $i.deleted}background-color:grey;{/if}" id="tr_{$i.id}">
+<tr style="text-align:center;/*{if $i.deleted}*/background-color:grey;/*{/if}*/" id="tr_{$i.id}">
 <td>
 	{$i.id}
 	{if ($is_admin or $is_do) and not $smarty.request.print and not $i.deleted}
@@ -70,7 +70,7 @@
 	<select
 	id=d_{$i.id}_ok_chief
 	name=d[{$i.id}][ok_chief]
-	onChange="save_prot({$i.id},'ok_chief',this.value);save_prot({$i.id},'ok_chief_fio','{$fio}, {$pos_name}, {$department_name}');"
+	onChange="save_prot('{$i.id}','ok_chief',this.value);save_prot('{$i.id}'','ok_chief_fio','{$fio}, {$pos_name}, {$department_name}');"
 	>
 	{foreach key=k1 item=i1 from=$da_ok_chief}
 	<option value="{$i1.id}">{$i1.name}</option>

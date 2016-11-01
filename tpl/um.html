@@ -6,18 +6,18 @@
 		По руководителю:
 		<select name=exp_list_without_ts id=exp_list_without_ts>
 			<option value=0></option>
-			{foreach key=key item=item from=$exp_list_without_ts}
-			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
-			{/foreach}
+			<!--{foreach key=key item=item from=$exp_list_without_ts}-->
+			<option value={$item.emp_svid}>{$item.emp_name} ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			<!--{/foreach}-->
 		</select>
 	</p>
 	<p>
 		По супервайзеру:
 		<select name=exp_list_only_ts id=exp_list_only_ts>
 			<option value=0></option>
-			{foreach key=key item=item from=$exp_list_only_ts}
-			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
-			{/foreach}
+			<!--{foreach key=key item=item from=$exp_list_only_ts}-->
+			<option value={$item.emp_svid}>{$item.emp_name} ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			<!--{/foreach}-->
 		</select>
 		<br>
 <script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
@@ -28,9 +28,9 @@
 		По ЭТА:
 		<select name=eta_list id=eta_list>
 			<option value=""></option>
-			{foreach key=key item=item from=$eta_list}
+			<!--{foreach key=key item=item from=$eta_list}-->
 			<option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
-			{/foreach}
+			<!--{/foreach}-->
 		</select>
 		<script>
 		$('#eta_list').val('{$smarty.request.eta_list}');
@@ -70,19 +70,19 @@
 			<td>Митинг проведен</td>
 		</tr>
 		{foreach key=list_key item=list_item from=$list name=list}
-		<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
+		<tr bgcolor='{cycle values="#ccffff,#ffffcc"}'>
 			<td>{$smarty.foreach.list.iteration}</td>
 			<td>{$list_item.chief_fio}</td>
 			<td>{$list_item.fio_ts}</td>
 			<td>{$list_item.fio_eta}</td>
-			<td style="text-align:center{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.time_begin}{/if}</td>
-			<td style="text-align:center{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.time_last_update}{/if}</td>
-			<td style="text-align:center{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.ts_visa}{/if}</td>
-			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_val|num:3}{/if}</td>
-			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_c1|num:3}{/if}</td>
-			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_c2|num:3}{/if}</td>
-			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_c3|num:3}{/if}</td>
-			<td style="text-align:right{if not $list_item.um_posted};background-color:red;{/if}">{if $list_item.um_posted}{$list_item.plan_ev|num:3}{/if}</td>
+			<td style="text-align:center/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.time_begin}{/if}</td>
+			<td style="text-align:center/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.time_last_update}{/if}</td>
+			<td style="text-align:center/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.ts_visa}{/if}</td>
+			<td style="text-align:right/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.plan_val|num:3}{/if}</td>
+			<td style="text-align:right/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.plan_c1|num:3}{/if}</td>
+			<td style="text-align:right/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.plan_c2|num:3}{/if}</td>
+			<td style="text-align:right/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.plan_c3|num:3}{/if}</td>
+			<td style="text-align:right/*{if not $list_item.um_posted}*/;background-color:red;/*{/if}*/">{if $list_item.um_posted}{$list_item.plan_ev|num:3}{/if}</td>
 			<td style="text-align:center">{$list_item.time_first_visit}</td>
 			<td>{$list_item.tp_kod} {$list_item.tp_ur} {$list_item.tp_addr}</td>
 			<td style="text-align:center"><a target=_blank href="https://www.google.com/maps/place/{$list_item.gps_koord}/@{$list_item.gps_koord},19z">{$list_item.gps_koord}</a></td>

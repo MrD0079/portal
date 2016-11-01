@@ -5,10 +5,10 @@
 <form target="_self" method="POST" name=form_sz_reestr id=form_sz_reestr>
 	<p>
 	Месяц
-	<select required="true" name=sd id=sd>
-		{foreach key=key item=item from=$dt}
+	<select required="required" name=sd id=sd>
+		<!--{foreach key=key item=item from=$dt}-->
 			<option value="{$item.sd_c}">{$item.my}</option>
-		{/foreach}
+		<!--{/foreach}-->
 	</select>
 	<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
 	</p>
@@ -17,9 +17,9 @@
 	Руководитель:
 	<select name=exp_list_without_ts id=exp_list_without_ts>
 		<option value=0></option>
-		{foreach key=key item=item from=$exp_list_without_ts}
-		<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
-		{/foreach}
+		<!--{foreach key=key item=item from=$exp_list_without_ts}-->
+		<option value={$item.emp_svid}>{$item.emp_name} ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+		<!--{/foreach}-->
 	</select>
 	<script>$('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').prop('selected', true);</script>
 	</p>
@@ -28,9 +28,9 @@
 	Должность:
 	<select name=pos_list id=pos_list>
 		<option value=0></option>
-		{foreach key=key item=item from=$pos_list}
+		<!--{foreach key=key item=item from=$pos_list}-->
 		<option value={$item.pos_id}>{$item.pos_name}</option>
-		{/foreach}
+		<!--{/foreach}-->
 	</select>
 	<script>$('#pos_list option[value="{$smarty.request.pos_list}"]').prop('selected', true);</script>
 	</p>
@@ -49,9 +49,9 @@
 			>{$i.name}
 	{/foreach}
 	<script>
-	{foreach key=k item=i from=$smarty.request.cur}
+	/*{foreach key=k item=i from=$smarty.request.cur}*/
 	$('#cur_{$i}').attr('checked',true);
-	{/foreach}
+	/*{/foreach}*/
 	</script>
 	</p>
 
@@ -67,13 +67,23 @@
 <p id=td_ok_ndp>
 Подтверждение НДП
 {if $is_ndp}
-<input {if $ok.ok_ndp}checked{/if} type=checkbox onChange="adv_ok_save('{$smarty.request.sd}','ok_ndp',this.checked?1:0);">
+<input
+    id=cb_ok_ndp
+    type=checkbox
+    onChange="adv_ok_save('{$smarty.request.sd}','ok_ndp',this.checked?1:0);"
+    >
+<script>
+    /*{if $ok.ok_ndp}*/
+    $("#cb_ok_ndp").prop('checked',true);
+    /*{/if}*/
+</script>
+    
 {/if}
 <b>{$ok.ok_ndp_fio} {$ok.ok_ndp_lu}</b>
 </p>
 
 <script>
-{literal}
+/*{literal}*/
 function adv_ok_save(dt,field,val)
 {
 	$('#td_'+field).css('background-color','red');
@@ -93,7 +103,7 @@ function adv_ok_save(dt,field,val)
 		}
 	});
 }
-{/literal}
+/*{/literal}*/
 </script>
 
 
@@ -115,12 +125,12 @@ function adv_ok_save(dt,field,val)
 		<td>Последнее<br>изменение</td>
 	</tr>
 	{foreach key=k item=i from=$advances name=advances}
-	<tr style="{if $i.free_staff_flag}background-color:red{/if}">
+	<tr {if $i.free_staff_flag} style="background-color:red" {/if}>
 		<td style="text-align:center">{$i.mt} {$i.y}</td>
 		<td>{$i.pos_name}</td>
 		<td>{$i.tab_num}</td>
 		<td>{$i.fio}</td>
-		<td style="text-align:right;{if $i.val > $i.def_val}background-color:red{/if}">
+		<td style="text-align:right; /*{if $i.val > $i.def_val}*/background-color:red /*{/if}*/">
 			{if ($is_ndp or $is_test_admin) and not $smarty.request.print and not $ok.ok_ndp}
 			<input
 				style=""
@@ -129,7 +139,7 @@ function adv_ok_save(dt,field,val)
 				onchange="
 				advance_save(
 					'{$i.data}',
-					{$i.tn},
+					'{$i.tn}',
 					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
 					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'my_advance_val'
 				);
@@ -142,14 +152,14 @@ function adv_ok_save(dt,field,val)
 			{$i.val|num:2}
 			{/if}
 		</td>
-		<td style="text-align:center;{if $i.cur_id neq $i.def_cur_id}background-color:red{/if}">
+		<td style="text-align:center; /*{if $i.cur_id neq $i.def_cur_id};*/ background-color:red; /*{/if}*/ ">
 			{if ($is_ndp or $is_test_admin) and not $smarty.request.print and not $ok.ok_ndp}
 			<select
 				style=""
 				onchange="
 				advance_save(
 					'{$i.data}',
-					{$i.tn},
+					'{$i.tn}',
 					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
 					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'cur_id_{$i.tn}_{$i.y}_{$i.my}'
 				);
@@ -162,11 +172,11 @@ function adv_ok_save(dt,field,val)
 				{/foreach}
 			</select>
 			<script>
-				{if $i.cur_id}
-					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.cur_id});
-				{else}
-					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.def_cur_id});
-				{/if}
+				/*{if $i.cur_id}*/
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val('{$i.cur_id}');
+				/*{else}*/
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val('{$i.def_cur_id}');
+				/*{/if}*/
 			</script>
 			{else}
 			{$i.valuta}

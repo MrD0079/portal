@@ -12,7 +12,7 @@
 	<td style="width:70px"></td>
 	{/section}
 	{foreach key=k item=i from=$days_list}
-		<td style="width:70px;{if $i.c>0}background-color:#00ff00{/if}"><a href="javascript:void(0)" onClick="$('#dt').val('{$i.dt_t}');$('#dt').change();">{$i.dm}{if $i.c>0} - {$i.c}ро{/if}</a></td>
+		<td style="width:70px;/*{if $i.c>0}*/background-color:#00ff00/*{/if}*/"><a href="javascript:void(0)" onClick="$('#dt').val('{$i.dt_t}');$('#dt').change();">{$i.dm}{if $i.c>0} - {$i.c}ро{/if}</a></td>
 		{if $i.dw eq 7}</tr><tr>{/if}
 	{/foreach}
 	</tr>

@@ -42,7 +42,7 @@
 			<td>
 				{$i.loc_name}
 			</td>
-			<td style="text-align:center;{if $i.completed}background-color:rgb(51, 255, 51){/if}">
+			<td style="text-align:center;/*{if $i.completed}*/background-color:rgb(51, 255, 51)/*{/if}*/">
 				{if $i.completed}да{else}нет{/if}
 			</td>
 			<td style="text-align:center">
@@ -57,15 +57,15 @@
 			<td
 				style="
 					text-align:center;
-					{if $i.max_ball neq 0}
-						{if $i.avg_ball/$i.max_ball*100 >= 85}
+					/*{if $i.max_ball neq 0}*/
+						/*{if $i.avg_ball/$i.max_ball*100 >= 85}*/
 							background-color: rgb(51, 255, 51);
-						{elseif $i.avg_ball/$i.max_ball*100 < 75}
+						/*{elseif $i.avg_ball/$i.max_ball*100 < 75}*/
 							background-color: red;
-						{else}
+						/*{else}*/
 							background-color: rgb(255, 255, 153);
-						{/if}
-					{/if}
+						/*{/if}*/
+					/*{/if}*/
 				"
 			>
 				{$i.avg_ball|default:0|num:2} / {$i.max_ball|default:0|num:2}

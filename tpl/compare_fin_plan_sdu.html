@@ -12,9 +12,9 @@
 				<br>
 				<select name=calendar_years id=calendar_years>
 					<option></option>
-					{foreach key=key item=item from=$calendar_years}
+					<!--{foreach key=key item=item from=$calendar_years}-->
 					<option value={$item.y}>{$item.y}</option>
-					{/foreach}
+					<!--{/foreach}-->
 				</select>
 				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
 			</td>
@@ -23,9 +23,9 @@
 				<br>
 				<select name=plan_type id=plan_type>
 					<option></option>
-					{foreach key=key item=item from=$plan_type}
+					<!--{foreach key=key item=item from=$plan_type}-->
 					<option value={$item.id}>{$item.name}</option>
-					{/foreach}
+					<!--{/foreach}-->
 				</select>
 				<script>$('#plan_type option[value="{$smarty.request.plan_type}"]').prop('selected', true);</script>
 			</td>
@@ -87,7 +87,7 @@
 
 
 
-	<tr style="{if $compare_fin_plan_sdu_item.no_budget eq 'да'};background-color:yellow{/if}">
+	<tr style="/*{if $compare_fin_plan_sdu_item.no_budget eq 'да'}*/;background-color:yellow/*{/if}*/">
 		<td>{$smarty.foreach.compare_fin_plan_sdu.iteration}</td>
 		<td>{$compare_fin_plan_sdu_item.rmkk}</td>
 		<td>{$compare_fin_plan_sdu_item.mkk}</td>

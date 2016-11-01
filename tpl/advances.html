@@ -6,15 +6,15 @@
 
 	<p>
 	Период просмотра
-	<select required="true" name=sd id=sd>
-		{foreach key=key item=item from=$dt}
+	<select required="required" name=sd id=sd>
+		<!--{foreach key=key item=item from=$dt}-->
 			<option value="{$item.sd_c}">{$item.my}</option>
-		{/foreach}
+		<!--{/foreach}-->
 	</select>
-	<select required="true" name=ed id=ed>
-		{foreach key=key item=item from=$dt}
+	<select required="required" name=ed id=ed>
+		<!--{foreach key=key item=item from=$dt}-->
 			<option value="{$item.sd_c}">{$item.my}</option>
-		{/foreach}
+		<!--{/foreach}-->
 	</select>
 	<script>$('#sd option[value="{$smarty.request.sd}"]').prop('selected', true);</script>
 	<script>$('#ed option[value="{$smarty.request.ed}"]').prop('selected', true);</script>
@@ -58,16 +58,15 @@ $("input[name=full][value={$smarty.request.full}]").attr('checked',true);
 		<td style="text-align:right;">
 			{if not $i.ok_ndp and $i.enabled}
 			<input
-				style="{if $i.val > $i.def_val}background-color:red{/if}"
+				{if $i.val > $i.def_val}style="background-color:red"{/if}
 				id="val_{$i.tn}_{$i.y}_{$i.my}"
 				size=8
 				onchange="
 				advance_save(
 					'{$i.data}',
-					{$i.tn},
+					'{$i.tn}',
 					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
-					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'my_advance_val'
-				);
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'my_advance_val');
 				"
 				id="my_advance_val"
 				class="number"
@@ -83,7 +82,7 @@ $("input[name=full][value={$smarty.request.full}]").attr('checked',true);
 				onchange="
 				advance_save(
 					'{$i.data}',
-					{$i.tn},
+					'{$i.tn}',
 					$('#val_{$i.tn}_{$i.y}_{$i.my}').val(),
 					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val(),'cur_id_{$i.tn}_{$i.y}_{$i.my}'
 				);
@@ -96,11 +95,11 @@ $("input[name=full][value={$smarty.request.full}]").attr('checked',true);
 				{/foreach}
 			</select>
 			<script>
-				{if $i.cur_id}
-					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.cur_id});
-				{else}
-					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val({$i.def_cur_id});
-				{/if}
+				/*{if $i.cur_id}*/
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val('{$i.cur_id}');
+				/*{else}*/
+					$('#cur_id_{$i.tn}_{$i.y}_{$i.my}').val('{$i.def_cur_id}');
+				/*{/if}*/
 			</script>
 			{else}
 			{$i.valuta}

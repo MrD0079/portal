@@ -8,7 +8,7 @@ if (isset($_REQUEST["save"]))
 		{
 			$keys = array('tp_kod'=>$k);
 			isset($v["bonus_dt1"]) ? $v["bonus_dt1"]=OraDate2MDBDate($v["bonus_dt1"]) : null;
-			Table_Update ($_REQUEST['act']."tp_select", $keys, $v);
+			Table_Update ($_REQUEST['act']."_select", $keys, $v);
 		}
 	}
 	if (isset($_REQUEST["ok_db"]))

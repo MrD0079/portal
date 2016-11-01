@@ -24,7 +24,7 @@
             </td>
 		{foreach from=$fin_plan_month_ok key=key item=item}
 	            <td
-			style="TEXT-ALIGN: center; {if $item.ok_rmkk_tmkk}BACKGROUND-COLOR:rgb(51,255,51);{/if}"
+			style="TEXT-ALIGN: center;/* {if $item.ok_rmkk_tmkk}*/BACKGROUND-COLOR:rgb(51,255,51);/*{/if}*/"
 			>
 			<input
 				type=checkbox
@@ -42,7 +42,7 @@
             </td>
 		{foreach from=$fin_plan_month_ok key=key item=item}
 	            <td
-			style="TEXT-ALIGN: center; {if $required}BACKGROUND-COLOR:#CCCCFF;{/if} {if $item.ok_fm}BACKGROUND-COLOR:rgb(51,255,51);{/if}"
+			style="TEXT-ALIGN: center; /*{if $required}*/BACKGROUND-COLOR:#CCCCFF;/*{/if}*/ /*{if $item.ok_fm}*/BACKGROUND-COLOR:rgb(51,255,51);/*{/if}*/"
 			>
 			<input
 				type=checkbox
@@ -60,7 +60,7 @@
             </td>
 		{foreach from=$fin_plan_month_ok key=key item=item}
 	            <td
-			style="TEXT-ALIGN: center; {if $item.ok_dpu}BACKGROUND-COLOR:rgb(51,255,51);{/if}"
+			style="TEXT-ALIGN: center; /*{if $item.ok_dpu}*/BACKGROUND-COLOR:rgb(51,255,51);/*{/if}*/"
 			>
 			<input
 				type=checkbox

@@ -31,28 +31,28 @@
 		<td style="text-align:center"><input type=checkbox name=del[{$i1.login}]></td>
 		<td style="text-align:center"><a target=_blank href="http://merchservice.com.ua/login.php?username={$i1.login}&password={$i1.password}&auto=1">{$i1.login}</a></td>
 		<td style="text-align:center">{$i1.password}</td>
-		<td style="text-align:center;{if $i1.is_super eq 1}background-color:green{/if}">
+		<td style="text-align:center;/*{if $i1.is_super eq 1}*/background-color:green/*{/if}*/">
 			<input {if $i1.is_super eq 1}checked{/if} type=checkbox onclick="
 				$('#is_super_{$i1.login}').attr('disabled',false);
 				$('#is_super_{$i1.login}').val(this.checked?1:0)
 			">
 			<input disabled type=hidden name=is_super[{$i1.login}] id=is_super_{$i1.login}>
 		</td>
-		<td style="text-align:center;{if $i1.is_vf eq 1}background-color:green{/if}">
+		<td style="text-align:center;/*{if $i1.is_vf eq 1}*/background-color:green/*{/if}*/">
 			<input {if $i1.is_vf eq 1}checked{/if} type=checkbox onclick="
 				$('#is_vf_{$i1.login}').attr('disabled',false);
 				$('#is_vf_{$i1.login}').val(this.checked?1:0)
 			">
 			<input disabled type=hidden name=is_vf[{$i1.login}] id=is_vf_{$i1.login}>
 		</td>
-		<td style="text-align:center;{if $i1.is_so eq 1}background-color:green{/if}">
+		<td style="text-align:center;/*{if $i1.is_so eq 1}*/background-color:green/*{/if}*/">
 			<input {if $i1.is_so eq 1}checked{/if} type=checkbox onclick="
 				$('#is_so_{$i1.login}').attr('disabled',false);
 				$('#is_so_{$i1.login}').val(this.checked?1:0)
 			">
 			<input disabled type=hidden name=is_so[{$i1.login}] id=is_so_{$i1.login}>
 		</td>
-		<td style="text-align:center;{if $i1.stat eq 1}background-color:green{/if}">
+		<td style="text-align:center;/*{if $i1.stat eq 1}*/background-color:green/*{/if}*/">
 			<input {if $i1.stat eq 1}checked{/if} type=checkbox onclick="
 				$('#stat_{$i1.login}').attr('disabled',false);
 				$('#stat_{$i1.login}').val(this.checked?1:0)

@@ -38,7 +38,7 @@ enctype="multipart/form-data"
 						</td>
 					</tr>
 					<tr>
-						<td style="{if $i2.day_enabled_mr eq 1}background-color:green;{/if}">
+						<td style="/*{if $i2.day_enabled_mr eq 1}*/background-color:green;/*{/if}*/">
 							<nobr>
 								<input
 									{if $i2.day_enabled_mr eq 1}checked{/if}
@@ -121,7 +121,7 @@ enctype="multipart/form-data"
 $tp='{$smarty.request.tp}';
 $ag='{$smarty.request.ag}';
 
-{literal}
+/*{literal}*/
 
 function x()
 {
@@ -141,7 +141,7 @@ $(document).ready(function() {
 });
 
 
-{/literal}
+/*{/literal}*/
 
 </script> 
 

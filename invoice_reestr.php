@@ -1,8 +1,4 @@
 <?
-
-
-//send_mail(' ivanycka.i@asnova.com, Revchuk.S@asnova.com','test','test');
-
 //ses_req();
 audit("открыл invoice_reestr","invoice_reestr");
 

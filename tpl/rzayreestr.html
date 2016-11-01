@@ -8,17 +8,17 @@
 					с
 					<select name="sd" id="sd">
 						<option></option>
-						{foreach key=key1 item=i1 from=$month_list}
+						<!--{foreach key=key1 item=i1 from=$month_list}-->
 							<option value="{$i1.sd_c}">{$i1.my}</option>
-						{/foreach}
+						<!--{/foreach}-->
 					</select>
 					<script>$('#sd option[value="{$smarty.request.sd|default:$now1}"]').prop('selected', true);</script>
 					по
 					<select name="ed" id="ed">
 						<option></option>
-						{foreach key=key1 item=i1 from=$month_list}
+						<!--{foreach key=key1 item=i1 from=$month_list}-->
 							<option value="{$i1.sd_c}">{$i1.my}</option>
-						{/foreach}
+						<!--{/foreach}-->
 					</select>
 					<script>$('#ed option[value="{$smarty.request.ed|default:$now1}"]').prop('selected', true);</script>
 				</td>
@@ -28,9 +28,9 @@
 				<td style="vertical-align: top;">
 						<select name=tn_rmkk id=tn_rmkk>
 							<option value=0></option>
-							{foreach key=rmkk_key item=rmkk_i from=$list_rmkk}
+							<!--{foreach key=rmkk_key item=rmkk_i from=$list_rmkk}-->
 							<option value={$rmkk_i.tn}>{$rmkk_i.fio} ({$rmkk_i.tn})</option>
-							{/foreach}
+							<!--{/foreach}-->
 						</select>
 						<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
 				</td>
@@ -40,9 +40,9 @@
 				<td style="vertical-align: top;">
 							<select name=tn_mkk id=tn_mkk>
 								<option value=0></option>
-								{foreach key=mkk_key item=mkk_i from=$list_mkk}
+								<!--{foreach key=mkk_key item=mkk_i from=$list_mkk}-->
 								<option value={$mkk_i.tn}>{$mkk_i.fio} ({$mkk_i.tn})</option>
-								{/foreach}
+								<!--{/foreach}-->
 							</select>
 							<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 				</td>
@@ -52,9 +52,9 @@
 				<td style="vertical-align: top;">
 							<select name="nets" id="nets">
 								<option value=0></option>
-								{foreach key=key item=i from=$nets}
+								<!--{foreach key=key item=i from=$nets}-->
 									<option value={$i.id_net}>{$i.net_name}</option>
-								{/foreach}
+								<!--{/foreach}-->
 							</select>
 							<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
 				</td>
@@ -125,7 +125,7 @@
 			{/foreach}
 		</td>
 		<td style="text-align:right">{$i.summa|default:0|num:3}</td>
-		<td style="text-align: center;{if $i.acceptstatus eq 1}background-color: rgb(51, 255, 51);{/if}">
+		<td style="text-align: center;/*{if $i.acceptstatus eq 1}*/background-color: rgb(51, 255, 51);/*{/if}*/">
 			{if not $smarty.request.print and $is_rmkk}
 				<input onclick="$('#data{$i.id}acceptstatus').val(this.checked?1:0);$('#data{$i.id}summafact').attr('disabled',!this.checked)" {if $i.acceptstatus eq 1}checked="checked"{/if} type="checkbox">
 				<input type=hidden name=data[{$i.id}][acceptstatus] id=data{$i.id}acceptstatus value="{$i.acceptstatus}">

@@ -1,9 +1,21 @@
 <a href="javascript:void(0);" onclick="$('.fils_{$smarty.request.conq_id}:enabled').each(function(){literal}{{/literal}$(this).prop('checked',false);$(this).click();{literal}}{/literal});">[+]</a>
 <a href="javascript:void(0);" onclick="$('.fils_{$smarty.request.conq_id}:enabled').each(function(){literal}{{/literal}$(this).prop('checked',true);$(this).click();{literal}}{/literal});">[-]</a>
 <br>
-{foreach key=k item=i from=$fils}
-<div id="div_{$smarty.request.conq_id}_{$i.id}" style="display:inline;{if $i.activ}background-color:green{/if}">
-<input class="fils_{$smarty.request.conq_id}" {if $i.activ}checked{/if} type=checkbox value="{$i.id}" onClick="save_fil({$smarty.request.conq_id},{$i.id},this.checked?1:0);">{$i.name} ({$i.nd_name})
+<!--{foreach key=k item=i from=$fils}-->
+<div id="div_{$smarty.request.conq_id}_{$i.id}" style="display:inline;/*{if $i.activ}*/background-color:green/*{/if}*/">
+<input
+    class="fils_{$smarty.request.conq_id}"
+    type=checkbox
+    value="{$i.id}"
+    id="savefil{$i.id}"
+    onClick="save_fil({$smarty.request.conq_id},{$i.id},this.checked?1:0);"
+    >
+    {$i.name} ({$i.nd_name})
 </div>
+<script>
+    /*{if $i.activ}*/
+    $("#savefil{$i.id}").prop('checked',true);
+    /*{/if}*/
+</script>
 <br>
-{/foreach}
+<!--{/foreach}-->

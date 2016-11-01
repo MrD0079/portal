@@ -15,16 +15,16 @@
       </td>
       <td>
 		<select required name="sd" id="sd">
-			{foreach key=key item=item from=$month_list}
+			<!--{foreach key=key item=item from=$month_list}-->
 			<option value={$item.sd_c}>{$item.my}</option>
-			{/foreach}
+			<!--{/foreach}-->
 		</select>
 		<script>$('#sd').val('{$smarty.request.sd}');</script>
 		-
 		<select required name="ed" id="ed">
-			{foreach key=key item=item from=$month_list}
+			<!--{foreach key=key item=item from=$month_list}-->
 			<option value={$item.sd_c}>{$item.my}</option>
-			{/foreach}
+			<!--{/foreach}-->
 		</select>
 		<script>$('#ed').val('{$smarty.request.ed}');</script>
       </td>
@@ -34,9 +34,9 @@
       <td>
       <select name="nd" id="nd">
 		<option value="0"></option>
-		{foreach key=k item=i from=$nd}
+		<!--{foreach key=k item=i from=$nd}-->
 		<option value="{$i.id}">{$i.name}</option>
-		{/foreach}
+		<!--{/foreach}-->
       </select>
 		<script>$('#nd').val('{$smarty.request.nd}');</script>
       </td>
@@ -46,9 +46,9 @@
 		<td>
 			<select name=region_name id=region_name>
 				<option value="0"></option>
-				{foreach key=key item=item from=$region_list}
+				<!--{foreach key=key item=item from=$region_list}-->
 				<option value="{$item.region_name}">{$item.region_name}</option>
-				{/foreach}
+				<!--{/foreach}-->
 			</select>
 			<script>$('#region_name').val('{$smarty.request.region_name}');</script>
 		</td>
@@ -58,9 +58,9 @@
 		<td>
 			<select name=fil id=fil>
 				<option value=0></option>
-				{foreach key=key item=item from=$fil_list}
+				<!--{foreach key=key item=item from=$fil_list}-->
 				<option value="{$item.id}">{$item.name}</option>
-				{/foreach}
+				<!--{/foreach}-->
 			</select>
 			<script>$('#fil').val('{$smarty.request.fil}');</script>
 		</td>
@@ -70,9 +70,9 @@
 		<td>
 			<select name=db id=db>
 				<option value=0></option>
-				{foreach key=key item=item from=$db_list}
+				<!--{foreach key=key item=item from=$db_list}-->
 				<option value="{$item.tn}">{$item.fio}</option>
-				{/foreach}
+				<!--{/foreach}-->
 			</select>
 			<script>$('#db').val('{$smarty.request.db}');</script>
 		</td>
@@ -84,13 +84,13 @@
 		<td style="text-align:right">Статья дохода</td>
 		<td>
 				<input type=hidden name=r_st_pri value=0>
-				{foreach key=key item=item from=$st_pri}
+				<!--{foreach key=key item=item from=$st_pri}-->
 				<input name=r_st_pri[{$item.id}] id=r_st_pri_{$item.id} type=checkbox value={$item.id}>{$item.name}
-				{/foreach}
+				<!--{/foreach}-->
 				<script>
-					{foreach key=k item=i from=$smarty.request.r_st_pri}
+					/*{foreach key=k item=i from=$smarty.request.r_st_pri}*/
 						$('#r_st_pri_{$k}').prop('checked',true);
-					{/foreach}
+					/*{/foreach}*/
 				</script>
 		</td>
 	</tr>
@@ -99,13 +99,13 @@
 		<td style="text-align:right">Статья расходов</td>
 		<td>
 				<input type=hidden name=r_st_ras value=0>
-				{foreach key=key item=item from=$st}
+				<!--{foreach key=key item=item from=$st}-->
 				{if $item.parent eq 0}<input name=r_st_ras[{$item.id}] id=r_st_ras_{$item.id} type=checkbox value={$item.id}>{$item.name}{/if}
-				{/foreach}
+				<!--{/foreach}-->
 				<script>
-					{foreach key=k item=i from=$smarty.request.r_st_ras}
+					/*{foreach key=k item=i from=$smarty.request.r_st_ras}*/
 						$('#r_st_ras_{$k}').prop('checked',true);
-					{/foreach}
+					/*{/foreach}*/
 				</script>
 		</td>
 	</tr>
@@ -114,13 +114,13 @@
 		<td style="text-align:right">Категория статьи расходов</td>
 		<td>
 				<input type=hidden name=r_kat value=0>
-				{foreach key=key item=item from=$st}
+				<!--{foreach key=key item=item from=$st}-->
 				{if $item.parent neq 0}<input name=r_kat[{$item.id}] id=r_kat_{$item.id} type=checkbox value={$item.id}>{$item.name}{else}<br>{/if}
-				{/foreach}
+				<!--{/foreach}-->
 				<script>
-					{foreach key=k item=i from=$smarty.request.r_kat}
+					/*{foreach key=k item=i from=$smarty.request.r_kat}*/
 						$('#r_kat_{$k}').prop('checked',true);
-					{/foreach}
+					/*{/foreach}*/
 				</script>
 		</td>
 	</tr>
@@ -201,7 +201,7 @@
       <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.zd_fakt|default:0|num:3}</td>
       <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.sum_end_plan|default:0|num:3}</td>
       <td style="text-align:right; background-color: rgb(255, 204, 153);">{$i.sum_end_fakt|default:0|num:3}</td>
-      <td style="text-align:right; background-color: {if $i.ok_fil}rgb(51, 255, 51);{else}rgb(255, 204, 153);{/if}">{if $i.ok_fil}да{/if}</td>
+      <td style="text-align:right; /*{if $i.ok_fil}*/background-color: rgb(51, 255, 51);/*{else}*/background-color: rgb(255, 204, 153);/*{/if}*/">{if $i.ok_fil}да{/if}</td>
     </tr>
 {/foreach}
     <tr style="text-align:right; font-weight:bold; background-color: rgb(51, 255, 51);">

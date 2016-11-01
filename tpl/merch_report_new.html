@@ -17,9 +17,9 @@
 <p>
 Дата
 <select name=dates_list id=dates_list onchange="javascript:fn_submit('dates_list');">
-{foreach key=key item=item from=$dates_list}
+<!--{foreach key=key item=item from=$dates_list}-->
 <option value="{$item.data_c}">{$item.data_c}</option>
-{/foreach}
+<!--{/foreach}-->
 </select>
 <script>$("#dates_list option[value='{$smarty.request.dates_list}']").prop('selected', true);</script>
 
@@ -85,12 +85,12 @@
 		<tr>
 			<td>{$smarty.foreach.i.iteration}. {$i1.ag_name}</td>
 			<td>{if $i1.spec neq 0}<a target=_blank href="?action=merch_spec_report&dt={$smarty.request.dates_list}&spec_id={$i1.spec_id}">Специя</a>{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep1}height:36px;width:36px;background-color:{$i1.reminders.rep1.color};{/if}">{if $i1.reminders.rep1}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep1.pict}">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep2}height:36px;width:36px;background-color:{$i1.reminders.rep2.color};{/if}">{if $i1.reminders.rep2}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep2.pict}">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep3}height:36px;width:36px;background-color:{$i1.reminders.rep3.color};{/if}">{if $i1.reminders.rep3}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep3.pict}">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep4}height:36px;width:36px;background-color:{$i1.reminders.rep4.color};{/if}">{if $i1.reminders.rep4}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep4.pict}">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep5}height:36px;width:36px;background-color:{$i1.reminders.rep5.color};{/if}">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep5.pict}">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;{if $i1.reminders.rep6}height:36px;width:36px;background-color:{$i1.reminders.rep6.color};{/if}">
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep1}*/height:36px;width:36px;background-color:{$i1.reminders.rep1.color};/*{/if}*/">{if $i1.reminders.rep1}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep1.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep2}*/height:36px;width:36px;background-color:{$i1.reminders.rep2.color};/*{/if}*/">{if $i1.reminders.rep2}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep2.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep3}*/height:36px;width:36px;background-color:{$i1.reminders.rep3.color};/*{/if}*/">{if $i1.reminders.rep3}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep3.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep4}*/height:36px;width:36px;background-color:{$i1.reminders.rep4.color};/*{/if}*/">{if $i1.reminders.rep4}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep4.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep5}*/height:36px;width:36px;background-color:{$i1.reminders.rep5.color};/*{/if}*/">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep5.pict}">{/if}</td>
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep6}*/height:36px;width:36px;background-color:{$i1.reminders.rep6.color};/*{/if}*/">
 				{if $i1.reminders.rep6}
 
 				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i1.spec_id}').show();">
@@ -168,7 +168,7 @@
 
 
 <script>
-{literal}
+/*{literal}*/
 function VVAdd(dates_list)
 {
 	var fd = new FormData();
@@ -184,7 +184,7 @@ function VVAdd(dates_list)
 		}
 	});
 }
-{/literal}
+/*{/literal}*/
 </script>
 
 <h1>Дополнительные отчеты</h1>

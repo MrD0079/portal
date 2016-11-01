@@ -27,7 +27,9 @@
 </h3>
 
 <p>
+</p>
 <div id="total" style="font-weight: bold;"></div>
+<p>
 </p>
 
 <h2>Детализация</h2>
@@ -165,7 +167,7 @@
 						onChange="save_tp('{$i.tp_kod}','bonus_fakt',this.value);/*after_save('{$i.tp_kod}');*/"
 					>
 					<script>
-						$('#bonus_fakt_{$i.tp_kod}').val({$i.bonus_fakt});
+						$('#bonus_fakt_{$i.tp_kod}').val('{$i.bonus_fakt}');
 						$('#bonus_fakt_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
 					</script>
 				{/if}
@@ -174,7 +176,7 @@
 				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
 					{$i.fixed_fakt|num:2}
 				{else}
-					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.tp_kod}').val({$i.fixed});$('#fixed_fakt_{$i.tp_kod}').change();">{$i.fixed|num:3} =></a>
+					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.tp_kod}').val('{$i.fixed}');$('#fixed_fakt_{$i.tp_kod}').change();">{$i.fixed|num:3} =></a>
 					<input
 						class="number"
 						size="10"
@@ -183,12 +185,12 @@
 						onChange="save_tp('{$i.tp_kod}','fixed_fakt',this.value);/*after_save('{$i.tp_kod}');*/"
 					>
 					<script>
-						$('#fixed_fakt_{$i.tp_kod}').val({$i.fixed_fakt});
+						$('#fixed_fakt_{$i.tp_kod}').val('{$i.fixed_fakt}');
 						$('#fixed_fakt_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
 					</script>
 				{/if}
 			</td>
-			<td style=" text-align:right ; {if $i.total > $i.maxtp} background-color:red {/if} " id="d_{$i.tp_kod}_maxtp">{$i.maxtp|num:2}</td>
+			<td style=" text-align:right ; /*{if $i.total > $i.maxtp}*/ background-color:red /*{/if}*/ " id="d_{$i.tp_kod}_maxtp">{$i.maxtp|num:2}</td>
 			<td style=" text-align:right ;background-color: rgb(153, 255, 153);" id="d_{$i.tp_kod}_total">{$i.total|num:2}</td>
 			<td style=" text-align:center" id="d_{$i.tp_kod}_cash">
 				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
@@ -214,7 +216,7 @@
 						name="ok_db_tn[{$i.tp_kod}]"
 						id="ok_db_tn_{$i.tp_kod}" type="checkbox"
 						onChange="
-							save_tp('{$i.tp_kod}','ok_db_tn',this.checked?{$i.parent_tn}:'');/*after_save('{$i.tp_kod}');*/
+							save_tp('{$i.tp_kod}','ok_db_tn',this.checked?'{$i.parent_tn}':'');/*after_save('{$i.tp_kod}');*/
 						"
 					>
 					<script>
@@ -255,7 +257,7 @@
 
 <script>
 v_dt='{$smarty.request.dt}';
-{literal}
+/*{literal}*/
 function save_tp(tp_kod,field,val)
 {
 	$('#d_'+tp_kod+'_'+field).css('background-color','red');
@@ -387,13 +389,13 @@ $('#svodf').html(''+data+'');
 
 
 
-{/literal}
+/*{/literal}*/
 
 
-{if not $smarty.request.print}
+/*{if not $smarty.request.print}*/
 load_tp_total();
 load_tp_svodf();
-{/if}
+/*{/if}*/
 
 </script>
 

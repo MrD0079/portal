@@ -1,18 +1,12 @@
 <?php
-
 header("Content-Type: text/html; charset=\"windows-1251\"");
 putenv("NLS_LANG=RUSSIAN_CIS.CL8MSWIN1251");
-
-
 define('ZAOAVK','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = oracle1.avk.company))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOAVK)      (SERVER = DEDICATED)    )  )');
 define('ZAOIBM','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = oracle2.avk.company))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOAVK)      (SERVER = DEDICATED)    )  )');
-
 //define('ZAOAVK','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = 192.168.4.253))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOAVK)      (SERVER = DEDICATED)    )  )');
 //define('ZAOWH','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = 192.168.4.242))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOWH)      (SERVER = DEDICATED)    )  )');
 //define('ZAOIBM','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = 10.2.10.242))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOWH)      (SERVER = DEDICATED)    )  )');
-
 require('smarty_init.php');
-
 function print_array($val, $level = 0)
 {
 	foreach ($val as $key=>$value)
@@ -28,9 +22,7 @@ function print_array($val, $level = 0)
 		}
 	}
 }
-
-function ses_req()
-{
+function ses_req() {
 ?>
 <div ondblclick="
 $(this).width(500-$(this).width());
@@ -53,7 +45,7 @@ style="
 	overflow:auto;
 "
 >
-<pre style="font-size:9;">
+<pre style="font-size:9px;">
 ******* REQUEST *******
 <?print_array($_REQUEST);?>
 <br>
@@ -66,7 +58,6 @@ style="
 </div>
 <?
 }
-
 function recursive_remove_directory($directory, $empty=FALSE)
 {
 	if(substr($directory,-1) == '/')
@@ -103,6 +94,3 @@ function recursive_remove_directory($directory, $empty=FALSE)
 	}
 	return TRUE;
 }
-
-
-?>

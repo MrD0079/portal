@@ -27,7 +27,7 @@
 <td>{$i.product_name_sw}</td>
 <td style="text-align:right">{$i.product_weight|num:3}</td>
 <td style="text-align:center">{$i.product_id}</td>
-<td style="text-align:center; {if $i.prod_id}background-color:green;{/if}">
+<td style="text-align:center; /*{if $i.prod_id}*/background-color:green;/*{/if}*/">
 	<input type=checkbox {if $i.prod_id}checked{/if} onclick="
 		$('#keys_{$i.product_id}').attr('disabled',false);
 		$('#keys_{$i.product_id}').val(this.checked?1:0);

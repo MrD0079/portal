@@ -51,10 +51,10 @@
 		{if $smarty.request.report_gps_new_page eq 'days'}
 		<td style="text-align: center;">{$i.min_time_in}</td>
 		<td style="text-align: center;">{$i.max_time_out}</td>
-		<td style="text-align: center;{if $i.work_day_is_red neq 0}background-color:red{/if}">{$i.work_day_time}</td>
+		<td style="text-align: center;/*{if $i.work_day_is_red neq 0}*/background-color:red/*{/if}*/">{$i.work_day_time}</td>
 		{/if}
 		{if $smarty.request.report_gps_new_page eq 'period'}
-		<td style="text-align: center;{if $i.work_day_is_red neq 0}background-color:red{/if}">{$i.work_day_is_red}</td>
+		<td style="text-align: center;/*{if $i.work_day_is_red neq 0}*/background-color:red/*{/if}*/">{$i.work_day_is_red}</td>
 		{/if}
 	</tr>
 	{/foreach}

@@ -180,7 +180,7 @@ function del_file(rid)
 {if $i.level eq 3}
 <tr>
 <td style="border: 1px solid black">{$i.name}</td>
-<td style="border: 1px solid black; text-align:center; {if $i.v_int eq 1}background-color:rgb(153, 255, 153){/if}">
+<td style="border: 1px solid black; text-align:center; /*{if $i.v_int eq 1}*/background-color:rgb(153, 255, 153)/*{/if}*/">
 	{if not $smarty.request.print}
 		<input onclick="$('#body_v_int_{$i.id}').val(this.checked?1:0);" {$disabled} type=checkbox {if $i.v_int eq 1}checked{/if}>
 		<input type=hidden name=body[{$i.id}][v_int] id=body_v_int_{$i.id} value={$i.v_int}>

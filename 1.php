@@ -1,11 +1,7 @@
 <?
 $file_list=array();
-
-
 include('SimpleImage.php');
 $image = new SimpleImage();
-
-
 function isEmptyDir($dir){
      return (($files = @scandir($dir)) && count($files) <= 2);
 } 

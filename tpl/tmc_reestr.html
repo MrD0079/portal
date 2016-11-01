@@ -22,9 +22,9 @@
 		<td>
 <select name=owner id=owner>
 	<option value=0></option>
-	{foreach key=key item=item from=$owners_list}
+	<!--{foreach key=key item=item from=$owners_list}-->
 	<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
-	{/foreach}
+	<!--{/foreach}-->
 </select>
 <script>$("#owner option[value='{$smarty.request.owner}']").prop('selected', true);</script>
 		</td>
@@ -34,18 +34,18 @@
 		<td>
 	<select name=country id=country>
 	<option value='0'></option>
-	{foreach key=key item=item from=$countries}
-	{if $item.checked eq 1}
+	<!--{foreach key=key item=item from=$countries}
+	{if $item.checked eq 1}-->
 	<option value='{$item.cnt_kod}'>{$item.cnt_name}</option>
-	{/if}
-	{/foreach}
+	<!--{/if}
+	{/foreach}-->
 	</select>
 	<script>
-	{if $smarty.request.country neq ''}
+	/*{if $smarty.request.country neq ''}*/
 		$("#country option[value='{$smarty.request.country}']").prop('selected', true);
-	{else}
+	/*{else}*/
 		$("#country option[value='{$cnt_kod}']").prop('selected', true);
-	{/if}
+	/*{/if}*/
 	</script>
 		</td>
 	</tr>
@@ -54,9 +54,9 @@
 		<td>
 <select name=tmc_pos_id id=tmc_pos_id>
 	<option value=0></option>
-	{foreach key=key item=item from=$pos_list}
+	<!--{foreach key=key item=item from=$pos_list}-->
 	<option value={$item.pos_id}>{$item.pos_name}</option>
-	{/foreach}
+	<!--{/foreach}-->
 </select>
 <script>$("#tmc_pos_id option[value='{$smarty.request.tmc_pos_id}']").prop('selected', true);</script>
 		</td>
@@ -66,9 +66,9 @@
 		<td>
 <select name=region_name id=region_name>
 	<option value=0></option>
-	{foreach key=key item=item from=$region_list}
+	<!--{foreach key=key item=item from=$region_list}-->
 	<option value="{$item.region_name}">{$item.region_name}</option>
-	{/foreach}
+	<!--{/foreach}-->
 </select>
 <script>$("#region_name option[value='{$smarty.request.region_name}']").prop('selected', true);</script>
 		</td>
@@ -78,9 +78,9 @@
 		<td>
 <select name=department_name id=department_name>
 	<option value=0></option>
-	{foreach key=key item=item from=$department_list}
+	<!--{foreach key=key item=item from=$department_list}-->
 	<option value="{$item.department_name}">{$item.department_name}</option>
-	{/foreach}
+	<!--{/foreach}-->
 </select>
 <script>$("#department_name option[value='{$smarty.request.department_name}']").prop('selected', true);</script>
 		</td>
@@ -150,7 +150,7 @@
 		<td>{$i.pos_name}</td>
 		<td style="text-align:center">{$i.tmcs}</td>
 		<td>{$i.name}</td>
-		<td style="text-align:center;{if not $i.sn}background-color:red;{/if}">{$i.sn}</td>
+		<td style="text-align:center;/*{if not $i.sn}*/background-color:red;/*{/if}*/">{$i.sn}</td>
 		<td style="text-align:center">{$i.num_avk}</td>
 		<td style="text-align:center">{$i.state}</td>
 		<td style="text-align:center">{$i.dtv}</td>

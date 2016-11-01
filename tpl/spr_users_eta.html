@@ -9,18 +9,18 @@
 По руководителю:
 <select name=exp_list_without_ts id=exp_list_without_ts>
 <option value=0></option>
-{foreach key=key item=item from=$exp_list_without_ts}
-<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
-{/foreach}
+<!--{foreach key=key item=item from=$exp_list_without_ts}-->
+<option value={$item.emp_svid}>{$item.emp_name} ({$item.emp_pos})</option>
+<!--{/foreach}-->
 </select>
 <br>
 
 По ТС/СТС:
 <select name=exp_list_only_ts id=exp_list_only_ts>
 <option value=0></option>
-{foreach key=key item=item from=$exp_list_only_ts}
-<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos})</option>
-{/foreach}
+<!--{foreach key=key item=item from=$exp_list_only_ts}-->
+<option value={$item.emp_svid}>{$item.emp_name} ({$item.emp_pos})</option>
+<!--{/foreach}-->
 </select>
 <br>
 
@@ -69,7 +69,7 @@
 		<td colspan=8>
 			{$i.head.fio}
 			{if $i.head.datauvol}<font style="color:red">уволен(а) {$i.head.datauvol}</font>{/if}
-			<a href="javascript:void(0);" onclick="sendPwds({$i.head.tn});">Выслать пароли на ТС / СТС / МКК</a>
+			<a href="javascript:void(0);" onclick="sendPwds('{$i.head.tn}');">Выслать пароли на ТС / СТС / МКК</a>
 			<div style="display:inline;" id="sendPwds_{$i.head.tn}"></div>
 			БТ: {$i.head.tr_list}</td>
 		</td>
@@ -83,8 +83,8 @@
 			<td style="text-align:center;">
 				<a href="javascript:void(0);" onclick="updatePwd('{$i1.login}');">Обновить пароль</a>
 			</td>
-			<td style="text-align:center;{if not $i1.lu}background-color:orange;{/if}">{$i1.lu}</td>
-			<td style="text-align:center;{if $i1.reserv}background-color:lightgreen;{/if}" id="v_{$i1.login}_reserv">
+			<td style="text-align:center;/*{if not $i1.lu}*/background-color:orange;/*{/if}*/">{$i1.lu}</td>
+			<td style="text-align:center;/*{if $i1.reserv}*/background-color:lightgreen;/*{/if}*/" id="v_{$i1.login}_reserv">
 				<input
 					onchange="
 						save_vals('{$i1.login}','reserv',this.checked?1:0);
@@ -105,7 +105,7 @@
 					{if $i1.reserv neq 1}disabled{/if}
 				>
 			</td>
-			<td style="text-align:center;{if $i1.datauvol}background-color:red{/if}">{$i1.datauvol}</td>
+			<td style="text-align:center;/*{if $i1.datauvol}*/background-color:red/*{/if}*/">{$i1.datauvol}</td>
 		</tr>
 		{/foreach}
 	{/foreach}
@@ -136,10 +136,10 @@
 			<td style="text-align:center;">{$i1.eta}</td>
 			<td style="text-align:center;">{$i1.login}</td>
 			<td style="text-align:center;">{$i1.password}</td>
-			<td style="text-align:center;{if not $i1.lu}background-color:orange;{/if}">{$i1.lu}</td>
-			<td style="text-align:center;{if $i1.reserv}background-color:lightgreen;{/if}">{if $i1.reserv eq 1}да{/if}</td>
+			<td style="text-align:center;/*{if not $i1.lu}*/background-color:orange;/*{/if}*/">{$i1.lu}</td>
+			<td style="text-align:center;/*{if $i1.reserv}*/background-color:lightgreen;/*{/if}*/">{if $i1.reserv eq 1}да{/if}</td>
 			<td style="text-align:center;">{$i1.reserv_dt}</td>
-			<td style="text-align:center;{if $i1.datauvol}background-color:red{/if}">{$i1.datauvol}</td>
+			<td style="text-align:center;/*{if $i1.datauvol}*/background-color:red/*{/if}*/">{$i1.datauvol}</td>
 		</tr>
 		{/foreach}
 	{/foreach}

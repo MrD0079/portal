@@ -225,18 +225,18 @@
 	</tr>
 	<tr>
 		<td>ИТОГО затраты по финпланированию, %</td>
-		<td style="text-align:right{if $sdu_budjet_last_ver2.b_total_perc neq 0}{if $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc < 0.99 or $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc > 1.01};color:red{/if}{/if}">{$sdu_budjet_last_ver2.fin_perc|default:0|num:2}</td>
-		<td style="text-align:right{if $sdu_budjet_last_ver1.b_total_perc neq 0}{if $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc < 0.99 or $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc > 1.01};color:red{/if}{/if}">{$sdu_budjet_last_ver1.fin_perc|default:0|num:2}</td>
+		<td style="text-align:right/*{if $sdu_budjet_last_ver2.b_total_perc neq 0}{if $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc < 0.99 or $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc > 1.01}*/;color:red/*{/if}{/if}*/">{$sdu_budjet_last_ver2.fin_perc|default:0|num:2}</td>
+		<td style="text-align:right/*{if $sdu_budjet_last_ver1.b_total_perc neq 0}{if $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc < 0.99 or $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc > 1.01}*/;color:red/*{/if}{/if}*/">{$sdu_budjet_last_ver1.fin_perc|default:0|num:2}</td>
 		{foreach from=$sdu item=s_item key=s_key}
-		<td style="text-align:right{if $sdu_budjet[$s_item.ver].b_total_perc neq 0}{if $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc < 0.99 or $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc > 1.01};color:red{/if}{/if}">{$sdu_budjet[$s_item.ver].fin_perc|default:0|num:3}</td>
+		<td style="text-align:right/*{if $sdu_budjet[$s_item.ver].b_total_perc neq 0}{if $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc < 0.99 or $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc > 1.01}*/;color:red/*{/if}{/if}*/">{$sdu_budjet[$s_item.ver].fin_perc|default:0|num:3}</td>
 		{/foreach}
 	</tr>
 	<tr>
 		<td>ИТОГО затраты по финпланированию, тыс.{$valuta}.</td>
-		<td style="text-align:right{if $sdu_budjet_last_ver2.b_total_perc neq 0}{if $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc < 0.99 or $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc > 1.01};color:red{/if}{/if}">{$sdu_budjet_last_ver2.fin_zatr|default:0|num:3}</td>
-		<td style="text-align:right{if $sdu_budjet_last_ver1.b_total_perc neq 0}{if $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc < 0.99 or $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc > 1.01};color:red{/if}{/if}">{$sdu_budjet_last_ver1.fin_zatr|default:0|num:3}</td>
+		<td style="text-align:right/*{if $sdu_budjet_last_ver2.b_total_perc neq 0}{if $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc < 0.99 or $sdu_budjet_last_ver2.fin_perc/$sdu_budjet_last_ver2.b_total_perc > 1.01}*/;color:red/*{/if}{/if}*/">{$sdu_budjet_last_ver2.fin_zatr|default:0|num:3}</td>
+		<td style="text-align:right/*{if $sdu_budjet_last_ver1.b_total_perc neq 0}{if $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc < 0.99 or $sdu_budjet_last_ver1.fin_perc/$sdu_budjet_last_ver1.b_total_perc > 1.01}*/;color:red/*{/if}{/if}*/">{$sdu_budjet_last_ver1.fin_zatr|default:0|num:3}</td>
 		{foreach from=$sdu item=s_item key=s_key}
-		<td style="text-align:right{if $sdu_budjet[$s_item.ver].b_total_perc neq 0}{if $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc < 0.99 or $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc > 1.01};color:red{/if}{/if}">{$sdu_budjet[$s_item.ver].fin_zatr|default:0|num:3}</td>
+		<td style="text-align:right/*{if $sdu_budjet[$s_item.ver].b_total_perc neq 0}{if $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc < 0.99 or $sdu_budjet[$s_item.ver].fin_perc/$sdu_budjet[$s_item.ver].b_total_perc > 1.01}*/;color:red/*{/if}{/if}*/">{$sdu_budjet[$s_item.ver].fin_zatr|default:0|num:3}</td>
 		{/foreach}
 	</tr>
 </table>

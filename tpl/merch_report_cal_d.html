@@ -1,16 +1,21 @@
 {foreach key=k item=i from=$d name=d}
 <div
-	style="{if $i.checked}background-color:green{/if}"
+	style="/*{if $i.checked}*/background-color:green/*{/if}*/"
 	id="d_{$smarty.request.id}_{$i.id}"
 >
 <input
-	onchange="save_d({$smarty.request.id},'{$smarty.request.type}','{$smarty.request.field}','{$i.id}',this.checked?0:1);"
+	onchange="save_d('{$smarty.request.id}','{$smarty.request.type}','{$smarty.request.field}','{$i.id}',this.checked?0:1);"
 	type=checkbox
 	value="{$i.id}"
-	{if $i.checked}checked{/if}
+	id="input_{$smarty.request.id}_{$i.id}"
 >
 {$i.name}
 </div>
+<script>
+    /*{if $i.checked}*/
+    $("#input_{$smarty.request.id}_{$i.id}").prop('checked',true);
+    /*{/if}*/
+</script>
 {/foreach}
 
 {literal}

@@ -2,7 +2,7 @@
   SELECT DISTINCT r.rep_id,
                   r.name,
                   r.pict,
-                  r.text,
+                  TO_CHAR (r.text) text,
                   CASE
                      WHEN r.rep_id IN (6            /* Акционная активность */
                                         )
