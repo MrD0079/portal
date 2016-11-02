@@ -3,8 +3,8 @@
          fn_getname (cse.tn) fio,
          TO_CHAR (cse.datauvol, 'dd.mm.yyyy') datauvol_txt,
          NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0) total,
-         NVL (zc.PET_VOL, 0) PET_VOL,
-         NVL (zc.PET_SUM, 0) PET_SUM,
+         NVL (zc.PET_VOL, 0)+nvl(zm.gbo_warmup_vol,0) PET_VOL,
+         NVL (zc.PET_SUM, 0)+nvl(zm.gbo_warmup_sum,0) PET_SUM,
          NVL (zc.OIL_SUM, 0) OIL_SUM,
          NVL (zc.WASH, 0) WASH,
          NVL (zc.SERVICE, 0) SERVICE,
@@ -91,6 +91,7 @@
                  + NVL (account_payments, 0)
                  + NVL (mobile, 0)
                  + NVL (AMORT, 0)
+               + NVL (gbo_warmup_sum, 0)
                     total,
                  (SELECT name
                     FROM currencies

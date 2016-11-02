@@ -1,11 +1,12 @@
-/* Formatted on 21.11.2013 14:31:04 (QP5 v5.227.12220.39724) */
+/* Formatted on 02.11.2016 17:10:45 (QP5 v5.252.13127.32867) */
   SELECT cse.*,
          NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0) total,
-         NVL (zc.total, 0) + NVL (zm.amort, 0) total_c,
+         NVL (zc.total, 0) + NVL (zm.amort, 0) + NVL (zm.gbo_warmup_sum, 0)
+            total_c,
          NVL (zt.total, 0) total_t,
          NVL (zm.total, 0) total_m,
-         NVL (zc.PET_VOL, 0) PET_VOL,
-         NVL (zc.PET_SUM, 0) PET_SUM,
+         NVL (zc.PET_VOL, 0)+ NVL (zm.gbo_warmup_vol, 0) PET_VOL,
+         NVL (zc.PET_SUM, 0)+ NVL (zm.gbo_warmup_sum, 0) PET_SUM,
          NVL (zc.PET_PRICE, 0) PET_PRICE,
          NVL (zc.PET_CNT, 0) PET_CNT,
          NVL (zc.OIL_SUM, 0) OIL_SUM,
@@ -36,10 +37,12 @@
             FROM (SELECT DISTINCT TRUNC (data, 'mm') dt, mt, y
                     FROM calendar
                    WHERE TRUNC (data, 'mm') BETWEEN ADD_MONTHS (
-                                                       TO_DATE (:sd,
+                                                       TO_DATE ( :sd,
                                                                 'dd.mm.yyyy'),
                                                        -2)
-                                                AND TO_DATE (:sd, 'dd.mm.yyyy')) c1) cse,
+                                                AND TO_DATE ( :sd,
+                                                             'dd.mm.yyyy')) c1)
+         cse,
          (  SELECT TRUNC (zc.data, 'mm') dt,
                    zc.tn,
                    SUM (
@@ -63,10 +66,10 @@
               FROM zat_daily_car zc
              WHERE     tn = :tn
                    AND TRUNC (zc.data, 'mm') BETWEEN ADD_MONTHS (
-                                                        TO_DATE (:sd,
+                                                        TO_DATE ( :sd,
                                                                  'dd.mm.yyyy'),
                                                         -2)
-                                                 AND TO_DATE (:sd, 'dd.mm.yyyy')
+                                                 AND TO_DATE ( :sd, 'dd.mm.yyyy')
           GROUP BY TRUNC (zc.data, 'mm'), zc.tn) zc,
          (  SELECT TRUNC (zt.data, 'mm') dt,
                    zt.tn,
@@ -83,10 +86,10 @@
               FROM zat_daily_trip zt
              WHERE     tn = :tn
                    AND TRUNC (zt.data, 'mm') BETWEEN ADD_MONTHS (
-                                                        TO_DATE (:sd,
+                                                        TO_DATE ( :sd,
                                                                  'dd.mm.yyyy'),
                                                         -2)
-                                                 AND TO_DATE (:sd, 'dd.mm.yyyy')
+                                                 AND TO_DATE ( :sd, 'dd.mm.yyyy')
           GROUP BY TRUNC (zt.data, 'mm'), zt.tn) zt,
          (SELECT TO_DATE ('01.' || m || '.' || y, 'dd.mm.yyyy') dt,
                  zm.*,
@@ -100,7 +103,8 @@
                  + NVL (SINGLE_TAX, 0)
                  + NVL (account_payments, 0)
                  + NVL (mobile, 0)
-                 /*+ NVL (AMORT, 0)*/
+                    /*+ NVL (AMORT, 0)*/
+
                     total,
                  NVL (odometr_end, 0) - NVL (odometr_start, 0) odometr_delta
             FROM zat_monthly zm
@@ -112,6 +116,7 @@
                                                                                -2)
                                                                         AND TO_DATE (
                                                                                :sd,
-                                                                               'dd.mm.yyyy')) zm
+                                                                               'dd.mm.yyyy'))
+         zm
    WHERE cse.dt = zm.dt(+) AND cse.dt = zt.dt(+) AND cse.dt = zc.dt(+)
 ORDER BY cse.dt DESC

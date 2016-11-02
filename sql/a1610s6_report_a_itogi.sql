@@ -1,4 +1,4 @@
-/* Formatted on 21.10.2016 16:00:59 (QP5 v5.252.13127.32867) */
+/* Formatted on 02.11.2016 11:43:29 (QP5 v5.252.13127.32867) */
 SELECT COUNT (DISTINCT tp_kod) cnt_tp,
        COUNT (DISTINCT DECODE (max_bonus, NULL, NULL, tp_kod)) if_cnt,
        SUM (fakt3) fakt3,
@@ -9,19 +9,26 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
        COUNT (DISTINCT DECODE (bonus_dt1, NULL, NULL, tp_kod)) bonus_fakt_cnt,
        DECODE (SUM (fakt4), 0, 0, SUM (bonus_sum1) / SUM (fakt4) * 100) zat
   FROM (SELECT d.tp_kod,
-               m3.summa fakt3,
-               m4.summa fakt4,
-               m3.summa * 1.5 plan4,
-                 DECODE (NVL (m3.summa, 0), 0, 0, m4.summa / (m3.summa * 2))
+               (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) fakt3,
+               (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) fakt4,
+               (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) * 1.5 plan4,
+                 DECODE (
+                    NVL ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)), 0),
+                    0, 0,
+                      (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+                    / ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) * 2))
                * 100
                   perc,
                CASE
-                  WHEN   DECODE (NVL (m3.summa, 0),
-                                 0, 0,
-                                 m4.summa / (m3.summa * 2))
+                  WHEN   DECODE (
+                            NVL ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)),
+                                 0),
+                            0, 0,
+                              (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+                            / ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) * 2))
                        * 100 >= 100
                   THEN
-                     m4.summa * 0.06
+                     (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) * 0.06
                END
                   max_bonus,
                m4.eta fio_eta,
@@ -85,9 +92,17 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                AND (   :ok_plan = 0
                     OR :ok_plan =
                           CASE
-                             WHEN   DECODE (NVL (m3.summa, 0),
-                                            0, 0,
-                                            m4.summa / (m3.summa * 2))
+                             WHEN   DECODE (
+                                       NVL (
+                                          (  NVL (m3.summa, 0)
+                                           + NVL (m3.coffee, 0)),
+                                          0),
+                                       0, 0,
+                                         (  NVL (m4.summa, 0)
+                                          + NVL (m4.coffee, 0))
+                                       / (  (  NVL (m3.summa, 0)
+                                             + NVL (m3.coffee, 0))
+                                          * 2))
                                   * 100 >= 100
                              THEN
                                 1

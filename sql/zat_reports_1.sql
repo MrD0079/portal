@@ -61,6 +61,7 @@
                  + NVL (account_payments, 0)
                  + NVL (mobile, 0)
                  + NVL (AMORT, 0)
+               + NVL (gbo_warmup_sum, 0)
                     total,
                  (SELECT name
                     FROM currencies

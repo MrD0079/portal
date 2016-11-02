@@ -2,15 +2,121 @@
 <form name=form target=_self method=post>
 <p><input type=submit name=save value="Сохранить"></p>
 
-
 <table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=3>Резерв кадров</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>в резерве</td>
-<td>должность резерва</td>
-<td>с какой даты</td>
+<tr>
+<td style="text-align:right">Фамилия                                 </td>
+<td><input name="item[fam]" value="{$spdtree_edit.fam}"></td>                    
 </tr>
 <tr>
+<td style="text-align:right">Имя                                     </td>
+<td><input name="item[im]" value="{$spdtree_edit.im}"></td>                      
+</tr>
+<tr>
+<td style="text-align:right">Отчество                                </td>
+<td><input name="item[otch]" value="{$spdtree_edit.otch}"></td>
+</tr>
+<tr>
+<td style="text-align:right">Адрес                                   </td>
+<td><input name="item[address]" value="{$spdtree_edit.address}"></td>            
+</tr>
+<tr>
+<td style="text-align:right">Должность                               </td>
+<td>
+<select name="item[pos_id]" id="item_pos_id">
+<option></option>
+{foreach key=key item=item from=$pos_list}
+<option value={$item.pos_id}>{$item.pos_name}</option>
+{/foreach}
+</select>
+<script>$("#item_pos_id option[value='{$spdtree_edit.pos_id}']").prop('selected', true);</script>
+</td>                
+</tr>
+<tr>
+<td style="text-align:right">адрес E-MAIL                            </td>
+<td><input name="item[email]" value="{$spdtree_edit.email}"></td>                
+</tr>
+<tr>
+<td style="text-align:right">№ Телефона                              </td>
+<td><input name="item[phone]" value="{$spdtree_edit.phone}"></td>                
+</tr>
+<tr>
+<td style="text-align:right">Skype                                   </td>
+<td><input name="item[skype]" value="{$spdtree_edit.skype}"></td>                
+</tr>
+<tr>
+<td style="text-align:right">Дата рожд.                              </td>
+<td><input name="item[birthday]" class="datepicker" value="{$spdtree_edit.birthday}"></td>          
+</tr>
+<tr>
+<td style="text-align:right">Дата факт. прист. к работе              </td>
+<td><input name="item[fdata]" class="datepicker" value="{$spdtree_edit.fdata}"></td>                
+</tr>
+<tr>
+<td style="text-align:right">Дата перевода                           </td>
+<td><input name="item[dataper]" class="datepicker" value="{$spdtree_edit.dataper}"></td>            
+</tr>
+<tr>
+<td style="text-align:right">Дата увольнения                         </td>
+<td><input name="item[datauvol]" class="datepicker" value="{$spdtree_edit.datauvol}"></td>          
+</tr>
+<tr>
+<td style="text-align:right">Дата начала действия карточки           </td>
+<td><input name="item[datastart]" class="datepicker" value="{$spdtree_edit.datastart}"></td>        
+</tr>
+<tr>
+<td style="text-align:right">Аванс                                   </td>
+<td><input name="item[avans]" class="number" value="{$spdtree_edit.avans}"></td>                
+</tr>
+<tr>
+<td style="text-align:right">Амортизация                             </td>
+<td><input name="item[amort]" class="number" value="{$spdtree_edit.amort}"></td>                
+</tr>
+<tr>
+<td style="text-align:right">Марка автомобиля                        </td>
+<td><input name="item[car_brand]" value="{$spdtree_edit.car_brand}"></td>        
+</tr>
+<tr>
+<td style="text-align:right">Расход топлива, л/100км                 </td>
+<td><input name="item[car_rashod]" class="number" value="{$spdtree_edit.car_rashod}"></td>      
+</tr>
+<tr>
+<td style="text-align:right">Таб. номер                              </td>
+<td><input name="item[tab_num]" value="{$spdtree_edit.tab_num}"></td>            
+</tr>
+<tr>
+<td style="text-align:right">Страна                             </td>
+<td>
+<select name="item[dpt_id]" id="item_dpt_id">
+{foreach key=key item=item from=$dpt_list}
+<option value={$item.dpt_id}>{$item.dpt_name}</option>
+{/foreach}
+</select>
+<script>$("#item_dpt_id option[value='{$spdtree_edit.dpt_id}']").prop('selected', true);</script>
+</td>                
+</tr>
+<tr>
+<td style="text-align:right">Видимость стран</td>
+<td>
+	{foreach key=key item=item from=$spdtree_edit_countries}
+		<input onclick="$('#sec_{$item.dpt_id}').val(this.checked?1:0)" {if $item.checked eq 1}checked{/if} {if $item.dpt_id eq $spdtree_edit.dpt_id}disabled{/if} type=checkbox>{$item.dpt_name}
+		<input type=hidden id="sec_{$item.dpt_id}" name="spdtree_edit_countries[{$item.dpt_id}]" {if $item.dpt_id eq $spdtree_edit.dpt_id}disabled{/if} value="{$item.checked}">
+                <br>
+	{/foreach}
+</td>
+</tr>
+<tr>
+<td style="text-align:right">Подразделение                                 </td>
+<td>{$spdtree_edit.department_name}<!--<input size=50 disabled value="{$spdtree_edit.department_name}">--></td>            
+</tr>
+<tr>
+<td style="text-align:right">Регион                                  </td>
+<td>{$spdtree_edit.region_name}<!--<input size=50 disabled value="{$spdtree_edit.region_name}">--></td>            
+</tr>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Резерв кадров</td>
+</tr>
+<tr>
+<td style="text-align:right">в резерве</td>
 <td>
 <input onClick="
 $('#res1_dt').attr('disabled',this.checked?false:true);
@@ -22,6 +128,9 @@ $('#res').val(this.checked?1:0);
 !this.checked?$('#res1_pos_id').val(''):null;
 " type=checkbox id=res1>
 </td>
+</tr>
+<tr>
+<td style="text-align:right">должность резерва</td>
 <td>
 <select required onchange="$('#res_pos_id').val(this.value);" id=res1_pos_id>
 <option></option>
@@ -30,138 +139,82 @@ $('#res').val(this.checked?1:0);
 {/foreach}
 </select>
 </td>                
+</tr>
+<tr>
+<td style="text-align:right">с какой даты</td>
 <td><input required onchange="$('#res_dt').val(this.value);" class=datepicker id=res1_dt value="{$spdtree_edit.res_dt}"></td>            
 </tr>
-</table>
-
 <input type=hidden name="item[res]" id=res value="{$spdtree_edit.res}">
 <input type=hidden name="item[res_dt]" id=res_dt value="{$spdtree_edit.res_dt}">
 <input type=hidden name="item[res_pos_id]" id=res_pos_id value="{$spdtree_edit.res_pos_id}">
-
 <script>
-
 $('#res').val({$spdtree_edit.res});
-
 $('#res_pos_id').val({$spdtree_edit.res_pos_id});
 $('#res1_pos_id').val({$spdtree_edit.res_pos_id});
-
 $('#res_dt').val('{$spdtree_edit.res_dt}');
 $('#res1_dt').val('{$spdtree_edit.res_dt}');
-
 $('#res1').prop('checked',{$spdtree_edit.res}==1?true:false);
 $('#res1_dt').attr('disabled',{$spdtree_edit.res}==1?false:true);
 $('#res1_pos_id').attr('disabled',{$spdtree_edit.res}==1?false:true);
-
-
 </script>
-
-
-
-
-
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Фамилия                                 </td>
-<td>Имя                                     </td>
-<td>Отчество                                </td>
-<td>Адрес                                   </td>
-<td>Должность                               </td>
-<td>адрес E-MAIL                            </td>
-<td>№ Телефона                              </td>
-<td>Skype                                   </td>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Договор</td>
 </tr>
 <tr>
-<td><input name="item[fam]" value="{$spdtree_edit.fam}"></td>                    
-<td><input name="item[im]" value="{$spdtree_edit.im}"></td>                      
-<td><input name="item[otch]" value="{$spdtree_edit.otch}"></td>
-<td><input name="item[address]" value="{$spdtree_edit.address}"></td>            
-<td>
-<select name="item[pos_id]" id="item_pos_id">
-<option></option>
-{foreach key=key item=item from=$pos_list}
-<option value={$item.pos_id}>{$item.pos_name}</option>
-{/foreach}
-</select>
-<script>$("#item_pos_id option[value='{$spdtree_edit.pos_id}']").prop('selected', true);</script>
-</td>                
-<td><input name="item[email]" value="{$spdtree_edit.email}"></td>                
-<td><input name="item[phone]" value="{$spdtree_edit.phone}"></td>                
-<td><input name="item[skype]" value="{$spdtree_edit.skype}"></td>                
-</tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Дата рожд.                              </td>
-<td>Дата факт. прист. к работе              </td>
-<td>Дата перевода                           </td>
-<td>Дата увольнения                         </td>
-<td>Дата начала действия карточки           </td>
-</tr>
-<tr>
-<td><input name="item[birthday]" class="datepicker" value="{$spdtree_edit.birthday}"></td>          
-<td><input name="item[fdata]" class="datepicker" value="{$spdtree_edit.fdata}"></td>                
-<td><input name="item[dataper]" class="datepicker" value="{$spdtree_edit.dataper}"></td>            
-<td><input name="item[datauvol]" class="datepicker" value="{$spdtree_edit.datauvol}"></td>          
-<td><input name="item[datastart]" class="datepicker" value="{$spdtree_edit.datastart}"></td>        
-</tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=4>Договор</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>№                                       </td>
-<td>Дата                                    </td>
-<td>Оплата в час                            </td>
-<td>Услуги                                  </td>
-</tr>
-<tr>
+<td style="text-align:right">№                                       </td>
 <td><input name="item[dogovornum]" value="{$spdtree_edit.dogovornum}"></td>      
+</tr>
+<tr>
+<td style="text-align:right">Дата                                    </td>
 <td><input name="item[dogovordata]" class="datepicker" value="{$spdtree_edit.dogovordata}"></td>    
+</tr>
+<tr>
+<td style="text-align:right">Оплата в час                            </td>
 <td><input name="item[dogovoropl]" class="number" value="{$spdtree_edit.dogovoropl}"></td>      
+</tr>
+<tr>
+<td style="text-align:right">Услуги                                  </td>
 <td><input name="item[dogovoruslugi]" value="{$spdtree_edit.dogovoruslugi}"></td>
 </tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=3>Свидетельство о регистрации</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>№                                       </td>
-<td>Дата                                    </td>
-<td>Кем выдано                              </td>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Свидетельство о регистрации</td>
 </tr>
 <tr>
+<td style="text-align:right">№                                       </td>
 <td><input name="item[svidregnum]" value="{$spdtree_edit.svidregnum}"></td>      
+</tr>
+<tr>
+<td style="text-align:right">Дата                                    </td>
 <td><input name="item[svidregdata]" class="datepicker" value="{$spdtree_edit.svidregdata}"></td>    
+</tr>
+<tr>
+<td style="text-align:right">Кем выдано                              </td>
 <td><input name="item[svidregvid]" value="{$spdtree_edit.svidregvid}"></td>      
 </tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=5>Свидетельство о ЕН</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>№                                       </td>
-<td>Дата регистрации                        </td>
-<!--<td>Дата окончания действия регистрации     </td>-->
-<td>ИНН                                     </td>
-<td>Место осуществления деятельности        </td>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Свидетельство о ЕН</td>
 </tr>
 <tr>
+<td style="text-align:right">№                                       </td>
 <td><input name="item[svidennum]" value="{$spdtree_edit.svidennum}"></td>        
+</tr>
+<tr>
+<td style="text-align:right">Дата регистрации                        </td>
 <td><input name="item[svidendata]" class="datepicker" value="{$spdtree_edit.svidendata}"></td>      
-<!--<td><input name="item[svidendataend]" class="datepicker" value="{$spdtree_edit.svidendataend}"></td>   -->
+</tr>
+<tr>
+<td style="text-align:right">ИНН                                     </td>
 <td><input name="item[svideninn]" value="{$spdtree_edit.svideninn}"></td>        
+</tr>
+<tr>
+<td style="text-align:right">Место осуществления деятельности        </td>
 <td><input name="item[svidenplace]" value="{$spdtree_edit.svidenplace}"></td>    
 </tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=7>Реквизиты для перечисления</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Банк                                    </td>
-<td>МФО                                     </td>
-<td>ОКПО (ИНН)                              </td>
-<td>Р/С                                     </td>
-<td>Назначение платежа                      </td>
-<td>Подразделение для учета в факте бюджета </td>
-<td>Счет                                    </td>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Реквизиты для перечисления</td>
 </tr>
 <tr>
+<td style="text-align:right">Банк                                    </td>
 <td>
 <select name="item[rekvbank]" id="item[rekvbank]">
 <option></option>
@@ -171,10 +224,25 @@ $('#res1_pos_id').attr('disabled',{$spdtree_edit.res}==1?false:true);
 </select>
 <script>$("#item[rekvbank] option[value='{$spdtree_edit.rekvbank}']").prop('selected', true);</script>
 </td>          
+</tr>
+<tr>
+<td style="text-align:right">МФО                                     </td>
 <td><input name="item[rekvmfo]" value="{$spdtree_edit.rekvmfo}"></td>            
+</tr>
+<tr>
+<td style="text-align:right">ОКПО (ИНН)                              </td>
 <td><input name="item[rekvokpo]" value="{$spdtree_edit.rekvokpo}"></td>          
+</tr>
+<tr>
+<td style="text-align:right">Р/С                                     </td>
 <td><input name="item[rekvrs]" value="{$spdtree_edit.rekvrs}"></td>              
+</tr>
+<tr>
+<td style="text-align:right">Назначение платежа                      </td>
 <td><input name="item[rekvplat]" value="{$spdtree_edit.rekvplat}"></td>          
+</tr>
+<tr>
+<td style="text-align:right">Подразделение для учета в факте бюджета </td>
 <td>
 <select name="item[rekvdpt]" id="item[rekvdpt]">
 <option></option>
@@ -184,88 +252,70 @@ $('#res1_pos_id').attr('disabled',{$spdtree_edit.res}==1?false:true);
 </select>
 <script>$("#item[rekvdpt] option[value='{$spdtree_edit.rekvdpt}']").prop('selected', true);</script>
 </td>          
+</tr>
+<tr>
+<td style="text-align:right">Счет                                    </td>
 <td><input name="item[rekvschet]" value="{$spdtree_edit.rekvschet}"></td>          
 </tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=3>Оплата</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Категория                               </td>
-<td>Ставка                                  </td>
-<td>Бонус                                   </td>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Оплата</td>
 </tr>
 <tr>
+<td style="text-align:right">Категория                               </td>
 <td><input name="item[oplatakat]" value="{$spdtree_edit.oplatakat}"></td>        
+</tr>
+<tr>
+<td style="text-align:right">Ставка                                  </td>
 <td><input name="item[oplatastavka]" class="number" value="{$spdtree_edit.oplatastavka}"></td>  
+</tr>
+<tr>
+<td style="text-align:right">Бонус                                   </td>
 <td><input name="item[oplatabonus]" class="number" value="{$spdtree_edit.oplatabonus}"></td>    
 </tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=8>Лимиты</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Командировочные расходы                 </td>
-<td>Транспортные расходы                    </td>
-<td>Питание                                 </td>
-<td>Представительские расходы               </td>
-<td>Канцтовары                              </td>
-<td>Мобильная связь                         </td>
-<td>Лимит топлива на авто, л                </td>
-<td>Лимит перечислений                      </td>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Лимиты</td>
 </tr>
 <tr>
-<td><input disabled name="item[limitkom]" class="number" value="{$spdtree_edit.limitkom}"></td>          
-<td><input disabled name="item[limittrans]" class="number" value="{$spdtree_edit.limittrans}"></td>      
-<td><input disabled name="item[limitpit]" class="number" value="{$spdtree_edit.limitpit}"></td>          
-<td><input disabled name="item[limitpred]" class="number" value="{$spdtree_edit.limitpred}"></td>        
-<td><input disabled name="item[limitkanc]" class="number" value="{$spdtree_edit.limitkanc}"></td>        
-<td><input disabled name="item[limitmob]" class="number" value="{$spdtree_edit.limitmob}"></td>          
-<td><input disabled name="item[limit_car_vol]" class="number" value="{$spdtree_edit.limit_car_vol}"></td>
-<td><input name="item[limitper]" class="number" value="{$spdtree_edit.limitper}"></td>
-</tr>
-</table>
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center"><td colspan=8>Прочее</td></tr>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Аванс                                   </td>
-<td>Амортизация                             </td>
-<td>Марка автомобиля                        </td>
-<td>Расход топлива, л/100км                 </td>
-<td>Таб. номер                              </td>
-<td>Страна                             </td>
-<td>Подразделение                                 </td>
-<td>Регион                                  </td>
+<td style="text-align:right">Командировочные расходы                 </td>
+<td>{$spdtree_edit.limitkom|num:2}<!--<input disabled name="item[limitkom]" class="number" value="{$spdtree_edit.limitkom}">--></td>          
 </tr>
 <tr>
-<td><input name="item[avans]" class="number" value="{$spdtree_edit.avans}"></td>                
-<td><input name="item[amort]" class="number" value="{$spdtree_edit.amort}"></td>                
-<td><input name="item[car_brand]" value="{$spdtree_edit.car_brand}"></td>        
-<td><input name="item[car_rashod]" class="number" value="{$spdtree_edit.car_rashod}"></td>      
-<td><input name="item[tab_num]" value="{$spdtree_edit.tab_num}"></td>            
+<td style="text-align:right">Транспортные расходы                    </td>
+<td>{$spdtree_edit.limittrans|num:2}<!--<input disabled name="item[limittrans]" class="number" value="{$spdtree_edit.limittrans}">--></td>      
+</tr>
+<tr>
+<td style="text-align:right">Питание                                 </td>
+<td>{$spdtree_edit.limitpit|num:2}<!--<input disabled name="item[limitpit]" class="number" value="{$spdtree_edit.limitpit}">--></td>          
+</tr>
+<tr>
+<td style="text-align:right">Представительские расходы               </td>
+<td>{$spdtree_edit.limitpred|num:2}<!--<input disabled name="item[limitpred]" class="number" value="{$spdtree_edit.limitpred}">--></td>        
+</tr>
+<tr>
+<td style="text-align:right">Канцтовары                              </td>
+<td>{$spdtree_edit.limitkanc|num:2}<!--<input disabled name="item[limitkanc]" class="number" value="{$spdtree_edit.limitkanc}">--></td>        
+</tr>
+<tr>
+<td style="text-align:right">Мобильная связь                         </td>
+<td>{$spdtree_edit.limitmob|num:2}<!--<input disabled name="item[limitmob]" class="number" value="{$spdtree_edit.limitmob}">--></td>          
+</tr>
+<tr>
+<td style="text-align:right">Лимит топлива на авто, л                </td>
+<td>{$spdtree_edit.limit_car_vol|num:2}<!--<input disabled name="item[limit_car_vol]" class="number" value="{$spdtree_edit.limit_car_vol}">--></td>
+</tr>
+<tr>
+<td style="text-align:right">Лимит перечислений                      </td>
+<td>{$spdtree_edit.limitper|num:2}<!--<input name="item[limitper]" class="number" value="{$spdtree_edit.limitper}">--></td>
+</tr>
+<td style="text-align:right">ГБО</td>
 <td>
-<select name="item[dpt_id]" id="item_dpt_id">
-{foreach key=key item=item from=$dpt_list}
-<option value={$item.dpt_id}>{$item.dpt_name}</option>
-{/foreach}
-</select>
-<script>$("#item_dpt_id option[value='{$spdtree_edit.dpt_id}']").prop('selected', true);</script>
-</td>                
-<td><input size=50 disabled value="{$spdtree_edit.department_name}"></td>            
-<td><input size=50 disabled value="{$spdtree_edit.region_name}"></td>            
-</tr>
-</table>
-
-<table cellspacing=0 cellpadding=3 align=center border=0>
-<tr style="font-weight:bold;background-color:rgb(204,204,204);text-align:center">
-<td>Видимость стран</td>
-</tr>
-<tr>
-<td>
-	{foreach key=key item=item from=$spdtree_edit_countries}
-		<input onclick="$('#sec_{$item.dpt_id}').val(this.checked?1:0)" {if $item.checked eq 1}checked{/if} {if $item.dpt_id eq $spdtree_edit.dpt_id}disabled{/if} type=checkbox>{$item.dpt_name}
-		<input type=hidden id="sec_{$item.dpt_id}" name="spdtree_edit_countries[{$item.dpt_id}]" {if $item.dpt_id eq $spdtree_edit.dpt_id}disabled{/if} value="{$item.checked}">
-	{/foreach}
+<input onClick="$('#limit_gbo').val(this.checked?1:0);" type=checkbox id=cb_limit_gbo>
+<input type=hidden name="item[limit_gbo]" id="limit_gbo" value="{$spdtree_edit.limit_gbo}">
+<script>
+$('#limit_gbo').val({$spdtree_edit.limit_gbo});
+$('#cb_limit_gbo').prop('checked',{$spdtree_edit.limit_gbo}==1?true:false);
+</script>
 </td>
-</tr>
 </table>
 <p><input type=submit name=save value="Сохранить"></p>
 </form>

@@ -1,10 +1,10 @@
-/* Formatted on 09/04/2015 12:51:48 (QP5 v5.227.12220.39724) */
+/* Formatted on 02.11.2016 17:22:19 (QP5 v5.252.13127.32867) */
 SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
             0)
           total,
        SUM (NVL (l.limitkom, 0) + NVL (l.limittrans, 0)) total_limit,
-       NVL (SUM (NVL (zc.PET_VOL, 0)), 0) PET_VOL,
-       NVL (SUM (NVL (zc.PET_SUM, 0)), 0) PET_SUM,
+       NVL (SUM (NVL (zc.PET_VOL, 0)+nvl(zm.gbo_warmup_vol,0)), 0) PET_VOL,
+       NVL (SUM (NVL (zc.PET_SUM, 0)+nvl(zm.gbo_warmup_sum,0)), 0) PET_SUM,
        NVL (SUM (NVL (zc.OIL_SUM, 0)), 0) OIL_SUM,
        NVL (SUM (NVL (zc.WASH, 0)), 0) WASH,
        NVL (SUM (NVL (zc.SERVICE, 0)), 0) SERVICE,
@@ -35,12 +35,15 @@ SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
                  WHERE dpt_id = :dpt_id AND master = :exp_tn) e1,
                (SELECT DISTINCT TRUNC (data, 'mm') dt, mt, y
                   FROM calendar
-                 WHERE TRUNC (data, 'mm') BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                              AND TO_DATE (:ed, 'dd.mm.yyyy')) c1
+                 WHERE TRUNC (data, 'mm') BETWEEN TO_DATE ( :sd,
+                                                           'dd.mm.yyyy')
+                                              AND TO_DATE ( :ed,
+                                                           'dd.mm.yyyy')) c1
          WHERE     S1.TN = e1.tn
                AND s1.dpt_id = :dpt_id
                AND s1.is_spd = 1
-               AND (INSTR (:full, TO_CHAR (e1.full)) > 0 OR e1.full = -2)) cse,
+               AND (INSTR ( :full, TO_CHAR (e1.full)) > 0 OR e1.full = -2))
+       cse,
        (  SELECT TRUNC (zc.data, 'mm') dt,
                  zc.tn,
                  SUM (
@@ -57,8 +60,8 @@ SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
                  SUM (SERVICE) SERVICE,
                  SUM (PARKING) PARKING
             FROM zat_daily_car zc
-           WHERE TRUNC (zc.data, 'mm') BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                           AND TO_DATE (:ed, 'dd.mm.yyyy')
+           WHERE TRUNC (zc.data, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                           AND TO_DATE ( :ed, 'dd.mm.yyyy')
         GROUP BY TRUNC (zc.data, 'mm'), zc.tn) zc,
        (  SELECT TRUNC (zt.data, 'mm') dt,
                  zt.tn,
@@ -73,8 +76,8 @@ SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
                  SUM (HOTEL) HOTEL,
                  SUM (TRANSPORT) TRANSPORT
             FROM zat_daily_trip zt
-           WHERE TRUNC (zt.data, 'mm') BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
-                                           AND TO_DATE (:ed, 'dd.mm.yyyy')
+           WHERE TRUNC (zt.data, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+                                           AND TO_DATE ( :ed, 'dd.mm.yyyy')
         GROUP BY TRUNC (zt.data, 'mm'), zt.tn) zt,
        (SELECT TO_DATE ('01.' || m || '.' || y, 'dd.mm.yyyy') dt,
                zm.*,
@@ -89,6 +92,7 @@ SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
                + NVL (account_payments, 0)
                + NVL (mobile, 0)
                + NVL (AMORT, 0)
+               + NVL (gbo_warmup_sum, 0)
                   total,
                (SELECT name
                   FROM currencies
@@ -100,7 +104,8 @@ SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
                                                                          'dd.mm.yyyy')
                                                                   AND TO_DATE (
                                                                          :ed,
-                                                                         'dd.mm.yyyy')) zm,
+                                                                         'dd.mm.yyyy'))
+       zm,
        limits_current l
  WHERE     cse.tn = zc.tn(+)
        AND cse.tn = zt.tn(+)
@@ -112,4 +117,4 @@ SELECT NVL (SUM (NVL (zc.total, 0) + NVL (zt.total, 0) + NVL (zm.total, 0)),
                         FROM full
                        WHERE master = :tn)
        AND cse.tn = l.tn(+)
-       AND (NVL (zm.cur_id, 0) IN (:cur))
+       AND (NVL (zm.cur_id, 0) IN ( :cur))

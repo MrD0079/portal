@@ -52,7 +52,8 @@
          d.cnt_kod,
          d.sort,
          s.region_name,
-         s.department_name
+         s.department_name,
+s.limit_gbo
     FROM PERSIK.SPDTREE s, departments d, limits_current l
    WHERE     s.dpt_id = D.DPT_ID
          AND d.dpt_id = :dpt_id

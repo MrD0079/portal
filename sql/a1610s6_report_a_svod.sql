@@ -47,7 +47,7 @@ INSERT INTO act_svod (act,
                             AND n.tp_kod = tp.tp_kod(+)
                             AND n.tp_kod = n.tp_kod
                             AND d.net_name = n.net*/) tplist,
-                    (SELECT m4.summa sales,
+                    (SELECT nvl(m4.summa,0)+nvl(m4.coffee,0) sales,
                             tp.bonus_sum1 bonus,
                             d.tp_kod,
                             fn_getname ( (SELECT parent
@@ -96,7 +96,7 @@ INSERT INTO act_svod (act,
                             AND d.tp_kod = m4.tp_kod
                             AND m4.dt = TO_DATE ('01/10/2016', 'dd/mm/yyyy'))
                     part1/*,
-                    (SELECT m4.summa sales,
+                    (SELECT nvl(m4.summa,0)+nvl(m4.coffee,0) sales,
                             tp.bonus_sum1 bonus,
                             n.tp_kod,
                             fn_getname ( (SELECT parent

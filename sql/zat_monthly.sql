@@ -30,7 +30,7 @@ SELECT ROWNUM,
           other_total,
        msg,
        cur_id,
-       c.name valuta
+       c.name valuta,m.gbo_warmup_vol,m.gbo_warmup_sum
   FROM zat_monthly m, currencies c
  WHERE     m.tn = :tn
        AND TO_DATE ('01' || '.' || m.m || '.' || m.y, 'dd.mm.yy') =

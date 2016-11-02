@@ -48,19 +48,52 @@
 	</tr>
 	{/foreach}
 	<tr align=center>
-		<td colspan=10>Амортизация - {if $amort eq 0}нет{else}да - {$amort*100}%{/if}</td>
+		<td colspan=3>
+                    Прогрев автомобиля с ГБО
+		</td>
+		<td>
+                    {if $zat_enabled}
+                        <input size=5 class="number"
+                           {if $limit_gbo eq 0}disabled{/if}
+                           name="zat_monthly[gbo_warmup_vol]"
+                           value={$zat_monthly.gbo_warmup_vol}
+                        >
+                    {else}
+                        {$zat_monthly.gbo_warmup_vol|default:0|num:2}
+                    {/if}
+		</td>
+		<td>
+		</td>
+		<td>
+                    {if $zat_enabled}
+                        <input size=5 class="number"
+                           {if $limit_gbo eq 0}disabled{/if}
+                           name="zat_monthly[gbo_warmup_sum]"
+                           value={$zat_monthly.gbo_warmup_sum}
+                        >
+                    {else}
+                        {$zat_monthly.gbo_warmup_sum|default:0|num:2}
+                    {/if}
+		</td>
+	</tr>
+	<tr align=center>
+		<td colspan=10>
+                    Амортизация - {if $amort eq 0}нет{else}да - {$amort*100}%{/if}
+                    &nbsp
+                    ГБО - {if $limit_gbo eq 0}нет{else}да{/if}
+                </td>
 		<td>
 			{$zat_monthly.amort}
 		</td>
 	</tr>
 	{foreach key=key item=item from=$zat_daily_total}
-	{assign var=sum_total value=`$sum_total+$item.zc_total+$zat_monthly.amort`}
+	{assign var=sum_total value=`$sum_total+$item.zc_total+$zat_monthly.amort+$zat_monthly.gbo_warmup_sum`}
 	{if $item.pet_vol neq 0}{assign var=pet_price value=`$item.pet_sum/$item.pet_vol`}{else}{assign var=pet_price value=0}{/if}
 	<tr align=center style="font-weight:bold">
 		<td colspan=3>Итого</td>
-		<td>{$item.pet_vol}</td>
+		<td>{$item.pet_vol+$zat_monthly.gbo_warmup_vol}</td>
 		<td>{$item.oil_vol}</td>
-		<td>{$item.pet_sum}</td>
+		<td>{$item.pet_sum+$zat_monthly.gbo_warmup_sum}</td>
 		<td>{$item.oil_sum}</td>
 		<td>{$item.wash}</td>
 		<td>{$item.service}</td>

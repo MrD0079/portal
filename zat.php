@@ -14,10 +14,12 @@ $smarty->assign('self', 0);
 $amort         = &$db->getOne("select amort from user_list where tn = ".$emp_tn."");
 $pos           = &$db->getOne("select pos_name from user_list where tn = ".$emp_tn."");
 $department    = &$db->getOne("select department_name from user_list where tn = ".$emp_tn."");
+$limit_gbo         = &$db->getOne("select limit_gbo from user_list where tn = ".$emp_tn."");
 
 $smarty->assign('amort', $amort);
 $smarty->assign('pos', $pos);
 $smarty->assign('department', $department);
+$smarty->assign('limit_gbo', $limit_gbo);
 
 $emp_fio = &$db->getOne("select fn_getname(" . $emp_tn . ") from dual");
 $smarty->assign('emp_fio', $emp_fio);
