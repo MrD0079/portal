@@ -85,7 +85,7 @@ if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
 	//ses_req();
 	$_REQUEST["select"]=1;
 	$keys = array("id"=>$_REQUEST["reset_z_id"]);
-	$vals = array("report_done"=>null,"report_zero_cost"=>null);
+	$vals = array("report_done"=>null,"report_zero_cost"=>null,"report_fakt_equal_plan"=>null);
 	Table_Update("bud_ru_zay",$keys,$vals);
 	$keys = array("z_id"=>$_REQUEST["reset_z_id"]);
 	$vals = array("rep_accepted"=>0);
@@ -140,8 +140,8 @@ if (isset($_REQUEST["save"]))
 			Table_Update("bud_ru_zay",$keys,$vals);
 			if ($v==1)
 			{
-				$keys = array("id"=>$k);
-				$vals = array("report_done"=>1);
+				//$keys = array("id"=>$k);
+				//$vals = array("report_done"=>1);
 				Table_Update("bud_ru_zay",$keys,$vals);
 				$keys = array("z_id"=>$k);
 				$vals = array("rep_accepted"=>1);

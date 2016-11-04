@@ -241,7 +241,7 @@ SELECT COUNT (*) exist,
                AND z.payment_type = pt.id(+)
                AND z.statya = ss.id(+)
                AND z.fil = f.id(+)
-               AND z.funds = fu.id
+               AND z.funds = fu.id(+)
                AND z.tn = u.tn
                AND za.tn = u1.tn
                AND z.recipient = u2.tn

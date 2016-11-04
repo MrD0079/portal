@@ -9,6 +9,7 @@ if (isset($_REQUEST["save"]))
 		$_REQUEST["data"] = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST["data"]);
 		foreach ($_REQUEST["data"] as $k=>$v)
 		{
+                        isset($v["removed"])&&($v["removed"]==1) ? $v["removed_fio"]=$fio : null;
 			isset($v["dtr"]) ? $v["dtr"]=OraDate2MDBDate($v["dtr"]) : null;
 			isset($v["zakup_dt"]) ? $v["zakup_dt"]=OraDate2MDBDate($v["zakup_dt"]) : null;
 			isset($v["buh_dt"]) ? $v["buh_dt"]=OraDate2MDBDate($v["buh_dt"]) : null;

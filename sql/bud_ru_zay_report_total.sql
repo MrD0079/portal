@@ -316,7 +316,7 @@
                  AND :report_done_flt =
                         DECODE ( :report_done_flt,
                                 0, 0,
-                                DECODE (nvl(report_done,0), 0, 2, 1))
+                                DECODE (NVL (report_fakt_equal_plan, 0) + NVL (report_done, 0), 0, 2, 1))
                  AND :report_zero_cost =
                         DECODE ( :report_zero_cost,
                                 0, 0,
