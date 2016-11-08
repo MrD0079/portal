@@ -9,6 +9,20 @@ if ($_REQUEST['field']=='id')
 }
 else
 {
+    	/*$params = array(
+		':tn'=>$tn,
+		':dt'=>"'".$_REQUEST['dt']."'",
+		':dpt_id' => $_SESSION["dpt_id"],
+		':unscheduled'=>$_REQUEST['unscheduled'],
+		':h_eta'=>"'".$_REQUEST['h_eta']."'",
+	);
+*/
+    $existingTN = $db->getOne("select max(tn) from bud_svod_zp where id=".$_REQUEST['id']);
+    if ($existingTN!=$tn){
+        Table_Update('bud_svod_zp', array('id'=>$_REQUEST['id']),array('tn'=>$tn));
+    }
+    //$_REQUEST["AAAA"] = [$sqlw,$sqlwo];
+    //$_REQUEST["BBBB"] = [$wTS,$woTS];
 	$keys = array(
 		'id'=>$_REQUEST['id'],
 		'tn'=>$tn,
@@ -28,12 +42,6 @@ else
 		$_REQUEST['field']=>$_REQUEST['val']
 	);
 	Table_Update('bud_svod_zp', $keys,$vals);
-	//print_r($keys);
-	//print_r($vals);
+    //$_REQUEST["CCCC"] = [$keys,$vals];
+    //ses_req();
 }
-
-?>
-
-
-
-

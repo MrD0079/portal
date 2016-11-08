@@ -13,7 +13,7 @@
 	</tr>
 	{foreach key=key item=item from=$file_list}
 	{foreach key=file_list_key item=file_list_item from=$item.data}
-	<tr style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
+	<tr style="text-align:center" bgcolor="{cycle values='#ccffff,#ffffcc'}">
 		<td>{if $is_ts and not $smarty.request.print and $ok_chief_4ts.part1 neq 1}<input type=checkbox name=del_file[{$file_list_item.id}]>{/if}</td>
 		<td style="text-align:left">{$file_list_item.fio_ts}</td>
 		<td><a target=_blank href="files/{$file_list_item.fn}">{$file_list_item.fn}</a></td>
