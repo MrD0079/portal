@@ -1,8 +1,11 @@
 /* Formatted on 04/04/2016 08:59:10 (QP5 v5.252.13127.32867) */
-  SELECT key, SUM (bonus4tp) bonus4tp
+  SELECT key, SUM (bonus4tp) bonus4tp, SUM (stelag) stelag, SUM (tumb) tumb,
+         SUM (stelag) + SUM (tumb) sto_total
     FROM (SELECT DISTINCT
                  tn key,
                  tp_kod_key,
+                        stelag,
+                        tumb,
                  standart_price * DECODE (zst_lu, NULL, 0, 1) bonus4tp
             FROM (SELECT z.*,
                  CASE
@@ -54,5 +57,5 @@
                        AND (   :standart = 1
                             OR ( :standart = 2 AND standart = 'A')
                             OR ( :standart = 3 AND standart = 'B')))
-         WHERE DECODE (zst_lu, NULL, 0, 1) > 0)
+         /*WHERE DECODE (zst_lu, NULL, 0, 1) > 0*/)
 GROUP BY key

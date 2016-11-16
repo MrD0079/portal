@@ -1,9 +1,17 @@
 <?php
 if (isset($_REQUEST["save"]))
 {
-	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
+        //0ses_req();
+        $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$keys = array('visitdate'=>OraDate2MDBDate($_REQUEST['visitdate']),'tp_kod'=>$_REQUEST['tp_kod']);
-	$vals = array($_REQUEST['field']=>$_REQUEST['val']);
+	if ($_REQUEST['field1']=='undefined')
+        {
+            $vals = array($_REQUEST['field']=>$_REQUEST['val']);
+        }
+        else
+        {
+            $vals = array($_REQUEST['field']=>$_REQUEST['val'],$_REQUEST['field1']=>$_REQUEST['val1']);
+        }
 	Table_Update('a14totp', $keys,$vals);
 }
 else

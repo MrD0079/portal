@@ -120,12 +120,10 @@
 		<td>Стеллажи</td>
 		<td>Витрины</td>
 		<td>ИТОГО СТО</td>
-		<td>Стандарт - ТС</td>
-		<td>Стандарт - аудит</td>
+		<td>Стандарт фото - ТС</td>
+                <td>отклонено (ТМ, ВСТМ)</td>
 		<td>% ТО со стандартом ТС</td>
-		<td>% ТО со стандартом аудит</td>
-		<td>Не проверено - ТС</td>
-		<td>Не проверено - аудит</td>
+		<td>Не проверено - ТС (фото)</td>
 		<td>План АКБ</td>
 		<td>% покрытия СТО</td>
 		<td>% фотоотчетов</td>
@@ -150,15 +148,13 @@
 		<td>{$i.t.tp_cnt}</td>
 		<td>{$i.t.visit_plan}</td>
 		<td>{$i.t.visit_fakt}</td>
-		<td>{$i.t1.stelag}</td>
-		<td>{$i.t1.tumb}</td>
-		<td>{$i.t1.sto_total}</td>
+		<td>{$i.t3.stelag}</td>
+		<td>{$i.t3.tumb}</td>
+		<td>{$i.t3.sto_total}</td>
 		<td>{$i.t1.ts1}</td>
-		<td>{$i.t1.auditor1}</td>
+                <td></td>
 		<td>{$i.t1.perc_ts|num:2}</td>
-		<td>{$i.t1.perc_auditor|num:2}</td>
 		<td>{$i.t1.tsnull}</td>
-		<td>{$i.t1.auditornull}</td>
 		<td>{$i.t2.value|num:2}</td>
 		<td>{$i.t2.perc_pokr_sto|num:2}</td>
 		<td>{$i.t.perc_photo_rep|num:2}</td>
@@ -176,15 +172,13 @@
 		<td>{$tt.tp_cnt}</td>
 		<td>{$tt.visit_plan}</td>
 		<td>{$tt.visit_fakt}</td>
-		<td>{$tt1.stelag}</td>
-		<td>{$tt1.tumb}</td>
-		<td>{$tt1.sto_total}</td>
+		<td>{$tt3.stelag}</td>
+		<td>{$tt3.tumb}</td>
+		<td>{$tt3.sto_total}</td>
 		<td>{$tt1.ts1}</td>
-		<td>{$tt1.auditor1}</td>
+                <td></td>
 		<td>{$tt1.perc_ts|num:2}</td>
-		<td>{$tt1.perc_auditor|num:2}</td>
 		<td>{$tt1.tsnull}</td>
-		<td>{$tt1.auditornull}</td>
 		<td>{$tt2.value|num:2}</td>
 		<td>{$tt2.perc_pokr_sto|num:2}</td>
 		<td>{$tt.perc_photo_rep|num:2}</td>
@@ -226,6 +220,7 @@
 		<td>Объем продаж в месяц, {$valuta}</td>
 		<td style="background-color: rgb(255, 204, 153);">Стоимость стандарта, {$valuta}</td>
 		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">Бонус за ТП, {$valuta}</td>
+                <td>Тип стандарта</td>
 	</tr>
 	{/if}
 	<tr>
@@ -242,7 +237,7 @@
 		<td style="text-align: left;">{$i.tp_kod_key}</td>
 		<td style="text-align: left;">{$i.tp_ur}</td>
 		<td style="text-align: left;">{$i.tp_addr}</td>
-		<td style="text-align: left;">{$i.tp_type}</td>
+		<td style="text-align: left;">{$i.tp_type_short}</td>
 		<td>{$i.stelag}</td>
 		<td>{$i.tumb}</td>
 		<td>{$i.visit_plan}</td>
@@ -274,12 +269,13 @@
 		<td>{$i.summa|default:0|num:2}</td>
 		<td style="background-color: rgb(255, 204, 153);">{$i.standart_price|default:0|num:2}</td>
 		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$i.bonus4tp|default:0|num:2}</td>
+                <td>{$i.standart}</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
 		<td colspan="{if $smarty.request.by_who eq 'eta'}9{else}8{/if}">ИТОГО</td>
-		<td>{$tt1.stelag}</td>
-		<td>{$tt1.tumb}</td>
+		<td>{$tt3.stelag}</td>
+		<td>{$tt3.tumb}</td>
 		<td>{$tt.visit_plan}</td>
 		<td>{$tt.visit_fakt}</td>
 		<td>{$tt1.ts1}</td>
@@ -288,6 +284,7 @@
 		<td>{$tt2.summa|num:2}</td>
 		<td style="background-color: rgb(255, 204, 153);"></td>
 		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$tt3.bonus4tp|num:2}</td>
+                <td></td>
 	</tr>
 </tbody>
 </table>

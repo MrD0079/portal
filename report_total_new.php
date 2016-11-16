@@ -136,9 +136,9 @@ if (isset($_REQUEST["select"]))
 	$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($rb as $k=>$v)
 	{
-		$d[$v["dt"].$v["num"]]["head"]=$v;
-		$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["head"]=$v;
-		$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]=$v;
+		$d[$v["dt"].$v["head_id"]]["head"]=$v;
+		$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["head"]=$v;
+		$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]=$v;
 	}
 //print_r($rb);
 		foreach ($rb as $k=>$v)
@@ -155,10 +155,10 @@ if (isset($_REQUEST["select"]))
 //print_r($pr);
 			$rb1r = $db->getAll($sqlr, null, null, null, MDB2_FETCHMODE_ASSOC);
 			//echo $sql;
-			$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']=null;
+			$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']=null;
 			foreach ($rb1r as $kr=>$vr)
 			{
-				$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']]=$vr;
+				$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']]=$vr;
 			}
 /*
 */		}
@@ -171,7 +171,7 @@ if (isset($_REQUEST["select"]))
 	$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($rb as $k=>$v)
 	{
-		$d[$v["dt"].$v["num"]]["data"][$v["kodtp"]]["total"]=$v;
+		$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["total"]=$v;
 	}
 
 	isset($d) ? $smarty->assign('d', $d) : null;

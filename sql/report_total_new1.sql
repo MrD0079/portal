@@ -1,6 +1,7 @@
-/* Formatted on 29.09.2015 13:23:12 (QP5 v5.227.12220.39724) */
+/* Formatted on 14.11.2016 14:58:12 (QP5 v5.252.13127.32867) */
   SELECT q1.dt,
          q1.dt1,
+         q1.head_id,
          q1.login,
          q1.num,
          q1.kodtp,
@@ -36,6 +37,7 @@
                       vv,
                    TO_CHAR (mr.dt, 'dd.mm.yyyy') dt,
                    mr.dt dt1,
+                   rh.id head_id,
                    rh.login,
                    rh.num,
                    cpp1.kodtp,
@@ -70,8 +72,8 @@
                    svms_oblast s,
                    ms_nets n,
                    (SELECT DISTINCT data, dm FROM calendar) c
-             WHERE     mr.dt BETWEEN TO_DATE (:sd, 'dd/mm/yyyy')
-                                 AND TO_DATE (:ed, 'dd/mm/yyyy')
+             WHERE     mr.dt BETWEEN TO_DATE ( :sd, 'dd/mm/yyyy')
+                                 AND TO_DATE ( :ed, 'dd/mm/yyyy')
                    AND mr.dt = c.data
                    AND rb.day_num = c.dm
                    AND rb.id = mr.rb_id
@@ -88,14 +90,14 @@
                    AND cpp1.kodtp = rb.kodtp
                    AND cpp1.kodtp = rt.kodtp
                    AND n.id_net = cpp1.id_net
-                   AND DECODE (:svms_list, 0, 0, rh.tn) =
-                          DECODE (:svms_list, 0, 0, :svms_list)
-                   AND rha.ag_id IN (:ha)
-                   AND DECODE (:select_route_numb, 0, 0, rh.id) =
-                          DECODE (:select_route_numb, 0, 0, :select_route_numb)
+                   AND DECODE ( :svms_list, 0, 0, rh.tn) =
+                          DECODE ( :svms_list, 0, 0, :svms_list)
+                   AND rha.ag_id IN ( :ha)
+                   AND DECODE ( :select_route_numb, 0, 0, rh.id) =
+                          DECODE ( :select_route_numb, 0, 0, :select_route_numb)
                    AND (   rh.tn IN (SELECT slave
-                               FROM full
-                              WHERE master = :tn)
+                                       FROM full
+                                      WHERE master = :tn)
                         OR (SELECT is_admin
                               FROM user_list
                              WHERE tn = :tn) = 1
@@ -114,6 +116,7 @@
                    AND (rb.DAY_enabled_MR = 1      /*OR rb.DAY_enabled_F = 1*/
                                              )
           GROUP BY mr.dt,
+                   rh.id,
                    rh.login,
                    rh.num,
                    cpp1.kodtp,

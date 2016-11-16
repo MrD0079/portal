@@ -1,4 +1,4 @@
-/* Formatted on 16/06/2016 15:58:34 (QP5 v5.252.13127.32867) */
+/* Formatted on 15.11.2016 17:35:48 (QP5 v5.252.13127.32867) */
   SELECT fio_rm,
          tn_rm,
          fio_tm,
@@ -13,8 +13,9 @@
          tp_addr,
          tp_place,
          tp_type,
-         SUM (stelag) stelag,
-         SUM (tumb) tumb,
+         tp_type_short,
+         max (stelag) stelag,
+         max (tumb) tumb,
          SUM (ts1) ts1,
          AVG (summa) summa,
          COUNT (DISTINCT tp_kod_key || visitdate) visit_plan,
@@ -28,7 +29,8 @@
          eta_tab_number,
          tab_num_ts,
          tab_num_tm,
-         tab_num_rm
+         tab_num_rm,
+         standart
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN standart_price_eta
@@ -70,7 +72,7 @@
                             FROM user_list
                            WHERE tn = :tn) = 1)
                  AND dpt_id = :dpt_id
-                 AND (:eta_list is null OR :eta_list = h_fio_eta)
+                 AND ( :eta_list IS NULL OR :eta_list = h_fio_eta)
                  AND DECODE ( :ok_ts, 1, ok_ts, :ok_ts) = ok_ts
                  AND DECODE ( :ok_auditor, 1, ok_auditor, :ok_auditor) =
                         ok_auditor
@@ -78,9 +80,9 @@
                  AND DECODE ( :st_auditor, 1, st_auditor, :st_auditor) =
                         st_auditor
                  AND DECODE ( :ok_st_tm, 1, ok_st_tm, :ok_st_tm) = ok_st_tm
-                       AND (   :standart = 1
-                            OR ( :standart = 2 AND standart = 'A')
-                            OR ( :standart = 3 AND standart = 'B')))
+                 AND (   :standart = 1
+                      OR ( :standart = 2 AND standart = 'A')
+                      OR ( :standart = 3 AND standart = 'B')))
 GROUP BY fio_rm,
          tn_rm,
          fio_tm,
@@ -94,6 +96,7 @@ GROUP BY fio_rm,
          tp_addr,
          tp_place,
          tp_type,
+         tp_type_short,
          standart_price,
          zst_lu,
          zst_lu_fio,
@@ -101,7 +104,8 @@ GROUP BY fio_rm,
          eta_tab_number,
          tab_num_ts,
          tab_num_tm,
-         tab_num_rm
+         tab_num_rm,
+         standart
 ORDER BY fio_rm,
          tn_rm,
          fio_tm,

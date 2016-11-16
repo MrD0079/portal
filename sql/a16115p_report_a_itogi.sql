@@ -1,4 +1,4 @@
-/* Formatted on 02.11.2016 11:43:29 (QP5 v5.252.13127.32867) */
+/* Formatted on 16.11.2016 17:29:54 (QP5 v5.252.13127.32867) */
 SELECT COUNT (DISTINCT tp_kod) cnt_tp,
        COUNT (DISTINCT DECODE (max_bonus, NULL, NULL, tp_kod)) if_cnt,
        SUM (fakt3) fakt3,
@@ -11,24 +11,39 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
   FROM (SELECT d.tp_kod,
                (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) fakt3,
                (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) fakt4,
-               (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) * 2 plan4,
+                 (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m3.s_ya, 0))
+               * 1.7
+                  plan4,
                  DECODE (
-                    NVL ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)), 0),
+                    NVL (
+                       (  NVL (m3.summa, 0)
+                        + NVL (m3.coffee, 0)
+                        - NVL (m3.s_ya, 0)),
+                       0),
                     0, 0,
                       (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
-                    / ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) * 2))
+                    / (  (  NVL (m3.summa, 0)
+                          + NVL (m3.coffee, 0)
+                          - NVL (m3.s_ya, 0))
+                       * 1.7))
                * 100
                   perc,
                CASE
                   WHEN   DECODE (
-                            NVL ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)),
-                                 0),
+                            NVL (
+                               (  NVL (m3.summa, 0)
+                                + NVL (m3.coffee, 0)
+                                - NVL (m3.s_ya, 0)),
+                               0),
                             0, 0,
                               (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
-                            / ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) * 2))
+                            / (  (  NVL (m3.summa, 0)
+                                  + NVL (m3.coffee, 0)
+                                  - NVL (m3.s_ya, 0))
+                               * 1.7))
                        * 100 >= 100
                   THEN
-                     (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) * 0.06
+                     (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) * 0.05
                END
                   max_bonus,
                m4.eta fio_eta,
@@ -62,9 +77,9 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                   parent_tn,
                st.fio ts_fio,
                st.tn ts_tn
-          FROM a1610s6 d,
+          FROM a16115p d,
                user_list st,
-               a1610s6_select tp,
+               a16115p_select tp,
                a14mega m3,
                a14mega m4
          WHERE     m4.tab_num = st.tab_num
@@ -95,14 +110,16 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                              WHEN   DECODE (
                                        NVL (
                                           (  NVL (m3.summa, 0)
-                                           + NVL (m3.coffee, 0)),
+                                           + NVL (m3.coffee, 0)
+                                           - NVL (m3.s_ya, 0)),
                                           0),
                                        0, 0,
                                          (  NVL (m4.summa, 0)
                                           + NVL (m4.coffee, 0))
                                        / (  (  NVL (m3.summa, 0)
-                                             + NVL (m3.coffee, 0))
-                                          * 2))
+                                             + NVL (m3.coffee, 0)
+                                             - NVL (m3.s_ya, 0))
+                                          * 1.7))
                                   * 100 >= 100
                              THEN
                                 1
@@ -110,6 +127,6 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                                 2
                           END)
                AND d.tp_kod = m3.tp_kod(+)
-               AND m3.dt(+) = TO_DATE ('01/09/2016', 'dd/mm/yyyy')
+               AND m3.dt(+) = TO_DATE ('01/10/2016', 'dd/mm/yyyy')
                AND d.tp_kod = m4.tp_kod
-               AND m4.dt = TO_DATE ('01/10/2016', 'dd/mm/yyyy'))
+               AND m4.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy'))

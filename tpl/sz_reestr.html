@@ -198,7 +198,7 @@
 		<td style="text-align:center">
 			{$i.head.id}
 			</br>
-			{if ($i.head.creator_tn eq $tn or ($is_do or $is_admin)) and ($i.head.current_status eq 2 or $i.head.not_seen eq 1) and $i.head.cat_id neq 927679}
+			{if ($i.head.creator_tn eq $tn or ($is_do or $is_admin)) and ($i.head.current_status eq 2 or $i.head.not_seen eq 1) and ($i.head.cat_id neq 927679 or 1 eq 1)}
 				<nobr>удал.<input type=checkbox name=del[] value={$i.head.id}></nobr>
 				</br>
 			{/if}
@@ -280,7 +280,7 @@
 				(
 					$i.head.current_status eq 1 and ((($is_do or $is_admin) and $i.head.valid_no neq 1) or $is_admin)
 				)
-				and $i.head.cat_id neq 927679
+				and ($i.head.cat_id neq 927679 or 1 eq 1)
 			}
 				<input onclick="
 				$('#valid_no_{$i.head.id}').val(this.checked?1:0);

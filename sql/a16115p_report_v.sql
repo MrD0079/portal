@@ -1,4 +1,4 @@
-/* Formatted on 09.11.2016 15:29:38 (QP5 v5.252.13127.32867) */
+/* Formatted on 16.11.2016 17:30:33 (QP5 v5.252.13127.32867) */
   SELECT x.parent_tn db_tn,
          u.fio db_fio,
          v.ok_traid,
@@ -25,12 +25,12 @@
                  NVL (part1.db_tn,                             /*part2.db_tn*/
                                   0) parent_tn
             FROM (SELECT d.tp_kod
-                    FROM a1610s6 d, a1610s6_select tp
+                    FROM a16115p d, a16115p_select tp
                    WHERE d.tp_kod = tp.tp_kod /*UNION
                                               SELECT n.tp_kod
-                                                FROM a1610s6net d,
-                                                     a1610s6net_select net,
-                                                     a1610s6n_nettp tp,
+                                                FROM a16115pnet d,
+                                                     a16115pnet_select net,
+                                                     a16115pn_nettp tp,
                                                      tp_nets n
                                                WHERE     n.h_net = net.net_kod
                                                      AND n.tp_kod = tp.tp_kod(+)
@@ -52,9 +52,9 @@
                             FROM parents
                            WHERE tn = st.tn)
                             db_tn
-                    FROM a1610s6 d,
+                    FROM a16115p d,
                          user_list st,
-                         a1610s6_select tp,
+                         a16115p_select tp,
                          a14mega m3,
                          a14mega m4
                    WHERE     m4.tab_num = st.tab_num
@@ -62,9 +62,9 @@
                          AND d.tp_kod = tp.tp_kod
                          AND tp.bonus_dt1 IS NOT NULL
                          AND d.tp_kod = m3.tp_kod(+)
-                         AND m3.dt(+) = TO_DATE ('01/09/2016', 'dd/mm/yyyy')
+                         AND m3.dt(+) = TO_DATE ('01/10/2016', 'dd/mm/yyyy')
                          AND d.tp_kod = m4.tp_kod
-                         AND m4.dt = TO_DATE ('01/10/2016', 'dd/mm/yyyy'))
+                         AND m4.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy'))
                  part1 /*,
                   (SELECT nvl(m4.summa,0)+nvl(m4.coffee,0) sales,
                           tp.bonus_sum1 bonus,
@@ -81,10 +81,10 @@
                              FROM parents
                             WHERE tn = st.tn)
                              db_tn
-                     FROM a1610s6net d,
+                     FROM a16115pnet d,
                           user_list st,
-                          a1610s6net_select net,
-                          a1610s6n_nettp tp,
+                          a16115pnet_select net,
+                          a16115pn_nettp tp,
                           a14mega m3,
                           a14mega m4,
                           tp_nets n
@@ -94,9 +94,9 @@
                           AND tp.bonus_dt1 IS NOT NULL
                           AND n.tp_kod = tp.tp_kod(+)
                           AND n.tp_kod = m3.tp_kod(+)
-                          AND m3.dt(+) = TO_DATE ('01/09/2016', 'dd/mm/yyyy')
+                          AND m3.dt(+) = TO_DATE ('01/10/2016', 'dd/mm/yyyy')
                           AND n.tp_kod = m4.tp_kod
-                          AND m4.dt = TO_DATE ('01/10/2016', 'dd/mm/yyyy')
+                          AND m4.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy')
                           AND n.tp_kod = n.tp_kod
                           AND d.net_name = n.net) part2*/
            WHERE tplist.tp_kod = part1.tp_kod(+) /*AND tplist.tp_kod = part2.tp_kod(+)*/
