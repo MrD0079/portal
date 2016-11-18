@@ -151,8 +151,8 @@
 		<td>{$i.t3.stelag}</td>
 		<td>{$i.t3.tumb}</td>
 		<td>{$i.t3.sto_total}</td>
-		<td>{$i.t1.ts1}</td>
-                <td></td>
+		<td>{$i.t1.ts1r}</td>
+                <td>{$i.t1.reject_traid_or_auditor}</td>
 		<td>{$i.t1.perc_ts|num:2}</td>
 		<td>{$i.t1.tsnull}</td>
 		<td>{$i.t2.value|num:2}</td>
@@ -175,8 +175,8 @@
 		<td>{$tt3.stelag}</td>
 		<td>{$tt3.tumb}</td>
 		<td>{$tt3.sto_total}</td>
-		<td>{$tt1.ts1}</td>
-                <td></td>
+		<td>{$tt1.ts1r}</td>
+                <td>{$tt1.reject_traid_or_auditor}</td>
 		<td>{$tt1.perc_ts|num:2}</td>
 		<td>{$tt1.tsnull}</td>
 		<td>{$tt2.value|num:2}</td>
@@ -242,11 +242,11 @@
 		<td>{$i.tumb}</td>
 		<td>{$i.visit_plan}</td>
 		<td>{$i.visit_fakt}</td>
-		<td>{$i.ts1}</td>
+		<td>{$i.ts1r}</td>
 		<td>
-			<b><!--if $i.visit_plan eq $i.ts1 or $i.zst_lu-->{if $i.zst_lu}да{else}нет{/if}</b>
+			<b><!--if $i.visit_plan eq $i.ts1r or $i.zst_lu-->{if $i.zst_lu}да{else}нет{/if}</b>
 			{if not $smarty.request.print}
-			{if $i.visit_plan eq $i.ts1}
+			{if $i.visit_plan eq $i.ts1r}
 				<!--<input id=zst_{$i.tp_kod_key} type=hidden value=1 name=data[{$i.tp_kod_key}][zst]>-->
 			{else}
 				{if ($is_tm eq 1 and not $i.zst_lu) or ($is_admin eq 1 and $i.zst_lu)}
@@ -262,7 +262,7 @@
 		</td>
 		<td>
 		{if not $smarty.request.print}
-			{if $i.visit_plan neq $i.ts1}<textarea required name=data[{$i.tp_kod_key}][comm] id=ta1_{$i.tp_kod_key} {if not $i.zst_lu}disabled{/if}>{$i.zst_comm}</textarea>{/if}
+			{if $i.visit_plan neq $i.ts1r}<textarea required name=data[{$i.tp_kod_key}][comm] id=ta1_{$i.tp_kod_key} {if not $i.zst_lu}disabled{/if}>{$i.zst_comm}</textarea>{/if}
 			{else}
 			{$i.zst_comm}
 			{/if}</td>
@@ -278,7 +278,7 @@
 		<td>{$tt3.tumb}</td>
 		<td>{$tt.visit_plan}</td>
 		<td>{$tt.visit_fakt}</td>
-		<td>{$tt1.ts1}</td>
+		<td>{$tt1.ts1r}</td>
 		<td>{$tt.sttotp}</td>
 		<td></td>
 		<td>{$tt2.summa|num:2}</td>

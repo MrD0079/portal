@@ -9,6 +9,7 @@
          SUM (tumb) tumb,
          SUM (stelag) + SUM (tumb) sto_total,
          SUM (ts1) ts1,
+         SUM (ts1r) ts1r,
          SUM (auditor1) auditor1,
          DECODE (NVL (COUNT (DISTINCT tp_kod_key || visitdate), 0),
                  0, 0,
@@ -25,7 +26,10 @@
             * 100)
             perc_auditor,
          SUM (tsnull) tsnull,
-         SUM (auditornull) auditornull
+         SUM (auditornull) auditornull,
+         SUM (reject_traid) reject_traid,
+         SUM (reject_auditor) reject_auditor,
+         SUM (reject_traid_or_auditor) reject_traid_or_auditor
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN standart_price_eta

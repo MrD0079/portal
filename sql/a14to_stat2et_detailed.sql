@@ -17,6 +17,7 @@
          max (stelag) stelag,
          max (tumb) tumb,
          SUM (ts1) ts1,
+         SUM (ts1r) ts1r,
          AVG (summa) summa,
          COUNT (DISTINCT tp_kod_key || visitdate) visit_plan,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))

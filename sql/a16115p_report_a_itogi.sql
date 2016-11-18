@@ -9,8 +9,8 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
        COUNT (DISTINCT DECODE (bonus_dt1, NULL, NULL, tp_kod)) bonus_fakt_cnt,
        DECODE (SUM (fakt4), 0, 0, SUM (bonus_sum1) / SUM (fakt4) * 100) zat
   FROM (SELECT d.tp_kod,
-               (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) fakt3,
-               (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) fakt4,
+               (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m4.s_ya, 0)) fakt3,
+               (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m3.s_ya, 0)) fakt4,
                  (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m3.s_ya, 0))
                * 1.7
                   plan4,
@@ -21,7 +21,7 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                         - NVL (m3.s_ya, 0)),
                        0),
                     0, 0,
-                      (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+                      (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0))
                     / (  (  NVL (m3.summa, 0)
                           + NVL (m3.coffee, 0)
                           - NVL (m3.s_ya, 0))
@@ -36,14 +36,14 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                                 - NVL (m3.s_ya, 0)),
                                0),
                             0, 0,
-                              (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+                              (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0))
                             / (  (  NVL (m3.summa, 0)
                                   + NVL (m3.coffee, 0)
                                   - NVL (m3.s_ya, 0))
                                * 1.7))
                        * 100 >= 100
                   THEN
-                     (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) * 0.05
+                     (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0)) * 0.05
                END
                   max_bonus,
                m4.eta fio_eta,
@@ -115,7 +115,7 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                                           0),
                                        0, 0,
                                          (  NVL (m4.summa, 0)
-                                          + NVL (m4.coffee, 0))
+                                          + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0))
                                        / (  (  NVL (m3.summa, 0)
                                              + NVL (m3.coffee, 0)
                                              - NVL (m3.s_ya, 0))

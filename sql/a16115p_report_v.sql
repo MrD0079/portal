@@ -37,7 +37,7 @@
                                                      AND n.tp_kod = n.tp_kod
                                                      AND d.net_name = n.net*/
                                              ) tplist,
-                 (SELECT NVL (m4.summa, 0) + NVL (m4.coffee, 0) sales,
+                 (SELECT NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0) sales,
                          tp.bonus_sum1 bonus,
                          d.tp_kod,
                          fn_getname ( (SELECT parent
@@ -66,7 +66,7 @@
                          AND d.tp_kod = m4.tp_kod
                          AND m4.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy'))
                  part1 /*,
-                  (SELECT nvl(m4.summa,0)+nvl(m4.coffee,0) sales,
+                  (SELECT nvl(m4.summa,0)+nvl(m4.coffee,0) - NVL (m4.s_ya, 0) sales,
                           tp.bonus_sum1 bonus,
                           n.tp_kod,
                           fn_getname ( (SELECT parent

@@ -3,6 +3,18 @@ InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 
 
+$url="https://bitrix.avk.ua/about/news_ex.php";
+$r = file_get_contents($url);
+//$f_local="/home/httpd/server2/tpl/news_ex.html";
+//$fp = fopen($f_local, "w");
+$r = mb_convert_encoding($r,"Windows-1251","UTF-8");
+$smarty->assign('bitrix_news', $r);
+//fwrite($fp, "{literal}".$r."{/literal}");
+//fclose($fp);
+//chmod($f_local,0777);
+
+
+
 $params=array(
 	':tn'=>$tn,
 	':dpt_id' => $_SESSION["dpt_id"],

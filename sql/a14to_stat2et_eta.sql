@@ -1,4 +1,4 @@
-/* Formatted on 16/06/2016 15:59:13 (QP5 v5.252.13127.32867) */
+/* Formatted on 18.11.2016 11:59:44 (QP5 v5.252.13127.32867) */
   SELECT fio_rm,
          tn_rm,
          fio_tm,
@@ -20,6 +20,7 @@
             * 100)
             perc_photo_rep,
          COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, tp_kod_key)) STTOTP,
+         --COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, (1 - reject_auditor) * (1 - reject_traid) * tp_kod_key)) STTOTP,
          eta_tab_number,
          tab_num_ts,
          tab_num_tm,
@@ -65,7 +66,7 @@
                             FROM user_list
                            WHERE tn = :tn) = 1)
                  AND dpt_id = :dpt_id
-                 AND (:eta_list is null OR :eta_list = h_fio_eta)
+                 AND ( :eta_list IS NULL OR :eta_list = h_fio_eta)
                  AND DECODE ( :ok_ts, 1, ok_ts, :ok_ts) = ok_ts
                  AND DECODE ( :ok_auditor, 1, ok_auditor, :ok_auditor) =
                         ok_auditor
@@ -73,9 +74,9 @@
                  AND DECODE ( :st_auditor, 1, st_auditor, :st_auditor) =
                         st_auditor
                  AND DECODE ( :ok_st_tm, 1, ok_st_tm, :ok_st_tm) = ok_st_tm
-                       AND (   :standart = 1
-                            OR ( :standart = 2 AND standart = 'A')
-                            OR ( :standart = 3 AND standart = 'B')))
+                 AND (   :standart = 1
+                      OR ( :standart = 2 AND standart = 'A')
+                      OR ( :standart = 3 AND standart = 'B')))
 GROUP BY fio_rm,
          tn_rm,
          fio_tm,

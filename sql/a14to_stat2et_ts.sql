@@ -19,6 +19,7 @@
             * 100)
             perc_photo_rep,
          COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, tp_kod_key)) STTOTP,
+         --COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, (1 - reject_auditor) * (1 - reject_traid) * tp_kod_key)) STTOTP,
          tab_num_ts,
          tab_num_tm,
          tab_num_rm

@@ -11,9 +11,11 @@ if (isset($_REQUEST["google"]))
 }
 else
 {
-	header("Content-Type: text/html; charset=\"windows-1251\"");
-	header("Cache-Control: no-store, no-cache,  must-revalidate"); 
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    //header('X-Frame-Options: ALLOW-FROM bitrix.avk.ua');
+    //header_remove("X-Frame-Options");
+    header("Content-Type: text/html; charset=\"windows-1251\"");
+    header("Cache-Control: no-store, no-cache,  must-revalidate"); 
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 }
 
 if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))

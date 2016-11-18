@@ -1,13 +1,13 @@
 /* Formatted on 16.11.2016 17:29:46 (QP5 v5.252.13127.32867) */
 SELECT d.tp_kod,
-       (NVL (m3.summa, 0) + NVL (m3.coffee, 0)) fakt3,
-       (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) fakt4,
+       (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m3.s_ya, 0)) fakt3,
+       (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0)) fakt4,
        (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m3.s_ya, 0)) * 1.7
           plan4,
          DECODE (
-            NVL ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0)), 0),
+            NVL ( (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m3.s_ya, 0)), 0),
             0, 0,
-              (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+              (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0))
             / (  (NVL (m3.summa, 0) + NVL (m3.coffee, 0) - NVL (m3.s_ya, 0))
                * 1.7))
        * 100
@@ -20,14 +20,14 @@ SELECT d.tp_kod,
                         - NVL (m3.s_ya, 0)),
                        0),
                     0, 0,
-                      (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+                      (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0))
                     / (  (  NVL (m3.summa, 0)
                           + NVL (m3.coffee, 0)
                           - NVL (m3.s_ya, 0))
                        * 1.7))
                * 100 >= 100
           THEN
-             (NVL (m4.summa, 0) + NVL (m4.coffee, 0)) * 0.05
+             (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0)) * 0.05
        END
           max_bonus,
        m4.eta fio_eta,
@@ -96,7 +96,7 @@ SELECT d.tp_kod,
                                    - NVL (m3.s_ya, 0)),
                                   0),
                                0, 0,
-                                 (NVL (m4.summa, 0) + NVL (m4.coffee, 0))
+                                 (NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0))
                                / (  (  NVL (m3.summa, 0)
                                      + NVL (m3.coffee, 0)
                                      - NVL (m3.s_ya, 0))
