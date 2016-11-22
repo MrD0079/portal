@@ -65,6 +65,10 @@ if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
 <script type="text/javascript" src="js/autoNumeric-1.9.27.js"></script>
 <script type="text/javascript" src="js/bud_fil_passport.js"></script>
 <script type="text/javascript" src="js/portal.js"></script>
+<?
+if (!isset($_REQUEST["print"]))
+{
+?>
 <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="js/jscolor/jscolor.js"></script>
 <script type="text/javascript">
@@ -90,6 +94,9 @@ tinymce.init({
         /*save_onsavecallback: function() {console.log("Save");}*/
 });
 </script>
+<?
+}
+?>
 <?
 }
 

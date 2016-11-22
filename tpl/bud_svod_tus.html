@@ -35,6 +35,7 @@
 
 {/if}
 
+{if not $smarty.request.print}
 <input type=hidden id=exp_list_without_ts name=exp_list_without_ts value='{$smarty.request.exp_list_without_ts}'>
 <input type=hidden id=exp_list_only_ts name=exp_list_only_ts value='{$smarty.request.exp_list_only_ts}'>
 <input type=hidden id=eta_list name=eta_list value='{$smarty.request.eta_list}'>
@@ -44,12 +45,14 @@
 <input type=hidden id=fakt_gt_plan name=fakt_gt_plan value='{$smarty.request.fakt_gt_plan}'>
 <input type=hidden id=cash name=cash value='{$smarty.request.cash}'>
 <input type=hidden id=print name=print value='{$smarty.request.print}'>
+{/if}
 
 <div id="tp" style="display: inline;"></div>
 
+{if not $smarty.request.print}
 <script>
 v_dt='{$smarty.request.dt}';
-{literal}
+/*{literal}*/
 function load_tp()
 {
 x=loadwait_show('tp');
@@ -67,16 +70,11 @@ $('#tp').load('?action=bud_svod_tus_tp&nohead=1',
 	dt: v_dt
 }
 ,
-function() {
-	loadwait_hide(x);
-	
-}
+function() {loadwait_hide(x);}
 );
 }
-
-{/literal}
-
-{if $smarty.request.print}
+/*{/literal}*/
+/*{if $smarty.request.print}*/
 $("#exp_list_without_ts").val("{$smarty.request.exp_list_without_ts}");
 $("#exp_list_only_ts").val("{$smarty.request.exp_list_only_ts}");
 $("#eta_list").val("{$smarty.request.eta_list}");
@@ -86,6 +84,6 @@ $("#cash").val("{$smarty.request.cash}");
 $("#fil").val("{$smarty.request.fil}");
 $("#clusters").val("{$smarty.request.clusters}");
 //load_tp();
-{/if}
-
+/*{/if}*/
 </script>
+{/if}

@@ -1,5 +1,7 @@
 
+{if not $smarty.request.print}
 <form name=bud_svod id=bud_svod target=_self method=post enctype="multipart/form-data">
+{/if}
 
 <h1>
 Отчет по фондам
@@ -33,7 +35,7 @@
 </select>
 </p>
 {else}
-<input name=dt id=dt type=hidden value="{$smarty.request.dt}">
+<!--<input name=dt id=dt type=hidden value="{$smarty.request.dt}">-->
 {/if}
 
 {if not $smarty.request.print}
@@ -48,13 +50,16 @@
 </table>
 {/if}
 
-<p>
+<p></p>
 <div id=page style="display: inline;">
 </div>
-</p>
+<p></p>
 
+
+
+{if not $smarty.request.print}
 <script>
-{literal}
+/*{literal}*/
 v_page='zp';
 function load_page(p_page)
 {
@@ -65,17 +70,17 @@ $('.a_page').css('font-weight','');
 $('#a_'+p_page).css('font-weight','bold');
 $('#page').load('?action=bud_svod_'+p_page+'&nohead=1',{page:p_page,dt:$('#dt').val()},function(){loadwait_hide(x);});
 }
-
-{/literal}
-
-{if $smarty.request.page}load_page('{$smarty.request.page}');{/if}
-
+/*{/literal}*/
+/*{if $smarty.request.page}*/
+load_page('{$smarty.request.page}');
+/*{/if}*/
 </script>
+{/if}
 
 
 
 
-
+{if not $smarty.request.print}
 </form>
-
+{/if}
 

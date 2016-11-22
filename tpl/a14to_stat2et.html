@@ -249,7 +249,7 @@
 			{if $i.visit_plan eq $i.ts1r}
 				<!--<input id=zst_{$i.tp_kod_key} type=hidden value=1 name=data[{$i.tp_kod_key}][zst]>-->
 			{else}
-				{if ($is_tm eq 1 and not $i.zst_lu) or ($is_admin eq 1 and $i.zst_lu)}
+				{if ($is_tm eq 1 and not $i.zst_lu and $i.ts1r > 0) or ($is_admin eq 1 and $i.zst_lu)}
 				<input id=cb1_{$i.tp_kod_key} type=checkbox {if $i.zst_lu}checked{/if} onChange="
 				$('#ta1_{$i.tp_kod_key}').attr('disabled',!this.checked);
 				$('#zst_{$i.tp_kod_key}').val(this.checked?1:0);

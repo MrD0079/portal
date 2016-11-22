@@ -254,7 +254,7 @@
 
 <div id="ok" style="display: inline;"></div>
 
-
+{if not $smarty.request.print}
 <script>
 v_dt='{$smarty.request.dt}';
 /*{literal}*/
@@ -386,20 +386,10 @@ $('#svodf').html(''+data+'');
   }
 });
 }
-
-
-
 /*{/literal}*/
-
-
 /*{if not $smarty.request.print}*/
 load_tp_total();
 load_tp_svodf();
 /*{/if}*/
-
 </script>
-
-
-
-
-
+{/if}

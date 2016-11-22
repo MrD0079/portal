@@ -55,9 +55,10 @@
 		{/if}
 
 
+{if not $smarty.request.print}
 <form name=form_zat id=form_zat target=_self method=post enctype="multipart/form-data">
-
 <input type=hidden name=month_list id=month_list_hidden value='{$smarty.request.month_list}'>
+{/if}
 
 <table border=0 cellspacing=0 cellpadding=10>
 	<tr>
@@ -257,7 +258,9 @@
 Подпись: ________________
 {/if}
 
+{if not $smarty.request.print}
 </form>
+{/if}
 
 {if $smarty.request.print neq 1}
 {include file="zat_car_limits.html"}

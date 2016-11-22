@@ -1,32 +1,22 @@
 <?
 
-
+/*
 ?>
-
-
-
 <iframe src="https://bitrix.avk.ua/about/news_ex.php"></iframe> 
 <br>
 <iframe src="https://ps2.avk.ua" style="width: 100%; height: 300px; border: none"></iframe> 
-    
-    <?
-
-
+<?
 exit;
-
+*/
 
 $url="https://bitrix.avk.ua/about/news_ex.php";
 	$r = file_get_contents($url);
-		$f_local="/home/httpd/server2/tpl/news_ex.html";
+		/*$f_local="/home/httpd/server2/tpl/news_ex.html";
 		$fp = fopen($f_local, "w");
 		fwrite($fp, $r);
 		fclose($fp);
-		chmod($f_local,0777);
-
-                
+		chmod($f_local,0777);*/
                 echo $r;
-                
-                
                 exit;
 
 
