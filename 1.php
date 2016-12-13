@@ -9,14 +9,30 @@
 exit;
 */
 
+
+
+
+
+
+
+
+
 $url="https://bitrix.avk.ua/about/news_ex.php";
-	$r = file_get_contents($url);
+include_once('simple_html_dom.php');
+$html = file_get_html($url);
+foreach($html->find('[src]') as $element)
+       $element->src = 'https://bitrix.avk.ua'.$element->src;
+        foreach($html->find('[href]') as $element)
+       $element->href = 'https://bitrix.avk.ua'.$element->href;
+
+       echo $html;
+//$r = file_get_contents($url);
 		/*$f_local="/home/httpd/server2/tpl/news_ex.html";
 		$fp = fopen($f_local, "w");
 		fwrite($fp, $r);
 		fclose($fp);
 		chmod($f_local,0777);*/
-                echo $r;
+                //echo $r;
                 exit;
 
 

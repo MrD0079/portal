@@ -259,6 +259,7 @@
 			{/if}
 			{/if}
 			{if not $smarty.request.print}<br>{$i.zst_lu_fio}<br>{$i.zst_lu}{/if}
+                        {if $i.reject_traid_in_month}<br><div style="display: inline; background-color:red;">отменен ВСТМ</div>{/if}
 		</td>
 		<td>
 		{if not $smarty.request.print}

@@ -1,16 +1,16 @@
 <table width="100%">
     <tr style="vertical-align: top">
-        <td width="70%">
+        <td width="50%">
             {foreach key=key item=item from=$news}
             <p style="text-align:left;font-weight:bold;background-color: #F5E3BF">{$item.lu_t}</p>
             <div style="text-align:left">{$item.text}</div>
             {/foreach}
         </td>
-        <td width="30%" style="border-left: 3px solid #F5E3BF">
+        <td width="50%" style="border-left: 3px solid #F5E3BF">
             <p style="text-align:center;font-weight:bold;background-color: #F5E3BF">Новости АВК Конфекшинэри</p>
-            {$bitrix_news}
-            <!--
             <iframe height="500" src="https://bitrix.avk.ua/about/news_ex.php" style="width: 100%; border: none"></iframe> 
+            {$bitrix_news_}
+            <!--
             -->
         </td>
     </tr>

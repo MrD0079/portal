@@ -18,8 +18,14 @@
             / COUNT (DISTINCT tp_kod_key || visitdate)
             * 100)
             perc_photo_rep,
-         COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, tp_kod_key)) STTOTP,
-         --COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, (1 - reject_auditor) * (1 - reject_traid) * tp_kod_key)) STTOTP,
+         --COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, tp_kod_key)) STTOTP,
+         COUNT (
+            DISTINCT CASE
+                        WHEN     zst_lu IS NOT NULL
+                             AND NVL (reject_traid_in_month, 0) = 0
+                        THEN
+                           tp_kod_key
+                     END) STTOTP,
          tab_num_ts,
          tab_num_tm,
          tab_num_rm

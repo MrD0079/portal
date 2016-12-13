@@ -3,6 +3,24 @@ InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 
 
+
+
+/*
+include_once('simple_html_dom.php');
+$url="https://bitrix.avk.ua/about/news_ex.php";
+$html = file_get_html($url);
+foreach($html->find('[src]') as $element)
+$element->src = 'https://bitrix.avk.ua'.$element->src;
+foreach($html->find('[href]') as $element)
+$element->href = 'https://bitrix.avk.ua'.$element->href;
+$html = mb_convert_encoding($html,"Windows-1251","UTF-8");
+$smarty->assign('bitrix_news', $html);
+*/
+
+
+
+
+/*
 $url="https://bitrix.avk.ua/about/news_ex.php";
 $r = file_get_contents($url);
 //$f_local="/home/httpd/server2/tpl/news_ex.html";
@@ -12,6 +30,10 @@ $smarty->assign('bitrix_news', $r);
 //fwrite($fp, "{literal}".$r."{/literal}");
 //fclose($fp);
 //chmod($f_local,0777);
+*/
+
+
+
 
 
 

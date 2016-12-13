@@ -1,4 +1,4 @@
-/* Formatted on 22/06/2016 12:02:04 (QP5 v5.252.13127.32867) */
+/* Formatted on 06.12.2016 15:14:28 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) c,
        SUM (dz_return) dz_return,
        SUM (dz_return_norm) dz_return_norm,
@@ -28,6 +28,9 @@ SELECT COUNT (*) c,
                NVL (vp.val_fact, 0) val_fact,
                vp.val_plan dz_return,
                  CASE
+                    WHEN s.eta_coffee = 1
+                    THEN
+                       0.03
                     WHEN DECODE (NVL (vp.val_plan, 0),
                                  0, 0,
                                  (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
@@ -40,6 +43,9 @@ SELECT COUNT (*) c,
                * sv.sales
                   dz_return_norm,
                  CASE
+                    WHEN s.eta_coffee = 1
+                    THEN
+                       0.03
                     WHEN DECODE (NVL (vp.val_plan, 0),
                                  0, 0,
                                  (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
@@ -57,6 +63,9 @@ SELECT COUNT (*) c,
                   plan_perc,
                sv.fal_payment,
                  CASE
+                    WHEN s.eta_coffee = 1
+                    THEN
+                       0.03
                     WHEN DECODE (NVL (vp.val_plan, 0),
                                  0, 0,
                                  (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
@@ -70,6 +79,9 @@ SELECT COUNT (*) c,
                   zp_plan,
                ROUND (
                     CASE
+                       WHEN s.eta_coffee = 1
+                       THEN
+                          0.03
                        WHEN DECODE (
                                NVL (vp.val_plan, 0),
                                0, 0,
@@ -101,20 +113,23 @@ SELECT COUNT (*) c,
                NVL (s.summa, 0) + NVL (s.coffee, 0) summa,
                f.name fil_name,
                f.id fil_id,
-               taf.ok_db_tn
+               taf.ok_db_tn,
+               s.eta_coffee
           FROM (  SELECT m.tab_num,
                          m.h_eta,
                          m.eta,
                          m.eta_tab_number,
                          SUM (m.summa) summa,
-                         SUM (m.coffee) coffee
+                         SUM (m.coffee) coffee,
+                         eta_coffee
                     FROM a14mega m
                    WHERE     m.dpt_id = :dpt_id
                          AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt
                 GROUP BY m.tab_num,
                          m.h_eta,
                          m.eta,
-                         m.eta_tab_number) s,
+                         m.eta_tab_number,
+                         eta_coffee) s,
                user_list u,
                bud_svod_zp sv,
                bud_fil f,
@@ -165,7 +180,7 @@ SELECT COUNT (*) c,
                     OR (SELECT NVL (is_traid_kk, 0)
                           FROM user_list
                          WHERE tn = :tn) = 1)
-               AND (:eta_list is null OR :eta_list = s.h_eta)
+               AND ( :eta_list IS NULL OR :eta_list = s.h_eta)
                AND sv.unscheduled(+) = 0
                AND sv.dt = n.dt(+)
                AND n.kod(+) = 'zp'
@@ -202,7 +217,8 @@ SELECT COUNT (*) c,
                NULL summa,
                f.name fil_name,
                f.id fil_id,
-               taf.ok_db_tn
+               taf.ok_db_tn,
+               NULL eta_coffee
           FROM user_list u,
                bud_svod_zp sv,
                bud_fil f,

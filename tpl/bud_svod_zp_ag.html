@@ -9,6 +9,7 @@
 <tr style="font-weight:bold;text-align: center;">
 <td>№ п/п</td>
 <td>несписочный</td>
+<td>кофе</td>
 <td>ЭТА ФИО</td>
 <td>ЭТА т.н.</td>
 <td>ТС ФИО</td>
@@ -34,6 +35,7 @@
 				<a href='javascript:void(0);' onClick="del_unscheduled({$i.id});">[X]</a>
 				{/if}
 			</td>
+			<td style="text-align:center">{if $i.eta_coffee}да{/if}</td>
 			<td style=" text-align:left;" id="d_{$i.id}_fio">
 				{if not $is_ts or not $i.unscheduled or $i.ok_db_tn}
 					{$i.eta}

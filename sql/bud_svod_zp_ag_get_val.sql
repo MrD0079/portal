@@ -1,9 +1,12 @@
-/* Formatted on 07/06/2016 17:47:50 (QP5 v5.252.13127.32867) */
+/* Formatted on 06.12.2016 15:15:22 (QP5 v5.252.13127.32867) */
 SELECT sv.h_eta,
        sv.fio,
        NVL (vp.val_fact, 0) val_fact,
        vp.val_plan dz_return,
          CASE
+            WHEN s.eta_coffee = 1
+            THEN
+               0.03
             WHEN DECODE (NVL (vp.val_plan, 0),
                          0, 0,
                          (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
@@ -15,6 +18,9 @@ SELECT sv.h_eta,
        * sv.sales
           dz_return_norm,
          CASE
+            WHEN s.eta_coffee = 1
+            THEN
+               0.03
             WHEN DECODE (NVL (vp.val_plan, 0),
                          0, 0,
                          (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
@@ -31,6 +37,9 @@ SELECT sv.h_eta,
           plan_perc,
        sv.fal_payment,
          CASE
+            WHEN s.eta_coffee = 1
+            THEN
+               0.03
             WHEN DECODE (NVL (vp.val_plan, 0),
                          0, 0,
                          (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
@@ -59,14 +68,16 @@ SELECT sv.h_eta,
                  m.eta,
                  m.eta_tab_number,
                  SUM (m.summa) summa,
-                 SUM (m.coffee) coffee
+                 SUM (m.coffee) coffee,
+                 eta_coffee
             FROM a14mega m
            WHERE m.dpt_id = :dpt_id
         GROUP BY m.dt,
                  m.tab_num,
                  m.h_eta,
                  m.eta,
-                 m.eta_tab_number) s,
+                 m.eta_tab_number,
+                 eta_coffee) s,
        user_list u,
        bud_svod_zp sv,
        (SELECT n1.norm,

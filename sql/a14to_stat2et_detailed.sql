@@ -1,4 +1,4 @@
-/* Formatted on 15.11.2016 17:35:48 (QP5 v5.252.13127.32867) */
+/* Formatted on 08.12.2016 14:25:31 (QP5 v5.252.13127.32867) */
   SELECT fio_rm,
          tn_rm,
          fio_tm,
@@ -14,8 +14,8 @@
          tp_place,
          tp_type,
          tp_type_short,
-         max (stelag) stelag,
-         max (tumb) tumb,
+         MAX (stelag) stelag,
+         MAX (tumb) tumb,
          SUM (ts1) ts1,
          SUM (ts1r) ts1r,
          AVG (summa) summa,
@@ -31,7 +31,8 @@
          tab_num_ts,
          tab_num_tm,
          tab_num_rm,
-         standart
+         standart,
+         reject_traid_in_month
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN standart_price_eta
@@ -106,7 +107,8 @@ GROUP BY fio_rm,
          tab_num_ts,
          tab_num_tm,
          tab_num_rm,
-         standart
+         standart,
+         reject_traid_in_month
 ORDER BY fio_rm,
          tn_rm,
          fio_tm,
