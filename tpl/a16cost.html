@@ -1,0 +1,223 @@
+<h1>Стандарт кофе - Статистика</h1>
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form_report id=form_report>
+	<p>
+	Дата
+	с
+	<input id=sd name=sd class=datepicker value='{$smarty.request.sd}'>
+	по
+	<input id=ed name=ed class=datepicker value='{$smarty.request.ed}'>
+	</p>
+
+	{if $is_ts neq 1 and $is_eta neq 1}
+		<p>
+		По руководителю:
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		</p>
+		<p>
+		По супервайзеру:
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+		</p>
+	{/if}
+	{if $is_eta neq 1}
+		<p>
+		По ЭТА:
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_eta}">{$item.eta}</option>
+			{/foreach}
+		</select>
+		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+		</p>
+	{/if}
+	<table border=0>
+		<tr>
+			<td>
+                            <input type=radio id="by_who" name="by_who" value='eta' onClick='$("input[name=rep_type][value=detailed]").attr("disabled",false);'>по ЭТА
+                            <input type=radio id="by_who" name="by_who" value='ts' onClick='$("input[name=rep_type][value=detailed]").attr("disabled",false);'>по ТС
+                            <input disabled type=radio id="by_who" name="by_who" value='tm' onClick='$("input[name=rep_type][value=brief]").prop("checked",true);$("input[name=rep_type][value=detailed]").attr("disabled",true);'>по ТМ
+                            <input disabled type=radio id="by_who" name="by_who" value='rm' onClick='$("input[name=rep_type][value=brief]").prop("checked",true);$("input[name=rep_type][value=detailed]").attr("disabled",true);'>по РМ
+                        </td>
+		</tr>
+		<script>$("input[name=by_who][value={$smarty.request.by_who}]").attr('checked',true);</script>
+		<tr>
+			<td>
+                            <input disabled type=radio id="rep_type" name="rep_type" value='brief'>краткий
+                            <input type=radio id="rep_type" name="rep_type" value='detailed' {if $smarty.request.by_who eq 'tm'}disabled{/if}>развернутый
+                        </td>
+		</tr>
+		<script>$("input[name=rep_type][value={$smarty.request.rep_type}]").attr('checked',true);</script>
+	</table>
+	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+	<p><a href="?action=a16cost&print=1&excel=1&generate=1&filename=Стандарт кофе - статистика">Экспорт в Excel</a></p>
+{/if}
+
+{if $smarty.request.rep_type eq 'brief'}
+<table style="text-align: center;" border=1>
+<tbody>
+	{foreach key=k item=i from=$d name=d}
+	{if $smarty.foreach.d.iteration%20 eq 1 and not ($smarty.request.print and $smarty.foreach.d.iteration > 1)}
+	<tr style="font-weight: bold;">
+		{if $smarty.request.by_who eq 'eta'}
+		<td>т.н. ЭТА</td>
+		<td>ФИО ЭТА</td>
+		{/if}
+		{if $smarty.request.by_who eq 'ts'}<td>т.н. ТС</td>{/if}
+		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts'}<td>ФИО ТС</td>{/if}
+		{if $smarty.request.by_who eq 'tm'}<td>т.н. ТМ</td>{/if}
+		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm'}<td>ФИО ТМ</td>{/if}
+		{if $smarty.request.by_who eq 'rm'}<td>т.н. РМ</td>{/if}
+		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td>ФИО РМ</td>{/if}
+		<td>Регион</td>
+		<td>Всего ТП с СТО по маршруту</td>
+		<td>Визитов в ТП с СТО по маршруту</td>
+		<td>Совершено визитов</td>
+		<td>Стеллажи</td>
+		<td>Витрины</td>
+		<td>ИТОГО СТО</td>
+		<td>Стандарт фото - ТС</td>
+                <td>отклонено (ТМ, ВСТМ)</td>
+		<td>% ТО со стандартом ТС</td>
+		<td>Не проверено - ТС (фото)</td>
+		<td>План АКБ</td>
+		<td>% покрытия СТО</td>
+		<td>% фотоотчетов</td>
+		<td>Стандарт по ТП</td>
+		{if $smarty.request.by_who neq 'tm'}
+		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">Сумма бонуса, {$valuta}</td>
+		{/if}
+	</tr>
+	{/if}
+	<tr>
+		{if $smarty.request.by_who eq 'eta'}
+		<td style="text-align: left;">{$i.t.eta_tab_number}</td>
+		<td style="text-align: left;">{$i.t.fio_eta}</td>
+		{/if}
+		{if $smarty.request.by_who eq 'ts'}<td style="text-align: left;">{$i.t.tab_num_ts}</td>{/if}
+		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts'}<td style="text-align: left;">{$i.t.fio_ts}</td>{/if}
+		{if $smarty.request.by_who eq 'tm'}<td style="text-align: left;">{$i.t.tab_num_tm}</td>{/if}
+		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm'}<td style="text-align: left;">{$i.t.fio_tm}</td>{/if}
+		{if $smarty.request.by_who eq 'rm'}<td style="text-align: left;">{$i.t.tab_num_rm}</td>{/if}
+		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td style="text-align: left;">{$i.t.fio_rm}</td>{/if}
+		<td>{$i.t.region_name}</td>
+		<td>{$i.t.tp_cnt}</td>
+		<td>{$i.t.visit_plan}</td>
+		<td>{$i.t.visit_fakt}</td>
+		<td>{$i.t3.stelag}</td>
+		<td>{$i.t3.tumb}</td>
+		<td>{$i.t3.sto_total}</td>
+		<td>{$i.t1.ts1r}</td>
+                <td>{$i.t1.reject_traid_or_auditor}</td>
+		<td>{$i.t1.perc_ts|num:2}</td>
+		<td>{$i.t1.tsnull}</td>
+		<td>{$i.t2.value|num:2}</td>
+		<td>{$i.t2.perc_pokr_sto|num:2}</td>
+		<td>{$i.t.perc_photo_rep|num:2}</td>
+		<td>{$i.t.sttotp}</td>
+		{if $smarty.request.by_who neq 'tm'}
+		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$i.t3.bonus4tp|num:2}</td>
+		{/if}
+	</tr>
+	{/foreach}
+	<tr style="font-weight: bold;">
+		{if $smarty.request.by_who eq 'eta'}<td colspan=6>ИТОГО</td>{/if}
+		{if $smarty.request.by_who eq 'ts'}<td colspan=5>ИТОГО</td>{/if}
+		{if $smarty.request.by_who eq 'tm'}<td colspan=4>ИТОГО</td>{/if}
+		{if $smarty.request.by_who eq 'rm'}<td colspan=3>ИТОГО</td>{/if}
+		<td>{$tt.tp_cnt}</td>
+		<td>{$tt.visit_plan}</td>
+		<td>{$tt.visit_fakt}</td>
+		<td>{$tt3.stelag}</td>
+		<td>{$tt3.tumb}</td>
+		<td>{$tt3.sto_total}</td>
+		<td>{$tt1.ts1r}</td>
+                <td>{$tt1.reject_traid_or_auditor}</td>
+		<td>{$tt1.perc_ts|num:2}</td>
+		<td>{$tt1.tsnull}</td>
+		<td>{$tt2.value|num:2}</td>
+		<td>{$tt2.perc_pokr_sto|num:2}</td>
+		<td>{$tt.perc_photo_rep|num:2}</td>
+		<td>{$tt.sttotp}</td>
+		{if $smarty.request.by_who neq 'tm'}
+		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$tt3.bonus4tp|num:2}</td>
+		{/if}
+	</tr>
+</tbody>
+</table>
+{/if}
+{if $smarty.request.rep_type eq 'detailed'}
+<table style="text-align: center;" border=1>
+<tbody>
+	{foreach key=k item=i from=$d name=d}
+	{if $smarty.foreach.d.iteration%20 eq 1 and not ($smarty.request.print and $smarty.foreach.d.iteration > 1)}
+	<tr style="font-weight: bold;">
+		{if $smarty.request.by_who eq 'eta'}
+		<td>т.н. ЭТА</td>
+		<td>ФИО ЭТА</td>
+		{/if}
+		{if $smarty.request.by_who eq 'ts'}
+		<td>т.н. ТС</td>
+		{/if}
+		<td>ФИО ТС</td>
+		<td>ФИО ТМ</td>
+		<td>ФИО РМ</td>
+		<td>Код ТП</td>
+		<td>Название/Адрес ТП</td>
+		<td>Тип ТП</td>
+                <td>Кол-во визитов по Стандарту "Кофе"</td>
+		<td>Кол-во ТП со Стандартом Кофе (ТС)</td>
+                <td>отклонено (ТМ, ВСТМ) визитов со стандартом</td>
+                <td>отклонено (ТМ, ВСТМ) ТП со стандартом</td>
+                <td>Стандарт по ТП</td>
+                <td>Сумма бонуса, {$valuta}</td>
+	</tr>
+	{/if}
+	<tr>
+		{if $smarty.request.by_who eq 'eta'}
+		<td style="text-align: left;">{$i.eta_tab_number}</td>
+		<td style="text-align: left;">{$i.fio_eta}</td>
+		{/if}
+		{if $smarty.request.by_who eq 'ts'}
+		<td style="text-align: left;">{$i.tab_num_ts}</td>
+		{/if}
+		<td style="text-align: left;">{$i.fio_ts}</td>
+		<td style="text-align: left;">{$i.fio_tm}</td>
+		<td style="text-align: left;">{$i.fio_rm}</td>
+		<td style="text-align: left;">{$i.tp_kod_key}</td>
+		<td style="text-align: left;">{$i.tp}</td>
+		<td style="text-align: left;">{$i.tp_type_short}</td>
+		<td>{$i.visit}</td>
+		<td>{$i.tp_st_ts}</td>
+		<td>{$i.visit_st_ts_reject_tm_or_traid}</td>
+		<td>{$i.tp_st_ts_reject_tm_or_traid}</td>
+		<td>{$i.tp_st}</td>
+		<td>{$i.bonus|num:2}</td>
+	</tr>
+	{/foreach}
+	<!--<tr style="font-weight: bold;">
+		<td colspan="{if $smarty.request.by_who eq 'eta'}8{else}7{/if}">ИТОГО</td>
+		<td>{$tt.visit_plan}</td>
+		<td>{$tt1.ts1r}</td>
+		<td>{$tt.sttotp}</td>
+		<td>{$tt3.bonus4tp|num:2}</td>
+	</tr>-->
+</tbody>
+</table>
+{/if}
+
+{if not $smarty.request.print}
+</form>
+{/if}
