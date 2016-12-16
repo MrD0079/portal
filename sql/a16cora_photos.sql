@@ -1,4 +1,4 @@
-/* Formatted on 13.12.2016 17:50:51 (QP5 v5.252.13127.32867) */
+/* Formatted on 15/12/2016 12:44:54 (QP5 v5.252.13127.32867) */
 SELECT t.url, t.h_url, CASE WHEN url.h_url IS NOT NULL THEN 1 END coffee_url
   FROM a16co t, a16cotp s, a16courl url
  WHERE     t.tp_kod_key = :tp_kod
@@ -47,3 +47,7 @@ SELECT t.url, t.h_url, CASE WHEN url.h_url IS NOT NULL THEN 1 END coffee_url
                  0
            END = 1
        AND t.h_url = url.h_url(+)
+       AND (   url.h_url IS NOT NULL
+            OR (SELECT NVL (is_ts, 0)
+                  FROM user_list
+                 WHERE tn = :tn) = 1)

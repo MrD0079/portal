@@ -133,7 +133,17 @@
                                             <nobr>
                                                 {if not $i.tm}
                                                 <div id="td_{$i1.h_url}" style="display: inline;">
-                                                    <input {if $i1.coffee_url}checked{/if} type="checkbox" value="" onclick="saveurl('{$i1.h_url}',this.checked?1:0);">
+                                                    <input {if $i1.coffee_url}checked{/if} type="checkbox" value=""
+                                                        class="cb_{$i.visitdate_key}_{$i.tp_kod_key}"
+                                                        onClick="
+                                                        saveurl('{$i1.h_url}',this.checked?1:0);
+                                                        $('input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}]').prop('disabled',true);
+                                                        $('.cb_{$i.visitdate_key}_{$i.tp_kod_key}:enabled').each(function(){literal}{{/literal}
+                                                            $(this).prop('checked')?
+                                                            $('input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}]').prop('disabled',false):null;
+                                                        {literal}}{/literal});
+                                                        "
+                                                        >
                                                 </div>
         					{else}
                                                     {if $i1.coffee_url}да{/if}
@@ -152,7 +162,16 @@
 						<nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}" value=1 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','ts',this.value)">соответствует</nobr>
 						<br>
 						<nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}" value=2 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','ts',this.value)">не соответствует</nobr>
-						<script>$("input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}][value={$i.ts}]").attr('checked',true);</script>
+						<script>
+                                                        $("input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}][value={$i.ts}]").attr('checked',true);
+                                                        $('input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}]').prop('disabled',true);
+                                                        $('.cb_{$i.visitdate_key}_{$i.tp_kod_key}:enabled').each(function(){literal}{{/literal}
+                                                            $(this).prop('checked')?
+                                                            $('input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}]').prop('disabled',false):null;
+                                                        {literal}}{/literal});
+                                                        
+                                                        
+                                                </script>
 					{else}
 						{if $i.ts eq 1}соответствует{/if}
 						{if $i.ts eq 2}не соответствует{/if}
