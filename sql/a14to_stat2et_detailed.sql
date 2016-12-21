@@ -22,7 +22,14 @@
          COUNT (DISTINCT tp_kod_key || visitdate) visit_plan,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
             visit_fakt,
-         standart_price * DECODE (zst_lu, NULL, 0, 1) bonus4tp,
+         standart_price
+
+ * DECODE (zst_lu, NULL, 0, 1)
+
+ * DECODE (reject_traid_in_month, 1, null, 1)
+
+
+ bonus4tp,
          standart_price,
          zst_lu,
          zst_lu_fio,

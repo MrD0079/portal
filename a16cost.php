@@ -37,20 +37,7 @@
 			$sql=rtrim(file_get_contents('sql/a16cost_'.$_REQUEST['by_who'].'.sql'));
 			$sql=stritr($sql,$params);
 			$t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-			$sql=rtrim(file_get_contents('sql/a16cost_'.$_REQUEST['by_who'].'1.sql'));
-			$sql=stritr($sql,$params);
-			$t1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-			$sql=rtrim(file_get_contents('sql/a16cost_'.$_REQUEST['by_who'].'2.sql'));
-			$sql=stritr($sql,$params);
-			$t2 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-			$sql=rtrim(file_get_contents('sql/a16cost_'.$_REQUEST['by_who'].'3.sql'));
-			$sql=stritr($sql,$params);
-			$t3 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-			foreach ($t as $k=>$v) {$d[$v['key']]['t']=$v;}
-			foreach ($t1 as $k=>$v) {$d[$v['key']]['t1']=$v;}
-			foreach ($t2 as $k=>$v) {$d[$v['key']]['t2']=$v;}
-			foreach ($t3 as $k=>$v) {$d[$v['key']]['t3']=$v;}
-			isset($d)?$smarty->assign('d', $d):null;
+                        $smarty->assign('d', $t);
 		}
 		else
 		{
@@ -59,22 +46,10 @@
 			$t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$smarty->assign('d', $t);
 		}
-		/*$sql=rtrim(file_get_contents('sql/a16cost_total.sql'));
+		$sql=rtrim(file_get_contents('sql/a16cost_total.sql'));
 		$sql=stritr($sql,$params);
 		$t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('tt', $t);
-		$sql=rtrim(file_get_contents('sql/a16cost_total1.sql'));
-		$sql=stritr($sql,$params);
-		$t1 = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		$smarty->assign('tt1', $t1);
-		$sql=rtrim(file_get_contents('sql/a16cost_total2.sql'));
-		$sql=stritr($sql,$params);
-		$t2 = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		$smarty->assign('tt2', $t2);
-		$sql=rtrim(file_get_contents('sql/a16cost_total3.sql'));
-		$sql=stritr($sql,$params);
-		$t3 = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		$smarty->assign('tt3', $t3);*/
 	}
 	$smarty->display('a16cost.html');
 ?>

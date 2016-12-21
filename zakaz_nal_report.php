@@ -128,6 +128,7 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
 	}
 	*/
 		$smarty->assign("data_table", $d);
+                //print_r($d);
 }
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 $sql=rtrim(file_get_contents('sql/list_mkk_all.sql'));

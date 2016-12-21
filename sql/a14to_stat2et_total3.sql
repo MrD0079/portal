@@ -5,7 +5,7 @@ SELECT SUM (bonus4tp) bonus4tp, SUM (stelag) stelag, SUM (tumb) tumb,
                tp_kod_key,
                         stelag,
                         tumb,
-               standart_price * DECODE (zst_lu, NULL, 0, 1) bonus4tp
+               standart_price * DECODE (zst_lu, NULL, 0, 1) * DECODE (reject_traid_in_month, 1, null, 1) bonus4tp
           FROM (SELECT z.*,
                        CASE
                           WHEN :by_who = 'eta' THEN standart_price_eta

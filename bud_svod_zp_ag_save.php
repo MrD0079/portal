@@ -18,7 +18,7 @@ else
 	);
 */
     $existingTN = $db->getOne("select max(tn) from bud_svod_zp where id=".$_REQUEST['id']);
-    if ($existingTN!=$tn){
+    if ($existingTN!=null&&$existingTN!=$tn){
         Table_Update('bud_svod_zp', array('id'=>$_REQUEST['id']),array('tn'=>$tn));
     }
     //$_REQUEST["AAAA"] = [$sqlw,$sqlwo];
