@@ -1,4 +1,4 @@
-/* Formatted on 24.07.2014 15:09:19 (QP5 v5.227.12220.39724) */
+/* Formatted on 22.12.2016 10:50:00 (QP5 v5.252.13127.32867) */
   SELECT ID,
          FAM,
          IM,
@@ -39,6 +39,7 @@
          l.LIMITKANC,
          l.LIMITMOB,
          l.LIMIT_CAR_VOL,
+         l.limit_gbo,
          LIMITPER,
          AVANS,
          amort,
@@ -58,8 +59,7 @@
          s.skype,
          s.res,
          s.res_pos_id,
-         TO_CHAR (res_dt, 'dd.mm.yyyy') res_dt,
-s.limit_gbo
+         TO_CHAR (res_dt, 'dd.mm.yyyy') res_dt
     FROM PERSIK.SPDTREE s, departments d, limits_current l
    WHERE s.dpt_id = D.DPT_ID AND id = :id AND s.svideninn = l.tn(+)
 ORDER BY d.sort,

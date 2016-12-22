@@ -307,15 +307,18 @@ $('#res1_pos_id').attr('disabled',{$spdtree_edit.res}==1?false:true);
 <td style="text-align:right">Лимит перечислений                      </td>
 <td>{$spdtree_edit.limitper|num:2}<!--<input name="item[limitper]" class="number" value="{$spdtree_edit.limitper}">--></td>
 </tr>
+<tr>
 <td style="text-align:right">ГБО</td>
 <td>
-<input onClick="$('#limit_gbo').val(this.checked?1:0);" type=checkbox id=cb_limit_gbo>
-<input type=hidden name="item[limit_gbo]" id="limit_gbo" value="{$spdtree_edit.limit_gbo}">
-<script>
-$('#limit_gbo').val({$spdtree_edit.limit_gbo});
-$('#cb_limit_gbo').prop('checked',{$spdtree_edit.limit_gbo}==1?true:false);
-</script>
+{if $spdtree_edit.limit_gbo}да{else}нет{/if}
 </td>
+</tr>
+<tr>
+<td style="text-align:right"></td>
+<td>
+    <a href="?action=zat&emp_tn={$spdtree_edit.svideninn}&readonly=1&full=0">Изменить лимиты</a>
+</td>
+</tr>
 </table>
 <p><input type=submit name=save value="Сохранить"></p>
 </form>

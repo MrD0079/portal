@@ -29,6 +29,7 @@ isset($_POST['username']) ? $_POST['username']=trim($_POST['username']) : null;
 isset($_POST['password']) ? $_POST['password']=trim($_POST['password']) : null;
 if (isset($_GET['auto'])){$_REQUEST["username"]=$_GET['username'];$_REQUEST["password"]=$_GET['password'];$_POST["username"]=$_GET['username'];$_POST["password"]=$_GET['password'];}
 require_once 'MDB2.php';
+//$dsn = '';
 $dsn = 'oci8://persik:razvitie@'.ZAOIBM;
 $db =& MDB2::connect($dsn);
 if (PEAR::isError($db))

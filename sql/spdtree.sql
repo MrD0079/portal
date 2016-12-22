@@ -39,6 +39,7 @@
          l.LIMITKANC,
          l.LIMITMOB,
          l.LIMIT_CAR_VOL,
+         l.limit_gbo,
          LIMITPER,
          AVANS,
          DECODE (NVL (AMORT, 0), 0, NULL, 'да') amort,
@@ -52,8 +53,7 @@
          d.cnt_kod,
          d.sort,
          s.region_name,
-         s.department_name,
-s.limit_gbo
+         s.department_name
     FROM PERSIK.SPDTREE s, departments d, limits_current l
    WHERE     s.dpt_id = D.DPT_ID
          AND d.dpt_id = :dpt_id

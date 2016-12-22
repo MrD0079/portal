@@ -79,54 +79,6 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["mkk_diff"]=$v["mkk_diff"];
 			//$v["mkk_diff"]==1?$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["mkk_diff"]=1:null;
 		}
-/*
-			if (isset($data))
-	{
-		foreach ($data as $k=>$v)
-		{
-			$d[$v["rmkk"]]["head"]["rmkk_name"]=$v["rmkk_name"];
-			$d[$v["rmkk"]]["head"]["nm_ok"]=$v["nm_ok"];
-			$d[$v["rmkk"]]["head"]["nm_lu"]=$v["nm_lu"];
-
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["mkk_name"]=$v["mkk_name"];
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["recipient"]=$v["recipient"];
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["recipient_fio"]=$v["recipient_fio"];
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["sum_per"]=$v["sum_per"];
-
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["net_name"]=$v["net_name"];
-			$v["mkk_diff"]==1?$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["mkk_diff"]=1:null;
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["total1"]=$v["total1"];
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["remain"]=$v["remain"];
-			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["fou_total"]=$v["fou_total"];
-		}
-	}
-	if (isset($d))
-	{
-		$d1["total1"]=0;
-		$d1["remain"]=0;
-		foreach ($d as $k=>$v)
-		{
-			$d[$k]["total1"]=0;
-			$d[$k]["remain"]=0;
-			foreach ($v["data"] as $k1=>$v1)
-			{
-				$d[$k]["data"][$k1]["total1"]=0;
-				$d[$k]["data"][$k1]["remain"]=0;
-				foreach ($v1["data"] as $k2=>$v2)
-				{
-					isset($v2["total1"])?$d[$k]["data"][$k1]["total1"]=$d[$k]["data"][$k1]["total1"]+$v2["total1"]:null;
-					isset($v2["remain"])?$d[$k]["data"][$k1]["remain"]=$d[$k]["data"][$k1]["remain"]+$v2["remain"]:null;
-				}
-				$d[$k]["total1"]=$d[$k]["total1"]+$d[$k]["data"][$k1]["total1"];
-				$d[$k]["remain"]=$d[$k]["remain"]+$d[$k]["data"][$k1]["remain"];
-			}
-			$d1["total1"]=$d1["total1"]+$d[$k]["total1"];
-			$d1["remain"]=$d1["remain"]+$d[$k]["remain"];
-		}
-		$smarty->assign("data_table", $d);
-		$smarty->assign("d1", $d1);
-	}
-	*/
 		$smarty->assign("data_table", $d);
                 //print_r($d);
 }

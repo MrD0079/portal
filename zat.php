@@ -14,12 +14,10 @@ $smarty->assign('self', 0);
 $amort         = &$db->getOne("select amort from user_list where tn = ".$emp_tn."");
 $pos           = &$db->getOne("select pos_name from user_list where tn = ".$emp_tn."");
 $department    = &$db->getOne("select department_name from user_list where tn = ".$emp_tn."");
-$limit_gbo         = &$db->getOne("select limit_gbo from user_list where tn = ".$emp_tn."");
 
 $smarty->assign('amort', $amort);
 $smarty->assign('pos', $pos);
 $smarty->assign('department', $department);
-$smarty->assign('limit_gbo', $limit_gbo);
 
 $emp_fio = &$db->getOne("select fn_getname(" . $emp_tn . ") from dual");
 $smarty->assign('emp_fio', $emp_fio);
@@ -385,16 +383,32 @@ if (isset($_REQUEST["save_limits"]))
 		"lu"=>null
 	);
 	$vals = $_REQUEST["limits"];
-	$sz_kat=$db->getOne('select cat from sz where id='.$_REQUEST["limits"]["sz_id"]);
-	if ($sz_kat==15534784)
-	{
-		Table_Update ("limits", $keys, $vals);
-	}
-	else
-	{
-		$smarty->assign('error', 1);
-		$smarty->assign('error_text', "Указанная СЗ не относится к категории 'Оплата: установка / корректировка лимитов'");
-	}
+	if ($_REQUEST["limits"]["sz_id"]!=null)
+        {
+            $sz_kat=$db->getOne('select cat from sz where id='.$_REQUEST["limits"]["sz_id"]);
+            if ($sz_kat==15534784)
+            {
+                    Table_Update ("limits", $keys, $vals);
+            }
+            else
+            {
+                    $smarty->assign('error', 1);
+                    $smarty->assign('error_text', "Указанная СЗ не относится к категории 'Оплата: установка / корректировка лимитов'");
+            }
+        }
+	if ($_REQUEST["limits"]["zay_id"]!=null)
+        {
+            $zay_st=$db->getOne('select st from bud_ru_zay where id='.$_REQUEST["limits"]["zay_id"]);
+            if ($zay_st==73133433)
+            {
+                Table_Update ("limits", $keys, $vals);
+            }
+            else
+            {
+                $smarty->assign('error', 1);
+                $smarty->assign('error_text', "Указанная заявка на активность не относится к категории 'Ст. 10 Установка ГБО'");
+            }
+        }
 }
 
 
