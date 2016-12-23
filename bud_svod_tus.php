@@ -1,7 +1,5 @@
 <?
 
-
-
 InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("exp_list_only_ts",0);
 InitRequestVar("eta_list",$_SESSION["h_eta"]);
