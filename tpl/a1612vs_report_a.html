@@ -1,0 +1,101 @@
+<h1>Отчет по акции "Все в шоколаде"</h1>
+{if not $smarty.request.print}
+	<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+	{if $is_ts eq 1}
+		{include file="a1612vs_report_a_select.html"}
+		<p>
+		{if $smarty.request.selected_tp}
+			{foreach key=tp_key item=tp_item from=$tp name=tp}
+				{if $smarty.request.selected_tp eq $tp_item.tp_kod}
+				Отгрузки клиента <b>{$tp_item.tp_ur} {$tp_item.tp_addr}</b>, ЭТА <b>{$tp_item.fio_eta}</b>
+				{/if}
+			{/foreach}
+		{/if}
+		</p>
+		{include file="a1612vs_report_a_action_nakl_select.html"}
+	{/if}
+	{if $is_ts neq 1 and $is_eta neq 1}
+		По руководителю:
+		<br>
+		<select name=exp_list_without_ts id=exp_list_without_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_without_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+		По супервайзеру:
+		<br>
+		<select name=exp_list_only_ts id=exp_list_only_ts>
+			<option value=0></option>
+			{foreach key=key item=item from=$exp_list_only_ts}
+			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+			{/foreach}
+		</select>
+		<br>
+<script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+<script>$("#exp_list_only_ts option[value='{$smarty.request.exp_list_only_ts}']").prop('selected', true);</script>
+
+	{/if}
+	{if $is_eta neq 1}
+		По ЭТА:
+		<br>
+		<select name=eta_list id=eta_list>
+			<option value=""></option>
+			{foreach key=key item=item from=$eta_list}
+			<option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
+			{/foreach}
+		</select>
+		<script>
+		$('#eta_list').val('{$smarty.request.eta_list}');
+		</script>
+		<br>
+	{/if}
+	<input type="hidden" name="form_submit">
+	<table border=0>
+		<tr style="vertical-align: top;">
+			<td>
+				<input type=radio id="ok_bonus" name="ok_bonus" value=0>все ТП<br>
+				<input type=radio id="ok_bonus" name="ok_bonus" value=1>бонус выдан<br>
+				<input type=radio id="ok_bonus" name="ok_bonus" value=2>бонус не выдан<br>
+				<script>$("input[name=ok_bonus][value={$smarty.request.ok_bonus|default:0}]").attr('checked',true);</script>
+			</td>
+		</tr>
+	</table>
+	<input type=submit name=generate id=generate value='Выбрать'>
+{/if}
+
+{if $smarty.request.generate}
+	{if not $smarty.request.print}
+		<p><a href="?act=a1612vs&action=a1612vs_report_a&month={$smarty.request.month}&print=1&excel=1&generate=1&filename=Ход акции Все в шоколаде">Экспорт в Excel</a></p>
+		<input type=hidden name=generate value="Выбрать">
+	{/if}
+
+	{include file="a1612vs_report_a_1.html"}
+	{include file="a1612vs_report_a_2.html"}
+
+
+	{if $is_eta neq 1}
+		{include file="a1612vs_report_a_3.html"}
+	{/if}
+
+
+{/if}
+{if not $smarty.request.print}
+	</form>
+{/if}
+
+{if $smarty.request.generate and not $smarty.request.print and not $is_eta and $is_ts and not $ok_chief}
+	<form target="_self" method="POST" name=form_report1 id=form_report1 enctype="multipart/form-data">
+	<input type=hidden name=generate value='Выбрать'>
+	{include file="a1612vs_report_a_4.html"}
+	</form>
+{/if}
+
+{if $smarty.request.generate and not $smarty.request.print and $is_db}
+	<form target="_self" method="POST" name=form_report1 id=form_report1 enctype="multipart/form-data">
+	<input type=hidden name=generate value='Выбрать'>
+	{include file="a1612vs_report_a_5.html"}
+	</form>
+{/if}
+

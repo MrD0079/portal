@@ -1,0 +1,24 @@
+{if not $smarty.request.print}
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+	<tr style="font-weight:bold; text-align:center">
+		<td style="vertical-align: top; text-align: center;">Количество<br>ТП<br>всего<br></td>
+		<td style="vertical-align: top; text-align: center;">Количество<br>акционных<br>накладных<br></td>
+		<td style="vertical-align: top; text-align: center;">Сумма продаж<br>по акционным накладным,<br>{$valuta}<br></td>
+		<td style="vertical-align: top; text-align: center;">Количество<br>акционных<br>наборов<br>по условиям 1/2</td>
+		<!--<td style="vertical-align: top; text-align: center;">Планируемое количество "подарков"</td>-->
+		<td style="vertical-align: top; text-align: center;">Бонус<br>выдан</td>
+		<td style="vertical-align: top; text-align: center;">Сумма<br>бонусов,<br>{$valuta}</td>
+	</tr>
+	<tr style="text-align:right">
+		<td>{$itogi.cnt_tp|default:0}</td>
+		<td>{$itogi.cnt_nakl|default:0}</td>
+		<td>{$itogi.nakl_summ|default:0|num:2}</td>
+		<td>
+		{$itogi.act_nabor_1|default:0}/{$itogi.act_nabor_2|default:0}
+		</td>
+		<!--<td>{$itogi.if_sum2|default:0|num:0}</td>-->
+		<td>{$itogi.if_cnt|default:0|num:0}</td>
+		<td>{$itogi.if_sum|default:0|num:2}</td>
+	</tr>
+</table>
+{/if}
