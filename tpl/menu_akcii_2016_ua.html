@@ -238,5 +238,13 @@
 		{if $is_admin or $is_traid or $is_super}<li><a href="?act=a1612np&action=act_report_v&y=2016&month=12">Отчет ВСТМ</a></li>{/if}
 	</ul>
 	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Подарки за заказ</span></a>
+	<ul>
+		<li><a target=_blank href="https://bitrix.avk.ua/~TyYFg">Условия акции</a></li>
+		{if $is_ts}                             <li><a href="?act=a1612pz&action=a1612pz_tp_select&y=2016&month=12">Выбор ТП для участия в акции</a></li>{/if}
+                                                        <li><a href="?act=a1612pz&action=a1612pz_report_a&y=2016&month=12">Отчет по акции</a></li>
+		{if $is_admin or $is_traid or $is_super}<li><a href="?act=a1612pz&action=act_report_v&y=2016&month=12">Отчет ВСТМ</a></li>{/if}
+	</ul>
+	</li>
 </ul>
 </li>
