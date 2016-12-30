@@ -1,20 +1,22 @@
-
 <table border=1 cellpadding=0 cellspacing=0>
 	<tr style="text-align:center">
 		<td>НМКК</td>
 		<td>ТМ КК</td>
 		<td>Сеть</td>
-		<td style="width:100px;">Форма 2, тыс.{$valuta}.</td>
-		<td style="width:100px;">Факт оплаченных услуг по форме 2, тыс.{$valuta}.</td>
-		<td style="width:100px;">Итого по ТМ КК Форма 2, тыс.{$valuta}.</td>
-		<td style="width:100px; background-color: rgb(255, 255, 204);">Итого по ТМ КК остаток по фонду 2 на начало месяца, тыс.{$valuta}</td>
-		<td style="width:100px; background-color: rgb(255, 255, 204);">Необходимая к перечислению сумма по форме 2, тыс.{$valuta}.</td>
-		<td style="background-color: rgb(255, 255, 204);">ФИО получателя</td>
-		<td style="width:100px;">Итого по НМКК Форма 2, тыс.{$valuta}.</td>
-		<td style="width:100px;">Итого по НМКК остаток по фонду 2 на начало месяца, тыс.{$valuta}</td>
+		<td style="width:70px;">Остаток предыдущего месяца, тыс.{$valuta}</td>
+		<td style="width:70px;">Оперативный план расходов, тыс.{$valuta}.</td>
+		<td style="width:70px;">Факт оказанных услуг, тыс.{$valuta}.</td>
+		<td style="width:70px;">План/факт поступления денег ТМКК, тыс.{$valuta}.</td>
+		<td style="">ФИО получателя</td>
+		<td style="width:70px;">Подтверждение ТМКК</td>
+		<td style="width:70px;">Подтверждение ФМ</td>
+		<td style="width:70px;">Подтверждение НМКК</td>
+		<td style="width:70px;">Факт выдачи денег, тыс.{$valuta}.</td>
+		<td style="width:70px;">Остаток текущего месяца, тыс.{$valuta}.</td>
+		<td style="">Сверка остатка. Данные ТМКК, тыс.{$valuta}.</td>
 	</tr>
 	{foreach key=key item=item from=$data_table name=data_table}
-		<tr style="vertical-align:middle;">
+		<tr style="vertical-align:middle; background-color: lightgreen">
 		{assign var=s1 value=0}
 		{foreach key=key1 item=item1 from=$item.data}
 			{assign var=s1 value=`$s1+1`}
@@ -22,62 +24,65 @@
 				{assign var=s1 value=`$s1+1`}
 			{/foreach}
 		{/foreach}
-		<td rowspan={$s1+1} style="text-align:center">
-			{$item.head.rmkk_name}
-			<p id="input{$key}ok">
-			Подтверждаю:
-			{if $tn eq $key and not $smarty.request.print}
-				<input
-					{if $item.head.nm_ok}checked{/if}
-					type=checkbox
-					onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok',this.checked?1:'');"
-				>
-			{/if}
-			<br>
-			{$item.head.nm_lu}
-			</p>
-		</td>
-		<td colspan=8></td>
-		<td rowspan={$s1+1} style="text-align:center">
+		<td rowspan={$s1+1} style="text-align:center">{$item.head.rmkk_name}</td>
+		<td colspan=2>Итого по НМ КК</td>
+		<td style="text-align:center">{$item.head.remain|default:0|num:3}</td>
+		<td style="text-align:center">
 		<a target=_blank
 		href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk=0&nets=0">
 		{$item.head.total1|default:0|num:3}
 		</a>
 		</td>
-		<td rowspan={$s1+1} style="text-align:center">{$item.head.remain|default:0|num:3}</td>
+                <td style="text-align:center">{$item.head.faktokazusl_total|default:0|num:3}</td>
+		<td colspan=4></td>
+                <td style="text-align: center">
+                    {if ($tn eq $key and not $smarty.request.print) or 1 eq 1}
+			<div id="input{$key}ok">
+                            <input
+                            {if $item.head.nm_ok}checked{/if}
+                            type=checkbox
+                            onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok',this.checked?1:'');"
+                        >
+                        </div>
+                    {/if}
+                    {if $item.head.nm_ok}{$item.head.nm_lu}{/if}
+                </td>
+                <td style="text-align:center">{$item.head.fou_total|default:0|num:3}</td>
+		<td></td>
+		<td></td>
 		</tr>
 		{foreach key=key1 item=item1 from=$item.data}
-			<tr style="vertical-align:middle;">
+			<tr style="vertical-align:middle; background-color: lightblue">
 				{assign var=s1 value=0}
 				{foreach key=key2 item=item2 from=$item1.data}
 					{assign var=s1 value=`$s1+1`}
 				{/foreach}
 				<td rowspan={$s1+1} style="text-align:center">{$item1.head.mkk_name}</td>
-				<td colspan=3></td>
-				<td rowspan={$s1+1} style="text-align:center">
+				<td>Итого по ТМ КК</td>
+				<td style="text-align:center">{$item1.head.remain}</td>
+				<td style="text-align:center">
 				<a target=_blank
 				href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets=0">
 				{$item1.head.total1|default:0|num:3}
 				</a>
 				</td>
-				<td rowspan={$s1+1} style="text-align:center;background-color: rgb(255, 255, 204);">{$item1.head.remain}</td>
-				<td rowspan={$s1+1} style="text-align:center;background-color: rgb(255, 255, 204);">
-					{if not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print}
+                                <td style="text-align:center">{$item1.head.faktokazusl_total|default:0|num:3}</td>
+				<td rowspan={$s1+1} style="text-align:center;">
+					{if (not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 1}
 					<input
 						id="input{$key1}sum_per"
 						onchange="save('tm','{$key1}','{$smarty.request.calendar_years}','{$smarty.request.plan_month}','sum_per',this.value);"
 						class="number3"
-						size=10
+						size=6
 					>
-					<script>
-						$('#input{$key1}sum_per').val('{$item1.head.sum_per}');
-					</script>
+					<script>$('#input{$key1}sum_per').val('{$item1.head.sum_per}');</script>
 					{else}
 					{$item1.head.sum_per|num:3}
 					{/if}
 				</td>
-				<td rowspan={$s1+1} style="text-align:center;background-color: rgb(255, 255, 204);">
-					{if not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print}
+				<td rowspan={$s1+1} style="text-align:center;">
+					{if (not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 1}
+                                        <nobr>
 					<a href="javascript:void(0);" onClick="$('#input{$key1}recipient option[value={$key1}]').prop('selected', true);$('#input{$key1}recipient').change();">По умолчанию</a>
 					<select
 						id="input{$key1}recipient"
@@ -88,24 +93,38 @@
 						<option value="{$item2.tn}">{$item2.fio}</option>
 						{/foreach}
 					</select>
-					<script>
-						$('#input{$key1}recipient option[value="{$item1.head.recipient}"]').prop('selected', true);
-					</script>
+                                        </nobr>
+					<script>$('#input{$key1}recipient option[value="{$item1.head.recipient}"]').prop('selected', true);</script>
 					{else}
 					{$item1.head.recipient_fio}
 					{/if}
 				</td>
+                                <td rowspan={$s1+1} style="text-align: center"><input type="checkbox"></td>
+                                <td rowspan={$s1+1} style="text-align: center"><input type="checkbox"></td>
+                                <td rowspan={$s1+1} style="text-align: center"><input type="checkbox"></td>
+                                <td style="text-align:center">{$item1.head.fou_total|default:0|num:3}</td>
+				<td></td>
+                                <td rowspan={$s1+1}>
+                                    <textarea
+                                        id="input{$key1}comm"
+						onchange="save('tm','{$key1}','{$smarty.request.calendar_years}','{$smarty.request.plan_month}','comm',this.value);"
+                                                >{$item1.head.comm}</textarea>
+                                </td>
 			</tr>
 			{foreach key=key2 item=item2 from=$item1.data}
 				<tr style="vertical-align:middle;">
-					<td {if $item2.head.mkk_diff} style="background-color:red;" {/if}>{$item2.head.net_name}</td>
+					<td {if $item2.head.mkk_diff} style="background-color: lightcoral;" {/if}>{$item2.head.net_name}</td>
+                                        <td></td>
 					<td style="text-align:center">
 					<a target=_blank
 					href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets={$key2}">
 					{$item2.head.total1|default:0|num:3}
 					</a>
 					</td>
+                                        <td style="text-align:center">{$item2.head.faktokazusl_total|default:0|num:3}</td>
 					<td style="text-align:center">{$item2.head.fou_total|default:0|num:3}</td>
+                                        <td></td>
+                                        <td></td>
 				</tr>
 			{/foreach}
 		{/foreach}

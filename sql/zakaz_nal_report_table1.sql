@@ -1,4 +1,4 @@
-/* Formatted on 12/15/2015 5:11:28  (QP5 v5.252.13127.32867) */
+/* Formatted on 30.12.2016 13:22:54 (QP5 v5.252.13127.32867) */
   SELECT rmkk,
          rmkk_name,
          mkk_ter,
@@ -7,13 +7,17 @@
          nm_lu,
          nm_ok,
          recipient,
+         tm_prev_sum_per,
+         tm_prev_income_sum,
          sum_per,
          income_sum,
+         comm,
          recipient_fio,
          SUM (total1) total1,
          SUM (fou_total) fou_total,
-         fu_prev_total fu_prev_total,
-         income_sum - fu_prev_total remain
+         SUM (faktokazusl_total) faktokazusl_total,
+         fu_prev_total,
+         tm_prev_income_sum - fu_prev_total remain
     FROM (  SELECT m.rmkk,
                    fn_getname (m.rmkk) rmkk_name,
                    CASE WHEN n.tn_mkk <> m.mkk_ter THEN 1 ELSE 0 END mkk_diff,
@@ -24,12 +28,16 @@
                    m.total1,
                    TO_CHAR (pnm.lu, 'dd.mm.yyyy hh24:mi:ss') nm_lu,
                    pnm.ok nm_ok,
+                   tm_prev.sum_per tm_prev_sum_per,
+                   tm_prev.income_sum tm_prev_income_sum,
                    ptm.recipient,
                    ptm.sum_per,
-                   NVL (ptm.income_sum, 0) income_sum,
+                   ptm.income_sum,
+                   ptm.comm,
                    uptm.fio recipient_fio,
                    NVL (fu_prev.total, 0) fu_prev_total,
-                   fou.total fou_total
+                   fou.total fou_total,
+                   faktokazusl.total faktokazusl_total
               FROM (  SELECT (SELECT tn_rmkk
                                 FROM nets
                                WHERE tn_mkk = m1.mkk_ter AND ROWNUM = 1)
@@ -48,27 +56,18 @@
                              m1.id_net) m,
                    nets n,
                    promo_nm pnm,
-                   (  SELECT tn,
-                             recipient,
-                             SUM (income_sum) income_sum,
-                             SUM (
-                                CASE
-                                   WHEN TO_DATE ('1.' || month || '.' || year,
-                                                 'dd.mm.yyyy') =
-                                           TO_DATE (
-                                              '1.' || :plan_month || '.' || :y,
-                                              'dd.mm.yyyy')
-                                   THEN
-                                      sum_per
-                                END)
-                                sum_per
+                   (  SELECT tn, SUM (income_sum) income_sum, SUM (sum_per) sum_per
                         FROM promo_tm
-                       WHERE TO_DATE ('1.' || month || '.' || year, 'dd.mm.yyyy') <
+                       WHERE TO_DATE ('1.' || month || '.' || year, 'dd.mm.yyyy') <=
                                 TO_DATE ('1.' || :plan_month || '.' || :y,
                                          'dd.mm.yyyy')
-                    GROUP BY tn, recipient) ptm,
+                    GROUP BY tn) tm_prev,
+                   (SELECT *
+                      FROM promo_tm
+                     WHERE month = :plan_month AND year = :y) ptm,
                    user_list uptm,
-                   (  SELECT m.mkk_ter, SUM (id.summa/*m.total*/) total
+                   (  SELECT m.mkk_ter, SUM (id.summa              /*m.total*/
+                                                     ) total
                         FROM nets_plan_month m, invoice_detail id, invoice i
                        WHERE     id.statya = m.id
                              AND m.plan_type = 4
@@ -80,28 +79,38 @@
                                     TO_DATE ('1.' || :plan_month || '.' || :y,
                                              'dd.mm.yyyy')
                     GROUP BY m.mkk_ter) fu_prev,
-                   (SELECT m.mkk_ter, m.id_net, SUM (id.summa/*m.total*/) total
-    FROM nets_plan_month m,
-         invoice_detail id,
-         invoice i,
-         nets_plan_month ms,
-         calendar c
-   WHERE     m.id = id.statya
-         AND m.plan_type = 4
-         /*AND m.YEAR = :y*/
-         AND m.payment_type = 1
-         /*AND m.MONTH = :plan_month*/
-         AND i.id = id.invoice
-         AND i.oplachen = 1
-         AND ms.id = id.statya
-         AND i.oplata_date = c.data
-         AND c.y = :y
-         AND c.my = :plan_month
-GROUP BY m.mkk_ter, m.id_net) fou
+                   (  SELECT m.mkk_ter, m.id_net, SUM (id.summa    /*m.total*/
+                                                               ) total
+                        FROM nets_plan_month m,
+                             invoice_detail id,
+                             invoice i,
+                             nets_plan_month ms,
+                             calendar c
+                       WHERE     m.id = id.statya
+                             AND m.plan_type = 4
+                             /*AND m.YEAR = :y*/
+                             AND m.payment_type = 1
+                             /*AND m.MONTH = :plan_month*/
+                             AND i.id = id.invoice
+                             AND i.oplachen = 1
+                             AND ms.id = id.statya
+                             AND i.oplata_date = c.data
+                             AND c.y = :y
+                             AND c.my = :plan_month
+                    GROUP BY m.mkk_ter, m.id_net) fou,
+                   (  SELECT m.mkk_ter, m.id_net, SUM (m.total) total
+                        FROM nets_plan_month m
+                       WHERE     m.plan_type = 4
+                             AND m.payment_type = 1
+                             AND m.year = :y
+                             AND m.month = :plan_month
+                    GROUP BY m.mkk_ter, m.id_net) faktokazusl
              WHERE     m.id_net = n.id_net
                    AND m.mkk_ter = fu_prev.mkk_ter(+)
                    AND m.id_net = fou.id_net(+)
                    AND m.mkk_ter = fou.mkk_ter(+)
+                   AND m.id_net = faktokazusl.id_net(+)
+                   AND m.mkk_ter = faktokazusl.mkk_ter(+)
                    AND m.YEAR = :y
                    AND DECODE ( :nets, 0, m.id_net, :nets) = m.id_net
                    AND :plan_month = m.MONTH
@@ -129,6 +138,7 @@ GROUP BY m.mkk_ter, m.id_net) fou
                    AND :y = pnm.year(+)
                    AND :plan_month = pnm.month(+)
                    AND m.rmkk = pnm.tn(+)
+                   AND m.mkk_ter = tm_prev.tn(+)
                    AND m.mkk_ter = ptm.tn(+)
                    AND ptm.recipient = uptm.tn(+)
           ORDER BY rmkk_name, mkk_name, n.net_name)
@@ -139,8 +149,11 @@ GROUP BY rmkk,
          nm_lu,
          nm_ok,
          recipient,
+         tm_prev_sum_per,
+         tm_prev_income_sum,
          sum_per,
          income_sum,
+         comm,
          recipient_fio,
          fu_prev_total
 ORDER BY rmkk_name, mkk_name

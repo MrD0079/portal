@@ -22,7 +22,7 @@ if (isset($_REQUEST["save"]))
 		$subj="Заказ промо по форме 2, команда КК, ".$_REQUEST['month'].".".$_REQUEST['year'];
 		$text="НМ КК согласовал заказ промобюджета по форме 2 на ".$_REQUEST['month'].".".$_REQUEST['year'];
 		$mails = $db->getOne("SELECT wm_concat(val_string) FROM parameters WHERE dpt_id = 1 AND param_name IN ('accept1', 'accept2')");
-		send_mail($mails,$subj,$text,$fn);
+		send_mail(/*$mails*/'denis.yakovenko@avk.ua',$subj,$text,$fn);
 	}
 }
 else
@@ -61,6 +61,8 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
 			$d[$v["rmkk"]]["head"]["nm_lu"]=$v["nm_lu"];
 			$d[$v["rmkk"]]["head"]["total1"]=$v["total1"];
 			$d[$v["rmkk"]]["head"]["remain"]=$v["remain"];
+			$d[$v["rmkk"]]["head"]["fou_total"]=$v["fou_total"];
+			$d[$v["rmkk"]]["head"]["faktokazusl_total"]=$v["faktokazusl_total"];
 		}
 		foreach ($data1 as $k=>$v)
 		{
@@ -70,12 +72,16 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["sum_per"]=$v["sum_per"];
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["total1"]=$v["total1"];
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["remain"]=$v["remain"];
+			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["fou_total"]=$v["fou_total"];
+			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["faktokazusl_total"]=$v["faktokazusl_total"];
+			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["head"]["comm"]=$v["comm"];
 		}
 		foreach ($data as $k=>$v)
 		{
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["net_name"]=$v["net_name"];
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["total1"]=$v["total1"];
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["fou_total"]=$v["fou_total"];
+			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["faktokazusl_total"]=$v["faktokazusl_total"];
 			$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["mkk_diff"]=$v["mkk_diff"];
 			//$v["mkk_diff"]==1?$d[$v["rmkk"]]["data"][$v["mkk_ter"]]["data"][$v["id_net"]]["head"]["mkk_diff"]=1:null;
 		}
