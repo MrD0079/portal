@@ -9,14 +9,6 @@
 exit;
 */
 
-
-
-
-
-
-
-
-
 $url="https://bitrix.avk.ua/about/news_ex.php";
 include_once('simple_html_dom.php');
 $html = file_get_html($url);
