@@ -1,0 +1,58 @@
+<form target="_self" method="POST" name=form1 id=form1>
+<h1>перепривязка маршрута между СВ МС</h1>
+<table style="text-align: left; height: 34px; width: 100px;" border="0" cellpadding="5" cellspacing="5">
+    <tbody>
+        <tr>
+            <td>Месяц</td>
+            <td>СВ МС</td>
+            <td>Маршрут</td>
+            <td>Перепривязать маршрут к</td>
+        </tr>
+        <tr>
+            <td><select name=month_list id=month_list>
+                {foreach key=key item=item from=$month_list}
+                    {if $item.routes_exists}
+                        <option value="{$item.sd_c}">{$item.my}</option>
+                    {/if}
+                {/foreach}
+                </select>
+                <script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+            </td>
+            <td>
+                <select name=svms_list id=svms_list>
+                <option value=0></option>
+                {foreach key=key item=item from=$svms_list}
+                        <option value="{$item.tn}">{$item.fio}</option>
+                {/foreach}
+                </select>
+                <script>$('#svms_list option[value="{$smarty.request.svms_list}"]').prop('selected', true);</script>
+            </td>
+            <td>
+                <select name="select_route_numb" id="select_route_numb">
+                <option value=0></option>
+                {foreach key=key item=item from=$routes_head}
+                        <option value="{$item.id}">{$item.num}</option>
+                {/foreach}
+                </select>
+                <script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>
+            </td>
+            <td>
+                <select name=svms_list_move id=svms_list_move>
+                <option value=0></option>
+                {foreach key=key item=item from=$svms_list}
+                        <option value="{$item.tn}">{$item.fio}</option>
+                {/foreach}
+                </select>
+                <script>$('#svms_list_move option[value="{$smarty.request.svms_list_move}"]').prop('selected', true);</script>
+            </td>
+        </tr>
+        <tr>
+            <td><input value="Выбрать" name="select" type="submit"></td>
+            <td><input value="Выбрать" name="select" type="submit"></td>
+            <td></td>
+            <td><input value="привязать" name="move" type="submit"></td>
+        </tr>
+    </tbody>
+</table>
+</form>
+<p>{$response}</p>

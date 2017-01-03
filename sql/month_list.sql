@@ -1,4 +1,4 @@
-/* Formatted on 05/08/2015 19:54:01 (QP5 v5.227.12220.39724) */
+/* Formatted on 03.01.2017 18:39:36 (QP5 v5.252.13127.32867) */
 SELECT ROWNUM,
        z.*,
        CASE
@@ -6,6 +6,7 @@ SELECT ROWNUM,
           ELSE 0
        END
           routes_enabled,
+       DECODE (h.data, NULL, 0, 1) routes_exists,
        CASE
           WHEN sd > ADD_MONTHS (TRUNC (SYSDATE, 'mm'), -2) THEN 1
           ELSE 0
@@ -26,5 +27,6 @@ SELECT ROWNUM,
                  MIN (DATA) sd
             FROM calendar c
         GROUP BY mt, y
-        ORDER BY MIN (DATA)) z
-        
+        ORDER BY MIN (DATA)) z,
+       (SELECT DISTINCT data FROM routes_head) h
+ WHERE z.sd = h.data(+)
