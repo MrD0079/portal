@@ -41,7 +41,7 @@
          s.skidka skidka,
          -s.summskidka skidka_val,
          sv.bonus_fakt,
-         NVL (sv.fixed_fakt, 0) + NVL (sv.summa_return, 0) * t.bonus / 100
+         NVL (sv.fixed_fakt, 0) + /*NVL (sv.summa_return, 0)*/ (s.summa) * t.bonus / 100
             maxtp,
          sv.cash,
          sv.comm,

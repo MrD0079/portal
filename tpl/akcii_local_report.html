@@ -73,9 +73,9 @@
 	</td>
       <td style="vertical-align: top; text-align: right;" id="d_{$i.tp_kod}_bonus_sum">
 {if not $smarty.request.print and ($is_db or $has_parent_db) and not $act_head.ok_db_tn}
-		<input class="number" size="10" name="bonus_sum[{$i.tp_kod}]" id="bonus_sum_{$i.tp_kod}" onChange="save_tp({$i.tp_kod},'bonus_sum',this.value,'{$i.summa}');">
+		<input class="number" size="10" name="bonus_sum[{$i.tp_kod}]" id="bonus_sum_{$i.tp_kod}" onChange="save_tp('{$i.tp_kod}','bonus_sum',this.value,'{$i.summa}');">
 		<script>
-			$('#bonus_sum_{$i.tp_kod}').val({$i.bonus_sum});
+			$('#bonus_sum_{$i.tp_kod}').val('{$i.bonus_sum}');
 			$('#bonus_sum_{$i.tp_kod}').attr('disabled','{$i.selected}'==1?false:true);
 		</script>
 {else}

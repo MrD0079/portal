@@ -22,7 +22,7 @@ if (isset($_REQUEST["save"]))
 		$subj="Заказ промо по форме 2, команда КК, ".$_REQUEST['month'].".".$_REQUEST['year'];
 		$text="НМ КК согласовал заказ промобюджета по форме 2 на ".$_REQUEST['month'].".".$_REQUEST['year'];
 		$mails = $db->getOne("SELECT wm_concat(val_string) FROM parameters WHERE dpt_id = 1 AND param_name IN ('accept1', 'accept2')");
-		send_mail(/*$mails*/'denis.yakovenko@avk.ua',$subj,$text,$fn);
+		send_mail($mails,$subj,$text,$fn);
 	}
 }
 else

@@ -39,7 +39,7 @@ SELECT COUNT (*) c,
                          m.tp_kod,
                          m.y,
                          m.m,
-                         m.summa,
+                         NVL (m.summa, 0) + NVL (m.np, 0) summa,
                          m.h_eta,
                          m.eta
                     FROM a14mega m, bud_ru_zay z, user_list u1
