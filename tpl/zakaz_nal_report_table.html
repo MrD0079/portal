@@ -26,29 +26,29 @@
 		{/foreach}
 		<td rowspan={$s1+1} style="text-align:center">{$item.head.rmkk_name}</td>
 		<td colspan=2>Итого по НМ КК</td>
-		<td style="text-align:center">{$item.head.remain|default:0|num:3}</td>
-		<td style="text-align:center">
-		<a target=_blank
-		href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk=0&nets=0">
-		{$item.head.total1|default:0|num:3}
-		</a>
+		<td style="text-align:center">{$item.head.remain_prev|num:3}</td>
+		<td style="text-align:center">{$item.head.total1|num:3}
+                    <!--<a target=_blank
+                    href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk=0&nets=0">
+                    {$item.head.total1|num:3}
+                    </a>-->
 		</td>
-                <td style="text-align:center">{$item.head.faktokazusl_total|default:0|num:3}</td>
+                <td style="text-align:center">{$item.head.faktokazusl_total|num:3}</td>
 		<td colspan=4></td>
                 <td style="text-align: center">
                     {if ($tn eq $key and not $smarty.request.print) or 1 eq 1}
 			<div id="input{$key}ok">
                             <input
-                            {if $item.head.nm_ok}checked{/if}
+                            {if $item.head.ok}checked{/if}
                             type=checkbox
                             onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok',this.checked?1:'');"
                         >
                         </div>
                     {/if}
-                    {if $item.head.nm_ok}{$item.head.nm_lu}{/if}
+                    {if $item.head.ok}{$item.head.lu}{/if}
                 </td>
-                <td style="text-align:center">{$item.head.fou_total|default:0|num:3}</td>
-		<td></td>
+                <td style="text-align:center">{$item.head.faktoplachusl_total|num:3}</td>
+		<td style="text-align:center">{$item.head.remain|num:3}</td>
 		<td></td>
 		</tr>
 		{foreach key=key1 item=item1 from=$item.data}
@@ -59,16 +59,16 @@
 				{/foreach}
 				<td rowspan={$s1+1} style="text-align:center">{$item1.head.mkk_name}</td>
 				<td>Итого по ТМ КК</td>
-				<td style="text-align:center">{$item1.head.remain}</td>
-				<td style="text-align:center">
-				<a target=_blank
-				href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets=0">
-				{$item1.head.total1|default:0|num:3}
-				</a>
+				<td rowspan={$s1+1}  style="text-align:center">{$item1.head.remain_prev|num:3}</td>
+				<td style="text-align:center">{$item1.head.total1|num:3}
+                                    <!--<a target=_blank
+                                    href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets=0">
+                                    {$item1.head.total1|num:3}
+                                    </a>-->
 				</td>
-                                <td style="text-align:center">{$item1.head.faktokazusl_total|default:0|num:3}</td>
+                                <td style="text-align:center">{$item1.head.faktokazusl_total|num:3}</td>
 				<td rowspan={$s1+1} style="text-align:center;">
-					{if (not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 1}
+					{if (not $item.head.ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 1}
 					<input
 						id="input{$key1}sum_per"
 						onchange="save('tm','{$key1}','{$smarty.request.calendar_years}','{$smarty.request.plan_month}','sum_per',this.value);"
@@ -81,7 +81,41 @@
 					{/if}
 				</td>
 				<td rowspan={$s1+1} style="text-align:center;">
-					{if (not $item.head.nm_ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 1}
+
+                                    <!--
+                                    <table border="1">
+                                    <tr>
+                                        <td>
+                                    пред. поступления</td><td>{$item1.head.tm_prev_sum_per|num:3}</td>
+                                        </tr><tr>
+                                        <td>
+                                    пред. выдачи денег</td><td> {$item1.head.faktoplachusl_prev_total|num:3}</td>
+                                        </tr><tr>
+                                        <td>
+                                    остаток на начало</td><td> {$item1.head.remain_prev|num:3}
+                                        </td>
+                                        </tr><tr>
+                                        <td>
+                                    поступления</td><td> {$item1.head.sum_per|num:3}</td>
+                                        </tr><tr>
+                                        <td>
+                                    выдача денег</td><td> {$item1.head.faktoplachusl_total|num:3}</td>
+                                        </tr><tr>
+                                        <td>
+                                    остаток на конец</td><td> {$item1.head.remain|num:3}
+                                        </td>
+                                        </tr><tr>
+                                        <td>
+                                    всего поступления</td><td> {$item1.head.tm_prev_sum_per+$item1.head.sum_per|num:3}</td>
+                                        </tr><tr>
+                                        <td>
+                                    всего выдача денег</td><td> {$item1.head.faktoplachusl_prev_total+$item1.head.faktoplachusl_total|num:3}</td>
+                                        </tr>
+                                    </table>
+                                    -->
+                                   
+                                    
+					{if (not $item.head.ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 1}
                                         <nobr>
 					<a href="javascript:void(0);" onClick="$('#input{$key1}recipient option[value={$key1}]').prop('selected', true);$('#input{$key1}recipient').change();">По умолчанию</a>
 					<select
@@ -99,11 +133,44 @@
 					{$item1.head.recipient_fio}
 					{/if}
 				</td>
-                                <td rowspan={$s1+1} style="text-align: center"><input type="checkbox"></td>
-                                <td rowspan={$s1+1} style="text-align: center"><input type="checkbox"></td>
-                                <td rowspan={$s1+1} style="text-align: center"><input type="checkbox"></td>
-                                <td style="text-align:center">{$item1.head.fou_total|default:0|num:3}</td>
-				<td></td>
+                                <td rowspan={$s1+1} style="text-align: center">
+                                    {if ($tn eq $key1 and not $smarty.request.print) or 1 eq 1}
+                                        <div id="input{$key1}ok_tm">
+                                            <input
+                                            {if $item1.head.ok_tm}checked{/if}
+                                            type=checkbox
+                                            onchange="save('tm',{$key1},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok_tm',this.checked?1:'');"
+                                        >
+                                        </div>
+                                    {/if}
+                                    {if $item1.head.ok_tm}{$item1.head.ok_tm_lu}{/if}
+                                </td>
+                                <td rowspan={$s1+1} style="text-align: center">
+                                    {if ($is_traid and not $smarty.request.print) or 1 eq 1}
+                                        <div id="input{$key1}ok_fm">
+                                            <input
+                                            {if $item1.head.ok_fm}checked{/if}
+                                            type=checkbox
+                                            onchange="save('tm',{$key1},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok_fm',this.checked?1:'');"
+                                        >
+                                        </div>
+                                    {/if}
+                                    {if $item1.head.ok_fm}{$item1.head.ok_fm_lu}{/if}
+                                </td>
+                                <td rowspan={$s1+1} style="text-align: center">
+                                    {if ($tn eq $key and not $smarty.request.print) or 1 eq 1}
+                                        <div id="input{$key1}ok_nm">
+                                            <input
+                                            {if $item1.head.ok_nm}checked{/if}
+                                            type=checkbox
+                                            onchange="save('tm',{$key1},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok_nm',this.checked?1:'');"
+                                        >
+                                        </div>
+                                    {/if}
+                                    {if $item1.head.ok_nm}{$item1.head.ok_nm_lu}{/if}
+                                </td>
+                                <td style="text-align:center">{$item1.head.faktoplachusl_total|num:3}</td>
+				<td rowspan={$s1+1} style="text-align: center">{$item1.head.remain|num:3}</td>
                                 <td rowspan={$s1+1}>
                                     <textarea
                                         id="input{$key1}comm"
@@ -114,17 +181,14 @@
 			{foreach key=key2 item=item2 from=$item1.data}
 				<tr style="vertical-align:middle;">
 					<td {if $item2.head.mkk_diff} style="background-color: lightcoral;" {/if}>{$item2.head.net_name}</td>
-                                        <td></td>
-					<td style="text-align:center">
-					<a target=_blank
-					href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets={$key2}">
-					{$item2.head.total1|default:0|num:3}
-					</a>
+					<td style="text-align:center">{$item2.head.total1|num:3}
+                                            <!--<a target=_blank
+                                            href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets={$key2}">
+                                            {$item2.head.total1|num:3}
+                                            </a>-->
 					</td>
-                                        <td style="text-align:center">{$item2.head.faktokazusl_total|default:0|num:3}</td>
-					<td style="text-align:center">{$item2.head.fou_total|default:0|num:3}</td>
-                                        <td></td>
-                                        <td></td>
+                                        <td style="text-align:center">{$item2.head.faktokazusl_total|num:3}</td>
+					<td style="text-align:center">{$item2.head.faktoplachusl_total|num:3}</td>
 				</tr>
 			{/foreach}
 		{/foreach}
@@ -138,6 +202,7 @@
 
 function save(table,tn,year,month,field,val)
 {
+        var color = $('#input'+tn+field).css('background-color');
 	$('#input'+tn+field).css('background-color','red');
 	var fd = new FormData();
 	fd.append('table',  table);
@@ -153,7 +218,7 @@ function save(table,tn,year,month,field,val)
 		processData: false,
 		contentType: false,
 		success: function(data) {
-			$('#input'+tn+field).css('background-color','white');
+			$('#input'+tn+field).css('background-color',color);
 			$('#ok').html(data);
 		}
 	});

@@ -7,7 +7,7 @@
 			<td>Месяц</td>
 			<td>НМКК</td>
 			<td>ТМ КК</td>
-			<td>Сеть</td>
+			<!--<td>Сеть</td>-->
 		</tr>
 		<tr>
 			<td>
@@ -46,6 +46,7 @@
 				</select>
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 			</td>
+                        <!--
 			<td>
 				<select name="nets" id="nets">
 					<option value=0></option>
@@ -55,6 +56,7 @@
 				</select>
 				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
 			</td>
+                        -->
 		</tr>
 	</table>
 	<input value="Построить отчет" name="generate" type="submit">
