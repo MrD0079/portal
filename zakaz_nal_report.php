@@ -9,21 +9,34 @@ if (isset($_REQUEST["save"]))
 	);
 	$_REQUEST['field'] == "ok" && $_REQUEST['val'] == "" && $_REQUEST["table"] == "nm" ? $vals = null : $vals = array($_REQUEST['field'] => $_REQUEST['val']);
 	Table_Update('promo_'.$_REQUEST["table"], $keys,$vals);
-	/*if ($_REQUEST['field'] == "ok" && $_REQUEST['val'] == 1 && $_REQUEST["table"] == "nm")
+	if ($_REQUEST['field'] == "ok" && $_REQUEST['val'] == 1 && $_REQUEST["table"] == "nm")
 	{
-		$url="https://localhost:8080/?username=".$_SESSION["_authsession"]["username"]."&password=".$password."&auto=1&action=zakaz_nal_report&generate=1&print=1&calendar_years=".$_REQUEST['year']."&plan_month=".$_REQUEST['month']."&nets=0&tn_rmkk=0&tn_mkk=0&table=4send";
+		$url="https://localhost:8080/?username=".$_SESSION["_authsession"]["username"]."&password=".$password."&auto=1&action=zakaz_nal_report&generate=1&print=1&calendar_years=".$_REQUEST['year']."&plan_month=".$_REQUEST['month']."&nets=0&tn_rmkk=".$_REQUEST['tn']."&tn_mkk=0&table=4send&nohead=1";
 		$r = file_get_contents($url);
-		$f_local="files/zakaz_nal_".get_new_file_id().".xls";
-		$fp = fopen($f_local, "w");
+                $r = trim(preg_replace('/\s+/', ' ', $r));
+		$fn="zakaz_nal_".get_new_file_id().".xls";
+		$fnWithPath="sz_files/".$fn;
+		$fp = fopen($fnWithPath, "w");
 		fwrite($fp, $r);
 		fclose($fp);
-		chmod($f_local,0777);
-		$fn[]=$f_local;
+		chmod($fnWithPath,0777);
+		$attaches[]=$fnWithPath;
 		$subj="Заказ промо по форме 2, команда КК, ".$_REQUEST['month'].".".$_REQUEST['year'];
 		$text="НМ КК согласовал заказ промобюджета по форме 2 на ".$_REQUEST['month'].".".$_REQUEST['year'];
-		$mails = $db->getOne("SELECT wm_concat(val_string) FROM parameters WHERE dpt_id = 1 AND param_name IN ('accept1', 'accept2')");
+                $text.=$r;
+		//$mails = $db->getOne("SELECT wm_concat(val_string) FROM parameters WHERE dpt_id = 1 AND param_name IN ('accept1', 'accept2')");
+		$mails = $db->getOne("SELECT wm_concat (e_mail) FROM user_list WHERE tn IN (2741600286, 2970)");
+                Table_Update(
+                        'promo_'.$_REQUEST["table"],
+                        $keys,
+                        array('text'=>$r,
+                            'fn'=>$fn
+                            )
+                        );
+		$db->query("BEGIN PR_PROMO_OK_SZ_CREATE (".$_REQUEST['tn'].", ".$_REQUEST['year'].", ".$_REQUEST['month']."); END;");
 		send_mail($mails,$subj,$text,$fn);
-	}*/
+		//send_mail("denis.yakovenko@avk.ua",$mails." *** ".$subj,$text,$attaches);
+	}
 }
 else
 {
