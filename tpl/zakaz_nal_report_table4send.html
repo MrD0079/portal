@@ -1,8 +1,8 @@
 
 <table border=1 cellpadding=0 cellspacing=0>
 	<tr style="font-weight:bold;">
-		<td>ТМ КК</td>
-		<td>Необходимая к перечислению сумма по форме 2, тыс.{$valuta}.</td>
+		<td></td>
+		<td>План/факт поступления денег, тыс.{$valuta}.</td>
 		<td>ФИО получателя</td>
 	</tr>
 	{foreach key=key item=item from=$data_table name=data_table}
@@ -13,5 +13,9 @@
 				<td>{$item1.head.recipient_fio}</td>
 			</tr>
 		{/foreach}
+                <tr style="font-weight: bold">
+			<td>{$item.head.rmkk_name}</td>
+			<td>{$item.head.sum_per|num:3}</td>
+		</tr>
 	{/foreach}
 </table>

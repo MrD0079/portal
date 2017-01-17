@@ -1,4 +1,6 @@
+{if not $smarty.request.nohead}
 <h1>Заказ промобюджета</h1>
+{/if}
 {if not $smarty.request.print}
 <form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
 	<table>
@@ -62,23 +64,11 @@
 	<input value="Построить отчет" name="generate" type="submit">
 </form>
 {/if}
-
-
 {if $smarty.request.generate}
-
-
-
-{if not $smarty.request.print}
-<a href="?action=zakaz_nal_report&generate=1&print=1&excel=1&filename=Заказ промобюджета">Экспорт в Excel</a>
-<!--
-<a target=_blank href="?action=zakaz_nal_report&generate=1&print=1&table=4send">4send</a>
--->
-{/if}
-
-{if $smarty.request.table eq '4send'}
-{include file="zakaz_nal_report_table4send.html"}
-{else}
-{include file="zakaz_nal_report_table.html"}
-{/if}
-
+    {if not $smarty.request.print}<a href="?action=zakaz_nal_report&generate=1&print=1&excel=1&filename=Заказ промобюджета">Экспорт в Excel</a>{/if}
+    {if $smarty.request.table eq '4send'}
+        {include file="zakaz_nal_report_table4send.html"}
+    {else}
+        {include file="zakaz_nal_report_table.html"}
+    {/if}
 {/if}

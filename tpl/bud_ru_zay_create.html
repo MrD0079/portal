@@ -66,10 +66,10 @@
 			<select name=new[fil] id=new_fil
 				required
 			>
-			<option></option>
+			<!--<option></option>
 			{foreach key=key item=item from=$fil}
 				<option value="{$item.bud_id}">{$item.bud_name|escape}</option>
-			{/foreach}
+			{/foreach}-->
 			</select>
 			<script>$('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);</script>
 		</td>
