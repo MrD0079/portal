@@ -35,18 +35,30 @@
 		</td>
                 <td style="text-align:center">{$item.head.faktokazusl_total|num:3}</td>
 		<td style="text-align:center">{$item.head.sum_per|num:3}</td>
-		<td colspan=3></td>
+		<td colspan=2></td>
                 <td style="text-align: center">
-                    {if ($tn eq $key and not $smarty.request.print) or 1 eq 0}
-			<div id="input{$key}ok">
+                    {if ($is_fin_man and not $smarty.request.print) or 1 eq 0}
+			<div id="input{$key}oknm_fm">
                             <input
-                            {if $item.head.ok}checked{/if}
+                            {if $item.head.oknm_fm}checked{/if}
                             type=checkbox
-                            onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','ok',this.checked?1:'');"
+                            onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','oknm_fm',this.checked?1:'');"
                         >
                         </div>
                     {/if}
-                    {if $item.head.ok}{$item.head.lu}{/if}
+                    {if $item.head.oknm_fm}{$item.head.oknm_fmlu}{/if}
+                </td>
+                <td style="text-align: center">
+                    {if ($tn eq $key and not $smarty.request.print) or 1 eq 0}
+			<div id="input{$key}oknm_nm">
+                            <input
+                            {if $item.head.oknm_nm}checked{/if}
+                            type=checkbox
+                            onchange="save('nm',{$key},'{$smarty.request.calendar_years}','{$smarty.request.plan_month}','oknm_nm',this.checked?1:'');"
+                        >
+                        </div>
+                    {/if}
+                    {if $item.head.oknm_nm}{$item.head.oknm_nmlu}{/if}
                 </td>
                 <td style="text-align:center">{$item.head.faktoplachusl_total|num:3}</td>
 		<td style="text-align:center">{$item.head.remain|num:3}</td>
@@ -69,7 +81,7 @@
 				</td>
                                 <td style="text-align:center">{$item1.head.faktokazusl_total|num:3}</td>
 				<td rowspan={$s1+1} style="text-align:center;">
-					{if (not $item.head.ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
+					{if (not $item.head.oknm_nm and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
 					<input
 						id="input{$key1}sum_per"
 						onchange="save('tm','{$key1}','{$smarty.request.calendar_years}','{$smarty.request.plan_month}','sum_per',this.value);"
@@ -116,7 +128,7 @@
                                     -->
                                    
                                     
-					{if (not $item.head.ok and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
+					{if (not $item.head.oknm_nm and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
                                         <nobr>
 					<a href="javascript:void(0);" onClick="$('#input{$key1}recipient option[value={$key1}]').prop('selected', true);$('#input{$key1}recipient').change();">По умолчанию</a>
 					<select
@@ -147,7 +159,7 @@
                                     {if $item1.head.ok_tm}{$item1.head.ok_tm_lu}{/if}
                                 </td>
                                 <td rowspan={$s1+1} style="text-align: center">
-                                    {if ($is_traid and not $smarty.request.print) or 1 eq 0}
+                                    {if ($is_fin_man and not $smarty.request.print) or 1 eq 0}
                                         <div id="input{$key1}ok_fm">
                                             <input
                                             {if $item1.head.ok_fm}checked{/if}

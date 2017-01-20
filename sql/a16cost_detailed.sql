@@ -31,7 +31,7 @@
          END
             tp_st_ts_reject_tm_or_traid,
          COUNT (DISTINCT tp_st) tp_st,
-         SUM (bonus) bonus
+         /*SUM (bonus)*/ bonus
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN bonus_eta
@@ -89,7 +89,7 @@ GROUP BY FIO_RM,
          TAB_NUM_TS,
          TAB_NUM_TM,
          TAB_NUM_RM,
-         DPT_ID
+         DPT_ID, bonus
 ORDER BY fio_rm,
          tn_rm,
          fio_tm,

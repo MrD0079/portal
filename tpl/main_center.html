@@ -163,7 +163,16 @@
 			</p>
 			{/if}
 
-			{if $bud_svod_ta}
+			{if $promo_nm and $is_rmkk}
+			<p>
+			Подтверждение заказа промобюджета
+			{foreach key=k item=i from=$promo_nm}
+			<a href="?action=zakaz_nal_report&year={$i.year}&month={$i.month}&generate=1">{$i.dt}</a>
+			{/foreach}
+			</p>
+			{/if}
+
+                        {if $bud_svod_ta}
 			<p>
 			Подтверждение отчета по фондам
 			{foreach key=k item=i from=$bud_svod_ta}

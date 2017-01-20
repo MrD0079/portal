@@ -1,11 +1,13 @@
-/* Formatted on 13.01.2017 22:21:40 (QP5 v5.252.13127.32867) */
+/* Formatted on 20.01.2017 16:16:42 (QP5 v5.252.13127.32867) */
   SELECT rmkk,
          rmkk_name,
          mkk_ter,
          mkk_name,
          MAX (mkk_diff) mkk_diff,
-         lu,
-         ok,
+         oknm_nm,
+         oknm_fm,
+         oknm_nmlu,
+         oknm_fmlu,
          ok_tm,
          ok_nm,
          ok_fm,
@@ -34,8 +36,10 @@
                    mkk_ter,
                    mkk_name,
                    MAX (mkk_diff) mkk_diff,
-                   lu,
-                   ok,
+                   oknm_nm,
+                   oknm_fm,
+                   oknm_nmlu,
+                   oknm_fmlu,
                    ok_tm,
                    ok_nm,
                    ok_fm,
@@ -76,8 +80,12 @@
                                 ok_nm_lu,
                              TO_CHAR (ptm.ok_fm_lu, 'dd.mm.yyyy hh24:mi:ss')
                                 ok_fm_lu,
-                             pnm.ok,
-                             TO_CHAR (pnm.lu, 'dd.mm.yyyy hh24:mi:ss') lu,
+                             pnm.oknm_nm,
+                             pnm.oknm_fm,
+                             TO_CHAR (pnm.oknm_nmlu, 'dd.mm.yyyy hh24:mi:ss')
+                                oknm_nmlu,
+                             TO_CHAR (pnm.oknm_fmlu, 'dd.mm.yyyy hh24:mi:ss')
+                                oknm_fmlu,
                              faktoplachusl.total faktoplachusl_total,
                              faktoplachusl_cur.total faktoplachusl_cur_total,
                              faktoplachusl_prev.total faktoplachusl_prev_total,
@@ -143,7 +151,7 @@
                                                                        FROM full
                                                                       WHERE master =
                                                                                :tn)
-                                                 OR (SELECT is_traid
+                                                 OR (SELECT is_fin_man
                                                        FROM user_list
                                                       WHERE tn = :tn) = 1)
                                             AND DECODE ( :tn_rmkk,
@@ -227,9 +235,8 @@
                              (  SELECT m.mkk_ter, m.id_net, SUM (m.total) total
                                   FROM nets_plan_month m
                                  WHERE     m.plan_type = 4
-                                       AND m.payment_type = 1
-                                       /*AND DECODE ( :nets, 0, m.id_net, :nets) =
-                                              m.id_net*/
+                                       AND m.payment_type = 1 /*AND DECODE ( :nets, 0, m.id_net, :nets) =
+                                                                     m.id_net*/
                                        AND m.year = :y
                                        AND m.month = :plan_month
                               GROUP BY m.mkk_ter, m.id_net) faktokazusl,
@@ -252,8 +259,10 @@
                    rmkk_name,
                    mkk_ter,
                    mkk_name,
-                   lu,
-                   ok,
+                   oknm_nm,
+                   oknm_fm,
+                   oknm_nmlu,
+                   oknm_fmlu,
                    ok_tm,
                    ok_nm,
                    ok_fm,
@@ -274,8 +283,10 @@ GROUP BY rmkk,
          rmkk_name,
          mkk_ter,
          mkk_name,
-         lu,
-         ok,
+         oknm_nm,
+         oknm_fm,
+         oknm_nmlu,
+         oknm_fmlu,
          ok_tm,
          ok_nm,
          ok_fm,

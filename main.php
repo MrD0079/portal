@@ -89,6 +89,11 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_funds_limits_dpu', $data);
 
+$sql=rtrim(file_get_contents('sql/main_promo_nm.sql'));
+$sql=stritr($sql,$params);
+$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('promo_nm', $data);
+
 $sql=rtrim(file_get_contents('sql/main_prob_test.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
