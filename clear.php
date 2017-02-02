@@ -1,4 +1,5 @@
 <?php
+$output = `find /home/httpd/server2/uprasoft/Loaded/                   -mtime +3 -delete`;
 $output = `find /home/httpd/server2/merch_chat_files                   -mtime +124 -delete`;
 $output = `find /home/httpd/server2/merch_photo_report_new_archives    -mtime +124 -delete`;
 $output = `find /home/httpd/server2/merch_spec_report_archives         -mtime +124 -delete`;
