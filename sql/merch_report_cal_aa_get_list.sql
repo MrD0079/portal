@@ -1,5 +1,6 @@
-/* Formatted on 14/08/2015 21:20:16 (QP5 v5.227.12220.39724) */
+/* Formatted on 06.02.2017 14:14:32 (QP5 v5.252.13127.32867) */
   SELECT h.*,
+         TO_CHAR (h.lu, 'dd.mm.yyyy hh24:mi:ss') lut,
          TO_CHAR (h.dts, 'dd.mm.yyyy') dts,
          TO_CHAR (h.dte, 'dd.mm.yyyy') dte,
          ch.city,
@@ -23,8 +24,8 @@
    WHERE     h.h_city = ch.h_city(+)
          AND h.id_net = n.id_net(+)
          AND h.ag_id = a.id(+)
-         AND DECODE (:ag_id, 0, NVL (h.ag_id, 0), :ag_id) = NVL (h.ag_id, 0)
-         AND (   (:dt = 1 AND TRUNC (SYSDATE) BETWEEN h.dts AND h.dte)
-              OR (:dt = 2 AND TRUNC (SYSDATE) > h.dte)
+         AND DECODE ( :ag_id, 0, NVL (h.ag_id, 0), :ag_id) = NVL (h.ag_id, 0)
+         AND (   ( :dt = 1 AND TRUNC (SYSDATE) BETWEEN h.dts AND h.dte)
+              OR ( :dt = 2 AND TRUNC (SYSDATE) > h.dte)
               OR :dt = 3)
-ORDER BY h.id
+ORDER BY h.lu DESC

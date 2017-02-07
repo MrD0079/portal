@@ -9,13 +9,13 @@
 		{foreach key=key1 item=item1 from=$item.data}
 			<tr>
 				<td>{$item1.head.mkk_name}</td>
-				<td>{$item1.head.sum_per|num:3}</td>
-				<td>{$item1.head.recipient_fio}</td>
+				<td>{$item1.head.sum_per|num:5}</td>
+                                <td>{$item1.head.recipient_fio}</td>
 			</tr>
 		{/foreach}
                 <tr style="font-weight: bold">
 			<td>{$item.head.rmkk_name}</td>
-			<td>{$item.head.sum_per|num:3}</td>
+			<td>{$item.head.sum_per|num:5}</td>
 		</tr>
 	{/foreach}
 </table>

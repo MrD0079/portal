@@ -7,13 +7,17 @@
 		<td style="width:70px;">Оперативный план расходов, тыс.{$valuta}.</td>
 		<td style="width:70px;">Факт оказанных услуг, тыс.{$valuta}.</td>
 		<td style="width:70px;">План/факт поступления денег ТМКК, тыс.{$valuta}.</td>
-		<td style="">ФИО получателя</td>
+		{if $smarty.request.byyear neq 1}
+                <td style="">ФИО получателя</td>
 		<td style="width:70px;">Подтверждение ТМКК</td>
 		<td style="width:70px;">Подтверждение ФМ</td>
 		<td style="width:70px;">Подтверждение НМКК</td>
+                {/if}
 		<td style="width:70px;">Факт выдачи денег, тыс.{$valuta}.</td>
 		<td style="width:70px;">Остаток текущего месяца, тыс.{$valuta}.</td>
-		<td style="">Сверка остатка. Данные ТМКК, тыс.{$valuta}.</td>
+		{if $smarty.request.byyear neq 1}
+                <td style="">Сверка остатка. Данные ТМКК, тыс.{$valuta}.</td>
+                {/if}
 	</tr>
 	{foreach key=key item=item from=$data_table name=data_table}
 		<tr style="vertical-align:middle; background-color: lightgreen">
@@ -26,16 +30,17 @@
 		{/foreach}
 		<td rowspan={$s1+1} style="text-align:center">{$item.head.rmkk_name}</td>
 		<td colspan=2>Итого по НМ КК</td>
-		<td style="text-align:center">{$item.head.remain_prev|num:3}</td>
-		<td style="text-align:center">{$item.head.total1|num:3}
+		<td style="text-align:center">{$item.head.remain_prev|num:5}</td>
+		<td style="text-align:center">{$item.head.total1|num:5}
                     <!--<a target=_blank
                     href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk=0&nets=0">
-                    {$item.head.total1|num:3}
+                    {$item.head.total1|num:5}
                     </a>-->
 		</td>
-                <td style="text-align:center">{$item.head.faktokazusl_total|num:3}</td>
-		<td style="text-align:center">{$item.head.sum_per|num:3}</td>
-		<td colspan=2></td>
+                <td style="text-align:center">{$item.head.faktokazusl_total|num:5}</td>
+		<td style="text-align:center">{$item.head.sum_per|num:5}</td>
+		{if $smarty.request.byyear neq 1}
+                <td colspan=2></td>
                 <td style="text-align: center">
                     {if ($is_fin_man and not $smarty.request.print) or 1 eq 0}
 			<div id="input{$key}oknm_fm">
@@ -60,9 +65,10 @@
                     {/if}
                     {if $item.head.oknm_nm}{$item.head.oknm_nmlu}{/if}
                 </td>
-                <td style="text-align:center">{$item.head.faktoplachusl_total|num:3}</td>
-		<td style="text-align:center">{$item.head.remain|num:3}</td>
-		<td></td>
+                {/if}
+                <td style="text-align:center">{$item.head.faktoplachusl_total|num:5}</td>
+		<td style="text-align:center">{$item.head.remain|num:5}</td>
+		{if $smarty.request.byyear neq 1}<td></td>{/if}
 		</tr>
 		{foreach key=key1 item=item1 from=$item.data}
 			<tr style="vertical-align:middle; background-color: lightblue">
@@ -72,14 +78,14 @@
 				{/foreach}
 				<td rowspan={$s1+1} style="text-align:center">{$item1.head.mkk_name}</td>
 				<td>Итого по ТМ КК</td>
-				<td rowspan={$s1+1}  style="text-align:center">{$item1.head.remain_prev|num:3}</td>
-				<td style="text-align:center">{$item1.head.total1|num:3}
+				<td rowspan={$s1+1}  style="text-align:center">{$item1.head.remain_prev|num:5}</td>
+				<td style="text-align:center">{$item1.head.total1|num:5}
                                     <!--<a target=_blank
                                     href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets=0">
-                                    {$item1.head.total1|num:3}
+                                    {$item1.head.total1|num:5}
                                     </a>-->
 				</td>
-                                <td style="text-align:center">{$item1.head.faktokazusl_total|num:3}</td>
+                                <td style="text-align:center">{$item1.head.faktokazusl_total|num:5}</td>
 				<td rowspan={$s1+1} style="text-align:center;">
 					{if (not $item.head.oknm_nm and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
 					<input
@@ -90,44 +96,11 @@
 					>
 					<script>$('#input{$key1}sum_per').val('{$item1.head.sum_per}');</script>
 					{else}
-					{$item1.head.sum_per|num:3}
+					{$item1.head.sum_per|num:5}
 					{/if}
 				</td>
+                                {if $smarty.request.byyear neq 1}
 				<td rowspan={$s1+1} style="text-align:center;">
-
-                                    <!--
-                                    <table border="1">
-                                    <tr>
-                                        <td>
-                                    пред. поступления</td><td>{$item1.head.tm_prev_sum_per|num:3}</td>
-                                        </tr><tr>
-                                        <td>
-                                    пред. выдачи денег</td><td> {$item1.head.faktoplachusl_prev_total|num:3}</td>
-                                        </tr><tr>
-                                        <td>
-                                    остаток на начало</td><td> {$item1.head.remain_prev|num:3}
-                                        </td>
-                                        </tr><tr>
-                                        <td>
-                                    поступления</td><td> {$item1.head.sum_per|num:3}</td>
-                                        </tr><tr>
-                                        <td>
-                                    выдача денег</td><td> {$item1.head.faktoplachusl_total|num:3}</td>
-                                        </tr><tr>
-                                        <td>
-                                    остаток на конец</td><td> {$item1.head.remain|num:3}
-                                        </td>
-                                        </tr><tr>
-                                        <td>
-                                    всего поступления</td><td> {$item1.head.tm_prev_sum_per+$item1.head.sum_per|num:3}</td>
-                                        </tr><tr>
-                                        <td>
-                                    всего выдача денег</td><td> {$item1.head.faktoplachusl_prev_total+$item1.head.faktoplachusl_total|num:3}</td>
-                                        </tr>
-                                    </table>
-                                    -->
-                                   
-                                    
 					{if (not $item.head.oknm_nm and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
                                         <nobr>
 					<a href="javascript:void(0);" onClick="$('#input{$key1}recipient option[value={$key1}]').prop('selected', true);$('#input{$key1}recipient').change();">По умолчанию</a>
@@ -182,8 +155,10 @@
                                     {/if}
                                     {if $item1.head.ok_nm}{$item1.head.ok_nm_lu}{/if}
                                 </td>
-                                <td style="text-align:center">{$item1.head.faktoplachusl_total|num:3}</td>
-				<td rowspan={$s1+1} style="text-align: center">{$item1.head.remain|num:3}</td>
+                                {/if}
+                                <td style="text-align:center">{$item1.head.faktoplachusl_total|num:5}</td>
+				<td rowspan={$s1+1} style="text-align: center">{$item1.head.remain|num:5}</td>
+                                {if $smarty.request.byyear neq 1}
                                 <td rowspan={$s1+1}>
                                     {if ($tn eq $key1 and not $smarty.request.print) or 1 eq 0}
                                     <textarea
@@ -194,18 +169,19 @@
                                         {$item1.head.comm}
                                     {/if}
                                 </td>
+                                {/if}
 			</tr>
 			{foreach key=key2 item=item2 from=$item1.data}
 				<tr style="vertical-align:middle;">
 					<td {if $item2.head.mkk_diff} style="background-color: lightcoral;" {/if}>{$item2.head.net_name}</td>
-					<td style="text-align:center">{$item2.head.total1|num:3}
+					<td style="text-align:center">{$item2.head.total1|num:5}
                                             <!--<a target=_blank
                                             href="?action=fin_plan_detail&plan_type=3&calendar_years={$smarty.request.calendar_years}&month={$smarty.request.plan_month}&payment_type=1&tn_rmkk={$key}&tn_mkk={$key1}&nets={$key2}">
-                                            {$item2.head.total1|num:3}
+                                            {$item2.head.total1|num:5}
                                             </a>-->
 					</td>
-                                        <td style="text-align:center">{$item2.head.faktokazusl_total|num:3}</td>
-					<td style="text-align:center">{$item2.head.faktoplachusl_total|num:3}</td>
+                                        <td style="text-align:center">{$item2.head.faktokazusl_total|num:5}</td>
+					<td style="text-align:center">{$item2.head.faktoplachusl_total|num:5}</td>
 				</tr>
 			{/foreach}
 		{/foreach}

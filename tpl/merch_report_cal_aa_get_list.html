@@ -17,9 +17,9 @@
 <thead>
 	<tr style="font-weight: bold;">
 		{if not $smarty.request.print}<td>[x]</td>{/if}
+		<td>Добавлено</td>
 		<td>Заказчик</td>
-		<td>Дата начала</td>
-		<td>Дата окончания</td>
+		<td>Дата начала - окончания</td>
 		<td>Области</td>
 		<td>Город</td>
 		<td>Сеть</td>
@@ -31,9 +31,9 @@
 {foreach key=k item=i from=$tbl}
 <tr id="tr_{$i.id}" style="vertical-align:top">
 	{if not $smarty.request.print}<td><a href="javascript:void(0);" onClick="del_item({$i.id});">[x]</a></td>{/if}
+        <td>{$i.lut}</td>
 	<td>{$i.ag_name}</td>
-	<td>{$i.dts}</td>
-	<td>{$i.dte}</td>
+	<td>{$i.dts} - {$i.dte}</td>
 	<td>{$i.obl}</td>
 	<td>{$i.city}</td>
 	<td>{$i.net_name}</td>

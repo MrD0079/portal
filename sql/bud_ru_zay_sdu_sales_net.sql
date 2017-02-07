@@ -1,4 +1,4 @@
-/* Formatted on 06/06/2016 16:13:20 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.02.2017 17:37:45 (QP5 v5.252.13127.32867) */
   SELECT c.data,
          c.y,
          c.my,
@@ -15,38 +15,21 @@
          m.zat_perc,
          m.sku,
          m.skidka,
-         (SELECT SUM (total)
-            FROM svs_new_view
-           WHERE     net_kod =
-                        (SELECT zff.val_list
-                           FROM bud_ru_ff ff, bud_ru_zay_ff zff
-                          WHERE     zff.z_id = :z_id
-                                AND zff.ff_id = ff.id
-                                AND ff.admin_id = 14)
-                 AND dpt_id = (SELECT u.dpt_id
-                                 FROM bud_ru_zay z, user_list u
-                                WHERE z.id = :z_id AND u.tn = z.tn)
-                 AND dt = c.data)
-            total_net
-    FROM (SELECT *
+         SUM (svs_new_view.total) total_net
+    FROM svs_new_view,
+         (SELECT *
             FROM calendar c,
                  (  SELECT tp_kod, MAX (tp_ur) tp_ur, MAX (tp_addr) tp_addr
                       FROM a14mega m
                      WHERE     m.tp_kod IN (SELECT tp_kod
                                               FROM tp_nets
                                              WHERE net_kod =
-                                                      (SELECT zff.val_list
-                                                         FROM bud_ru_ff ff,
-                                                              bud_ru_zay_ff zff
-                                                        WHERE     zff.z_id =
-                                                                     :z_id
-                                                              AND zff.ff_id =
-                                                                     ff.id
-                                                              AND ff.admin_id =
-                                                                     14))
-                           AND m.dpt_id = (SELECT u.dpt_id
-                                             FROM bud_ru_zay z, user_list u
-                                            WHERE z.id = :z_id AND u.tn = z.tn)
+                                                      TO_NUMBER (
+                                                         getZayFieldVal (
+                                                            :z_id,
+                                                            'admin_id',
+                                                            14)))
+                           AND m.dpt_id = :zayDptId
                   GROUP BY tp_kod) m
            WHERE     c.data BETWEEN (SELECT ADD_MONTHS (
                                                TRUNC (dt_start, 'yyyy'),
@@ -155,13 +138,7 @@
                                                WHERE     ff_id IN (SELECT id
                                                                      FROM bud_ru_ff
                                                                     WHERE     dpt_id =
-                                                                                 (SELECT u.dpt_id
-                                                                                    FROM bud_ru_zay z,
-                                                                                         user_list u
-                                                                                   WHERE     z.id =
-                                                                                                :z_id
-                                                                                         AND u.tn =
-                                                                                                z.tn)
+                                                                                 :zayDptId
                                                                           AND rep_var_name IN ('rv3',
                                                                                                'rv4'))
                                                      AND z_id = z1.id)
@@ -171,13 +148,7 @@
                                                WHERE     ff_id IN (SELECT id
                                                                      FROM bud_ru_ff
                                                                     WHERE     dpt_id =
-                                                                                 (SELECT u.dpt_id
-                                                                                    FROM bud_ru_zay z,
-                                                                                         user_list u
-                                                                                   WHERE     z.id =
-                                                                                                :z_id
-                                                                                         AND u.tn =
-                                                                                                z.tn)
+                                                                                 :zayDptId
                                                                           AND admin_id =
                                                                                  4)
                                                      AND z_id = z1.id)
@@ -251,18 +222,33 @@
                            AND m.tp_kod IN (SELECT tp_kod
                                               FROM tp_nets
                                              WHERE net_kod =
-                                                      (SELECT zff.val_list
-                                                         FROM bud_ru_ff ff,
-                                                              bud_ru_zay_ff zff
-                                                        WHERE     zff.z_id =
-                                                                     :z_id
-                                                              AND zff.ff_id =
-                                                                     ff.id
-                                                              AND ff.admin_id =
-                                                                     14))
-                           AND m.dpt_id = (SELECT u.dpt_id
-                                             FROM bud_ru_zay z, user_list u
-                                            WHERE z.id = :z_id AND u.tn = z.tn))
+                                                      TO_NUMBER (
+                                                         getZayFieldVal (
+                                                            :z_id,
+                                                            'admin_id',
+                                                            14)))
+                           AND m.dpt_id = :zayDptId)
           GROUP BY dt, m, tp_kod) m
-   WHERE c.data = m.dt(+) AND c.tp_kod = m.tp_kod(+)
+   WHERE     c.data = m.dt(+)
+         AND c.tp_kod = m.tp_kod(+)
+         AND svs_new_view.net_kod(+) =
+                TO_NUMBER (getZayFieldVal ( :z_id, 'admin_id', 14))
+         AND svs_new_view.dpt_id(+) = :zayDptId
+         AND svs_new_view.dt(+) = c.data
+GROUP BY c.data,
+         c.y,
+         c.my,
+         c.mt,
+         c.tp_kod,
+         c.tp_ur,
+         c.tp_addr,
+         m.summa,
+         m.total,
+         m.act_bonus,
+         m.act_local_bonus,
+         m.zay_zat,
+         m.zat_total,
+         m.zat_perc,
+         m.sku,
+         m.skidka
 ORDER BY c.data, c.my, c.mt

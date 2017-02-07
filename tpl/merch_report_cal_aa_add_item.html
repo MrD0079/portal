@@ -1,17 +1,15 @@
-
 <input type=hidden id=id value="{$id}">
-
 <table width=800px>
 <tr>
 <td>Дата начала</td>
 <td>
-<input id="dts" class="datepicker">
+<input required="required" id="dts" class="datepicker">
 </td>
 </tr>
 <tr>
 <td>Дата окончания</td>
 <td>
-<input id="dte" class="datepicker">
+<input required="required" id="dte" class="datepicker">
 </td>
 </tr>
 <tr>
@@ -72,6 +70,5 @@
 </td>
 </tr>
 </table>
-
-
-<p><a href="javascript:void(0);" onclick="add_item(null);">Добавить активность</a></p>
+<p><a href="javascript:void(0);" onclick="add_item();">Добавить активность</a></p>
+<p style="color:red">{$result}</p>

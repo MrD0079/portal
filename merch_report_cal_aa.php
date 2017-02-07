@@ -2,10 +2,10 @@
 if (isset($_REQUEST['add_item']))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
-	if ($_REQUEST['id']!='undefined')
+	ses_req();
+	if ($_REQUEST['id']!='undefined'&&$_REQUEST['dts']!=''&&$_REQUEST['dte']!='')
 	{
-		//ses_req();
-		$keys = array('id'=>$_REQUEST["id"]);
+      		$keys = array('id'=>$_REQUEST["id"]);
 		$vals = array(
 			'dts'=>OraDate2MDBDate($_REQUEST['dts']),
 			'dte'=>OraDate2MDBDate($_REQUEST['dte']),
@@ -24,7 +24,10 @@ if (isset($_REQUEST['add_item']))
 			$keys = array('head_id'=>$_REQUEST["id"],'h_o'=>$v);
 			Table_Update('merch_report_cal_aa_o', $keys,$keys);
 		}
-	}
+                $smarty->assign('result', 'Добавлена активность №'.$_REQUEST["id"]);
+        } else {
+                $smarty->assign('result', 'Активность не добавлена, введите даты начала/окончания');
+        }
 	$smarty->assign('id', get_new_id());
 	$sql = rtrim(file_get_contents('sql/merch_report_cal_aa_list_a.sql'));
 	$x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

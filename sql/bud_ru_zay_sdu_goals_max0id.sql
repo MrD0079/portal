@@ -1,4 +1,4 @@
-/* Formatted on 17/03/2016 17:39:40 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.02.2017 17:42:59 (QP5 v5.252.13127.32867) */
 SELECT CASE
           WHEN NVL (MAX (CASE WHEN status = 0 THEN id END), 0) >
                   NVL (MAX (CASE WHEN status = 1 THEN id END), 0)
@@ -32,14 +32,9 @@ SELECT CASE
                            FROM bud_ru_zay
                           WHERE id = :z_id)
                  AND ff.admin_id =
-                        DECODE (
-                           (SELECT zff.val_list
-                              FROM bud_ru_ff ff, bud_ru_zay_ff zff
-                             WHERE     zff.z_id = :z_id
-                                   AND zff.ff_id = ff.id
-                                   AND ff.admin_id = 13),
-                           100027437, 4,
-                           100027436, 14)
+                        DECODE (getZayFieldVal ( :z_id, 'admin_id', 13),
+                                100027437, 4,
+                                100027436, 14)
                  AND zff.val_list =
                         (SELECT zff.val_list
                            FROM bud_ru_ff ff, bud_ru_zay_ff zff
@@ -47,12 +42,9 @@ SELECT CASE
                                 AND zff.ff_id = ff.id
                                 AND ff.admin_id =
                                        DECODE (
-                                          (SELECT zff.val_list
-                                             FROM bud_ru_ff ff,
-                                                  bud_ru_zay_ff zff
-                                            WHERE     zff.z_id = :z_id
-                                                  AND zff.ff_id = ff.id
-                                                  AND ff.admin_id = 13),
+                                          getZayFieldVal ( :z_id,
+                                                          'admin_id',
+                                                          13),
                                           100027437, 4,
                                           100027436, 14))
                  AND (SELECT NVL (tu, 0)

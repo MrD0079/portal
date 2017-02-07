@@ -7,8 +7,14 @@ $params=array(':z_id' => $_REQUEST["z_id"]);
 $sql=stritr($sql,$params);
 $tp_type = $db->getOne($sql);
 
+$sql=rtrim("SELECT getZayDptId (:z_id) FROM DUAL");
+$sql=stritr($sql,$params);
+$zayDptId = $db->getOne($sql);
+$params[":zayDptId"] = $zayDptId;
+
+
+
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_sdu_sales_'.$tp_type.'.sql'));
-$params=array(':z_id' => $_REQUEST["z_id"]);
 $sql=stritr($sql,$params);
 $d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach($d as $k=>$v){
@@ -19,7 +25,6 @@ foreach($d as $k=>$v){
 isset($d1)?$smarty->assign('sales', $d1):null;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_sdu_sales_'.$tp_type.'_total.sql'));
-$params=array(':z_id' => $_REQUEST["z_id"]);
 $sql=stritr($sql,$params);
 $d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach($d as $k=>$v){
@@ -31,12 +36,10 @@ foreach($d as $k=>$v){
 $smarty->assign('sales_t', $d);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_get_head.sql'));
-$p=array(':z_id' => $_REQUEST["z_id"]);
-$sql=stritr($sql,$p);
+$sql=stritr($sql,$params);
 $d = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
-$p=array(':z_id' => $_REQUEST["z_id"]);
-$sql=stritr($sql,$p);
+$sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 foreach ($data as $k1=>$v1)
 {
@@ -52,7 +55,6 @@ $smarty->assign('z', $d);
 //$tn=$_REQUEST["tn"];
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_sdu_goals.sql'));
-$params=array(':z_id' => $_REQUEST["z_id"]);
 $sql=stritr($sql,$params);
 $d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //echo $sql;
@@ -60,7 +62,6 @@ $d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('goals', $d);
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_sdu_goals_max0id.sql'));
-$params=array(':z_id' => $_REQUEST["z_id"]);
 $sql=stritr($sql,$params);
 $goals_max0id = $db->getOne($sql);
 $smarty->assign('goals_max0id', $goals_max0id);

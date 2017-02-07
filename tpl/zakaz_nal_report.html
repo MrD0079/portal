@@ -9,7 +9,7 @@
 			<td>Месяц</td>
 			<td>НМКК</td>
 			<td>ТМ КК</td>
-			<!--<td>Сеть</td>-->
+			<td>Накопительный отчет</td>
 		</tr>
 		<tr>
 			<td>
@@ -48,17 +48,10 @@
 				</select>
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 			</td>
-                        <!--
 			<td>
-				<select name="nets" id="nets">
-					<option value=0></option>
-					{foreach key=key item=item from=$nets}
-							<option value={$item.id_net}>{$item.net_name}</option>
-					{/foreach}
-				</select>
-				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+				<input type="hidden" name="byyear" id="byyear" value="{$smarty.request.byyear}">
+                                <input type="checkbox" {if $smarty.request.byyear eq 1}checked{/if} onclick="$('#byyear').val(this.checked?1:0)">
 			</td>
-                        -->
 		</tr>
 	</table>
 	<input value="Построить отчет" name="generate" type="submit">

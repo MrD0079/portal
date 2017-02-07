@@ -47,13 +47,15 @@ InitRequestVar("calendar_years");
 InitRequestVar("plan_month");
 InitRequestVar("tn_rmkk");
 InitRequestVar("tn_mkk");
+InitRequestVar("byyear",0);
 if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
 {
-	$sql=rtrim(file_get_contents('sql/zakaz_nal_report_table.sql'));
-	$sql1=rtrim(file_get_contents('sql/zakaz_nal_report_table1.sql'));
-	$sql2=rtrim(file_get_contents('sql/zakaz_nal_report_table2.sql'));
+	$sql=rtrim(file_get_contents('sql/zakaz_nal_report_'.$_REQUEST["byyear"].'table.sql'));
+	$sql1=rtrim(file_get_contents('sql/zakaz_nal_report_'.$_REQUEST["byyear"].'table1.sql'));
+	$sql2=rtrim(file_get_contents('sql/zakaz_nal_report_'.$_REQUEST["byyear"].'table2.sql'));
 	$params=array(
-		':y'=>$_REQUEST["calendar_years"],
+            ':byyear'=>$_REQUEST["byyear"],
+            ':y'=>$_REQUEST["calendar_years"],
 		":plan_month" => $_REQUEST["plan_month"],
 		//':nets'=>$_REQUEST["nets"],
 		':tn_rmkk'=>$_REQUEST["tn_rmkk"],
