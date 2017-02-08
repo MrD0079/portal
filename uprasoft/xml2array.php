@@ -1,5 +1,4 @@
 <?
-
 function xml2array($contents, $get_attributes=1, $priority = 'tag') {
     if(!$contents) return array();
 
@@ -122,9 +121,4 @@ function xml2array($contents, $get_attributes=1, $priority = 'tag') {
     }
     
     return($xml_array);
-}  
-
-
-?>
-
-
+}
