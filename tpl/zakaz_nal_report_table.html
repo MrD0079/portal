@@ -87,7 +87,14 @@
 				</td>
                                 <td style="text-align:center">{$item1.head.faktokazusl_total|num:5}</td>
 				<td rowspan={$s1+1} style="text-align:center;">
-					{if (not $item.head.oknm_nm and $tn eq $key1 and not $smarty.request.print) or 1 eq 0}
+					{if
+                                            (
+                                                $smarty.request.byyear neq 1
+                                                    and
+                                                (not $item.head.oknm_nm and $tn eq $key1 and not $smarty.request.print)
+                                            )
+                                            or 1 eq 0
+                                        }
 					<input
 						id="input{$key1}sum_per"
 						onchange="save('tm','{$key1}','{$smarty.request.calendar_years}','{$smarty.request.plan_month}','sum_per',this.value);"

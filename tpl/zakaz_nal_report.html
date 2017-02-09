@@ -5,13 +5,7 @@
 <form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
 	<table>
 		<tr>
-			<td>Год</td>
-			<td>Месяц</td>
-			<td>НМКК</td>
-			<td>ТМ КК</td>
-			<td>Накопительный отчет</td>
-		</tr>
-		<tr>
+			<td style="text-align: right">Год (а)</td>
 			<td>
 				<select name="calendar_years" id="calendar_years" required>
 					<option value=0></option>
@@ -21,6 +15,18 @@
 				</select>
 				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
 			</td>
+                        <td rowspan="5" style="color:red;width: 100px">
+                        </td>
+                        <td rowspan="5" style="color:red; text-align: center">
+                                Если в отчете нет данных<br>
+                                по какому-либо ТМ КК,<br>
+                                необходимо внести<br>
+                                оперплан по форме 2<br>
+                                по данному ТМ КК
+                        </td>
+		</tr>
+		<tr>
+			<td style="text-align: right">Месяц (б)</td>
 			<td style="vertical-align: top;">
 				<select name="plan_month" id="plan_month" required>
 					<option></option>
@@ -30,6 +36,9 @@
 				</select>
 				<script>$('#plan_month option[value="{$smarty.request.plan_month}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">НМКК</td>
 			<td style="vertical-align: top;">
 				<select name=tn_rmkk id=tn_rmkk>
 					<option value=0></option>
@@ -39,6 +48,9 @@
 				</select>
 				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">ТМ КК</td>
 			<td style="vertical-align: top;">
 				<select name=tn_mkk id=tn_mkk>
 					<option value=0></option>
@@ -48,17 +60,29 @@
 				</select>
 				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
 			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">Накопительный</td>
 			<td>
 				<input type="hidden" name="byyear" id="byyear" value="{$smarty.request.byyear}">
                                 <input type="checkbox" {if $smarty.request.byyear eq 1}checked{/if} onclick="$('#byyear').val(this.checked?1:0)">
+                                с начала года (а) по месяц (б)
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right"></td>
+			<td>
+                            <input value="Построить отчет" name="generate" type="submit">
+                            <br>
+                            {if $smarty.request.generate}
+                                {if not $smarty.request.print}<a href="?action=zakaz_nal_report&generate=1&print=1&excel=1&filename=Заказ промобюджета">Экспорт в Excel</a>{/if}
+                            {/if}
 			</td>
 		</tr>
 	</table>
-	<input value="Построить отчет" name="generate" type="submit">
 </form>
 {/if}
 {if $smarty.request.generate}
-    {if not $smarty.request.print}<a href="?action=zakaz_nal_report&generate=1&print=1&excel=1&filename=Заказ промобюджета">Экспорт в Excel</a>{/if}
     {if $smarty.request.table eq '4send'}
         {include file="zakaz_nal_report_table4send.html"}
     {else}

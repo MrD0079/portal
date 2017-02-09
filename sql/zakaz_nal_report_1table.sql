@@ -1,8 +1,9 @@
-/* Formatted on 06.02.2017 18:54:34 (QP5 v5.252.13127.32867) */
+/* Formatted on 09.02.2017 14:59:06 (QP5 v5.252.13127.32867) */
   SELECT rmkk,
          rmkk_name,
          mkk_ter,
          mkk_name,
+         MAX (mkk_diff) mkk_diff,
          id_net,
          net_name,
          SUM (total1) total1,
@@ -14,6 +15,7 @@
                    rmkk_name,
                    mkk_ter,
                    mkk_name,
+                   MAX (mkk_diff) mkk_diff,
                    id_net,
                    net_name,
                    SUM (total1) total1,
