@@ -8,6 +8,7 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["new_staff"]))
 		$v["limitkom"]=str_replace(",", ".", $v["limitkom"]);
 		$v["limittrans"]=str_replace(",", ".", $v["limittrans"]);
 		$v["limit_car_vol"]=str_replace(",", ".", $v["limit_car_vol"]);
+		$v["gbo_installed"]=$v["gbo_installed"];
 		Table_Update("new_staff",array("id"=>$k),$v);
 	}
 	if (isset($_REQUEST["new_staff_detail"]))

@@ -71,6 +71,17 @@
 					<td><input class="number" required name="new_staff[{$item1.id}][limitkom]" size=30 value="{$item1.limitkom|escape}"></td>
 				</tr>
 				<tr>
+					<td>Установлено ГБО</td>
+					<td>
+                                            <input onClick="$('#gbo_installed{$item1.id}').val(this.checked?1:0);" type=checkbox id=cb_gbo_installed{$item1.id}>
+                                            <input type=hidden name="new_staff[{$item1.id}][gbo_installed]" id="gbo_installed{$item1.id}" value="{$item1.gbo_installed}">
+                                            <script>
+                                            $('#gbo_installed{$item1.id}').val({$item1.gbo_installed});
+                                            $('#cb_gbo_installed{$item1.id}').prop('checked',{$item1.gbo_installed}==1?true:false);
+                                            </script>
+                                        </td>
+				</tr>
+				<tr>
 					<td>Личная карточка</td>
 					<td><a target=_blank href="new_staff_files/{$item1.fn}">{$item1.fn}</a></td>
 				</tr>

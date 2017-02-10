@@ -36,7 +36,7 @@
 		<td>Представительские, {$valuta}</td>
 		<td>Канцтовары, {$valuta}</td>
 		<td>Моб. связь, {$valuta}</td>
-		<td>ГБО</td>
+		<td>Установлено ГБО</td>
 		<td>На основе СЗ №</td>
 		<td>На основе заявки на активность №</td>
 		<td>Кто и когда изменил</td>
@@ -50,11 +50,11 @@
 		<td><input {$disabled} class="number" size=10 name=limits[limitkanc] value="{$limits_current.limitkanc}"></td>
 		<td><input {$disabled} class="number" size=10 name=limits[limitmob] value="{$limits_current.limitmob}"></td>
                 <td>
-                    <input {$disabled} onClick="$('#limit_gbo').val(this.checked?1:0);" type=checkbox id=cb_limit_gbo>
-                    <input {$disabled} type=hidden name="limits[limit_gbo]" id="limit_gbo" value="{$spdtree_edit.limit_gbo}">
+                    <input {$disabled} onClick="$('#gbo_installed').val(this.checked?1:0);" type=checkbox id=cb_gbo_installed>
+                    <input {$disabled} type=hidden name="limits[gbo_installed]" id="gbo_installed" value="{$spdtree_edit.gbo_installed}">
                     <script>
-                    $('#limit_gbo').val({$limits_current.limit_gbo});
-                    $('#cb_limit_gbo').prop('checked',{$limits_current.limit_gbo}==1?true:false);
+                    $('#gbo_installed').val({$limits_current.gbo_installed});
+                    $('#cb_gbo_installed').prop('checked',{$limits_current.gbo_installed}==1?true:false);
                     </script>
                 </td>
 		<td><input {$disabled} class="number_int" size=10 name=limits[sz_id]></td>
@@ -70,7 +70,7 @@
 		<td>{$i.limitpred}</td>
 		<td>{$i.limitkanc}</td>
 		<td>{$i.limitmob}</td>
-                <td>{if $i.limit_gbo}да{else}нет{/if}</td>
+                <td>{if $i.gbo_installed}да{else}нет{/if}</td>
 		<td><a target=_blank href="?action=sz_reestr&sz_id={$i.sz_id}&select=1">{$i.sz_id}</a></td>
 		<td><a target=_blank href="?action=bud_ru_zay_reestr&tu=0&z_id={$i.zay_id}&select=1">{$i.zay_id}</a></td>
 		<td>{$i.lu_fio} {$i.lu_txt}</td>

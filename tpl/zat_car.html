@@ -54,7 +54,7 @@
 		<td>
                     {if $zat_enabled}
                         <input size=5 class="number"
-                           {if $limits_current.limit_gbo eq 0}disabled{/if}
+                           {if $limits_current.gbo_installed eq 0}disabled{/if}
                            name="zat_monthly[gbo_warmup_vol]"
                            value={$zat_monthly.gbo_warmup_vol}
                         >
@@ -67,7 +67,7 @@
 		<td>
                     {if $zat_enabled}
                         <input size=5 class="number"
-                           {if $limits_current.limit_gbo eq 0}disabled{/if}
+                           {if $limits_current.gbo_installed eq 0}disabled{/if}
                            name="zat_monthly[gbo_warmup_sum]"
                            value={$zat_monthly.gbo_warmup_sum}
                         >
@@ -80,7 +80,7 @@
 		<td colspan=10>
                     Амортизация - {if $amort eq 0}нет{else}да - {$amort*100}%{/if}
                     &nbsp
-                    ГБО - {if $limits_current.limit_gbo eq 0}нет{else}да{/if}
+                    ГБО - {if $limits_current.gbo_installed eq 0}нет{else}да{/if}
                 </td>
 		<td>
 			{$zat_monthly.amort}

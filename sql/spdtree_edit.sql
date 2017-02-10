@@ -39,7 +39,7 @@
          l.LIMITKANC,
          l.LIMITMOB,
          l.LIMIT_CAR_VOL,
-         l.limit_gbo,
+         l.gbo_installed,
          LIMITPER,
          AVANS,
          amort,

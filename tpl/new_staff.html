@@ -62,6 +62,13 @@
 		<td><input class="number" required name="new_staff[limitkom]" size=30 value=0></td>
 	</tr>
 	<tr>
+		<td>Установлено ГБО</td>
+		<td>
+                    <input onClick="$('#gbo_installed').val(this.checked?1:0);" type=checkbox id=cb_gbo_installed>
+                    <input type=hidden name="new_staff[gbo_installed]" id="gbo_installed" value="0">
+                </td>
+	</tr>
+	<tr>
 		<td>Прикрепить личную карточку</td>
 		<td><input name="fn" type="file"></td>
 	</tr>

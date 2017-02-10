@@ -15,14 +15,19 @@ if (isset($_REQUEST["new_staff"]))
 		$_REQUEST["new_staff"]["limitkom"]=str_replace(",", ".", $_REQUEST["new_staff"]["limitkom"]);
 		$_REQUEST["new_staff"]["limittrans"]=str_replace(",", ".", $_REQUEST["new_staff"]["limittrans"]);
 		$_REQUEST["new_staff"]["limit_car_vol"]=str_replace(",", ".", $_REQUEST["new_staff"]["limit_car_vol"]);
+		$_REQUEST["new_staff"]["gbo_installed"]=$_REQUEST["new_staff"]["gbo_installed"];
 		$_REQUEST["new_staff"]["dpt_id"]=$_SESSION["dpt_id"];
 		$_REQUEST["new_staff"]["id"]=$id;
 		$d1="new_staff_files";
 		if (!file_exists($d1)) {mkdir($d1);}
 		foreach ($_FILES as $k=>$v)
 		{
-			if (is_uploaded_file($v['tmp_name'])){move_uploaded_file($v["tmp_name"], $d1."/".translit($v["name"]));}
-			$_REQUEST["new_staff"][$k]=translit($v["name"]);
+                        $fn=get_new_file_id()."_".translit($v["name"]);
+			if (is_uploaded_file($v['tmp_name'])){
+                            move_uploaded_file($v["tmp_name"], $d1."/".$fn);
+                            
+                        }
+			$_REQUEST["new_staff"][$k]=$fn;
 		}
 
 		Table_Update("new_staff",$_REQUEST["new_staff"],$_REQUEST["new_staff"]);
@@ -63,6 +68,8 @@ if (isset($_REQUEST["new_staff"]))
 			$text.="Лимит ком.: ".$_REQUEST["new_staff"]["limitkom"]."<br>";
 			$text.="Лимит транс.: ".$_REQUEST["new_staff"]["limittrans"]."<br>";
 			$text.="Лимит транс., л: ".$_REQUEST["new_staff"]["limit_car_vol"]."<br>";
+                        $gbo_installed = $_REQUEST["new_staff"]["gbo_installed"]==1?'да':'нет';
+			$text.="Установлено ГБО: ".$gbo_installed."<br>";
 			$text.="Марка авто: ".$_REQUEST["new_staff"]["car_brand"]."<br>";
 			$text.="Адрес e-mail: ".$_REQUEST["new_staff"]["email"]."<br>";
 			$text.="Прямые подчиненные нового сотрудника:<br>";
@@ -95,6 +102,8 @@ if (isset($_REQUEST["new_staff"]))
 			$text.="Лимит ком.: ".$_REQUEST["new_staff"]["limitkom"]."<br>";
 			$text.="Лимит транс.: ".$_REQUEST["new_staff"]["limittrans"]."<br>";
 			$text.="Лимит транс., л: ".$_REQUEST["new_staff"]["limit_car_vol"]."<br>";
+                        $gbo_installed = $_REQUEST["new_staff"]["gbo_installed"]==1?'да':'нет';
+			$text.="Установлено ГБО: ".$gbo_installed."<br>";
 			$text.="Марка авто: ".$_REQUEST["new_staff"]["car_brand"]."<br>";
 			$text.="Адрес e-mail: ".$_REQUEST["new_staff"]["email"]."<br>";
 			send_mail($v["e_mail"],$subj,$text,null);
