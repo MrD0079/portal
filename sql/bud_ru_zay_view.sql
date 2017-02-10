@@ -70,7 +70,7 @@
                  AND bud_ru_zay.payment_type = pt.id(+)
                  AND bud_ru_zay.statya = ss.id(+)
                  AND bud_ru_zay.fil = f.id
-                 AND bud_ru_zay.funds = fu.id
+                 AND bud_ru_zay.funds = fu.id(+)
                  AND bud_ru_zay.id = bud_ru_zay_accept.z_id
                  AND bud_ru_zay_accept.accepted = bud_ru_zayat.id
                  AND bud_ru_zay.id = :id) z

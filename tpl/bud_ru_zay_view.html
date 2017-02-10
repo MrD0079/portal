@@ -1,10 +1,11 @@
-<table border=0 cellpadding=5 cellspacing=0 width=100%>
+<table border=0 cellpadding=0 cellspacing=0 width=100% style="font-size:8pt">
 	<tr style="text-align:center;">
-		<td colspan=2>
+		<td style="text-align:left;"><img src="bud_ru_zay_files/chart{$smarty.request.id}.png"/></td>
+		<td style="text-align:center;">
 			<p><img src="design/logo.png" border="0"/></p>
-			<h2>
+			<h3>
 			ДИРЕКЦИЯ ПО ПРОДАЖАМ ООО "АВК КОНФЕКШИНЭРИ"
-			</h2>
+			</h3>
 		</td>
 	</tr>
 	<tr>
@@ -13,15 +14,10 @@
 	</tr>
 	<tr style="text-align:center;">
 		<td colspan=2>
-			<h3>
-			{if $smarty.request.tu eq 1}Торговые условия{else}Заявка на проведение активности{/if}
-			</h3>
+			<h3>{if $smarty.request.tu eq 1}Торговые условия{else}Заявка на проведение активности{/if}</h3>
 		</td>
 	</tr>
 </table>
-
-
-
 {if $d.head.net_name}
 <p style="text-align:left;font-size:8pt">
 	Сеть:<b>{$d.head.net_name}</b>
@@ -30,9 +26,6 @@
 	Возмещение дистрибутору:<b>{if $d.head.distr_compensation eq 1}да{else}нет{/if}</b>
 </p>
 {/if}
-
-
-
 <p style="text-align:left;font-size:8pt">
 	{foreach key=k1 item=i1 from=$d.ff}
 		{if $i1.type neq 'file'}
@@ -50,18 +43,19 @@
 		{/if}
 	{/foreach}
 </p>
-<table border=0 cellpadding=5 cellspacing=0 width=100%>
+<table border=0 cellpadding=0 cellspacing=0 width=100% style="font-size:8pt">
 	<tr>
-		<td style="text-align:left;"><img src="bud_ru_zay_files/chart{$smarty.request.id}.png"/></td>
-		<td style="text-align:right;">{$d.head.creator_pos}<br>{$d.head.creator}</td>
+            <td style="text-align:left; vertical-align: top">
+                {if $d.chat}
+                    Комментарии/уточнения:<br>
+                    {foreach key=k1 item=i1 from=$d.chat}
+                            <font style="color:red">{$i1.chat_time}</font>
+                            {$i1.pos_name}, {$i1.department_name}, <font style="color:green">{$i1.chater}:</font>
+                            <font style="color:blue">{$i1.text}</font>
+                            <br>
+                    {/foreach}
+                {/if}
+            </td>
+            <td style="text-align:right; vertical-align: bottom">{$d.head.creator_pos}<br>{$d.head.creator}</td>
 	</tr>
 </table>
-<p>Комментарии/уточнения:</p>
-<p style="text-align:left;font-size:8pt">
-{foreach key=k1 item=i1 from=$d.chat}
-	<font style="color:red">{$i1.chat_time}</font>
-	{$i1.pos_name}, {$i1.department_name}, <font style="color:green">{$i1.chater}:</font>
-	<font style="color:blue">{$i1.text}</font>
-	<br>
-{/foreach}
-</p>

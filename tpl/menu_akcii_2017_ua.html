@@ -60,5 +60,13 @@
 		{if $is_admin or $is_traid or $is_super}<li><a href="?act=a1702b&action=act_report_v&y=2017&month=2">Отчет ВСТМ</a></li>{/if}
 	</ul>
 	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Королевское предложение 2</span></a>
+	<ul>
+		<li><a target=_blank href="https://bitrix.avk.ua/~64E7t">Условия акции</a></li>
+		{if $is_ts}                             <li><a href="?act=a1702kp&action=a1702kp_tp_select&y=2017&month=2">Выбор ТП для участия в акции</a></li>{/if}
+                                                        <li><a href="?act=a1702kp&action=a1702kp_report_a&y=2017&month=2">Отчет по акции</a></li>
+		{if $is_admin or $is_traid or $is_super}<li><a href="?act=a1702kp&action=act_report_v&y=2017&month=2">Отчет ВСТМ</a></li>{/if}
+	</ul>
+	</li>
 </ul>
 </li>

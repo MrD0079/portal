@@ -1,4 +1,4 @@
-/* Formatted on 29.12.2016 15:40:05 (QP5 v5.252.13127.32867) */
+/* Formatted on 15/06/2016 13:51:51 (QP5 v5.252.13127.32867) */
   SELECT an.id,
          d.nakl,
          TO_CHAR (d.data, 'dd.mm.yyyy') data,
@@ -7,12 +7,8 @@
          d.tp_ur,
          d.nakl_summ,
          d.act_nabor_1,
-         d.act_nabor_2,
          /* TRUNC (d.act_nabor / 1000) * 100 */
-         GREATEST (NVL (d.act_nabor_1, 0) * 37.5, NVL (d.act_nabor_2, 0) * 20)
-            max_bonus,
-         /*nvl(d.act_nabor_1,0) * 180 +
-         nvl(d.act_nabor_2,0) * 75 max_bonus,*/
+         nvl(d.act_nabor_1,0) * 37.5 max_bonus,
          --TRUNC (d.act_nabor / 2) max_bonus2,
          d.tp_addr,
          NVL (an.if1, 0) selected_if1,
@@ -47,10 +43,10 @@
             parent_tn,
          st.fio ts_fio,
          st.tn ts_tn
-    FROM a1702ks d,
-         a1702ks_action_nakl an,
+    FROM a1702kp d,
+         a1702kp_action_nakl an,
          user_list st,
-         a1702ks_tp_select tp
+         a1702kp_tp_select tp
    WHERE     d.tab_num = st.tab_num
          AND (   :exp_list_without_ts = 0
               OR st.tn IN (SELECT slave
@@ -72,8 +68,8 @@
          AND DECODE ( :eta_list, '', d.h_fio_eta, :eta_list) = d.h_fio_eta
          AND NVL (an.if1, 0) > 0
          AND (   ( :ok_bonus = 0)
-              OR ( :ok_bonus = 1 AND bonus_dt1 IS NOT NULL)
-              OR ( :ok_bonus = 2 AND bonus_dt1 IS NULL))
+              OR ( :ok_bonus = 1 AND bonus_dt1 is not null)
+              OR ( :ok_bonus = 2 AND bonus_dt1 is null))
 ORDER BY parent_fio,
          ts_fio,
          fio_eta,
