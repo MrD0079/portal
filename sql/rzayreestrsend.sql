@@ -1,4 +1,4 @@
-/* Formatted on 22/09/2016 15:27:31 (QP5 v5.252.13127.32867) */
+/* Formatted on 14.02.2017 17:14:20 (QP5 v5.252.13127.32867) */
 DECLARE
    text     CLOB;
    subj     VARCHAR2 (255);
@@ -76,6 +76,9 @@ BEGIN
                              n.tn_rmkk
                       AND DECODE ( :tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
                       AND DECODE ( :nets, 0, n.id_net, :nets) = n.id_net
+                      AND n.tn_mkk IN (SELECT slave
+                                         FROM full
+                                        WHERE master = :tn)
                       AND r.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
                                    AND TO_DATE ( :ed, 'dd.mm.yyyy')
                       AND ( :sendstatus = 0 OR :sendstatus = r.sendstatus + 1)
@@ -124,5 +127,15 @@ BEGIN
                    text,
                    clob_to_blob (attach),
                    'attach.html');
+
+      INSERT INTO full_log (text, prg)
+              VALUES (
+                           'отправлено письмо с уведомлением о возврате по адресу '
+                        || a.return_mail
+                        || ' с темой: '
+                        || subj,
+                        'rzay');
+
+      COMMIT;
    END LOOP;
 END;

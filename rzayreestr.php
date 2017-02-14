@@ -63,7 +63,7 @@ if (isset($_REQUEST["send"]))
 	);
 	$sql=stritr($sql,$params);
 	//echo $sql;
-	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+	$data = $db->query($sql);
 }
 
 if (isset($_REQUEST["generate"]))
