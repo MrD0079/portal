@@ -68,19 +68,41 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 		if (!$mail->Send())
 		{
 			echo "<p><font style=\"color: red;\">".$mail->ErrorInfo."</font></p>";
+                        audit(
+                                                $mail->ErrorInfo
+                                              . "\n"
+                                              . 'recipients => '
+                                              . join(' ', $adrs)
+                                              . "\n"
+                                              . 'subject => '
+                                              . $subj
+                                              . "\n"
+                                              . 'MESSAGE => '
+                                              . $text
+                                ,'error');
 		}
 		else
 		{
 			if ($ok_output_enable)
 			{
 				echo "<p><font style=\"color: red;\">письмо отправлено по следующим адресам: \"".$email."\"</font></p>"; 
+                                        audit(
+                                                'recipients => '
+                                              . join(' ', $adrs)
+                                              . "\n"
+                                              . 'subject => '
+                                              . $subj
+                                              . "\n"
+                                              . 'MESSAGE => '
+                                              . $text
+                                        ,'mail');
 			}
 		}
 	}
 	catch (Exception $e)
 	{
 		//    echo 'Поймано исключение: ',  $e->getMessage(), "\n";
-		audit('Ошибка отправки почтового письма: ',  $e->getMessage(),'error');
+		audit('Ошибка отправки почтового письма: '.  $e->getMessage(),'error');
 	}
 	finally
 	{

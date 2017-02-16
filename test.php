@@ -2,6 +2,11 @@
 
 
 
+
+send_mail('denis.yakovenko@avk.ua','subj','text');
+
+exit;
+
 //$formula='$x=1;';
 $d1=1.0;
 $d2=1.0;
