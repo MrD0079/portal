@@ -49,7 +49,7 @@
 		<td>{$list_item.nakl}</td>
 		<td style="text-align:right">{$list_item.nakl_summ|default:0|num:2}</td>
 		<td style="text-align:right">
-		{$list_item.act_nabor_1|default:0}/{$list_item.act_nabor_2|default:0}/{$list_item.act_nabor_3|default:0}
+		{$list_item.act_nabor_1|default:0}&nbsp;/&nbsp;{$list_item.act_nabor_2|default:0}&nbsp;/&nbsp;{$list_item.act_nabor_3|default:0}
 		</td>
 		<!--<td {if $list_item.bonus_sum2 > $list_item.max_bonus2} style="background-color:red"{/if}>
 			{if not $smarty.request.print and $is_ts and $list_item.ok_chief neq 1 and $list_item.selected_if1 eq 1}
