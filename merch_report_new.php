@@ -1,6 +1,6 @@
 <?
 
-//audit("открыл merch_report_new","merch_report_new");
+audit("МР открыл отчет","merch_report_new");
 
 $sql=rtrim(file_get_contents('sql/routes_text.sql'));
 $routes_text = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -150,7 +150,6 @@ $_REQUEST["zp_res"]=$zp;
 		$sql="select path from ms_faq";
 		$f = $db->getOne($sql);
 		$smarty->assign('ms_faq', $f);
-ses_req();
 	}
 }
 

@@ -75,13 +75,6 @@
 		Юридическое название ТЗ <b>{$i2.head.ur_tz_name}</b><br>
 		Адрес ТЗ <b>{$i2.head.tz_address}</b>
 		</td>
-
-
-
-
-
-
-
 		<td colspan={$smarty.foreach.fields.total+9} style="text-align:right">
 				{if $i2.head.file_list}
 				{if not $smarty.request.print}
@@ -89,16 +82,7 @@
 				{/if}
 				{/if}
 		</td>
-			<!--<td rowspan={$s2+1}>
-			{$i2.head.chat}
-			<textarea rows=5 cols=20 name="chat[{$i1.head.dt}][{$i2.head.kodtp}]"></textarea>
-			<br>
-			<input type=submit name=save value='Добавить Задача'>
-			</td>-->
 		</tr>
-
-
-
 		{assign var=s1 value=0}
 		{foreach key=k2 item=i2 from=$i1.data name=i2}
 

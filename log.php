@@ -25,11 +25,13 @@ if (isset($_REQUEST["select"]))
 	$sql = rtrim(file_get_contents('sql/log.sql'));
 	!isset($_REQUEST["prg"])?$_REQUEST["prg"]=null:null;
 	$params = array(
-	'prg' => $_REQUEST["prg"],
-	"dates_list1"=>$_REQUEST["dates_list1"],
-	"dates_list2"=>$_REQUEST["dates_list2"]
+	':prg' => "'".$_REQUEST["prg"]."'",
+	":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
+	":dates_list2"=>"'".$_REQUEST["dates_list2"]."'"
 	);
-	$res = $db->getAll($sql, null, $params, null, MDB2_FETCHMODE_ASSOC);
+        $sql=stritr($sql,$params);
+        //echo $sql;
+	$res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('log', $res);
 }
 $smarty->display('log.html');

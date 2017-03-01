@@ -13,56 +13,12 @@ InitRequestVar("agent",0);
 InitRequestVar("city","0");
 InitRequestVar("tp",0);
 
-if (isset($_REQUEST["save"]))
-{
-InitRequestVar("select",1);
-	if (isset($_REQUEST["rb"]))
-	{
-		$table_name = "merch_report";
-		foreach ($_REQUEST["rb"] as $k => $v)
-		{
-			//echo $k."<br>";
-			foreach ($v as $k1 => $v1)
-			{
-				//echo $k1."<br>";
-				$keys = array('id'=>$k1);
-				$values = array($k=>$v1);
-				//print_r($keys);
-				//print_r($values);
-				Table_Update ($table_name, $keys, $values);
-			}
-		}
-	}
-	if (isset($_REQUEST["svms_ok"]))
-	{
-		$table_name = "merch_report_ok";
-		foreach ($_REQUEST["svms_ok"] as $k => $v)
-		{
-			//echo $k."<br>";
-			foreach ($v as $k1 => $v1)
-			{
-			foreach ($v1 as $k2 => $v2)
-			{
-				//echo $k1."<br>";
-				$keys = array('head_id'=>$k,'dt'=>OraDate2MDBDate($k1));
-				$values = array($k2=>$v2);
-				//print_r($keys);
-				//print_r($values);
-				Table_Update ($table_name, $keys, $values);
-			}
-			}
-		}
-	}
-}
-
-
 $p = array(
 	':dpt_id' => $_SESSION["dpt_id"],
 	":sd"=>"'".$_REQUEST["dates_list1"]."'",
 	":ed"=>"'".$_REQUEST["dates_list2"]."'",
 	":tn"=>$tn
 );
-
 
 $sql = rtrim(file_get_contents('sql/dates_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
