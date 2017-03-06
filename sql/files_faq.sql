@@ -5,7 +5,7 @@
                           avatar PATH,
                           NULL PARENT,
                           orderby,
-                          TO_CHAR (lu, 'dd.mm.yyyy hh24:mi:ss') lu
+                          TO_CHAR (lu, 'dd.mm.yyyy hh24:mi') lu
                      FROM files_sections
                     WHERE dpt_id = :dpt_id
                    UNION
@@ -14,7 +14,7 @@
                           NULL PATH,
                           NULL PARENT,
                           9999999999,
-                          TO_CHAR (SYSDATE, 'dd.mm.yyyy hh24:mi:ss') lu
+                          TO_CHAR (SYSDATE, 'dd.mm.yyyy hh24:mi') lu
                      FROM DUAL
                    UNION
                    SELECT f.ID,
@@ -22,7 +22,7 @@
                           f.PATH,
                           f.section PARENT,
                           f.orderby,
-                          TO_CHAR (f.lu, 'dd.mm.yyyy hh24:mi:ss') lu
+                          TO_CHAR (f.lu, 'dd.mm.yyyy hh24:mi') lu
                      FROM files f
                     WHERE    (SELECT COUNT (*)
                                 FROM files_rights

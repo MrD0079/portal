@@ -9,7 +9,7 @@
          d.act_nabor_1,
          d.act_nabor_2,
          /* TRUNC (d.act_nabor / 1000) * 100 */
-         GREATEST (NVL (d.act_nabor_1, 0) * 37.5, NVL (d.act_nabor_2, 0) * 20)
+         GREATEST (NVL (d.act_nabor_1, 0) * 37.5, NVL (d.act_nabor_2, 0) * 21)
             max_bonus,
          /*nvl(d.act_nabor_1,0) * 180 +
          nvl(d.act_nabor_2,0) * 75 max_bonus,*/

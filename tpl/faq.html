@@ -1,4 +1,4 @@
-<table border=0 width=600px cellpadding=3>
+<table border=0 width=500px cellpadding=3>
 <tr>
 <td valign=top align=left>
 <ul>
@@ -18,10 +18,10 @@
 				</td>
 			</tr>
 		</table>
-		<ul>
+            	<ul>
 			{foreach key=k1 item=i1 from=$i.files}
 			<li style="list-style-type: disc;">
-				<a target=_blank href="{$i1.path}">{$i1.name}</a>
+                                    <nobr><a target=_blank href="{$i1.path}">{$i1.name}</a> ({$i1.lu})</nobr>
 			</li>
 			{/foreach}
 		</ul>
