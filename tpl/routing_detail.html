@@ -8,10 +8,12 @@
 		<td>Тип ТП</td>
 		<td>Контактное лицо</td>
 		<td>Контактный телефон</td>
-		<td>Стеллажи</td>
-		<td>Тумбы</td>
+		<td>СТ</td>
+		<td>НВ</td>
 		<td>НТО</td>
 		<td>GPS координаты</td>
+		<td>Конд</td>
+		<td>Кофе</td>
 	</tr>
 	{assign var=z value=0}
 	{foreach key=list_detail_key item=list_detail_item from=$list_detail name=list_detail}
@@ -30,14 +32,16 @@
 				<td>{$list_detail_item.tp_type}</td>
 				<td>{$list_detail_item.contact_fio}</td>
 				<td>{$list_detail_item.contact_tel}</td>
-				<td>{$list_detail_item.stelag}</td>
-				<td>{$list_detail_item.tumb}</td>
-				<td>{$list_detail_item.nto}</td>
+                                <td style="text-align: right">{$list_detail_item.stelag}</td>
+				<td style="text-align: right">{$list_detail_item.tumb}</td>
+				<td style="text-align: right">{$list_detail_item.nto}</td>
 				<td style="text-align:center">
 					{if $list_detail_item.latitude and $list_detail_item.longitude}
 						<a target=_blank href="https://www.google.com/maps/place/{$list_detail_item.latitude}+{$list_detail_item.longitude}/@{$list_detail_item.latitude},{$list_detail_item.longitude},19z">{$list_detail_item.latitude} {$list_detail_item.longitude}</a>
 					{/if}
 				</td>
+				<td style="text-align: right">{$list_detail_item.summa|num:2}</td>
+				<td style="text-align: right">{$list_detail_item.coffee|num:2}</td>
 			</tr>
 		{/if}
 	{/foreach}

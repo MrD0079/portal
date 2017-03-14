@@ -1,4 +1,4 @@
-/* Formatted on 06/04/2016 14:45:00 (QP5 v5.252.13127.32867) */
+/* Formatted on 13.03.2017 12:49:09 (QP5 v5.252.13127.32867) */
 SELECT NVL (is_red, DECODE (ROUND (ROWNUM / 2) * 2, ROWNUM, 1, 0)) color,
        z.*,
        z.day_pos day,
@@ -51,21 +51,26 @@ SELECT NVL (is_red, DECODE (ROUND (ROWNUM / 2) * 2, ROWNUM, 1, 0)) color,
                  || ','
                  || REPLACE (r.longitude, ',', '.')
                  || ')},'
-                    googledata
-            FROM routes r, user_list u
-           WHERE     r.olstatus = 1
+                    googledata,
+                 m.summa,
+                 m.coffee
+            FROM routes r, user_list u, a14mega m
+           WHERE     m.dpt_id(+) = :dpt_id
+                 AND m.tp_kod(+) = r.TP_KOD
+                 AND m.dt(+) = TRUNC (SYSDATE, 'mm')
+                 AND r.olstatus = 1
                  AND r.dpt_id = u.dpt_id
                  AND r.tab_number = u.tab_num
                  AND u.dpt_id = :dpt_id
                  AND u.datauvol IS NULL
-				  AND (   :exp_list_without_ts = 0
+                 AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
-                                  FROM full
-                                 WHERE master = :exp_list_without_ts))
-         AND (   :exp_list_only_ts = 0
+                                    FROM full
+                                   WHERE master = :exp_list_without_ts))
+                 AND (   :exp_list_only_ts = 0
                       OR u.tn IN (SELECT slave
-                                  FROM full
-                                 WHERE master = :exp_list_only_ts))
+                                    FROM full
+                                   WHERE master = :exp_list_only_ts))
                  AND (   u.tn IN (SELECT slave
                                     FROM full
                                    WHERE master = :tn)

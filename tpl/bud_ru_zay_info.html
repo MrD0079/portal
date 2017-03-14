@@ -1,0 +1,48 @@
+<h3>Инфо для расчета бонусов за НГ-программу по команде</h3>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form_bud_ru_zay_reestr id=form_bud_ru_zay_reestr>
+<table>
+	<tr>
+		<td style="text-align:right">Дата с/по</td>
+		<td>
+			<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+			<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+			<script>
+				$('#dates_list1').val('{$smarty.request.dates_list1}');
+				$('#dates_list2').val('{$smarty.request.dates_list2}');
+			</script>
+		</td>
+	</tr>
+</table>
+<p><a href="?action=bud_ru_zay_info&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&select=1&filename=Инфо для расчета бонусов за НГ-программу по команде">Экспорт в Excel</a></p>
+<p>
+	<input type="submit" name="select" id="select" value="Отобразить реестр">
+</p>
+</form>
+{/if}
+{if $smarty.request.select}
+<table border=1>
+	<tr style="text-align:center;font-weight:bold">
+		<td>№ заявки</td>
+		<td>ФИО ЭТА</td>
+		<td>Код ТП</td>
+		<td>Название ТП</td>
+		<td>ФАКТ сумма затрат "АВК" (тыс. грн.) в ценах прайса</td>
+		<td>Товаром</td>
+		<td>Разовая выплата согласована</td>
+		<td>Номер документа (СЗ / Цели на переговоры)</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr style="text-align: center">
+		<td>{$i.z_id}</td>
+		<td style="text-align: left">{$i.eta}</td>
+		<td>{$i.tp_kod}</td>
+		<td style="text-align: left">{$i.tp_name}</td>
+                <td style="text-align: right">{$i.zat_fakt|num:5}</td>
+		<td>{if $i.tovarom}да{/if}</td>
+		<td>{$i.raz_vipl}</td>
+		<td>{$i.num_doc}</td>
+	</tr>
+	{/foreach}
+</table>
+{/if}
