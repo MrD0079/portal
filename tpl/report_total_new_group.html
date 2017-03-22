@@ -28,9 +28,6 @@
     </tr>
 {foreach key=k item=i from=$d name=d}
 	<tr style="text-align:center;">
-
-
-
 	{assign var=s1 value=0}
 	{foreach key=k1 item=i1 from=$i.data name=i1}
 		{assign var=s1 value=`$s1+1`}
@@ -38,11 +35,6 @@
 			{assign var=s1 value=`$s1+1`}
 		{/foreach}
 	{/foreach}
-
-
-
-
-
 		<td rowspan={$s1+1}>
 			{$i.head.dt}<br>{$i.head.num}<br>{$i.head.fio_otv}
 			<br>
@@ -141,16 +133,16 @@
 			</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_mr}</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">
-			{if not $smarty.request.print}
-				<input {$disabled} size="7" name="rb[mr_fakt][{$i2.id}]" {if $i2.day_enabled_mr neq 1} disabled {/if} value="{$i2.mr_fakt}" class="number_int">
+			{if not $smarty.request.print and not $disabled and $i2.day_enabled_mr eq 1}
+				<input size="7" name="rb[mr_fakt][{$i2.id}]" value="{$i2.mr_fakt}" class="number_int">
 			{else}
 				{$i2.mr_fakt}
 			{/if}
 			</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
 			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">
-			{if not $smarty.request.print}
-				<input {$disabled} size="50" name="rb[mr_text][{$i2.id}]" {if $i2.day_enabled_mr neq 1} disabled {/if} value="{$i2.mr_text|escape}">
+			{if not $smarty.request.print and not $disabled and $i2.day_enabled_mr eq 1}
+				<input size="50" name="rb[mr_text][{$i2.id}]" value="{$i2.mr_text|escape}">
 			{else}
 				{$i2.mr_text|escape}
 			{/if}
@@ -185,9 +177,6 @@
 				{$i2.ras_text|escape}
 			{/if}
 			</td>-->
-
-
-
 		</tr>
 		{/foreach}
 		{/foreach}

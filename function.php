@@ -7,20 +7,30 @@ define('ZAOIBM','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = T
 //define('ZAOWH','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = 192.168.4.242))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOWH)      (SERVER = DEDICATED)    )  )');
 //define('ZAOIBM','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = 10.2.10.242))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOWH)      (SERVER = DEDICATED)    )  )');
 require('smarty_init.php');
-function print_array($val, $level = 0)
+function print_array($val, $level = 0, $print = 1)
 {
+    $r = "";
+	if (is_array($val))
+	{
 	foreach ($val as $key=>$value)
 	{
 		if (is_array($value))
 		{
-			echo str_pad("",$level*3)."[".$key."] => ARRAY\n";
-			print_array($value,$level+1);
+                    $s = str_pad("",$level*3)."[".$key."] => ARRAY\n";
+			if ($print ==1) echo $s;
+                        $r.=$s;
+			$r.=print_array($value,$level+1,$print);
 		}
 		else
 		{
-			echo str_pad("",$level*3)."[".$key."] => ".$value."\n";
+                    //$print == 1 ? $v = $value : $v = preg_replace( "/\r|\n/", " ", $value );
+                    $s = str_pad("",$level*3)."[".$key."] => ".$value."\n";
+			if ($print ==1) echo $s;
+                        $r.=$s;
 		}
-	}
+        }
+        } else $r.=$val;
+        return /*$level == 0 ? "<pre>\n".$r."\n<pre>" : */$r;
 }
 function ses_req() {
 ?>

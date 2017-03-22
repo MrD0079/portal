@@ -22,9 +22,7 @@
 <!--{/foreach}-->
 </select>
 <script>$("#dates_list option[value='{$smarty.request.dates_list}']").prop('selected', true);</script>
-
 <input value="Выбрать" name="select_month" type="submit"></p>
-
 <table style="text-align: left; " border="1">
 <tbody>
 <tr>
@@ -39,10 +37,7 @@
 </tr>
 </tbody>
 </table>
-
-
-<p><input {$disabled} name="save" value="Сохранить" type="submit"></p>
-
+{if not $disabled}<p><input name="save" value="Сохранить" type="submit"></p>{/if}
 <table style="text-align: left;" border="1" cellpadding=0 cellspacing=0>
     <tr style="text-align:center;font-weight:bold;background-color:rgb(204,204,204)">
       <td>Область<br>Сеть<br>Юридическое название ТЗ<br>Адрес ТЗ</td>
@@ -53,12 +48,6 @@
       <td style="background-color: rgb(204, 255, 255);">Факт<br>по МР,<br>мин</td>
       <td style="background-color: rgb(204, 255, 255);">Отклонение<br>МР,<br>мин</td>
       <td style="background-color: rgb(204, 255, 255);">Комментарии<br>по отклонению МР</td>
-<!--      <td style="background-color: rgb(255, 255, 204);">План по Ф, мин<br></td>-->
-<!--      <td style="background-color: rgb(255, 255, 204);">Факт по Ф, мин<br></td>-->
-<!--      <td style="background-color: rgb(255, 255, 204);">Отклонение Ф, мин<br></td>-->
-<!--      <td style="background-color: rgb(255, 255, 204);">Комментарии по отклонению Ф<br></td>-->
-<!--      <td style="background-color: rgb(255, 204, 255);">Расфас. ВК+ВП, ящ.<br></td>-->
-<!--      <td style="background-color: rgb(255, 204, 255);">Комментарии по отклонению расфас<br></td>-->
       <td>GPS</td>
     </tr>
 {foreach key=k item=i from=$d name=d}
@@ -92,37 +81,35 @@
 			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep5}*/height:36px;width:36px;background-color:{$i1.reminders.rep5.color};/*{/if}*/">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep5.pict}">{/if}</td>
 			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep6}*/height:36px;width:36px;background-color:{$i1.reminders.rep6.color};/*{/if}*/">
 				{if $i1.reminders.rep6}
-
 				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i1.spec_id}').show();">
 					<img style="height:29px;width:29px;" src="files/{$i1.reminders.rep6.pict}">
 				</div>
 				<div style="display:none;width:300px;" id="text_{$i1.spec_id}">{$i1.reminders.rep6.text}</div>
-				<script>
-				/*$('#div{$i1.spec_id}').hide();*/
-				</script>
-
-					<!--<span title="{$i1.reminders.rep6.text}"><img src="files/{$i1.reminders.rep6.pict}"></span>-->
 				{/if}
 			</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i1.vv eq 1}внеплановый визит{/if}{$i1.day_time_mr}</td>
-			<td style="background-color: rgb(204, 255, 255);text-align: center;"><input {$disabled} size="7" name="rb[mr_fakt][{$i1.id}]" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_fakt}" class="number_int"></td>
+			<td style="background-color: rgb(204, 255, 255);text-align: center;">
+                            {if not $disabled}
+                                <input size="7" name="rb[mr_fakt][{$i1.id}]" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_fakt}" class="number_int">
+                            {else}
+                                {$i1.mr_fakt}
+                            {/if}
+                        </td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i1.mr_delta}</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">
-				<select {$disabled} onchange="$('#rb_mr_text_{$i1.id}').val(this.value);">
+                            {if not $disabled}
+				<select onchange="$('#rb_mr_text_{$i1.id}').val(this.value);">
 					<option></option>
 					{foreach key=key item=item from=$routes_text}
 					<option value="{$item.name|escape}">{$item.name|escape}</option>
 					{/foreach}
 				</select>
 				<br>
-				<input {$disabled} size="35" name="rb[mr_text][{$i1.id}]" id="rb_mr_text_{$i1.id}" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_text|escape}">
+				<input size="35" name="rb[mr_text][{$i1.id}]" id="rb_mr_text_{$i1.id}" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_text|escape}">
+                            {else}
+                                {$i1.mr_text}
+                            {/if}
 			</td>
-<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i1.vv eq 1}внеплановый визит{/if}{$i1.day_time_f}</td>-->
-<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;"><input {$disabled} size="7" name="rb[f_fakt][{$i1.id}]" {if $i1.day_enabled_f neq 1} disabled {/if} value="{$i1.f_fakt}" class="number_int"></td>-->
-<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i1.f_delta}</td>-->
-<!--			<td style="background-color: rgb(255, 255, 204);text-align: center;"><input {$disabled} size="20" name="rb[f_text][{$i1.id}]" {if $i1.day_enabled_f neq 1} disabled {/if} value="{$i1.f_text|escape}"></td>-->
-<!--			<td style="background-color: rgb(255, 204, 255);text-align: center;"><input {$disabled} size="7" name="rb[ras][{$i1.id}]" value="{$i1.ras}" class="number_int"></td>-->
-<!--			<td style="background-color: rgb(255, 204, 255);text-align: center;"><input {$disabled} size="20" name="rb[ras_text][{$i1.id}]" value="{$i1.ras_text|escape}"></td>-->
 		</tr>
 		{/foreach}
 {/foreach}
@@ -131,24 +118,16 @@
       <td>{$rb_total.day_time_mr}</td>
       <td>{$rb_total.mr_fakt}</td>
       <td>{$rb_total.mr_delta}</td>
-      <!--<td></td>
-      <td>{$rb_total.day_time_f}</td>
-      <td>{$rb_total.f_fakt}</td>
-      <td>{$rb_total.f_delta}</td>
-      <td></td>
-      <td>{$rb_total.ras}</td>-->
     </tr>
 </table><br>
-<input {$disabled} name="save" value="Сохранить" type="submit">
-
+{if not $disabled}<input name="save" value="Сохранить" type="submit">{/if}
 </form>
 
 <hr>
 
+{if not $disabled}
 <form target="_self" method="POST" name=form11 id=form11>
-
 <h1>Добавление внепланового визита</h1>
-
 <table id=vvt>
 <tbody>
 <tr style="text-align:center">
@@ -158,13 +137,9 @@
 </tr>
 </tbody>
 </table>
-
 <input {$disabled} name="add_vv" value="Добавить" type="submit">
-
-
-
-
 </form>
+{/if}
 
 
 <script>

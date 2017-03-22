@@ -1,8 +1,8 @@
 <h1>Лог активности пользователей в модуле {if $smarty.request.prg}{$smarty.request.prg}{/if}</h1>
 
 {if not $smarty.request.print}
-<form target="_self" method="POST">
-
+<form target="_self" method="POST" id="log_form">
+<input type=hidden name="select" value="1">
 {if $is_admin}
 
 {if $smarty.request.prg eq 'get_data'}
@@ -18,12 +18,32 @@
 <input size=10 class="datepicker" name=dates_list1 id=dates_list1>
 по
 <input size=10 class="datepicker" name=dates_list2 id=dates_list2>
-<input type=submit name="select" value="показать журнал">
+<a href="javascript:void(0);" onClick="send_form(-{$smarty.request.log_r1-1});">Показать журнал</a>
 <script>
 $('#dates_list1').val('{$smarty.request.dates_list1}');
 $('#dates_list2').val('{$smarty.request.dates_list2}');
 </script>
 </p>
+
+<p>
+<input hidden="hidden" id="log_r1" name="log_r1" value="{$smarty.request.log_r1}">
+<input hidden="hidden" id="log_r2" name="log_r2" value="{$smarty.request.log_r2}">
+{if $smarty.request.log_r1 neq 1}
+<a href="javascript:void(0);" onClick="send_form(-{$smarty.request.log_r1-1});">Первая страница</a>
+<a href="javascript:void(0);" onClick="send_form(-1000);">Предыдущая страница</a>
+{/if}
+<a href="javascript:void(0);" onClick="send_form(+1000);">Следующая страница</a>
+</p>
+
+<!--{literal}-->
+<script>
+function send_form(delta){
+    $('#log_r1').val(parseInt($('#log_r1').val(),10)+parseInt(delta,10));
+    $('#log_r2').val(parseInt($('#log_r2').val(),10)+parseInt(delta,10));
+    $('#log_form').submit();
+}
+</script>
+<!--{/literal}-->
 
 </form>
 {/if}
@@ -31,17 +51,19 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 {if $smarty.request.select}
 <table border=1 cellpadding=0 cellspacing=0>
   <tr align=center>
+    <td><b>№ п/п</b></td>
     <td><b>Дата,время</b></td>
     <td><b>login</b></td>
     <td><b>Пользователь</b></td>
     <td><b>Т.Н.</b></td>
-    <td width=700px><b>Действие</b></td>
+    <td><b>Действие</b></td>
     {if not $smarty.request.prg}
     <td><b>Модуль</b></td>
     {/if}
   </tr>
   {foreach key=key item=log from=$log}
-  <tr>
+  <tr style="vertical-align: top">
+    <td>{$log.rn}</td>
     <td><nobr>{$log.lu}</nobr></td>
     <td>{$log.login}</td>
     <td>{$log.name}</td>

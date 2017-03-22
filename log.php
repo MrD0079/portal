@@ -2,6 +2,8 @@
 audit("просмотрел лог посещений");
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
+InitRequestVar("log_r1",1);
+InitRequestVar("log_r2",1000);
 if (isset($_REQUEST["a14mega_make_good"]))
 {
 	audit("запустил процедуру исправления a14mega","get_data");
@@ -27,7 +29,9 @@ if (isset($_REQUEST["select"]))
 	$params = array(
 	':prg' => "'".$_REQUEST["prg"]."'",
 	":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
-	":dates_list2"=>"'".$_REQUEST["dates_list2"]."'"
+	":dates_list2"=>"'".$_REQUEST["dates_list2"]."'",
+	':r1' => $_REQUEST["log_r1"],
+	':r2' => $_REQUEST["log_r2"],
 	);
         $sql=stritr($sql,$params);
         //echo $sql;
