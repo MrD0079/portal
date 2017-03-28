@@ -287,7 +287,7 @@ if (isset($_REQUEST["send_invoices"]))
 		file_put_contents("files/invoices".$fn, $table);
 		//$subj="Реестр счетов для оплаты, информативно"." PAYER(ONLY FOR TEST): ".$v["name"]." MAIL: ".$v["mail"];
 		$subj="Реестр счетов для оплаты, информативно";
-		send_mail($v["mail"],$subj,$subj,["files/invoices".$fn]);
+                send_mail($v["mail"],$subj,$subj,["files/invoices".$fn]);
 	}
 	foreach ($invoices_all as $k => $v)
 	{

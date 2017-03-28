@@ -23,6 +23,7 @@ function get_month_name($m){global $db;return($db->getOne('SELECT DISTINCT mt FR
 
 function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 {
+        if ($email==null) return;
 	$mail = new PHPMailer();
 	try
 	{
