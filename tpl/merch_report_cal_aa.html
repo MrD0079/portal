@@ -63,8 +63,9 @@ function get_list()
 
 }
 
-function add_item()
+function save_item()
 {
+        $("#form_edit_item :input").prop("disabled", true);
 	var fd = new FormData();
 	fd.append('id',  $('#id').val());
 	var selectedIdsArray = $(".obl:checked").map(function(){return this.value;});
@@ -79,13 +80,51 @@ function add_item()
 	fd.append('tasks',  $('#tasks').val());
 	$.ajax({
 		type: 'POST',
-		url: '?action=merch_report_cal_aa&add_item=1&nohead=1',
+		url: '?action=merch_report_cal_aa&save_item=1&nohead=1',
 		data: fd,
 		processData: false,
 		contentType: false,
 		success: function(data) {
-			$('#add_item').html(''+data+'');
+			$('#result').html(''+data+'');
+                        $("#form_edit_item :input").prop("disabled", false);
+                        $('#form_edit_item').trigger("reset");
 			get_list();
+		}
+	});
+}
+
+function update_item(id,field,val)
+{
+	$('#item_'+id+'_'+field).css('background-color','red');
+	var fd = new FormData();
+	fd.append('id',  id);
+	fd.append('field',  field);
+	fd.append('val',  val);
+	$.ajax({
+		type: 'POST',
+		url: '?action=merch_report_cal_aa&update_item=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#result').html(''+data+'');
+                        $("#form_edit_item :input").prop("disabled", false);
+                        $('#form_edit_item').trigger("reset");
+                	$('#item_'+id+'_'+field).css('background-color','white');
+			//get_list();
+		}
+            });
+}
+
+function get_form()
+{
+	$.ajax({
+		type: 'GET',
+		url: '?action=merch_report_cal_aa&get_form=1&nohead=1',
+		processData: false,
+		contentType: false,
+		success: function(data) {
+			$('#edit_item').html(''+data+'');
 		}
 	});
 }
@@ -94,8 +133,10 @@ function add_item()
 </script>
 
 <div id=ok></div>
-<div id=add_item></div>
-<script>add_item();</script>
+<div id=edit_item></div>
+
+<p id="result" style="color:red"></p>
+
 <h3>Реестр активностей</h3>
 
 <p>
@@ -118,3 +159,8 @@ function add_item()
 <p><a href="javascript:void(0);" onclick="get_list();">Отобразить реестр</a></p>
 
 <div id=tbl></div>
+
+<script>
+        get_form();
+        get_list();
+</script>

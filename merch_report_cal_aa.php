@@ -1,11 +1,20 @@
 <?
-if (isset($_REQUEST['add_item']))
+//ses_req();
+if (isset($_REQUEST['save_item']))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
-	ses_req();
-	if ($_REQUEST['id']!='undefined'&&$_REQUEST['dts']!=''&&$_REQUEST['dte']!='')
+	if (
+                $_REQUEST['dts']!=''
+                &&
+                $_REQUEST['dte']!=''
+                &&
+                $_REQUEST['ag_id']!=''
+                &&
+                $_REQUEST['id_net']!=''
+            )
 	{
-      		$keys = array('id'=>$_REQUEST["id"]);
+            $id = get_new_id();
+      		$keys = array('id'=>$id);
 		$vals = array(
 			'dts'=>OraDate2MDBDate($_REQUEST['dts']),
 			'dte'=>OraDate2MDBDate($_REQUEST['dte']),
@@ -16,19 +25,29 @@ if (isset($_REQUEST['add_item']))
 			'tasks'=>$_REQUEST['tasks']
 		);
 		Table_Update('merch_report_cal_aa_h', $keys,$vals);
-		$keys = array('head_id'=>$_REQUEST["id"]);
+		$keys = array('head_id'=>$id);
 		Table_Update('merch_report_cal_aa_o', $keys,null);
 		$obl = split(',',$_REQUEST["obl"]);
 		foreach ($obl as $k=>$v)
 		{
-			$keys = array('head_id'=>$_REQUEST["id"],'h_o'=>$v);
+			$keys = array('head_id'=>$id,'h_o'=>$v);
 			Table_Update('merch_report_cal_aa_o', $keys,$keys);
 		}
-                $smarty->assign('result', 'Добавлена активность №'.$_REQUEST["id"]);
+                echo 'Добавлена активность №'.$id;
         } else {
-                $smarty->assign('result', 'Активность не добавлена, введите даты начала/окончания');
+                echo 'Активность не добавлена, введите даты начала/окончания, сеть, заказчика';
         }
-	$smarty->assign('id', get_new_id());
+}
+else
+if (isset($_REQUEST['update_item']))
+{
+      		$keys = array('id'=>$_REQUEST["id"]);
+		$vals = array($_REQUEST["field"]=>OraDate2MDBDate($_REQUEST['val']));
+		Table_Update('merch_report_cal_aa_h', $keys,$vals);
+}
+else
+if (isset($_REQUEST['get_form']))
+{
 	$sql = rtrim(file_get_contents('sql/merch_report_cal_aa_list_a.sql'));
 	$x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('agents', $x);

@@ -28,4 +28,4 @@
          AND (   ( :dt = 1 AND TRUNC (SYSDATE) BETWEEN h.dts AND h.dte)
               OR ( :dt = 2 AND TRUNC (SYSDATE) > h.dte)
               OR :dt = 3)
-ORDER BY h.lu DESC
+ORDER BY h.id DESC
