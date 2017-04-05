@@ -27,11 +27,8 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 	$mail = new PHPMailer();
 	try
 	{
-		global $tn;
 		$mail->IsSMTP();
 		$mail->isHTML(true);
-		//$mail->Host = "3-mail.avk.ua";
-		//$mail->Host = "dkf.avk.company";
 		$mail->Host = "mailhub.avk.company";
 		$mail->SMTPAuth = false;
 		$mail->SetLanguage("ru");
@@ -87,6 +84,7 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 			if ($ok_output_enable)
 			{
 				echo "<p><font style=\"color: red;\">письмо отправлено по следующим адресам: \"".$email."\"</font></p>"; 
+			}
                                         audit(
                                                 'recipients => '
                                               . join(' ', $adrs)
@@ -97,12 +95,10 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
                                               . 'MESSAGE => '
                                               . $text
                                         ,'mail');
-			}
 		}
 	}
 	catch (Exception $e)
 	{
-		//    echo 'Поймано исключение: ',  $e->getMessage(), "\n";
 		audit('Ошибка отправки почтового письма: '.  $e->getMessage(),'error');
 	}
 	finally

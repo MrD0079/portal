@@ -34,7 +34,7 @@
         <td>{$i.lut}</td>
 	<td>{$i.ag_name}</td>
 	<td>
-            {if $is_admin}
+            {if $is_admin or $is_ma}
             <input id="item_{$i.id}_dts" type="text" class="datepicker" value="{$i.dts}" size="8" onchange="update_item('{$i.id}','dts',this.value);">
             <input id="item_{$i.id}_dte" type="text" class="datepicker" value="{$i.dte}" size="8" onchange="update_item('{$i.id}','dte',this.value);">
             {else}

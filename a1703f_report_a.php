@@ -53,16 +53,17 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["ok_db"]))
 	{
-		$keys = array('tn'=>$tn,'m'=>$_REQUEST["month"]);
+		$keys = array('tn'=>$tn,'m'=>$_REQUEST['month'],'act'=>$_REQUEST['act']);
 
 		if ($_REQUEST["ok_db"]==1)
 		{
-			Table_Update ('a1703f_ok', $keys, $keys);
+			Table_Update ('act_ok', $keys, $keys);
 		}
 		else
 		{
-			Table_Update ('a1703f_ok', $keys, null);
+			Table_Update ('act_ok', $keys, null);
 		}
+
 	}
 }
 

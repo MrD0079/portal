@@ -61,13 +61,16 @@ if (isset($_REQUEST["save"]))
 		{
 			foreach ($v as $k1 => $v1)
 			{
-				$keys = array('spec_id'=>$k,'dt'=>OraDate2MDBDate($_REQUEST["dt"]));
-				$values = $keys;
-				Table_Update ($table_name, $keys, $values);
-				$values = array($k1=>$v1);
-				Table_Update ($table_name, $keys, $values);
-				$rep_id = $db->getOne("select id from merch_report_cal_rep where rep_name='".$k1."'");
-				$v1!=''?sok($rep_id):null;
+                                $spec_exists = $db->getOne("select count(*) from merch_spec_body where id=".$k);
+                                if ($spec_exists>0){
+                                    $keys = array('spec_id'=>$k,'dt'=>OraDate2MDBDate($_REQUEST["dt"]));
+                                    $values = $keys;
+                                    Table_Update ($table_name, $keys, $values);
+                                    $values = array($k1=>$v1);
+                                    Table_Update ($table_name, $keys, $values);
+                                    $rep_id = $db->getOne("select id from merch_report_cal_rep where rep_name='".$k1."'");
+                                    $v1!=''?sok($rep_id):null;
+                                }
 			}
 		}
 	}
