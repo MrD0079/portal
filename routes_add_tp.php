@@ -9,23 +9,6 @@ if (isset($_REQUEST["select_month"]))
 	$_REQUEST["select_route_numb"]=null;
 }
 
-if (isset($_REQUEST["copy"]))
-{
-$sql1="DELETE FROM routes_head      WHERE tn = :tn AND data = TO_DATE (:month_list, 'dd/mm/yyyy')";
-$sql2="
-	INSERT INTO routes_head (parent, data)
-	SELECT z.id, TO_DATE (:month_list, 'dd/mm/yyyy')
-	FROM routes_head z
-	WHERE tn = :tn
-	AND data = ADD_MONTHS (TO_DATE (:month_list, 'dd/mm/yyyy'), -1)
-";
-$p=array(":tn"=>$tn,":month_list"=>"'".$_REQUEST["month_list"]."'");
-$sql1 = stritr($sql1, $p);
-$sql2 = stritr($sql2, $p);
-//$db->query($sql1);
-$db->query($sql2);
-}
-
 if (isset($_REQUEST["add_route"]))
 {
 	$affectedRows = $db->extended->autoExecute("routes_head", array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])), MDB2_AUTOQUERY_INSERT);
@@ -115,29 +98,32 @@ $sql = rtrim(file_get_contents('sql/routes_head.sql'));
 $p=array(":tn"=>$tn,":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+foreach($res as $k=>$v){
+        $sql=rtrim(file_get_contents('sql/routes_add_tp_getDisabledDates.sql'));
+        $p=array(":route"=>$v["id"]);
+        $sql=stritr($sql,$p);
+        $dd = $db->getOne($sql);
+        $res[$k]["DisabledDates"]=$dd;
+}
+
 $smarty->assign('routes_head', $res);
 
 if (isset($_REQUEST["select_route_numb"]))
 {
-if ($_REQUEST["select_route_numb"]!="")
-{
-$sql = rtrim(file_get_contents('sql/routes_add_tp.sql'));
-$p=array(":route"=>$_REQUEST["select_route_numb"]);
-$sql=stritr($sql,$p);
-$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('d', $rb);
+    if ($_REQUEST["select_route_numb"]!="")
+    {
+        $sql = rtrim(file_get_contents('sql/routes_add_tp.sql'));
+        $p=array(":route"=>$_REQUEST["select_route_numb"]);
+        $sql=stritr($sql,$p);
+        $rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        $smarty->assign('d', $rb);
 
-
-
-//echo $sql;
-
-
-$sql = rtrim(file_get_contents('sql/routes_add_tp_total.sql'));
-$p=array(":route"=>$_REQUEST["select_route_numb"]);
-$sql=stritr($sql,$p);
-$res = $db->getOne($sql);
-$smarty->assign('rb_total', $res);
-}
+        $sql = rtrim(file_get_contents('sql/routes_add_tp_total.sql'));
+        $p=array(":route"=>$_REQUEST["select_route_numb"]);
+        $sql=stritr($sql,$p);
+        $res = $db->getOne($sql);
+        $smarty->assign('rb_total', $res);
+    }
 }
 
 $sql = rtrim(file_get_contents('sql/routes_pos.sql'));

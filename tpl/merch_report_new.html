@@ -2,8 +2,6 @@
 
 {include file="merch_report_new_zp.html"}
 
-<form target="_self" method="POST" name=form1 id=form1>
-
 <h1>Внесение данных в отчет. Маршрут: {$route.num} Ответственный: {$route.fio_otv}</h1>
 {if $route.svms_ok eq 1}
 	{assign var=disabled value='disabled'}
@@ -14,15 +12,20 @@
 	<h2>Внесение данных запрещено</h2>
 {/if}
 
-<p>
-Дата
-<select name=dates_list id=dates_list onchange="javascript:fn_submit('dates_list');">
-<!--{foreach key=key item=item from=$dates_list}-->
-<option value="{$item.data_c}">{$item.data_c}</option>
-<!--{/foreach}-->
-</select>
-<script>$("#dates_list option[value='{$smarty.request.dates_list}']").prop('selected', true);</script>
-<input value="Выбрать" name="select_month" type="submit"></p>
+<form target="_self" method="GET" name=form0 id=form0>
+    <p>
+        Дата
+        <select name=dates_list id=dates_list onChange="$('#form0').trigger('submit');">
+            <!--{foreach key=key item=item from=$dates_list}-->
+            <option value="{$item.data_c}">{$item.data_c}</option>
+            <!--{/foreach}-->
+        </select>
+        <script>$("#dates_list option[value='{$smarty.request.dates_list}']").prop('selected', true);</script>
+    </p>
+</form>
+
+<form target="_self" method="POST" name=form1 id=form1>
+<input type="hidden" name=dates_list value="{$smarty.request.dates_list}">
 <table style="text-align: left; " border="1">
 <tbody>
 <tr>

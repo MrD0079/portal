@@ -24,7 +24,21 @@ function init_number(mode)
 
 var DisabledDates={"period":[{ "from": "01/01/1999", "to": "01/01/1999" }]};
 /*var DisabledDates ={"period":[{ "from": "01/06/2015", "to": "05/06/2015" },{ "from": "08/06/2015", "to": "12/06/2015" }]};*/
-function DateDisabled(date){var i, num, period, start, startArray, end, endArray;num = DisabledDates.period.length;for(i=0;i<num;i++){period = DisabledDates.period[i];startArray = period.from.split('/');start = new Date(startArray[2]-0, startArray[1]-1, startArray[0]-0);endArray = period.to.split('/');end = new Date(endArray[2]-0, endArray[1]-1, endArray[0]-0);if(date>=start && date<=end){return true;}}return false;}
+function DateDisabled(date){
+    //console.log(DisabledDates);
+    //console.log(date);
+    var i, num, period, start, startArray, end, endArray;
+    num = DisabledDates.period.length;
+    for(i=0;i<num;i++){
+        period = DisabledDates.period[i];
+        startArray = period.from.split('/');
+        start = new Date(startArray[2]-0, startArray[1]-1, startArray[0]-0);
+        endArray = period.to.split('/');
+        end = new Date(endArray[2]-0, endArray[1]-1, endArray[0]-0);
+        if(date>=start && date<=end){return true;}
+    }
+    return false;
+}
 //function DPInit(){$(".datepicker").datepicker({beforeShowDay:function(date){return[!DateDisabled(date)];}});}
 
 function init_form()
@@ -36,6 +50,9 @@ function init_form()
 		$.datepicker.setDefaults(
 			{
 				dateFormat: 'dd.mm.yy',
+                                beforeShowDay:function(date){
+                                    return[!DateDisabled(date)];
+                                }
 			}
 		);
 		$.datepicker._gotoToday = function (id) {
@@ -45,7 +62,15 @@ function init_form()
 			//console.log(id);
 		};
 		$(".datepicker").not(".hasDatepicker").datepicker();
-		$(".datepicker").datepicker({beforeShowDay:function(date){return[!DateDisabled(date)];}});
+    /*console.log('ok');
+		$(".datepicker").datepicker(
+                    {
+                            beforeShowDay:function(date){
+    console.log(date);
+                                return[!DateDisabled(date)];
+                            }
+                    }
+                );*/
 		$(".datepicker").datepicker( "option", "showOtherMonths", true);
 		$(".datepicker").datepicker( "option", "showButtonPanel", true);
 		$(".datepicker").datepicker( "option", "beforeShow", function( input ) {
@@ -74,19 +99,6 @@ function init_form()
 				}).appendTo( buttonPane ).addClass("ui-datepicker-clear ui-state-default ui-priority-primary ui-corner-all");
 			}, 1 );
 		});
-//$(".ui-datepicker-clear").hide();
-		/*
-		{literal}
-		$(
-			function()
-			{
-				var dt = new Date();
-				dt.setMonth(dt.getMonth()-1);
-				$(".datepicker_prev1").datepicker( "option", "minDate", dt);
-			}
-		)
-		{/literal}
-		*/
 		$(".datepicker_3_0").datepicker( "option", "minDate", -3);
 		$(".datepicker_3_0").datepicker( "option", "maxDate", +0);
 		$(".datepicker_7_0").datepicker( "option", "minDate", -7);

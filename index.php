@@ -232,18 +232,20 @@ if ($a->getAuth())
 		$football_team_responsible > 0 ? $smarty->assign('football_team_responsible', 1) : null;
 		$football_team_checking > 0 ? $smarty->assign('football_team_checking', 1) : null;
 		*/
-		if (!isset($_REQUEST["pdf"])){require_once "m.header.php";}
-		if (!isset($_REQUEST["print"])&&!isset($_REQUEST["nohead"])) {
-			if (
-				/*(strpos($login,'akr_avk_')===false)&&(strpos($login,'akr_ag_')===false)&&(strpos($login,'atd_avk_')===false)&&(strpos($login,'atd_ag_')===false)&&(strpos($login,'azl_avk_')===false)&&(strpos($login,'azl_ag_')===false)&&*/
-				((strpos($login,'ms')===false)&&
-				(strpos($login,'avk')===false)&&
-				(strpos($login,'ag0')===false)&&
-				(strpos($login,'fil0')===false)&&
-				(strpos($login,'ac')===false))
-			) {include "menu.php";}
-			include "content-div-start.php";
-		}
+                if (!($action=='merch_report_new'&&isset($_POST))) {
+                    if (!isset($_REQUEST["pdf"])){require_once "m.header.php";}
+                    if (!isset($_REQUEST["print"])&&!isset($_REQUEST["nohead"])) {
+                            if (
+                                    /*(strpos($login,'akr_avk_')===false)&&(strpos($login,'akr_ag_')===false)&&(strpos($login,'atd_avk_')===false)&&(strpos($login,'atd_ag_')===false)&&(strpos($login,'azl_avk_')===false)&&(strpos($login,'azl_ag_')===false)&&*/
+                                    ((strpos($login,'ms')===false)&&
+                                    (strpos($login,'avk')===false)&&
+                                    (strpos($login,'ag0')===false)&&
+                                    (strpos($login,'fil0')===false)&&
+                                    (strpos($login,'ac')===false))
+                            ) {include "menu.php";}
+                            include "content-div-start.php";
+                    }
+                }
 		if (count(glob($action.".php"))==0) {
 			/*if (strpos($login,'akr_avk_')!==false){include "akr_report.php";}elseif (strpos($login,'akr_ag_')!==false){include "akr_ag_report.php";}elseif (strpos($login,'atd_avk_')!==false){include "atd_report.php";}elseif (strpos($login,'atd_ag_')!==false){include "atd_ag_report.php";}elseif (strpos($login,'azl_avk_')!==false){include "azl_report.php";}elseif (strpos($login,'azl_ag_')!==false){include "azl_ag_report.php";}else*/
 			if (strpos($login,'ms')!==false){include "merch_report_new.php";}

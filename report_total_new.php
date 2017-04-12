@@ -1,6 +1,6 @@
 <?php
 
-audit("открыл сводный отчет М-Сервис","report_total_new");
+//audit("открыл сводный отчет М-Сервис","report_total_new");
 
 InitRequestVar("dates_list1",$_REQUEST["dates_list"]);
 InitRequestVar("dates_list2",$_REQUEST["dates_list"]);

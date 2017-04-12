@@ -6,7 +6,7 @@
   <tbody>
     <tr>
       <td style=" width: 100px; text-align: left;">¬ыберите мес€ц 
-	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+	<select name=month_list id=month_list onChange="$('#form1').trigger('submit');">
 	{foreach key=key item=item from=$month_list}
 		<option value="{$item.sd_c}">{$item.my}</option>
 		{if $item.sd_c eq $smarty.request.month_list}
@@ -43,14 +43,18 @@
       <td style="text-align: center;">копировать<br>в<br>следующий<br>мес€ц</td>
       <td>
 		–азделить маршрут<br>
-		<font style="color:red">
-		(кнопка "разделить" по€витс€<br>при изменении полей<br>"с даты" и "ф.и.о. отв.")
-		</font>
-		</td>
+		<p style="color:red">
+                    (кнопка "разделить" по€витс€ при изменении полей "с даты" и "ф.и.о. отв.")<br>
+                    в текущем маршруте останутс€ визиты с начальной даты маршрута по выбранную дату (не включа€ ее),<br>
+                    а в новый маршрут будут скопированы визиты с выбранной даты (включительно) по последнюю дату маршута<br>
+                    к примеру, если выбрано 15-е число мес€ца, то при разделении в текущем маршруте останутс€ визиты с 1-го по 14-е число мес€ца,<br>
+                    а в новый маршрут будут скопированы визиты с 15-го числа (включительно) и до конца мес€ца
+                </p>
+	</td>
     </tr>
 	{foreach key=key item=item from=$routes_head}
     <tr>
-      <td style=" text-align: center;"><input {if not $routes_enabled}disabled{/if} type=checkbox name="del[{$item.id}]"></td>
+      <td style=" text-align: center;"><input {if not $routes_enabled}disabled{/if} {if $item.svmsok eq 1}disabled{/if} type=checkbox name="del[{$item.id}]"></td>
       <td style="text-align: center;"><input {if not $routes_enabled}disabled{/if} size="15" name="num[{$item.id}]" value="{$item.num}"></td>
       <td style="text-align: center;"><input {if not $routes_enabled}disabled{/if} size="25" name="fio_otv[{$item.id}]" value="{$item.fio_otv|escape}"></td>
       <td style="text-align: center;">
@@ -78,7 +82,8 @@
 		>
 	</td>
 	<td>
-		с даты <input class=datepicker name="divide_from[{$item.id}]" size=9 value="{$smarty.request.month_list}"
+		с даты <input class="datepicker" name="divide_from[{$item.id}]" size=9 value="{$smarty.request.month_list}"
+                              onFocus='{$item.DisabledDates}'
 
 			onChange="
 				$('#cfrom_{$item.id}').val('true');
@@ -168,12 +173,14 @@
 		<td style="text-align: center;">
 			<input
 				{if not $routes_enabled}disabled{/if}
+                                {if $i.svmsok eq 1}disabled{/if}
 				onclick="$('#rbtp_enabled{$i.kodtp}').val(this.checked?1:0)"
 				{if $i.tp_enabled eq 1}checked{/if}
 				{if not ($is_mservice or $is_admin)}disabled{/if}
 				type="checkbox"
 			>
 			<input
+                                {if $i.svmsok eq 1}disabled{/if}
 				{if not $routes_enabled}disabled{/if}
 				type=hidden
 				name="rb[tp_enabled][{$i.kodtp}]"

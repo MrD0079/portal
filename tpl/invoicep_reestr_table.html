@@ -99,8 +99,8 @@ function() {
 	<td style="text-align:right">{$item.summa|default:0|num:3}</td>
 		<td>
 			{if $is_fin_man and not $smarty.request.print}
-				<select name=data[{$item.id}][payer] id="data{$item.id}payer">
-					<option value=0></option>
+				<select required name=data[{$item.id}][payer] id="data{$item.id}payer">
+					<option></option>
 					{foreach key=k1 item=i1 from=$payer}
 						<option value={$i1.id}>{$i1.name}</option>
 					{/foreach}

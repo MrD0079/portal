@@ -1,5 +1,5 @@
 /* Formatted on 25/06/2015 17:25:44 (QP5 v5.227.12220.39724) */
-SELECT    'var DisabledDates={"period":['
+SELECT    'DisabledDates={"period":['
        || fn_query2str (
                 '
 SELECT    ''{ "from": "''

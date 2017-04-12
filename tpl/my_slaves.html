@@ -1,13 +1,13 @@
 <h1>Планы активности подчиненных</h1>
 
 <form name=form_plan_activ id=form_plan_activ target=_self method=post>
-<input type="hidden" name="form_submit" id=form_submit>
+
 
 {literal}
 <script>
 function fn_submit(val)
 {
-	$('#form_submit').val(val);
+
 	$('#form_plan_activ').submit();
 }
 </script>
@@ -42,13 +42,11 @@ fn_href('a1','dates_list');
 
 <form name=form_zat id=form_zat target=_self method=post>
 
-<input type="hidden" name="form_submit" id=form_submitz>
-
 {literal}
 <script>
 function fn_submit(val)
 {
-	$('#form_submitz').val(val);
+
 	$('#form_zat').submit();
 }
 </script>

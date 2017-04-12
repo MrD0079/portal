@@ -23,7 +23,7 @@
          bud_fil p,
          urlic u
    WHERE     n.id_net = i.id_net
-         AND i.payer = p.id
+         AND i.payer = p.id(+)
          AND u.id(+) = i.urlic
          AND :tn IN (DECODE ( (SELECT pos_id
                                  FROM spdtree

@@ -1,12 +1,12 @@
 <h1>{if $is_acceptor}Департамент оплаты{else}Заполнение отчета{/if}</h1>
 <form name=form_zat id=form_zat target=_self method=post>
-<input type="hidden" name="form_submit" id=form_submit>
+
 
 {literal}
 <script>
 function fn_submit(val)
 {
-	$('#form_submit').val(val);
+
 	$('#form_zat').submit();
 }
 </script>

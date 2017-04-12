@@ -59,6 +59,7 @@
 		type=checkbox
 		value="{$item.id}"
 		{if $item.checked or $s eq 0}checked{/if}
+                {if $item.svmsok eq 1}disabled{/if}
 		onclick="$('#selected_changed_{$item.id}').val(this.checked?'on':'off')"
 		>
 		<input type=hidden value="" name=selected_changed[{$item.id}] id=selected_changed_{$item.id}>

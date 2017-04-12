@@ -69,6 +69,7 @@ $d[$v["kodtp"]]["data"][$v["ag_id"]]["data"][$v['dm']]['day_time_mr']=$v['day_ti
 $d[$v["kodtp"]]["data"][$v["ag_id"]]["data"][$v['dm']]['dw']=$v['dw'];
 $d[$v["kodtp"]]["data"][$v["ag_id"]]["data"][$v['dm']]['dwt']=$v['dwt'];
 $d[$v["kodtp"]]["data"][$v["ag_id"]]["data"][$v['dm']]['is_wd']=$v['is_wd'];
+$d[$v["kodtp"]]["data"][$v["ag_id"]]["data"][$v['dm']]['svms_ok']=$v['svms_ok'];
 }
 isset($d) ? $smarty->assign('d', $d) : null;
 }

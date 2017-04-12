@@ -1,6 +1,6 @@
 <?
 
-audit("МР открыл отчет","merch_report_new");
+//audit("МР открыл отчет","merch_report_new");
 
 $sql=rtrim(file_get_contents('sql/routes_text.sql'));
 $routes_text = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -14,8 +14,8 @@ InitRequestVar("dates_list",$now);
 
 $sql = "select case when to_date('".$_REQUEST["dates_list"]."','dd.mm.yyyy') > trunc(sysdate) then 1 end from dual";
 $x = $db->getOne($sql);
-audit($sql,"merch_report_new");
-audit("READ ONLY:\n".print_array($x, 0, 0),"merch_report_new");
+//audit($sql,"merch_report_new");
+//audit("READ ONLY:\n".print_array($x, 0, 0),"merch_report_new");
 $smarty->assign('readonly', $x);
 
 foreach ($dates_list as $k=>$v){if ($v["data_c"]==$_REQUEST["dates_list"]){$day=$v["dm"];}}
@@ -24,8 +24,8 @@ $sql = rtrim(file_get_contents('sql/merch_report_head.sql'));
 $p=array(":data"=>"'".$_REQUEST["dates_list"]."'",":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $r=$db->GetRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-audit($sql,"merch_report_new");
-audit("REPORT HEAD:\n".print_array($r, 0, 0),"merch_report_new");
+//audit($sql,"merch_report_new");
+//audit("REPORT HEAD:\n".print_array($r, 0, 0),"merch_report_new");
 $smarty->assign('route', $r);
 
 function Time2Int($v)
@@ -39,7 +39,7 @@ function Time2Int($v)
 
 if (isset($_REQUEST["save_zp"])&&isset($_REQUEST["data"]))
 {
-        audit("МР сохранил ЗП","merch_report_new");
+        //audit("МР сохранил ЗП","merch_report_new");
 	foreach ($_REQUEST["data"] as $k => $v)
 	{
 		$keys = array('head_id'=>$v["head_id"],'h_fio_otv'=>$v["h_fio_otv"]);
@@ -47,11 +47,12 @@ if (isset($_REQUEST["save_zp"])&&isset($_REQUEST["data"]))
 		isset($v['part2_dt'])?$v['part2_dt']=OraDate2MDBDate($v['part2_dt']):null;
 		Table_Update ('mr_zp', $keys, $v);
 	}
+        header('Location: /');
 }
 
 if (isset($_REQUEST["save"]))
 {
-        audit("МР сохранил отчет","merch_report_new");
+        //audit("МР сохранил отчет","merch_report_new");
 	if (isset($_REQUEST["rb"]))
 	{
 		$table_name = "merch_report";
@@ -66,6 +67,8 @@ if (isset($_REQUEST["save"]))
 			}
 		}
 	}
+        header('Location: /');
+        //$_SERVER["SERVER_NAME"]
 }
 
 if (isset($r["id"]))
@@ -106,15 +109,15 @@ if (isset($r["id"]))
 		$p=array(":route"=>$r["id"],":day"=>$day,":dates_list"=>"'".$_REQUEST["dates_list"]."'");
 		$sql=stritr($sql,$p);
 		$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-                audit($sql,"merch_report_new");
-                audit("RB:\n".print_array($rb, 0, 0),"merch_report_new");
+                //audit($sql,"merch_report_new");
+                //audit("RB:\n".print_array($rb, 0, 0),"merch_report_new");
 
 		$sql = rtrim(file_get_contents('sql/merch_report_new_routes_body1.sql'));
 		$p=array(":route"=>$r["id"],":day"=>$day,":dates_list"=>"'".$_REQUEST["dates_list"]."'");
 		$sql=stritr($sql,$p);
 		$rb1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-                audit($sql,"merch_report_new");
-                audit("RB1:\n".print_array($rb1, 0, 0),"merch_report_new");
+                //audit($sql,"merch_report_new");
+                //audit("RB1:\n".print_array($rb1, 0, 0),"merch_report_new");
 
 		foreach ($rb as $k=>$v)
 		{
@@ -139,7 +142,7 @@ if (isset($r["id"]))
 		}
 
 		isset($d) ? $smarty->assign('d', $d) : null;
-                isset($d) ? audit("D:\n".print_array($d, 0, 0),"merch_report_new") : null;
+                //isset($d) ? audit("D:\n".print_array($d, 0, 0),"merch_report_new") : null;
 
 		$sql = rtrim(file_get_contents('sql/merch_report_new_routes_body_total.sql'));
 		$p=array(":route"=>$r["id"],":day"=>$day,":dates_list"=>"'".$_REQUEST["dates_list"]."'");
@@ -157,6 +160,7 @@ if (isset($r["id"]))
 		$f = $db->getOne($sql);
 		$smarty->assign('ms_faq', $f);
 	}
+        //header('Location: /');
 }
 
 $smarty->display('merch_report_new.html');

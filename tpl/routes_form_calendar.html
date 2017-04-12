@@ -41,6 +41,7 @@ enctype="multipart/form-data"
 						<td style="/*{if $i2.day_enabled_mr eq 1}*/background-color:green;/*{/if}*/">
 							<nobr>
 								<input
+									{if $i2.svms_ok eq 1}disabled{/if}
 									{if $i2.day_enabled_mr eq 1}checked{/if}
 									type="checkbox"
 									onClick="
@@ -53,14 +54,14 @@ enctype="multipart/form-data"
 									"
 								>
 								<input
-									{if $i2.day_enabled_mr neq 1}disabled{/if}
+									{if $i2.day_enabled_mr neq 1 or $i2.svms_ok eq 1}disabled{/if}
 									type=hidden
 									value="{$i2.day_enabled_mr}"
 									id="rbday_enabled_mr_{$smarty.request.tp}_{$smarty.request.ag}_{$i2.dm}"
 									name="rb[day_enabled_mr][{$smarty.request.tp}][{$smarty.request.ag}][{$i2.dm}]"
 								>
 								<input
-									{if $i2.day_enabled_mr neq 1}disabled{/if}
+									{if $i2.day_enabled_mr neq 1 or $i2.svms_ok eq 1}disabled{/if}
 									size=3
 									class="number_int"
 									value="{$i2.day_time_mr}"
