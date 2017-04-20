@@ -36,18 +36,6 @@ target=_self
 method=post
 >
 
-
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_plan_activ').submit();
-}
-</script>
-{/literal}
-
 <table border=0 cellspacing=0 cellpadding=10>
 	<tr>
 	<td>
@@ -56,7 +44,7 @@ function fn_submit(val)
 	<td>
 		Μερÿφ
 		{if $smarty.request.print neq 1}
-			<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+			<select name=month_list id=month_list onchange="$('#form_plan_activ').trigger('submit');">
 			{foreach key=key item=item from=$month_list}
 				<option value="{$item.sd_c}">{$item.my}</option>
 			{/foreach}

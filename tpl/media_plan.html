@@ -1,0 +1,133 @@
+{if not $smarty.request.nohead}
+<h1>Медиа-план</h1>
+{/if}
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=fin_plan_select id=fin_plan_select>
+	<table>
+        <tbody>
+		<tr>
+			<td style="text-align: right">Год (а)</td>
+			<td>
+				<select name="calendar_years" id="calendar_years" required>
+					<option value=0></option>
+					{foreach key=key item=item from=$calendar_years}
+						<option value={$item.y}>{$item.y}</option>
+					{/foreach}
+				</select>
+				<script>$('#calendar_years option[value="{$smarty.request.calendar_years}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">Месяц (б)</td>
+			<td style="vertical-align: top;">
+				<select name="plan_month" id="plan_month" required>
+					<option></option>
+					{foreach key=key item=item from=$calendar_months}
+					<option value={$item.my}>{$item.mt}</option>
+					{/foreach}
+				</select>
+				<script>$('#plan_month option[value="{$smarty.request.plan_month}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">Накопительный</td>
+			<td>
+				<input type="hidden" name="byyear" id="byyear" value="{$smarty.request.byyear}">
+                                <input type="checkbox" {if $smarty.request.byyear eq 1}checked{/if} onclick="$('#byyear').val(this.checked?1:0)">
+                                с начала года (а) по месяц (б)
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">НМКК</td>
+			<td style="vertical-align: top;">
+				<select name=tn_rmkk id=tn_rmkk>
+					<option value=0></option>
+					{foreach key=rmkk_key item=rmkk_item from=$list_rmkk}
+					<option value={$rmkk_item.tn}>{$rmkk_item.fio} ({$rmkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_rmkk option[value="{$smarty.request.tn_rmkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right">ТМ КК</td>
+			<td style="vertical-align: top;">
+				<select name=tn_mkk id=tn_mkk>
+					<option value=0></option>
+					{foreach key=mkk_key item=mkk_item from=$list_mkk}
+					<option value={$mkk_item.tn}>{$mkk_item.fio} ({$mkk_item.tn})</option>
+					{/foreach}
+				</select>
+				<script>$('#tn_mkk option[value="{$smarty.request.tn_mkk}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right">Сеть</td>
+			<td>
+				<select name="nets" id="nets">
+					<option value=0></option>
+					{foreach key=key item=item from=$nets}
+						<option value={$item.id_net}>{$item.net_name}</option>
+					{/foreach}
+				</select>
+				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:right; vertical-align: top">
+                            <nobr>
+                            <a style="font-weight: bold" href="javascript:void(0);" onClick="$('#statya_list').toggle();">[+/-]</a>
+                            Статья затрат
+                            </nobr>
+                        </td>
+			<td>
+                            <table id="statya_list">
+                                <tr style="vertical-align: top">
+                                    {foreach key=k item=i from=$statya_list}
+                                    <td>
+                                        <a style="font-weight: bold" href="javascript:void(0);" onClick="$('.st{$k}').each(function()/*{literal}*/{/*{/literal}*/$(this).prop('checked',false);$(this).click();/*{literal}*/}/*{/literal}*/)">[+]</a>
+                                        <a style="font-weight: bold" href="javascript:void(0);" onClick="$('.st{$k}').each(function()/*{literal}*/{/*{/literal}*/$(this).prop('checked',true);$(this).click();/*{literal}*/}/*{/literal}*/)">[-]</a>
+                                        {$i.cost_item}
+                                        <br>
+                                        {foreach key=k1 item=i1 from=$i.data}
+                                        <input name=statya_list[{$k1}] type="checkbox" class="statya_list st{$k}" id="st{$k1}" value="{$k1}" onChange="$('#sttd{$k1}').css('background-color',this.checked?'lightgreen':'white');">
+                                        <div style="display: inline" id="sttd{$k1}">{$i1}</div>
+                                        <br>
+                                        {/foreach}
+                                    </td>
+                                    {/foreach}
+				<script>/*{foreach key=k item=i from=$smarty.request.statya_list}*/$("#st{$k}").click();/*{/foreach}*/</script>
+                                </tr>
+                            </table>
+                            <script>$('#statya_list').hide();</script>
+                        </td>
+		</tr>
+		<tr>
+			<td style="text-align: right">Детализация</td>
+			<td style="vertical-align: top;">
+				<select name=detalisation id=detalisation>
+					<option value=0>Активность</option>
+					<option value=1>Сеть</option>
+					<option value=2>ТМКК</option>
+					<option value=3>НМКК</option>
+				</select>
+				<script>$('#detalisation option[value="{$smarty.request.detalisation}"]').prop('selected', true);</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: right"></td>
+			<td>
+                            <input value="Построить отчет" name="generate" type="submit">
+                            <br>
+                            {if $smarty.request.generate}
+                                {if not $smarty.request.print}<a href="?action=media_plan&generate=1&print=1&excel=1&filename=Медиа-план">Экспорт в Excel</a>{/if}
+                            {/if}
+			</td>
+		</tr>
+	</tbody>
+        </table>
+</form>
+{/if}
+{if $smarty.request.generate}
+    {include file="media_plan_table.html"}
+{/if}

@@ -2,26 +2,11 @@
 
 <form name=form_activ id=form_activ target=_self method=post>
 
-
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_activ').submit();
-}
-</script>
-{/literal}
-
-
-
-
 Период:
 
 <br>
 
-<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+<select name=month_list id=month_list onchange="$('#form_activ').trigger('submit');">
 {foreach key=key item=item from=$month_list}
 	<option value="{$item.sd_c}">{$item.my}</option>
 {/foreach}
@@ -37,7 +22,7 @@ function fn_submit(val)
 
 <br>
 
-<select name=dolgn_list id=dolgn_list onchange="javascript:fn_submit('dolgn_list');">
+<select name=dolgn_list id=dolgn_list onchange="$('#form_activ').trigger('submit');">
 <option value=0></option>
 {foreach key=key item=item from=$dolgn_list}
 <option value={$key}>{$item}</option>

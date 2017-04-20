@@ -1,4 +1,4 @@
-/* Formatted on 12.04.2017 12:11:32 (QP5 v5.252.13127.32867) */
+/* Formatted on 18.04.2017 15:39:43 (QP5 v5.252.13127.32867) */
   SELECT cpp.tz_oblast,
          (SELECT net_name
             FROM ms_nets
@@ -7,8 +7,8 @@
          ur_tz_name,
          tz_address,
          cpp.kodtp,
+         rb.id,
          DECODE (rb.id, NULL, NULL, 1) tp_enabled,
-         rb.ID,
          DECODE (svmsok.kodtp, NULL, 0, 1) svmsok
     FROM (SELECT cpp1.*
             FROM cpp cpp1,
@@ -34,7 +34,8 @@
                  AND c.data = mr.dt
                  AND h.id = o.head_id
                  AND c.data = o.dt
-                 AND h.id = :route) svmsok
+                 AND h.id = :route
+                 AND b.vv = 0) svmsok
    WHERE cpp.kodtp = rb.kodtp(+) AND cpp.kodtp = svmsok.kodtp(+)
 ORDER BY tz_oblast,
          net_name,

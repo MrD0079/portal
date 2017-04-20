@@ -1,4 +1,4 @@
-/* Formatted on 12.04.2017 12:04:53 (QP5 v5.252.13127.32867) */
+/* Formatted on 18.04.2017 15:41:11 (QP5 v5.252.13127.32867) */
   SELECT a.*,
          DECODE (ha.id, NULL, 0, 1) checked,
          DECODE (svmsok.id, NULL, 0, 1) svmsok
@@ -19,7 +19,8 @@
                  AND h.id = o.head_id
                  AND c.data = o.dt
                  AND a.id = b.ag_id
-                 AND h.id = :route) svmsok
+                 AND h.id = :route
+                 AND b.vv = 0) svmsok
    WHERE     hA.HEAD_ID(+) = :route
          AND A.ID = HA.AG_ID(+)
          AND ha.vv(+) = 0

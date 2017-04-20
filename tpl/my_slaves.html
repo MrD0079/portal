@@ -2,17 +2,6 @@
 
 <form name=form_plan_activ id=form_plan_activ target=_self method=post>
 
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_plan_activ').submit();
-}
-</script>
-{/literal}
-
 {literal}
 <script>
 function fn_href(e1,e2)
@@ -36,25 +25,11 @@ fn_href('a1','dates_list');
 </script>
 </form>
 
-
-
-
-
 <form name=form_zat id=form_zat target=_self method=post>
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_zat').submit();
-}
-</script>
-{/literal}
 
 	Период:
 	<br>
-	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+	<select name=month_list id=month_list onchange="$('#form_zat').trigger('submit');">
 		{foreach key=key item=item from=$month_list}
 			<option value="{$item.sd_c}">{$item.my}</option>
 		{/foreach}
@@ -62,10 +37,6 @@ function fn_submit(val)
 	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
 
 </form>
-
-
-
-
 
 <h3>Мои подчиненные, заполнившие план активности</h3>
 

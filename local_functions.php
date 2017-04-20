@@ -109,31 +109,41 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 	}
 }
 
-function InitRequestVar($Name, $Default = null)
+function InitRequestVar($Name, $Default = null, $storeSessionVarInDB = false)
 {
-	if (isset($_POST[$Name]))
-	{
-		$_SESSION[$Name]=$_POST[$Name];
-	}
-	else
-	{
-		if (isset($_GET[$Name]))
-		{
-			$_SESSION[$Name]=$_GET[$Name];
-		}
-		else
-		{
-			if (isset($_SESSION[$Name]))
-			{
-				$_REQUEST[$Name]=$_SESSION[$Name];
-			}
-			else
-			{
-				$_SESSION[$Name]=$Default;
-				$_REQUEST[$Name]=$Default;
-			}
-		}
-	}
+    global $db,$tn,$login;
+    if ($storeSessionVarInDB) {
+        $db_session_var = $db->getOne("select val from session_vars where login='$login' and name='$Name'");
+        $_SESSION[$Name]=unserialize($db_session_var);
+    }
+    if (isset($_POST[$Name]))
+    {
+            $_SESSION[$Name]=$_POST[$Name];
+    }
+    else
+    {
+        if (isset($_GET[$Name]))
+        {
+                $_SESSION[$Name]=$_GET[$Name];
+        }
+        else
+        {
+            if (isset($_SESSION[$Name]))
+            {
+                    $_REQUEST[$Name]=$_SESSION[$Name];
+            }
+            else
+            {
+                $_SESSION[$Name]=$Default;
+                $_REQUEST[$Name]=$Default;
+            }
+        }
+    }
+    if ($storeSessionVarInDB) {
+        $keys = array('name'=>$Name,'login'=>$login);
+        $vals = array('val'=>serialize($_REQUEST[$Name]));
+        Table_Update('session_vars', $keys,$vals);
+    }
 }
 
 /*

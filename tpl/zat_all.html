@@ -1,19 +1,9 @@
 <h1>{if $is_acceptor}Департамент оплаты{else}Заполнение отчета{/if}</h1>
 <form name=form_zat id=form_zat target=_self method=post>
 
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_zat').submit();
-}
-</script>
-{/literal}
 	Период:
 	<br>
-	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+	<select name=month_list id=month_list onchange="$('#form_zat').trigger('submit');">
 		{foreach key=key item=item from=$month_list}
 			<option value="{$item.sd_c}">{$item.my}</option>
 		{/foreach}
@@ -35,7 +25,7 @@ function fn_submit(val)
 			<td valign=top align=left>
 				Должность: 
 				<br>
-				<select name=dolgn_list id=dolgn_list onchange="javascript:fn_submit('dolgn_list');">
+				<select name=dolgn_list id=dolgn_list onchange="$('#form_zat').trigger('submit');">
 					<option value=0></option>
 					{foreach key=key item=item from=$dolgn_list}
 						<option value={$key}>{$item}</option>
@@ -47,11 +37,11 @@ function fn_submit(val)
 						<td valign=top align=left>
 							Показывать сотрудников:
 							<br>
-							<input type=radio onchange="javascript:fn_submit('exist_daily_zat_count');" name=exist_daily_zat_count id=exist_daily_zat_count value=0>Всех
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=exist_daily_zat_count id=exist_daily_zat_count value=0>Всех
 							<br>
-							<input type=radio onchange="javascript:fn_submit('exist_daily_zat_count');" name=exist_daily_zat_count id=exist_daily_zat_count value=1>Только заполнивших отчеты
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=exist_daily_zat_count id=exist_daily_zat_count value=1>Только заполнивших отчеты
 							<br>
-							<input type=radio onchange="javascript:fn_submit('exist_daily_zat_count');" name=exist_daily_zat_count id=exist_daily_zat_count value=-1>Только незаполнивших отчеты
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=exist_daily_zat_count id=exist_daily_zat_count value=-1>Только незаполнивших отчеты
 						</td>
 					</tr>
 				</table>
@@ -69,7 +59,7 @@ function fn_submit(val)
 			<td valign=top align=left>
 				Рук-ль/Эксперт:
 				<br>
-				<select name=exp_list_accepted id=exp_list_accepted onchange="javascript:fn_submit('exp_list_accepted');">
+				<select name=exp_list_accepted id=exp_list_accepted onchange="$('#form_zat').trigger('submit');">
 					<option value=0></option>
 					{foreach key=key item=item from=$exp_list}
 						<option value={$key}>{$item}</option>
@@ -81,11 +71,11 @@ function fn_submit(val)
 						<td valign=top align=left>
 							Показывать сотрудников, у которых статус отчета:
 							<br>
-							<input type=radio onchange="javascript:fn_submit('is_accepted');" name=is_accepted id=is_accepted value=10>Любой
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_accepted id=is_accepted value=10>Любой
 							<br>
-							<input type=radio onchange="javascript:fn_submit('is_accepted');" name=is_accepted id=is_accepted value=1>Принят
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_accepted id=is_accepted value=1>Принят
 							<br>
-							<input type=radio onchange="javascript:fn_submit('is_accepted');" name=is_accepted id=is_accepted value=0>Не принят
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_accepted id=is_accepted value=0>Не принят
 						</td>
 					</tr>
 				</table>
@@ -107,7 +97,7 @@ function fn_submit(val)
 			<td valign=top align=left>
 				Рук-ль/Эксперт:
 				<br>
-				<select name=exp_list_processed id=exp_list_processed onchange="javascript:fn_submit('exp_list_processed');">
+				<select name=exp_list_processed id=exp_list_processed onchange="$('#form_zat').trigger('submit');">
 					<option value=0></option>
 					{foreach key=key item=item from=$exp_list}
 						<option value={$key}>{$item}</option>
@@ -119,11 +109,11 @@ function fn_submit(val)
 						<td valign=top align=left>
 							Показывать сотрудников, у которых статус отчета:
 							<br>
-							<input type=radio onchange="javascript:fn_submit('is_processed');" name=is_processed id=is_processed value=10>Любой
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_processed id=is_processed value=10>Любой
 							<br>
-							<input type=radio onchange="javascript:fn_submit('is_processed');" name=is_processed id=is_processed value=1>Обработан
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_processed id=is_processed value=1>Обработан
 							<br>
-							<input type=radio onchange="javascript:fn_submit('is_processed');" name=is_processed id=is_processed value=0>Не обработан
+							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_processed id=is_processed value=0>Не обработан
 						</td>
 					</tr>
 				</table>

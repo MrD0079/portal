@@ -8,7 +8,7 @@
 		Μερÿφ
 		<br>
 		{if $smarty.request.print neq 1}
-			<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+			<select name=month_list id=month_list onchange="$('#form_tr_shed').trigger('submit');">
 			{foreach key=key item=item from=$month_list}
 				<option value="{$item.sd_c}">{$item.my}</option>
 			{/foreach}
@@ -38,29 +38,7 @@
 	</tr>
 </table>
 
-
-
-
-
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_tr_shed').submit();
-}
-</script>
-{/literal}
-
-
-
-
-
-
-
 </form>
-
 
 {assign var=a value=0}
 

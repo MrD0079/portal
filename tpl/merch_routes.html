@@ -1,7 +1,7 @@
 <form target="_self" method="POST" name=form1 id=form1>
 <h1>Закрепление маршрута за сотрудниками</h1>
 Выберите месяц
-<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+<select name=month_list id=month_list onchange="$('#form1').trigger('submit');">
 {foreach key=key item=item from=$month_list}
 <option value="{$item.sd_c}">{$item.my}</option>
 {/foreach}

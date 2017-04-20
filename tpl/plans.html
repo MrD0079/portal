@@ -1,26 +1,11 @@
 <h1>Отчет - "Планы активности"</h1>
 <form name="form_plans" id="form_plans" target="_self" method="post">
 
-
-
-{literal}
-<script>
-function fn_submit(val)
-{
-
-	$('#form_plans').submit();
-}
-</script>
-{/literal}
-
-
-
-
 Период:
 
 <br>
 
-<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+<select name=month_list id=month_list onchange="$('#form_plans').trigger('submit');">
 {foreach key=key item=item from=$month_list}
 	<option value="{$item.sd_c}">{$item.my}</option>
 {/foreach}
@@ -59,7 +44,7 @@ function fn_submit(val)
 
 <br>
 
-<select name=dolgn_list id=dolgn_list onchange="javascript:fn_submit('dolgn_list');">
+<select name=dolgn_list id=dolgn_list onchange="$('#form_plans').trigger('submit');">
 <option value=0></option>
 {foreach key=key item=item from=$dolgn_list}
 <option value={$key}>{$item}</option>
@@ -73,11 +58,11 @@ function fn_submit(val)
 <table width=200px><tr><td>
 Показывать сотрудников:
 <br>
-<input type=radio onchange="javascript:fn_submit('exist_daily_plans_count');" name=exist_daily_plans_count id=exist_daily_plans_count value=0>Всех
+<input type=radio onchange="$('#form_plans').trigger('submit');" name=exist_daily_plans_count id=exist_daily_plans_count value=0>Всех
 <br>
-<input type=radio onchange="javascript:fn_submit('exist_daily_plans_count');" name=exist_daily_plans_count id=exist_daily_plans_count value=1>Только заполнивших планы
+<input type=radio onchange="$('#form_plans').trigger('submit');" name=exist_daily_plans_count id=exist_daily_plans_count value=1>Только заполнивших планы
 <br>
-<input type=radio onchange="javascript:fn_submit('exist_daily_plans_count');" name=exist_daily_plans_count id=exist_daily_plans_count value=-1>Только незаполнивших планы
+<input type=radio onchange="$('#form_plans').trigger('submit');" name=exist_daily_plans_count id=exist_daily_plans_count value=-1>Только незаполнивших планы
 </td></tr></table>
 <script>$("input[name=exist_daily_plans_count][value={$smarty.request.exist_daily_plans_count}]").attr('checked',true);</script>
 
@@ -94,7 +79,7 @@ function fn_submit(val)
 
 <br>
 
-<select name=exp_list id=exp_list onchange="javascript:fn_submit('exp_list');">
+<select name=exp_list id=exp_list onchange="$('#form_plans').trigger('submit');">
 <option value=0></option>
 {foreach key=key item=item from=$exp_list}
 <option value={$key}>{$item}</option>

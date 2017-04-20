@@ -212,7 +212,7 @@ $('#master').change(
 		<!--<input type=hidden name=new[fil] value="{$smarty.request.new.fil}">-->
 	</tr>
 <script>
-{literal}
+/*{literal}*/
 function load_fils(fil)
 {
 	$('#new_fil').load('?action=bud_ru_zay_create_fils&nohead=1&dt='+$('#master').val(),function() {
@@ -220,8 +220,13 @@ function load_fils(fil)
 		$('#new_fil option[value="'+fil+'"]').prop('selected', true);
 	});
 }
-{/literal}
-load_fils({$smarty.request.new.fil});
+/*{/literal}*/
+$(
+	function()
+	/*{literal}*/{/*{/literal}*/
+            load_fils({$smarty.request.new.fil});
+	/*{literal}*/}/*{/literal}*/
+)
 </script>
 	<tr>
 		<td>‘»Œ –Ã/ÕÃ  </td>

@@ -5,7 +5,7 @@
 
 
 	ֲûבונטעו לוסÿצ
-	<select name=month_list id=month_list onchange="javascript:fn_submit('month_list');">
+	<select name=month_list id=month_list onchange="$('#form1').trigger('submit');">
 	{foreach key=key item=item from=$month_list}
 		<option value="{$item.sd_c}">{$item.my}</option>
 		{if $item.sd_c eq $smarty.request.month_list}

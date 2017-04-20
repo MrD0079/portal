@@ -1,0 +1,129 @@
+<table border=1 cellpadding=0 cellspacing=0>
+	<tr style="text-align:center">
+		<td rowspan=2>НМКК</td>
+		{if $smarty.request.detalisation <= 2}<td rowspan=2>ТМ КК</td>{/if}
+		{if $smarty.request.detalisation <= 1}<td rowspan=2>Сеть</td>{/if}
+                {if $smarty.request.detalisation <= 0}<td rowspan=2>Активность</td>{/if}
+		<td colspan=2 style="width:100px;">Фин план</td>
+		<td colspan=2 style="width:100px;">Договорн план</td>
+		<td colspan=2 style="width:100px;">Опер план</td>
+		<td colspan=2 style="width:100px;">Факт оказ услуг</td>
+		<td rowspan=2 style="width:50px;">План бюджет, %</td>
+		<td rowspan=2 style="width:50px;">Факт бюджет, %</td>
+	</tr>
+	<tr style="text-align:center">
+		<td style="width:50px;">кол-во</td>
+		<td style="width:50px;">сумма</td>
+		<td style="width:50px;">кол-во</td>
+		<td style="width:50px;">сумма</td>
+		<td style="width:50px;">кол-во</td>
+		<td style="width:50px;">сумма</td>
+		<td style="width:50px;">кол-во</td>
+		<td style="width:50px;">сумма</td>
+	</tr>
+	{foreach key=key item=i from=$d}
+		<tr style="vertical-align:middle; background-color: lightgreen">
+                        {assign var=s1 value=0}
+                        {if $smarty.request.detalisation <= 2}
+                        {foreach key=key1 item=i1 from=$i.data}
+                                {assign var=s1 value=`$s1+1`}
+                                {if $smarty.request.detalisation <= 1}
+                                {foreach key=key2 item=i2 from=$i1.data}
+                                        {assign var=s1 value=`$s1+1`}
+                                        {if $smarty.request.detalisation <= 0}
+                                        {foreach key=key3 item=i3 from=$i2.data}
+                                                {assign var=s1 value=`$s1+1`}
+                                        {/foreach}
+                                        {/if}
+                                {/foreach}
+                                {/if}
+                        {/foreach}
+                        {/if}
+                        <td rowspan={$s1+1} style="text-align:left; vertical-align: top">{$i.head.nmkk_net}</td>
+                        {if $smarty.request.detalisation <= 2}<td></td>{/if}
+                        {if $smarty.request.detalisation <= 1}<td></td>{/if}
+                        {if $smarty.request.detalisation <= 0}<td></td>{/if}
+                        <td style="text-align:center">{$i.head.financial_quantity|num:0}</td>
+                        <td style="text-align:center">{$i.head.financial_amount|num:3}</td>
+                        <td style="text-align:center">{$i.head.contractual_quantity|num:0}</td>
+                        <td style="text-align:center">{$i.head.contractual_amount|num:3}</td>
+                        <td style="text-align:center">{$i.head.operational_quantity|num:0}</td>
+                        <td style="text-align:center">{$i.head.operational_amount|num:3}</td>
+                        <td style="text-align:center">{$i.head.rendered_quantity|num:0}</td>
+                        <td style="text-align:center">{$i.head.rendered_amount|num:3}</td>
+                        <td style="text-align:center">{$i.head.plan_budjet|num:2}</td>
+                        <td style="text-align:center">{$i.head.fakt_budjet|num:2}</td>
+		</tr>
+                {if $smarty.request.detalisation <= 2}
+		{foreach key=key1 item=i1 from=$i.data}
+			<tr style="vertical-align:middle; background-color: lightblue">
+				{assign var=s1 value=0}
+				{if $smarty.request.detalisation <= 1}
+                                {foreach key=key2 item=i2 from=$i1.data}
+                                        {assign var=s1 value=`$s1+1`}
+                                        {if $smarty.request.detalisation <= 0}
+                                        {foreach key=key3 item=i3 from=$i2.data}
+                                                {assign var=s1 value=`$s1+1`}
+                                        {/foreach}
+                                        {/if}
+                                {/foreach}
+                                {/if}
+				<td rowspan={$s1+1} style="text-align:left; vertical-align: top">{$i1.head.tmkk_net}</td>
+				{if $smarty.request.detalisation <= 1}<td></td>{/if}
+                                {if $smarty.request.detalisation <= 0}<td></td>{/if}
+                                <td style="text-align:center">{$i1.head.financial_quantity|num:0}</td>
+                                <td style="text-align:center">{$i1.head.financial_amount|num:3}</td>
+                                <td style="text-align:center">{$i1.head.contractual_quantity|num:0}</td>
+                                <td style="text-align:center">{$i1.head.contractual_amount|num:3}</td>
+                                <td style="text-align:center">{$i1.head.operational_quantity|num:0}</td>
+                                <td style="text-align:center">{$i1.head.operational_amount|num:3}</td>
+                                <td style="text-align:center">{$i1.head.rendered_quantity|num:0}</td>
+                                <td style="text-align:center">{$i1.head.rendered_amount|num:3}</td>
+                                <td style="text-align:center">{$i1.head.plan_budjet|num:2}</td>
+                                <td style="text-align:center">{$i1.head.fakt_budjet|num:2}</td>
+			</tr>
+                        {if $smarty.request.detalisation <= 1}
+			{foreach key=key2 item=i2 from=$i1.data}
+				<tr style="vertical-align:middle; background-color: lightsalmon">
+                                        {assign var=s1 value=0}
+                                        {if $smarty.request.detalisation <= 0}
+                                        {foreach key=key3 item=i3 from=$i2.data}
+                                                {assign var=s1 value=`$s1+1`}
+                                        {/foreach}
+                                        {/if}
+					<td rowspan={$s1+1} style="text-align:left; vertical-align: top">{$i2.head.net_name}</td>
+        				{if $smarty.request.detalisation <= 0}<td></td>{/if}
+                                        <td style="text-align:center">{$i2.head.financial_quantity|num:0}</td>
+                                        <td style="text-align:center">{$i2.head.financial_amount|num:3}</td>
+                                        <td style="text-align:center">{$i2.head.contractual_quantity|num:0}</td>
+                                        <td style="text-align:center">{$i2.head.contractual_amount|num:3}</td>
+                                        <td style="text-align:center">{$i2.head.operational_quantity|num:0}</td>
+                                        <td style="text-align:center">{$i2.head.operational_amount|num:3}</td>
+                                        <td style="text-align:center">{$i2.head.rendered_quantity|num:0}</td>
+                                        <td style="text-align:center">{$i2.head.rendered_amount|num:3}</td>
+                                        <td style="text-align:center">{$i2.head.plan_budjet|num:2}</td>
+                                        <td style="text-align:center">{$i2.head.fakt_budjet|num:2}</td>
+				</tr>
+                                {if $smarty.request.detalisation <= 0}
+                                {foreach key=key3 item=i3 from=$i2.data}
+                                        <tr style="vertical-align:middle;">
+                                                <td style="text-align:left">{$i3.head.description}</td>
+                                                <td style="text-align:center">{$i3.head.financial_quantity|num:0}</td>
+                                                <td style="text-align:center">{$i3.head.financial_amount|num:3}</td>
+                                                <td style="text-align:center">{$i3.head.contractual_quantity|num:0}</td>
+                                                <td style="text-align:center">{$i3.head.contractual_amount|num:3}</td>
+                                                <td style="text-align:center">{$i3.head.operational_quantity|num:0}</td>
+                                                <td style="text-align:center">{$i3.head.operational_amount|num:3}</td>
+                                                <td style="text-align:center">{$i3.head.rendered_quantity|num:0}</td>
+                                                <td style="text-align:center">{$i3.head.rendered_amount|num:3}</td>
+                                                <td style="text-align:center">{$i3.head.plan_budjet|num:2}</td>
+                                                <td style="text-align:center">{$i3.head.fakt_budjet|num:2}</td>
+                                        </tr>
+                                {/foreach}
+                                {/if}
+			{/foreach}
+                        {/if}
+		{/foreach}
+                {/if}
+	{/foreach}
+</table>

@@ -8,7 +8,20 @@ InitRequestVar("select_route_numb",0);
 InitRequestVar("svms_list",0);
 InitRequestVar("head_agents");
 
-//ses_req();
+if (isset($_REQUEST["add_vv"]))
+{
+	InitRequestVar("select",1);
+	$sql = rtrim(file_get_contents('sql/merch_report_new_vv_ins.sql'));
+	$p=array(
+		":head_id"=>$_REQUEST["select_route_numb"],
+		":kod_tp"=>$_REQUEST["vv_tp"],
+		":ag_id"=>$_REQUEST["vv_ag"],
+		":dt"=>"'".$_REQUEST["vv_dt"]."'"
+	);
+	$sql=stritr($sql,$p);
+	$res = $db->query($sql);
+	//echo $sql;
+}
 
 if (isset($_REQUEST["save"]))
 {
@@ -59,27 +72,11 @@ if (isset($_REQUEST["save"]))
 	}
 }
 
-if (isset($_REQUEST["add_vv"]))
-{
-	InitRequestVar("select",1);
-	$sql = rtrim(file_get_contents('sql/merch_report_new_vv_ins.sql'));
-	$p=array(
-		":head_id"=>$_REQUEST["select_route_numb"],
-		":kod_tp"=>$_REQUEST["vv_tp"],
-		":ag_id"=>$_REQUEST["vv_ag"],
-		":dt"=>"'".$_REQUEST["vv_dt"]."'"
-	);
-	$sql=stritr($sql,$p);
-	$res = $db->query($sql);
-	//echo $sql;
-}
-
 if ($_REQUEST["select_route_numb"]>0)
 {
 	$sql = rtrim(file_get_contents('sql/merch_report_new_vv_tp.sql'));
 	$p=array(":route"=>$_REQUEST["select_route_numb"]);
 	$sql=stritr($sql,$p);
-//echo $sql;
 	$res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('vv_tp', $res);
 }
