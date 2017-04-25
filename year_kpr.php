@@ -120,6 +120,7 @@ if (isset($_REQUEST["calendar_years"]))
 	isset($data_fos)?$smarty->assign('year_kpr_fos', $data_fos)                                    :null;
 	isset($data_svs)?$smarty->assign('year_kpr_svs', $data_svs)                                    :null;
 	isset($d_pfb_total)?$smarty->assign('year_kpr_pfb_total', $d_pfb_total)                           :null;
+        //print_r($d_pfb_total);
 	isset($data_fou_total)?$smarty->assign('year_kpr_fou_total', $data_fou_total)                        :null;
 	isset($data_fos_total)?$smarty->assign('year_kpr_fos_total', $data_fos_total)                        :null;
 	isset($data_svs_total)?$smarty->assign('year_kpr_svs_total', $data_svs_total)                        :null;

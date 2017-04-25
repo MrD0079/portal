@@ -73,33 +73,55 @@
 				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>
 			</td>
 		</tr>
+		<tr style="vertical-align:top">
+			<td>
+				Группа затрат
+			</td>
+			<td>
+				<input type=radio id=mgroups name=mgroups value=1>КОНД<br>
+				<input type=radio id=mgroups name=mgroups value=2>КОФЕ<br>
+				<input type=radio id=mgroups name=mgroups value=3>НГ<br>
+				<script>$("input[name=mgroups][value={$smarty.request.mgroups}]").attr('checked',true);</script>
+			</td>
+		</tr>
 		<tr>
 			<td style="text-align:right; vertical-align: top">
                             <nobr>
-                            <a style="font-weight: bold" href="javascript:void(0);" onClick="$('#statya_list').toggle();">[+/-]</a>
+                            <a style="font-weight: bold" href="javascript:void(0);" onClick="$('#statya_list_media_plan').toggle();">[+/-]</a>
                             Статья затрат
                             </nobr>
                         </td>
 			<td>
-                            <table id="statya_list">
+                            <table id="statya_list_media_plan">
+                                <tr style="vertical-align: top; font-weight: bold">
+                                    {foreach key=k0 item=i0 from=$statya_list_media_plan}
+                                    {foreach key=k item=i from=$i0}
+                                    <td>{$k0}</td>
+                                    {/foreach}
+                                    {/foreach}
+				<script>/*{foreach key=k item=i from=$smarty.request.statya_list_media_plan}*/$("#st{$k}").click();/*{/foreach}*/</script>
+                                </tr>
                                 <tr style="vertical-align: top">
-                                    {foreach key=k item=i from=$statya_list}
+                                    {foreach key=k0 item=i0 from=$statya_list_media_plan}
+                                    {foreach key=k item=i from=$i0}
                                     <td>
                                         <a style="font-weight: bold" href="javascript:void(0);" onClick="$('.st{$k}').each(function()/*{literal}*/{/*{/literal}*/$(this).prop('checked',false);$(this).click();/*{literal}*/}/*{/literal}*/)">[+]</a>
                                         <a style="font-weight: bold" href="javascript:void(0);" onClick="$('.st{$k}').each(function()/*{literal}*/{/*{/literal}*/$(this).prop('checked',true);$(this).click();/*{literal}*/}/*{/literal}*/)">[-]</a>
-                                        {$i.cost_item}
+                                        <font style="font-weight: bold">{$i.cost_item}</font>
                                         <br>
                                         {foreach key=k1 item=i1 from=$i.data}
-                                        <input name=statya_list[{$k1}] type="checkbox" class="statya_list st{$k}" id="st{$k1}" value="{$k1}" onChange="$('#sttd{$k1}').css('background-color',this.checked?'lightgreen':'white');">
+                                        <input name=statya_list_media_plan[{$k1}] type="checkbox" class="statya_list_media_plan st{$k}" id="st{$k1}" value="{$k1}" onChange="$('#sttd{$k1}').css('background-color',this.checked?'lightgreen':'white');">
                                         <div style="display: inline" id="sttd{$k1}">{$i1}</div>
                                         <br>
                                         {/foreach}
                                     </td>
                                     {/foreach}
-				<script>/*{foreach key=k item=i from=$smarty.request.statya_list}*/$("#st{$k}").click();/*{/foreach}*/</script>
+                                    {/foreach}
+				<script>/*{foreach key=k item=i from=$smarty.request.statya_list_media_plan}*/$("#st{$k}").click();/*{/foreach}*/</script>
                                 </tr>
                             </table>
-                            <script>$('#statya_list').hide();</script>
+                            <script>$('#statya_list_media_plan').hide();</script>
+                            <input type="hidden" name=statya_list_media_plan1[0] value="0">
                         </td>
 		</tr>
 		<tr>

@@ -1,4 +1,4 @@
-/* Formatted on 19.04.2017 16:43:43 (QP5 v5.252.13127.32867) */
+/* Formatted on 24.04.2017 16:13:27 (QP5 v5.252.13127.32867) */
   SELECT tn_nmkk_net,
          nmkk_net,
          tn_tmkk_net,
@@ -47,7 +47,8 @@
                         WHEN s.parent = 96882041 THEN fakt_coffee
                      END
                    / 1000
-                      net_fakt
+                      net_fakt,
+                   sp.net_plan
               FROM nets_plan_month m,
                    nets n,
                    statya s,
@@ -63,7 +64,24 @@
                            t1.fakt_ng,
                            t1.fakt_coffee
                       FROM networkplanfact t1, nets t2
-                     WHERE t1.id_net = t2.sw_kod) npf
+                     WHERE t1.id_net = t2.sw_kod) npf,
+                   (SELECT y.year,
+                           mk.month,
+                           y.id_net,
+                             CASE
+                                WHEN :mgroups = 1 THEN sales
+                                WHEN :mgroups = 3 THEN sales_ng
+                                WHEN :mgroups = 2 THEN sales_coffee
+                             END
+                           / 100
+                           * CASE
+                                WHEN :mgroups = 1 THEN koeff
+                                WHEN :mgroups = 3 THEN koeff_ng
+                                WHEN :mgroups = 2 THEN koeff_coffee
+                             END
+                              net_plan
+                      FROM nets_plan_year y, month_koeff mk
+                     WHERE y.plan_type = 1) sp
              WHERE     TO_DATE ('1.' || m.month || '.' || m.year, 'dd.mm.yyyy') BETWEEN TO_DATE (
                                                                                               '1.'
                                                                                            || DECODE (
@@ -83,7 +101,7 @@
                    AND n.id_net = m.id_net
                    AND m.statya = s.id
                    AND s.parent = sp.id
-                   AND s.id IN ( :statya_list)
+                   AND (s.id IN ( :statya_list_media_plan) or length(':statya_list_media_plan') = 1)
                    AND pf.id = m.payment_format
                    AND m.mkk_ter = umkkter.tn
                    AND n.tn_rmkk = unm.tn
@@ -91,6 +109,9 @@
                    AND npf.YEAR(+) = m.year
                    AND npf.MONTH(+) = m.month
                    AND npf.id_net(+) = m.id_net
+                   AND sp.YEAR(+) = m.year
+                   AND sp.MONTH(+) = m.month
+                   AND sp.id_net(+) = m.id_net
                    AND (    (   n.tn_mkk IN (SELECT slave
                                                FROM full
                                               WHERE master = :tn)
@@ -100,6 +121,11 @@
                         AND DECODE ( :tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) =
                                n.tn_rmkk
                         AND DECODE ( :tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk)
+                   AND CASE
+                          WHEN s.parent NOT IN (42, 96882041) THEN 1
+                          WHEN s.parent = 42 THEN 3
+                          WHEN s.parent = 96882041 THEN 2
+                       END IN ( :mgroups)
           GROUP BY n.id_net,
                    n.net_name,
                    m.year,
@@ -118,7 +144,8 @@
                         WHEN s.parent = 42 THEN fakt_ng
                         WHEN s.parent = 96882041 THEN fakt_coffee
                      END
-                   / 1000
+                   / 1000,
+                   sp.net_plan
           ORDER BY year,
                    net_name,
                    ñost_item_group,
