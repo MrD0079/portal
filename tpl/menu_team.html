@@ -96,7 +96,7 @@
 		<li><a href="?action=tr_plan">Мой план обучения</a></li>
 		<li><a href="?action=tr_shed">График обучения менеджеров</a></li>
 
-		{if $cnt_kod eq "ua" or $cnt_kod eq "exp" or $cnt_kod eq "md"}
+		{if $cnt_kod eq "ua" or $cnt_kod eq "exp"}
 
 			<li><a href="?action=tr_pt_shed">График обучения агентов</a></li>
 
@@ -129,7 +129,7 @@
 		</ul>
 		</li>
 
-		{if $cnt_kod eq "ua" or $cnt_kod eq "exp" or $cnt_kod eq "md"}
+		{if $cnt_kod eq "ua" or $cnt_kod eq "exp"}
 
 			<li><a href="javascript:void(0);"><span class="dir">Для агентов</span></a>
 			<ul>
@@ -178,7 +178,7 @@
 	<li><a href="files/ua/INSTRUKTSIYA__Pooshchreniya_shtrafi.pdf">Инструкция</a></li>
 	<li><a href="?action=bonus_create">Заявка на применение административных мер</a></li>
 	<li><a href="?action=bonus_reestr">Реестр административных мер</a></li>
-	<li><a href="?action=box_reestr">Реестр предложений ДП</a></li>
+	<!--<li><a href="?action=box_reestr">Реестр предложений ДП</a></li>-->
 	<li><a href="javascript:void(0);"><span class="dir">Оплата</span></a>
 	<ul>
 		{if $is_acceptor or $is_test_admin or $is_admin}

@@ -1,4 +1,4 @@
-/* Formatted on 06/06/2016 14:01:05 (QP5 v5.252.13127.32867) */
+/* Formatted on 10.05.2017 18:21:44 (QP5 v5.252.13127.32867) */
   SELECT s.net_kod,
          s.net,
          s.isrc,
@@ -79,62 +79,90 @@
                  AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt
                  AND u.tab_num = m.tab_num
                  AND u.dpt_id = m.dpt_id) s,
-         (  SELECT tp_kod,
-                   chain,
-                   AVG (delay) delay,
-                   AVG (discount) discount,
-                   AVG (bonus) bonus,
-                   AVG (fixed) fixed,
-                   AVG (margin) margin
-              FROM (SELECT z.id,
-                           TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14))
-                              chain,
-                           TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))
-                              tp_kod,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 710)) delay,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1000))
-                              discount,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1010)) bonus,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1020)) fixed,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 735)) margin,
-                           u.dpt_id
-                      FROM bud_ru_zay z, user_list u
-                     WHERE     (SELECT NVL (tu, 0)
-                                  FROM bud_ru_st_ras
-                                 WHERE id = z.kat) = 1
-                           AND z.tn = u.tn
-                           AND u.dpt_id = :dpt_id
-                           AND TO_DATE ( :dt, 'dd.mm.yyyy') BETWEEN TRUNC (
-                                                                       z.dt_start,
-                                                                       'mm')
-                                                                AND TRUNC (
-                                                                       z.dt_end,
-                                                                       'mm')
-                           AND z.report_data IS NOT NULL
-                           AND (SELECT rep_accepted
-                                  FROM bud_ru_zay_accept
-                                 WHERE     z_id = z.id
-                                       AND accept_order =
-                                              DECODE (
-                                                 NVL (
-                                                    (SELECT MAX (accept_order)
-                                                       FROM bud_ru_zay_accept
-                                                      WHERE     z_id = z.id
-                                                            AND rep_accepted = 2),
-                                                    0),
-                                                 0, (SELECT MAX (accept_order)
-                                                       FROM bud_ru_zay_accept
-                                                      WHERE     z_id = z.id
-                                                            AND rep_accepted
-                                                                   IS NOT NULL),
-                                                 (SELECT MAX (accept_order)
-                                                    FROM bud_ru_zay_accept
-                                                   WHERE     z_id = z.id
-                                                         AND rep_accepted = 2))) =
-                                  1                                      /*0*/
-                           AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14))
-                                  IS NOT NULL)
-          GROUP BY tp_kod, chain) t,
+         (/* Formatted on 10.05.2017 18:48:06 (QP5 v5.252.13127.32867) */
+SELECT z_all.chain,
+       z_all.delay,
+       z_all.discount,
+       z_all.bonus,
+       z_all.fixed,
+       z_all.margin
+  FROM (SELECT z.dt_start,
+               z.id,
+               TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14)) chain,
+               TO_NUMBER (getZayFieldVal (z.id, 'var1', 710)) delay,
+               TO_NUMBER (getZayFieldVal (z.id, 'var1', 1000)) discount,
+               TO_NUMBER (getZayFieldVal (z.id, 'var1', 1010)) bonus,
+               TO_NUMBER (getZayFieldVal (z.id, 'var1', 1020)) fixed,
+               TO_NUMBER (getZayFieldVal (z.id, 'var1', 735)) margin
+          FROM bud_ru_zay z, user_list u
+         WHERE     (SELECT NVL (tu, 0)
+                      FROM bud_ru_st_ras
+                     WHERE id = z.kat) = 1
+               AND z.tn = u.tn
+               AND u.dpt_id = :dpt_id
+               AND TO_DATE ( :dt, 'dd.mm.yyyy') BETWEEN TRUNC (z.dt_start,
+                                                               'mm')
+                                                    AND TRUNC (z.dt_end,
+                                                               'mm')
+               AND z.report_data IS NOT NULL
+               AND (SELECT rep_accepted
+                      FROM bud_ru_zay_accept
+                     WHERE     z_id = z.id
+                           AND accept_order =
+                                  DECODE (
+                                     NVL (
+                                        (SELECT MAX (accept_order)
+                                           FROM bud_ru_zay_accept
+                                          WHERE     z_id = z.id
+                                                AND rep_accepted = 2),
+                                        0),
+                                     0, (SELECT MAX (accept_order)
+                                           FROM bud_ru_zay_accept
+                                          WHERE     z_id = z.id
+                                                AND rep_accepted IS NOT NULL),
+                                     (SELECT MAX (accept_order)
+                                        FROM bud_ru_zay_accept
+                                       WHERE z_id = z.id AND rep_accepted = 2))) =
+                      1                                                  /*0*/
+               AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14))
+                      IS NOT NULL) z_all,
+       (  SELECT MAX (z.dt_start) dt_start,
+                 TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14)) chain
+            FROM bud_ru_zay z, user_list u
+           WHERE     (SELECT NVL (tu, 0)
+                        FROM bud_ru_st_ras
+                       WHERE id = z.kat) = 1
+                 AND z.tn = u.tn
+                 AND u.dpt_id = :dpt_id
+                 AND TO_DATE ( :dt, 'dd.mm.yyyy') BETWEEN TRUNC (z.dt_start,
+                                                                 'mm')
+                                                      AND TRUNC (z.dt_end,
+                                                                 'mm')
+                 AND z.report_data IS NOT NULL
+                 AND (SELECT rep_accepted
+                        FROM bud_ru_zay_accept
+                       WHERE     z_id = z.id
+                             AND accept_order =
+                                    DECODE (
+                                       NVL (
+                                          (SELECT MAX (accept_order)
+                                             FROM bud_ru_zay_accept
+                                            WHERE     z_id = z.id
+                                                  AND rep_accepted = 2),
+                                          0),
+                                       0, (SELECT MAX (accept_order)
+                                             FROM bud_ru_zay_accept
+                                            WHERE     z_id = z.id
+                                                  AND rep_accepted IS NOT NULL),
+                                       (SELECT MAX (accept_order)
+                                          FROM bud_ru_zay_accept
+                                         WHERE z_id = z.id AND rep_accepted = 2))) =
+                        1                                                /*0*/
+                 AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14))
+                        IS NOT NULL
+        GROUP BY TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14)),
+                 TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))) z_max
+ WHERE z_all.chain = z_max.chain AND z_all.dt_start = z_max.dt_start) t,
          sc_svodn sv,
          (SELECT fil, h_eta
             FROM bud_svod_zp

@@ -12,7 +12,7 @@
          cr.fio creator_fio,
          cr.pos_name creator_pos_name,
          cr.department_name creator_department_name
-    FROM box b, box_chat c, user_list cr
+    FROM box_dpu b, box_dpu_chat c, user_list cr
    WHERE     b.id = c.box_id
          AND cr.tn = b.creator
          AND (   b.creator = :tn

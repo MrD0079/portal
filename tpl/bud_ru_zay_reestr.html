@@ -342,8 +342,8 @@
 			<nobr>ќтметить дл€ удалени€<input type=checkbox name=del[] value={$i.head.id}></nobr>
 			{/if}
 			
-			{if $is_admin or ($i.head.creator_tn eq $tn and ($i.head.current_status eq 2 or $i.head.not_seen eq 1)) or ($is_do and $i.head.current_status neq 1)}
-				<a target=_blank href="?action=bud_ru_zay_create_2&id={$i.head.id}{if $is_admin}&admin=1{/if}&tu={$smarty.request.tu}">–едактировать</a>
+			{if $is_admin or $is_do or ($i.head.creator_tn eq $tn and ($i.head.current_status eq 2 or $i.head.not_seen eq 1)) or ($is_do and $i.head.current_status neq 1)}
+				<a target=_blank href="?action=bud_ru_zay_create_2&id={$i.head.id}{if $is_admin or $is_do}&admin=1{/if}&tu={$smarty.request.tu}">–едактировать</a>
 			{/if}
 			
 			{if $i.head.current_status eq 1 and $i.head.valid_no neq 1}<a target=_blank href="?action=bud_ru_zay_view&id={$i.head.id}&print=1&pdf=1&tn={$tn}&tu={$smarty.request.tu}">Ёкспорт</a>{/if}
@@ -352,7 +352,7 @@
 				<input type="submit" name="save" id="save" value="—охранить"><br>
 			{/if}
 
-			{if $is_admin and not $i.head.report_done}
+			{if ($is_admin or $is_do) and not $i.head.report_done}
 				<input type="submit" name="reset" id="reset" value="—бросить подтверждени€"><br>
 				<input type=hidden name='reset_z_id' value='{$i.head.id}'>
 			{/if}

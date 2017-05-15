@@ -12,6 +12,18 @@ if (isset($_REQUEST["save"]))
 	Table_Update("merch_report_cal",$keys,$keys);
 }
 else
+if (isset($_REQUEST["del"]))
+{
+	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
+	$keys = array(
+		'dt'=>OraDate2MDBDate($_REQUEST["dt"]),
+		'ag_id'=>$_REQUEST['ag_id'],
+		'rep_id'=>$_REQUEST['rep_id'],
+		'freq_id'=>$_REQUEST['freq_id']
+	);
+	Table_Update("merch_report_cal",$keys,null);
+}
+else
 if (isset($_REQUEST["save_d"]))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);

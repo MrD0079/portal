@@ -234,11 +234,11 @@ function Table_Update ($table/* string */ , $keys/* array(field1=>value1,...)*/ 
 		$res = $db->getRow($sql, null, $v1, null, MDB2_FETCHMODE_ASSOC);
 		if ($res)
 		{ ////////////////////////////////////////// record exist, updating...
-			//echo "запись существует, будем обновлять<br>\n";
 			if (!array_diff_my($res, $values))
 			{
 				$affectedRows = $db->extended->autoExecute($table, $values, MDB2_AUTOQUERY_UPDATE, implode(" and ", $k));
-                                if ($table=="merch_report"||$table=="merch_report_ok") audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
+                                //if ($table=="merch_report"||$table=="merch_report_ok") 
+                                    audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
 			}
 		}
 		else
@@ -246,14 +246,16 @@ function Table_Update ($table/* string */ , $keys/* array(field1=>value1,...)*/ 
 			if (implode("",$values)!="")
 			{
 				$affectedRows = $db->extended->autoExecute($table, array_merge($keys, $values), MDB2_AUTOQUERY_INSERT);
-                                if ($table=="merch_report"||$table=="merch_report_ok") audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
+                                //if ($table=="merch_report"||$table=="merch_report_ok") 
+                                    audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
 			}
 		}
 	}
 	else
 	{
 			$affectedRows = $db->extended->autoExecute($table, null, MDB2_AUTOQUERY_DELETE, implode(" and ", $k));
-                        if ($table=="merch_report"||$table=="merch_report_ok") audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
+                        //if ($table=="merch_report"||$table=="merch_report_ok") 
+                            audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
 	}
 	if (isset($affectedRows))
 	{
