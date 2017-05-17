@@ -214,7 +214,12 @@
 		</td>
 		<td style="text-align:right">
                     {if $year_kpr_pfb_total_prev.plan[1] > 0}
-                        {$year_kpr_pfb_total_prev.budget[1]/$year_kpr_pfb_total_prev.plan[1]*100.0|num:2}
+                    <!--
+                    {if $is_admin}
+                    {$year_kpr_pfb_total_prev.budget[1]} / {$year_kpr_pfb_total_prev.plan[1]} * 100 = 
+                    {/if}
+                    -->
+                    {$year_kpr_pfb_total_prev.budget[1]/$year_kpr_pfb_total_prev.plan[1]*100.0|num:2}
                     {else}
                         {0|num:2}
                     {/if}
@@ -237,6 +242,11 @@
 		<td style="text-align:right">{$year_kpr_fou_total|default:0|num:2}</td>
 		<td style="text-align:right">
                     {if $year_kpr_pfb_total_prev.fakt > 0}
+                        <!--
+                        {if $is_admin}
+                        {$year_kpr_fou_total_prev} / {$year_kpr_pfb_total_prev.fakt} * 100 = 
+                        {/if}
+                        -->
                         {$year_kpr_fou_total_prev/$year_kpr_pfb_total_prev.fakt*100.0|num:2}
                     {else}
                         {0|num:2}

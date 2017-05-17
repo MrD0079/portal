@@ -110,16 +110,22 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
         {
                 $d[$v["tn_nmkk_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
                 $d[$v["tn_nmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
+                $d[$v["tn_nmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
+                $d[$v["tn_nmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
         }
         foreach ($data2 as $k=>$v)
         {
                 $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
                 $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
+                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
+                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
         }
         foreach ($data1 as $k=>$v)
         {
                 $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
                 $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
+                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_plan"]=$v["net_plan"];
+                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_fakt"]=$v["net_fakt"];
         }
         isset($d)?$smarty->assign("d", $d):null;
         //print_r($d);

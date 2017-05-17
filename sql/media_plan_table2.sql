@@ -11,6 +11,7 @@
          SUM (operational_amount) operational_amount,
          SUM (rendered_quantity) rendered_quantity,
          SUM (rendered_amount) rendered_amount,
+         SUM (net_plan) net_plan,
          SUM (net_fakt) net_fakt,
          DECODE (SUM (net_plan),
                  0, 0,
