@@ -94,39 +94,52 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
         {
                 $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["data"][$v["description"]]["head"]=$v;
         }
-        $params[':plan_month'] = date("m")-1;
-        $params[':byyear'] = 1;
-        $params[':statya_list_media_plan'] = "''";
-        //print_r($params);
-	$sql1_=stritr($sql1,$params);
-	$sql2_=stritr($sql2,$params);
-	$sql3_=stritr($sql3,$params);
-        //echo $sql3_;
-        //exit;
-	$data1 = $db->getAll($sql1_, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$data2 = $db->getAll($sql2_, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$data3 = $db->getAll($sql3_, null, null, null, MDB2_FETCHMODE_ASSOC);
-        foreach ($data3 as $k=>$v)
-        {
-                $d[$v["tn_nmkk_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
-                $d[$v["tn_nmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
-                $d[$v["tn_nmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
-                $d[$v["tn_nmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
-        }
-        foreach ($data2 as $k=>$v)
-        {
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
-        }
-        foreach ($data1 as $k=>$v)
-        {
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_plan"]=$v["net_plan"];
-                $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_fakt"]=$v["net_fakt"];
-        }
+        //print_r($d);
+        //if ($_REQUEST["byyear"]==1)
+        //{
+            $params[':plan_month'] = date("m")-1;
+            $params[':byyear'] = 1;
+            $params[':statya_list_media_plan'] = "''";
+            //print_r($params);
+            $sql1_=stritr($sql1,$params);
+            $sql2_=stritr($sql2,$params);
+            $sql3_=stritr($sql3,$params);
+            //echo $sql3_;
+            //exit;
+            $data1 = $db->getAll($sql1_, null, null, null, MDB2_FETCHMODE_ASSOC);
+            $data2 = $db->getAll($sql2_, null, null, null, MDB2_FETCHMODE_ASSOC);
+            $data3 = $db->getAll($sql3_, null, null, null, MDB2_FETCHMODE_ASSOC);
+            foreach ($data3 as $k=>$v)
+            {
+                    $d[$v["tn_nmkk_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
+                    $d[$v["tn_nmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
+                    if ($_REQUEST["byyear"]==1)
+                    {
+                        $d[$v["tn_nmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
+                        $d[$v["tn_nmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
+                    }
+            }
+            foreach ($data2 as $k=>$v)
+            {
+                    $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
+                    $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
+                    if ($_REQUEST["byyear"]==1)
+                    {
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
+                    }
+            }
+            foreach ($data1 as $k=>$v)
+            {
+                    $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["plan_budjet"]=$v["plan_budjet"];
+                    $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
+                    if ($_REQUEST["byyear"]==1)
+                    {
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_plan"]=$v["net_plan"];
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_fakt"]=$v["net_fakt"];
+                    }
+            }
+        //}
         isset($d)?$smarty->assign("d", $d):null;
         //print_r($d);
 
