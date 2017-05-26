@@ -1,0 +1,121 @@
+<h1>Личные карточки мерчандайзеров (
+{if $smarty.request.all eq 0}Все{/if}
+{if $smarty.request.all eq 1}Работающие{/if}
+{if $smarty.request.all eq -1}Уволенные{/if}
+)</h1>
+<p>
+<a href="?action=spr_users_ms&all=0">Все</a>
+&nbsp&nbsp&nbsp
+<a href="?action=spr_users_ms&all=1">Работающие</a>
+&nbsp&nbsp&nbsp
+<a href="?action=spr_users_ms&all=-1">Уволенные</a>
+</p>
+<table cellspacing=0 cellpadding=3 align=center border=1 width='300px'>
+<form name=form target=_self method=post>
+<tr id="{$item.id}">
+<td><input type='submit' name="add" value="Добавить"></td>
+<td><input required="required" name="new[fam]" size=10></td>
+<td><input required="required" name="new[im]" size=10></td>
+<td><input name="new[otch]" size=10></td>
+<td><input name="new[birthday]" size=8 class="datepicker"></td>
+<td><input name="new[datauvol]" size=8 class="datepicker"></td>
+<td><input name="new[start_company]" size=8 class="datepicker"></td>
+<td><input name="new[inn]" size=10 class="number_int"></td>
+<td><input name="new[passport]" size=8></td>
+<td><input name="new[working_hours]" size=8 class="number_int"></td>
+<td>
+    <select required="required" name=new[pos_id]>
+        <option></option>
+        {foreach key=k item=i from=$routes_pos}
+        <option value="{$i.id}">{$i.name}</option>
+        {/foreach}
+    </select>
+</td>
+<td>
+    <select required="required" name=new[chief]>
+        <option></option>
+        {foreach key=k item=i from=$svms_list}
+        <option value="{$i.tn}">{$i.fio} ({$i.tn})</option>
+        {/foreach}
+    </select>
+</td>
+</tr>
+</form>
+{foreach key=key item=item from=$spr_users_ms name=spr_users_ms}
+{if $smarty.foreach.spr_users_ms.iteration%10 eq 1}
+<tr style="font-weight:bold;background-color: rgb(204, 255, 255);">
+<td>логин</td>
+<td>Фамилия</td>
+<td>Имя</td>
+<td>Отчество</td>
+<td>Дата рожд.</td>          
+<td>Дата увольнения</td>          
+<td>Дата начала работы в компании</td>        
+<td>ИНН</td>                
+<td>Паспорт</td>                
+<td>Норматив раб. дня, часов </td>                
+<td>Должность</td>
+<td>Рук-ль</td>                
+</tr>
+{/if}
+<tr id="{$item.id}">
+<td>{$item.login}</td>
+<td><input type=hidden value="fam"><input size=10 class="msItem" value="{$item.fam}"></td>
+<td><input type=hidden value="im"><input size=10 class="msItem" value="{$item.im}"></td>
+<td><input type=hidden value="otch"><input size=10 class="msItem" value="{$item.otch}"></td>
+<td><input type=hidden value="birthday"><input size=8 class="msItem msItemDT" value="{$item.birthday}"></td>
+<td><input type=hidden value="datauvol"><input size=8 class="msItem msItemDT" value="{$item.datauvol}"></td>
+<td><input type=hidden value="start_company"><input size=8 class="msItem msItemDT" value="{$item.start_company}"></td>
+<td><input type=hidden value="inn"><input size=10 class="msItem number_int" value="{$item.inn}"></td>
+<td><input type=hidden value="passport"><input size=8 class="msItem" value="{$item.passport}"></td>
+<td><input type=hidden value="working_hours"><input size=8 class="msItem number_int" value="{$item.working_hours}"></td>
+<td><input type=hidden value="pos_id">
+    <select class="msItem" id=pos_id{$item.id}>
+        <option value=0></option>
+        {foreach key=k item=i from=$routes_pos}
+        <option value="{$i.id}">{$i.name}</option>
+        {/foreach}
+    </select>
+    <script>$('#pos_id{$item.id} option[value="{$item.pos_id}"]').prop('selected', true);</script>
+</td>
+<td><input type=hidden value="chief">
+    <select class="msItem" id=chief{$item.id}>
+        <option value=0></option>
+        {foreach key=k item=i from=$svms_list}
+        <option value="{$i.tn}">{$i.fio} ({$i.tn})</option>
+        {/foreach}
+    </select>
+    <script>$('#chief{$item.id} option[value="{$item.chief}"]').prop('selected', true);</script>
+</td>                
+</tr>
+{/foreach}
+</table>
+<script>
+    {literal}
+    $(function(){
+        $('.msItemDT').focusin(function(){
+            $('.msItemDT').removeClass('datepicker');
+            $('.msItemDT').datepicker("destroy");
+            if (!$(this).hasClass('datepicker')){
+                $(this).addClass('datepicker');
+                init_form();
+            }
+        });
+        $('.msItem').change(function(){
+            //console.log($(this).closest('tr').attr('id')+' '+$(this).val());
+            $(this).closest('td').css('background-color','red');
+            //console.log($(this).prev().val());
+            $.get(
+                '?action=spr_users_ms&nohead=1&save=1',
+                {"id": $(this).closest('tr').attr('id'), "field": $(this).prev().val(), "val": $(this).val()},
+                function(data){
+                    $('#'+data).children().css('background-color','white');
+                    //console.log(data);
+                }
+            );
+        })
+        //$(".dt").addClass('datepicker');
+        //init_form();
+    })
+    {/literal}
+</script>

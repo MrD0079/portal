@@ -1,50 +1,38 @@
 <form target="_self" method="POST" name=form1 id=form1>
 
-
 <h1>Выбор ТП для маршрута</h1>
-<table style="text-align: center; height: 34px; width: 100px;" border="0" cellpadding="5" cellspacing="5">
-  <tbody>
-    <tr>
-      <td style=" width: 100px; text-align: left;">Выберите месяц 
-	<select name=month_list id=month_list onChange="$('#form1').trigger('submit');">
-	{foreach key=key item=item from=$month_list}
-		<option value="{$item.sd_c}">{$item.my}</option>
-		{if $item.sd_c eq $smarty.request.month_list}
-			{assign var=routes_enabled value=$item.routes_enabled}
-		{/if}
-	{/foreach}
-	</select>
-	<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
 
-	<input value="Выбрать" name="select_month" type="submit"><br>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<br>
-
-
-
-
-
+Выберите месяц 
+<select name=month_list id=month_list onChange="$('#form1').trigger('submit');">
+{foreach key=key item=item from=$month_list}
+        <option value="{$item.sd_c}">{$item.my}</option>
+        {if $item.sd_c eq $smarty.request.month_list}
+                {assign var=routes_enabled value=$item.routes_enabled}
+        {/if}
+{/foreach}
+</select>
+<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+<input value="Выбрать" name="select_month" type="submit"><br>
 
 {if $is_mservice or $is_admin}
 
-<hr style="width: 100%; height: 2px;"><span style="font-weight: bold;"><br>
-Номера маршрутов</span><br>
+<h3>Номера маршрутов</h3>
+
+<p>
+<input {if not $routes_enabled}disabled{/if} name="add_route" value="Добавить маршрут" type="submit">
+<input {if not $routes_enabled}disabled{/if} name="save" value="Сохранить изменения" type="submit">
+</p>
 
 <table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
 <tbody><tr>
       <td style=" text-align: center;">удал.<br></td>
       <td style="text-align: center;">Номер маршрута<br></td>
-      <td style="text-align: center;">ФИО отв. сотр.<br></td>
-      <td style="text-align: center;">должность отв. сотр.<br></td>
-      <td style="text-align: center;">ФИО создателя маршрута<br></td>
+      <td style="text-align: center;">Мерчандайзер<br></td>
+      <td style="text-align: center;">СВМС</td>
       <td style="text-align: center;">копировать<br>в<br>следующий<br>месяц</td>
       <td>
 		Разделить маршрут<br>
 		<p style="color:red">
-                    (кнопка "разделить" появится при изменении полей "с даты" и "ф.и.о. отв.")<br>
                     в текущем маршруте останутся визиты с начальной даты маршрута по выбранную дату (не включая ее),<br>
                     а в новый маршрут будут скопированы визиты с выбранной даты (включительно) по последнюю дату маршута<br>
                     к примеру, если выбрано 15-е число месяца, то при разделении в текущем маршруте останутся визиты с 1-го по 14-е число месяца,<br>
@@ -56,15 +44,15 @@
     <tr>
       <td style=" text-align: center;"><input {if not $routes_enabled}disabled{/if} {if $item.svmsok eq 1}disabled{/if} type=checkbox name="del[{$item.id}]"></td>
       <td style="text-align: center;"><input {if not $routes_enabled}disabled{/if} size="15" name="num[{$item.id}]" value="{$item.num}"></td>
-      <td style="text-align: center;"><input {if not $routes_enabled}disabled{/if} size="25" name="fio_otv[{$item.id}]" value="{$item.fio_otv|escape}"></td>
-      <td style="text-align: center;">
-	<select name=pos_otv[{$item.id}] id=pos_otv_{$item.id} {if not $routes_enabled}disabled{/if}>
-	{foreach key=key1 item=item1 from=$routes_pos}
-		<option value="{$item1.id}">{$item1.name}</option>
-	{/foreach}
-	</select>
-	<script>$("#pos_otv_{$item.id} option[value='{$item.pos_otv}']").prop('selected', true);</script>
-	</td>
+        <td style="text-align: center;">
+            <select name=spr_users_ms[{$item.id}] id=spr_users_ms{$item.id} {if not $routes_enabled}disabled{/if}>
+                <option></option>
+                {foreach key=key1 item=item1 from=$spr_users_ms}
+                <option value="{$item1.login}">{$item1.fam} {$item1.im} {$item1.otch}</option>
+                {/foreach}
+            </select>
+            <script>$("#spr_users_ms{$item.id} option[value='{$item.login}']").prop('selected', true);</script>
+        </td>
       <td style="text-align: center;">{$item.fio}</td>
 	<td style=" text-align: center;">
 		<input
@@ -82,56 +70,67 @@
 		>
 	</td>
 	<td>
-		с даты <input class="datepicker" name="divide_from[{$item.id}]" size=9 value="{$smarty.request.month_list}"
-                              onFocus='{$item.DisabledDates}'
-
-			onChange="
-				$('#cfrom_{$item.id}').val('true');
-				$('#cfrom_{$item.id}').val()=='true'&&$('#cfio_{$item.id}').val()=='true'?$('#divide_go_{$item.id}').attr('disabled',false):null;
-				$('#cfrom_{$item.id}').val()=='true'&&$('#cfio_{$item.id}').val()=='true'?$('#sm{$item.id}').show():null;
-			"
-
->
-		ф.и.о. отв. <input name="divide_fio_otv[{$item.id}]" size=15
-
-			onChange="
-				$('#cfio_{$item.id}').val('true');
-				$('#cfrom_{$item.id}').val()=='true'&&$('#cfio_{$item.id}').val()=='true'?$('#divide_go_{$item.id}').attr('disabled',false):null;
-				$('#cfrom_{$item.id}').val()=='true'&&$('#cfio_{$item.id}').val()=='true'?$('#sm{$item.id}').show():null;
-			"
-
->
-		<!--<input type=submit id="divide_go_{$item.id}" name="divide_go[{$item.id}]" value="Разделить">-->
-		<input type=hidden id="divide_go_{$item.id}" name="divide_go[{$item.id}]" disabled>
-		<input type=hidden id="cfrom_{$item.id}" value='false'>
-		<input type=hidden id="cfio_{$item.id}" value='false'>
-		<!--<a href="javascript:void(0);" >Разделить</a>-->
-		<input id=sm{$item.id} type=submit value="Разделить">
-		<script>$('#sm{$item.id}').hide();</script>
+            <button
+                {if not $routes_enabled}disabled{/if}
+                type="button"
+                onclick="
+                    $('.divide_from').attr('disabled',true);
+                    $('.divide_spr_users_ms').attr('disabled',true);
+                    $('.divide_go').prop('disabled',true);
+                    $('#divide_go{$item.id}').prop('disabled',false);
+                    $('#divide_from_{$item.id}').attr('disabled',false);
+                    $('#divide_spr_users_ms_{$item.id}').attr('disabled',false);
+                                    ">Разделить маршрут</button>
+            с даты
+            <input
+                disabled="disabled"
+                class="divide_from msItemDT"
+                id="divide_from_{$item.id}"
+                name="divide_from[{$item.id}]"
+                size=9
+                required="required"
+                onFocus='{$item.DisabledDates}'>
+            мерчандайзер
+            <select
+                disabled="disabled"
+                class="divide_spr_users_ms"
+                name="divide_spr_users_ms[{$item.id}]"
+                id="divide_spr_users_ms_{$item.id}"
+                required="required">
+                <option></option>
+                {foreach key=key1 item=item1 from=$spr_users_ms}
+                <option value="{$item1.login}">{$item1.fam} {$item1.im} {$item1.otch}</option>
+                {/foreach}
+            </select>
+            <button
+                class="divide_go"
+                id="divide_go{$item.id}"
+                name="divide_go[{$item.id}]"
+                type="submit">Выполнить разделение</button>
 	</td>
     </tr>
 	{/foreach}
 </tbody>
 </table>
-<br>
-<table style="text-align: left; width: 534px; height: 34px;" border="0" cellpadding="2" cellspacing="2">
-  <tbody>
-    <tr>
-      <td style=" text-align: center;"><input {if not $routes_enabled}disabled{/if} name="add_route" value="Добавить маршрут" type="submit"></td>
-      <td style=" text-align: center;"><input {if not $routes_enabled}disabled{/if} name="save" value="Сохранить изменения" type="submit"><br>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<br>
-<hr style="width: 100%; height: 2px;">
-
+<script>$('.divide_go').prop('disabled',true);</script>
+<script>
+    {literal}
+    $(function(){
+        $('.msItemDT').focusin(function(){
+            $('.msItemDT').removeClass('datepicker');
+            $('.msItemDT').datepicker("destroy");
+            if (!$(this).hasClass('datepicker')){
+                $(this).addClass('datepicker');
+                init_form();
+            }
+        });
+    })
+    {/literal}
+</script>
 
 {/if}
 
-<span style="font-weight: bold;"><br>
-Закрепить ТП за маршрутом: 
-</span>
+<h3>Закрепить ТП за маршрутом:</h3>
 
 <select name="select_route_numb" id="select_route_numb">
 	<option></option>
@@ -142,13 +141,8 @@
 <script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>
 <input value="Выбрать" name="select" type="submit">
  
-
-
 {if ($is_mservice or $is_admin) and $smarty.request.select_route_numb and $routes_enabled}
-<br><span style="font-weight: bold;"><input name="save" value="Сохранить маршрут" type="submit"></span><br>
-
-
-
+<p><input name="save" value="Сохранить маршрут" type="submit"></p>
 <table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
     <tr style="text-align: center;font-weight:bold">
       <td>№ п/п</td>
@@ -193,10 +187,9 @@
       <td colspan="5" rowspan="1" style="">ИТОГО</td>
       <td>{$rb_total}</td>
     </tr>
-
-</table><br>
-
-<br><span style="font-weight: bold;"><input name="save" value="Сохранить маршрут" type="submit"></span><br>
+</table>
+<p><input name="save" value="Сохранить маршрут" type="submit"></p>
 {/if}
 
 </form>
+

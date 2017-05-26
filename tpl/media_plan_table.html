@@ -9,6 +9,7 @@
 		<td colspan=2 style="width:100px;">Опер план</td>
 		<td colspan=2 style="width:100px;">Факт оказ услуг</td>
 		<td rowspan=2 style="width:50px;">Фин план продаж, тыс {$valuta}</td>
+		<td rowspan=2 style="width:50px;">Опер план продаж, тыс {$valuta}</td>
 		<td rowspan=2 style="width:50px;">Факт продаж, тыс {$valuta}</td>
 		<td rowspan=2 style="width:50px;">План бюджет, %</td>
 		<td rowspan=2 style="width:50px;">Факт бюджет, %</td>
@@ -53,7 +54,8 @@
                         <td style="text-align:center">{$i.head.operational_amount|num:3}</td>
                         <td style="text-align:center">{$i.head.rendered_quantity|num:0}</td>
                         <td style="text-align:center">{$i.head.rendered_amount|num:3}</td>
-                        <td style="text-align:center">{$i.head.net_plan|num:2}</td>
+                        <td style="text-align:center">{$i.head.net_plan_fin|num:2}</td>
+                        <td style="text-align:center">{$i.head.net_plan_oper|num:2}</td>
                         <td style="text-align:center">{$i.head.net_fakt|num:2}</td>
                         <td style="text-align:center">{$i.head.plan_budjet|num:2}</td>
                         <td style="text-align:center">{$i.head.fakt_budjet|num:2}</td>
@@ -83,7 +85,8 @@
                                 <td style="text-align:center">{$i1.head.operational_amount|num:3}</td>
                                 <td style="text-align:center">{$i1.head.rendered_quantity|num:0}</td>
                                 <td style="text-align:center">{$i1.head.rendered_amount|num:3}</td>
-                                <td style="text-align:center">{$i1.head.net_plan|num:2}</td>
+                                <td style="text-align:center">{$i1.head.net_plan_fin|num:2}</td>
+                                <td style="text-align:center">{$i1.head.net_plan_oper|num:2}</td>
                                 <td style="text-align:center">{$i1.head.net_fakt|num:2}</td>
                                 <td style="text-align:center">{$i1.head.plan_budjet|num:2}</td>
                                 <td style="text-align:center">{$i1.head.fakt_budjet|num:2}</td>
@@ -107,7 +110,8 @@
                                         <td style="text-align:center">{$i2.head.operational_amount|num:3}</td>
                                         <td style="text-align:center">{$i2.head.rendered_quantity|num:0}</td>
                                         <td style="text-align:center">{$i2.head.rendered_amount|num:3}</td>
-                                        <td style="text-align:center">{$i2.head.net_plan|num:2}</td>
+                                        <td style="text-align:center">{$i2.head.net_plan_fin|num:2}</td>
+                                        <td style="text-align:center">{$i2.head.net_plan_oper|num:2}</td>
                                         <td style="text-align:center">{$i2.head.net_fakt|num:2}</td>
                                         <td style="text-align:center">{$i2.head.plan_budjet|num:2}</td>
                                         <td style="text-align:center">{$i2.head.fakt_budjet|num:2}</td>

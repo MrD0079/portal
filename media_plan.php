@@ -115,7 +115,8 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
                     $d[$v["tn_nmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
                     if ($_REQUEST["byyear"]==1)
                     {
-                        $d[$v["tn_nmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
+                        $d[$v["tn_nmkk_net"]]["head"]["net_plan_fin"]=$v["net_plan_fin"];
+                        $d[$v["tn_nmkk_net"]]["head"]["net_plan_oper"]=$v["net_plan_oper"];
                         $d[$v["tn_nmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
                     }
             }
@@ -125,7 +126,8 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
                     $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
                     if ($_REQUEST["byyear"]==1)
                     {
-                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_plan"]=$v["net_plan"];
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_plan_fin"]=$v["net_plan_fin"];
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_plan_oper"]=$v["net_plan_oper"];
                         $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["head"]["net_fakt"]=$v["net_fakt"];
                     }
             }
@@ -135,7 +137,8 @@ if (isset($_REQUEST["generate"])&&($_REQUEST["calendar_years"]>0))
                     $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["fakt_budjet"]=$v["fakt_budjet"];
                     if ($_REQUEST["byyear"]==1)
                     {
-                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_plan"]=$v["net_plan"];
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_plan_fin"]=$v["net_plan_fin"];
+                        $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_plan_oper"]=$v["net_plan_oper"];
                         $d[$v["tn_nmkk_net"]]["data"][$v["tn_tmkk_net"]]["data"][$v["id_net"]]["head"]["net_fakt"]=$v["net_fakt"];
                     }
             }

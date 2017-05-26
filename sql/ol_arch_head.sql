@@ -12,7 +12,7 @@
            END
          - TRUNC (f.accept_data)
             srok,
-         o.sum_plus - o.sum_minus summa,
+         nvl(o.sum_plus,0) - nvl(o.sum_minus,0) summa,
          o1.gruppa,
          (SELECT MAX (name)
             FROM ol_staff

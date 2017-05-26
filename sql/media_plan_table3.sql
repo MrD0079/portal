@@ -9,11 +9,12 @@
          SUM (operational_amount) operational_amount,
          SUM (rendered_quantity) rendered_quantity,
          SUM (rendered_amount) rendered_amount,
-         SUM (net_plan) net_plan,
+         SUM (net_plan_fin) net_plan_fin,
+sum(net_plan_oper)net_plan_oper,
          SUM (net_fakt) net_fakt,
-         DECODE (SUM (net_plan),
+         DECODE (SUM (net_plan_fin),
                  0, 0,
-                 SUM (financial_amount) / SUM (net_plan) * 100)
+                 SUM (financial_amount) / SUM (net_plan_fin) * 100)
             plan_budjet,
          DECODE (SUM (net_fakt),
                  0, 0,
@@ -34,8 +35,8 @@
                    SUM (operational_amount) operational_amount,
                    SUM (rendered_quantity) rendered_quantity,
                    SUM (rendered_amount) rendered_amount,
-                   net_fakt,
-                   net_plan
+                   net_fakt,net_plan_oper,
+                   net_plan_fin
               FROM (  SELECT n.tn_rmkk tn_nmkk_net,
                              unm.fio nmkk_net,
                              n.tn_mkk tn_tmkk_net,
@@ -72,7 +73,13 @@
                                END
                              / 1000
                                 net_fakt,
-                             sp.net_plan
+                   CASE
+                        WHEN s.parent NOT IN (42, 96882041) THEN plan
+                        WHEN s.parent = 42 THEN plan_ng
+                        WHEN s.parent = 96882041 THEN plan_coffee
+                     END
+                      net_plan_oper,
+                             sp.net_plan_fin
                         FROM nets_plan_month m,
                              nets n,
                              statya s,
@@ -86,7 +93,10 @@
                                      t1.month,
                                      t1.fakt,
                                      t1.fakt_ng,
-                                     t1.fakt_coffee
+                                     t1.fakt_coffee,
+                                     t1.plan,
+                                     t1.plan_ng,
+                                     t1.plan_coffee
                                 FROM networkplanfact t1, nets t2
                                WHERE t1.id_net = t2.sw_kod) npf,
                              (SELECT y.year,
@@ -103,7 +113,7 @@
                                           WHEN :mgroups = 3 THEN koeff_ng
                                           WHEN :mgroups = 2 THEN koeff_coffee
                                        END
-                                        net_plan
+                                        net_plan_fin
                                 FROM nets_plan_year y, month_koeff mk
                                WHERE y.plan_type = 1) sp
                        WHERE     TO_DATE ('1.' || m.month || '.' || m.year,
@@ -171,7 +181,12 @@
                                   WHEN s.parent = 96882041 THEN fakt_coffee
                                END
                              / 1000,
-                             sp.net_plan
+CASE
+                        WHEN s.parent NOT IN (42, 96882041) THEN plan
+                        WHEN s.parent = 42 THEN plan_ng
+                        WHEN s.parent = 96882041 THEN plan_coffee
+                     END,
+                             sp.net_plan_fin
                     ORDER BY year,
                              net_name,
                              ñost_item_group,
@@ -186,6 +201,6 @@
                    id_net,
                    net_name,
                    month,
-                   net_fakt,
-                   net_plan)
+                   net_fakt,net_plan_oper,
+                   net_plan_fin)
 GROUP BY tn_nmkk_net, nmkk_net

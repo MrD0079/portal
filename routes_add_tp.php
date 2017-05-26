@@ -26,13 +26,14 @@ if (isset($_REQUEST["divide_go"]))
 {
 	foreach ($_REQUEST["divide_go"] as $k=>$v)
 	{
-		$sql="begin divide_route (:parent, TO_DATE (:divide_from, 'dd.mm.yyyy'), :divide_fio_otv); END;";
+		$sql="begin divide_route (:parent, TO_DATE (:divide_from, 'dd.mm.yyyy'), :divide_spr_users_ms); END;";
 		$p=array(
 			":parent"=>$k,
 			":divide_from"=>"'".$_REQUEST["divide_from"][$k]."'",
-			":divide_fio_otv"=>"'".$_REQUEST["divide_fio_otv"][$k]."'"
+			":divide_spr_users_ms"=>"'".$_REQUEST["divide_spr_users_ms"][$k]."'"
 		);
 		$sql = stritr($sql, $p);
+                //echo $sql;
 		$db->Query($sql);
 		audit("разделил маршрут: ".$sql,"routes");
 	}
@@ -40,6 +41,13 @@ if (isset($_REQUEST["divide_go"]))
 
 if (isset($_REQUEST["save"]))
 {
+	if (isset($_REQUEST["spr_users_ms"]))
+	{
+		foreach ($_REQUEST["spr_users_ms"] as $k=>$v)
+		{
+			$affectedRows = $db->extended->autoExecute("routes_head", array("login"=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
+		}
+	}
 	if (isset($_REQUEST["copy2next_month"]))
 	{
 		foreach ($_REQUEST["copy2next_month"] as $k=>$v)
@@ -54,22 +62,20 @@ if (isset($_REQUEST["save"]))
 			$affectedRows = $db->extended->autoExecute("routes_head", array('num'=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
 		}
 	}
-	if (isset($_REQUEST["fio_otv"]))
+	/*if (isset($_REQUEST["fio_otv"]))
 	{
 		foreach ($_REQUEST["fio_otv"] as $k=>$v)
 		{
 			$affectedRows = $db->extended->autoExecute("routes_head", array("fio_otv"=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
 		}
 	}
-
 	if (isset($_REQUEST["pos_otv"]))
 	{
 		foreach ($_REQUEST["pos_otv"] as $k=>$v)
 		{
 			$affectedRows = $db->extended->autoExecute("routes_head", array("pos_otv"=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
 		}
-	}
-
+	}*/
 	if (isset($_REQUEST["rb"]))
 	{
 		$table_name = "routes_tp";
@@ -133,6 +139,12 @@ $smarty->assign('routes_pos', $res);
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
+
+$sql=rtrim(file_get_contents('sql/spr_users_ms.sql'));
+$p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"],':flt'=>0);
+$sql=stritr($sql,$p);
+$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('spr_users_ms', $data);
 
 $smarty->display('routes_add_tp.html');
 
