@@ -1,36 +1,40 @@
 <h1>Заявка на отпуск Мерчандайзера</h1>
 
-<table border=1>
-    <tr style="font-weight:bold;background-color: rgb(204, 255, 255);">
+<p>
+РММС
+<select id="list_rm" onchange="load_svms()"><option value="0"></select>
+СВМС
+<select id="list_svms" onchange="load_ms()"><option value="0"></select>
+</p>
+
+<table border=1 id="list_ms">
+    <tbody>
+    <tr style="text-align: center;font-weight:bold;background-color: rgb(204, 255, 255);">
         <td>Мерчандайзер ФИО</td>
-        <td>Дата начала работы</td>
-        <td>текущий стаж, г,м,д</td>
-        <td>кол-во доступных дней отпуска</td>
+        <td width="50px">Дата начала работы</td>
+        <td width="50px">текущий стаж, лет/месяцев/дней</td>
+        <td width="50px">кол-во доступных дней отпуска</td>
         <td>Отпуска в текущем году</td>
     </tr>
-    {foreach key=k item=i from=$users_ms}
-    <tr>
-        <td>{$i.fio}</td>
-        <td>{$i.start_company}</td>
-        <td>{$i.experience}</td>
-    </tr>
-    {/foreach}
+    </tbody>
 </table>
 
-<form name=form target=_self method=post>
-<table cellspacing=0 cellpadding=3 align=center border=1 width='300px'>
+<p></p>
+
+<form name=form target=_self method=post id="add_vac">
+<table cellspacing=0 cellpadding=3 align=center border=0 width='300px'>
 <tr id="{$item.id}">
 <td>Мерчандайзер</td>
 <td style="text-align: center;">
     <select name="new[login]">
         <option></option>
-        {foreach key=key1 item=item1 from=$users_ms}
+        {foreach key=key1 item=item1 from=$list_ms}
         <option value="{$item1.login}">{$item1.fio}</option>
         {/foreach}
     </select>
 </td>
 <td>Дата начала</td>
-<td><input size=8 class="datepicker" name="new[start]"></td>
+<td><input size=8 class="datepicker" name="new[vac_start]"></td>
 <td>Кол-во дней отпуска</td>
 <td style="text-align: center;">
     <select name=new[days]>
@@ -38,67 +42,97 @@
         <option value="14">14</option>
     </select>
 </td>
-<td><input type='submit' name="add" value="Добавить"></td>
+<td><input type='button' name="add" value="Добавить" onClick="add_vac();"></td>
 </tr>
 </table>
 </form>
 
-<table cellspacing=0 cellpadding=3 align=center border=1 width='300px'>
-<td><input required="required" name="new[fam]" size=10></td>
-<td><input required="required" name="new[im]" size=10></td>
-<td><input name="new[otch]" size=10></td>
-<td><input name="new[birthday]" size=8 class="datepicker"></td>
-<td><input name="new[datauvol]" size=8 class="datepicker"></td>
-<td><input name="new[start_company]" size=8 class="datepicker"></td>
-<td><input name="new[inn]" size=10 class="number_int"></td>
-<td><input name="new[passport]" size=8></td>
-<td><input name="new[working_hours]" size=8 class="number_int"></td>
-<td>
-    <select required="required" name=new[pos_id]>
-        <option></option>
-        {foreach key=k item=i from=$routes_pos}
-        <option value="{$i.id}">{$i.name}</option>
-        {/foreach}
-    </select>
-</td>
-<td>
-    <select required="required" name=new[chief]>
-        <option></option>
-        {foreach key=k item=i from=$svms_list}
-        <option value="{$i.tn}">{$i.fio} ({$i.tn})</option>
-        {/foreach}
-    </select>
-</td>
-</tr>
+<p><div style='color:red' id="ok"></div></p>
+
+<table border=1 id="list_vac">
+    <tbody>
+    <tr style="text-align: center;font-weight:bold;background-color: rgb(204, 255, 255);">
+        <td>Удалить</td>
+        <td>Мерчандайзер ФИО</td>
+        <td width="50px">Дата начала работы</td>
+        <td width="50px">Использованное кол-во дней отпуска в тек году</td>
+        <td>Период отпуска с .. По</td>
+        <td>ФИО создавшего заявку на отпуск</td>
+        <td width="50px">Дата создания отпуска</td>
+    </tr>
 </table>
+
 <script>
-/*
     {literal}
     $(function(){
-        $('.msItemDT').focusin(function(){
-            $('.msItemDT').removeClass('datepicker');
-            $('.msItemDT').datepicker("destroy");
-            if (!$(this).hasClass('datepicker')){
-                $(this).addClass('datepicker');
-                init_form();
-            }
-        });
-        $('.msItem').change(function(){
-            //console.log($(this).closest('tr').attr('id')+' '+$(this).val());
-            $(this).closest('td').css('background-color','red');
-            //console.log($(this).prev().val());
-            $.get(
-                '?action=spr_users_ms&nohead=1&save=1',
-                {"id": $(this).closest('tr').attr('id'), "field": $(this).prev().val(), "val": $(this).val()},
+        DisabledDates={"period":[{ "from": "01/01/1999", "to": "{/literal}{$yesterdayJS}{literal}"}]};
+        $.get(
+                '?action=ms_vac&nohead=1&list_rm=1',
                 function(data){
-                    $('#'+data).children().css('background-color','white');
-                    //console.log(data);
+                    $('#list_rm').html(data);
                 }
             );
-        })
-        //$(".dt").addClass('datepicker');
-        //init_form();
+        load_svms();
+        load_ms();
+        load_vac();
     })
+    
+    function add_vac(){
+        $.get(
+                '?action=ms_vac&nohead=1&add_vac=1',
+                $('#add_vac').serialize(),
+                function(data){
+                    $('#ok').html(data);
+                    load_ms();
+                    load_vac();
+                }
+            );
+    }
+    
+    function load_svms(){
+        //console.log($('#list_rm').val());
+        $.get(
+                '?action=ms_vac&nohead=1&list_svms=1',
+                {rm_tn:$('#list_rm').val()},
+                function(data){
+                    $('#list_svms').html(data);
+                }
+            );
+    }
+    
+    function load_ms(){
+        //console.log($('#list_rm').val()+' '+$('#list_svms').val());
+        $.get(
+                '?action=ms_vac&nohead=1&list_ms=1',
+                {rm_tn:$('#list_rm').val(),svms_tn:$('#list_svms').val()},
+                function(data){
+                    $("#list_ms").find("tr:gt(0)").remove();
+                    $('#list_ms').append(''+data+'');
+                }
+            );
+    }
+    
+    function load_vac(){
+        //console.log($('#list_rm').val()+' '+$('#list_svms').val());
+        $.get(
+                '?action=ms_vac&nohead=1&list_vac=1',
+                function(data){
+                    $("#list_vac").find("tr:gt(0)").remove();
+                    $('#list_vac').append(''+data+'');
+                }
+            );
+    }
+    
+    function vacRemove(id){
+        $("#vac"+id).css("opacity",0.3);
+        $.get(
+                '?action=ms_vac&nohead=1&vac_remove=1',
+                {id:id},
+                function(data){
+                    load_ms();
+                    load_vac();
+                }
+            );
+    }
     {/literal}
-*/
 </script>

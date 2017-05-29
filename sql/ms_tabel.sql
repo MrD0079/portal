@@ -99,9 +99,9 @@
                              0)
                         + rb.vv <> 1)
                    AND (rb.day_enabled_mr = 1 /*OR rb.day_enabled_f = 1*/)
-                   AND (SELECT svms_ok
+                   /*AND (SELECT svms_ok
                           FROM merch_report_ok
-                         WHERE dt = mr.dt AND head_id = rh.id) = 1
+                         WHERE dt = mr.dt AND head_id = rh.id) = 1*/
           GROUP BY mr.dt,
                    rh.tn,
                    rh.fio_otv,
