@@ -85,7 +85,7 @@
 									<td style="width:30px;">{$i2.dm}
 									</td>
 									<td id=td_{$i.id}_{$i2.dm}_hours>
-										{if not $smarty.request.print and $enabled and not $i2.working_hours}
+										{if $enabled and not $i2.working_hours}
 											<input
 											id=input_{$i.id}_{$i2.dm}_hours
 											{if $i2.hours > 24}style="background-color:yellow;"{/if}
@@ -106,7 +106,7 @@
                                                                                     <b>
                                                                                         {if $i2.working_hours}
                                                                                             {if $i2.is_wd}
-                                                                                                {$i2.working_hours|num:2}
+                                                                                                {$i2.working_hours+$i2.hours|num:2}
                                                                                             {/if}
                                                                                             (î)
                                                                                         {else}

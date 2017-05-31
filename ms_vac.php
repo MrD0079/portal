@@ -42,6 +42,12 @@ if (isset($_REQUEST["save"])){
     </tr>';
     }
     echo $s;
+} else if (isset($_REQUEST["list_ms_json"])) {
+    $sql=rtrim(file_get_contents('sql/ms_vac_list_ms.sql'));
+    $p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"],':rm_tn' => $_REQUEST["rm_tn"],':svms_tn' => $_REQUEST["svms_tn"]);
+    $sql=stritr($sql,$p);
+    $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    echo mb_convert_encoding (json_encode(recursive_iconv('Windows-1251','UTF-8',$data), /*JSON_FORCE_OBJECT | */JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),'Windows-1251','UTF-8');
 } else if (isset($_REQUEST["list_vac"])) {
     $sql=rtrim(file_get_contents('sql/ms_vac.sql'));
     $p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
@@ -91,11 +97,11 @@ if (isset($_REQUEST["save"])){
             echo "Недостаточно дней для создания отпуска";
         }
 } else {
-    $sql=rtrim(file_get_contents('sql/ms_vac_list_ms.sql'));
+    /*$sql=rtrim(file_get_contents('sql/ms_vac_list_ms.sql'));
     $p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"],':rm_tn' => 0,':svms_tn' => 0);
     $sql=stritr($sql,$p);
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-    $smarty->assign('list_ms', $data);
+    $smarty->assign('list_ms', $data);*/
     $sql=rtrim(file_get_contents('sql/svms_list.sql'));
     $p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
     $sql=stritr($sql,$p);

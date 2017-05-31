@@ -4,7 +4,7 @@
 РММС
 <select id="list_rm" onchange="load_svms()"><option value="0"></select>
 СВМС
-<select id="list_svms" onchange="load_ms()"><option value="0"></select>
+<select id="list_svms" onchange="load_ms();load_ms_json();"><option value="0"></select>
 </p>
 
 <table border=1 id="list_ms">
@@ -26,11 +26,11 @@
 <tr id="{$item.id}">
 <td>Мерчандайзер</td>
 <td style="text-align: center;">
-    <select name="new[login]">
-        <option></option>
+    <select name="new[login]" id="new_login">
+        <!--<option></option>
         {foreach key=key1 item=item1 from=$list_ms}
         <option value="{$item1.login}">{$item1.fio}</option>
-        {/foreach}
+        {/foreach}-->
     </select>
 </td>
 <td>Дата начала</td>
@@ -74,6 +74,7 @@
             );
         load_svms();
         load_ms();
+        load_ms_json();
         load_vac();
     })
     
@@ -111,7 +112,37 @@
                 }
             );
     }
-    
+
+        function load_ms_json(){
+        //console.log($('#list_rm').val()+' '+$('#list_svms').val());
+        $.getJSON(
+        //$.get(
+                '?action=ms_vac&nohead=1&list_ms_json=1',
+                {rm_tn:$('#list_rm').val(),svms_tn:$('#list_svms').val()},
+                function(data){
+                    //$($.parseJSON(data)).map(function () {
+                    $('#new_login').find('option').remove();
+                    $('<option>').appendTo('#new_login');
+                    
+                    $.each(data, function(k,v) {
+                        //console.log(k+':'+v.fio+' '+v.login);
+                        $('<option>').val(v.login).text(v.fio).appendTo('#new_login')
+                    });
+                    
+                    
+                    
+                    /*$(data).map(function (k,v) {
+                        console.log(k+':'+v.fio+' '+v.login);
+                        return $('<option>').val(v.login).text(v.fio);
+                    }).appendTo('#new_login');*/
+                    //console.log(data);
+                    /*$.each(data, function(k,v) {
+                        console.log(k+':'+v.fio+' '+v.login);
+                    });*/
+                }
+            );
+    }
+
     function load_vac(){
         //console.log($('#list_rm').val()+' '+$('#list_svms').val());
         $.get(
