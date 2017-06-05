@@ -24,5 +24,7 @@
                             WHERE master = :tn)
               OR (SELECT NVL (is_admin, 0)
                     FROM user_list
+                   WHERE tn = :tn) = 1 OR (SELECT NVL (is_ma, 0)
+                    FROM user_list
                    WHERE tn = :tn) = 1)
 ORDER BY s.fam, s.im, s.otch

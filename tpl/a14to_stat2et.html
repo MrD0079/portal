@@ -244,12 +244,14 @@
 		<td>{$i.visit_fakt}</td>
 		<td>{$i.ts1r}</td>
 		<td>
+                    <!--*{$is_admin}*{$i.zst_lu}*
+                    *{$i.visit_plan}*{$i.ts1r}*-->
 			<b><!--if $i.visit_plan eq $i.ts1r or $i.zst_lu-->{if $i.zst_lu}да{else}нет{/if}</b>
 			{if not $smarty.request.print}
 			{if $i.visit_plan eq $i.ts1r}
 				<!--<input id=zst_{$i.tp_kod_key} type=hidden value=1 name=data[{$i.tp_kod_key}][zst]>-->
 			{else}
-				{if ($is_tm eq 1 and not $i.zst_lu and $i.ts1r > 0) or ($is_admin eq 1 and $i.zst_lu)}
+				{if ($is_tm eq 1 and not $i.zst_lu and $i.ts1r > 0) or ($is_admin and $i.zst_lu)}
 				<input id=cb1_{$i.tp_kod_key} type=checkbox {if $i.zst_lu}checked{/if} onChange="
 				$('#ta1_{$i.tp_kod_key}').attr('disabled',!this.checked);
 				$('#zst_{$i.tp_kod_key}').val(this.checked?1:0);
