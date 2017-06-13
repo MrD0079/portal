@@ -65,7 +65,10 @@
 <script>
     {literal}
     $(function(){
+        /*{/literal}{if not $is_admin and not $is_ma}{literal}*/
         DisabledDates={"period":[{ "from": "01/01/1999", "to": "{/literal}{$yesterdayJS}{literal}"}]};
+        /*{/literal}{/if}{literal}*/
+        
         $.get(
                 '?action=ms_vac&nohead=1&list_rm=1',
                 function(data){
