@@ -1,4 +1,4 @@
-/* Formatted on 16.12.2016 18:03:52 (QP5 v5.252.13127.32867) */
+/* Formatted on 15.06.2017 09:57:00 (QP5 v5.252.13127.32867) */
   SELECT FIO_RM,
          TN_RM,
          FIO_TM,
@@ -31,7 +31,11 @@
          END
             tp_st_ts_reject_tm_or_traid,
          COUNT (DISTINCT tp_st) tp_st,
-         /*SUM (bonus)*/ bonus
+         /*SUM (bonus)*/
+         bonus,
+         a16coGetTarget (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy')) target,
+         a16coGetTargetInfo (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy'))
+            target_info
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN bonus_eta
@@ -89,7 +93,8 @@ GROUP BY FIO_RM,
          TAB_NUM_TS,
          TAB_NUM_TM,
          TAB_NUM_RM,
-         DPT_ID, bonus
+         DPT_ID,
+         bonus
 ORDER BY fio_rm,
          tn_rm,
          fio_tm,

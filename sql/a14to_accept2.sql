@@ -37,7 +37,7 @@
          s.tasks_mr,
          s.auditor_comm,
          s.traid_comm,
-         standart,s.traid
+         standart,s.traid,t.target,t.target_info
     FROM a14to t,
          (SELECT DISTINCT tp_place,
                           tp_type,tp_type_short,
@@ -180,7 +180,7 @@ GROUP BY t.visitdate,
          s.tasks_mr,
          s.auditor_comm,
          s.traid_comm,
-         standart,s.traid
+         standart,s.traid,t.target,t.target_info
 ORDER BY t.tp_kod_key,
          t.visitdate,
          t.fio_ts,

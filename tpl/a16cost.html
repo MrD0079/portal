@@ -160,6 +160,7 @@
                 <td class="w100">отклонено (ТМ, ВСТМ) ТП со стандартом</td>
                 <td class="w100">Стандарт по ТП</td>
                 <td class="w100">Сумма бонуса, {$valuta}</td>
+                <td>отг. цел. ассортимент</td>
 	</tr>
 	{/if}
 	<tr>
@@ -182,6 +183,9 @@
 		<td>{$i.tp_st_ts_reject_tm_or_traid}</td>
 		<td>{$i.tp_st}</td>
 		<td>{$i.bonus|num:2}</td>
+                <td>
+                    <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
+                </td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
@@ -192,6 +196,7 @@
 		<td>{$tt.tp_st_ts_reject_tm_or_traid}</td>
 		<td>{$tt.tp_st}</td>
 		<td>{$tt.bonus|num:2}</td>
+                <td></td>
         </tr>
 </tbody>
 </table>

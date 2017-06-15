@@ -40,7 +40,7 @@ SELECT COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
                  s.tasks_mr,
                  s.auditor_comm,
                  s.traid_comm,
-                 standart,s.traid
+                 standart,s.traid,t.target,t.target_info
             FROM a14to t,
                  (SELECT DISTINCT tp_place,
                                   tp_type,tp_type_short,
@@ -191,7 +191,7 @@ SELECT COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
                  s.tasks_mr,
                  s.auditor_comm,
                  s.traid_comm,
-                 standart,s.traid
+                 standart,s.traid,t.target,t.target_info
         ORDER BY t.visitdate,
                  t.fio_ts,
                  t.fio_eta,

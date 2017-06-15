@@ -145,6 +145,7 @@
 		<td rowspan=2>Фото</td>
 		<td colspan=5>Выполнение стандарта</td>
 		<td colspan=2>Задачи</td>
+                <td rowspan=2>отг. цел. ассортимент</td>
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 		<td>ТС</td>
@@ -246,6 +247,9 @@
 				</td>
 				<td>{$i.tasks_assort|nl2br}</td>
 				<td>{$i.tasks_mr|nl2br}</td>
+                                <td>
+                                    <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
+                                </td>
 			</tr>
 	{/foreach}
 </table>

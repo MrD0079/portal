@@ -221,6 +221,7 @@
 		<td style="background-color: rgb(255, 204, 153);">Стоимость стандарта, {$valuta}</td>
 		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">Бонус за ТП, {$valuta}</td>
                 <td>Тип стандарта</td>
+                <td>отг. цел. ассортимент</td>
 	</tr>
 	{/if}
 	<tr>
@@ -273,6 +274,9 @@
 		<td style="background-color: rgb(255, 204, 153);">{$i.standart_price|default:0|num:2}</td>
 		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$i.bonus4tp|default:0|num:2}</td>
                 <td>{$i.standart}</td>
+                <td>
+                    <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
+                </td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
@@ -287,6 +291,7 @@
 		<td>{$tt2.summa|num:2}</td>
 		<td style="background-color: rgb(255, 204, 153);"></td>
 		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$tt3.bonus4tp|num:2}</td>
+                <td></td>
                 <td></td>
 	</tr>
 </tbody>

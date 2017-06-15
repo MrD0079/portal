@@ -1,4 +1,4 @@
-/* Formatted on 08.12.2016 14:25:31 (QP5 v5.252.13127.32867) */
+/* Formatted on 15.06.2017 09:58:09 (QP5 v5.252.13127.32867) */
   SELECT fio_rm,
          tn_rm,
          fio_tm,
@@ -22,14 +22,10 @@
          COUNT (DISTINCT tp_kod_key || visitdate) visit_plan,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
             visit_fakt,
-         standart_price
-
- * DECODE (zst_lu, NULL, 0, 1)
-
- * DECODE (reject_traid_in_month, 1, null, 1)
-
-
- bonus4tp,
+           standart_price
+         * DECODE (zst_lu, NULL, 0, 1)
+         * DECODE (reject_traid_in_month, 1, NULL, 1)
+            bonus4tp,
          standart_price,
          zst_lu,
          zst_lu_fio,
@@ -39,7 +35,10 @@
          tab_num_tm,
          tab_num_rm,
          standart,
-         reject_traid_in_month
+         reject_traid_in_month,
+         a14toGetTarget (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy')) target,
+         a14toGetTargetInfo (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy'))
+            target_info
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN standart_price_eta

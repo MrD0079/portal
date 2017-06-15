@@ -26,7 +26,7 @@ form input[type="submit"] {padding:12px;clear:left;font-size:12px;font-weight:no
 /* show popup pict */
 .pics { position:relative; top:0px; left:0px; display:inline-block;}
 .pics img { display:block;}
-.hov { z-index:999; position:absolute; top:60px; left:-200px; visibility:hidden;}
+.hov { z-index:999; position:absolute; top:60px; left:-200px; visibility:hidden; background-color: white;}
 
 #toTop{position:fixed;right:15px;top:45%;width:44px;height:44px;background:url('/design/butt_up.png') no-repeat 0 0;display:none;z-index:50}
 /*.lt-ie7 #toTop{display:none!important;visibility:hidden!important}*/

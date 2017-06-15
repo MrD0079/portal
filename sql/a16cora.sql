@@ -1,4 +1,4 @@
-/* Formatted on 13.12.2016 17:54:32 (QP5 v5.252.13127.32867) */
+/* Formatted on 15.06.2017 09:37:44 (QP5 v5.252.13127.32867) */
   SELECT TO_CHAR (t.visitdate, 'dd.mm.yyyy') vd,
          t.fio_ts,
          t.fio_eta,
@@ -32,7 +32,9 @@
          s.tasks_mr,
          s.tm_comm,
          s.traid_comm,
-         s.traid
+         s.traid,
+         t.target,
+         t.target_info
     FROM a16co t,
          (SELECT DISTINCT tp_place,
                           tp_type,
@@ -146,7 +148,9 @@ GROUP BY t.visitdate,
          s.tasks_mr,
          s.tm_comm,
          s.traid_comm,
-         s.traid
+         s.traid,
+         t.target,
+         t.target_info
 ORDER BY t.tp_kod_key,
          t.visitdate,
          t.fio_ts,
