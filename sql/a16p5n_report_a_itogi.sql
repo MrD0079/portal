@@ -126,7 +126,7 @@ SELECT COUNT (DISTINCT h_net) cnt_tp,
                               OR st.tn IN (SELECT slave
                                              FROM full
                                             WHERE master = :exp_list_only_ts))
-                         AND st.dpt_id = :dpt_id
+                         AND st.dpt_id = :dpt_id and st.is_spd=1
                          AND n.h_net = net.net_kod
                          AND n.tp_kod = tp.tp_kod(+)
                          AND DECODE ( :eta_list, '', m4.h_eta, :eta_list) =

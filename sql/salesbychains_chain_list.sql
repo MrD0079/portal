@@ -4,7 +4,8 @@
    WHERE     u.tab_num = m.tab_num
          AND u.dpt_id = m.dpt_id
          AND u.dpt_id = :dpt_id
-         AND (   u.tn IN (SELECT slave
+     and u.is_spd=1
+    AND (   u.tn IN (SELECT slave
                             FROM full
                            WHERE master = (DECODE ( :tn, -1, master, :tn)))
               OR (SELECT NVL (is_admin, 0)

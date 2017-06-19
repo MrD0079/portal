@@ -315,7 +315,8 @@
                       OR :clusters = 0)) zay
    WHERE     m.tab_number = u1.tab_num
          AND u1.dpt_id = :dpt_id
-         AND p.tn = u1.tn
+   and ul.is_spd=1
+      AND p.tn = u1.tn
          AND p.parent = pu.tn
          AND m.tp_kod = zay.tp_kod
         AND (   :exp_list_without_ts = 0

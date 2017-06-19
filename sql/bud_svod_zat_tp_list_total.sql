@@ -170,7 +170,8 @@ SELECT COUNT (*) c,
                  AND m.dt = sv.dt(+)
                  AND m.tab_num = u1.tab_num
                  AND u1.dpt_id = :dpt_id
-                 AND p.tn = u1.tn
+           and u1.is_spd=1
+      AND p.tn = u1.tn
                  AND p.parent = pu.tn
                  AND m.dt = act.act_month(+)
                  AND m.tp_kod = act.tp_kod(+)

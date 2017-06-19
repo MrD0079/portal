@@ -207,7 +207,8 @@
          AND u.tn = k.coach(+)
          AND k.dt = TO_DATE (:sd, 'dd.mm.yyyy')
          AND u.dpt_id = :dpt_id
-         AND u.tn = prob_prosroch.coach(+)
+   and u.is_spd=1
+      AND u.tn = prob_prosroch.coach(+)
          AND u.tn = prob_test_perc.coach(+)
          AND (   u.tn IN (SELECT slave
                             FROM full

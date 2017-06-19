@@ -51,6 +51,7 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
        AND r.tab_num = u.tab_num
        /*AND u.datauvol IS NULL*/
        AND u.dpt_id = :dpt_id
+and u.is_spd=1
        AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
        AND :dpt_id = sv.dpt_id(+)
        AND r.h_eta = sv.h_eta(+)
@@ -120,7 +121,8 @@ SELECT sv.id,
        AND sv.tn = u.tn
        /*AND u.datauvol IS NULL*/
        AND u.dpt_id = sv.dpt_id
-       AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
+ and u.is_spd=1
+      AND TO_DATE (:dt, 'dd.mm.yyyy') = sv.dt(+)
        AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full

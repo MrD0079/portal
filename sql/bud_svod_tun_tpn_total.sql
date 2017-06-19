@@ -123,7 +123,8 @@ SELECT COUNT (*) c,
                                    bud_fil f,
                                    bud_tn_fil tf
                              WHERE     m.tp_kod = tpn.tp_kod
-                                   AND u.tn = p.tn
+                               and u.is_spd=1
+    AND u.tn = p.tn
                                    AND m.dpt_id = :dpt_id
                                    AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt
                                    AND u.tab_num = m.tab_num

@@ -125,7 +125,8 @@ SELECT COUNT (*) c,
            WHERE     zp.fil = taf.fil(+)
                  AND s.tab_num = u.tab_num
                  AND u.dpt_id = :dpt_id
-                 AND :dpt_id = t.dpt_id(+)
+            and u.is_spd=1
+     AND :dpt_id = t.dpt_id(+)
                  AND s.tp_kod = t.tp_kod(+)
                  AND s.tp_kod = sv.tp_kod(+)
                  AND sv.dt(+) = TO_DATE ( :dt, 'dd.mm.yyyy')

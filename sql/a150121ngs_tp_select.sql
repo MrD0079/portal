@@ -20,7 +20,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND a150121ngs.tp_kod = a150121ngstps.tp_kod(+)
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
 GROUP BY a150121ngs.tab_num,
          st.fio,
          a150121ngs.fio_eta,

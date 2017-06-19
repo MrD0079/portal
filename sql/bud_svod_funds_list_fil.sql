@@ -68,7 +68,8 @@
                         OR u.tn IN (SELECT slave
                                       FROM full
                                      WHERE master = :exp_list_only_ts))
-                   AND (   u.tn IN (SELECT slave
+                  and u.is_spd=1
+ AND (   u.tn IN (SELECT slave
                                       FROM full
                                      WHERE master = :tn)
                         OR (SELECT NVL (is_traid, 0)
@@ -244,7 +245,8 @@
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_only_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                   and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -459,7 +461,8 @@
                                   OR u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :exp_list_only_ts))
-                             AND (   u.tn IN (SELECT slave
+                          and u.is_spd=1
+   AND (   u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :tn)
                                   OR (SELECT NVL (is_traid, 0)
@@ -518,7 +521,8 @@
                                      AND fil IS NOT NULL) zp
                        WHERE     u.tab_num = s.ts_tab_num
                              AND u.dpt_id = :dpt_id
-                             AND s.dpt_id = :dpt_id
+                          and u.is_spd=1
+   AND s.dpt_id = :dpt_id
                              AND s.db_tn = DECODE ( :db, 0, s.db_tn, :db)
                              AND (   :exp_list_without_ts = 0
                                   OR u.tn IN (SELECT slave
@@ -608,7 +612,8 @@
                            AND fil IS NOT NULL) zp
              WHERE     s.tab_num = u.tab_num
                    AND u.dpt_id = :dpt_id
-                   AND :dpt_id = t.dpt_id(+)
+             and u.is_spd=1
+      AND :dpt_id = t.dpt_id(+)
                    AND s.tp_kod = t.tp_kod(+)
                    AND s.tp_kod = sv.tp_kod(+)
                    AND sv.dt(+) = s.dt
@@ -725,7 +730,8 @@
                            AND zp.dpt_id(+) = :dpt_id
                            AND s.tab_num = u.tab_num
                            AND u.dpt_id = :dpt_id
-                           AND s.tp_kod = t.tp_kod
+                      and u.is_spd=1
+     AND s.tp_kod = t.tp_kod
                            AND s.tp_kod = sv.tp_kod(+)
                            AND sv.dt(+) = s.dt
                            AND s.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
@@ -806,7 +812,8 @@
                                                bud_fil f,
                                                bud_tn_fil tf
                                          WHERE     m.tp_kod = tpn.tp_kod
-                                               AND u.tn = p.tn
+                                          and u.is_spd=1
+     AND u.tn = p.tn
                                                AND u.tab_num = m.tab_num
                                                AND u.dpt_id = m.dpt_id
                                                AND f.id = tf.bud_id

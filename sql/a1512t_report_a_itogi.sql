@@ -78,7 +78,7 @@ SELECT                              /*COUNT (DISTINCT an.H_client) cnt_nakl,*/
                       OR (SELECT NVL (is_traid, 0)
                             FROM user_list
                            WHERE tn = :tn) = 1)
-                 AND st.dpt_id = :dpt_id
+                 AND st.dpt_id = :dpt_id and st.is_spd=1
                  AND tp.tp_kod = d.tp_kod
                  AND sp.H_client = tp.H_client
                  AND sp.H_client = an.H_client(+)

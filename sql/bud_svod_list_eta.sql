@@ -13,6 +13,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND r.dpt_id = :dpt_id
-         AND r.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
+      and u.is_spd=1
+   AND r.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
                       AND TO_DATE ( :ed, 'dd.mm.yyyy')
 ORDER BY eta

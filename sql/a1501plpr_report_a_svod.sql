@@ -60,7 +60,7 @@ INSERT INTO act_svod (act,
                          OR (SELECT NVL (is_traid, 0)
                                FROM user_list
                               WHERE tn = :tn) = 1)
-                    AND st.dpt_id = :dpt_id
+                    AND st.dpt_id = :dpt_id and st.is_spd=1
                     AND DECODE (:eta_list, '', lpr.h_fio_eta, :eta_list) =
                            lpr.h_fio_eta)
    GROUP BY act,

@@ -63,7 +63,8 @@ SELECT SUM (stelag) stelag,
          AND */
         u    .tab_num = t.tab_num
          AND u.dpt_id = :dpt_id
-         AND (   :exp_list_without_ts = 0
+      and u.is_spd=1
+   AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :exp_list_without_ts))

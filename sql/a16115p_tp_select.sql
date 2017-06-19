@@ -24,7 +24,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND a16115p.tp_kod = a16115ptps.tp_kod(+)
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
          AND a16115p.tp_kod = m.tp_kod
          AND m.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy')
 GROUP BY m.tab_num,

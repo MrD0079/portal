@@ -23,7 +23,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND a1610s6.tp_kod = a1610s6tps.tp_kod(+)
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
          AND a1610s6.tp_kod = m.tp_kod
          AND m.dt = to_date('01/10/2016','dd/mm/yyyy')
 GROUP BY m.tab_num,

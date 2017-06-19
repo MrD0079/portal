@@ -44,7 +44,7 @@ INSERT INTO act_svodt (act,
                        db_tn
                FROM a1503vs d, user_list st, a1503vs_tp_select tp
               WHERE     d.tab_num = st.tab_num
-                    AND st.dpt_id = :dpt_id
+                    AND st.dpt_id = :dpt_id and st.is_spd=1
                     AND d.tp_kod = tp.tp_kod
                     AND DECODE (:eta_list, '', d.h_fio_eta, :eta_list) =
                            d.h_fio_eta

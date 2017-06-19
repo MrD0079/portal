@@ -159,6 +159,7 @@ SELECT COUNT (*) c,
                     OR :clusters = 0)
                AND s.tab_num = u.tab_num
                AND u.dpt_id = :dpt_id
+and u.is_spd=1
                AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
                AND :dpt_id = sv.dpt_id(+)
                AND s.h_eta = sv.h_eta(+)
@@ -240,7 +241,8 @@ SELECT COUNT (*) c,
                     OR :clusters = 0)
                AND sv.tn = u.tn
                AND u.dpt_id = sv.dpt_id
-               AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
+          and u.is_spd=1
+     AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
                AND (   :exp_list_without_ts = 0
                     OR u.tn IN (SELECT slave
                                   FROM full

@@ -34,7 +34,8 @@
                  AND fil IS NOT NULL) zp
    WHERE     u.tab_num = s.ts_tab_num
          AND u.dpt_id = :dpt_id
-         AND s.dpt_id = :dpt_id
+      and u.is_spd=1
+   AND s.dpt_id = :dpt_id
          AND s.db_tn = DECODE (:db, 0, s.db_tn, :db)
          AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave

@@ -24,7 +24,7 @@ SELECT SUM (selected)
                             FROM user_list
                            WHERE tn = :tn) = 1)
                  AND a16p5tp.tp_kod = a16p5tptps.tp_kod(+)
-                 AND st.dpt_id = :dpt_id
+                 AND st.dpt_id = :dpt_id and st.is_spd=1
                  AND a16p5tp.tp_kod = m.tp_kod
                  AND m.dt = to_date('01/04/2016','dd/mm/yyyy')
         GROUP BY m.tab_num,

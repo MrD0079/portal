@@ -21,7 +21,7 @@ SELECT SUM (selected)
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND z.tp_kod = z1.tp_kod(+)
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
 GROUP BY z.tab_num,
          st.fio,
          z.fio_eta,

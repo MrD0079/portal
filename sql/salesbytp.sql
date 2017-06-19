@@ -19,7 +19,8 @@ SELECT SUM (m.summa) summa,
  WHERE     m.tab_num = st.tab_num
        AND m.dpt_id = st.dpt_id
        AND m.dpt_id = :dpt_id
-       AND (   :exp_list_without_ts = 0
+   and st.is_spd=1
+    AND (   :exp_list_without_ts = 0
                       OR st.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :exp_list_without_ts))

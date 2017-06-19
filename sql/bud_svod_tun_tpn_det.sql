@@ -64,7 +64,8 @@
                         OR u.tn IN (SELECT slave
                                       FROM full
                                      WHERE master = :exp_list_only_ts))
-                   AND (   u.tn IN (SELECT slave
+                and u.is_spd=1
+   AND (   u.tn IN (SELECT slave
                                       FROM full
                                      WHERE master = :tn)
                         OR (SELECT NVL (is_traid, 0)

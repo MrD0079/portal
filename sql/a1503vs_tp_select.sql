@@ -20,5 +20,5 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND ny.tp_kod = a1503vstps.tp_kod(+)
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
 ORDER BY st.fio, ny.fio_eta, ny.tp_ur

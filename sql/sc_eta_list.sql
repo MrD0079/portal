@@ -9,7 +9,8 @@
          AND d.dpt_id = :dpt_id
          /*AND u.datauvol IS NULL*/
          AND u.dpt_id = :dpt_id
-         AND :dpt_id = t.dpt_id(+)
+    and u.is_spd=1
+     AND :dpt_id = t.dpt_id(+)
          AND r.tp_kod = t.tp_kod(+)
          AND (   u.tn IN (SELECT slave
                             FROM full

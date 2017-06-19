@@ -26,7 +26,8 @@
          AND t.z_id = z.id
          AND s.tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
-         AND t.z_id = :z_id
+     and u.is_spd=1
+    AND t.z_id = :z_id
          /*AND (u.datauvol IS NULL or trunc(u.datauvol,'mm') >= TO_DATE (:dt, 'dd.mm.yyyy'))*/
          AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave

@@ -4,7 +4,8 @@
    WHERE     r.tab_number = st.tab_num
          AND r.dpt_id = :dpt_id
          AND st.dpt_id = :dpt_id
-         AND (   st.tn IN
+      and st.is_spd=1
+   AND (   st.tn IN
                     (SELECT slave
                        FROM full
                       WHERE master IN

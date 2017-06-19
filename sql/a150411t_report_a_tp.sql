@@ -15,7 +15,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND a150411t.tp_kod = a150411ttps.tp_kod
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
          AND DECODE (:eta_list, '', a150411t.h_fio_eta, :eta_list) =
                 a150411t.h_fio_eta
 GROUP BY a150411t.tab_num,

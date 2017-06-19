@@ -157,7 +157,8 @@
                    AND z.funds = DECODE ( :funds, 0, z.funds, :funds)
                    AND z.tn = u.tn
                    AND u.dpt_id = :dpt_id
-                   AND z.st = st.id(+)
+              and u.is_spd=1
+     AND z.st = st.id(+)
                    AND z.kat = kat.id(+)
                    AND kat.la = 1
                    AND z.id = zff1.z_id

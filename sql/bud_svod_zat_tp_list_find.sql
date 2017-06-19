@@ -27,6 +27,7 @@ SELECT COUNT (*) exist, NVL (SUM (visible), 0) visible
                AND zp.dt = m.dt
                AND m.tab_num = u1.tab_num
                AND u1.dpt_id = :dpt_id
-               AND DECODE (:tp_kod, 0, m.tp_kod, :tp_kod) = m.tp_kod
+           and u1.is_spd=1
+    AND DECODE (:tp_kod, 0, m.tp_kod, :tp_kod) = m.tp_kod
                AND d.manufak = m.country
                AND d.dpt_id = :dpt_id)

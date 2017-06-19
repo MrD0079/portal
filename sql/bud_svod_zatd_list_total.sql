@@ -270,7 +270,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                        WHERE master =
                                                                 :exp_list_without_ts))
                                      AND u.tn = DECODE ( :db, 0, u.tn, :db)
-                                     AND (   u.tn IN (SELECT slave
+                                                             and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -447,7 +448,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                                 FROM full
                                                                WHERE master =
                                                                         :exp_list_without_ts))
-                                             AND (   u.tn IN (SELECT slave
+                                                                     and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                                 FROM full
                                                                WHERE master = :tn)
                                                   OR (SELECT NVL (is_traid, 0)
@@ -625,7 +627,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                             and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -688,7 +691,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                            and u.is_spd=1
+   AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -785,7 +789,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                           and u.is_spd=1
+    AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -920,7 +925,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                                 FROM full
                                                                WHERE master =
                                                                         :exp_list_without_ts))
-                                             AND (   u.tn IN (SELECT slave
+                                                                     and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                                 FROM full
                                                                WHERE master = :tn)
                                                   OR (SELECT NVL (is_traid, 0)
@@ -990,7 +996,8 @@ SELECT SUM (sales_fact) / COUNT (DISTINCT fund_id) sales_fact,
                                                                  bud_tn_fil tf
                                                            WHERE     m.tp_kod =
                                                                         tpn.tp_kod
-                                                                 AND u.tn = p.tn
+                                                                                       and u.is_spd=1
+    AND u.tn = p.tn
                                                                  AND u.tab_num =
                                                                         m.tab_num
                                                                  AND u.dpt_id =

@@ -63,7 +63,7 @@
               OR (SELECT NVL (is_traid, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
          AND d.H_TP_KOD_DATA_NAKL = an.H_TP_KOD_DATA_NAKL
          AND d.tp_kod = tp.tp_kod
          AND DECODE (:eta_list, '', d.h_fio_eta, :eta_list) = d.h_fio_eta

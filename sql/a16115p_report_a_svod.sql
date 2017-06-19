@@ -94,7 +94,7 @@ INSERT INTO act_svod (act,
                                  OR (SELECT NVL (is_traid, 0)
                                        FROM user_list
                                       WHERE tn = :tn) = 1)
-                            AND st.dpt_id = :dpt_id
+                            AND st.dpt_id = :dpt_id and st.is_spd=1
                             AND d.tp_kod = tp.tp_kod
                             AND DECODE ( :eta_list, '', m4.h_eta, :eta_list) =
                                    m4.h_eta
@@ -145,7 +145,7 @@ INSERT INTO act_svod (act,
                                   OR (SELECT NVL (is_traid, 0)
                                         FROM user_list
                                        WHERE tn = :tn) = 1)
-                             AND st.dpt_id = :dpt_id
+                             AND st.dpt_id = :dpt_id and st.is_spd=1
                              AND n.h_net = net.net_kod
                              AND tp.bonus_dt1 IS NOT NULL
                              AND n.tp_kod = tp.tp_kod(+)

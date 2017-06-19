@@ -78,7 +78,7 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                     OR (SELECT NVL (is_traid, 0)
                           FROM user_list
                          WHERE tn = :tn) = 1)
-               AND st.dpt_id = :dpt_id
+               AND st.dpt_id = :dpt_id and st.is_spd=1
                AND d.tp_kod = tp.tp_kod
                AND DECODE ( :eta_list, '', m4.h_eta, :eta_list) = m4.h_eta
                AND DECODE ( :ok_bonus,

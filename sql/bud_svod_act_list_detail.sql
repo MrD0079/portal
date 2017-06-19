@@ -20,7 +20,8 @@
          AND s.m = :m
          AND s.ts_tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
-         AND s.dpt_id = :dpt_id
+    and u.is_spd=1
+     AND s.dpt_id = :dpt_id
          AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full

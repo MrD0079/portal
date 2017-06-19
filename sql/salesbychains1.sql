@@ -12,7 +12,8 @@
    WHERE     u.tab_num = m.tab_num
          AND u.dpt_id = m.dpt_id
          AND u.dpt_id = :dpt_id
-         AND (   :exp_list_without_ts = 0
+     and u.is_spd=1
+    AND (   :exp_list_without_ts = 0
               OR u.tn IN (SELECT slave
                             FROM full
                            WHERE master = :exp_list_without_ts))

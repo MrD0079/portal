@@ -25,7 +25,8 @@
          AND h.h_eta = r.h_eta
          AND u.tab_num = r.tab_number
          AND u.dpt_id = :dpt_id
-         AND (   :exp_list_without_ts = 0
+     and u.is_spd=1
+    AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :exp_list_without_ts))

@@ -41,7 +41,8 @@ SELECT SUM (ts_visa) ts_visa,
     FROM um, user_list u
    WHERE     um.tab_num = u.tab_num
 		 and um.dpt_id=u.dpt_id
-         AND (   :exp_list_without_ts = 0
+     and um.is_spd=1
+    AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :exp_list_without_ts))

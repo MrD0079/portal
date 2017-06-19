@@ -118,7 +118,8 @@
                                                 FROM full
                                                WHERE master = :exp_list_without_ts))
                              AND u.tn = DECODE ( :db, 0, u.tn, :db)
-                             AND (   u.tn IN (SELECT slave
+                          and u.is_spd=1
+   AND (   u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :tn)
                                   OR (SELECT NVL (is_traid, 0)
@@ -267,7 +268,8 @@
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                             and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -420,7 +422,8 @@
                                   OR u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :exp_list_without_ts))
-                             AND (   u.tn IN (SELECT slave
+                                                    and u.is_spd=1
+   AND (   u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :tn)
                                   OR (SELECT NVL (is_traid, 0)
@@ -473,7 +476,8 @@
                                   OR u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :exp_list_without_ts))
-                             AND (   u.tn IN (SELECT slave
+                                                   and u.is_spd=1
+    AND (   u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :tn)
                                   OR (SELECT NVL (is_traid, 0)
@@ -557,7 +561,8 @@
                                   OR u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :exp_list_without_ts))
-                             AND (   u.tn IN (SELECT slave
+                                                    and u.is_spd=1
+   AND (   u.tn IN (SELECT slave
                                                 FROM full
                                                WHERE master = :tn)
                                   OR (SELECT NVL (is_traid, 0)
@@ -626,7 +631,8 @@
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                          and u.is_spd=1
+     AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -659,7 +665,8 @@
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                           and u.is_spd=1
+    AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -782,7 +789,8 @@
                                                         FROM full
                                                        WHERE master =
                                                                 :exp_list_without_ts))
-                                     AND (   u.tn IN (SELECT slave
+                                                             and u.is_spd=1
+  AND (   u.tn IN (SELECT slave
                                                         FROM full
                                                        WHERE master = :tn)
                                           OR (SELECT NVL (is_traid, 0)
@@ -842,7 +850,8 @@
                                                          bud_fil f,
                                                          bud_tn_fil tf
                                                    WHERE     m.tp_kod = tpn.tp_kod
-                                                         AND u.tn = p.tn
+                                                                               and u.is_spd=1
+    AND u.tn = p.tn
                                                          AND u.tab_num = m.tab_num
                                                          AND u.dpt_id = m.dpt_id
                                                          AND f.id = tf.bud_id

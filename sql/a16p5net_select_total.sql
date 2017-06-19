@@ -18,7 +18,7 @@ SELECT SUM (selected)
                             FROM user_list
                            WHERE tn = :tn) = 1)
                  AND a16p5net.net_kod = s.net_kod(+)
-                 AND st.dpt_id = :dpt_id
+                 AND st.dpt_id = :dpt_id and st.is_spd=1
                  AND m.tp_kod = n.tp_kod
                  AND a16p5net.net_name = n.net
                  AND m.dt = TO_DATE ('01/04/2016', 'dd/mm/yyyy')

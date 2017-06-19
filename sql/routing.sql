@@ -18,7 +18,8 @@ SELECT DECODE (ROUND (ROWNUM / 2) * 2, ROWNUM, 1, 0) color,
                  AND r.dpt_id = u.dpt_id
                  AND r.tab_number = u.tab_num
                  AND u.dpt_id = :dpt_id
-                 AND u.datauvol IS NULL
+          and u.is_spd=1
+       AND u.datauvol IS NULL
 				  AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full

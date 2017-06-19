@@ -24,7 +24,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND DECODE ( :eta_list, '', d.h_fio_eta, :eta_list) = d.h_fio_eta
-         AND st.dpt_id = :dpt_id
+         AND st.dpt_id = :dpt_id and st.is_spd=1
          AND sp.H_client = tp.H_client
          AND tp.tp_kod = d.tp_kod
          AND :h_client = sp.H_client
