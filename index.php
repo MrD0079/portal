@@ -193,12 +193,12 @@ if ($a->getAuth())
 		$smarty->assign('is_don', $a->getAuthData('is_don'));
 		$is_don = $a->getAuthData('is_don');
 		$smarty->assign('is_fil', $a->getAuthData('is_fil'));
-		$is_atd_super = $db->getOne("SELECT nvl(is_super,0) FROM atd_contr_avk WHERE inn = ".$tn);
+		/*$is_atd_super = $db->getOne("SELECT nvl(is_super,0) FROM atd_contr_avk WHERE inn = ".$tn);
 		$smarty->assign('is_atd_super', $is_atd_super);
 		$is_azl_super = $db->getOne("SELECT nvl(is_super,0) FROM azl_contr_avk WHERE inn = ".$tn);
 		$smarty->assign('is_azl_super', $is_azl_super);
 		$is_akr_super = $db->getOne("SELECT nvl(is_super,0) FROM akr_contr_avk WHERE inn = ".$tn);
-		$smarty->assign('is_akr_super', $is_akr_super);
+		$smarty->assign('is_akr_super', $is_akr_super);*/
 		$smarty->assign('is_eta', $a->getAuthData('is_eta'));
 		$smarty->assign('h_eta', $a->getAuthData('h_eta'));
 		$smarty->assign('is_eta_kk', $a->getAuthData('is_eta_kk'));
