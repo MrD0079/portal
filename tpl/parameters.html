@@ -7,6 +7,7 @@
 <td>значение типа число</td>
 <td>значение типа строка</td>
 <td>значение типа дата</td>
+<td>комментарий</td>
 </tr>
 {foreach key=key item=item from=$parameters}
 <tr>
@@ -15,6 +16,7 @@
 <td><input name=data[{$item.id}][val_number] class="number" value="{$item.val_number}"></td>
 <td><input name=data[{$item.id}][val_string] size=70 value="{$item.val_string|escape}"></td>
 <td><input name=data[{$item.id}][val_date] value="{$item.val_date}" class="datepicker"></td>
+<td><input name=data[{$item.id}][comm] size=80 value="{$item.comm|escape}"></td>
 </tr>
 {/foreach}
 </table>

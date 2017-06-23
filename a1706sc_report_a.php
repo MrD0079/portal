@@ -14,23 +14,23 @@ if (isset($_REQUEST["add"]))
 			if ($vals["if1"]!=0)
 			{
 				$sql1="
-                              SELECT count(*)
-                                FROM ".$_REQUEST['act']."_action_nakl
-                               WHERE h_tp_kod_data_nakl IN (SELECT h_tp_kod_data_nakl
-                                                              FROM ".$_REQUEST['act']."
-                                                             WHERE tp_kod = (SELECT tp_kod
-                                                                               FROM ".$_REQUEST['act']."
-                                                                              WHERE h_tp_kod_data_nakl = '".$key."'))
-                                 AND h_tp_kod_data_nakl <> '".$key."'
-                              ";
+                                      SELECT COUNT (*)
+                                        FROM ".$_REQUEST['act']."_action_nakl
+                                       WHERE h_tp_kod_data_nakl IN (SELECT h_tp_kod_data_nakl
+                                                                      FROM ".$_REQUEST['act']."
+                                                                     WHERE tp_kod = (SELECT tp_kod
+                                                                                       FROM ".$_REQUEST['act']."
+                                                                                      WHERE h_tp_kod_data_nakl = '".$key."'))
+                                         AND h_tp_kod_data_nakl <> '".$key."'
+                                      ";
 				$c1=$db->getOne($sql1);
-				if ($c1>0)
+				if ($c1>=3)
 				{
-					echo "<p>В 1 ТП можно провести только 1 акцию!!!</p>";
+					echo "<p>По одному клиенту за период акции может быть только не более трех акционных накладных!!!</p>";
 				}
-				else
+				if ($c1<3)
 				{
-					Table_Update ($_REQUEST['act'].'_action_nakl', $keys, $vals);
+					Table_Update ($_REQUEST['act']."_action_nakl", $keys, $vals);
 				}
 			}
 			else
@@ -64,11 +64,11 @@ if (isset($_REQUEST["save"]))
 		//ses_req();
 		foreach($_REQUEST["data"] as $k=>$v)
 		{
-			//если 2* [Планируемое количество "подарков"] + [Сумма бонуса продукцией "АВК", грн] / 130 <= [ACT_SUMM] - то сохраняем!
+			//РµСЃР»Рё 2* [РџР»Р°РЅРёСЂСѓРµРјРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ "РїРѕРґР°СЂРєРѕРІ"] + [РЎСѓРјРјР° Р±РѕРЅСѓСЃР° РїСЂРѕРґСѓРєС†РёРµР№ "РђР’Рљ", РіСЂРЅ] / 130 <= [act_nabor] - С‚Рѕ СЃРѕС…СЂР°РЅСЏРµРј!
 			/*if (isset($v["bonus_sum2"])&&isset($v["bonus_sum1"]))
 			{
-				//echo $v["bonus_sum2"].' '.$v["bonus_sum1"].' '.$_REQUEST["data_help"][$k]["act_summ"].'<br>';
-				if ((2*$v["bonus_sum2"]+$v["bonus_sum1"]/130)>$_REQUEST["data_help"][$k]["act_summ"])
+				//echo $v["bonus_sum2"].' '.$v["bonus_sum1"].' '.$_REQUEST["data_help"][$k]["act_nabor"].'<br>';
+				if ((2*$v["bonus_sum2"]+$v["bonus_sum1"]/130)>$_REQUEST["data_help"][$k]["act_nabor"])
 				{
 					unset($v["bonus_sum1"]);
 					unset($v["bonus_sum2"]);

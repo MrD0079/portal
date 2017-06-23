@@ -4,7 +4,7 @@ SELECT p.param_name,
        p.val_string,
        TO_CHAR(p.val_date, 'dd.mm.yyyy') val_date,
        p.ID,
-       p.lu
+       p.lu,p.comm
   FROM PARAMETERS p
   where dpt_id=:dpt_id
 order by p.param_name
