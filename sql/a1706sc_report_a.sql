@@ -11,10 +11,10 @@
          d.act_nabor_3,
          d.act_nabor_4,
          /* TRUNC (d.act_nabor / 1000) * 100 */
-         nvl(d.act_nabor_1,0) * 29 +
-         nvl(d.act_nabor_2,0) * 29 +
-         nvl(d.act_nabor_3,0) * 29 +
-         nvl(d.act_nabor_4,0) * 29 max_bonus,
+         nvl(d.act_nabor_1,0) * 31 +
+         nvl(d.act_nabor_2,0) * 31 +
+         nvl(d.act_nabor_3,0) * 31 +
+         nvl(d.act_nabor_4,0) * 31 max_bonus,
          --TRUNC (d.act_nabor / 2) max_bonus2,
          d.tp_addr,
          NVL (an.if1, 0) selected_if1,
