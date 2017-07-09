@@ -135,7 +135,7 @@
 			{$list_item.bonus_dt1}
 			{/if}
 		</td>
-			{if not $smarty.request.print}
+			{if not $smarty.request.print and $is_ts and $list_item.ok_chief neq 1}
 			<input type=hidden name=data[{$list_item.id}][max_bonus] id=data{$list_item.id}max_bonus>
 			<input type=hidden name=data[{$list_item.id}][nakl] id=data{$list_item.id}nakl>
 			<script>$('#data{$list_item.id}max_bonus').val("{$list_item.max_bonus}");</script>
