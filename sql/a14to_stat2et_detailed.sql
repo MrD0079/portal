@@ -1,4 +1,4 @@
-/* Formatted on 15.06.2017 09:58:09 (QP5 v5.252.13127.32867) */
+/* Formatted on 10.07.2017 17:34:56 (QP5 v5.252.13127.32867) */
   SELECT fio_rm,
          tn_rm,
          fio_tm,
@@ -90,7 +90,9 @@
                  AND DECODE ( :ok_st_tm, 1, ok_st_tm, :ok_st_tm) = ok_st_tm
                  AND (   :standart = 1
                       OR ( :standart = 2 AND standart = 'A')
-                      OR ( :standart = 3 AND standart = 'B')))
+                      OR ( :standart = 3 AND standart = 'B'))
+                 AND (   :zst = 1
+                      OR ( :zst = 2 AND DECODE (zst_lu, NULL, 0, 1) = 1)))
 GROUP BY fio_rm,
          tn_rm,
          fio_tm,

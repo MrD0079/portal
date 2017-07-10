@@ -41,6 +41,7 @@ if (isset($_REQUEST["save"]))
 	InitRequestVar("rep_type",'brief');
 	InitRequestVar("ok_st_tm",1);
 	InitRequestVar("standart",1);
+	InitRequestVar("zst",1);
 	$params=array(
 		':dpt_id' => $_SESSION["dpt_id"],
 		':tn'=>$tn,
@@ -57,6 +58,7 @@ if (isset($_REQUEST["save"]))
 		':by_who'=>"'".$_REQUEST['by_who']."'",
 		':ok_st_tm' => $_REQUEST["ok_st_tm"],
 		':standart' => $_REQUEST["standart"],
+		':zst' => $_REQUEST["zst"],
 	);
 	$sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
 	$sql=stritr($sql,$params);

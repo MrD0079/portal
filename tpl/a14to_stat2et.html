@@ -71,13 +71,15 @@
 		<tr>
 			<td><input type=radio id="by_who" name="by_who" value='eta' onClick='$("input[name=rep_type][value=detailed]").attr("disabled",false);'>по ЭТА
 			<input type=radio id="by_who" name="by_who" value='ts' onClick='$("input[name=rep_type][value=detailed]").attr("disabled",false);'>по ТС
-			<input type=radio id="by_who" name="by_who" value='tm' onClick='$("input[name=rep_type][value=brief]").prop("checked",true);$("input[name=rep_type][value=detailed]").attr("disabled",true);'>по ТМ
-			<input type=radio id="by_who" name="by_who" value='rm' onClick='$("input[name=rep_type][value=brief]").prop("checked",true);$("input[name=rep_type][value=detailed]").attr("disabled",true);'>по РМ</td>
+			<input type=radio id="by_who" name="by_who" value='tm' onClick='$("input[name=rep_type][value=brief]").click();$("input[name=rep_type][value=detailed]").attr("disabled",true);'>по ТМ
+			<input type=radio id="by_who" name="by_who" value='rm' onClick='$("input[name=rep_type][value=brief]").click();$("input[name=rep_type][value=detailed]").attr("disabled",true);'>по РМ</td>
 		</tr>
 		<script>$("input[name=by_who][value={$smarty.request.by_who}]").attr('checked',true);</script>
 		<tr>
-			<td><input type=radio id="rep_type" name="rep_type" value='brief'>краткий
-			<input type=radio id="rep_type" name="rep_type" value='detailed' {if $smarty.request.by_who eq 'tm'}disabled{/if}>развернутый</td>
+			<td>
+                            <input type=radio id="rep_type" name="rep_type" value='brief' onClick='$("input[name=zst][value=1]").click();$("input[name=zst][value=2]").attr("disabled",true);'>краткий
+                            <input type=radio id="rep_type" name="rep_type" value='detailed' onClick='$("input[name=zst][value=2]").attr("disabled",false);' {if $smarty.request.by_who eq 'tm'}disabled{/if}>развернутый
+                        </td>
 		</tr>
 		<script>$("input[name=rep_type][value={$smarty.request.rep_type}]").attr('checked',true);</script>
 		<tr>
@@ -91,6 +93,13 @@
 			<input type=radio id="standart" name="standart" value=3>B-стандарт</td>
 		</tr>
 		<script>$("input[name=standart][value={$smarty.request.standart}]").attr('checked',true);</script>
+		<tr>
+			<td>
+                            <input type=radio id="zst" name="zst" value=1>все
+                            <input type=radio id="zst" name="zst" value=2 {if $smarty.request.rep_type eq 'brief'}disabled{/if}>Стандарт по ТП
+                        </td>
+		</tr>
+		<script>$("input[name=zst][value={$smarty.request.zst}]").attr('checked',true);</script>
 	</table>
 	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
 	<p><input type=submit name=save id=save value="Сохранить"></p>
@@ -226,55 +235,55 @@
 	{/if}
 	<tr>
 		{if $smarty.request.by_who eq 'eta'}
-		<td style="text-align: left;">{$i.eta_tab_number}</td>
-		<td style="text-align: left;">{$i.fio_eta}</td>
+		<!--т.н. ЭТА--><td style="text-align: left;">{$i.eta_tab_number}</td>
+		<!--ФИО ЭТА--><td style="text-align: left;">{$i.fio_eta}</td>
 		{/if}
 		{if $smarty.request.by_who eq 'ts'}
-		<td style="text-align: left;">{$i.tab_num_ts}</td>
+		<!--т.н. ТС--><td style="text-align: left;">{$i.tab_num_ts}</td>
 		{/if}
-		<td style="text-align: left;">{$i.fio_ts}</td>
-		<td style="text-align: left;">{$i.fio_tm}</td>
-		<td style="text-align: left;">{$i.fio_rm}</td>
-		<td style="text-align: left;">{$i.tp_kod_key}</td>
-		<td style="text-align: left;">{$i.tp_ur}</td>
-		<td style="text-align: left;">{$i.tp_addr}</td>
-		<td style="text-align: left;">{$i.tp_type_short}</td>
-		<td>{$i.stelag}</td>
-		<td>{$i.tumb}</td>
-		<td>{$i.visit_plan}</td>
-		<td>{$i.visit_fakt}</td>
-		<td>{$i.ts1r}</td>
-		<td>
+		<!--ФИО ТС--><td style="text-align: left;">{$i.fio_ts}</td>
+		<!--ФИО ТМ--><td style="text-align: left;">{$i.fio_tm}</td>
+		<!--ФИО РМ--><td style="text-align: left;">{$i.fio_rm}</td>
+		<!--Код ТП--><td style="text-align: left;">{$i.tp_kod_key}</td>
+		<!--Название ТП--><td style="text-align: left;">{$i.tp_ur}</td>
+		<!--Адрес ТП--><td style="text-align: left;">{$i.tp_addr}</td>
+		<!--Тип ТП--><td style="text-align: left;">{$i.tp_type_short}</td>
+		<!--Стеллажи--><td>{$i.stelag}</td>
+		<!--Витрины--><td>{$i.tumb}</td>
+		<!--Визиты ПЛАН--><td>{$i.visit_plan}</td>
+		<!--Визиты ФАКТ--><td>{$i.visit_fakt}</td>
+		<!--Количество стандартов по визитам--><td>{$i.ts1r}</td>
+		<!--Стандарт по ТП / Засчитать стандарт--><td>
                     <!--*{$is_admin}*{$i.zst_lu}*
                     *{$i.visit_plan}*{$i.ts1r}*-->
 			<b><!--if $i.visit_plan eq $i.ts1r or $i.zst_lu-->{if $i.zst_lu}да{else}нет{/if}</b>
 			{if not $smarty.request.print}
-			{if $i.visit_plan eq $i.ts1r}
-				<!--<input id=zst_{$i.tp_kod_key} type=hidden value=1 name=data[{$i.tp_kod_key}][zst]>-->
-			{else}
-				{if ($is_tm eq 1 and not $i.zst_lu and $i.ts1r > 0) or ($is_admin and $i.zst_lu)}
-				<input id=cb1_{$i.tp_kod_key} type=checkbox {if $i.zst_lu}checked{/if} onChange="
-				$('#ta1_{$i.tp_kod_key}').attr('disabled',!this.checked);
-				$('#zst_{$i.tp_kod_key}').val(this.checked?1:0);
-				">
-				<input id=zst_{$i.tp_kod_key} type=hidden value='{if $i.zst_lu}1{/if}' name=data[{$i.tp_kod_key}][zst]>
-				{/if}
-			{/if}
+                            {if $i.visit_plan eq $i.ts1r}
+                                    <!--<input id=zst_{$i.tp_kod_key} type=hidden value=1 name=data[{$i.tp_kod_key}][zst]>-->
+                            {else}
+                                    {if ($is_tm eq 1 and not $i.zst_lu and $i.ts1r > 0) or ($is_admin and $i.zst_lu)}
+                                    <input id=cb1_{$i.tp_kod_key} type=checkbox {if $i.zst_lu}checked{/if} onChange="
+                                    $('#ta1_{$i.tp_kod_key}').attr('disabled',!this.checked);
+                                    $('#zst_{$i.tp_kod_key}').val(this.checked?1:0);
+                                    ">
+                                    <input id=zst_{$i.tp_kod_key} type=hidden value='{if $i.zst_lu}1{/if}' name=data[{$i.tp_kod_key}][zst]>
+                                    {/if}
+                            {/if}
 			{/if}
 			{if not $smarty.request.print}<br>{$i.zst_lu_fio}<br>{$i.zst_lu}{/if}
                         {if $i.reject_traid_in_month}<br><div style="display: inline; background-color:red;">отменен ВСТМ</div>{/if}
 		</td>
-		<td>
+		<!--Комментарии по засчитыванию стандарта--><td>
 		{if not $smarty.request.print}
 			{if $i.visit_plan neq $i.ts1r}<textarea required name=data[{$i.tp_kod_key}][comm] id=ta1_{$i.tp_kod_key} {if not $i.zst_lu}disabled{/if}>{$i.zst_comm}</textarea>{/if}
 			{else}
 			{$i.zst_comm}
 			{/if}</td>
-		<td>{$i.summa|default:0|num:2}</td>
-		<td style="background-color: rgb(255, 204, 153);">{$i.standart_price|default:0|num:2}</td>
-		<td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$i.bonus4tp|default:0|num:2}</td>
-                <td>{$i.standart}</td>
-                <td>
+		<!--Объем продаж в месяц--><td>{$i.summa|default:0|num:2}</td>
+		<!--Стоимость стандарта--><td style="background-color: rgb(255, 204, 153);">{$i.standart_price|default:0|num:2}</td>
+		<!--Бонус за ТП--><td style="font-weight: bold; background-color: rgb(255, 204, 153);">{$i.bonus4tp|default:0|num:2}</td>
+                <!--Тип стандарта--><td>{$i.standart}</td>
+                <!--отг. цел. ассортимент--><td>
                     <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
                 </td>
 	</tr>

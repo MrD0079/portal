@@ -61,5 +61,7 @@ SELECT SUM (bonus4tp) bonus4tp, SUM (stelag) stelag, SUM (tumb) tumb,
                               ok_st_tm
                        AND (   :standart = 1
                             OR ( :standart = 2 AND standart = 'A')
-                            OR ( :standart = 3 AND standart = 'B')))
+                            OR ( :standart = 3 AND standart = 'B'))
+                 AND (   :zst = 1
+                      OR ( :zst = 2 AND DECODE (zst_lu, NULL, 0, 1) = 1)))
          /*WHERE DECODE (zst_lu, NULL, 0, 1) > 0*/)
