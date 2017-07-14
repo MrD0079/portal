@@ -1,5 +1,5 @@
 /* Formatted on 13/09/2013 14:30:54 (QP5 v5.227.12220.39724) */
-  SELECT u.h_eta,
+  SELECT distinct u.h_eta,
          u.tab_num,
          u.fio,
          u.pos_name,
@@ -58,6 +58,6 @@
          AND NVL (u.is_top, 0) <> 1
          AND u.datauvol IS NULL
          AND NVL (f2, 0) >= 0
-         /*AND u.dpt_id = :dpt_id*/
+         AND u.dpt_id = :dpt_id
          AND (u.h_eta = :h_eta OR :h_eta = '0')
 ORDER BY d.sort, u.fio

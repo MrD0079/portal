@@ -1,5 +1,5 @@
 /* Formatted on 13/09/2013 14:30:36 (QP5 v5.227.12220.39724) */
-  SELECT u.h_eta,
+  SELECT distinct u.h_eta,
          u.tab_num,
          u.fio,
          u.pos_name,
@@ -58,5 +58,5 @@
          AND u.h_eta = this_tr.h_eta
          AND u.is_eta = 1
          AND NVL (u.is_top, 0) <> 1
-         /*AND u.dpt_id = :dpt_id*/
+         AND u.dpt_id = :dpt_id
 ORDER BY u.fio

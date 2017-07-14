@@ -1,0 +1,11 @@
+{if $prot_db}
+    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$prot_db}
+    {foreach from=$keywords item=keyword}
+        <nobr>
+        {if $is_db and not $smarty.request.ok_t2_tn and $smarty.request.enabled}
+            <a href="javascript:void(0);" onClick=save('{$smarty.request.dt}','f','prot_db',"{$keyword}",'{$smarty.request.key2}','del','{$smarty.request.ok_t2_tn}','{$smarty.request.enabled}');>[x]</a>
+        {/if}
+        <a target=_blank href="bud_svod_ta_files/{$keyword}">{$keyword}</a><br>
+        </nobr>
+    {/foreach}
+{/if}

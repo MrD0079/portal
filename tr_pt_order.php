@@ -141,12 +141,13 @@ if (isset($_REQUEST["form_list"]))
 
 	$sql=rtrim(file_get_contents('sql/tr_pt_order_users.sql'));
 	$sql=stritr($sql,$p);
-	//echo $sql;
+	//echo $sql.";";
 	$tru = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('tru', $tru);
 
 	$sql = rtrim(file_get_contents('sql/tr_pt_order_users_add.sql'));
 	$sql=stritr($sql,$p);
+	//echo $sql.";";
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('trua', $data);
 

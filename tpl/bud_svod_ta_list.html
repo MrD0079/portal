@@ -53,26 +53,53 @@
 <td style="text-align:right">{$i.svs_total|num:2}</td>
 <td style="text-align:right">{$i.promo_total|num:2}</td>
 <td style="text-align:right; background-color: rgb(204, 255, 255);">{$i.compens_db|num:2}</td>
-<td id=td_ok_db_tn{$i.fil_id} style="text-align:center">
-	{if not $smarty.request.print}
-	<a target=_blank href="bud_svod_ta_files/{$i.prot_db}">{$i.prot_db}</a>
-	{/if}
-	{if $is_db and not $i.ok_t2_tn and $enabled}
-	<div id=td_prot_db{$i.fil_id}>
-	<input
-		id=fn_prot_db{$i.fil_id}
-		type=file
-		onChange="save('{$smarty.request.dt}','f','prot_db',this.value,{$i.fil_id});"
-	>
-	</div>
-	{/if}
-	{if $is_db and not $i.ok_pr_tn and $enabled}
-	<input
-		type=checkbox
-		{if $i.ok_db_tn}checked{/if}
-		onChange="save('{$smarty.request.dt}','f','ok_db_tn',this.checked?{$tn}:'',{$i.fil_id});"
-	>
-	{/if}
+<td id=td_ok_db_tn{$i.fil_id} style="text-align:left">
+	
+                   
+    {if not $smarty.request.print}
+        <div id=td_prot_db{$i.fil_id}>
+            <div id=list_prot_db{$i.fil_id}>
+                <!--{if $i.prot_db}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.prot_db}
+                    {foreach from=$keywords item=keyword}
+                        <nobr>
+                        {if $is_db and not $i.ok_t2_tn and $enabled}
+                            <a href="javascript:void(0);" onClick=save('{$smarty.request.dt}','f','prot_db',"{$keyword}",'{$i.fil_id}','del','{$i.ok_t2_tn}','{$enabled}');>[x]</a>
+                        {/if}
+                        <a target=_blank href="bud_svod_ta_files/{$keyword}">{$keyword}</a><br>
+                        </nobr>
+                    {/foreach}
+                {/if}-->
+            </div>
+            <script>
+                $('#list_prot_db{$i.fil_id}')
+                .load(
+                '?action=bud_svod_ta_save&nohead=1&get_prot_db=1&dt={$smarty.request.dt}'
+                +'&key2={$i.fil_id}'
+                +'&ok_t2_tn={$i.ok_t2_tn}'
+                +'&enabled={$enabled}');
+            </script>
+            {if $is_db and not $i.ok_t2_tn and $enabled}
+                    <input
+                        id=fn_prot_db{$i.fil_id}
+                        type=file
+                        onChange="save('{$smarty.request.dt}','f','prot_db',this.value,'{$i.fil_id}',null,'{$i.ok_t2_tn}','{$enabled}');"
+                    >
+            {/if}
+            {if $is_db and not $i.ok_pr_tn and $enabled}
+            <input
+                    type=checkbox
+                    {if $i.ok_db_tn}checked{/if}
+                    onChange="save('{$smarty.request.dt}','f','ok_db_tn',this.checked?{$tn}:'',{$i.fil_id});"
+            >
+            {/if}
+        </div>
+    {/if}
+        
+        
+        
+        
+        
 	{$i.ok_db_lu}
 	{$i.ok_db_fio}
 </td>

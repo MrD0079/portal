@@ -73,7 +73,7 @@ $smarty->assign('loc', $db->getOne("select loc from tr_pt_order_head where id=".
 
 $sql=rtrim(file_get_contents('sql/tr_pt_order_edit_users.sql'));
 $sql=stritr($sql,$p);
-//echo $sql;
+//echo $sql.";";
 $tru = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('tru', $tru);
 
@@ -81,8 +81,7 @@ $p[':h_eta'] = "'0'";
 
 $sql = rtrim(file_get_contents('sql/tr_pt_order_edit_users_add.sql'));
 $sql=stritr($sql,$p);
-//echo $sql;
-//exit;
+//echo $sql.";";
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('trua', $data);
 

@@ -1,5 +1,5 @@
 /* Formatted on 13/09/2013 14:00:30 (QP5 v5.227.12220.39724) */
-  SELECT u.h_eta,
+  SELECT distinct u.h_eta,
          u.tab_num,
          u.fio,
          u.pos_name,

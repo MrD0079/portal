@@ -166,7 +166,7 @@ function() {
 );
 }
 
-function save(dt,table,field,val,key2)
+function save(dt,table,field,val,key2,del,ok_t2_tn,enabled)
 {
 	$('#td_'+field+key2).css('background-color','red');
 	var fd = new FormData();
@@ -175,7 +175,8 @@ function save(dt,table,field,val,key2)
 	fd.append('table',  table);
 	fd.append('field',  field);
 	fd.append('val',  val);
-	if (field=='prot_db')
+	fd.append('del',  del);
+	if (field=='prot_db'&&del==undefined)
 	{
 		fd.append('file', $('#fn_'+field+key2)[0].files[0]);
 	}
@@ -188,9 +189,24 @@ function save(dt,table,field,val,key2)
 		success: function(data) {
 			$('#td_'+field+key2).css('background-color','white');
 			$('#ok').html(data);
+                        if (field=='prot_db')
+                        {
+                            /*console.log(
+                                    '?action=bud_svod_ta_save&nohead=1&get_prot_db=1&dt='+dt
+                                    +'&key2='+key2
+                                    +'&ok_t2_tn='+ok_t2_tn
+                                    +'&enabled='+enabled);*/
+                            $('#list_prot_db'+key2)
+                                    .load(
+                                    '?action=bud_svod_ta_save&nohead=1&get_prot_db=1&dt='+dt
+                                    +'&key2='+key2
+                                    +'&ok_t2_tn='+ok_t2_tn
+                                    +'&enabled='+enabled);
+                        }
 		}
 	});
 }
+
 {/literal}
 
 {if $smarty.request.select}

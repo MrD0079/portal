@@ -6,8 +6,8 @@
 			{/if}
 
 			{if $is_prez}
-			<h1>Конференция КОФЕ</h1>
-			<h1><a href="?action=voiting">Голосование по потребительским предпочтениям</a></h1>
+			<h1>Конференция Kresko</h1>
+			<!--<h1><a href="?action=voiting">Голосование по потребительским предпочтениям</a></h1>-->
 			{foreach key=k item=i from=$voiting_test_list}
 			<h1><a href="?action=voiting_test&id={$i.id}">{$i.name}</a></h1>
 			{/foreach}

@@ -45,6 +45,11 @@ if (isset($_REQUEST["edit"]))
 
 
 
+$sql=rtrim(file_get_contents('sql/list_mkk.sql'));
+$params = array(':tn' => $tn,':dpt_id' => $_SESSION["dpt_id"]);
+$sql=stritr($sql,$params);
+$list_mkk = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('list_tmkk', $list_mkk);
 
 
 $sql=rtrim(file_get_contents('sql/ms_nets.sql'));

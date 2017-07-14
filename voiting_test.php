@@ -32,7 +32,8 @@ if (isset($_REQUEST["test_end"]))
 		'tn'=>$tn
 		);
 	$vals=array(
-		'test_ball'=>$ball
+		'test_ball'=>$ball,
+		'test_finished'=>date("Y-m-d H:i:s")
 		);
 	Table_Update('voiting_order_body',$keys,$vals);
 }
@@ -67,6 +68,15 @@ else
 			'tn'=>$tn
 			);
 		Table_Update('voiting_test_onoff',$keys,null);
+                
+                $keys=array(
+                    'head'=>$id,
+                    'tn'=>$tn
+		);
+                $vals=array(
+                        'test_started'=>date("Y-m-d H:i:s")
+                        );
+                Table_Update('voiting_order_body',$keys,$vals);
 	}
 }
 $smarty->display('voiting_test.html');

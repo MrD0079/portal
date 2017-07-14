@@ -16,11 +16,13 @@
 	<tr style="font-weight:bold;">
 		<td>ФИО<br>сотрудника</td>
 		<td>количество<br>правильных ответов<br>по данному тесту</td>
+		<td>Время</td>
 	</tr>
 	{foreach key=k item=i from=$data}
 	<tr>
 		<td style="text-align:left">{$i.fio}</td>
 		<td>{$i.test_ball}</td>
+		<td style="text-align:right">{$i.time}</td>
 	</tr>
 	{/foreach}
 </tbody>
