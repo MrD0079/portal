@@ -139,7 +139,7 @@ if (isset($_REQUEST["select"]))
 
 $sql=rtrim(file_get_contents('sql/sz_reestr.sql'));
 $sql=stritr($sql,$params);
-//echo $sql;
+//echo $sql; exit;
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($data as $k=>$v)

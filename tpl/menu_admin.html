@@ -31,12 +31,12 @@
 		<li><a href="?action=bonus_types">Административные меры</a></li>
 		<li><a href="?action=new_staff_accept">Подтверждение новичков</a></li>
 		<li><a href="?action=free_staff_accept">Подтверждение увольнения</a></li>
+		<li><a href="?action=admin_list&all=1">Супер Пользователи</a></li>
 
 		{/if}
 
 		{if $is_admin}
 
-		<li><a href="?action=admin_list&all=1">Супер Пользователи</a></li>
 		<li><a href="?action=free_staff_seat">Причины увольнения</a></li>
 		<li><a href="?action=move_staff_accept">Подтверждение переводов</a></li>
 		<li><a href="?action=os_spr">Справочник для формы ОС ДЦ</a></li>
@@ -69,7 +69,7 @@
 		<li><a href="?action=log&dates_list1={$now}&dates_list2={$now}">Полный лог</a></li>
 		<li><a href="?action=log&prg=get_data&dates_list1={$now}&dates_list2={$now}">Лог закачки SW=>Oracle</a></li>
 		<li><a href="?action=log&prg=error&dates_list1={$now}&dates_list2={$now}">Лог ошибок</a></li>
-		<li><a href="?action=log&prg=mail&dates_list1={$now}&dates_list2={$now}">Лог отправки почты</a></li>
+		<li><a href="?action=log&prg=mail&dates_list1={$now}&dates_list2={$now}&table=full_log_mail">Лог отправки почты</a></li>
 		<li><a href="?action=log&prg=%report%&dates_list1={$now}&dates_list2={$now}">Лог %report%</a></li>
 		<li><a href="?action=mr_gps_log">Лог GPS</a></li>
 		<li><a href="?action=inform">Настройка информационных сообщений</a></li>

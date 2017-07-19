@@ -25,7 +25,8 @@ $params=array(
 
 $sql = rtrim(file_get_contents('sql/bud_svod_zp_ag.sql'));
 $sql=stritr($sql,$params);
-//echo $sql;
+//$_REQUEST["sql"]=$sql;
+//ses_req();
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('ag', $x);
 

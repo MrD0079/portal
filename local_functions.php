@@ -66,7 +66,7 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 		if (!$mail->Send())
 		{
 			echo "<p><font style=\"color: red;\">".$mail->ErrorInfo."</font></p>";
-                        audit(
+                        audit_mail(
                                                 $mail->ErrorInfo
                                               . "\n"
                                               . 'recipients => '
@@ -76,8 +76,7 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
                                               . $subj
                                               . "\n"
                                               . 'MESSAGE => '
-                                              . $text
-                                ,'error');
+                                              . $text);
 		}
 		else
 		{
@@ -85,7 +84,7 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 			{
 				echo "<p><font style=\"color: red;\">письмо отправлено по следующим адресам: \"".$email."\"</font></p>"; 
 			}
-                                        audit(
+                                        audit_mail(
                                                 'recipients => '
                                               . join(' ', $adrs)
                                               . "\n"
@@ -93,8 +92,7 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
                                               . $subj
                                               . "\n"
                                               . 'MESSAGE => '
-                                              . $text
-                                        ,'mail');
+                                              . $text);
 		}
 	}
 	catch (Exception $e)
@@ -308,14 +306,24 @@ function IfEmpty($arg1, $arg2)
 function audit($info = "",$prg = "admin")
 {
 	global $db,$tn,$login;
-	$table_name = 'full_log';
 	$fields_values = array(
 		'login'=>$login,
 		'tn'=>$tn,
 		'text'=>$info,
 		'prg'=>$prg
 	);
-	$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_INSERT, null);
+	$affectedRows = $db->extended->autoExecute('full_log', $fields_values, MDB2_AUTOQUERY_INSERT, null);
+}
+
+function audit_mail($info = "")
+{
+	global $db,$tn,$login;
+	$fields_values = array(
+		'login'=>$login,
+		'tn'=>$tn,
+		'text'=>$info
+	);
+	$affectedRows = $db->extended->autoExecute('full_log_mail', $fields_values, MDB2_AUTOQUERY_INSERT, null);
 }
 
 function translit($str)

@@ -18,15 +18,7 @@
 </p>
 {/if}
 
-
-
 {if $is_db and $zp_ag_total.fil_null}<p style="color:red;">На закладке "Заработная плата" не привязаны к филиалам {$zp_ag_total.fil_null} агентов(-а)</p>{/if}
-
-{if $is_db and $zp_ag_total.fil_null}
-{assign var=disabled value='disabled'}
-{else}
-{assign var=enabled value=1}
-{/if}
 
 <table border=1 style="width:300px">
 <tr style="font-weight:bold; text-align:center">
@@ -44,6 +36,11 @@
 <td>ВСТМ 2й этап</td>
 </tr>
 {foreach key=k item=i from=$x}
+
+{if $zp_ag_total.fil_null eq 0}
+    {assign var=enabled value=1}
+{/if}
+
 <tr>
 <td><nobr>{$i.fil_name}</nobr></td>
 <td style="text-align:right">{$i.sales_fact|num:2}</td>
@@ -58,19 +55,7 @@
                    
     {if not $smarty.request.print}
         <div id=td_prot_db{$i.fil_id}>
-            <div id=list_prot_db{$i.fil_id}>
-                <!--{if $i.prot_db}
-                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.prot_db}
-                    {foreach from=$keywords item=keyword}
-                        <nobr>
-                        {if $is_db and not $i.ok_t2_tn and $enabled}
-                            <a href="javascript:void(0);" onClick=save('{$smarty.request.dt}','f','prot_db',"{$keyword}",'{$i.fil_id}','del','{$i.ok_t2_tn}','{$enabled}');>[x]</a>
-                        {/if}
-                        <a target=_blank href="bud_svod_ta_files/{$keyword}">{$keyword}</a><br>
-                        </nobr>
-                    {/foreach}
-                {/if}-->
-            </div>
+            <div id=list_prot_db{$i.fil_id}></div>
             <script>
                 $('#list_prot_db{$i.fil_id}')
                 .load(
@@ -79,14 +64,14 @@
                 +'&ok_t2_tn={$i.ok_t2_tn}'
                 +'&enabled={$enabled}');
             </script>
-            {if $is_db and not $i.ok_t2_tn and $enabled}
+            {if $is_db and not $i.ok_t2_tn and $zp_ag_total.fil_null eq 0}
                     <input
                         id=fn_prot_db{$i.fil_id}
                         type=file
                         onChange="save('{$smarty.request.dt}','f','prot_db',this.value,'{$i.fil_id}',null,'{$i.ok_t2_tn}','{$enabled}');"
                     >
             {/if}
-            {if $is_db and not $i.ok_pr_tn and $enabled}
+            {if $is_db and not $i.ok_pr_tn and ($zp_ag_total.fil_null eq 0 or ($zp_ag_total.fil_null neq 0 and $i.ok_db_tn))}
             <input
                     type=checkbox
                     {if $i.ok_db_tn}checked{/if}
@@ -104,7 +89,7 @@
 	{$i.ok_db_fio}
 </td>
 <td id=td_ok_pr_tn{$i.fil_id} style="text-align:center">
-	{if $tn eq $i.tn_pr and not $i.ok_t1_tn and $enabled}
+	{if $tn eq $i.tn_pr and not $i.ok_t1_tn and $zp_ag_total.fil_null eq 0}
 	<input
 		type=checkbox
 		{if $i.ok_pr_tn}checked{/if}
@@ -115,7 +100,7 @@
 	{$i.ok_pr_fio}
 </td>
 <td id=td_ok_t1_tn{$i.fil_id} style="text-align:center">
-	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_pr_tn and not $i.ok_t2_tn and $enabled}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_pr_tn and not $i.ok_t2_tn and $zp_ag_total.fil_null eq 0}
 	<input
 		type=checkbox
 		{if $i.ok_t1_tn}checked{/if}
@@ -126,7 +111,7 @@
 	{$i.ok_t1_fio}
 </td>
 <td id=td_ok_t2_tn{$i.fil_id} style="text-align:center">
-	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_t1_tn and $enabled}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_t1_tn and $zp_ag_total.fil_null eq 0}
 	<input
 		type=checkbox
 		{if $i.ok_t2_tn}checked{/if}
@@ -149,8 +134,3 @@
 <td style="text-align:right;background-color: rgb(204, 255, 255);">{$xt.compens_db|num:2}</td>
 </tr>
 </table>
-<!--
-{$d1}<br>
-{$d2}<br>
-{$d3}<br>
--->

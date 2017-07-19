@@ -1,4 +1,4 @@
-/* Formatted on 06.12.2016 15:14:28 (QP5 v5.252.13127.32867) */
+/* Formatted on 19.07.2017 11:23:56 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) c,
        SUM (dz_return) dz_return,
        SUM (dz_return_norm) dz_return_norm,
@@ -19,7 +19,8 @@ SELECT COUNT (*) c,
        SUM (sales) sales,
        SUM (val_fact) val_fact,
        DECODE (SUM (sales), 0, 0, SUM (dz_return) / SUM (sales) * 100)
-          plan_perc
+          plan_perc,
+       DECODE (SUM (NVL (ok_db_tn, 0)), 0, 0, 1) ok_db_tn
   FROM (SELECT NVL (sv.id, FN_GET_NEW_ID) id,
                u.fio ts,
                u.tab_num ts_tn,
@@ -159,7 +160,7 @@ SELECT COUNT (*) c,
                     OR :clusters = 0)
                AND s.tab_num = u.tab_num
                AND u.dpt_id = :dpt_id
-and u.is_spd=1
+               AND u.is_spd = 1
                AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
                AND :dpt_id = sv.dpt_id(+)
                AND s.h_eta = sv.h_eta(+)
@@ -241,8 +242,8 @@ and u.is_spd=1
                     OR :clusters = 0)
                AND sv.tn = u.tn
                AND u.dpt_id = sv.dpt_id
-          and u.is_spd=1
-     AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
+               AND u.is_spd = 1
+               AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
                AND (   :exp_list_without_ts = 0
                     OR u.tn IN (SELECT slave
                                   FROM full

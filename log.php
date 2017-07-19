@@ -4,6 +4,7 @@ InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
 InitRequestVar("log_r1",1);
 InitRequestVar("log_r2",1000);
+isset($_REQUEST["table"])?$table=$_REQUEST["table"]:$table="full_log";
 if (isset($_REQUEST["a14mega_make_good"]))
 {
 	audit("запустил процедуру исправления a14mega","get_data");
@@ -18,15 +19,20 @@ if (isset($_REQUEST["start_job"]))
 }
 if (isset($_REQUEST["clear_log"])&&isset($_REQUEST["prg"]))
 {
-	$sql = "delete from full_log where prg='".$_REQUEST["prg"]."'";
+        isset($_REQUEST["table"])
+        ?
+        $sql = "delete from ".$table
+        :
+        $sql = "delete from ".$table." where prg='".$_REQUEST["prg"]."'";
 	$res = $db->Query($sql);
 	$_REQUEST["select"]='select';
 }
 if (isset($_REQUEST["select"]))
 {
-	$sql = rtrim(file_get_contents('sql/log.sql'));
+	$sql = rtrim(file_get_contents('sql/'.$table.'.sql'));
 	!isset($_REQUEST["prg"])?$_REQUEST["prg"]=null:null;
 	$params = array(
+	':table' => $table,
 	':prg' => "'".$_REQUEST["prg"]."'",
 	":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
 	":dates_list2"=>"'".$_REQUEST["dates_list2"]."'",
@@ -39,4 +45,5 @@ if (isset($_REQUEST["select"]))
 	$smarty->assign('log', $res);
 }
 $smarty->display('log.html');
+//ses_req();
 ?>
