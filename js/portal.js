@@ -111,7 +111,7 @@ init_form();
 
 $(function(){$("form").submit(function(){var error=0;$(this).find(":input").each(function(){if(!$(this).attr("disabled")&&$(this).attr("required")&&!$(this).val()){/*$(this).css('border', 'red 1px solid');*/error=1;}else{/*$(this).css('border', 'gray 1px solid');*/}});if(error==0){return true;}else{var error_msg = "Please fill in the required fields";alert(error_msg);return false;}});});
 function blink_text(el){op=.9;/*$('#'+el).html('<p id="loadwait">Load data ...</p>');*/x=setInterval(function(){op=.9-op;$('#'+el).animate({opacity:.1+op});},500);return x;}
-function loadwait_show(el){op=.9;$('#'+el).html('<p id="loadwait"><img src="/design/AVK_Logo_37x18.png"></p>');x=setInterval(function(){op=.9-op;$('#loadwait').animate({opacity:.1+op});},500);return x;}
+function loadwait_show(el){op=.9;$('#'+el).html('<p id="loadwait">Loading data. Please wait...</p>');x=setInterval(function(){op=.9-op;$('#loadwait').animate({opacity:.1+op});},100);return x;}
 function loadwait_hide(x){clearInterval(x);}
 
 $(document).on('ready ajaxComplete',

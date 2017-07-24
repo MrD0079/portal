@@ -1,0 +1,277 @@
+{if $smarty.request.list_tp}
+    <table border=1 id="table_tp">
+        <tr style="font-weight:bold; text-align:center">
+            <td></td>
+            <td>№ п/п</td>
+            <td>Сеть</td>
+            <td>ТЗ</td>
+            <td>Время начала</td>
+            <td>Время окончания</td>
+            <td>Контролер</td>
+            <td>СВ МС Промоутеров</td>
+            <td>Промоутеры</td>
+            <td>новый контролер</td>
+        </tr>
+    </table>
+    {foreach key=k item=i from=$x name=x}
+    <script>add_tp('{$smarty.request.id}','{$i.tp}');</script>
+    {/foreach}
+{elseif $smarty.request.get_tp}
+    <tr id=tp_{$x.tp}>
+        <td><input type="button" value="удалить" onClick="$('#tp_{$x.tp}').remove();rewrite_indexes();"></td>
+        <td class="iter_tp" id=iter_tp_{$x.tp} style="text-align:center"></td>
+        <td>{$x.net_name}</td>
+        <td>{$x.tp_name}</td>
+        <td style="text-align:center">{if $is_admin or $is_ma}<input name=tasting_tp[{$x.tp}][time_start] class="number_int" value="{$x.time_start}" size="15">{/if}</td>
+        <td style="text-align:center">{if $is_admin or $is_ma}<input name=tasting_tp[{$x.tp}][time_end] class="number_int" value="{$x.time_end}" size="15">{/if}</td>
+        <td>{$x.tmkk_fio}</td>
+        <td style="text-align:center">
+            {if $is_admin or $is_ma}
+            <select name=tasting_tp[{$x.tp}][svms] id=select_svms_{$x.tp}></select>
+                <script>
+                    $('#select_svms_{$x.tp}')
+                        .load(
+                            '?action=tasting&nohead=1&select_svms=1',
+                            /*{literal}*/{}/*{/literal}*/,
+                            function() /*{literal}*/{/*{/literal}*/
+                                $('#select_svms_{$x.tp}').val('{$x.svms}')
+                            /*{literal}*/}/*{/literal}*/
+                        );
+                </script>
+                {else}
+                {$x.svms_fio}
+                {/if}
+        </td>
+        <td style="text-align:center">{$x.promoter_cnt}</td>
+        <td style="text-align:left">{$x.new_controller_fio}</td>
+        <input type="hidden" class="iter_tp_hidden" name=iter_tp_hidden[] value="{$x.tp}">
+    </tr>
+{elseif $smarty.request.select_svms}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.tn}">{$i.fio}</option>
+    {/foreach}
+{elseif $smarty.request.select_nets}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id_net}">{$i.net_name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tp}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.kodtp}">{$i.tz_oblast} {$i.ur_tz_name} {$i.tz_address}</option>
+    {/foreach}
+{elseif $smarty.request.list_files}
+{elseif $smarty.request.save_tasting}
+{elseif $smarty.request.id or $smarty.request.new_tasting}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting">
+    <h1>{$smarty.request.id}</h1>
+    <table border="1" id="tasting">
+        <tr>
+            <td>Название</td><td><input id=tasting_name name=tasting[name] value="{$tasting.name}" size="50"></td>
+        </tr>
+        <tr>
+            <td>Дата проведения</td><td><input id=tasting_dt name=tasting[dt] value="{$tasting.dt}" class="datepicker"></td>
+        </tr>
+        <tr>
+            <td>Описание</td><td><input name=tasting[descr] value="{$tasting.descr}" size="50"></td>
+        </tr>
+        <tr>
+            <td>Комментарий</td><td><input name=tasting[comm] value="{$tasting.comm}" size="50"></td>
+        </tr>
+        <tr>
+            <td>
+                *вложения
+            </td>
+            <td>
+                <input
+                    type="button"
+                    value="добавить"
+                    onClick="$('#tasting').append($(
+                                '<tr>\n\
+                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                    <td><input type=file name=tasting_tp_file[]></td>\n\
+                                </tr>'))">
+            </td>
+        </tr>
+        {if $tasting.files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$tasting.files}
+        {foreach from=$keywords item=keyword}
+        <tr>
+            <td>
+                <input type=button value=удалить onClick="
+                    del_files.push('{$keyword}');
+                    $(this).parent().parent().remove();
+                       ">
+            </td>
+            <td>
+                <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+            </td>
+        </tr>
+        {/foreach}
+        {/if}
+    </table>
+    <h1>Детали</h1>
+    <table border="1">
+        <tr>
+            <td>Сеть</td><td>ТЗ</td>
+        </tr>
+        <tr>
+            <td>
+                <select id=select_nets></select>
+            </td>
+            <td>
+                <select id=select_tp></select>
+            </td>
+            <td><input id="button_add_tp" type="button" value="добавить" onClick="add_tp('{$smarty.request.id}',$('#select_tp').val())"></td>
+        </tr>
+    </table>
+    <p><input type="button" value="Показать данные" onClick="load_list_tp('{$smarty.request.id}');"></p>
+    <div id="list_tp" style="display: inline;"></div>
+    </form>
+    <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting('{$smarty.request.id}');"></p>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    $('#select_nets').on("change",function(){
+        $('#select_tp').load('?action=tasting&nohead=1&select_tp=1',
+        {id_net:$('#select_nets').val()},
+        function() {
+            $('#select_tp').change();
+        });
+    });
+    $('#select_nets').load('?action=tasting&nohead=1&select_nets=1');
+    function load_list_tp(id)
+    {
+        x=loadwait_show('list_tp');
+        $('#list_tp').load('?action=tasting&id='+id+'&list_tp=1&nohead=1',{},function() {loadwait_hide(x);});
+    }
+    function add_tp(id,tp){
+        if (tp==null||tp==''){
+            return;
+        }
+        if ($('#tp_'+tp).length){
+            //console.log(tp+" already exists");
+            return;
+        }
+        $('#button_add_tp').prop("disabled",true);
+        var fd = new FormData();
+        fd.append('tp',  tp);
+        $.ajax({
+            type: 'POST',
+            url: '?action=tasting&id='+id+'&get_tp=1&nohead=1',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $('#table_tp').append($(''+data+''));
+                $('#button_add_tp').prop("disabled",false);
+                rewrite_indexes();
+            }
+        });
+    }
+    function rewrite_indexes(){
+	$('.iter_tp').each(function(){
+            $(this).html($(this).closest('tr').index());
+	});
+    }
+    function save_tasting(id){
+        if (!$('#tasting_name').val()){
+            console.log("tasting name is empty");
+            return;
+        }
+        if (!$('#tasting_dt').val()){
+            console.log("tasting date is empty");
+            return;
+        }
+        var bad_data = false;
+        $('.iter_tp_hidden').each(function(){
+            var svms = $('select[name="tasting_tp['+$(this).val()+'][svms]"]').val();
+            var time_start = $('input[name="tasting_tp['+$(this).val()+'][time_start]"]').val();
+            var time_end = $('input[name="tasting_tp['+$(this).val()+'][time_end]"]').val();
+            //console.log($(this).val()+' svms '+svms+' time_start '+time_start+' time_end '+time_end);
+            if (!svms)
+                {console.log($(this).val()+' svms empty'); bad_data = true;}
+            else if (!time_start||!time_end)
+                {console.log($(this).val()+' time empty'); bad_data = true;}
+            else if (time_start<0||time_start>23)
+                {console.log($(this).val()+' time_start not between 0 and 23'); bad_data = true;}
+            else if (time_end<0||time_end>23)
+                {console.log($(this).val()+' time_end not between 0 and 23'); bad_data = true;}
+            else if (time_start>time_end)
+                {console.log($(this).val()+' time_start > time_end'); bad_data = true;}
+            
+	});
+        if (bad_data) return;
+        $('#button_save').prop("disabled",true);
+	$('#table_tp').css('background-color','red');
+	$('#tasting').css('background-color','red');
+        var fd = new FormData(document.getElementById('form_tasting'));
+        if (del_files.length>0) fd.append('del_files',del_files);
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting&id='+id+'&save_tasting=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    $('#button_save').prop("disabled",false);
+                    $('#table_tp').css('background-color','white');
+                    $('#tasting').css('background-color','white');
+                    //console.log(data);
+		}
+	});
+    }
+    /*{/literal}*/
+    load_list_tp('{$smarty.request.id}');
+    var del_files = [];
+    </script>
+{elseif $smarty.request.list_tasting}
+    <table border=1>
+    <tr style="font-weight:bold; text-align:center">
+    <td>№ п/п</td>
+    <td>Название</td>
+    <td>дата проведения</td>
+    <td>Описание</td>
+    <td>Комментарий</td>
+    <td>Вложения</td>
+    <td>кол-во ТЗ</td>
+    <td>{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting&new_tasting=1">добавить</a>{/if}</td>
+    </tr>
+    {foreach key=k item=i from=$x name=x}
+    <tr>
+    <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+    <td>{$i.name}</td>
+    <td style="text-align:center">{$i.dt}</td>
+    <td>{$i.descr}</td>
+    <td>{$i.comm}</td>
+    <td style="text-align:left">
+        {if $i.files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.files}
+        {foreach from=$keywords item=keyword}
+        <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+        {/foreach}
+        {/if}
+    </td>
+    <td style="text-align:center">{$i.tp_cnt}</td>
+    <td style="text-align:center">{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting&id={$i.id}">редактировать</a>{/if}</td>
+    </tr>
+    {/foreach}
+    </table>
+{else}
+    <h1>ДЕГУСТАЦИИ</h1>
+    <p><input type="button" value="Показать данные" onClick="load_list_tasting();"></p>
+    <div id="list_tasting" style="display: inline;"></div>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    function load_list_tasting()
+    {
+        x=loadwait_show('list_tasting');
+        $('#list_tasting').load('?action=tasting&list_tasting=1&nohead=1',{},function() {loadwait_hide(x);});
+    }
+    /*{/literal}*/
+    load_list_tasting();
+    </script>
+{/if}

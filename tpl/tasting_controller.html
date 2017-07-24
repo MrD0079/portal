@@ -1,0 +1,90 @@
+{if $smarty.request.select_tasting}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_new_controller}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.tn}">{$i.fio}</option>
+    {/foreach}
+{elseif $smarty.request.select_nets}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id_net}">{$i.net_name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tp}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.kodtp}">{$i.tz_oblast} {$i.ur_tz_name} {$i.tz_address}</option>
+    {/foreach}
+{elseif $smarty.request.save_controller}
+{else}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_controller">
+    <h1>Изменить контролера по Дегустации</h1>
+    <table border="1" id="table_controller">
+        <tr>
+            <td>Название</td>
+            <td><select name=tasting id=tasting></select></td>
+        </tr>
+        <tr>
+            <td>Сеть</td>
+            <td><select name=nets id=nets></select></td>
+        </tr>
+        <tr>
+            <td>ТЗ</td>
+            <td><select name=tp id=tp></select></td>
+        </tr>
+        <tr>
+            <td>Установить нового контролера</td>
+            <td><select name=new_controller id=new_controller></select></td>
+        </tr>
+    </table>
+    </form>
+    <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting();"></p>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    function load_nets(){
+        $('#nets').load('?action=tasting_controller&nohead=1&select_nets=1&id_t='+$('#tasting').val(),{},function() {
+            load_tp();
+        });
+    }
+    function load_tp(){
+        $('#tp').load('?action=tasting_controller&nohead=1&select_tp=1&id_t='+$('#tasting').val()+'&id_net='+$('#nets').val(),{},function(){
+            load_controller();
+        });
+    }
+    function load_controller(){
+        $('#new_controller').load('?action=tasting_controller&nohead=1&select_new_controller=1&id_t='+$('#tasting').val()+'&id_net='+$('#nets').val()+'&id_tp='+$('#tp').val());
+    }
+    $('#tasting').on("change",function(){load_nets();});
+    $('#nets').on("change",function(){load_tp();});
+    $('#tp').on("change",function(){load_controller();});
+    $('#tasting').load('?action=tasting_controller&nohead=1&select_tasting=1',{},function(){
+        load_nets();
+    });
+    function save_tasting(){
+        if ($('#tasting').val()==null||$('#tp').val()==null){
+            return;
+        }
+        $('#button_save').prop("disabled",true);
+        $('#table_controller').css('background-color','red');
+        var fd = new FormData(document.getElementById('form_tasting'));
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_controller&save_controller=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    $('#button_save').prop("disabled",false);
+                    $('#table_controller').css('background-color','white');
+                    //console.log(data);
+		}
+	});
+    }
+    /*{/literal}*/
+    </script>
+{/if}

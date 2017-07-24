@@ -495,7 +495,7 @@
                            skid_nacenka * 100 skid_nacenka,
                            sales_2_5 * 1000 sales_2_5,
                            dop_zarobotok * 1000 dop_zarobotok
-                      FROM sales_nac_by_distr_2014
+                      FROM Sales
                      WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) sales,
                    (  SELECT zp.fil,
                              SUM (

@@ -1,0 +1,160 @@
+{if $smarty.request.list_promoter}
+    <table border=1 id="table_promoter">
+        <tr style="font-weight:bold; text-align:center">
+            <td></td>
+            <td>№ п/п</td>
+            <td>Промоутер</td>
+        </tr>
+    </table>
+    {foreach key=k item=i from=$x name=x}
+    <script>
+        add_promoter('{$smarty.request.id_t}','{$smarty.request.id_tp}','{$i.promoter}');
+    </script>
+    {/foreach}
+{elseif $smarty.request.get_promoter}
+    <tr id=promoter_{$smarty.request.promoter}>
+        <td><input type="button" value="удалить" onClick="$('#promoter_{$smarty.request.promoter}').remove();rewrite_indexes();"></td>
+        <td class="iter_promoter" id=iter_promoter_{$smarty.request.promoter} style="text-align:center"></td>
+        <td style="text-align:left">{$x}</td>
+        <input type=hidden name=tasting_promoter[] value="{$smarty.request.promoter}">
+    </tr>
+{elseif $smarty.request.select_tasting}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_promoter}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.tn}">{$i.fio}</option>
+    {/foreach}
+{elseif $smarty.request.select_nets}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id_net}">{$i.net_name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tp}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.kodtp}">{$i.tz_oblast} {$i.ur_tz_name} {$i.tz_address}</option>
+    {/foreach}
+{elseif $smarty.request.save_promoter}
+{else}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_promoter">
+    <h1>Выбор промоутера по Дегустации</h1>
+    <table border="1" id="promoter">
+        <tr>
+            <td>Название</td>
+            <td><select name=tasting id=tasting></select></td>
+        </tr>
+        <tr>
+            <td>Сеть</td>
+            <td><select name=nets id=nets></select></td>
+        </tr>
+        <tr>
+            <td>ТЗ</td>
+            <td><select name=tp id=tp></select></td>
+        </tr>
+        <tr>
+            <td>Промоутеры в зале :</td>
+            <td>
+                <select name=new_promoter id=new_promoter></select>
+                <input id="button_add_promoter" type="button" value="добавить"
+                       onClick="add_promoter($('#tasting').val(),$('#tp').val(),$('#new_promoter').val())">
+            </td>
+        </tr>
+    </table>
+    <p><input type="button" value="Показать данные" onClick="load_list_promoter();"></p>
+    <div id="list_promoter" style="display: inline;"></div>
+    </form>
+    <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting();"></p>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    $('#tasting').on("change",function(){
+        $('#nets').load('?action=tasting_promoter&nohead=1&select_nets=1',{id_t:$('#tasting').val()},function() {
+            $('#nets').change();
+        });
+    });
+    $('#nets').on("change",function(){
+        $('#tp').load('?action=tasting_promoter&nohead=1&select_tp=1',{
+            id_t:$('#tasting').val(),
+            id_net:$('#nets').val()
+        },function(){
+            $('#tp').change();
+        });
+    });
+    $('#tp').on("change",function(){
+        $('#new_promoter').load('?action=tasting_promoter&nohead=1&select_promoter=1',{
+            id_t:$('#tasting').val(),
+            id_net:$('#nets').val(),
+            id_tp:$('#tp').val()
+        }
+        );
+        load_list_promoter();
+    });
+    $('#tasting').load('?action=tasting_promoter&nohead=1&select_tasting=1');
+    function save_tasting(){
+        /*if ($('#tasting').val()==null||$('#tp').val()==null){
+            $('#button_save').prop("disabled",false);
+            return;
+        }*/
+        $('#button_save').prop("disabled",true);
+	$('#table_promoter').css('background-color','red');
+	$('#promoter').css('background-color','red');
+        var fd = new FormData(document.getElementById('form_tasting'));
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_promoter&save_promoter=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    $('#button_save').prop("disabled",false);
+                    $('#table_promoter').css('background-color','white');
+                    $('#promoter').css('background-color','white');
+                    //console.log(data);
+		}
+	});
+    }
+    function add_promoter(id,tp,promoter){
+        if (promoter==null||promoter==''){
+            return;
+        }
+        $('#button_add_promoter').prop("disabled",true);
+        if ($('#promoter_'+promoter).length){
+            console.log(promoter+" already exists");
+            $('#button_add_promoter').prop("disabled",false);
+            return;
+        }
+        var fd = new FormData();
+        fd.append('id_t',  id);
+        fd.append('id_tp',  tp);
+        fd.append('promoter',  promoter);
+        $.ajax({
+            type: 'POST',
+            url: '?action=tasting_promoter&get_promoter=1&nohead=1',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $('#table_promoter').append($(''+data+''));
+                $('#button_add_promoter').prop("disabled",false);
+                rewrite_indexes();
+            }
+        });
+    }
+    function rewrite_indexes(){
+	$('.iter_promoter').each(function(){
+            $(this).html($(this).closest('tr').index());
+	});
+    }
+    function load_list_promoter()
+    {
+        x=loadwait_show('list_promoter');
+        $('#list_promoter').load('?action=tasting_promoter&list_promoter=1&nohead=1',{id_t:$('#tasting').val(),id_tp:$('#tp').val()},function() {loadwait_hide(x);});
+    }
+    /*{/literal}*/
+    </script>
+{/if}

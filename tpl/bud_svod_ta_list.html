@@ -89,7 +89,7 @@
 	{$i.ok_db_fio}
 </td>
 <td id=td_ok_pr_tn{$i.fil_id} style="text-align:center">
-	{if $tn eq $i.tn_pr and not $i.ok_t1_tn and $zp_ag_total.fil_null eq 0}
+	{if $tn eq $i.tn_pr and not $i.ok_t1_tn}
 	<input
 		type=checkbox
 		{if $i.ok_pr_tn}checked{/if}
@@ -100,7 +100,7 @@
 	{$i.ok_pr_fio}
 </td>
 <td id=td_ok_t1_tn{$i.fil_id} style="text-align:center">
-	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_pr_tn and not $i.ok_t2_tn and $zp_ag_total.fil_null eq 0}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_pr_tn and not $i.ok_t2_tn}
 	<input
 		type=checkbox
 		{if $i.ok_t1_tn}checked{/if}
@@ -111,7 +111,7 @@
 	{$i.ok_t1_fio}
 </td>
 <td id=td_ok_t2_tn{$i.fil_id} style="text-align:center">
-	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_t1_tn and $zp_ag_total.fil_null eq 0}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_t1_tn}
 	<input
 		type=checkbox
 		{if $i.ok_t2_tn}checked{/if}
