@@ -21,7 +21,30 @@ if (isset($_REQUEST["save"])){
     $sql=stritr($sql,$p);
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('spr_users_ms', $data);
-    $sql=rtrim(file_get_contents('sql/svms_list.sql'));
+    //$sql=rtrim(file_get_contents('sql/svms_list.sql'));
+    $sql="SELECT tn, fio
+    FROM user_list
+   WHERE     pos_id in ( 69,127707110)
+         AND dpt_id = :dpt_id
+         AND ADD_MONTHS (TRUNC (NVL (datauvol, SYSDATE), 'mm'), +1) >=
+                TRUNC (SYSDATE, 'mm')
+         AND (   tn IN (SELECT slave
+                          FROM full
+                         WHERE master = :tn)
+              OR (SELECT is_admin
+                    FROM user_list
+                   WHERE tn = :tn) = 1
+
+              OR (SELECT is_ma
+                    FROM user_list
+                   WHERE tn = :tn) = 1
+
+              OR (SELECT is_kk
+                    FROM user_list
+                   WHERE tn = :tn) = 1
+
+)
+ORDER BY fio";
     $p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
     $sql=stritr($sql,$p);
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

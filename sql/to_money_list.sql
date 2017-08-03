@@ -1,4 +1,4 @@
-/* Formatted on 12/02/2016 12:23:24 (QP5 v5.252.13127.32867) */
+/* Formatted on 31.07.2017 18:11:24 (QP5 v5.252.13127.32867) */
   SELECT pu.tn chief_tn,
          pu.fio chief_fio,
          u1.tn ts_tn,
@@ -287,27 +287,35 @@
                  AND (SELECT rep_accepted
                         FROM bud_ru_zay_accept
                        WHERE     z_id = z1.id
+                             AND INN_not_ReportMA (tn) = 0
                              AND accept_order =
                                     DECODE (
                                        NVL (
                                           (SELECT MAX (accept_order)
                                              FROM bud_ru_zay_accept
                                             WHERE     z_id = z1.id
-                                                  AND rep_accepted = 2),
+                                                  AND rep_accepted = 2
+                                                  AND INN_not_ReportMA (tn) = 0),
                                           0),
                                        0, (SELECT MAX (accept_order)
                                              FROM bud_ru_zay_accept
                                             WHERE     z_id = z1.id
-                                                  AND rep_accepted IS NOT NULL),
+                                                  AND rep_accepted IS NOT NULL
+                                                  AND INN_not_ReportMA (tn) = 0),
                                        (SELECT MAX (accept_order)
                                           FROM bud_ru_zay_accept
                                          WHERE     z_id = z1.id
-                                               AND rep_accepted = 2))) = 1
-                 AND DECODE ( (SELECT COUNT (*)
-                                 FROM bud_ru_zay_accept
-                                WHERE z_id = z1.id AND rep_accepted = 2),
-                             0, 0,
-                             1) = 0
+                                               AND rep_accepted = 2
+                                               AND INN_not_ReportMA (tn) = 0))) =
+                        1
+                 AND DECODE (
+                        (SELECT COUNT (*)
+                           FROM bud_ru_zay_accept
+                          WHERE     z_id = z1.id
+                                AND rep_accepted = 2
+                                AND INN_not_ReportMA (tn) = 0),
+                        0, 0,
+                        1) = 0
                  AND DECODE ( :fil, 0, z1.fil, :fil) = z1.fil
                  AND (   z1.fil IN (SELECT fil_id
                                       FROM clusters_fils
@@ -315,18 +323,18 @@
                       OR :clusters = 0)) zay
    WHERE     m.tab_number = u1.tab_num
          AND u1.dpt_id = :dpt_id
-   and ul.is_spd=1
-      AND p.tn = u1.tn
+         AND u1.is_spd = 1
+         AND p.tn = u1.tn
          AND p.parent = pu.tn
          AND m.tp_kod = zay.tp_kod
-        AND (   :exp_list_without_ts = 0
-                      OR u1.tn IN (SELECT slave
-                                  FROM full
-                                 WHERE master = :exp_list_without_ts))
+         AND (   :exp_list_without_ts = 0
+              OR u1.tn IN (SELECT slave
+                             FROM full
+                            WHERE master = :exp_list_without_ts))
          AND (   :exp_list_only_ts = 0
-                      OR u1.tn IN (SELECT slave
-                                  FROM full
-                                 WHERE master = :exp_list_only_ts))
+              OR u1.tn IN (SELECT slave
+                             FROM full
+                            WHERE master = :exp_list_only_ts))
          AND (   u1.tn IN (SELECT slave
                              FROM full
                             WHERE master = :tn)
@@ -336,7 +344,7 @@
               OR (SELECT NVL (is_traid_kk, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND (:eta_list is null OR :eta_list = m.h_eta)
+         AND ( :eta_list IS NULL OR :eta_list = m.h_eta)
          AND pu.tn = DECODE ( :db, 0, pu.tn, :db)
          AND DECODE ( :adminid8,  1, zay.z_adminid8,  2, 1,  3, 0) =
                 zay.z_adminid8

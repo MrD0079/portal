@@ -177,36 +177,60 @@
 	});
     }
     function save_tasting(id){
+        console.clear();
+        var bad_data = false;
+        var error_text = '';
         if (!$('#tasting_name').val()){
             console.log("tasting name is empty");
-            return;
+            bad_data = true;
+            error_text = error_text + 'Название не заполнено'+'<br>';
         }
         if (!$('#tasting_dt').val()){
-            console.log("tasting date is empty");
-            return;
+            bad_data = true;
+            error_text = error_text + 'Дата не заполнена'+'<br>';
         }
-        var bad_data = false;
         $('.iter_tp_hidden').each(function(){
             var svms = $('select[name="tasting_tp['+$(this).val()+'][svms]"]').val();
-            var time_start = $('input[name="tasting_tp['+$(this).val()+'][time_start]"]').val();
-            var time_end = $('input[name="tasting_tp['+$(this).val()+'][time_end]"]').val();
-            //console.log($(this).val()+' svms '+svms+' time_start '+time_start+' time_end '+time_end);
+            var time_start = Number($('input[name="tasting_tp['+$(this).val()+'][time_start]"]').val());
+            var time_end = Number($('input[name="tasting_tp['+$(this).val()+'][time_end]"]').val());
+            console.log($(this).val()+' svms '+svms+' time_start '+time_start+' time_end '+time_end);
             if (!svms)
-                {console.log($(this).val()+' svms empty'); bad_data = true;}
-            else if (!time_start||!time_end)
-                {console.log($(this).val()+' time empty'); bad_data = true;}
-            else if (time_start<0||time_start>23)
-                {console.log($(this).val()+' time_start not between 0 and 23'); bad_data = true;}
-            else if (time_end<0||time_end>23)
-                {console.log($(this).val()+' time_end not between 0 and 23'); bad_data = true;}
-            else if (time_start>time_end)
-                {console.log($(this).val()+' time_start > time_end'); bad_data = true;}
+                {
+                    console.log($(this).val()+' svms empty');
+                    bad_data = true;
+                    error_text = error_text + 'ТЗ '+$(this).val()+' Свмс не заполнен'+'<br>';
+                }
+            if (!time_start||!time_end)
+                {
+                    console.log($(this).val()+' time empty'); 
+                    bad_data = true;
+                    error_text = error_text + 'ТЗ '+$(this).val()+' Время не заполнено'+'<br>';
+                }
+            if (time_start<0||time_start>23)
+                {
+                    console.log($(this).val()+' time_start not between 0 and 23');
+                    bad_data = true;
+                    error_text = error_text + 'ТЗ '+$(this).val()+' Время начала должно быть между 0 и 23'+'<br>';
+                }
+            if (time_end<0||time_end>23)
+                {
+                    console.log($(this).val()+' time_end not between 0 and 23'); 
+                    bad_data = true;
+                    error_text = error_text + 'ТЗ '+$(this).val()+' Время окончания должно быть между 0 и 23'+'<br>';
+                }
+            if (time_start>time_end)
+                {
+                    console.log($(this).val()+' time_start > time_end'); 
+                    bad_data = true;
+                    error_text = error_text + 'ТЗ '+$(this).val()+' Время начала не должно быть больше времени окончания'+'<br>';
+                }   
             
 	});
-        if (bad_data) return;
+        if (bad_data) {
+            errorNoty('Ошибка сохранения'+'<br>'+error_text);
+            return;
+        }
         $('#button_save').prop("disabled",true);
-	$('#table_tp').css('background-color','red');
-	$('#tasting').css('background-color','red');
         var fd = new FormData(document.getElementById('form_tasting'));
         if (del_files.length>0) fd.append('del_files',del_files);
         $.ajax({
@@ -217,9 +241,7 @@
 		contentType: false,
 		success: function(data) {
                     $('#button_save').prop("disabled",false);
-                    $('#table_tp').css('background-color','white');
-                    $('#tasting').css('background-color','white');
-                    //console.log(data);
+                    successNoty("Сохранено");
 		}
 	});
     }

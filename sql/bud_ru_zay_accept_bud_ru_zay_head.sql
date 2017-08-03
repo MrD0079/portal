@@ -13,10 +13,10 @@ SELECT TO_CHAR (bud_ru_zay.created, 'dd.mm.yyyy hh24:mi:ss') created,
           bud_ru_zay_ok,
        DECODE (  (SELECT COUNT (*)
                     FROM bud_ru_zay_accept
-                   WHERE z_id = bud_ru_zay.id and rep_accepted is not null)
+                   WHERE z_id = bud_ru_zay.id and rep_accepted is not null AND INN_not_ReportMA (tn) = 0)
                - (SELECT COUNT (*)
                     FROM bud_ru_zay_accept
-                   WHERE z_id = bud_ru_zay.id and rep_accepted is not null AND rep_accepted = 1),
+                   WHERE z_id = bud_ru_zay.id and rep_accepted is not null AND INN_not_ReportMA (tn) = 0 AND rep_accepted = 1),
                0, 1,
                0)
           rep_bud_ru_zay_ok,

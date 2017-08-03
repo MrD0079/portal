@@ -23,19 +23,19 @@
          NVL (kat.tu, 0) tu,
          (SELECT rep_accepted
             FROM bud_ru_zay_accept
-           WHERE     z_id = z.id
+           WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
                  AND accept_order =
                         DECODE (
                            NVL ( (SELECT MAX (accept_order)
                                     FROM bud_ru_zay_accept
-                                   WHERE z_id = z.id AND rep_accepted = 2),
+                                   WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
                                 0),
                            0, (SELECT MAX (accept_order)
                                  FROM bud_ru_zay_accept
-                                WHERE z_id = z.id AND rep_accepted IS NOT NULL),
+                                WHERE z_id = z.id AND rep_accepted IS NOT NULL AND INN_not_ReportMA (tn) = 0),
                            (SELECT MAX (accept_order)
                               FROM bud_ru_zay_accept
-                             WHERE z_id = z.id AND rep_accepted = 2)))
+                             WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0)))
             rep_current_accepted_id
     FROM bud_ru_zay z,
          user_list u,

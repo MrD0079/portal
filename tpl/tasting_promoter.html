@@ -96,13 +96,11 @@
     });
     $('#tasting').load('?action=tasting_promoter&nohead=1&select_tasting=1');
     function save_tasting(){
-        /*if ($('#tasting').val()==null||$('#tp').val()==null){
-            $('#button_save').prop("disabled",false);
+        if (!$('#tasting').val()||!$('#tp').val()){
+            errorNoty('Ошибка сохранения'+'<br>'+'Не выбрано название или ТЗ');
             return;
-        }*/
+        }
         $('#button_save').prop("disabled",true);
-	$('#table_promoter').css('background-color','red');
-	$('#promoter').css('background-color','red');
         var fd = new FormData(document.getElementById('form_tasting'));
         $.ajax({
 		type: 'POST',
@@ -112,9 +110,7 @@
 		contentType: false,
 		success: function(data) {
                     $('#button_save').prop("disabled",false);
-                    $('#table_promoter').css('background-color','white');
-                    $('#promoter').css('background-color','white');
-                    //console.log(data);
+                    successNoty("Сохранено");
 		}
 	});
     }

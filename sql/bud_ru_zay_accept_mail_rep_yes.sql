@@ -19,7 +19,7 @@ SELECT fn_getname ( tn) fio,
                    WHERE     z_id = (SELECT z_id
                                        FROM bud_ru_zay_accept
                                       WHERE id = :accept_id)
-                         AND rep_accepted = 0
+                         AND rep_accepted = 0 AND INN_not_ReportMA (tn) = 0
                 ORDER BY accept_order)
          WHERE ROWNUM = 1
         UNION
@@ -30,7 +30,7 @@ SELECT fn_getname ( tn) fio,
                    WHERE     z_id = (SELECT z_id
                                        FROM bud_ru_zay_accept
                                       WHERE id = :accept_id)
-                         AND rep_accepted = 1
+                         AND rep_accepted = 1 AND INN_not_ReportMA (tn) = 0
                          AND id <> :accept_id
                          AND accept_order < (SELECT accept_order
                                                FROM bud_ru_zay_accept

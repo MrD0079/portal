@@ -111,24 +111,24 @@
                            AND z.report_data IS NOT NULL
                            AND (SELECT rep_accepted
                                   FROM bud_ru_zay_accept
-                                 WHERE     z_id = z.id
+                                 WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
                                        AND accept_order =
                                               DECODE (
                                                  NVL (
                                                     (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
                                                       WHERE     z_id = z.id
-                                                            AND rep_accepted = 2),
+                                                            AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
                                                     0),
                                                  0, (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
                                                       WHERE     z_id = z.id
                                                             AND rep_accepted
-                                                                   IS NOT NULL),
+                                                                   IS NOT NULL AND INN_not_ReportMA (tn) = 0),
                                                  (SELECT MAX (accept_order)
                                                     FROM bud_ru_zay_accept
                                                    WHERE     z_id = z.id
-                                                         AND rep_accepted = 2))) =
+                                                         AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0))) =
                                   1                                      /*0*/
                            AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))
                                   IS NOT NULL)

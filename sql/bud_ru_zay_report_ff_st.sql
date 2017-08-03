@@ -74,7 +74,7 @@
                                    (SELECT COUNT (*)
                                       FROM bud_ru_zay_accept
                                      WHERE     z_id = z.id
-                                           AND rep_accepted = 2),
+                                           AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
                                    0, 0,
                                    1)
                                    deleted,
@@ -100,7 +100,7 @@
                                    z_current_accepted_id,
                                 (SELECT rep_accepted
                                    FROM bud_ru_zay_accept
-                                  WHERE     z_id = z.id
+                                  WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
                                         AND accept_order =
                                                DECODE (
                                                   NVL (
@@ -108,7 +108,7 @@
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z.id
                                                              AND rep_accepted =
-                                                                    2),
+                                                                    2 AND INN_not_ReportMA (tn) = 0),
                                                      0),
                                                   0, (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
@@ -117,7 +117,7 @@
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id = z.id
                                                           AND rep_accepted =
-                                                                 2)))
+                                                                 2 AND INN_not_ReportMA (tn) = 0)))
                                    current_accepted_id,
                                 (SELECT tn
                                    FROM bud_ru_zay_accept
@@ -127,7 +127,7 @@
                                                   FROM bud_ru_zay_accept
                                                  WHERE     z_id = z.id
                                                        AND rep_accepted =
-                                                              0))
+                                                              0 AND INN_not_ReportMA (tn) = 0))
                                    current_acceptor_tn,
                                 (SELECT id
                                    FROM bud_ru_zay_accept
@@ -137,7 +137,7 @@
                                                   FROM bud_ru_zay_accept
                                                  WHERE     z_id = z.id
                                                        AND rep_accepted =
-                                                              0))
+                                                              0 AND INN_not_ReportMA (tn) = 0))
                                    current_accept_id,
                                 (SELECT lu
                                    FROM bud_ru_zay_accept
@@ -149,7 +149,7 @@
                                                         FROM bud_ru_zay_accept
                                                        WHERE     z_id = z.id
                                                              AND rep_accepted =
-                                                                    2),
+                                                                    2 AND INN_not_ReportMA (tn) = 0),
                                                      0),
                                                   0, (SELECT MAX (accept_order)
                                                         FROM bud_ru_zay_accept
@@ -158,7 +158,7 @@
                                                      FROM bud_ru_zay_accept
                                                     WHERE     z_id = z.id
                                                           AND rep_accepted =
-                                                                 2)))
+                                                                 2 AND INN_not_ReportMA (tn) = 0)))
                                    current_accepted_date,
                                 (SELECT COUNT (tn)
                                    FROM bud_ru_zay_accept
@@ -217,7 +217,7 @@
                                    (SELECT COUNT (*)
                                       FROM bud_ru_zay_accept
                                      WHERE     z_id = z.id
-                                           AND rep_accepted <> 0),
+                                           AND rep_accepted <> 0 AND INN_not_ReportMA (tn) = 0),
                                    0, 1,
                                    0)
                                    not_seen,
@@ -282,7 +282,7 @@
                                                  WHERE cnt_kod = :country))
                                 AND z.id = za.z_id(+)
                                 AND za.rep_accepted = zat.id(+)
-                                AND za.rep_accepted IS NOT NULL
+                                AND za.rep_accepted IS NOT NULL AND INN_not_ReportMA (za.tn) = 0
                                 AND a.z_id(+) = z.id
                                 AND z.st = st.id(+)
                                 AND z.kat = kat.id(+)

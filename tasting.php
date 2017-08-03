@@ -36,7 +36,7 @@ if (isset($_REQUEST["get_tp"])){
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_svms"])){
-    $sql = "SELECT tn, fio FROM user_list WHERE pos_id = 127707110 ORDER BY fio";
+    $sql = "SELECT tn, fio FROM user_list WHERE pos_id = 127707110 AND datauvol IS NULL ORDER BY fio";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_nets"])){

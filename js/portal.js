@@ -155,5 +155,20 @@ $.ajax({
 });
 }
 
+function successNoty(text) {
+    new Noty({
+        text: text,
+        type: 'success',
+        layout: 'bottomRight',
+        timeout: 1000
+    }).show();
+}
 
-
+function errorNoty(text) {
+    new Noty({
+        text: text,
+        type: 'error',
+        layout: 'bottomRight',
+        timeout: 3000
+    }).show();
+}

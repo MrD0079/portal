@@ -43,6 +43,7 @@ if (!isset($_REQUEST["print"])&&!isset($_REQUEST["nohead"]))
 <link type="text/css" rel="stylesheet" href="css3menu/style.css">
 <style type="text/css">._css3m{display:none}</style>
 <link type="text/css" rel="stylesheet" href="css/portal.css">
+<link href="css/noty.css" rel="stylesheet" />
 <!--[if IE]>
 <style type="text/css">
 #content-div {width: expression(eval(document.body.clientWidth-10) + "px");}
@@ -65,6 +66,7 @@ if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
 <script type="text/javascript" src="js/autoNumeric-1.9.27.js"></script>
 <script type="text/javascript" src="js/bud_fil_passport.js"></script>
 <script type="text/javascript" src="js/portal.js"></script>
+<script type="text/javascript" src="js/noty.min.js"></script>
 <?
 if (!isset($_REQUEST["print"]))
 {

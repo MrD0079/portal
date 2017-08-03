@@ -70,7 +70,7 @@ SELECT COUNT (*) c,
                            AND TO_CHAR (f.act_month, 'mm') = st.m
                            AND DECODE ( :st, 0, 0, 1) = 0
                   GROUP BY f.act_month, st.tp_kod) act,
-                 (  SELECT TRUNC (z.dt_start, 'mm') period,
+                 (  SELECT z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/ period,
                            tp.tp_kod,
                            SUM (tp.bonus_sum) bonus_sum
                       FROM bud_ru_zay z, akcii_local_tp tp
@@ -81,27 +81,27 @@ SELECT COUNT (*) c,
                            AND z.valid_no = 0
                            AND (SELECT rep_accepted
                                   FROM bud_ru_zay_accept
-                                 WHERE     z_id = z.id
+                                 WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
                                        AND accept_order =
                                               DECODE (
                                                  NVL (
                                                     (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
                                                       WHERE     z_id = z.id
-                                                            AND rep_accepted = 2),
+                                                            AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
                                                     0),
                                                  0, (SELECT MAX (accept_order)
                                                        FROM bud_ru_zay_accept
                                                       WHERE     z_id = z.id
                                                             AND rep_accepted
-                                                                   IS NOT NULL),
+                                                                   IS NOT NULL AND INN_not_ReportMA (tn) = 0),
                                                  (SELECT MAX (accept_order)
                                                     FROM bud_ru_zay_accept
                                                    WHERE     z_id = z.id
-                                                         AND rep_accepted = 2))) =
+                                                         AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0))) =
                                   1
                            AND DECODE ( :st, 0, z.st, :st) = z.st
-                  GROUP BY TRUNC (z.dt_start, 'mm'), tp.tp_kod) act_local,
+                  GROUP BY z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/, tp.tp_kod) act_local,
                  (  SELECT period, SUM (z_fakt) zat, tp_kod
                       FROM (SELECT TRUNC (z1.dt_start, 'mm') period,
                                    (SELECT rep_val_number * 1000
