@@ -84,7 +84,7 @@
                                WHERE id = z.kat) = 1
                          AND z.tn = u.tn
                          AND u.dpt_id = :dpt_id
-                         AND TO_DATE ( :dt, 'dd.mm.yyyy') = z.cost_assign_month /*BETWEEN TRUNC (z.dt_start, 'mm') AND TRUNC (z.dt_end, 'mm')*/
+                         AND TO_DATE ( :dt, 'dd.mm.yyyy') /*= z.cost_assign_month*/ BETWEEN TRUNC (z.dt_start, 'mm') AND TRUNC (z.dt_end, 'mm')
                          AND z.report_data IS NOT NULL
                          AND (SELECT rep_accepted
                                 FROM bud_ru_zay_accept
@@ -108,7 +108,7 @@
                                  WHERE id = z.kat) = 1
                            AND z.tn = u.tn
                            AND u.dpt_id = :dpt_id
-                           AND TO_DATE ( :dt, 'dd.mm.yyyy') = z.cost_assign_month /*BETWEEN TRUNC (z.dt_start, 'mm') AND TRUNC (z.dt_end, 'mm')*/
+                           AND TO_DATE ( :dt, 'dd.mm.yyyy') /*= z.cost_assign_month*/ BETWEEN TRUNC (z.dt_start, 'mm') AND TRUNC (z.dt_end, 'mm')
                            AND z.report_data IS NOT NULL
                            AND (SELECT rep_accepted
                                   FROM bud_ru_zay_accept

@@ -556,8 +556,8 @@
                                          WHERE id = z.kat) = 1
                                    AND z.tn = u.tn
                                    AND u.dpt_id = :dpt_id
-                                   /*AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy') AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')*/
-                                   AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
+                                   AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy') AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')
+                                   /*AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')*/
                                    AND z.report_data IS NOT NULL
                                    AND (SELECT rep_accepted
                                           FROM bud_ru_zay_accept
@@ -659,8 +659,8 @@
                                                      WHERE id = z.kat) = 1
                                                AND z.tn = u.tn
                                                AND u.dpt_id = :dpt_id
-                                               /*AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy') AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')*/
-                                               AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
+                                               AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy') AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')
+                                               /*AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')*/
                                                AND z.report_data IS NOT NULL
                                                AND (SELECT rep_accepted
                                                       FROM bud_ru_zay_accept
