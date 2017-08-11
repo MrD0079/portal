@@ -26,7 +26,7 @@
 {elseif $smarty.request.select_promoter}
     <option></option>
     {foreach key=k item=i from=$x name=x}
-    <option value="{$i.tn}">{$i.fio}</option>
+    <option value="{$i.login}">{$i.fio}</option>
     {/foreach}
 {elseif $smarty.request.select_nets}
     <option></option>

@@ -34,12 +34,16 @@ if (isset($_REQUEST["save"]))
 			//echo $k."<br>";
 			foreach ($v as $k1 => $v1)
 			{
-				//echo $k1."<br>";
-				$keys = array('id'=>$k1);
-				$values = array($k=>$v1);
-				//print_r($keys);
-				//print_r($values);
-				Table_Update ($table_name, $keys, $values);
+                            $reportAlreadyConfirmed = $db->getOne("SELECT getMerchReportSvmsOkById (".$k1.") FROM DUAL");
+                            if ($reportAlreadyConfirmed==0)
+                            {
+                                //echo $k1."<br>";
+                                $keys = array('id'=>$k1);
+                                $values = array($k=>$v1);
+                                //print_r($keys);
+                                //print_r($values);
+                                Table_Update ($table_name, $keys, $values);
+                            }
 			}
 		}
 	}

@@ -13,9 +13,10 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["sz_accept"] as $k=>$v)
 		{
 			$cnt = $db->getOne('select count(*) from sz_accept where id='.$k);
-			if ($cnt==1)
+			$already_accepted = $db->getOne('select count(*) from sz_accept where id='.$k.' AND accepted IN (1, 2)');
+			if ($cnt==1&&$already_accepted==0)
 			{
-				Table_Update("sz_accept",array("id"=>$k),$v);
+                                Table_Update("sz_accept",array("id"=>$k),$v);
 				$sql=rtrim(file_get_contents('sql/sz_accept_sz_head.sql'));
 				$params=array(':accept_id' => $k);
 				$sql=stritr($sql,$params);

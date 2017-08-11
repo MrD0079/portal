@@ -39,8 +39,8 @@ if (isset($_REQUEST["select_tasting"])){
                                          FROM ms_nets n, cpp c
                                         WHERE     c.id_net = n.id_net
                                               AND c.kodtp = '".$_REQUEST["id_tp"]."')))
-            AND datauvol IS NULL)
-            AND '".$_REQUEST["id_tp"]."' <> 0
+            )
+            AND datauvol IS NULL AND '".$_REQUEST["id_tp"]."' <> 0
 ORDER BY fio";
     echo $sql;
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

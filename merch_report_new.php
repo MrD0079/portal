@@ -60,10 +60,14 @@ if (isset($_REQUEST["save"]))
 		{
 			foreach ($v as $k1 => $v1)
 			{
-				$keys = array('rb_id'=>$k1,'dt'=>OraDate2MDBDate($_REQUEST["dates_list"]));
-				$values = array($k=>$v1);
+                            $reportAlreadyConfirmed = $db->getOne("SELECT getMerchReportSvmsOkByRBandDT (".$k1.", TO_DATE ('".$_REQUEST["dates_list"]."', 'dd.mm.yyyy')) FROM DUAL");
+                            if ($reportAlreadyConfirmed==0)
+                            {
+                                $keys = array('rb_id'=>$k1,'dt'=>OraDate2MDBDate($_REQUEST["dates_list"]));
+                                $values = array($k=>$v1);
                                 //echo "TABLE=".$table_name."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values)."<br>";
-				Table_Update ($table_name, $keys, $values);
+                                Table_Update ($table_name, $keys, $values);
+                            }
 			}
 		}
 	}

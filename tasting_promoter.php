@@ -1,15 +1,15 @@
 <?
 if (isset($_REQUEST["get_promoter"])){
-    $params=array(':id' => $_REQUEST["id_t"], ':tp' => $_REQUEST["id_tp"],':promoter'=>$_REQUEST["promoter"]);
+    $params=array(':id' => $_REQUEST["id_t"], ':tp' => $_REQUEST["id_tp"],':promoter'=>"'".$_REQUEST["promoter"]."'");
     //$sql = "SELECT t.* FROM tasting_promoter t WHERE t.t_id = :id AND t.tp = :tp";
-    $sql = "SELECT fio from user_list where tn = :promoter";
+    $sql = "SELECT fio from spr_users_ms where login = :promoter";
     $sql = stritr($sql,$params);
     //echo $sql;
     //$r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $r = $db->getOne($sql);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["list_promoter"])){
-    $sql = "select promoter from tasting_promoter where t_id=".$_REQUEST["id_t"]." and tp=".$_REQUEST["id_tp"];
+    $sql = "select promoter from tasting_promoter where t_id='".$_REQUEST["id_t"]."' and tp='".$_REQUEST["id_tp"]."'";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_tasting"])){
@@ -34,26 +34,9 @@ if (isset($_REQUEST["get_promoter"])){
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_promoter"])){
-    $sql = "SELECT tn,
-         fio,
-         pos_id,
-         pos_name,
-         is_mkk,
-         is_mkk_new,
-         is_tm
-    FROM user_list
-   WHERE  (  is_tm = 1
-         OR pos_id IN (69)
-         OR     (    1 IN (is_mkk, is_mkk_new)
-                 AND tn IN (SELECT slave
-                              FROM full
-                             WHERE master =
-                                      (SELECT n.tn_tmkk
-                                         FROM ms_nets n, cpp c
-                                        WHERE     c.id_net = n.id_net
-                                              AND c.kodtp = '".$_REQUEST["id_tp"]."')))
-            AND datauvol IS NULL)
-            AND '".$_REQUEST["id_tp"]."' <> 0
+    $sql="SELECT login, fio
+    FROM spr_users_ms
+   WHERE pos_id IN (127968517) AND datauvol IS NULL AND '".$_REQUEST["id_tp"]."' <> 0
 ORDER BY fio";
     //echo $sql;
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
