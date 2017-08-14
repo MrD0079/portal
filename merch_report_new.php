@@ -61,7 +61,8 @@ if (isset($_REQUEST["save"]))
 			foreach ($v as $k1 => $v1)
 			{
                             $reportAlreadyConfirmed = $db->getOne("SELECT getMerchReportSvmsOkByRBandDT (".$k1.", TO_DATE ('".$_REQUEST["dates_list"]."', 'dd.mm.yyyy')) FROM DUAL");
-                            if ($reportAlreadyConfirmed==0)
+                            $cnt = $db->getOne('select count(*) from merch_report where id='.$k1);
+                            if ($cnt==1&&$reportAlreadyConfirmed==0)
                             {
                                 $keys = array('rb_id'=>$k1,'dt'=>OraDate2MDBDate($_REQUEST["dates_list"]));
                                 $values = array($k=>$v1);

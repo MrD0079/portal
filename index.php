@@ -23,6 +23,19 @@ $smarty->assign('now_time', $now_time);
 $smarty->assign('now_date_time', $now_date_time);
 $smarty->assign('yesterday', $yesterday);
 $smarty->assign('yesterdayJS', $yesterdayJS);
+
+
+$times=array();
+for ($h=0;$h<24;$h++)
+{
+	for ($m=0;$m<6;$m++)
+	{
+		$times[]=substr('0'.$h,-2,2).'-'.substr('0'.($m*10),-2,2);
+	}
+}
+$smarty->assign('times', $times);
+
+
 InitRequestVar('remote_addr',$_SERVER["REMOTE_ADDR"]);
 $smarty->assign('remote_addr', $_SERVER["REMOTE_ADDR"]);
 isset($_REQUEST['action']) ? $action = $_REQUEST['action'] : $action = null;

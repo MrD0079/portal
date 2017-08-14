@@ -13,7 +13,17 @@ if (isset($_REQUEST["get_promoter"])){
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_tasting"])){
-    $sql = "SELECT t.*, TO_CHAR (t.dt, 'dd.mm.yyyy') dt FROM tasting t";
+    $sql = "SELECT t.*, TO_CHAR (t.dt, 'dd.mm.yyyy') dt FROM tasting t"
+            . " WHERE dt >= TRUNC (SYSDATE) and program_id = '".$_REQUEST["id_program"]."'"
+            . " and t.dt=to_date('".$_REQUEST["id_dt"]."','dd.mm.yyyy')";
+    $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
+} else if (isset($_REQUEST["select_tasting_program"])){
+    $sql = "SELECT * FROM tasting_program ORDER BY name";
+    $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
+} else if (isset($_REQUEST["select_tasting_program_dates"])){
+    $sql = "SELECT distinct TO_CHAR (t.dt, 'dd.mm.yyyy') dt FROM tasting t WHERE program_id = '".$_REQUEST["id_program"]."' ORDER BY dt";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_nets"])){

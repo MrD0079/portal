@@ -1,0 +1,89 @@
+{if $smarty.request.save_tasting_program}
+{elseif $smarty.request.id or $smarty.request.new_tasting_program}
+    <form name=form_tasting_program id=form_tasting_program target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_program">
+    <h1>{$smarty.request.id}</h1>
+    <table border="1" id="tasting_program">
+        <tr>
+            <td>Название</td><td><input id=tasting_program_name name=tasting_program[name] value="{$tasting_program.name}" size="50"></td>
+        </tr>
+        <tr>
+            <td>Плановый бюджет, {$valuta}</td><td><input id=tasting_program_budjet name=tasting_program[budjet] value="{$tasting_program.budjet}" class="number_int"></td>
+        </tr>
+        <tr>
+            <td>Программа закрыта</td><td><input id=tasting_program_closed name=tasting_program[closed] value="{$tasting_program.closed}" class="number_int_01"></td>
+        </tr>
+    </table>
+    </form>
+    <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting_program('{$smarty.request.id}');"></p>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    function save_tasting_program(id){
+        console.clear();
+        var bad_data = false;
+        var error_text = '';
+        if (!$('#tasting_program_name').val()){
+            console.log("tasting_program name is empty");
+            bad_data = true;
+            error_text = error_text + 'Название не заполнено'+'<br>';
+        }
+        if (!$('#tasting_program_budjet').val()){
+            console.log("tasting_program name is empty");
+            bad_data = true;
+            error_text = error_text + 'Бюджет не заполнен'+'<br>';
+        }
+        if (bad_data) {
+            errorNoty('Ошибка сохранения'+'<br>'+error_text);
+            return;
+        }
+        $('#button_save').prop("disabled",true);
+        var fd = new FormData(document.getElementById('form_tasting_program'));
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_program&id='+id+'&save_tasting_program=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    $('#button_save').prop("disabled",false);
+                    successNoty("Сохранено");
+		}
+	});
+    }
+    /*{/literal}*/
+    </script>
+{elseif $smarty.request.list_tasting_program}
+    <table border="1">
+    <tr style="font-weight:bold; text-align:center">
+    <td>№ п/п</td>
+    <td>Название</td>
+    <td>Плановый бюджет, {$valuta}</td>
+    <td>Программа закрыта</td>
+    <td>{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting_program&new_tasting_program=1">добавить</a>{/if}</td>
+    </tr>
+    {foreach key=k item=i from=$x name=x}
+    <tr>
+    <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+    <td>{$i.name}</td>
+    <td style="text-align:right">{$i.budjet|num:0}</td>
+    <td style="text-align:center">{if $i.closed}да{/if}</td>
+    <td style="text-align:center">{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting_program&id={$i.id}">редактировать</a>{/if}</td>
+    </tr>
+    {/foreach}
+    </table>
+{else}
+    <h1>Дегустационные программы</h1>
+    <p><input type="button" value="Показать данные" onClick="load_list_tasting_program();"></p>
+    <div id="list_tasting_program" style="display: inline;"></div>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    function load_list_tasting_program()
+    {
+        $('#list_tasting_program').load('?action=tasting_program&list_tasting_program=1&nohead=1');
+    }
+    /*{/literal}*/
+    load_list_tasting_program();
+    </script>
+{/if}

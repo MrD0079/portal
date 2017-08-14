@@ -1,0 +1,254 @@
+{if $smarty.request.select_tasting}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tasting_program}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tasting_program_dates}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.dt}">{$i.dt}</option>
+    {/foreach}
+{elseif $smarty.request.select_promoter_presence}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_buyers_interest}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_product_presence}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_nets}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id_net}">{$i.net_name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tp}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.kodtp}">{$i.tz_oblast} {$i.ur_tz_name} {$i.tz_address}</option>
+    {/foreach}
+{elseif $smarty.request.get_data}
+
+{foreach key=k item=i from=$x name=x}
+    $('#{$k}').val('{$i}');
+{/foreach}
+    
+{elseif $smarty.request.save_data}
+{elseif $smarty.request.select_time}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{else}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_control_list">
+    <h1>Лист Контроль</h1>
+    <table border="1" id="table">
+        <tr>
+            <td>Дегустационная программа</td>
+            <td><select name=tasting_program id=tasting_program></select></td>
+        </tr>
+        <tr>
+            <td>Даты проведения дегустаций</td>
+            <td><select name=tasting_program_dates id=tasting_program_dates></select></td>
+        </tr>
+        <tr>
+            <td>Название</td>
+            <td><select name=tasting id=tasting></select></td>
+        </tr>
+        <tr>
+            <td>Сеть</td>
+            <td><select name=nets id=nets></select></td>
+        </tr>
+        <tr>
+            <td>ТЗ</td>
+            <td><select name=tp id=tp></select></td>
+        </tr>
+    </table>
+    <h1>Ввод данных по ТП</h1>
+    <table border="1" id="table_detail">
+        <tr style="font-weight: bold">
+            <td style="text-align:right"></td>
+            <td></td>
+            <td>Комментарий</td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Время посещения торгового зала</td>
+            <td>
+                <select name=tp_detail[visit_time] id=visit_time>
+                    <option></option>
+                    {foreach key=kt item=ki from=$times}
+                    <option value='{$ki}'>{$ki}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Наличие промоутера на соответствующем месте</td>
+            <td><select name=tp_detail[promoter_presence] id=promoter_presence></select></td>
+            <td><input name=tp_detail[promoter_presence_comm] id=promoter_presence_comm></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Активность</td>
+            <td><select name=tp_detail[activity] id=activity><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
+            <td><input name=tp_detail[activity_comm] id=activity_comm></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Внешний вид</td>
+            <td><select name=tp_detail[appearance] id=appearance><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
+            <td><input name=tp_detail[appearance_comm] id=appearance_comm></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Знание промо-текста</td>
+            <td><select name=tp_detail[text_knowledge] id=text_knowledge><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
+            <td><input name=tp_detail[text_knowledge_comm] id=text_knowledge_comm></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Заинтересованность покупателей</td>
+            <td><select name=tp_detail[buyers_interest] id=buyers_interest></select></td>
+            <td><input name=tp_detail[buyers_interest_comm] id=buyers_interest_comm></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Наличие дегустационного продукта на полке</td>
+            <td><select name=tp_detail[product_presence] id=product_presence></select></td>
+            <td><input name=tp_detail[product_presence_comm] id=product_presence_comm></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Замечания (комментарии)</td>
+            <td></td>
+            <td><input name=tp_detail[comm] id=comm></td>
+        </tr>
+    </table>
+    </form>
+    <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting();"></p>
+    <div id=ok></div>
+    <script>
+    /*{literal}*/
+    function load_tasting_program(){
+        $('#tasting_program').load('?action=tasting_control_list&nohead=1&select_tasting_program=1',{
+        },function() {$('#tasting_program').change();});
+    }
+    function load_tasting_program_dates(){
+        $('#tasting_program_dates').load('?action=tasting_control_list&nohead=1&select_tasting_program_dates=1',{
+            id_program:$('#tasting_program').val()
+        },function() {$('#tasting_program_dates').change();});
+    }
+    function load_tasting(){
+        $('#tasting').load('?action=tasting_control_list&nohead=1&select_tasting=1',{
+            id_program:$('#tasting_program').val(),
+            id_dt:$('#tasting_program_dates').val()
+        },function() {$('#tasting').change();});
+    }
+    function load_nets(){
+        $('#nets').load('?action=tasting_control_list&nohead=1&select_nets=1',{
+            id_t:$('#tasting').val()
+        },function() {$('#nets').change();});
+    }
+    function load_tp(){
+        $('#tp').load('?action=tasting_control_list&nohead=1&select_tp=1',{
+            id_t:$('#tasting').val(),
+            id_net:$('#nets').val()
+        },function(){$('#tp').change();});
+    }
+    function load_data(){
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_control_list&nohead=1&get_data=1'
+                    +'&id_t='+$('#tasting').val()
+                    +'&id_tp='+$('#tp').val(),
+		//data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    eval(data);
+                    //console.log(data);
+                    //$('#button_save').prop("disabled",false);
+                    //successNoty("Сохранено");
+		}
+	});
+        /*$('#new_controller').load('?action=tasting_control_list&nohead=1&select_new_controller=1',{
+            id_t:$('#tasting').val(),
+            id_tp:$('#tp').val()
+        },function(data){
+            console.log(now());
+            console.log(data);
+        });*/
+    }
+    $('#tasting_program').on("change",function(){load_tasting_program_dates();});
+    $('#tasting_program_dates').on("change",function(){load_tasting();});
+    $('#tasting').on("change",function(){load_nets();});
+    $('#nets').on("change",function(){load_tp();});
+    $('#tp').on("change",function(){load_data();});
+    load_tasting_program();
+    $('#promoter_presence').load('?action=tasting_control_list&nohead=1&select_promoter_presence=1');
+    $('#buyers_interest').load('?action=tasting_control_list&nohead=1&select_buyers_interest=1');
+    $('#product_presence').load('?action=tasting_control_list&nohead=1&select_product_presence=1');
+    function save_tasting(){
+        var bad_data = false;
+        var error_text = '';
+        if (!$('#tp').val()){
+            bad_data = true;
+            error_text = error_text + 'ТЗ не выбран'+'<br>';
+        }
+        if (!$('#visit_time').val()){
+            bad_data = true;
+            error_text = error_text + 'Время посещения торгового зала не выбрано'+'<br>';
+        }
+        if (!$('#promoter_presence').val()){
+            bad_data = true;
+            error_text = error_text + 'Наличие промоутера на соответствующем месте не выбрано'+'<br>';
+        }
+        if (!$('#activity').val()){
+            bad_data = true;
+            error_text = error_text + 'Активность не выбрана'+'<br>';
+        }
+        if (!$('#appearance').val()){
+            bad_data = true;
+            error_text = error_text + 'Внешний вид не выбран'+'<br>';
+        }
+        if (!$('#text_knowledge').val()){
+            bad_data = true;
+            error_text = error_text + 'Знание промо-текста не выбрано'+'<br>';
+        }
+        if (!$('#buyers_interest').val()){
+            bad_data = true;
+            error_text = error_text + 'Заинтересованность покупателей не выбрана'+'<br>';
+        }
+        if (!$('#product_presence').val()){
+            bad_data = true;
+            error_text = error_text + 'Наличие дегустационного продукта на полке не выбрано'+'<br>';
+        }
+        if (bad_data) {
+            errorNoty('Ошибка сохранения'+'<br>'+error_text);
+            return;
+        }
+        $('#button_save').prop("disabled",true);
+        var fd = new FormData(document.getElementById('form_tasting'));
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_control_list&save_data=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    //console.log(data);
+                    $('#button_save').prop("disabled",false);
+                    successNoty("Сохранено");
+		}
+	});
+    }
+    /*{/literal}*/
+    </script>
+{/if}

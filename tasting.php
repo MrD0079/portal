@@ -35,6 +35,10 @@ if (isset($_REQUEST["get_tp"])){
     $sql = "select tp from tasting_tp where t_id='".$_REQUEST["id"]."'";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
+} else if (isset($_REQUEST["select_tasting_program"])){
+    $sql = "SELECT * FROM tasting_program ORDER BY name";
+    $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_svms"])){
     $sql = "SELECT tn, fio FROM user_list WHERE pos_id = 127707110 AND datauvol IS NULL ORDER BY fio";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -53,13 +57,18 @@ if (isset($_REQUEST["get_tp"])){
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["list_files"])){
 } else if (isset($_REQUEST["list_tasting"])){
-    $sql = "SELECT t.*,
-       TO_CHAR (t.dt, 'dd.mm.yyyy') dt,
-       (SELECT COUNT (*)
-          FROM tasting_tp
-         WHERE t_id = t.id)
-          tp_cnt
-  FROM tasting t";
+    $sql = "
+                SELECT t.*,
+                TO_CHAR (t.dt, 'dd.mm.yyyy') dt,
+                (SELECT COUNT (*)
+                FROM tasting_tp
+                WHERE t_id = t.id)
+                tp_cnt,
+                p.name tasting_program_name
+                FROM tasting t, tasting_program p
+                WHERE t.program_id = p.id(+)
+                ORDER BY p.name, t.dt
+            ";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["save_tasting"])){

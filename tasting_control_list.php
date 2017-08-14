@@ -30,38 +30,31 @@ if (isset($_REQUEST["select_tasting"])){
     ORDER BY n.net_name";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
-} else if (isset($_REQUEST["select_new_controller"])){
-    $sql = "SELECT tn,
-         fio,
-         pos_id,
-         pos_name,
-         is_mkk,
-         is_mkk_new,
-         is_tm
-    FROM user_list
-   WHERE  (  is_tm = 1
-         OR pos_id IN (69)
-         OR     (    1 IN (is_mkk, is_mkk_new)
-                 AND tn IN (SELECT slave
-                              FROM full
-                             WHERE master =
-                                      (SELECT n.tn_tmkk
-                                         FROM ms_nets n, cpp c
-                                        WHERE     c.id_net = n.id_net
-                                              AND c.kodtp = '".$_REQUEST["id_tp"]."')))
-            )
-            AND datauvol IS NULL AND '".$_REQUEST["id_tp"]."' <> 0
-ORDER BY fio";
-    echo $sql;
+} else if (isset($_REQUEST["select_time"])){
+} else if (isset($_REQUEST["select_promoter_presence"])){
+    $sql = "SELECT id, name FROM tasting_lists WHERE parent = (SELECT id FROM tasting_lists WHERE name = 'promoter_presence') ORDER BY name";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
-} else if (isset($_REQUEST["save_controller"])){
+} else if (isset($_REQUEST["select_buyers_interest"])){
+    $sql = "SELECT id, name FROM tasting_lists WHERE parent = (SELECT id FROM tasting_lists WHERE name = 'buyers_interest') ORDER BY name";
+    $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
+} else if (isset($_REQUEST["select_product_presence"])){
+    $sql = "SELECT id, name FROM tasting_lists WHERE parent = (SELECT id FROM tasting_lists WHERE name = 'product_presence') ORDER BY name";
+    $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
+} else if (isset($_REQUEST["get_data"])){
+    $sql = "SELECT * FROM tasting_tp WHERE  t_id = '".$_REQUEST["id_t"]."' AND tp= '".$_REQUEST["id_tp"]."'";
+    //echo $sql;
+    $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    //print_r($r);
+    $smarty->assign('x', $r);
+} else if (isset($_REQUEST["save_data"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     Table_Update('tasting_tp', array(
         "t_id"=>$_REQUEST["tasting"],
         "tp"=>$_REQUEST["tp"]
-        ),array("new_controller"=>$_REQUEST["new_controller"]));
+        ),$_REQUEST["tp_detail"]);
     //print_r($_REQUEST);
-    //print_r($_FILES);
 }
-$smarty->display('tasting_controller.html');
+$smarty->display('tasting_control_list.html');

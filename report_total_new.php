@@ -35,7 +35,8 @@ if (isset($_REQUEST["save"]))
 			foreach ($v as $k1 => $v1)
 			{
                             $reportAlreadyConfirmed = $db->getOne("SELECT getMerchReportSvmsOkById (".$k1.") FROM DUAL");
-                            if ($reportAlreadyConfirmed==0)
+                            $cnt = $db->getOne('select count(*) from merch_report where id='.$k1);
+                            if ($cnt==1&&$reportAlreadyConfirmed==0)
                             {
                                 //echo $k1."<br>";
                                 $keys = array('id'=>$k1);

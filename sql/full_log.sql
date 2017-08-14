@@ -10,7 +10,7 @@ SELECT *
                  prg
             FROM :table l
            WHERE     (LENGTH ( :prg) IS NULL OR prg LIKE :prg)
-                 AND TRUNC (lu) BETWEEN TO_DATE ( :dates_list1, 'dd.mm.yyyy')
+                 AND lu_dt BETWEEN TO_DATE ( :dates_list1, 'dd.mm.yyyy')
                                     AND TO_DATE ( :dates_list2, 'dd.mm.yyyy')
         ORDER BY ID DESC)
  WHERE    rn BETWEEN :r1 AND :r2

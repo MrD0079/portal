@@ -1,1 +1,0 @@
-select distinct prg from full_log order by prg

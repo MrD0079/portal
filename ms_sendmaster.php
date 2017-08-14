@@ -20,15 +20,6 @@ foreach ($rb as $k=>$v)
 }
 $smarty->assign('list', $rb);
 
-$times=array();
-for ($h=0;$h<24;$h++)
-{
-	for ($m=0;$m<6;$m++)
-	{
-		$times[]=substr('0'.$h,-2,2).'-'.substr('0'.($m*10),-2,2);
-	}
-}
-$smarty->assign('times', $times);
 
 $sql = rtrim(file_get_contents('sql/calendar_week_days.sql'));
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

@@ -547,10 +547,12 @@ $text.="<p>Руководитель ЭТА - ".$chief["fio"].", ".$chief["dpt_name"].", ".$chie
 send_mail($parameters["eta_inform"]["val_string"],$subj,$text,null,false);
 }
 
-$sql=rtrim(file_get_contents('sql/error.sql'));
-$data = $db->getOne($sql);
-$smarty->assign('error', $data);
-
+if ($is_admin==1 && $tn==2885600038)
+{
+    $sql=rtrim(file_get_contents('sql/error.sql'));
+    $data = $db->getOne($sql);
+    $smarty->assign('error', $data);
+}
 $smarty->display('main.html');
 
 ?>

@@ -1,5 +1,5 @@
 {if $smarty.request.list_tp}
-    <table border=1 id="table_tp">
+    <table border="1" id="table_tp">
         <tr style="font-weight:bold; text-align:center">
             <td></td>
             <td>№ п/п</td>
@@ -46,6 +46,11 @@
         <td style="text-align:left">{$x.new_controller_fio}</td>
         <input type="hidden" class="iter_tp_hidden" name=iter_tp_hidden[] value="{$x.tp}">
     </tr>
+{elseif $smarty.request.select_tasting_program}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
 {elseif $smarty.request.select_svms}
     <option></option>
     {foreach key=k item=i from=$x name=x}
@@ -70,6 +75,21 @@
     <table border="1" id="tasting">
         <tr>
             <td>Название</td><td><input id=tasting_name name=tasting[name] value="{$tasting.name}" size="50"></td>
+        </tr>
+        <tr>
+            <td>Дегустационная программа</td><td>
+            <select id=tasting_program_id name=tasting[program_id]></select>
+                <script>
+                    $('#tasting_program_id')
+                        .load(
+                            '?action=tasting&nohead=1&select_tasting_program=1',
+                            /*{literal}*/{}/*{/literal}*/,
+                            function() /*{literal}*/{/*{/literal}*/
+                                $('#tasting_program_id').val('{$tasting.program_id}')
+                            /*{literal}*/}/*{/literal}*/
+                        );
+                </script>
+            </td>
         </tr>
         <tr>
             <td>Дата проведения</td><td><input id=tasting_dt name=tasting[dt] value="{$tasting.dt}" class="datepicker"></td>
@@ -144,8 +164,7 @@
     $('#select_nets').load('?action=tasting&nohead=1&select_nets=1');
     function load_list_tp(id)
     {
-        x=loadwait_show('list_tp');
-        $('#list_tp').load('?action=tasting&id='+id+'&list_tp=1&nohead=1',{},function() {loadwait_hide(x);});
+        $('#list_tp').load('?action=tasting&id='+id+'&list_tp=1&nohead=1');
     }
     function add_tp(id,tp){
         if (tp==null||tp==''){
@@ -180,6 +199,11 @@
         console.clear();
         var bad_data = false;
         var error_text = '';
+        if (!$('#tasting_program_id').val()){
+            console.log("tasting_program_id is empty");
+            bad_data = true;
+            error_text = error_text + 'Дегустационная программа не выбрана'+'<br>';
+        }
         if (!$('#tasting_name').val()){
             console.log("tasting name is empty");
             bad_data = true;
@@ -250,9 +274,10 @@
     var del_files = [];
     </script>
 {elseif $smarty.request.list_tasting}
-    <table border=1>
+    <table border="1">
     <tr style="font-weight:bold; text-align:center">
     <td>№ п/п</td>
+    <td>Дегустационная программа</td>
     <td>Название</td>
     <td>дата проведения</td>
     <td>Описание</td>
@@ -264,6 +289,7 @@
     {foreach key=k item=i from=$x name=x}
     <tr>
     <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+    <td>{$i.tasting_program_name}</td>
     <td>{$i.name}</td>
     <td style="text-align:center">{$i.dt}</td>
     <td>{$i.descr}</td>
@@ -290,8 +316,7 @@
     /*{literal}*/
     function load_list_tasting()
     {
-        x=loadwait_show('list_tasting');
-        $('#list_tasting').load('?action=tasting&list_tasting=1&nohead=1',{},function() {loadwait_hide(x);});
+        $('#list_tasting').load('?action=tasting&list_tasting=1&nohead=1');
     }
     /*{/literal}*/
     load_list_tasting();

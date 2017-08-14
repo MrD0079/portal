@@ -3,6 +3,16 @@
     {foreach key=k item=i from=$x name=x}
     <option value="{$i.id}">{$i.name}</option>
     {/foreach}
+{elseif $smarty.request.select_tasting_program}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.select_tasting_program_dates}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.dt}">{$i.dt}</option>
+    {/foreach}
 {elseif $smarty.request.select_new_controller}
     <option></option>
     {foreach key=k item=i from=$x name=x}
@@ -25,6 +35,14 @@
     <h1>Изменить контролера по Дегустации</h1>
     <table border="1" id="table_controller">
         <tr>
+            <td>Дегустационная программа</td>
+            <td><select name=tasting_program id=tasting_program></select></td>
+        </tr>
+        <tr>
+            <td>Даты проведения дегустаций</td>
+            <td><select name=tasting_program_dates id=tasting_program_dates></select></td>
+        </tr>
+        <tr>
             <td>Название</td>
             <td><select name=tasting id=tasting></select></td>
         </tr>
@@ -46,30 +64,46 @@
     <div id=ok></div>
     <script>
     /*{literal}*/
+    function load_tasting_program(){
+        $('#tasting_program').load('?action=tasting_controller&nohead=1&select_tasting_program=1',{
+        },function() {$('#tasting_program').change();});
+    }
+    function load_tasting_program_dates(){
+        $('#tasting_program_dates').load('?action=tasting_controller&nohead=1&select_tasting_program_dates=1',{
+            id_program:$('#tasting_program').val()
+        },function() {$('#tasting_program_dates').change();});
+    }
+    function load_tasting(){
+        $('#tasting').load('?action=tasting_controller&nohead=1&select_tasting=1',{
+            id_program:$('#tasting_program').val(),
+            id_dt:$('#tasting_program_dates').val()
+        },function() {$('#tasting').change();});
+    }
     function load_nets(){
-        $('#nets').load('?action=tasting_controller&nohead=1&select_nets=1&id_t='+$('#tasting').val(),{},function() {
-            load_tp();
-        });
+        $('#nets').load('?action=tasting_controller&nohead=1&select_nets=1',{
+            id_t:$('#tasting').val()
+        },function() {$('#nets').change();});
     }
     function load_tp(){
-        $('#tp').load('?action=tasting_controller&nohead=1&select_tp=1&id_t='+$('#tasting').val()+'&id_net='+$('#nets').val(),{},function(){
-            load_controller();
-        });
+        $('#tp').load('?action=tasting_controller&nohead=1&select_tp=1',{
+            id_t:$('#tasting').val(),
+            id_net:$('#nets').val()
+        },function(){$('#tp').change();});
     }
     function load_controller(){
-        $('#new_controller').load('?action=tasting_controller&nohead=1&select_new_controller=1&id_t='+$('#tasting').val()+'&id_net='+$('#nets').val()+'&id_tp='+$('#tp').val());
+        $('#new_controller').load('?action=tasting_controller&nohead=1&select_new_controller=1',{
+            id_t:$('#tasting').val(),
+            id_net:$('#nets').val(),
+            id_tp:$('#tp').val()
+        });
     }
+    $('#tasting_program').on("change",function(){load_tasting_program_dates();});
+    $('#tasting_program_dates').on("change",function(){load_tasting();});
     $('#tasting').on("change",function(){load_nets();});
     $('#nets').on("change",function(){load_tp();});
     $('#tp').on("change",function(){load_controller();});
-    $('#tasting').load('?action=tasting_controller&nohead=1&select_tasting=1',{},function(){
-        load_nets();
-    });
+    load_tasting_program();
     function save_tasting(){
-        if (!$('#tasting').val()||!$('#tp').val()){
-            errorNoty('Ошибка сохранения'+'<br>'+'Не выбрано название или ТЗ');
-            return;
-        }
         $('#button_save').prop("disabled",true);
         var fd = new FormData(document.getElementById('form_tasting'));
         $.ajax({
