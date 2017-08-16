@@ -7,7 +7,7 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["obl_add"] as $k=>$v)
 		{
 			$vals=array("login"=>$_REQUEST["login"],"id_net"=>$v);
-			$affectedRows = $db->extended->autoExecute($table_name, $vals, MDB2_AUTOQUERY_INSERT);
+			Table_Update($table_name, $vals, $vals );
 		}
 	}
 	if (isset($_REQUEST["obl_del"]))
@@ -15,7 +15,7 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["obl_del"] as $k=>$v)
 		{
 			$vals=array("login"=>$_REQUEST["login"],"id_net"=>$v);
-			$affectedRows = $db->extended->autoExecute($table_name, null, MDB2_AUTOQUERY_DELETE, "id_net='".$v."' and login='".$_REQUEST["login"]."'");
+                        Table_Update($table_name, $vals,null);
 		}
 	}
 }

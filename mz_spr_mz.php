@@ -10,17 +10,12 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 {
 	foreach ($_REQUEST["data"] as $k=>$v)
 	{
-
-
-	foreach ($v as $k1=>$v1)
-	{
-		if ($k1=="dataz")
-		$v[$k1]=init_data($v1);
-	}
-
-
-
-		Table_Update("mz_spr_mz", array("id"=>$k),$v);
+            foreach ($v as $k1=>$v1)
+            {
+                    if ($k1=="dataz")
+                    $v[$k1]=init_data($v1);
+            }
+            Table_Update("mz_spr_mz", array("id"=>$k),$v);
 	}
 }
 
@@ -28,15 +23,15 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 
 if (isset($_REQUEST["del"]))
 {
-	foreach ($_REQUEST["del"] as $k=>$v)
-	{
-		$db->extended->autoExecute("mz_spr_mz", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
-	}
+    foreach ($_REQUEST["del"] as $k=>$v)
+    {
+        Table_Update("mz_spr_mz", array('id'=>$k),null);
+    }
 }
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("mz_spr_mz", array("name"=>$_REQUEST["new_name"]), MDB2_AUTOQUERY_INSERT);
+	Table_Update("mz_spr_mz", array("name"=>$_REQUEST["new_name"]), array("name"=>$_REQUEST["new_name"]));
 }
 
 $sql=rtrim(file_get_contents('sql/mz_spr_mz.sql'));

@@ -20,14 +20,13 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("tr", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+		Table_Update("tr", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("tr",
-		array
+	Table_Update("tr",array
 		(
 			"name"=>$_REQUEST["new_name"],
 			"for_eta"=>$_REQUEST["new_for_eta"],
@@ -37,7 +36,17 @@ if (isset($_REQUEST["new"]))
 			"days"=>$_REQUEST["new_days"],
 			"test_len"=>$_REQUEST["new_test_len"],
 			"text" => $_REQUEST["new_text"]
-		), MDB2_AUTOQUERY_INSERT);
+		),array
+		(
+			"name"=>$_REQUEST["new_name"],
+			"for_eta"=>$_REQUEST["new_for_eta"],
+			"for_prez"=>$_REQUEST["new_for_prez"],
+			"kod"=>$_REQUEST["new_kod"],
+			"max_stud"=>$_REQUEST["new_max_stud"],
+			"days"=>$_REQUEST["new_days"],
+			"test_len"=>$_REQUEST["new_test_len"],
+			"text" => $_REQUEST["new_text"]
+		) );
 }
 
 $sql=rtrim(file_get_contents('sql/tr_all.sql'));

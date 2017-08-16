@@ -13,14 +13,7 @@ if (isset($_REQUEST["id_net"]))
 {
 	if($_REQUEST["id_net"]==0)
 	{
-//		Table_Update ("nets", array('id_net'=>$key), $fields_values);
-//	$table_name = 'nets';
-//	$fields_values = array("name"=>$_REQUEST["new_item"]);
-//	$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_INSERT);
-//	if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
-//	audit("добавил новый тип активности");
 		$new_id = get_new_id();
-//echo $new_id;
 		Table_update("nets",array("id_net"=>$new_id),array("id_net"=>$new_id,'dpt_id' => $_SESSION["dpt_id"]));
 		$_REQUEST["id_net"]=$new_id;
 		$_POST["id_net"]=$new_id;
@@ -36,8 +29,7 @@ if (isset($_REQUEST["activ_changed"]))
 			audit("изменил статус сети ".$key." на ".Bool2Int($val));
 			$table_name = 'nets';
 			$fields_values = array('activ'=>Bool2Int($val));
-			$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'id_net='.$key);
-			if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
+			Table_Update($table_name, array('id_net'=>$key), $fields_values);
 		}
 	}
 }
@@ -51,8 +43,7 @@ if (isset($_REQUEST["cat_a_changed"]))
 			audit("изменил категорию сети ".$key." на ".Bool2Int($val));
 			$table_name = 'nets';
 			$fields_values = array('cat_a'=>Bool2Int($val));
-			$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'id_net='.$key);
-			if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
+			Table_Update($table_name, array('id_net'=>$key), $fields_values);
 		}
 	}
 }
@@ -62,9 +53,7 @@ if (isset($_REQUEST["edit"]))
 	audit("изменил параметры сети ".$_REQUEST["edit_id_net"]);
 	$table_name = 'nets';
 	$fields_values = $_REQUEST["edit"];
-	$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'id_net='.$_REQUEST["edit_id_net"]);
-	if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
-	//print_r($affectedRows);
+	Table_Update($table_name, array('id_net'=>$key), $fields_values);
 }
 
 
@@ -72,24 +61,13 @@ if (isset($_REQUEST["edit"]))
 if (isset($_REQUEST["replace"]))
 {
 	audit("изменил ответственных сети");
-	/*$table_name = 'nets';*/
 	if (($_REQUEST["rmkk_from"]!='')&&($_REQUEST["rmkk_to"]!=''))
 	{
-		/*
-		$fields_values = array('tn_rmkk'=>$_REQUEST["rmkk_to"]);
-		$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'tn_rmkk='.$_REQUEST["rmkk_from"]);
-		if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
-		*/
 		Table_update("nets", array("tn_rmkk"=>$_REQUEST["rmkk_from"]), array("tn_rmkk"=>$_REQUEST["rmkk_to"]));
 	}
 
 	if (($_REQUEST["mkk_from"]!='')&&($_REQUEST["mkk_to"]!=''))
 	{
-		/*
-		$fields_values = array('tn_mkk'=>$_REQUEST["mkk_to"]);
-		$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_UPDATE, 'tn_mkk='.$_REQUEST["mkk_from"]);
-		if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
-		*/
 		Table_update("nets", array("tn_mkk"=>$_REQUEST["mkk_from"]), array("tn_mkk"=>$_REQUEST["mkk_to"]));
 		Table_update("promo_tm", array("tn"=>$_REQUEST["mkk_from"]), array("tn"=>$_REQUEST["mkk_to"]));
 		Table_update("nets_plan_month", array("payment_type"=>1, "plan_type"=>3, "mkk_ter"=>$_REQUEST["mkk_from"]), array("mkk_ter"=>$_REQUEST["mkk_to"]));

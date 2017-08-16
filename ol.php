@@ -18,21 +18,13 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("ol", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+		Table_Update("ol", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["new"]))
 {
-
 		Table_Update("ol", $_REQUEST["data_new"],$_REQUEST["data_new"]);
-
-/*
-	$affectedRows = $db->extended->autoExecute("ol", array(
-				"tn"=>$_REQUEST["data_new"]["tn"],
-				"dpt_id"=>$_SESSION["dpt_id"]
-			), MDB2_AUTOQUERY_INSERT);
-*/
 }
 
 $p = array();

@@ -7,7 +7,7 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["obl_add"] as $k=>$v)
 		{
 			$vals=array("tn"=>$_REQUEST["tn"],"oblast"=>$v);
-			$affectedRows = $db->extended->autoExecute($table_name, $vals, MDB2_AUTOQUERY_INSERT);
+			Table_Update($table_name, $vals, $vals);
 		}
 	}
 	if (isset($_REQUEST["obl_del"]))
@@ -15,7 +15,7 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["obl_del"] as $k=>$v)
 		{
 			$vals=array("tn"=>$_REQUEST["tn"],"oblast"=>$v);
-			$affectedRows = $db->extended->autoExecute($table_name, null, MDB2_AUTOQUERY_DELETE, "oblast='".$v."' and tn=".$_REQUEST["tn"]);
+                        Table_Update($table_name, $vals,null);
 		}
 	}
 }

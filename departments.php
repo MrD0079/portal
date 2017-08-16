@@ -27,13 +27,13 @@ if (isset($_REQUEST["del"])&&isset($_REQUEST["delete"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("departments", null, MDB2_AUTOQUERY_DELETE, "dpt_id=".$k);
+                Table_Update("departments", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["add"]))
 {
-	$affectedRows = $db->extended->autoExecute("departments", $_REQUEST["new"], MDB2_AUTOQUERY_INSERT);
+	Table_Update("departments", $_REQUEST["new"], $_REQUEST["new"]);
 	if (!file_exists("files/".$_REQUEST["new"]["cnt_kod"])) {mkdir("files/".$_REQUEST["new"]["cnt_kod"],0777,true);}
 }
 

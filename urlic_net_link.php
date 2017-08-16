@@ -10,7 +10,7 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["urlic_add"] as $k=>$v)
 		{
 			$vals=array("id_net"=>$_REQUEST["id_net"],"urlic"=>$v);
-			$affectedRows = $db->extended->autoExecute($table_name, $vals, MDB2_AUTOQUERY_INSERT);
+			Table_Update($table_name, $vals, $vals);
 		}
 	}
 	if (isset($_REQUEST["urlic_del"]))
@@ -18,7 +18,7 @@ if (isset($_REQUEST["save"]))
 		foreach ($_REQUEST["urlic_del"] as $k=>$v)
 		{
 			$vals=array("id_net"=>$_REQUEST["id_net"],"urlic"=>$v);
-			$affectedRows = $db->extended->autoExecute($table_name, null, MDB2_AUTOQUERY_DELETE, "urlic='".$v."' and id_net=".$_REQUEST["id_net"]);
+			Table_Update($table_name, $vals,null);
 		}
 	}
 }

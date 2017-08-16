@@ -229,7 +229,7 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("nets_plan_month", null, MDB2_AUTOQUERY_DELETE, "id=".$v);
+                Table_Update("nets_plan_month", array('id'=>$k),null);
 	}
 }
 if (isset($_REQUEST["add_st"])&&isset($_REQUEST["st"]))

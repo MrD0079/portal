@@ -2,14 +2,15 @@
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute(
-		"distr_prot_conq",
+	Table_Update("distr_prot_conq",
 		array
 		(
 			"name"=>$_REQUEST["new_distr_prot_conq_name"],"dpt_id" => $_SESSION["dpt_id"]
 		),
-		MDB2_AUTOQUERY_INSERT
-	);
+		array
+		(
+			"name"=>$_REQUEST["new_distr_prot_conq_name"],"dpt_id" => $_SESSION["dpt_id"]
+		));
 }
 
 $sql=rtrim(file_get_contents('sql/distr_prot_conq.sql'));

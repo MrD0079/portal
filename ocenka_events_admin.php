@@ -15,16 +15,19 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("ocenka_events", null, MDB2_AUTOQUERY_DELETE, "year=".$k);
+		Table_Update("ocenka_events", array('year'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("ocenka_events", array(
+	Table_Update("ocenka_events", array(
 				"name"=>$_REQUEST["new_name"],
 				"year"=>$_REQUEST["new_year"]
-			), MDB2_AUTOQUERY_INSERT);
+			), array(
+				"name"=>$_REQUEST["new_name"],
+				"year"=>$_REQUEST["new_year"]
+			));
 }
 
 

@@ -20,13 +20,13 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("tr_loc", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+		Table_Update("tr_loc", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("tr_loc", array("name"=>$_REQUEST["new_name"],"addr"=>$_REQUEST["new_addr"],"text" => $_REQUEST["new_text"],"url" => $_REQUEST["new_url"]), MDB2_AUTOQUERY_INSERT);
+	Table_Update("tr_loc", array("name"=>$_REQUEST["new_name"],"addr"=>$_REQUEST["new_addr"],"text" => $_REQUEST["new_text"],"url" => $_REQUEST["new_url"]), array("name"=>$_REQUEST["new_name"],"addr"=>$_REQUEST["new_addr"],"text" => $_REQUEST["new_text"],"url" => $_REQUEST["new_url"]));
 }
 
 $sql=rtrim(file_get_contents('sql/tr_loc.sql'));

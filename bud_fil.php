@@ -4,7 +4,7 @@ audit("открыл bud_fil","bud");
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("bud_fil", array("name"=>$_REQUEST["new_name"],"dpt_id" => $_SESSION["dpt_id"]), MDB2_AUTOQUERY_INSERT);
+        Table_Update("bud_fil", array("name"=>$_REQUEST["new_name"],"dpt_id" => $_SESSION["dpt_id"]), array("name"=>$_REQUEST["new_name"],"dpt_id" => $_SESSION["dpt_id"]));
 }
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));

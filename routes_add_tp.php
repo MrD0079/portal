@@ -11,14 +11,14 @@ if (isset($_REQUEST["select_month"]))
 
 if (isset($_REQUEST["add_route"]))
 {
-	$affectedRows = $db->extended->autoExecute("routes_head", array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])), MDB2_AUTOQUERY_INSERT);
+	Table_Update("routes_head", array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])), array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])));
 }
 
 if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$affectedRows = $db->extended->autoExecute("routes_head", null, MDB2_AUTOQUERY_DELETE, 'id='.$k);
+		Table_Update("routes_head", array('id'=>$k),null);
 	}
 }
 
@@ -45,37 +45,23 @@ if (isset($_REQUEST["save"]))
 	{
 		foreach ($_REQUEST["spr_users_ms"] as $k=>$v)
 		{
-			$affectedRows = $db->extended->autoExecute("routes_head", array("login"=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
+			Table_Update("routes_head", array('id'=>$k), array('login'=>$v));
 		}
 	}
 	if (isset($_REQUEST["copy2next_month"]))
 	{
 		foreach ($_REQUEST["copy2next_month"] as $k=>$v)
 		{
-			$affectedRows = $db->extended->autoExecute("routes_head", array('copy2next_month'=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
+			Table_Update("routes_head", array('id'=>$k), array('copy2next_month'=>$v));
 		}
 	}
 	if (isset($_REQUEST["num"]))
 	{
 		foreach ($_REQUEST["num"] as $k=>$v)
 		{
-			$affectedRows = $db->extended->autoExecute("routes_head", array('num'=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
+			Table_Update("routes_head", array('id'=>$k), array('num'=>$v));
 		}
 	}
-	/*if (isset($_REQUEST["fio_otv"]))
-	{
-		foreach ($_REQUEST["fio_otv"] as $k=>$v)
-		{
-			$affectedRows = $db->extended->autoExecute("routes_head", array("fio_otv"=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
-		}
-	}
-	if (isset($_REQUEST["pos_otv"]))
-	{
-		foreach ($_REQUEST["pos_otv"] as $k=>$v)
-		{
-			$affectedRows = $db->extended->autoExecute("routes_head", array("pos_otv"=>$v), MDB2_AUTOQUERY_UPDATE, 'id='.$k);
-		}
-	}*/
 	if (isset($_REQUEST["rb"]))
 	{
 		$table_name = "routes_tp";

@@ -144,14 +144,14 @@ if (isset($_REQUEST["del_files"]))
 {
 	foreach ($_REQUEST["del_files"] as $k=>$v)
 	{
-		$db->extended->autoExecute("invoice_files", null, MDB2_AUTOQUERY_DELETE, "id=".$v);
+		Table_Update("invoice_files", array('id'=>$v),null);
 	}
 }
 if (isset($_REQUEST["del_acts"]))
 {
 	foreach ($_REQUEST["del_acts"] as $k=>$v)
 	{
-		$db->extended->autoExecute("invoice_acts", null, MDB2_AUTOQUERY_DELETE, "id=".$v);
+		Table_Update("invoice_acts", array('id'=>$v),null);
 	}
 }
 
@@ -159,7 +159,7 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("invoice", null, MDB2_AUTOQUERY_DELETE, "id=".$v);
+		Table_Update("invoice", array('id'=>$v),null);
 	}
 }
 

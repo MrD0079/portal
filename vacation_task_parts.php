@@ -20,13 +20,12 @@ if (isset($_REQUEST["del"])&&isset($_REQUEST["delete"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("vacation_task_parts", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+                Table_Update("vacation_task_parts", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["add"]))
 {
-	//$affectedRows = $db->extended->autoExecute("vacation_task_parts", $_REQUEST["new"], MDB2_AUTOQUERY_INSERT);
 	Table_Update("vacation_task_parts", array("id"=>get_new_id(),'dpt_id' => $_SESSION["dpt_id"]),$_REQUEST["new"]);
 }
 

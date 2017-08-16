@@ -16,13 +16,13 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("routes_text", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+		Table_Update("routes_text", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("routes_text", array("name"=>$_REQUEST["new_text_name"]), MDB2_AUTOQUERY_INSERT);
+	Table_Update("routes_text", array("name"=>$_REQUEST["new_text_name"]), array("name"=>$_REQUEST["new_text_name"]));
 }
 
 $sql=rtrim(file_get_contents('sql/routes_text.sql'));

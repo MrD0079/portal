@@ -13,10 +13,7 @@ if (isset($_REQUEST["new"])) {
 		$params[$key]=stripslashes($val);
 	}
 	$table_name = 'ocenka_criteria';
-	$fields_values = $params;
-	$affectedRows = $db->extended->autoExecute($table_name, $fields_values, MDB2_AUTOQUERY_INSERT);
-	if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
-	audit("добавил критерий в список критериев");
+	Table_Update($table_name, $params, $params);
 }
 
 if (isset($_REQUEST["del"]))
@@ -24,9 +21,7 @@ if (isset($_REQUEST["del"]))
 	foreach ($_REQUEST["del"] as $key=>$val)
 	{
 		$table_name = 'ocenka_criteria';
-		$affectedRows = $db->extended->autoExecute($table_name, null, MDB2_AUTOQUERY_DELETE, 'id_num='.$key);
-		if (PEAR::isError($affectedRows)) { echo $affectedRows->getMessage(); }
-		audit("удалил критерий из списка критериев");
+                Table_Update($table_name, array('id_num'=>$key),null);
 	}
 }
 

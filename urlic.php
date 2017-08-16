@@ -17,13 +17,13 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-		$db->extended->autoExecute("urlic", null, MDB2_AUTOQUERY_DELETE, "id=".$k);
+		Table_Update("urlic", array('id'=>$k),null);
 	}
 }
 
 if (isset($_REQUEST["new"]))
 {
-	$affectedRows = $db->extended->autoExecute("urlic", array("name"=>$_REQUEST["new_name"]), MDB2_AUTOQUERY_INSERT);
+	Table_Update("urlic", array("name"=>$_REQUEST["new_name"]), array("name"=>$_REQUEST["new_name"]));
 }
 
 $sql=rtrim(file_get_contents('sql/urlic.sql'));
