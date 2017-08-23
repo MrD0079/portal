@@ -1,4 +1,4 @@
-/* Formatted on 20/05/2016 17:45:01 (QP5 v5.252.13127.32867) */
+/* Formatted on 22.08.2017 14:28:27 (QP5 v5.252.13127.32867) */
   SELECT z.id,
          z.dt_start,
          z.fil fil_id,
@@ -15,6 +15,11 @@
          zff1.val_string,
          zff2.val_textarea,
          zff3.rep_val_number * 1000 bonus_tma,
+         (SELECT mt || ' ' || y
+            FROM calendar
+           WHERE data = z.cost_assign_month)
+            cost_assign_month_text,
+         CASE WHEN z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy') THEN 1 END cost_assign_month_is_in_period,
          t.period,
          (SELECT mt || ' ' || y
             FROM calendar
@@ -23,19 +28,18 @@
          NVL (kat.tu, 0) tu,
          (SELECT rep_accepted
             FROM bud_ru_zay_accept
-           WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
-                 AND accept_order =
-                        DECODE (
-                           NVL ( (SELECT MAX (accept_order)
-                                    FROM bud_ru_zay_accept
-                                   WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
-                                0),
-                           0, (SELECT MAX (accept_order)
-                                 FROM bud_ru_zay_accept
-                                WHERE z_id = z.id AND rep_accepted IS NOT NULL AND INN_not_ReportMA (tn) = 0),
-                           (SELECT MAX (accept_order)
-                              FROM bud_ru_zay_accept
-                             WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0)))
+           WHERE     z_id = z.id
+                 AND INN_not_ReportMA (tn) = 0
+                 AND accept_order = DECODE (NVL ( (SELECT MAX (accept_order)
+                                                     FROM bud_ru_zay_accept
+                                                    WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
+                                                 0),
+                                            0, (SELECT MAX (accept_order)
+                                                  FROM bud_ru_zay_accept
+                                                 WHERE z_id = z.id AND rep_accepted IS NOT NULL AND INN_not_ReportMA (tn) = 0),
+                                            (SELECT MAX (accept_order)
+                                               FROM bud_ru_zay_accept
+                                              WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0)))
             rep_current_accepted_id
     FROM bud_ru_zay z,
          user_list u,
@@ -56,36 +60,30 @@
                    SUM (t.bonus_sum) bonus_sum,
                      SUM (t.bonus_sum)
                    * CASE
-                        WHEN NVL (
-                                (SELECT val_bool
-                                   FROM bud_ru_zay_ff
-                                  WHERE     ff_id IN (SELECT id
-                                                        FROM bud_ru_ff
-                                                       WHERE     dpt_id = :dpt_id
-                                                             AND admin_id = 9)
-                                        AND z_id = z.id),
-                                0) = 1
+                        WHEN NVL ( (SELECT val_bool
+                                      FROM bud_ru_zay_ff
+                                     WHERE     ff_id IN (SELECT id
+                                                           FROM bud_ru_ff
+                                                          WHERE dpt_id = :dpt_id AND admin_id = 9)
+                                           AND z_id = z.id),
+                                  0) = 1
                         THEN
                            0
-                        WHEN NVL (
-                                (SELECT val_bool
-                                   FROM bud_ru_zay_ff
-                                  WHERE     ff_id IN (SELECT id
-                                                        FROM bud_ru_ff
-                                                       WHERE     dpt_id = :dpt_id
-                                                             AND admin_id = 8)
-                                        AND z_id = z.id),
-                                0) = 0
+                        WHEN NVL ( (SELECT val_bool
+                                      FROM bud_ru_zay_ff
+                                     WHERE     ff_id IN (SELECT id
+                                                           FROM bud_ru_ff
+                                                          WHERE dpt_id = :dpt_id AND admin_id = 8)
+                                           AND z_id = z.id),
+                                  0) = 0
                         THEN
                            1
                         ELSE
                              (  1
-                              -   NVL (
-                                     (SELECT discount
-                                        FROM bud_fil_discount_body
-                                       WHERE     dt = TRUNC (z.dt_start, 'mm')
-                                             AND distr = z.fil),
-                                     0)
+                              -   NVL ( (SELECT discount
+                                           FROM bud_fil_discount_body
+                                          WHERE dt = TRUNC (z.dt_start, 'mm') AND distr = z.fil),
+                                       0)
                                 / 100)
                            * (SELECT bonus_log_koef
                                 FROM bud_fil
@@ -94,15 +92,13 @@
                       compens_distr,
                      SUM (t.bonus_sum)
                    * CASE
-                        WHEN NVL (
-                                (SELECT val_bool
-                                   FROM bud_ru_zay_ff
-                                  WHERE     ff_id IN (SELECT id
-                                                        FROM bud_ru_ff
-                                                       WHERE     dpt_id = :dpt_id
-                                                             AND admin_id = 9)
-                                        AND z_id = z.id),
-                                0) = 1
+                        WHEN NVL ( (SELECT val_bool
+                                      FROM bud_ru_zay_ff
+                                     WHERE     ff_id IN (SELECT id
+                                                           FROM bud_ru_ff
+                                                          WHERE dpt_id = :dpt_id AND admin_id = 9)
+                                           AND z_id = z.id),
+                                  0) = 1
                         THEN
                            1
                      END
@@ -117,21 +113,19 @@
                            m.h_eta,
                            m.eta
                       FROM a14mega m
-                     WHERE     m.dpt_id = :dpt_id
-                           AND m.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
-                                        AND TO_DATE ( :ed, 'dd.mm.yyyy')) s,
+                     WHERE m.dpt_id = :dpt_id AND m.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')) s,
                    akcii_local_tp t,
                    bud_ru_zay z
              WHERE     s.tp_kod = t.tp_kod
                    AND t.z_id = z.id
-                   AND (:eta_list is null OR :eta_list = s.h_eta)
+                   AND ( :eta_list IS NULL OR :eta_list = s.h_eta)
                    AND DECODE ( :fil, 0, z.fil, :fil) = z.fil
                    AND z.funds = DECODE ( :funds, 0, z.funds, :funds)
                    AND (   z.fil IN (SELECT fil_id
                                        FROM clusters_fils
                                       WHERE :clusters = CLUSTER_ID)
                         OR :clusters = 0)
-                   AND s.dt = TRUNC (z.dt_start, 'mm')
+                   AND s.dt IN (z.cost_assign_month, TRUNC (z.dt_start, 'mm'))
           GROUP BY z.id, z.fil, z.dt_start) t
    WHERE     t.id = z.id
          AND z.id_net = n.id_net(+)
@@ -140,8 +134,8 @@
          AND z.funds = DECODE ( :funds, 0, z.funds, :funds)
          AND z.tn = u.tn
          AND u.dpt_id = :dpt_id
-    and u.is_spd=1
-     AND z.st = st.id(+)
+         AND u.is_spd = 1
+         AND z.st = st.id(+)
          AND z.kat = kat.id(+)
          AND kat.la = 1
          AND z.id = zff1.z_id
@@ -156,21 +150,18 @@
          AND (SELECT accepted
                 FROM bud_ru_zay_accept
                WHERE     z_id = z.id
-                     AND accept_order =
-                            DECODE (
-                               NVL ( (SELECT MAX (accept_order)
-                                        FROM bud_ru_zay_accept
-                                       WHERE z_id = z.id AND accepted = 2),
-                                    0),
-                               0, (SELECT MAX (accept_order)
-                                     FROM bud_ru_zay_accept
-                                    WHERE z_id = z.id),
-                               (SELECT MAX (accept_order)
-                                  FROM bud_ru_zay_accept
-                                 WHERE z_id = z.id AND accepted = 2))) = 1
+                     AND accept_order = DECODE (NVL ( (SELECT MAX (accept_order)
+                                                         FROM bud_ru_zay_accept
+                                                        WHERE z_id = z.id AND accepted = 2),
+                                                     0),
+                                                0, (SELECT MAX (accept_order)
+                                                      FROM bud_ru_zay_accept
+                                                     WHERE z_id = z.id),
+                                                (SELECT MAX (accept_order)
+                                                   FROM bud_ru_zay_accept
+                                                  WHERE z_id = z.id AND accepted = 2))) = 1
          AND z.valid_no = 0
-         AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
-                                          AND TO_DATE ( :ed, 'dd.mm.yyyy')
+         AND (TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy') OR z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy'))
          AND u.tn = DECODE ( :db, 0, u.tn, :db)
          AND (   :exp_list_without_ts = 0
               OR u.tn IN (SELECT slave
@@ -190,5 +181,5 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND DECODE ( :st, 0, z.st, :st) = z.st
-         AND TRUNC (z.dt_start, 'mm') = t.period
+         AND t.period IN (z.cost_assign_month, TRUNC (z.dt_start, 'mm'))
 ORDER BY t.period, val_string, fil_name

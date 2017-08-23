@@ -74,7 +74,7 @@ if (isset($_REQUEST["calendar_years"]))
 	$data2_total = $db->getAll($sql2_total, null, null, null, MDB2_FETCHMODE_ASSOC);
 //print_r($data);
 
-
+$h=[];
 
 foreach ($data1 as $k=>$v)
 {

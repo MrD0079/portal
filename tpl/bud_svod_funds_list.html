@@ -103,7 +103,8 @@
 <table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
   <tbody>
     <tr style="font-weight: bold;text-align:center">
-      <td>период</td>
+      <td>период проведения</td>
+      <td>месяц отнесения затрат</td>
       <td>Название акции</td>
       <td>Кол-во<br>ТП</td>
       <td>Объем<br>продаж,<br>{$valuta}</td>
@@ -112,8 +113,12 @@
       <td>Компенсация<br>ДБ</td>
     </tr>
 {foreach key=k1 item=i1 from=$i.act_local}
-    <tr {if $i1.rep_current_accepted_id neq 1}style="background-color:red"{/if}>
+    <tr
+        {if $i1.rep_current_accepted_id neq 1}style="background-color:red"{/if}
+        {if $i1.cost_assign_month_is_in_period and $i1.cost_assign_month_is_in_period neq 1}style="background-color:yellow"{/if}
+        >
       <td>{$i1.period_text}</td>
+      <td>{$i1.cost_assign_month_text}</td>
       <td>
 	<a target=_blank href="?action=bud_ru_zay_report&tu={$i1.tu}&z_id={$i1.id}&select=1">{$i1.id}</a>
 	<a target=_blank href="?action=akcii_local_report&z_id={$i1.id}&ok_selected=2">{$i1.val_string}</a>
@@ -126,6 +131,7 @@
     </tr>
 {/foreach}
     <tr style="font-weight: bold;">
+      <td></td>
       <td></td>
       <td>ИТОГО</td>
       <td style="text-align:right">{$i.act_local_total.c}</td>
@@ -143,7 +149,8 @@
 <table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
   <tbody>
     <tr style="font-weight: bold;text-align:center">
-      <td>период</td>
+      <td>период проведения</td>
+      <td>месяц отнесения затрат</td>
       <td>№ заявки</td>
       <td>Статья</td>
       <td>Категория</td>
@@ -154,8 +161,12 @@
     </tr>
 {foreach key=k1 item=i1 from=$i.zay}
 {foreach key=k2 item=i2 from=$i1.data}
-    <tr {if $i2.rep_current_accepted_id neq 1}style="background-color:red"{/if}>
+    <tr
+        {if $i2.rep_current_accepted_id neq 1}style="background-color:red"{/if}
+        {if $i2.cost_assign_month_is_in_period and $i2.cost_assign_month_is_in_period neq 1}style="background-color:yellow"{/if}
+        >
       <td>{$i2.period_text}</td>
+      <td>{$i2.cost_assign_month_text}</td>
       <td><a target=_blank href="?action=bud_ru_zay_report&tu={$i2.tu}&z_id={$i2.id}&select=1">{$i2.id}</a></td>
       <td style="text-align:left">{$i2.st_name}</td>
       <td style="text-align:left">{$i2.kat_name}</td>
@@ -167,6 +178,7 @@
 {/foreach}
     <tr style="font-weight: bold;">
       <td></td>
+      <td></td>
       <td style="text-align:right">{$i1.st_total.c}</td>
       <td style="text-align:left">{$i1.st_total.st_name}</td>
       <td style="text-align:left">{$i1.st_total.kat_name}</td>
@@ -177,6 +189,7 @@
     </tr>
 {/foreach}
     <tr style="font-weight: bold;">
+      <td></td>
       <td></td>
       <td style="text-align:right">{$i.zay_total.c}</td>
       <td>ИТОГО</td>

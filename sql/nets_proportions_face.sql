@@ -17,4 +17,5 @@ SELECT   ct.ID,
      AND ct.ID = ty2.prop_id(+)
      AND :YEAR - 2 = ty2.YEAR(+)
      AND :net = ty2.id_net(+)
+and ct.visible=1
 ORDER BY ct.ID

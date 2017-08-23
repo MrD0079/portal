@@ -255,5 +255,13 @@
 		{if $is_admin or $is_traid or $is_super}<li><a href="?act=a1708kb&action=act_report_v&y=2017&month=8">Отчет ВСТМ</a></li>{/if}
 	</ul>
 	</li>
+	<li><a href="javascript:void(0);"><span class="dir">Получи свой бонус</span></a>
+	<ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~ORCLM">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1708gb&action=a1708gb_tp_select&y=2017&month=8">Выбор ТП для участия в акции</a></li>{/if}
+                                                        <li><a href="?act=a1708gb&action=a1708gb_report_a&y=2017&month=8">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1708gb&action=act_report_v&y=2017&month=8">Отчет ВСТМ</a></li>{/if}
+	</ul>
+	</li>
 </ul>
 </li>

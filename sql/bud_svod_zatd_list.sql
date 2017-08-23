@@ -1,4 +1,4 @@
-/* Formatted on 03.08.2017 13:37:54 (QP5 v5.252.13127.32867) */
+/* Formatted on 23.08.2017 11:11:19 (QP5 v5.252.13127.32867) */
   SELECT fil_id,
          fil_name,
          fund_id,
@@ -49,7 +49,7 @@
                    act.compens_distr act_compens_distr,
                    act_local.compens_distr act_local_compens_distr,
                    zay.compens_distr zay_compens_distr,
-                   act_local.compens_db + zay.compens_db compens_db,
+                   NVL (act_local.compens_db, 0) + NVL (zay.compens_db, 0) compens_db,
                    - (NVL (act.compens_distr, 0) + NVL (act_local.compens_distr, 0) + NVL (zay.compens_distr, 0)) promo_total,
                    NVL (svs.compens_distr, 0) + NVL (svs_new.compens_distr, 0) svs_compens_distr,
                    NVL (sales.dop_zarobotok, 0) - NVL (svs.compens_distr, 0) - NVL (svs_new.compens_distr, 0) - NVL (zay.compens_distr, 0) - NVL (act_local.compens_distr, 0) - NVL (act.compens_distr, 0) svs_total,
@@ -128,7 +128,7 @@
                              f.gsm,
                              c.period,
                              fnd.kod) tf,
-                   (  SELECT TRUNC (z.dt_start, 'mm') period,
+                   (  SELECT z.cost_assign_month period,
                              z.fil,
                              z.funds,
                              SUM (z_plan) z_plan,
@@ -218,7 +218,7 @@
                                      AND z.st = st.id(+)
                                      AND z.kat = kat.id(+)
                                      AND NVL (kat.la, 0) = 0
-                                     AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
+                                     AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
                                      AND z.valid_no = 0
                                      AND (   :exp_list_without_ts = 0
                                           OR u.tn IN (SELECT slave
@@ -236,8 +236,8 @@
                                                WHERE tn = :tn) = 1)
                                      AND u.tn = DECODE ( :db, 0, u.tn, :db)) z
                        WHERE current_accepted_id = 1 AND deleted = 0
-                    GROUP BY z.fil, z.funds, TRUNC (z.dt_start, 'mm')) zay,
-                   (  SELECT t.dt period,
+                    GROUP BY z.fil, z.funds, z.cost_assign_month) zay,
+                   (  SELECT z.cost_assign_month period,
                              z.fil,
                              z.funds,
                              SUM (t.compens_distr) compens_distr,
@@ -255,9 +255,7 @@
                              bud_ru_ff ff2,
                              bud_ru_zay_ff zff3,
                              bud_ru_ff ff3,
-                             (  SELECT s.dt,
-                                       z.id,
-                                       z.fil,
+                             (  SELECT z.id,
                                        COUNT (*) c,
                                        SUM (s.summa) summa,
                                        SUM (t.bonus_sum) bonus_sum,
@@ -319,8 +317,7 @@
                                        akcii_local_tp t,
                                        bud_ru_zay z
                                  WHERE s.tp_kod = t.tp_kod AND t.z_id = z.id AND TRUNC (z.dt_start, 'mm') = s.dt
-                              GROUP BY z.id, z.fil, s.dt
-                              ORDER BY z.id, z.fil, s.dt) t
+                              GROUP BY z.id, z.fil, s.dt) t
                        WHERE     t.id = z.id
                              AND z.id_net = n.id_net(+)
                              AND z.fil = f.id
@@ -353,8 +350,7 @@
                                                                        FROM bud_ru_zay_accept
                                                                       WHERE z_id = z.id AND accepted = 2))) = 1
                              AND z.valid_no = 0
-                             AND TRUNC (z.dt_start, 'mm') BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
-                             AND TRUNC (z.dt_start, 'mm') = t.dt
+                             AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
                              AND (   :exp_list_without_ts = 0
                                   OR u.tn IN (SELECT slave
                                                 FROM full
@@ -370,7 +366,7 @@
                                         FROM user_list
                                        WHERE tn = :tn) = 1)
                              AND u.tn = DECODE ( :db, 0, u.tn, :db)
-                    GROUP BY t.dt, z.fil, z.funds) act_local,
+                    GROUP BY z.cost_assign_month, z.fil, z.funds) act_local,
                    (  SELECT z.act_month period,
                              zp.fil,
                              z.fund_id,
@@ -538,7 +534,8 @@
                                                    WHERE id = z.kat) = 1
                                              AND z.tn = u.tn
                                              AND u.dpt_id = :dpt_id
-                                             AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy') AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')
+                                             AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy')
+                                             AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')
                                              /*AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')*/
                                              AND z.report_data IS NOT NULL
                                              AND (SELECT rep_accepted
@@ -633,7 +630,8 @@
                                                                WHERE id = z.kat) = 1
                                                          AND z.tn = u.tn
                                                          AND u.dpt_id = :dpt_id
-                                                         AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy') AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')
+                                                         AND TRUNC (z.dt_end, 'mm') >= TO_DATE ( :sd, 'dd.mm.yyyy')
+                                                         AND TRUNC (z.dt_start, 'mm') <= TO_DATE ( :ed, 'dd.mm.yyyy')
                                                          /*AND z.cost_assign_month BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')*/
                                                          AND z.report_data IS NOT NULL
                                                          AND (SELECT rep_accepted
