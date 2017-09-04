@@ -8,7 +8,7 @@
          d.nakl_summ,
          d.act_nabor_1,
          /* TRUNC (d.act_nabor / 1000) * 100 */
-         nvl(d.act_nabor_1,0) * 23.1 max_bonus,
+         nvl(d.act_nabor_1,0) * 23.5 max_bonus,
          --TRUNC (d.act_nabor / 2) max_bonus2,
          d.tp_addr,
          NVL (an.if1, 0) selected_if1,

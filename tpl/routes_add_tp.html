@@ -47,7 +47,7 @@
         <td style="text-align: center;">
             <select name=spr_users_ms[{$item.id}] id=spr_users_ms{$item.id} {if not $routes_enabled}disabled{/if}>
                 <option></option>
-                {foreach key=key1 item=item1 from=$spr_users_ms}
+                {foreach key=key1 item=item1 from=$item.spr_users_ms}
                 <option value="{$item1.login}">{$item1.fam} {$item1.im} {$item1.otch}</option>
                 {/foreach}
             </select>

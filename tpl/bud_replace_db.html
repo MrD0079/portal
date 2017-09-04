@@ -4,7 +4,7 @@
 <p>
 ДБ
 <select onchange="load_fil_list();" required name=from id=from>
-	<option></option>
+	<option value="0"></option>
 	{foreach key=key item=item from=$list}
 	<option value={$item.tn}>{$item.fio}{if $item.datauvol} - уволен {$item.datauvol}{/if}</option>
 	{/foreach}

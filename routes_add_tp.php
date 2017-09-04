@@ -1,19 +1,13 @@
 <?
-
-//ses_req();
-
 audit("открыл routes_add_tp","routes");
-
 if (isset($_REQUEST["select_month"]))
 {
 	$_REQUEST["select_route_numb"]=null;
 }
-
 if (isset($_REQUEST["add_route"]))
 {
 	Table_Update("routes_head", array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])), array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])));
 }
-
 if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
@@ -21,7 +15,6 @@ if (isset($_REQUEST["del"]))
 		Table_Update("routes_head", array('id'=>$k),null);
 	}
 }
-
 if (isset($_REQUEST["divide_go"]))
 {
 	foreach ($_REQUEST["divide_go"] as $k=>$v)
@@ -38,7 +31,6 @@ if (isset($_REQUEST["divide_go"]))
 		audit("разделил маршрут: ".$sql,"routes");
 	}
 }
-
 if (isset($_REQUEST["save"]))
 {
 	if (isset($_REQUEST["spr_users_ms"]))
@@ -90,12 +82,17 @@ $sql = rtrim(file_get_contents('sql/routes_head.sql'));
 $p=array(":tn"=>$tn,":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$sql1=rtrim(file_get_contents('sql/routes_add_tp_getDisabledDates.sql'));
+$p1=array();
+$sql2=rtrim(file_get_contents('sql/routes_add_tp_spr_users_ms.sql'));
+$p2=array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"],":month_list"=>"'".$_REQUEST["month_list"]."'");
 foreach($res as $k=>$v){
-        $sql=rtrim(file_get_contents('sql/routes_add_tp_getDisabledDates.sql'));
-        $p=array(":route"=>$v["id"]);
-        $sql=stritr($sql,$p);
-        $dd = $db->getOne($sql);
+        $p1[":route"]=$v["id"];
+        $dd = $db->getOne(stritr($sql1,$p1));
         $res[$k]["DisabledDates"]=$dd;
+        $p2[":login"]="'".$v["login"]."'";
+        $dd = $db->getAll(stritr($sql2,$p2), null, null, null, MDB2_FETCHMODE_ASSOC);
+        $res[$k]["spr_users_ms"]=$dd;
 }
 
 $smarty->assign('routes_head', $res);
@@ -126,8 +123,9 @@ $sql = rtrim(file_get_contents('sql/month_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
-$sql=rtrim(file_get_contents('sql/spr_users_ms.sql'));
-$p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"],':flt'=>0);
+
+$sql=rtrim(file_get_contents('sql/routes_add_tp_spr_users_ms.sql'));
+$p = array(":tn"=>$tn,':dpt_id' => $_SESSION["dpt_id"],":month_list"=>"'".$_REQUEST["month_list"]."'",":login"=>"''");
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('spr_users_ms', $data);
