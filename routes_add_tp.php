@@ -6,14 +6,12 @@ if (isset($_REQUEST["select_month"]))
 }
 if (isset($_REQUEST["add_route"]))
 {
-	Table_Update("routes_head", array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])), array("tn"=>$tn,"data"=>OraDate2MDBDate($_SESSION["month_list"])));
-}
-if (isset($_REQUEST["del"]))
-{
-	foreach ($_REQUEST["del"] as $k=>$v)
-	{
-		Table_Update("routes_head", array('id'=>$k),null);
-	}
+    //ses_req();
+    $p = array("id"=>null,"tn"=>$tn,"data"=>OraDate2MDBDate($_REQUEST["month_list"]));
+    //print_r($p);
+    //$db->query("INSERT INTO routes_head (tn, data) VALUES (2992713422, TO_DATE ('01.09.2017', 'dd.mm.yyyy'))");
+    //$db->query("INSERT INTO routes_head (tn, data) VALUES (2992713422, '2017-09-01 00:00:00');");
+	Table_Update("routes_head", $p, $p);
 }
 if (isset($_REQUEST["divide_go"]))
 {
@@ -75,6 +73,13 @@ if (isset($_REQUEST["save"]))
 			}
 			}
 		}
+	}
+}
+if (isset($_REQUEST["del"]))
+{
+	foreach ($_REQUEST["del"] as $k=>$v)
+	{
+		Table_Update("routes_head", array('id'=>$k),null);
 	}
 }
 

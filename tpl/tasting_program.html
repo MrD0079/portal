@@ -11,8 +11,53 @@
             <td>Плановый бюджет, {$valuta}</td><td><input id=tasting_program_budjet name=tasting_program[budjet] value="{$tasting_program.budjet}" class="number_int"></td>
         </tr>
         <tr>
-            <td>Программа закрыта</td><td><input id=tasting_program_closed name=tasting_program[closed] value="{$tasting_program.closed}" class="number_int_01"></td>
+            <td>Комментарий</td><td><input name=tasting_program[comm] value="{$tasting_program.comm}" size="50"></td>
         </tr>
+        <tr>
+            <td>Программа закрыта</td>
+            <td>
+                <input id=cb_tasting_program_closed
+                       type=checkbox
+                       onClick="$('#tasting_program_closed').val(this.checked?1:0);">
+                <input type="hidden"
+                       id="tasting_program_closed"
+                       name="tasting_program[closed]" value="{$tasting_program.closed}">
+                <script>
+                    $("#cb_tasting_program_closed").prop('checked','{$tasting_program.closed}'=='1'?true:false);
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                *вложения
+            </td>
+            <td>
+                <input
+                    type="button"
+                    value="добавить"
+                    onClick="$('#tasting_program').append($(
+                                '<tr>\n\
+                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                    <td><input type=file name=tasting_tp_file[]></td>\n\
+                                </tr>'))">
+            </td>
+        </tr>
+        {if $tasting_program.files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$tasting_program.files}
+        {foreach from=$keywords item=keyword}
+        <tr>
+            <td>
+                <input type=button value=удалить onClick="
+                    del_files.push('{$keyword}');
+                    $(this).parent().parent().remove();
+                       ">
+            </td>
+            <td>
+                <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+            </td>
+        </tr>
+        {/foreach}
+        {/if}
     </table>
     </form>
     <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting_program('{$smarty.request.id}');"></p>
@@ -39,6 +84,7 @@
         }
         $('#button_save').prop("disabled",true);
         var fd = new FormData(document.getElementById('form_tasting_program'));
+        if (del_files.length>0) fd.append('del_files',del_files);
         $.ajax({
 		type: 'POST',
 		url: '?action=tasting_program&id='+id+'&save_tasting_program=1&nohead=1',
@@ -52,6 +98,7 @@
 	});
     }
     /*{/literal}*/
+    var del_files = [];
     </script>
 {elseif $smarty.request.list_tasting_program}
     <table border="1">
@@ -59,7 +106,9 @@
     <td>№ п/п</td>
     <td>Название</td>
     <td>Плановый бюджет, {$valuta}</td>
+    <td>Комментарий</td>
     <td>Программа закрыта</td>
+    <td>Вложения</td>
     <td>{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting_program&new_tasting_program=1">добавить</a>{/if}</td>
     </tr>
     {foreach key=k item=i from=$x name=x}
@@ -67,7 +116,16 @@
     <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
     <td>{$i.name}</td>
     <td style="text-align:right">{$i.budjet|num:0}</td>
+    <td>{$i.comm}</td>
     <td style="text-align:center">{if $i.closed}да{/if}</td>
+    <td style="text-align:left">
+        {if $i.files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.files}
+        {foreach from=$keywords item=keyword}
+        <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+        {/foreach}
+        {/if}
+    </td>
     <td style="text-align:center">{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting_program&id={$i.id}">редактировать</a>{/if}</td>
     </tr>
     {/foreach}

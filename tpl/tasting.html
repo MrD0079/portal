@@ -66,19 +66,25 @@
     {foreach key=k item=i from=$x name=x}
     <option value="{$i.kodtp}">{$i.tz_oblast} {$i.ur_tz_name} {$i.tz_address}</option>
     {/foreach}
-{elseif $smarty.request.list_files}
 {elseif $smarty.request.save_tasting}
 {elseif $smarty.request.id or $smarty.request.new_tasting}
     <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
           action="?action=tasting">
-    <h1>{$smarty.request.id}</h1>
+    <h1>{if not $smarty.request.new_tasting}{$tasting.name}{/if}</h1>
     <table border="1" id="tasting">
+        {if $smarty.request.new_tasting}
         <tr>
-            <td>Название</td><td><input id=tasting_name name=tasting[name] value="{$tasting.name}" size="50"></td>
+            <td>Название</td>
+            <td>
+                <input id=tasting_name name=tasting[name] value="{$tasting.name}" size="50">
+            </td>
         </tr>
+        {/if}
         <tr>
-            <td>Дегустационная программа</td><td>
-            <select id=tasting_program_id name=tasting[program_id]></select>
+            <td>Дегустационная программа</td>
+            <td>
+                {if $smarty.request.new_tasting}
+                <select id=tasting_program_id name=tasting[program_id]></select>
                 <script>
                     $('#tasting_program_id')
                         .load(
@@ -89,48 +95,38 @@
                             /*{literal}*/}/*{/literal}*/
                         );
                 </script>
+                {else}
+                    {$tasting.program_name}
+                {/if}
             </td>
         </tr>
         <tr>
-            <td>Дата проведения</td><td><input id=tasting_dt name=tasting[dt] value="{$tasting.dt}" class="datepicker"></td>
-        </tr>
-        <tr>
-            <td>Описание</td><td><input name=tasting[descr] value="{$tasting.descr}" size="50"></td>
+            <td>Дата проведения</td>
+            <td>
+                {if $smarty.request.new_tasting}
+                <input id=tasting_dt name=tasting[dt] value="{$tasting.dt}" class="datepicker">
+                {else}
+                    {$tasting.dt}
+                {/if}
+            </td>
         </tr>
         <tr>
             <td>Комментарий</td><td><input name=tasting[comm] value="{$tasting.comm}" size="50"></td>
         </tr>
         <tr>
+            <td>оплата доп. часа работ</td>
             <td>
-                *вложения
-            </td>
-            <td>
-                <input
-                    type="button"
-                    value="добавить"
-                    onClick="$('#tasting').append($(
-                                '<tr>\n\
-                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
-                                    <td><input type=file name=tasting_tp_file[]></td>\n\
-                                </tr>'))">
-            </td>
-        </tr>
-        {if $tasting.files}
-        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$tasting.files}
-        {foreach from=$keywords item=keyword}
-        <tr>
-            <td>
-                <input type=button value=удалить onClick="
-                    del_files.push('{$keyword}');
-                    $(this).parent().parent().remove();
-                       ">
-            </td>
-            <td>
-                <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+                <input id=cb_tasting_extra_hours_payment
+                       type=checkbox
+                       onClick="$('#tasting_extra_hours_payment').val(this.checked?1:0);">
+                <input type="hidden"
+                       id=tasting_extra_hours_payment
+                       name="tasting[extra_hours_payment]" value="{$tasting.extra_hours_payment}">
+                <script>
+                    $("#cb_tasting_extra_hours_payment").prop('checked','{$tasting.extra_hours_payment}'=='1'?true:false);
+                </script>
             </td>
         </tr>
-        {/foreach}
-        {/if}
     </table>
     <h1>Детали</h1>
     <table border="1">
@@ -199,17 +195,17 @@
         console.clear();
         var bad_data = false;
         var error_text = '';
-        if (!$('#tasting_program_id').val()){
+        if ($('#tasting_program_id').length!=0&&!$('#tasting_program_id').val()){
             console.log("tasting_program_id is empty");
             bad_data = true;
             error_text = error_text + 'Дегустационная программа не выбрана'+'<br>';
         }
-        if (!$('#tasting_name').val()){
+        if ($('#tasting_name').length!=0&&!$('#tasting_name').val()){
             console.log("tasting name is empty");
             bad_data = true;
             error_text = error_text + 'Название не заполнено'+'<br>';
         }
-        if (!$('#tasting_dt').val()){
+        if ($('#tasting_dt').length!=0&&!$('#tasting_dt').val()){
             bad_data = true;
             error_text = error_text + 'Дата не заполнена'+'<br>';
         }
@@ -256,7 +252,6 @@
         }
         $('#button_save').prop("disabled",true);
         var fd = new FormData(document.getElementById('form_tasting'));
-        if (del_files.length>0) fd.append('del_files',del_files);
         $.ajax({
 		type: 'POST',
 		url: '?action=tasting&id='+id+'&save_tasting=1&nohead=1',
@@ -271,7 +266,6 @@
     }
     /*{/literal}*/
     load_list_tp('{$smarty.request.id}');
-    var del_files = [];
     </script>
 {elseif $smarty.request.list_tasting}
     <table border="1">
@@ -280,10 +274,9 @@
     <td>Дегустационная программа</td>
     <td>Название</td>
     <td>дата проведения</td>
-    <td>Описание</td>
     <td>Комментарий</td>
-    <td>Вложения</td>
     <td>кол-во ТЗ</td>
+    <td>оплата доп. часа работ</td>
     <td>{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting&new_tasting=1">добавить</a>{/if}</td>
     </tr>
     {foreach key=k item=i from=$x name=x}
@@ -292,17 +285,9 @@
     <td>{$i.tasting_program_name}</td>
     <td>{$i.name}</td>
     <td style="text-align:center">{$i.dt}</td>
-    <td>{$i.descr}</td>
     <td>{$i.comm}</td>
-    <td style="text-align:left">
-        {if $i.files}
-        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.files}
-        {foreach from=$keywords item=keyword}
-        <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
-        {/foreach}
-        {/if}
-    </td>
     <td style="text-align:center">{$i.tp_cnt}</td>
+    <td style="text-align:center">{if $i.extra_hours_payment}да{/if}</td>
     <td style="text-align:center">{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting&id={$i.id}">редактировать</a>{/if}</td>
     </tr>
     {/foreach}

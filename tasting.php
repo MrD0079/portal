@@ -55,7 +55,6 @@ if (isset($_REQUEST["get_tp"])){
     echo $sql;
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
-} else if (isset($_REQUEST["list_files"])){
 } else if (isset($_REQUEST["list_tasting"])){
     $sql = "
                 SELECT t.*,
@@ -87,39 +86,11 @@ if (isset($_REQUEST["get_tp"])){
             Table_Update('tasting_tp', array("t_id"=>$_REQUEST["id"],"tp"=>$k),$v);
         }
     }
-    if (isset($_FILES['tasting_tp_file']))
-    {
-            $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
-            foreach($_FILES['tasting_tp_file']['tmp_name'] as $k=>$v){
-                if (is_uploaded_file($_FILES['tasting_tp_file']['tmp_name'][$k]))
-                {
-                        $a=pathinfo($_FILES['tasting_tp_file']['name'][$k]);
-                        $id=get_new_file_id();
-                        $fn=$id.'_'.translit($_FILES['tasting_tp_file']['name'][$k]);
-                        $files = $db->getOne("select files from tasting where id=".$_REQUEST['id']);
-                        $files = preg_split('/\r\n|\r|\n/', $files);
-                        $files[]=$fn;
-                        $vals = array("files"=>join("\n",$files));
-                        Table_Update('tasting', array("id"=>$_REQUEST["id"]),$vals);
-                        move_uploaded_file($_FILES['tasting_tp_file']['tmp_name'][$k], 'files/'.$fn);
-                }
-            }
-    }
-    if (isset($_REQUEST["del_files"])) {
-        foreach(explode(",", $_REQUEST["del_files"]) as $v) {
-            echo $v."\n";
-            $files = $db->getOne("select files from tasting where id=".$_REQUEST['id']);
-            $files = preg_split('/\r\n|\r|\n/', $files);
-            if(($key = array_search($v, $files)) !== false) {unset($files[$key]);}
-            $vals = array("files"=>join("\n",$files));
-            Table_Update('tasting', array("id"=>$_REQUEST["id"]),$vals);
-        }
-    }
-    //print_r($_REQUEST);
-    //print_r($_FILES);
 } else if (isset($_REQUEST["id"])||isset($_REQUEST["new_tasting"])){
     !isset($_REQUEST["id"])?$_REQUEST["id"]=get_new_id():null;
-    $sql = "SELECT t.*, TO_CHAR (t.dt, 'dd.mm.yyyy') dt FROM tasting t WHERE id = '".$_REQUEST["id"]."'";
+    $sql = "SELECT t.*, TO_CHAR (t.dt, 'dd.mm.yyyy') dt, p.name program_name
+  FROM tasting t, tasting_program p
+ WHERE t.program_id = p.id AND t.id = '".$_REQUEST["id"]."'";
     $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('tasting', $r);
 }

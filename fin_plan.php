@@ -229,7 +229,7 @@ if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
 	{
-                Table_Update("nets_plan_month", array('id'=>$k),null);
+                Table_Update("nets_plan_month", array('id'=>$v),null);
 	}
 }
 if (isset($_REQUEST["add_st"])&&isset($_REQUEST["st"]))
