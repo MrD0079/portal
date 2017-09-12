@@ -29,4 +29,3 @@ set multiple checkboxes
 <a href="javascript:void(0);" onclick="$('.chk_all:enabled').each(function(){$(this).prop('checked',true);$(this).click();});">[-]</a>
 get checkbox:
 $('#cb_{$i.id}_{$smarty.request.id}').val()
-

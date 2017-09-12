@@ -17,7 +17,7 @@ if (isset($_REQUEST["get_tp"])){
        (SELECT fio
           FROM user_list
          WHERE tn = t.new_controller)
-          new_controller_fio
+          new_controller_fio,t.extra_hours_payment
   FROM tasting_tp t,
        ms_nets n,
        cpp c,

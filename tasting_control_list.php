@@ -56,5 +56,33 @@ if (isset($_REQUEST["select_tasting"])){
         "tp"=>$_REQUEST["tp"]
         ),$_REQUEST["tp_detail"]);
     //print_r($_REQUEST);
+    if (isset($_FILES['tasting_tp_file']))
+    {
+            $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
+            foreach($_FILES['tasting_tp_file']['tmp_name'] as $k=>$v){
+                if (is_uploaded_file($_FILES['tasting_tp_file']['tmp_name'][$k]))
+                {
+                        $a=pathinfo($_FILES['tasting_tp_file']['name'][$k]);
+                        $id=get_new_file_id();
+                        $fn=$id.'_'.translit($_FILES['tasting_tp_file']['name'][$k]);
+                        $files = $db->getOne("select files from tasting_tp where t_id=".$_REQUEST["tasting"]." and tp=".$_REQUEST["tp"]);
+                        $files = preg_split('/\r\n|\r|\n/', $files);
+                        $files[]=$fn;
+                        $vals = array("files"=>join("\n",$files));
+                        Table_Update('tasting_tp', array("t_id"=>$_REQUEST["tasting"],"tp"=>$_REQUEST["tp"]),$vals);
+                        move_uploaded_file($_FILES['tasting_tp_file']['tmp_name'][$k], 'files/'.$fn);
+                }
+            }
+    }
+    if (isset($_REQUEST["del_files"])) {
+        foreach(explode(",", $_REQUEST["del_files"]) as $v) {
+            echo $v."\n";
+            $files = $db->getOne("select files from tasting_tp where t_id=".$_REQUEST["tasting"]." and tp=".$_REQUEST["tp"]);
+            $files = preg_split('/\r\n|\r|\n/', $files);
+            if(($key = array_search($v, $files)) !== false) {unset($files[$key]);}
+            $vals = array("files"=>join("\n",$files));
+            Table_Update('tasting_tp', array("t_id"=>$_REQUEST["tasting"],"tp"=>$_REQUEST["tp"]),$vals);
+        }
+    }
 }
 $smarty->display('tasting_control_list.html');

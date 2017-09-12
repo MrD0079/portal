@@ -11,6 +11,7 @@
             <td>СВ МС Промоутеров</td>
             <td>Промоутеры</td>
             <td>новый контролер</td>
+            <td>оплата доп. часа работ</td>
         </tr>
     </table>
     {foreach key=k item=i from=$x name=x}
@@ -44,6 +45,17 @@
         </td>
         <td style="text-align:center">{$x.promoter_cnt}</td>
         <td style="text-align:left">{$x.new_controller_fio}</td>
+        <td>
+            <input id=cb_tasting_extra_hours_payment_{$x.tp}
+                   type=checkbox
+                   onClick="$('#tasting_extra_hours_payment_{$x.tp}').val(this.checked?1:0);">
+            <input type="hidden"
+                   id=tasting_extra_hours_payment_{$x.tp}
+                   name="tasting_tp[{$x.tp}][extra_hours_payment]" value="{$x.extra_hours_payment}">
+            <script>
+                $("#cb_tasting_extra_hours_payment_{$x.tp}").prop('checked','{$x.extra_hours_payment}'=='1'?true:false);
+            </script>
+        </td>
         <input type="hidden" class="iter_tp_hidden" name=iter_tp_hidden[] value="{$x.tp}">
     </tr>
 {elseif $smarty.request.select_tasting_program}
@@ -113,20 +125,6 @@
         <tr>
             <td>Комментарий</td><td><input name=tasting[comm] value="{$tasting.comm}" size="50"></td>
         </tr>
-        <tr>
-            <td>оплата доп. часа работ</td>
-            <td>
-                <input id=cb_tasting_extra_hours_payment
-                       type=checkbox
-                       onClick="$('#tasting_extra_hours_payment').val(this.checked?1:0);">
-                <input type="hidden"
-                       id=tasting_extra_hours_payment
-                       name="tasting[extra_hours_payment]" value="{$tasting.extra_hours_payment}">
-                <script>
-                    $("#cb_tasting_extra_hours_payment").prop('checked','{$tasting.extra_hours_payment}'=='1'?true:false);
-                </script>
-            </td>
-        </tr>
     </table>
     <h1>Детали</h1>
     <table border="1">
@@ -147,7 +145,6 @@
     <div id="list_tp" style="display: inline;"></div>
     </form>
     <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting('{$smarty.request.id}');"></p>
-    <div id=ok></div>
     <script>
     /*{literal}*/
     $('#select_nets').on("change",function(){
@@ -276,7 +273,6 @@
     <td>дата проведения</td>
     <td>Комментарий</td>
     <td>кол-во ТЗ</td>
-    <td>оплата доп. часа работ</td>
     <td>{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting&new_tasting=1">добавить</a>{/if}</td>
     </tr>
     {foreach key=k item=i from=$x name=x}
@@ -287,7 +283,6 @@
     <td style="text-align:center">{$i.dt}</td>
     <td>{$i.comm}</td>
     <td style="text-align:center">{$i.tp_cnt}</td>
-    <td style="text-align:center">{if $i.extra_hours_payment}да{/if}</td>
     <td style="text-align:center">{if $is_admin or $is_ma}<a target="_blank" href="?action=tasting&id={$i.id}">редактировать</a>{/if}</td>
     </tr>
     {/foreach}
@@ -296,7 +291,6 @@
     <h1>ДЕГУСТАЦИИ</h1>
     <p><input type="button" value="Показать данные" onClick="load_list_tasting();"></p>
     <div id="list_tasting" style="display: inline;"></div>
-    <div id=ok></div>
     <script>
     /*{literal}*/
     function load_list_tasting()

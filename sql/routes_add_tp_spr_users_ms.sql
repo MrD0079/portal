@@ -1,4 +1,4 @@
-/* Formatted on 28.08.2017 17:33:16 (QP5 v5.252.13127.32867) */
+/* Formatted on 11.09.2017 10:54:03 (QP5 v5.252.13127.32867) */
   SELECT s.id,
          s.login,
          s.FAM,
@@ -25,7 +25,7 @@
                    WHERE tn = :tn) = 1)
          AND (   (    login NOT IN (SELECT login
                                       FROM routes_head
-                                     WHERE data = TO_DATE ( :month_list, 'dd.mm.yyyy'))
+                                     WHERE data = TO_DATE ( :month_list, 'dd.mm.yyyy') AND login IS NOT NULL)
                   AND datauvol IS NULL)
               OR login = :login)
 ORDER BY s.fam, s.im, s.otch

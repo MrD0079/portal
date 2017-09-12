@@ -39,11 +39,113 @@
     <option value="{$i.kodtp}">{$i.tz_oblast} {$i.ur_tz_name} {$i.tz_address}</option>
     {/foreach}
 {elseif $smarty.request.get_data}
-
-{foreach key=k item=i from=$x name=x}
-    $('#{$k}').val('{$i}');
-{/foreach}
-    
+    <h1>Ввод данных по ТП</h1>
+    <table border="1" id="table_detail">
+        <tr style="font-weight: bold">
+            <td style="text-align:right"></td>
+            <td></td>
+            <td>Комментарий</td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Время посещения торгового зала</td>
+            <td>
+                <select name=tp_detail[visit_time] id=visit_time>
+                    <option></option>
+                    {foreach key=kt item=ki from=$times}
+                    <option value='{$ki}'>{$ki}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Наличие промоутера на соответствующем месте</td>
+            <td><select name=tp_detail[promoter_presence] id=promoter_presence></select></td>
+            <td><input name=tp_detail[promoter_presence_comm] id=promoter_presence_comm value="{$x.promoter_presence_comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Активность</td>
+            <td><select name=tp_detail[activity] id=activity><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
+            <td><input name=tp_detail[activity_comm] id=activity_comm value="{$x.activity_comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Внешний вид</td>
+            <td><select name=tp_detail[appearance] id=appearance><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
+            <td><input name=tp_detail[appearance_comm] id=appearance_comm value="{$x.appearance_comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Знание промо-текста</td>
+            <td><select name=tp_detail[text_knowledge] id=text_knowledge><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
+            <td><input name=tp_detail[text_knowledge_comm] id=text_knowledge_comm value="{$x.text_knowledge_comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Заинтересованность покупателей</td>
+            <td><select name=tp_detail[buyers_interest] id=buyers_interest></select></td>
+            <td><input name=tp_detail[buyers_interest_comm] id=buyers_interest_comm value="{$x.buyers_interest_comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Наличие дегустационного продукта на полке</td>
+            <td><select name=tp_detail[product_presence] id=product_presence></select></td>
+            <td><input name=tp_detail[product_presence_comm] id=product_presence_comm value="{$x.product_presence_comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">Замечания (комментарии)</td>
+            <td></td>
+            <td><input name=tp_detail[comm] id=comm value="{$x.comm}"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right">
+                вложения
+            </td>
+            <td colspan="2">
+                <input
+                    type="button"
+                    value="добавить"
+                    onClick="add_file();">
+            </td>
+        </tr>
+        {if $x.files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
+        {foreach from=$keywords item=keyword}
+        <tr>
+            <td style="text-align:right">
+                <input type=button value=удалить onClick="
+                    del_files.push('{$keyword}');
+                    $(this).parent().parent().remove();
+                       ">
+            </td>
+            <td colspan=2>
+                <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+            </td>
+        </tr>
+        {/foreach}
+        {/if}
+    </table>
+    <script>
+        $('#visit_time').val('{$x.visit_time}');
+        $('#activity').val('{$x.activity}');
+        $('#appearance').val('{$x.appearance}');
+        $('#text_knowledge').val('{$x.text_knowledge}');
+        var promoter_presence='{$x.promoter_presence}';
+        var buyers_interest='{$x.buyers_interest}';
+        var product_presence='{$x.product_presence}';
+        /*{literal}*/
+        $('#promoter_presence').load('?action=tasting_control_list&nohead=1&select_promoter_presence=1',{},function() {$('#promoter_presence').val(promoter_presence);});
+        $('#buyers_interest').load('?action=tasting_control_list&nohead=1&select_buyers_interest=1',{},function() {$('#buyers_interest').val(buyers_interest);});
+        $('#product_presence').load('?action=tasting_control_list&nohead=1&select_product_presence=1',{},function() {$('#product_presence').val(product_presence);});
+        function add_file(){
+            $('#table_detail').append(
+                    $(
+                                "<tr>\
+                                    <td style=\"text-align:right\">\
+                                        <input type=button value=удалить onClick=$(this).parent().parent().remove();>\
+                                    </td>\
+                                    <td colspan=2><input type=file name=tasting_tp_file[]></td>\
+                                </tr>")
+                );
+        }
+        /*{/literal}*/
+    </script>
 {elseif $smarty.request.save_data}
 {elseif $smarty.request.select_time}
     <option></option>
@@ -76,64 +178,10 @@
             <td><select name=tp id=tp></select></td>
         </tr>
     </table>
-    <h1>Ввод данных по ТП</h1>
-    <table border="1" id="table_detail">
-        <tr style="font-weight: bold">
-            <td style="text-align:right"></td>
-            <td></td>
-            <td>Комментарий</td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Время посещения торгового зала</td>
-            <td>
-                <select name=tp_detail[visit_time] id=visit_time>
-                    <option></option>
-                    {foreach key=kt item=ki from=$times}
-                    <option value='{$ki}'>{$ki}</option>
-                    {/foreach}
-                </select>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Наличие промоутера на соответствующем месте</td>
-            <td><select name=tp_detail[promoter_presence] id=promoter_presence></select></td>
-            <td><input name=tp_detail[promoter_presence_comm] id=promoter_presence_comm></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Активность</td>
-            <td><select name=tp_detail[activity] id=activity><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
-            <td><input name=tp_detail[activity_comm] id=activity_comm></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Внешний вид</td>
-            <td><select name=tp_detail[appearance] id=appearance><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
-            <td><input name=tp_detail[appearance_comm] id=appearance_comm></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Знание промо-текста</td>
-            <td><select name=tp_detail[text_knowledge] id=text_knowledge><option></option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></td>
-            <td><input name=tp_detail[text_knowledge_comm] id=text_knowledge_comm></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Заинтересованность покупателей</td>
-            <td><select name=tp_detail[buyers_interest] id=buyers_interest></select></td>
-            <td><input name=tp_detail[buyers_interest_comm] id=buyers_interest_comm></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Наличие дегустационного продукта на полке</td>
-            <td><select name=tp_detail[product_presence] id=product_presence></select></td>
-            <td><input name=tp_detail[product_presence_comm] id=product_presence_comm></td>
-        </tr>
-        <tr>
-            <td style="text-align:right">Замечания (комментарии)</td>
-            <td></td>
-            <td><input name=tp_detail[comm] id=comm></td>
-        </tr>
-    </table>
+    <p><input type="button" value="Показать данные" onClick="load_data();"></p>
+    <div id="detail" style="display: inline;"></div>
     </form>
     <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting();"></p>
-    <div id=ok></div>
     <script>
     /*{literal}*/
     function load_tasting_program(){
@@ -163,28 +211,14 @@
         },function(){$('#tp').change();});
     }
     function load_data(){
-        $.ajax({
-		type: 'POST',
-		url: '?action=tasting_control_list&nohead=1&get_data=1'
-                    +'&id_t='+$('#tasting').val()
-                    +'&id_tp='+$('#tp').val(),
-		//data: fd,
-		processData: false,
-		contentType: false,
-		success: function(data) {
-                    eval(data);
-                    //console.log(data);
-                    //$('#button_save').prop("disabled",false);
-                    //successNoty("Сохранено");
-		}
-	});
-        /*$('#new_controller').load('?action=tasting_control_list&nohead=1&select_new_controller=1',{
-            id_t:$('#tasting').val(),
-            id_tp:$('#tp').val()
-        },function(data){
-            console.log(now());
-            console.log(data);
-        });*/
+        if (!$('#tp').val()){
+            $('#detail').html('');
+            return;
+        }
+        $('#detail').load('?action=tasting_control_list&nohead=1&get_data=1',{
+                    id_t:$('#tasting').val(),
+                    id_tp:$('#tp').val()
+        });
     }
     $('#tasting_program').on("change",function(){load_tasting_program_dates();});
     $('#tasting_program_dates').on("change",function(){load_tasting();});
@@ -192,9 +226,6 @@
     $('#nets').on("change",function(){load_tp();});
     $('#tp').on("change",function(){load_data();});
     load_tasting_program();
-    $('#promoter_presence').load('?action=tasting_control_list&nohead=1&select_promoter_presence=1');
-    $('#buyers_interest').load('?action=tasting_control_list&nohead=1&select_buyers_interest=1');
-    $('#product_presence').load('?action=tasting_control_list&nohead=1&select_product_presence=1');
     function save_tasting(){
         var bad_data = false;
         var error_text = '';
@@ -236,6 +267,7 @@
         }
         $('#button_save').prop("disabled",true);
         var fd = new FormData(document.getElementById('form_tasting'));
+        if (del_files.length>0) fd.append('del_files',del_files);
         $.ajax({
 		type: 'POST',
 		url: '?action=tasting_control_list&save_data=1&nohead=1',
@@ -250,5 +282,6 @@
 	});
     }
     /*{/literal}*/
+    var del_files = [];
     </script>
 {/if}
