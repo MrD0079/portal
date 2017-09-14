@@ -28,7 +28,7 @@ if (isset($_REQUEST["save_d"]))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$keys = array('parent'=>$_REQUEST['parent'],$_REQUEST['field']=>$_REQUEST['val']);
-	if ($_REQUEST["del"]==1)
+	if ($_REQUEST["del_d"]==1)
 	{
 		$vals = null;
 	}

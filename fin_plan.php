@@ -72,7 +72,7 @@ if (isset($_REQUEST["save_year"])&&isset($_REQUEST["nets_plan_year"]))
 		"year" => $_REQUEST["calendar_years"]
 	);
 	Table_Update ("nets_plan_year", $keys, $_REQUEST['nets_plan_year']);
-	/*if (
+	if (
 		isset($_REQUEST['nets_plan_year']["sales"])||
 		isset($_REQUEST['nets_plan_year']["sales_prev"])||
 		isset($_REQUEST['nets_plan_year']["sales_ng"])||
@@ -82,7 +82,7 @@ if (isset($_REQUEST["save_year"])&&isset($_REQUEST["nets_plan_year"]))
 		$sql="update nets_plan_month set payment_format = 1 where plan_type=:plan_type and payment_format = 1 and id_net = :net and year = :y";
 		$sql=stritr($sql,$params);
 		$db->query($sql);
-	}*/
+	}
 }
 if (isset($_REQUEST["save_month_on"])&&isset($_REQUEST["nets_month_on"]))
 {

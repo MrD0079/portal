@@ -133,7 +133,7 @@ if (isset($r["id"]))
 			$p=array(":route"=>$r["id"],":ag_id"=>$v["ag_id"],":kodtp"=>$v["kodtp"],":dates_list"=>"'".$_REQUEST["dates_list"]."'");
 
 			$sqlr=stritr($sqlr,$p);
-			$rb1r = $db->getAll($sqlr, null, null, null, MDB2_FETCHMODE_ASSOC);
+                        $rb1r = $db->getAll($sqlr, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 			$d[$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']=null;
 			foreach ($rb1r as $kr=>$vr)
