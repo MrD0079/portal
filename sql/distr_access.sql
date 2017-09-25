@@ -1,4 +1,4 @@
-/* Formatted on 09/04/2015 12:09:55 (QP5 v5.227.12220.39724) */
+/* Formatted on 21.09.2017 12:32:20 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT
          z.id,
          z.name,
@@ -12,16 +12,18 @@
          z.comm,
          z.login,
          s.password,
-         FN_QUERY2STR (
-               'SELECT t2.fio FROM bud_tn_fil t1, user_list t2 WHERE t1.bud_id = '
-            || z.id
-            || ' AND t1.tn = t2.tn ORDER BY t2.fio',
-            '<br>')
+         TO_CHAR (
+            FN_QUERY2STR (
+                  'SELECT t2.fio FROM bud_tn_fil t1, user_list t2 WHERE t1.bud_id = '
+               || z.id
+               || ' AND t1.tn = t2.tn ORDER BY t2.fio',
+               '<br>'))
             db_list,
-         FN_QUERY2STR (
-               'SELECT DISTINCT dolgn || '': '' || mail FROM bud_fil_contacts WHERE delivery = 1 AND fil = '
-            || z.id,
-            '<br>')
+         TO_CHAR (
+            FN_QUERY2STR (
+                  'SELECT DISTINCT dolgn || '': '' || mail FROM bud_fil_contacts WHERE delivery = 1 AND fil = '
+               || z.id,
+               '<br>'))
             delivery
     FROM bud_fil z,
          bud_nd nd,
@@ -42,9 +44,8 @@
               OR (SELECT NVL (is_super, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND DECODE (:da_db, 0, bf.tn, :da_db) = bf.tn
-         AND DECODE (:da_di, 0, z.id, :da_di) = z.id
-         AND DECODE (:da_re, '0', u.region_name, :da_re) = u.region_name
-         AND DECODE (:da_de, '0', u.department_name, :da_de) =
-                u.department_name
+         AND DECODE ( :da_db, 0, bf.tn, :da_db) = bf.tn
+         AND DECODE ( :da_di, 0, z.id, :da_di) = z.id
+         AND DECODE ( :da_re, '0', u.region_name, :da_re) = u.region_name
+         AND DECODE ( :da_de, '0', u.department_name, :da_de) = u.department_name
 ORDER BY z.name

@@ -1,0 +1,447 @@
+{if $smarty.request.select_tasting_program}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.get_data}
+    <p>
+        итого:{$costs_amount}
+        &nbsp&nbsp&nbsp
+        {if $program_readonly neq 1}
+            {if $my_pos_id eq 127707110 or $is_admin or $is_mservice}
+            <a target=_blank href="?action=tasting_program_costs&report_user=1&program_id={$smarty.request.program_id}&login={$login}">мой отчет о затратах</a>
+            &nbsp&nbsp&nbsp
+            {/if}
+            для создания отчета промоутера выберите промоутера
+            <select onchange="
+                if (this.value=='')
+                    $('#promo_rep_link').hide()
+                else /*{literal}*/{/*{/literal}*/
+                    $('#promo_rep_link').attr(
+                            'href',
+                            '?action=tasting_program_costs&report_promo=1&program_id={$smarty.request.program_id}&login='+this.value);
+                    $('#promo_rep_link').show();
+                /*{literal}*/}/*{/literal}*/
+            ">
+                <option></option>
+                {foreach key=k item=i from=$promoters}
+                <option value="{$i.login}">{$i.fio}</option>
+                {/foreach}
+            </select>
+            &nbsp&nbsp&nbsp
+            <a id="promo_rep_link" target=_blank>отчет промоутера</a>
+            <script>$('#promo_rep_link').hide();</script>
+        {/if}
+    </p>
+    <table border="1" id="table_detail">
+        <tr style="font-weight: bold">
+            <td>№ п/п</td>
+            <td>ФИО</td>
+            <td>Руководитель</td>
+            <td>Должность</td>
+            <td>Сумма затрат, {$valuta}</td>
+            <td>Подтверждающие документы</td>
+            <td>отчет принят руководителем</td>
+            <td>отчет обработан</td>
+        </tr>
+        {foreach key=k item=i from=$x name=x}
+        {if $i.login|substr:0:2 eq 'ms'}
+            {assign var=user_type value='promo'}
+        {else}
+            {assign var=user_type value='user'}
+        {/if}
+        <tr id="tr_{$i.program_id}_{$i.login}">
+            <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+            <td>{$i.fio}</td>
+            <td>{$i.chief_fio}</td>
+            <td>{$i.pos_name}</td>
+            <td style="text-align: right">{$i.costs_amount|num:2}</td>
+            <td>
+                {if $i.motivation_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.motivation_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.transportation_costs_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.transportation_costs_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.log_trasport_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.log_trasport_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.log_loaders_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.log_loaders_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.log_lease_warehouse_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.log_lease_warehouse_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.organizational_costs_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.organizational_costs_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.consumables_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.consumables_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+                {if $i.files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
+            </td>
+            <td style="text-align: center">{if $i.is_accepted}да{/if}</td>
+            <td style="text-align: center">{if $i.is_processed}да{/if}</td>
+            {if $program_readonly neq 1}
+            <td>
+                <a
+                    target=_blank
+                    href="?action=tasting_program_costs&report_{$user_type}=1&program_id={$i.program_id}&login={$i.login}">
+                    редактировать
+                </a>
+            </td>
+            <td>
+                <a
+                    href="javascript:void(0);"
+                    onClick='del_rep("{$i.program_id}","{$i.login}");'>
+                    удалить
+                </a>
+            </td>
+            {/if}
+            <td>
+                <a
+                    target=_blank
+                    href="?action=tasting_program_costs&report_{$user_type}=1&program_id={$i.program_id}&login={$i.login}&view=1">
+                    просмотреть
+                </a>
+            </td>
+        </tr>
+        {/foreach}
+    </table>
+{elseif $smarty.request.report_user}
+    {if $program_readonly eq 1 or $smarty.request.view}
+    {assign var=disabled value='disabled="disabled"'}
+    {/if}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_program_costs">
+    <input type="hidden" name=keys[program_id] value="{$smarty.request.program_id}">
+    <input type="hidden" name=keys[login] value="{$smarty.request.login}">
+    <h1>Отчет о затратах</h1>
+    <table>
+        <tr>
+            <td>
+                <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn}disabled="disabled"{/if} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
+                <p>очтет обработан <select {$disabled} {if not $is_acceptor}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
+                <script>
+                    $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
+                    $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
+                </script>
+            </td>
+            <td>&nbsp&nbsp&nbsp</td>
+            <td>
+                <p>
+                    Текст сообщения:
+                    <br>
+                    <textarea cols=20 rows=3 name=vals[msg] id="msg">{$x.msg}</textarea>
+                    <br>
+                    <input id="button_send_msg" type="button" value="Отправить сообщение" onClick="send_msg();"></p>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p>Дегустационная программа <b>{$program_name}</b></p>
+    <p>Сотрудник <b>{$login_fio}</b></p>
+    <table border="1">
+        <tr style="font-weight: bold">
+            <td></td>
+            <td>Затраты</td>
+            <td>Подтверждающие документы</td>
+        </tr>
+        <tr style="vertical-align: top">
+            <td>Мотивация (ЗП)</td>
+            <td><input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}"></td>
+            <td id="motivation_files">
+                {if $x.motivation_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.motivation_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[motivation_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('motivation_files');">
+            </td>
+        </tr>		
+        <tr>
+            <td>Транспортные затраты</td>
+            <td><input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}"
+                    onChange="$('#amort').html(Math.round('{$amort}'*this.value*100)/100)" id="transportation_costs"></td>
+            <td id="transportation_costs_files">
+                {if $x.transportation_costs_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.transportation_costs_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[transportation_costs_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('transportation_costs_files');">
+            </td>
+        </tr>		
+        <tr>
+            <td>Амортизация</td>
+            <td><div id="amort"></div></td>
+            <td></td>
+        </tr>		
+    <script>
+        $("#transportation_costs").change();
+    </script>
+        <tr>
+            <td>Логистика (транспорт)</td>
+            <td><input {$disabled} class="number" name="vals[log_trasport]" value="{$x.log_trasport}"></td>
+            <td id="log_trasport_files">
+                {if $x.log_trasport_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_trasport_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[log_trasport_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('log_trasport_files');">
+            </td>
+        </tr>		
+        <tr>
+            <td>Логистика (грузчики)</td>
+            <td><input {$disabled} class="number" name="vals[log_loaders]" value="{$x.log_loaders}"></td>
+            <td id="log_loaders_files">
+                {if $x.log_loaders_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_loaders_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[log_loaders_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('log_loaders_files');">
+            </td>
+        </tr>		
+        <tr>
+            <td>Логистика (аренда склад)</td>
+            <td><input {$disabled} class="number" name="vals[log_lease_warehouse]" value="{$x.log_lease_warehouse}"></td>
+            <td id="log_lease_warehouse_files">
+                {if $x.log_lease_warehouse_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_lease_warehouse_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[log_lease_warehouse_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('log_lease_warehouse_files');">
+            </td>
+        </tr>		
+        <tr>
+            <td>Организационные затраты</td>
+            <td><input {$disabled} class="number" name="vals[organizational_costs]" value="{$x.organizational_costs}"></td>
+            <td id="organizational_costs_files">
+                {if $x.transportation_costs_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.organizational_costs_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[organizational_costs_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('organizational_costs_files');">
+            </td>
+        </tr>		
+        <tr>
+            <td>Расходные материалы</td>
+            <td><input {$disabled} class="number" name="vals[consumables]" value="{$x.consumables}"></td>
+            <td id="consumables_files">
+                {if $x.consumables_files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.consumables_files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[consumables_files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('consumables_files');">
+            </td>
+        </tr>		
+    </table>
+    <p><input {$disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
+    </form>
+{elseif $smarty.request.report_promo}
+    {if $program_readonly eq 1 or $smarty.request.view}
+    {assign var=disabled value='disabled="disabled"'}
+    {/if}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_program_costs">
+    <input type="hidden" name=keys[program_id] value="{$smarty.request.program_id}">
+    <input type="hidden" name=keys[login] value="{$smarty.request.login}">
+    <h1>Отчет о затратах</h1>
+    <table>
+        <tr>
+            <td>
+                <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn}disabled="disabled"{/if} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
+                <p>очтет обработан <select {$disabled} {if not $is_acceptor}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
+                <script>
+                    $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
+                    $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
+                </script>
+            </td>
+            <td>&nbsp&nbsp&nbsp</td>
+            <td>
+                <p>
+                    Текст сообщения:
+                    <br>
+                    <textarea cols=20 rows=3 name=vals[msg] id="msg">{$x.msg}</textarea>
+                    <br>
+                    <input id="button_send_msg" type="button" value="Отправить сообщение" onClick="send_msg();"></p>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p>Дегустационная программа <b>{$program_name}</b></p>
+    <p>Сотрудник <b>{$login_fio}</b></p>
+    <table border="1">
+        <tr style="font-weight: bold">
+            <td></td>
+            <td>Затраты</td>
+        </tr>
+        <tr style="vertical-align: top">
+            <td>Мотивация (ЗП)</td>
+            <td><input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}"></td>
+        </tr>		
+        <tr>
+            <td>Транспортные затраты</td>
+            <td><input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}"></td>
+        </tr>		
+        <tr>
+            <td>Вложения</td>
+            <td id="files">
+                {if $x.files}
+                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
+                {foreach from=$keywords item=keyword}
+                        <div>
+                            <input {$disabled} type=button value=удалить onClick="
+                            $('#form_tasting').append($('<input type=hidden name=del_files[files][{$keyword}]>'));
+                            $(this).parent().remove();
+                               ">
+                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
+                        </div>
+                {/foreach}
+                {/if}
+                <input {$disabled} type="button" value="добавить" onClick="add_file('files');">
+            </td>
+        </tr>		
+    </table>
+    <p><input {$disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
+    </form>
+{elseif $smarty.request.save_user_report}
+{elseif $smarty.request.del_rep}
+{else}
+    <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
+          action="?action=tasting_program_costs">
+    <h1>Затраты по дегустационной программе</h1>
+    <table border="0" id="table">
+        <tr>
+            <td>Дегустационная программа</td>
+            <td><select name=tasting_program id=tasting_program></select></td>
+        </tr>
+    </table>
+    <p><input type="button" value="Показать данные" onClick="load_data();"></p>
+    <div id="detail" style="display: inline;"></div>
+    </form>
+    <script>
+    /*{literal}*/
+    function load_tasting_program(){
+        $('#tasting_program').load('?action=tasting_program_costs&nohead=1&select_tasting_program=1',{
+        },function() {$('#tasting_program').change();});
+    }
+    function load_data(){
+        if (!$('#tasting_program').val()){
+            $('#detail').html('');
+            return;
+        }
+        $('#detail').load('?action=tasting_program_costs&nohead=1&get_data=1',{
+            program_id:$('#tasting_program').val()
+        });
+    }
+    function del_rep(program_id, login){
+        var fd = new FormData();
+        fd.append('keys[program_id]',  program_id);
+        fd.append('keys[login]',  login);
+        $.ajax({
+            type: 'POST',
+            url: '?action=tasting_program_costs&nohead=1&del_rep=1',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $("#tr_"+program_id+"_"+login).remove();
+                successNoty("Удалено");
+            }
+        });
+    }
+    $('#tasting_program').on("change",function(){load_data();});
+    load_tasting_program();
+    /*{/literal}*/
+    </script>
+{/if}
+{if $smarty.request.report_promo or $smarty.request.report_user}
+    <script>
+    /*{literal}*/
+    function save_user_report(){
+        $('#button_save').prop("disabled",true);
+        var fd = new FormData(document.getElementById('form_tasting'));
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_program_costs&save_user_report=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    $('#button_save').prop("disabled",false);
+                    successNoty("Сохранено");
+		}
+	});
+    }
+    function send_msg(){
+        $('#button_send_msg').prop("disabled",true);
+        var fd = new FormData(document.getElementById('form_tasting'));
+        //fd.append('keys[program_id]',  program_id);
+        //fd.append('keys[login]',  login);
+        //fd.append('msg',  $('#msg').text());
+        $.ajax({
+		type: 'POST',
+		url: '?action=tasting_program_costs&send_msg=1&nohead=1',
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(data) {
+                    $('#button_send_msg').prop("disabled",false);
+                    successNoty("Отправлено");
+		}
+	});
+    }
+    function add_file(e){
+        $('#'+e).append(
+                $(
+                            "   <div>\n\
+                                    <input type=button value=удалить onClick=$(this).parent().remove();>\
+                                    <input type=file name="+e+"[]>\n\
+                                </div>\
+                            ")
+            );
+    }
+    /*{/literal}*/
+    </script>
+{/if}
