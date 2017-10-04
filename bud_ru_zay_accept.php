@@ -1,6 +1,7 @@
 <?
 $_REQUEST["tu"]==1?$_REQUEST["st"]=0:InitRequestVar("st",0);
 InitRequestVar("wait4myaccept",0);
+InitRequestVar("showall",0);
 $_REQUEST["tu"]==1?$doc_str="цели на переговоры":$doc_str="заявка на проведение активности";
 
 if (isset($_REQUEST["save"]))
@@ -198,44 +199,48 @@ foreach ($data as $k=>$v)
 }
 if (isset($d))
 {
-
-$max=100;
-$i=0;
-foreach ($d as $k=>$v)
-{
-	$i++;
-	if ($i>$max) {
-		unset($d[$k]);
-	}
-}
-if ($i>$max){
-	$smarty->assign('tooManyLines','<p style="color:red">Отображены не все документы, '.$max.' из '.$i.'. Остальные документы будут отображены после согласования отображенных.</p>');
-}
-
-foreach ($d as $k=>$v)
-{
-	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
-	$params=array(':z_id' => $k);
-	$sql=stritr($sql,$params);
-	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	foreach ($data as $k1=>$v1)
-	{
-		if ($v1["type"]=="file")
-		{
-			$data[$k1]["val_file"]=explode("\n",$v1["val_file"]);
-		}
-		/*if ($v1['type']=='list')
-		{
-			$sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
-			$params[':id'] = $v1['val_list'];
-			$sql=stritr($sql,$params);
-			$list = $db->getOne($sql);
-			$data[$k1]['val_list_name'] = $list;
-		}*/
-	}
-	include "bud_ru_zay_formula.php";
-	$d[$k]["ff"]=$data;
-}
+    if ($_REQUEST["showall"]==0)
+    {
+        $max=100;
+        $i=0;
+        foreach ($d as $k=>$v)
+        {
+            $i++;
+            if ($i>$max) {
+                unset($d[$k]);
+            }
+        }
+        if ($i>$max){
+            $smarty->assign('tooManyLines',
+                '<p style="color:red">Отображены не все документы, '.$max.' из '.$i.'.<br>'.
+                'Остальные документы будут отображены после согласования отображенных.<br>'.
+                '<a href="?action=bud_ru_zay_accept&tu=1&showall=1">показать все документы</a></p>');
+        }
+    }
+    foreach ($d as $k=>$v)
+    {
+            $sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
+            $params=array(':z_id' => $k);
+            $sql=stritr($sql,$params);
+            $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+            foreach ($data as $k1=>$v1)
+            {
+                    if ($v1["type"]=="file")
+                    {
+                            $data[$k1]["val_file"]=explode("\n",$v1["val_file"]);
+                    }
+                    /*if ($v1['type']=='list')
+                    {
+                            $sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
+                            $params[':id'] = $v1['val_list'];
+                            $sql=stritr($sql,$params);
+                            $list = $db->getOne($sql);
+                            $data[$k1]['val_list_name'] = $list;
+                    }*/
+            }
+            include "bud_ru_zay_formula.php";
+            $d[$k]["ff"]=$data;
+    }
 }
 isset($d) ? $smarty->assign('d', $d) : null;
 

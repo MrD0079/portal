@@ -12,7 +12,7 @@ if (isset($_REQUEST["save"]))
 	Table_Update('promo_'.$_REQUEST["table"], $keys,$vals);
 	if ($_REQUEST['field'] == "oknm_nm" && $_REQUEST['val'] == 1 && $_REQUEST["table"] == "nm")
 	{
-		$url="https://localhost:8080/?username=".$_SESSION["_authsession"]["username"]."&password=".$password."&auto=1&action=zakaz_nal_report&generate=1&print=1&calendar_years=".$_REQUEST['year']."&plan_month=".$_REQUEST['month']."&nets=0&tn_rmkk=".$_REQUEST['tn']."&tn_mkk=0&table=4send&nohead=1";
+		$url="https://ps.avk.ua/?username=".$_SESSION["_authsession"]["username"]."&password=".$password."&auto=1&action=zakaz_nal_report&generate=1&print=1&calendar_years=".$_REQUEST['year']."&plan_month=".$_REQUEST['month']."&nets=0&tn_rmkk=".$_REQUEST['tn']."&tn_mkk=0&table=4send&nohead=1";
 		$r = file_get_contents($url);
                 $r = trim(preg_replace('/\s+/', ' ', $r));
 		$fn="zakaz_nal_".get_new_file_id().".xls";

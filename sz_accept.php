@@ -102,7 +102,7 @@ if (isset($_REQUEST["save"]))
 									$text.=$v2["fio"]." - ".$v2["e_mail"]."<br/>";
 								}
 							}
-							$r = file_get_contents("https://localhost:8080/sz_view.php?id=".$h["id"]."&print=1&pdf=1&to_file=1");
+							$r = file_get_contents("https://ps.avk.ua/sz_view.php?id=".$h["id"]."&print=1&pdf=1&to_file=1");
 							$fn=array("sz_files/attach".$h["id"].".pdf");
 							$sql=rtrim(file_get_contents('sql/sz_files.sql'));
 							$params=array(':id'=>$h["id"]);

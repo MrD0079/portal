@@ -135,7 +135,6 @@ if (isset($_REQUEST["senddog2fm"]))
 	$text="Здравствуйте,<br>";
 	$text.="Прошу просмотреть и подтвердить корректность договорного планирования по сети \"".$net_name."\" на ".$_REQUEST["calendar_years"]." год.<br>";
 	$text.="Ответственные: РМКК - ".$rmkk.", МКК - ".$mkk.".<br>";
-	//$text.="<a href=https://ps.avk.ua:8080/?action=fin_plan&nets=".$_REQUEST["nets"]."&calendar_years=".$_REQUEST["calendar_years"]."&plan_type=".$_REQUEST["plan_type"].">Договорное планирование</a>";
 	send_mail($fm_email,$subj,$text,null);
 }
 if (isset($_REQUEST["save_month"]))
