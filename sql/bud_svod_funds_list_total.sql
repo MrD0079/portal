@@ -308,7 +308,7 @@ SELECT SUM (zay_compens_distr) zay_compens_distr,
                                                          FROM clusters_fils
                                                         WHERE :clusters = CLUSTER_ID)
                                           OR :clusters = 0)
-                                     AND s.dt = TRUNC (z.dt_start, 'mm')
+                                     AND s.dt IN (z.cost_assign_month, TRUNC (z.dt_start, 'mm'))
                             GROUP BY z.id, z.fil, s.dt) t
                      WHERE     t.id = z.id
                            AND z.id_net = n.id_net(+)

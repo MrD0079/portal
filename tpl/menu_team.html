@@ -24,7 +24,7 @@
 <li><a href="javascript:void(0);"><span class="dir">Подбор и найм</span></a>
 <ul>
 	<li><a href="?action=new_staff">Добавить новичка</a></li>
-	<li><a href="?action=move_staff">Перевод сотрудника на другую должность</a></li>
+	<!--<li><a href="?action=move_staff">Перевод сотрудника на другую должность</a></li>-->
 
 	{if not $is_eta}
 	<li><a href="javascript:void(0);"><span class="dir">Цикл собеседований</span></a>
@@ -50,9 +50,9 @@
 		{/if}
 
 		<li><a href="?action=ac_accept">Согласование заявок на проведение АЦ</a></li>
-		<li><a href="?action=os_ac">ОС по участнику АЦ</a></li>
+		<!--<li><a href="?action=os_ac">ОС по участнику АЦ</a></li>-->
 		<li><a href="?action=ac_report">Отчет по АЦ</a></li>
-		<li><a href="?action=ac_test_report">Тестирование АЦ</a></li>
+		<!--<li><a href="?action=ac_test_report">Тестирование АЦ</a></li>-->
 	</ul>
 	</li>
 
@@ -159,7 +159,7 @@
 				<li><a href="?action=tr_pos">Лестница тренингов</a></li>
 				<li><a href="?action=tr_loc">Места проведения</a></li>
 				<li><a href="?action=tr_test_qa">Тестирование</a></li>
-				<li><a href="?action=ac_test">Тестирование АЦ</a></li>
+				<!--<li><a href="?action=ac_test">Тестирование АЦ</a></li>-->
 				<li><a href="?action=prob_test">Тестирование АП</a></li>
 			</ul>
 		</li>
@@ -184,7 +184,7 @@
 		{if $is_acceptor or $is_test_admin or $is_admin}
 		<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
 		<ul>
-			<li><a href="?action=advance_pos">Базовый аванс</a></li>
+			<!--<li><a href="?action=advance_pos">Базовый аванс</a></li>-->
 		</ul>
 		</li>
 		{/if}
@@ -209,32 +209,24 @@
 
 {/if}
 
+<!--
 {if $cnt_kod neq 'nr'}
-
 <li><a href="javascript:void(0);"><span class="dir">Оценка персонала</span></a>
 <ul>
-	<!--<li><a href="?action=ocenka_help">Инструкция по оценке</a></li>-->
+        <li><a href="?action=ocenka_help">Инструкция по оценке</a></li>
 	<li><a href="?action=ocenka">Провести оценку</a></li>
-
 	{if $test_enabled eq 1}
-
 	<li><a href="?action=ocenka_test">Пройти тест</a></li>
-
 	{/if}
-
 	{if $is_admin or $is_super}
-
 	<li><a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
 		<ul>
 			<li><a href="?action=log&prg=ocenka">Журнал посещений</a></li>
 			<li><a href="?action=ocenka_report">Итог оценки</a></li>
 		</ul>
 	</li>
-
 	{/if}
-
 	{if $is_dc}
-
 	<li><a href="javascript:void(0);"><span class="dir">Девелопмент-центр</span></a>
 	<ul>
 		<li><a href="?action=os">ОС по участникам</a></li>
@@ -243,13 +235,11 @@
 		<li><a href="?action=dc_list">Редактирование групп</a></li>
 	</ul>
 	</li>
-
 	{/if}
-
 </ul>
 </li>
-
 {/if}
+-->
 
 <li><a href="javascript:void(0);"><span class="dir">Увольнение подчиненного</span></a>
 <ul>

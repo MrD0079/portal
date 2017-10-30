@@ -241,7 +241,7 @@
             <td>Организационные затраты</td>
             <td><input {$disabled} class="number" name="vals[organizational_costs]" value="{$x.organizational_costs}"></td>
             <td id="organizational_costs_files">
-                {if $x.transportation_costs_files}
+                {if $x.organizational_costs_files}
                 {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.organizational_costs_files}
                 {foreach from=$keywords item=keyword}
                         <div>

@@ -1,50 +1,13 @@
 <?
+$xxxxxxx=array();
+$xxxxxxx[0]=microtime(true);
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);
-
-
-
-
-/*
-include_once('simple_html_dom.php');
-$url="https://bitrix.avk.ua/about/news_ex.php";
-$html = file_get_html($url);
-foreach($html->find('[src]') as $element)
-$element->src = 'https://bitrix.avk.ua'.$element->src;
-foreach($html->find('[href]') as $element)
-$element->href = 'https://bitrix.avk.ua'.$element->href;
-$html = mb_convert_encoding($html,"Windows-1251","UTF-8");
-$smarty->assign('bitrix_news', $html);
-*/
-
-
-
-
-/*
-$url="https://bitrix.avk.ua/about/news_ex.php";
-$r = file_get_contents($url);
-//$f_local="/home/httpd/server2/tpl/news_ex.html";
-//$fp = fopen($f_local, "w");
-$r = mb_convert_encoding($r,"Windows-1251","UTF-8");
-$smarty->assign('bitrix_news', $r);
-//fwrite($fp, "{literal}".$r."{/literal}");
-//fclose($fp);
-//chmod($f_local,0777);
-*/
-
-
-
-
-
-
 $params=array(
 	':tn'=>$tn,
 	':dpt_id' => $_SESSION["dpt_id"],
 	':eta' => "'".$_SESSION["h_eta"]."'"
 );
-
-//$x=microtime(true);
-
 $data = $db->getAll("
 SELECT tr.id, tr.name
 FROM voiting_test_onoff t, user_list u, tr
@@ -56,19 +19,17 @@ AND tr.id = t.tr
 ORDER BY tr.name
 ", null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('voiting_test_list', $data);
-
 $smarty->assign('scmovezayexist', $db->getOne("SELECT COUNT (*) FROM scmovezay WHERE dpt_id = ".$_SESSION['dpt_id']." AND status = 0"));
-
 $sql=rtrim(file_get_contents('sql/main_it_tasks.sql'));
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('it_tasks', $data);
-
+/*
 $sql=rtrim(file_get_contents('sql/main_dzc_accept.sql'));
 $params[':wait4myaccept']=0;
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dzc_accept', $data);
-
+*/
 $sql=rtrim(file_get_contents('sql/main_bud_svod_ta.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -98,16 +59,12 @@ $sql=rtrim(file_get_contents('sql/main_prob_test.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('prob_test', $data);
-
-
-
+/*
 $sql=rtrim(file_get_contents('sql/main_ac_tests.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('ac_tests', $data);
-
-
-
+*/
 $sql=rtrim(file_get_contents('sql/main_tasks_tmc.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -124,7 +81,7 @@ $sql=rtrim(file_get_contents('sql/main_tasks_sz_my_acceptor.sql'));
 $sql=stritr($sql,$params);
 //$data = $db->getOne($sql);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('sz_my_acceptor', $data);
+$xxxxxxx[1]=microtime(true);$smarty->assign('sz_my_acceptor', $data);
 
 $params1=array(
 ':tn' => $tn,
@@ -154,26 +111,19 @@ $params1=array(
 ':report_zero_cost'=>0,
 );
 
-
 $params1[":who"]=1;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_reestr_total_i', $data);
-
-//$_REQUEST["sql"] = $sql;
-//ses_req();
+$xxxxxxx[2]=microtime(true);$smarty->assign('bud_ru_zay_reestr_total_i', $data);
 
 $params1[":who"]=2;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_reestr_total_o', $data);
-
-
-
+$xxxxxxx[3]=microtime(true);$smarty->assign('bud_ru_zay_reestr_total_o', $data);
 
 
 
@@ -185,34 +135,34 @@ $params1[":report_zero_cost"]=0;
 $params1[":who"]=1;
 $params1[":tu"]=0;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total1_i_tu0', $data);
+$xxxxxxx[4]=microtime(true);$smarty->assign('bud_ru_zay_report_total1_i_tu0', $data);
 
 $params1[":who"]=2;
 $params1[":tu"]=0;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total1_o_tu0', $data);
+$xxxxxxx[5]=microtime(true);$smarty->assign('bud_ru_zay_report_total1_o_tu0', $data);
 
 $params1[":who"]=1;
 $params1[":tu"]=1;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total1_i_tu1', $data);
+$xxxxxxx[6]=microtime(true);$smarty->assign('bud_ru_zay_report_total1_i_tu1', $data);
 
 $params1[":who"]=2;
 $params1[":tu"]=1;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total1_o_tu1', $data);
+$xxxxxxx[7]=microtime(true);$smarty->assign('bud_ru_zay_report_total1_o_tu1', $data);
 
 $params1[":status"]=2;
 $params1[":srok_ok"]=2;
@@ -220,45 +170,45 @@ $params1[":report_done_flt"]=2;
 
 $params1[":who"]=1;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total3_i', $data);
+$xxxxxxx[8]=microtime(true);$smarty->assign('bud_ru_zay_report_total3_i', $data);
 
 $params1[":who"]=2;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_total3_o', $data);
+$xxxxxxx[9]=microtime(true);$smarty->assign('bud_ru_zay_report_total3_o', $data);
 
 $params1[":wait4myaccept"]=0;
 $params1[":tu"]=0;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_accept_total_tu0', $data);
+$xxxxxxx[10]=microtime(true);$smarty->assign('bud_ru_zay_accept_total_tu0', $data);
 
 
 $params1[":wait4myaccept"]=0;
 $params1[":tu"]=1;
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_total.sql'));
+$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_accept_total_tu1', $data);
+$xxxxxxx[11]=microtime(true);$smarty->assign('bud_ru_zay_accept_total_tu1', $data);
 
-$params1[":wait4myaccept"]=0;
+//$params1[":wait4myaccept"]=0;
 $params1[":tu"]=0;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total_main.sql'));
 $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('bud_ru_zay_report_accept_total_tu0', $data);
+$xxxxxxx[12]=microtime(true);$smarty->assign('bud_ru_zay_report_accept_total_tu0', $data);
 
 $params1[":wait4myaccept"]=0;
-$params1[":tu"]=1;
+//$params1[":tu"]=1;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total_main.sql'));
 $sql = stritr($sql, $params1);
@@ -330,17 +280,17 @@ $smarty->assign('pr_count', $data);
 $sql=rtrim(file_get_contents('sql/main_tasks_pa_date.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('pa_date', $data);
+$xxxxxxx[18]=microtime(true);$smarty->assign('pa_date', $data);
 
 $sql=rtrim(file_get_contents('sql/main_tasks_pa_zapolnen.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('pa_zapolnen', $data);
+$xxxxxxx[19]=microtime(true);$smarty->assign('pa_zapolnen', $data);
 
 $sql=rtrim(file_get_contents('sql/main_tasks_pa_prinyat.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('pa_prinyat', $data);
+$xxxxxxx[20]=microtime(true);$smarty->assign('pa_prinyat', $data);
 
 $sql=rtrim(file_get_contents('sql/main_tasks_zat_date.sql'));
 $sql=stritr($sql,$params);
@@ -360,7 +310,7 @@ $smarty->assign('zat_prinyat', $data);
 $sql=rtrim(file_get_contents('sql/main_tasks_zat_utverjden.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('zat_utverjden', $data);
+$xxxxxxx[21]=microtime(true);$smarty->assign('zat_utverjden', $data);
 
 $sql=rtrim(file_get_contents('sql/main_tasks_probs.sql'));
 $sql=stritr($sql,$params);
@@ -547,12 +497,34 @@ $text.="<p>Руководитель ЭТА - ".$chief["fio"].", ".$chief["dpt_name"].", ".$chie
 send_mail($parameters["eta_inform"]["val_string"],$subj,$text,null,false);
 }
 
+
+/*
+if ($tn==2885600038)
+{
+//if ($tn=2885600038)echo $sql.";<br>";
+    echo "<table border=0 cellpadding=5px>";
+    $xxxxxxx[999]=microtime(true);
+    $prev=0;
+    foreach($xxxxxxx as $k=>$v)
+    {
+        echo "<tr><td>".$k."</td><td>".round($v-$xxxxxxx[0],3)."</td><td>".round($v-$xxxxxxx[0]-$prev,3)."</td></tr>";
+        $prev=$v-$xxxxxxx[0];
+    }
+    echo "</table>";
+}
+*/
+
 if ($is_admin==1 && $tn==2885600038)
 {
     $sql=rtrim(file_get_contents('sql/error.sql'));
     $data = $db->getOne($sql);
-    $smarty->assign('error', $data);
+    $smarty->assign('error', $data);    
 }
 $smarty->display('main.html');
+
+
+
+
+
 
 ?>

@@ -35,6 +35,11 @@ InitRequestVar("date_between_brzr","dt12");
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 
+$sql = rtrim(file_get_contents('sql/month_list.sql'));
+$sql=stritr($sql,$params);
+$dt = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('dt', $dt);
+
 $sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
 $sql=stritr($sql,$params);
 $exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -94,6 +99,21 @@ if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
 	Table_Update("nets_plan_month",$keys,null);
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"]);
 	Table_Update("invoice",$keys,null);
+}
+
+if (
+        isset($_REQUEST["save_cost_assign_month"])
+        &&isset($_REQUEST["reset_z_id"])
+        &&isset($_REQUEST["cost_assign_month"])
+        )
+{
+	//ses_req();
+	$_REQUEST["select"]=1;
+        if ($_REQUEST["cost_assign_month"]!=""){
+            $keys = array("id"=>$_REQUEST["reset_z_id"]);
+            $vals = array("cost_assign_month"=>OraDate2MDBDate($_REQUEST["cost_assign_month"]));
+            Table_Update("bud_ru_zay",$keys,$vals);
+        }
 }
 
 if (isset($_REQUEST["save"]))
@@ -337,7 +357,6 @@ $params=array(
 ':tu'=>$_REQUEST['tu']
 );
 
-
 //print_r($params);
 
 if ($_REQUEST["z_id"]!=0)
@@ -446,7 +465,6 @@ foreach ($d as $k=>$v)
 }
 }
 
-
 //print_r($d);
 
 //$_REQUEST["d"]=$d;
@@ -464,10 +482,8 @@ $smarty->assign('d1', $data);
 
 }
 
-if (isset($_REQUEST["select"]))
+if (isset($_REQUEST["select"])&&$_REQUEST["z_id"]==0)
 {
-
-
 
 //$params[":status"]=1;
 
@@ -478,12 +494,15 @@ $smarty->assign('bud_ru_ff', $bud_ru_ff);
 
 //echo $sql;
 
+
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_ff_st_ras.sql'));
 $sql=stritr($sql,$params);
 $bud_ru_ff_st_ras = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_ff_st_ras', $bud_ru_ff_st_ras);
 
 //echo $sql;
+
+
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_ff_st.sql'));
 $sql=stritr($sql,$params);
@@ -494,10 +513,12 @@ $smarty->assign('bud_ru_ff_st', $bud_ru_ff_st);
 
 
 
+
 }
 
 
 
+//ses_req();
 $smarty->display('bud_ru_zay_report.html');
 
 ?>

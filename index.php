@@ -12,6 +12,7 @@ $now_date_time=date("d.m.Y H:i:s");
 $next1=date("01.m.Y", strtotime('+1 month'));
 $yesterday=date("d.m.Y", strtotime('-1 day'));
 $yesterdayJS=date("d/m/Y", strtotime('-1 day'));
+$datePlus2DaysJS=date("d/m/Y", strtotime('+2 day'));
 $smarty->assign('year_start', date("01.01.Y"));
 $smarty->assign('year_end', date("31.12.Y"));
 $smarty->assign('now1', $now1);
@@ -23,6 +24,7 @@ $smarty->assign('now_time', $now_time);
 $smarty->assign('now_date_time', $now_date_time);
 $smarty->assign('yesterday', $yesterday);
 $smarty->assign('yesterdayJS', $yesterdayJS);
+$smarty->assign('datePlus2DaysJS', $datePlus2DaysJS);
 
 
 $times=array();

@@ -14,7 +14,7 @@ if (isset($_REQUEST["get_promoter"])){
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["select_tasting"])){
     $sql = "SELECT t.*, TO_CHAR (t.dt, 'dd.mm.yyyy') dt FROM tasting t"
-            . " WHERE dt >= TRUNC (SYSDATE) and program_id = '".$_REQUEST["id_program"]."'"
+            . " WHERE /*dt >= TRUNC (SYSDATE) and*/ program_id = '".$_REQUEST["id_program"]."'"
             . " and t.dt=to_date('".$_REQUEST["id_dt"]."','dd.mm.yyyy')";
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);

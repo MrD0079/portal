@@ -1,0 +1,80 @@
+{if $smarty.request.ms_tasks_list}
+    <p>Обшая</p>
+    <table border="1" style="width: 700px">
+        <tr style="font-weight:bold; text-align:center;">
+            <td>СВ МС</td>
+            <td>кол-во задач</td>
+            <td>своевременно принято в работу</td>
+            <td>% задач принятых в срок</td>
+            <td>выполненных задач</td>
+            <td>% выполненных задач</td>
+            <td>выполнено в срок</td>
+            <td>%, выполнено в срок</td>
+        </tr>
+        {foreach key=k item=i from=$xg name=x}
+        <tr>
+            <td><nobr>{$i.svms}</nobr></td>
+            <td style="text-align:center">{$i.c}</td>
+            <td style="text-align:center">{$i.accepted_in_srok}</td>
+            <td style="text-align:center">{$i.accepted_in_srok_perc}</td>
+            <td style="text-align:center">{$i.completed_dt}</td>
+            <td style="text-align:center">{$i.completed_dt_perc}</td>
+            <td style="text-align:center">{$i.completed_in_srok}</td>
+            <td style="text-align:center">{$i.completed_in_srok_perc}</td>
+        </tr>
+        {/foreach}
+        <tr style="font-weight: bold">
+            <td></td>
+            <td style="text-align:center">{$xgt.c}</td>
+            <td style="text-align:center">{$xgt.accepted_in_srok}</td>
+            <td style="text-align:center">{$xgt.accepted_in_srok_perc}</td>
+            <td style="text-align:center">{$xgt.completed_dt}</td>
+            <td style="text-align:center">{$xgt.completed_dt_perc}</td>
+            <td style="text-align:center">{$xgt.completed_in_srok}</td>
+            <td style="text-align:center">{$xgt.completed_in_srok_perc}</td>
+        </tr>
+    </table>
+    <p>Детали</p>
+    <table border="1" style="width: 700px">
+        <tr style="font-weight:bold; text-align:center">
+            <td>№ задачи</td>
+            <td>СВ МС</td>
+            <td>заказчик</td>
+            <td>Время принятия в работу</td>
+            <td>Время работы по задаче</td>
+            <td>задача выполнена в срок</td>
+            <td>задача закрыта с вложением</td>
+        </tr>
+        {foreach key=k item=i from=$x name=x}
+        <tr>
+            <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+            <td><nobr>{$i.svms}</nobr></td>
+            <td><nobr>{$i.ag_name}</nobr></td>
+            <td style="text-align:center">{$i.accepted_time}</td>
+            <td style="text-align:center">{$i.work_time}</td>
+            <td style="text-align:center">{$i.completed_in_srok}</td>
+            <td style="text-align:center">{if $i.rfiles_exists}да{else}нет{/if}</td>
+        </tr>
+        {/foreach}
+    </table>
+{else}
+    <h1>Отчет</h1>
+    <table>
+        <tr><td>Период создания задачи</td><td>с&nbsp<input size=8 id=sd class="datepicker" value="{$now}">&nbspпо&nbsp<input size=8 id=ed class="datepicker" value="{$now}"></td></tr>
+    </table>
+    <p><input type="button" value="Показать данные" onClick="load_ms_tasks_list();"></p>
+    <div id="ms_tasks_list" style="display: inline;"></div>
+    <script>
+    /*{literal}*/
+    function load_ms_tasks_list()
+    {
+        $('#ms_tasks_list').load('?action=ms_task_report&ms_tasks_list=1&nohead=1',
+        {
+            sd:$('#sd').val(),
+            ed:$('#ed').val()
+        });
+    }
+    /*{/literal}*/
+    load_ms_tasks_list();
+    </script>
+{/if}

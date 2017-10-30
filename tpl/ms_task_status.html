@@ -1,0 +1,37 @@
+<h1>Статусы задач</h1>
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+<p><input type=submit value="сохранить"></p>
+<table border=1 cellspacing=0 cellpadding=3>
+    <tr style="font-weight:bold">
+        <td>[x]</td>
+        <td>название</td>
+        <td>код</td>
+        <td>порядок</td>
+        <td>Доступен поставновщику задачи</td>
+        <td>досутп СВ МС</td>
+    </tr>
+    {foreach key=key item=i from=$ms_task_status}
+    <tr>
+        <td><input type=checkbox name=delete[{$i.id}]></td>
+        <td><input name=update[{$i.id}][name] value="{$i.name}"></td>
+        <td><input name=update[{$i.id}][kod] class="number_int" value="{$i.kod}"></td>
+        <td><input name=update[{$i.id}][sort] class="number_int" value="{$i.sort}"></td>
+        <td>
+            <input type=checkbox
+                   id="cb_available_to_creator_{$i.id}"
+                   onclick="$('#available_to_creator_{$i.id}').val(this.checked?1:null);">
+            <input type=hidden name=update[{$i.id}][available_to_creator] id=available_to_creator_{$i.id} value="{$i.available_to_creator}">
+            <script>$("#cb_available_to_creator_{$i.id}").prop('checked','{$i.available_to_creator}'=='1'?true:false);</script>
+        </td>
+        <td>
+            <input type=checkbox
+                   id="cb_available_to_svms_{$i.id}"
+                   onclick="$('#available_to_svms_{$i.id}').val(this.checked?1:null);">
+            <input type=hidden name=update[{$i.id}][available_to_svms] id=available_to_svms_{$i.id} value="{$i.available_to_svms}">
+            <script>$("#cb_available_to_svms_{$i.id}").prop('checked','{$i.available_to_svms}'=='1'?true:false);</script>
+        </td>
+    </tr>
+    {/foreach}
+</table>
+<p>новый статус <input name=new_name></p>
+</form>

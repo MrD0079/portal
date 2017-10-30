@@ -13,6 +13,7 @@
 			{/foreach}
 			{/if}
 
+                        <!--
 			{if $dzc_accept}
 			<p>
 			Ожидает согласование компенсация на затраты по дистрибутору(ам):
@@ -21,6 +22,7 @@
 			{/foreach}
 			</p>
 			{/if}
+                        -->
 
 			<!--
 			{if $advance_ok_dpu and $is_dpu}
@@ -183,10 +185,12 @@
 
 			{if $prob_test}<p><a href="?action=prob_test_go">Ссылка для прохождения теста по АП</a></p>{/if}
 
+                        <!--
 			{foreach key=k item=i from=$ac_tests}
 				{if $i.logic_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_logic}">Ссылка для прохождения теста по АЦ - ЛОГИКА</a></p>{/if}
 				{if $i.math_test eq 1}<p><a href="?action=ac_test_go&ac_id={$i.ac_id}&memb_id={$i.id}&ac_test_id={$i.ac_test_math}">Ссылка для прохождения теста по АЦ - МАТЕМАТИКА</a></p>{/if}
 			{/foreach}
+                        -->
 
 			{if $tn eq 2885600038 and $is_admin and $error > 0}
 				<p style="font-weight:bold"><a href="?action=log&prg=error&select=1">Лог ошибок ({$error})</a></p>

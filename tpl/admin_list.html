@@ -1,30 +1,17 @@
 {if not $smarty.request.print}
-
 <h1>Список СуперПользователей (
 {if $smarty.request.all eq 0}Все{/if}
 {if $smarty.request.all eq 1}Работающие{/if}
 {if $smarty.request.all eq -1}Уволенные{/if}
 )</h1>
-
-
 <p>
-<a href="?action=admin_list&all=0">Все</a>
-&nbsp&nbsp&nbsp
-<a href="?action=admin_list&all=1">Работающие</a>
-&nbsp&nbsp&nbsp
-<a href="?action=admin_list&all=-1">Уволенные</a>
+    <a href="?action=admin_list&all=0">Все</a>
+    &nbsp&nbsp&nbsp
+    <a href="?action=admin_list&all=1">Работающие</a>
+    &nbsp&nbsp&nbsp
+    <a href="?action=admin_list&all=-1">Уволенные</a>
 </p>
-
-
 {/if}
-
-
-
-
-
-
-
-
 <form target="_self" method="POST" name=form_admin_list>
 <table border=1 cellspacing=0 cellpadding=2>
 	{foreach key=k item=i from=$admin_list name=admin_list}
@@ -72,7 +59,7 @@
 			<a
 				href="javascript:void(0);"
 				onclick="$('#div_pwd_{$i.tn}').load('?action=admin_list_change_pwd&nohead=1&tn='+'{$i.tn}');">
-				Сменить пароль
+				[Сменить]
 			</a>
 		</td>
 		<td>
@@ -80,7 +67,7 @@
 			<a
 				href="javascript:void(0);"
 				onclick="$('#div_{$i.tn}').load('?action=admin_list_send_pwd&nohead=1&tn='+'{$i.tn}');">
-				Отправить логин/пароль
+				[Отправить]
 			</a>
 			</div>
 		</td>

@@ -6,6 +6,7 @@ if (isset($_REQUEST["select_tasting_program"])){
 } else if (isset($_REQUEST["report_user"])){
     $sql = "SELECT tpc.*,u.chief_tn FROM tasting_program_costs tpc, user_list u WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."' and tpc.login='".$_REQUEST["login"]."'";
     $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    //echo $sql;
     $smarty->assign('x', $r);
     $smarty->assign('program_name', $db->getOne("SELECT name FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
     $smarty->assign('login_fio', $db->getOne("SELECT fio FROM user_list WHERE login = '".$_REQUEST["login"]."'"));
@@ -29,6 +30,7 @@ if (isset($_REQUEST["select_tasting_program"])){
        + nvl(tpc.log_lease_warehouse,0)
        + nvl(tpc.organizational_costs,0)
        + nvl(tpc.consumables,0)
+       + nvl(tpc.transportation_costs * u.amort,0)
           costs_amount,
        tpc.is_accepted,
        tpc.is_processed,
@@ -47,6 +49,7 @@ files
 
   FROM tasting_program_costs tpc, user_list u
  WHERE tpc.login = u.login AND tpc.program_id =  '".$_REQUEST["program_id"]."' order by u.fio";
+    //echo $sql;
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
     $smarty->assign('costs_amount', $db->getOne("SELECT SUM (
@@ -56,10 +59,12 @@ files
           + nvl(tpc.log_loaders,0)
           + nvl(tpc.log_lease_warehouse,0)
           + nvl(tpc.organizational_costs,0)
-          + nvl(tpc.consumables,0))
+          + nvl(tpc.consumables,0)
+          + nvl(tpc.transportation_costs * u.amort,0)
+          )
           costs_amount
-  FROM tasting_program_costs tpc
- WHERE tpc.program_id = '".$_REQUEST["program_id"]."'"));
+  FROM tasting_program_costs tpc, user_list u
+ WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."'"));
     $smarty->assign('promoters', $db->getAll("SELECT login, fio FROM user_list WHERE pos_id = 127968517 AND chief_tn = ".$tn, null, null, null, MDB2_FETCHMODE_ASSOC));
 } else if (isset($_REQUEST["save_user_report"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);

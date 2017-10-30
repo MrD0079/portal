@@ -251,7 +251,7 @@
                          bud_ru_zay_executors.execute_order,
                          bud_ru_zay_executors.pos_name executor_pos_name,
                          bud_ru_zay_executors.department_name
-                            executor_department_name
+                            executor_department_name,TO_CHAR (z.cost_assign_month, 'dd.mm.yyyy') cost_assign_month
                     FROM bud_ru_zay z,
                          bud_ru_zay_accept za,
                          (SELECT sze.*, szu.pos_name, szu.department_name

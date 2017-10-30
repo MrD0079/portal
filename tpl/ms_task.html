@@ -1,0 +1,318 @@
+{if $smarty.request.save}
+{elseif $smarty.request.edit}
+
+<table border="0">
+        <tr style="vertical-align: top; text-align: center">
+            <td>
+                <h3>Редактирование задачи</h3>
+                <form name=ms_task id=ms_task target=_self method=post enctype="multipart/form-data" action="?action=ms_task">
+                <input id=task_id name=id type="hidden" value="{$smarty.request.id}">
+                <table border="1" id="table">
+                    <tr><td>Заказчик</td><td>{$x.ag_name}</td></tr>
+                    <tr><td>ТЗ</td><td>{$x.address}</td></tr>
+                    <tr><td>Ответственный</td><td><div id="svms"></div>{$x.svms}</td></tr>
+                    <tr><td>Тема</td><td>{$x.subject}</td></tr>
+                    <tr><td>Описание</td><td>{$x.descr}</td></tr>
+                    <tr><td>Тип задачи</td><td>{$x.type}</td></tr>
+                    <tr><td>Выполнить до</td><td>
+                            {if $x.status_kod lt 1}
+                                <input name=data[end_date] id="end_date" class="datepicker" value="{$x.end_date}">
+                            {else}
+                                {$x.end_date}
+                            {/if}
+                        </td></tr>
+                    <tr>
+                        <td>Отчет о выполнении с фото</td>
+                        <td>
+                            {if $x.status_kod lt 1}
+                                <input id="cb_rep_w_photo" type="checkbox" onclick="$('#rep_w_photo').val(this.checked?1:null);">
+                                <input name=data[rep_w_photo] id="rep_w_photo" type="hidden" value="{$x.rep_w_photo}">
+                            {else}
+                                <input id="rep_w_photo" type="hidden" value="{$x.rep_w_photo}">
+                                {if $x.rep_w_photo}да{/if}
+                            {/if}
+                        </td>
+                        <script>$("#cb_rep_w_photo").prop('checked','{$x.rep_w_photo}'=='1'?true:false);</script>
+                    </tr>
+                    <tr><td>Статус</td><td><select name=data[status] id="statuses"></select></td></tr>
+                    <tr id="tfiles">
+                        <td>приложить файл(ы)</td>
+                        <td>
+                            <input
+                                type="button"
+                                value="добавить"
+                                onClick="$('<tr>\n\
+                                                <td style=\'text-align:right;\'><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                                <td><input type=file name=tfiles[]></td>\n\
+                                            </tr>').insertAfter($('#tfiles'))">
+
+                        </td>
+                    </tr>
+                    {if $x.tfiles}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.tfiles}
+                    {foreach from=$keywords item=keyword}
+                    <tr>
+                        <td style="text-align:right">
+                            <input type=button value=удалить onClick="
+                                del_tfiles.push('{$keyword}');
+                                $(this).parent().parent().remove();
+                                   ">
+                        </td>
+                        <td colspan=2>
+                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    {/if}
+                    <tr id="rfiles">
+                        <td>вложение (результат по задаче)</td>
+                        <td>
+                            <input
+                                type="button"
+                                value="добавить"
+                                onClick="$('<tr>\n\
+                                                <td style=\'text-align:right;\'><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                                <td><input type=file name=rfiles[]></td>\n\
+                                            </tr>').insertAfter($('#rfiles'))">
+
+                        </td>
+                    </tr>
+                    {if $x.rfiles}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.rfiles}
+                    {foreach from=$keywords item=keyword}
+                    <tr>
+                        <td style="text-align:right">
+                            <input type=button value=удалить onClick="
+                                del_rfiles.push('{$keyword}');
+                                $(this).parent().parent().remove();
+                                   ">
+                        </td>
+                        <td colspan=2>
+                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    {/if}
+                </table>
+                </form>
+                <p><input id="button_save" type="button" value="Сохранить" onClick="save();"></p>
+            </td>
+            <td>
+                &nbsp
+            </td>
+            <td>
+                <h3>чат</h3>
+                <div id="chat_table" style="text-align: left; width: 500px"></div>
+                <p><input id="msg" size="50"></p>
+                <p><input id="button_add_msg" type="button" value="Добавить" onClick="add_msg();"></p>
+            </td>
+        </tr>
+    </table>
+
+
+    <script>
+        var del_tfiles = [];
+        var del_rfiles = [];
+        /*{literal}*/
+        function get_chat()
+        {
+            $('#chat_table').load('?action=ms_task&print=1&nohead=1&getChat=1',{task_id: $('#task_id').val()},function() {
+                successNoty("Чат обновлен");
+            });
+        }
+        function add_msg(){
+            var fd = new FormData();
+            fd.append('msg',  $('#msg').val());
+            fd.append('task_id',  $('#task_id').val());
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=ms_task&print=1&nohead=1&addMsg=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        console.log(data);
+                        //eval(data);
+                        //$('#button_save').prop("disabled",false);
+                        successNoty("Добавлено");
+                        get_chat();
+                    }
+            });
+        }
+        $(function(){
+            DisabledDates={"period":[{ "from": "01/01/1999", "to": "{/literal}{$datePlus2DaysJS}{literal}"}]};
+        })
+        function save(){
+            console.clear();
+            /*console.log(
+                    rfilesCount
+                    +' '+del_rfiles.length
+                    +' '+$("input:file[name='rfiles[]']").filter(function() { return $(this).val() != ""; }).length);*/
+            var bad_data = false;
+            var error_text = '';
+            //return;
+            if (
+                    statuses[$('#statuses').val()]==4
+                        &&
+                    $('#rep_w_photo').val()==1
+                        &&
+                    (
+                        (
+                            rfilesCount
+                            -del_rfiles.length
+                            +$("input:file[name='rfiles[]']").filter(function() { return $(this).val() != ""; }).length
+                        )==0
+                    )
+                ){
+                bad_data = true;
+                error_text = error_text + 'Необходимо хотя бы одно вложение в "вложение (результат по задаче)"' +'<br>';
+            }
+            if (bad_data) {
+                errorNoty('Ошибка сохранения'+'<br>'+error_text);
+                return;
+            }
+            $('#button_save').prop("disabled",true);
+            var fd = new FormData(document.getElementById('ms_task'));
+            if (del_tfiles.length>0) fd.append('del_tfiles',del_tfiles);
+            if (del_rfiles.length>0) fd.append('del_rfiles',del_rfiles);
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=ms_task&print=1&nohead=1&save=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        console.log(data);
+                        //eval(data);
+                        $('#button_save').prop("disabled",false);
+                        successNoty("Сохранено");
+                    }
+            });
+        }
+        /*$('.selectTPs').on("change",function(){
+            if ($('#regions').val()!=''&&$('#nets').val()!='')
+            $('#kod_tp').load('?action=ms_task&print=1&nohead=1&getTPs=1',{region:$('#regions').val(),net:$('#nets').val()},
+            function() {
+                $('#kod_tp').change();
+            });
+        });
+        $('#kod_tp').on("change",function(){
+            console.log('?action=ms_task&print=1&nohead=1&getSVMS=1&tp='+$('#kod_tp').val());
+            $('#svms').load('?action=ms_task&print=1&nohead=1&getSVMS=1',{tp:$('#kod_tp').val()});
+        });*/
+        //$('#select_nets').load('?action=tasting&nohead=1&select_nets=1');
+        function statuses(status)
+        {
+            $('#statuses').load('?action=ms_task&print=1&nohead=1&getStatuses=1',{},function() {
+                $('#statuses').val(status);
+            });
+        }
+        /*{/literal}*/
+        statuses('{$x.status}');
+        {$statuses}
+        //console.log(statuses);
+        //console.log(statuses[133571305]);
+        var rfilesCount = 0;
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.rfiles}
+        {foreach from=$keywords item=keyword}
+        {if $keyword}
+                rfilesCount++;
+                {/if}
+        {/foreach}
+        //console.log(rfilesCount);
+        get_chat();
+    </script>
+{elseif $smarty.request.addMsg}
+{elseif $smarty.request.getChat}
+    {foreach key=k item=i from=$x name=x}
+        {$i.lu}
+        <span style="color:{if $i.is_ms}blue{else}green{/if}">{$i.fio}</span>
+        {$i.text}<br>
+    {/foreach}
+{elseif $smarty.request.getSVMSs}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.tn}">{$i.fio}</option>
+    {/foreach}
+{elseif $smarty.request.getAgents}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.getStatuses}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option {if $i.available_to_svms neq 1}disabled{/if} value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.ms_tasks_list}
+    <table border="1">
+    <tr style="font-weight:bold; text-align:center">
+    <td>№ задачи</td>
+    <td>компания заказчик</td>
+    <td>СВ МС</td>
+    <td>Торговый зал (название / Адрес)</td>
+    <td>Тема</td>
+    <td>Дата создания</td>
+    <td>Выполнить до</td>
+    <td>Дней в "работе" ост</td>
+    <td>Статус</td>
+    <td>Отчет с фото</td>
+    </tr>
+    {foreach key=k item=i from=$x name=x}
+    <tr>
+    <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+    <td>{$i.ag_name}</td>
+    <td>{$i.svms}</td>
+    <td>{$i.address}</td>
+    <td>{$i.subject}</td>
+    <td>{$i.created}</td>
+    <td>{$i.end_date}</td>
+    <td style="text-align:center">{$i.days_remain}</td>
+    <td>{$i.status}</td>
+    <td style="text-align:center">{if $i.rep_w_photo}да{/if}</td>
+    <td style="text-align:center"><a target="_blank" href="?action=ms_task&id={$i.id}&edit=1">редакт</a></td>
+    </tr>
+    {/foreach}
+    </table>
+{else}
+    <h1>Задачи</h1>
+    <table>
+        <tr><td>Дата созадния задачи</td><td>с&nbsp<input size=8 id=sd class="datepicker" value="{$now}">&nbspпо&nbsp<input size=8 id=ed class="datepicker" value="{$now}"></td></tr>
+        <tr><td>Заказчик</td><td><select id="agents"></select></td></tr>
+        <tr><td>ответственный СВ МС</td><td><select id="svmss"></select></td></tr>
+        <tr><td>статус</td><td><select id="statuses"></select></td></tr>
+    </table>
+    <p><input type="button" value="Показать данные" onClick="load_ms_tasks_list();"></p>
+    <div id="ms_tasks_list" style="display: inline;"></div>
+    <script>
+    /*{literal}*/
+    function getAgents()
+    {
+        $('#agents').load('?action=ms_task&nohead=1&getAgents=1');
+    }
+    function getSVMSs()
+    {
+        $('#svmss').load('?action=ms_task&nohead=1&getSVMSs=1');
+    }
+    function getStatuses()
+    {
+        $('#statuses').load('?action=ms_task&nohead=1&getStatuses=1');
+    }
+    function load_ms_tasks_list()
+    {
+        $('#ms_tasks_list').load('?action=ms_task&ms_tasks_list=1&nohead=1',
+        {
+            sd:$('#sd').val(),
+            ed:$('#ed').val(),
+            agent:$('#agents').val(),
+            svms:$('#svmss').val(),
+            status:$('#statuses').val()
+        });
+    }
+    /*{/literal}*/
+    getAgents();
+    getSVMSs();
+    getStatuses();
+    load_ms_tasks_list();
+    </script>
+{/if}

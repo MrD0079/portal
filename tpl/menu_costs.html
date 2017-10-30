@@ -173,13 +173,13 @@
 
 		{if $cnt_kod eq "exp" and ($is_admin or $super or $is_bud_admin)}
 
-		<li><a href="javascript:void(0);"><span class="dir">Учет ФРТ</span></a>
+		<!--<li><a href="javascript:void(0);"><span class="dir">Учет ФРТ</span></a>
 			<ul>
 				<li><a href="?action=bud_ru_cash_in">Поступление ДС</a></li>
 				<li><a href="?action=bud_ru_cash_out">Расход ДС</a></li>
 				<li><a href="?action=bud_ru_cash_rep">Сводный отчет</a></li>
 			</ul>
-		</li>
+		</li>-->
 
 		{/if}
 
@@ -250,8 +250,8 @@
 
 {/if}
 
+<!--
 {if ($is_mz or $is_mz_admin or $is_mz_buh) and $cnt_kod neq "nr"}
-
 <li><a href="javascript:void(0);"><span class="dir">Музей шоколада</span></a>
 	<ul>
 		<li><a href="?action=mz_help">Инструкция</a></li>
@@ -260,8 +260,8 @@
 		<li><a href="?action=mz_rep&arc=1">Архив</a></li>
 	</ul>
 </li>
-
 {/if}
+-->
 
 {if $cnt_kod eq "nr"}
 
