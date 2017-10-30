@@ -1,6 +1,5 @@
 {if $smarty.request.save}
 {elseif $smarty.request.edit}
-
 <table border="0">
         <tr style="vertical-align: top; text-align: center">
             <td>
@@ -41,58 +40,26 @@
                             <input
                                 type="button"
                                 value="добавить"
-                                onClick="$('<tr>\n\
+                                onClick="$('<tr class=tr_files>\n\
                                                 <td style=\'text-align:right;\'><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
                                                 <td><input type=file name=tfiles[]></td>\n\
                                             </tr>').insertAfter($('#tfiles'))">
 
                         </td>
                     </tr>
-                    {if $x.tfiles}
-                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.tfiles}
-                    {foreach from=$keywords item=keyword}
-                    <tr>
-                        <td style="text-align:right">
-                            <input type=button value=удалить onClick="
-                                del_tfiles.push('{$keyword}');
-                                $(this).parent().parent().remove();
-                                   ">
-                        </td>
-                        <td colspan=2>
-                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
-                        </td>
-                    </tr>
-                    {/foreach}
-                    {/if}
                     <tr id="rfiles">
                         <td>вложение (результат по задаче)</td>
                         <td>
                             <input
                                 type="button"
                                 value="добавить"
-                                onClick="$('<tr>\n\
+                                onClick="$('<tr class=tr_files>\n\
                                                 <td style=\'text-align:right;\'><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
                                                 <td><input type=file name=rfiles[]></td>\n\
                                             </tr>').insertAfter($('#rfiles'))">
 
                         </td>
                     </tr>
-                    {if $x.rfiles}
-                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.rfiles}
-                    {foreach from=$keywords item=keyword}
-                    <tr>
-                        <td style="text-align:right">
-                            <input type=button value=удалить onClick="
-                                del_rfiles.push('{$keyword}');
-                                $(this).parent().parent().remove();
-                                   ">
-                        </td>
-                        <td colspan=2>
-                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
-                        </td>
-                    </tr>
-                    {/foreach}
-                    {/if}
                 </table>
                 </form>
                 <p><input id="button_save" type="button" value="Сохранить" onClick="save();"></p>
@@ -108,8 +75,6 @@
             </td>
         </tr>
     </table>
-
-
     <script>
         var del_tfiles = [];
         var del_rfiles = [];
@@ -182,25 +147,30 @@
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        console.log(data);
+                        //console.log(data);
                         //eval(data);
                         $('#button_save').prop("disabled",false);
+                        $(".tr_files").remove();
+                        get_Files();
                         successNoty("Сохранено");
                     }
             });
         }
-        /*$('.selectTPs').on("change",function(){
-            if ($('#regions').val()!=''&&$('#nets').val()!='')
-            $('#kod_tp').load('?action=ms_task&print=1&nohead=1&getTPs=1',{region:$('#regions').val(),net:$('#nets').val()},
-            function() {
-                $('#kod_tp').change();
+        function get_Files(){
+            var fd = new FormData();
+            fd.append('task_id',  $('#task_id').val());
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=ms_task&print=1&nohead=1&getFiles=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        //console.log(data);
+                        eval(data);
+                    }
             });
-        });
-        $('#kod_tp').on("change",function(){
-            console.log('?action=ms_task&print=1&nohead=1&getSVMS=1&tp='+$('#kod_tp').val());
-            $('#svms').load('?action=ms_task&print=1&nohead=1&getSVMS=1',{tp:$('#kod_tp').val()});
-        });*/
-        //$('#select_nets').load('?action=tasting&nohead=1&select_nets=1');
+        }
         function statuses(status)
         {
             $('#statuses').load('?action=ms_task&print=1&nohead=1&getStatuses=1',{},function() {
@@ -221,8 +191,44 @@
         {/foreach}
         //console.log(rfilesCount);
         get_chat();
+        get_Files();
     </script>
 {elseif $smarty.request.addMsg}
+{elseif $smarty.request.getFiles}
+                    {if $x.tfiles}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.tfiles}
+                    {foreach from=$keywords item=keyword}
+                    $('<tr class=tr_files>\n\
+                        <td style="text-align:right">\n\
+                            <input type=button value=удалить onClick="\n\
+                                del_tfiles.push(\'{$keyword}\');\n\
+                                $(this).parent().parent().remove();\n\
+                                   ">\n\
+                        </td>\n\
+                        <td colspan=2>\n\
+                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>\n\
+                        </td>\n\
+                    </tr>\n\
+                    ').insertAfter($('#tfiles'));
+                    {/foreach}
+                    {/if}
+                    {if $x.rfiles}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.rfiles}
+                    {foreach from=$keywords item=keyword}
+                    $('<tr class=tr_files>\n\
+                        <td style="text-align:right">\n\
+                            <input type=button value=удалить onClick="\n\
+                                del_rfiles.push(\'{$keyword}\');\n\
+                                $(this).parent().parent().remove();\n\
+                                   ">\n\
+                        </td>\n\
+                        <td colspan=2>\n\
+                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>\n\
+                        </td>\n\
+                    </tr>\n\
+                    ').insertAfter($('#rfiles'));
+                    {/foreach}
+                    {/if}
 {elseif $smarty.request.getChat}
     {foreach key=k item=i from=$x name=x}
         {$i.lu}

@@ -75,7 +75,7 @@ ORDER BY ag_name, svms, created
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('xg', $r);
     $sql = "select
-            count(*) c,
+            sum(c) c,
             sum(accepted_in_srok) accepted_in_srok,
             round(sum(accepted_in_srok)/count(*)*100,2) accepted_in_srok_perc,
             sum(completed_dt) completed_dt,

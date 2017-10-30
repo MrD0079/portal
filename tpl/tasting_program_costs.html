@@ -137,18 +137,6 @@
             <td>Мотивация (ЗП)</td>
             <td><input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}"></td>
             <td id="motivation_files">
-                {if $x.motivation_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.motivation_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[motivation_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('motivation_files');">
             </td>
         </tr>		
@@ -157,18 +145,6 @@
             <td><input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}"
                     onChange="$('#amort').html(Math.round('{$amort}'*this.value*100)/100)" id="transportation_costs"></td>
             <td id="transportation_costs_files">
-                {if $x.transportation_costs_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.transportation_costs_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[transportation_costs_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('transportation_costs_files');">
             </td>
         </tr>		
@@ -184,18 +160,6 @@
             <td>Логистика (транспорт)</td>
             <td><input {$disabled} class="number" name="vals[log_trasport]" value="{$x.log_trasport}"></td>
             <td id="log_trasport_files">
-                {if $x.log_trasport_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_trasport_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[log_trasport_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('log_trasport_files');">
             </td>
         </tr>		
@@ -203,18 +167,6 @@
             <td>Логистика (грузчики)</td>
             <td><input {$disabled} class="number" name="vals[log_loaders]" value="{$x.log_loaders}"></td>
             <td id="log_loaders_files">
-                {if $x.log_loaders_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_loaders_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[log_loaders_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('log_loaders_files');">
             </td>
         </tr>		
@@ -222,18 +174,6 @@
             <td>Логистика (аренда склад)</td>
             <td><input {$disabled} class="number" name="vals[log_lease_warehouse]" value="{$x.log_lease_warehouse}"></td>
             <td id="log_lease_warehouse_files">
-                {if $x.log_lease_warehouse_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_lease_warehouse_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[log_lease_warehouse_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('log_lease_warehouse_files');">
             </td>
         </tr>		
@@ -241,18 +181,6 @@
             <td>Организационные затраты</td>
             <td><input {$disabled} class="number" name="vals[organizational_costs]" value="{$x.organizational_costs}"></td>
             <td id="organizational_costs_files">
-                {if $x.organizational_costs_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.organizational_costs_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[organizational_costs_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('organizational_costs_files');">
             </td>
         </tr>		
@@ -260,18 +188,6 @@
             <td>Расходные материалы</td>
             <td><input {$disabled} class="number" name="vals[consumables]" value="{$x.consumables}"></td>
             <td id="consumables_files">
-                {if $x.consumables_files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.consumables_files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[consumables_files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('consumables_files');">
             </td>
         </tr>		
@@ -327,18 +243,6 @@
         <tr>
             <td>Вложения</td>
             <td id="files">
-                {if $x.files}
-                {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
-                {foreach from=$keywords item=keyword}
-                        <div>
-                            <input {$disabled} type=button value=удалить onClick="
-                            $('#form_tasting').append($('<input type=hidden name=del_files[files][{$keyword}]>'));
-                            $(this).parent().remove();
-                               ">
-                        <a target=_blank href="files/{$keyword}">{$keyword}</a>
-                        </div>
-                {/foreach}
-                {/if}
                 <input {$disabled} type="button" value="добавить" onClick="add_file('files');">
             </td>
         </tr>		
@@ -346,6 +250,66 @@
     <p><input {$disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
     </form>
 {elseif $smarty.request.save_user_report}
+{elseif $smarty.request.getFiles}
+    {if $program_readonly eq 1 or $smarty.request.view}
+    {assign var=disabled value='disabled="disabled"'}
+    {/if}
+    {if $x.motivation_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.motivation_files}
+        {foreach from=$keywords item=keyword}
+            $('#motivation_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[motivation_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.transportation_costs_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.transportation_costs_files}
+        {foreach from=$keywords item=keyword}
+            $('#transportation_costs_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[transportation_costs_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.log_trasport_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_trasport_files}
+        {foreach from=$keywords item=keyword}
+            $('#log_trasport_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[log_trasport_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.log_loaders_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_loaders_files}
+        {foreach from=$keywords item=keyword}
+            $('#log_loaders_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[log_loaders_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.log_lease_warehouse_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_lease_warehouse_files}
+        {foreach from=$keywords item=keyword}
+            $('#log_lease_warehouse_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[log_lease_warehouse_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.organizational_costs_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.organizational_costs_files}
+        {foreach from=$keywords item=keyword}
+            $('#organizational_costs_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[organizational_costs_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.consumables_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.consumables_files}
+        {foreach from=$keywords item=keyword}
+            $('#consumables_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[consumables_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
+        {foreach from=$keywords item=keyword}
+            $('#files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
 {elseif $smarty.request.del_rep}
 {else}
     <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
@@ -410,10 +374,30 @@
 		contentType: false,
 		success: function(data) {
                     $('#button_save').prop("disabled",false);
+                    $(".tr_files").remove();
+                    get_Files();
                     successNoty("Сохранено");
 		}
 	});
     }
+    function get_Files(){
+        var fd = new FormData();
+        fd.append('program_id', '{/literal}{$smarty.request.program_id}{literal}');
+        fd.append('login', '{/literal}{$smarty.request.login}{literal}');
+        fd.append('view', '{/literal}{$smarty.request.view}{literal}');
+        $.ajax({
+                type: 'POST',
+                url: '?action=tasting_program_costs&print=1&nohead=1&getFiles=1',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    console.log(data);
+                    eval(data);
+                }
+        });
+    }
+    get_Files();
     function send_msg(){
         $('#button_send_msg').prop("disabled",true);
         var fd = new FormData(document.getElementById('form_tasting'));
@@ -435,7 +419,7 @@
     function add_file(e){
         $('#'+e).append(
                 $(
-                            "   <div>\n\
+                            "   <div class=tr_files>\n\
                                     <input type=button value=удалить onClick=$(this).parent().remove();>\
                                     <input type=file name="+e+"[]>\n\
                                 </div>\

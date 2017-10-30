@@ -49,6 +49,10 @@ if (isset($_REQUEST["select_tasting"])){
     $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     //print_r($r);
     $smarty->assign('x', $r);
+} else if (isset($_REQUEST["getFiles"])){
+    $sql = "SELECT * FROM tasting_tp WHERE  t_id = '".$_REQUEST["id_t"]."' AND tp= '".$_REQUEST["id_tp"]."'";
+    $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
 } else if (isset($_REQUEST["save_data"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     Table_Update('tasting_tp', array(

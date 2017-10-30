@@ -93,7 +93,7 @@
             <td></td>
             <td><input name=tp_detail[comm] id=comm value="{$x.comm}"></td>
         </tr>
-        <tr>
+        <tr id="files">
             <td style="text-align:right">
                 вложени€
             </td>
@@ -104,22 +104,6 @@
                     onClick="add_file();">
             </td>
         </tr>
-        {if $x.files}
-        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
-        {foreach from=$keywords item=keyword}
-        <tr>
-            <td style="text-align:right">
-                <input type=button value=удалить onClick="
-                    del_files.push('{$keyword}');
-                    $(this).parent().parent().remove();
-                       ">
-            </td>
-            <td colspan=2>
-                <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
-            </td>
-        </tr>
-        {/foreach}
-        {/if}
     </table>
     <script>
         $('#visit_time').val('{$x.visit_time}');
@@ -136,7 +120,7 @@
         function add_file(){
             $('#table_detail').append(
                     $(
-                                "<tr>\
+                                "<tr class=tr_files>\
                                     <td style=\"text-align:right\">\
                                         <input type=button value=удалить onClick=$(this).parent().parent().remove();>\
                                     </td>\
@@ -144,8 +128,44 @@
                                 </tr>")
                 );
         }
+        function get_Files(){
+            var fd = new FormData();
+            fd.append('id_t',  '{/literal}{$smarty.request.id_t}{literal}');
+            fd.append('id_tp',  '{/literal}{$smarty.request.id_tp}{literal}');
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=tasting_control_list&print=1&nohead=1&getFiles=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        //console.log(data);
+                        eval(data);
+                    }
+            }
+            );
+        }
+        get_Files();
         /*{/literal}*/
     </script>
+{elseif $smarty.request.getFiles}
+                    {if $x.files}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
+                    {foreach from=$keywords item=keyword}
+                    $('<tr class=tr_files>\n\
+                        <td style="text-align:right">\n\
+                            <input type=button value=удалить onClick="\n\
+                                del_files.push(\'{$keyword}\');\n\
+                                $(this).parent().parent().remove();\n\
+                                   ">\n\
+                        </td>\n\
+                        <td colspan=2>\n\
+                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>\n\
+                        </td>\n\
+                    </tr>\n\
+                    ').insertAfter($('#files'));
+                    {/foreach}
+                    {/if}
 {elseif $smarty.request.save_data}
 {elseif $smarty.request.select_time}
     <option></option>
@@ -277,6 +297,8 @@
 		success: function(data) {
                     //console.log(data);
                     $('#button_save').prop("disabled",false);
+                    $(".tr_files").remove();
+                    get_Files();
                     successNoty("—охранено");
 		}
 	});

@@ -1,4 +1,22 @@
 {if $smarty.request.save_tasting_program}
+{elseif $smarty.request.getFiles}
+                    {if $x.files}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
+                    {foreach from=$keywords item=keyword}
+                    $('<tr class=tr_files>\n\
+                        <td style="text-align:right">\n\
+                            <input type=button value=удалить onClick="\n\
+                                del_files.push(\'{$keyword}\');\n\
+                                $(this).parent().parent().remove();\n\
+                                   ">\n\
+                        </td>\n\
+                        <td colspan=2>\n\
+                            <a target=_blank href="files/{$keyword}">{$keyword}</a><br>\n\
+                        </td>\n\
+                    </tr>\n\
+                    ').insertAfter($('#files'));
+                    {/foreach}
+                    {/if}
 {elseif $smarty.request.id or $smarty.request.new_tasting_program}
     <form name=form_tasting_program id=form_tasting_program target=_self method=post enctype="multipart/form-data"
           action="?action=tasting_program">
@@ -27,7 +45,7 @@
                 </script>
             </td>
         </tr>
-        <tr>
+        <tr id="files">
             <td>
                 *вложения
             </td>
@@ -36,28 +54,12 @@
                     type="button"
                     value="добавить"
                     onClick="$('#tasting_program').append($(
-                                '<tr>\n\
-                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                '<tr class=tr_files>\n\
+                                    <td style=text-align:right><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
                                     <td><input type=file name=tasting_tp_file[]></td>\n\
                                 </tr>'))">
             </td>
         </tr>
-        {if $tasting_program.files}
-        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$tasting_program.files}
-        {foreach from=$keywords item=keyword}
-        <tr>
-            <td>
-                <input type=button value=удалить onClick="
-                    del_files.push('{$keyword}');
-                    $(this).parent().parent().remove();
-                       ">
-            </td>
-            <td>
-                <a target=_blank href="files/{$keyword}">{$keyword}</a><br>
-            </td>
-        </tr>
-        {/foreach}
-        {/if}
     </table>
     </form>
     <p><input id="button_save" type="button" value="Сохранить" onClick="save_tasting_program('{$smarty.request.id}');"></p>
@@ -92,10 +94,28 @@
 		contentType: false,
 		success: function(data) {
                     $('#button_save').prop("disabled",false);
+                    $(".tr_files").remove();
+                    get_Files();
                     successNoty("Сохранено");
 		}
 	});
     }
+    function get_Files(){
+        var fd = new FormData();
+        fd.append('id',  '{/literal}{$smarty.request.id}{literal}');
+        $.ajax({
+                type: 'POST',
+                url: '?action=tasting_program&print=1&nohead=1&getFiles=1',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    //console.log(data);
+                    eval(data);
+                }
+        });
+    }
+    get_Files();
     /*{/literal}*/
     var del_files = [];
     </script>

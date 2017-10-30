@@ -19,6 +19,12 @@ if (isset($_REQUEST["select_tasting_program"])){
     $smarty->assign('program_name', $db->getOne("SELECT name FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
     $smarty->assign('login_fio', $db->getOne("SELECT fio FROM user_list WHERE login = '".$_REQUEST["login"]."'"));
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
+} else if (isset($_REQUEST["getFiles"])){
+    $sql = "SELECT tpc.*,u.chief_tn FROM tasting_program_costs tpc, user_list u WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."' and tpc.login='".$_REQUEST["login"]."'";
+    $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    //echo $sql;
+    $smarty->assign('x', $r);
+    $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
 } else if (isset($_REQUEST["get_data"])){
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
     $sql = "SELECT tpc.program_id,
@@ -38,14 +44,14 @@ if (isset($_REQUEST["select_tasting_program"])){
        u.pos_name,
        u.chief_tn,
        u.chief_fio,
-       motivation_files           ,
-transportation_costs_files ,
-log_trasport_files         ,
-log_loaders_files          ,
-log_lease_warehouse_files  ,
-organizational_costs_files ,
-consumables_files          ,
-files
+        motivation_files           ,
+        transportation_costs_files ,
+        log_trasport_files         ,
+        log_loaders_files          ,
+        log_lease_warehouse_files  ,
+        organizational_costs_files ,
+        consumables_files          ,
+        files
 
   FROM tasting_program_costs tpc, user_list u
  WHERE tpc.login = u.login AND tpc.program_id =  '".$_REQUEST["program_id"]."' order by u.fio";

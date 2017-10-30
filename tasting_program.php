@@ -35,6 +35,10 @@ if (isset($_REQUEST["list_tasting_program"])){
         }
     }
 } else if (isset($_REQUEST["list_files"])){
+} else if (isset($_REQUEST["getFiles"])){
+    $sql = "SELECT p.* FROM tasting_program p WHERE id = '".$_REQUEST["id"]."'";
+    $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
 } else if (isset($_REQUEST["id"])||isset($_REQUEST["new_tasting_program"])){
     !isset($_REQUEST["id"])?$_REQUEST["id"]=get_new_id():null;
     $sql = "SELECT p.* FROM tasting_program p WHERE id = '".$_REQUEST["id"]."'";

@@ -75,9 +75,7 @@ if (isset($_REQUEST["save"])){
          m.status status,
          s.name status_name,
          s.kod status_kod,
-         m.end_date - TRUNC (SYSDATE) - 1 days_remain,
-         m.tfiles,
-         m.rfiles
+         m.end_date - TRUNC (SYSDATE) - 1 days_remain
     FROM ms_task m,
          routes_agents a,
          cpp,
@@ -101,6 +99,10 @@ ORDER BY ag_name,
 } else if (isset($_REQUEST["addMsg"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     Table_Update('ms_task_chat', array("id"=>get_new_id(),"task_id"=>$_REQUEST["task_id"]),array("text"=>$_REQUEST["msg"],"login"=>$login));
+} else if (isset($_REQUEST["getFiles"])){
+    $sql = "SELECT m.tfiles, m.rfiles FROM ms_task m WHERE m.id = ".$_REQUEST["task_id"];
+    $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('x', $r);
 } else if (isset($_REQUEST["getChat"])){
     $smarty->assign('x', $db->getAll("
 SELECT c.id,
