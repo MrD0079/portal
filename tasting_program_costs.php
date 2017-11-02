@@ -4,7 +4,16 @@ if (isset($_REQUEST["select_tasting_program"])){
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
 } else if (isset($_REQUEST["report_user"])){
-    $sql = "SELECT tpc.*,u.chief_tn FROM tasting_program_costs tpc, user_list u WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."' and tpc.login='".$_REQUEST["login"]."'";
+    $sql = "SELECT nvl(tpc.motivation,0)
+       + nvl(tpc.transportation_costs,0)
+       + nvl(tpc.log_trasport,0)
+       + nvl(tpc.log_loaders,0)
+       + nvl(tpc.log_lease_warehouse,0)
+       + nvl(tpc.organizational_costs,0)
+       + nvl(tpc.consumables,0)
+       + nvl(tpc.bank_services,0)
+       + nvl(tpc.transportation_costs * u.amort,0)
+          costs_amount, tpc.*,u.chief_tn FROM tasting_program_costs tpc, user_list u WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."' and tpc.login='".$_REQUEST["login"]."'";
     $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     //echo $sql;
     $smarty->assign('x', $r);
@@ -13,7 +22,16 @@ if (isset($_REQUEST["select_tasting_program"])){
     $smarty->assign('amort', $db->getOne("SELECT amort FROM user_list WHERE login = '".$_REQUEST["login"]."'"));
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
 } else if (isset($_REQUEST["report_promo"])){
-    $sql = "SELECT tpc.*,u.chief_tn FROM tasting_program_costs tpc, user_list u WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."' and tpc.login='".$_REQUEST["login"]."'";
+    $sql = "SELECT nvl(tpc.motivation,0)
+       + nvl(tpc.transportation_costs,0)
+       + nvl(tpc.log_trasport,0)
+       + nvl(tpc.log_loaders,0)
+       + nvl(tpc.log_lease_warehouse,0)
+       + nvl(tpc.organizational_costs,0)
+       + nvl(tpc.consumables,0)
+       + nvl(tpc.bank_services,0)
+       + nvl(tpc.transportation_costs * u.amort,0)
+          costs_amount, tpc.*,u.chief_tn FROM tasting_program_costs tpc, user_list u WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."' and tpc.login='".$_REQUEST["login"]."'";
     $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
     $smarty->assign('program_name', $db->getOne("SELECT name FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
@@ -27,6 +45,7 @@ if (isset($_REQUEST["select_tasting_program"])){
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
 } else if (isset($_REQUEST["get_data"])){
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
+    $smarty->assign('period',$db->getRow("SELECT TO_CHAR (MIN (dt), 'dd.mm.yyyy') min_dt, TO_CHAR (MAX (dt), 'dd.mm.yyyy') max_dt FROM tasting t WHERE t.program_id = '".$_REQUEST["program_id"]."'", null, null, null, MDB2_FETCHMODE_ASSOC));
     $sql = "SELECT tpc.program_id,
         tpc.login,
          nvl(tpc.motivation,0)
@@ -36,6 +55,7 @@ if (isset($_REQUEST["select_tasting_program"])){
        + nvl(tpc.log_lease_warehouse,0)
        + nvl(tpc.organizational_costs,0)
        + nvl(tpc.consumables,0)
+       + nvl(tpc.bank_services,0)
        + nvl(tpc.transportation_costs * u.amort,0)
           costs_amount,
        tpc.is_accepted,
@@ -51,10 +71,37 @@ if (isset($_REQUEST["select_tasting_program"])){
         log_lease_warehouse_files  ,
         organizational_costs_files ,
         consumables_files          ,
-        files
-
+        bank_services_files,
+        files,
+NVL (REGEXP_COUNT (motivation_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (transportation_costs_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (log_trasport_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (log_loaders_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (log_lease_warehouse_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (organizational_costs_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (consumables_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (bank_services_files, '[' || CHR (10) || ']') + 1, 0) +
+NVL (REGEXP_COUNT (files, '[' || CHR (10) || ']') + 1, 0) files_count,
+         motivation,
+         transportation_costs,
+         log_trasport,
+         log_loaders,
+         log_lease_warehouse,
+         organizational_costs,
+         consumables,
+         bank_services,
+         transportation_costs * u.amort amort
   FROM tasting_program_costs tpc, user_list u
- WHERE tpc.login = u.login AND tpc.program_id =  '".$_REQUEST["program_id"]."' order by u.fio";
+ WHERE tpc.login = u.login AND tpc.program_id =  '".$_REQUEST["program_id"]."'   AND (   u.tn = ".$tn."
+              OR u.chief_tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = ".$tn.")
+              OR (SELECT NVL (is_admin, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1
+              OR (SELECT NVL (is_acceptor, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1) order by u.chief_fio, u.fio";
     //echo $sql;
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
@@ -66,11 +113,21 @@ if (isset($_REQUEST["select_tasting_program"])){
           + nvl(tpc.log_lease_warehouse,0)
           + nvl(tpc.organizational_costs,0)
           + nvl(tpc.consumables,0)
+          + nvl(tpc.bank_services,0)
           + nvl(tpc.transportation_costs * u.amort,0)
           )
-          costs_amount
+         costs_amount
   FROM tasting_program_costs tpc, user_list u
- WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."'"));
+ WHERE tpc.login = u.login AND tpc.program_id = '".$_REQUEST["program_id"]."'   AND (   u.tn = ".$tn."
+              OR u.chief_tn IN (SELECT slave
+                                  FROM full
+                                 WHERE master = ".$tn.")
+              OR (SELECT NVL (is_admin, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1
+              OR (SELECT NVL (is_acceptor, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1) "));
     $smarty->assign('promoters', $db->getAll("SELECT login, fio FROM user_list WHERE pos_id = 127968517 AND chief_tn = ".$tn, null, null, null, MDB2_FETCHMODE_ASSOC));
 } else if (isset($_REQUEST["save_user_report"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);

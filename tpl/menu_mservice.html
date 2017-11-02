@@ -1,5 +1,5 @@
 
-{if $is_admin or $is_ma}
+{if ($is_admin or $is_ma) and not $is_acceptor}
 
 <li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
 	<ul>
@@ -50,6 +50,7 @@
 
 {/if}
 
+{if not $is_acceptor}
 <li><a href="javascript:void(0);"><span class="dir">Маршруты</span></a>
 	<ul>
 
@@ -82,6 +83,7 @@
 		<li><a href="?action=ms_vac">Заявка на отпуск Мерчандайзера</a></li>
 	</ul>
 </li>
+{/if}
 <li><a href="javascript:void(0);"><span class="dir">Дегустация</span></a>
 	<ul>
 		<li><a href="?action=tasting_program">Дегустационные программы</a></li>
@@ -92,9 +94,11 @@
 		<li><a href="?action=tasting_program_costs">Затраты</a></li>
 	</ul>
 </li>
+{if not $is_acceptor}
 <li><a href="javascript:void(0);"><span class="dir">Задачи</span></a>
 	<ul>
 		<li><a href="?action=ms_task">Задачи</a></li>
 		<li><a href="?action=ms_task_report">Отчет</a></li>
 	</ul>
 </li>
+{/if}

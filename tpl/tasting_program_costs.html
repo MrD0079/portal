@@ -4,6 +4,7 @@
     <option value="{$i.id}">{$i.name}</option>
     {/foreach}
 {elseif $smarty.request.get_data}
+    <p>Период проведения с {$period.min_dt} по {$period.max_dt}</p>
     <p>
         итого:{$costs_amount}
         &nbsp&nbsp&nbsp
@@ -12,6 +13,7 @@
             <a target=_blank href="?action=tasting_program_costs&report_user=1&program_id={$smarty.request.program_id}&login={$login}">мой отчет о затратах</a>
             &nbsp&nbsp&nbsp
             {/if}
+            {if not $is_acceptor}
             для создания отчета промоутера выберите промоутера
             <select onchange="
                 if (this.value=='')
@@ -31,6 +33,7 @@
             &nbsp&nbsp&nbsp
             <a id="promo_rep_link" target=_blank>отчет промоутера</a>
             <script>$('#promo_rep_link').hide();</script>
+            {/if}
         {/if}
     </p>
     <table border="1" id="table_detail">
@@ -40,9 +43,18 @@
             <td>Руководитель</td>
             <td>Должность</td>
             <td>Сумма затрат, {$valuta}</td>
-            <td>Подтверждающие документы</td>
+            <td>Мотивация (ЗП), {$valuta}</td>
+            <td>Транспортные затраты, {$valuta}</td>
+            <td>Амортизация, {$valuta}</td>
+            <td>Логистика (транспорт), {$valuta}</td>
+            <td>Логистика (грузчики), {$valuta}</td>
+            <td>Логистика (аренда склада), {$valuta}</td>
+            <td>Организационные затраты, {$valuta}</td>
+            <td>Расходные материалы, {$valuta}</td>
+            <td>Банковские услуги, {$valuta}</td>
             <td>отчет принят руководителем</td>
             <td>отчет обработан</td>
+            <td>кол-во вложенных сканкопий</td>
         </tr>
         {foreach key=k item=i from=$x name=x}
         {if $i.login|substr:0:2 eq 'ms'}
@@ -56,18 +68,18 @@
             <td>{$i.chief_fio}</td>
             <td>{$i.pos_name}</td>
             <td style="text-align: right">{$i.costs_amount|num:2}</td>
-            <td>
-                {if $i.motivation_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.motivation_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.transportation_costs_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.transportation_costs_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.log_trasport_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.log_trasport_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.log_loaders_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.log_loaders_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.log_lease_warehouse_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.log_lease_warehouse_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.organizational_costs_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.organizational_costs_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.consumables_files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.consumables_files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-                {if $i.files}{assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.files}{foreach from=$keywords item=keyword}<a target=_blank href="files/{$keyword}">{$keyword}</a><br>{/foreach}{/if}
-            </td>
+            <td style="text-align: right">{$i.motivation|num:2}</td>
+            <td style="text-align: right">{$i.transportation_costs|num:2}</td>
+            <td style="text-align: right">{$i.amort|num:2}</td>
+            <td style="text-align: right">{$i.log_trasport|num:2}</td>
+            <td style="text-align: right">{$i.log_loaders|num:2}</td>
+            <td style="text-align: right">{$i.log_lease_warehouse|num:2}</td>
+            <td style="text-align: right">{$i.organizational_costs|num:2}</td>
+            <td style="text-align: right">{$i.consumables|num:2}</td>
+            <td style="text-align: right">{$i.bank_services|num:2}</td>
             <td style="text-align: center">{if $i.is_accepted}да{/if}</td>
             <td style="text-align: center">{if $i.is_processed}да{/if}</td>
+            <td style="text-align:center">{$i.files_count}</td>
             {if $program_readonly neq 1}
             <td>
                 <a
@@ -76,6 +88,7 @@
                     редактировать
                 </a>
             </td>
+            {if not $is_acceptor}
             <td>
                 <a
                     href="javascript:void(0);"
@@ -83,6 +96,7 @@
                     удалить
                 </a>
             </td>
+            {/if}
             {/if}
             <td>
                 <a
@@ -98,215 +112,306 @@
     {if $program_readonly eq 1 or $smarty.request.view}
     {assign var=disabled value='disabled="disabled"'}
     {/if}
+    {if $is_acceptor}
+    {assign var=acc_disabled value='disabled="disabled"'}
+    {/if}
+    {if not $smarty.request.print}
     <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
           action="?action=tasting_program_costs">
     <input type="hidden" name=keys[program_id] value="{$smarty.request.program_id}">
     <input type="hidden" name=keys[login] value="{$smarty.request.login}">
+    {/if}
     <h1>Отчет о затратах</h1>
-    <table>
-        <tr>
-            <td>
-                <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn}disabled="disabled"{/if} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
-                <p>очтет обработан <select {$disabled} {if not $is_acceptor}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
-                <script>
-                    $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
-                    $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
-                </script>
-            </td>
-            <td>&nbsp&nbsp&nbsp</td>
-            <td>
-                <p>
-                    Текст сообщения:
-                    <br>
-                    <textarea cols=20 rows=3 name=vals[msg] id="msg">{$x.msg}</textarea>
-                    <br>
-                    <input id="button_send_msg" type="button" value="Отправить сообщение" onClick="send_msg();"></p>
-                </p>
-            </td>
-        </tr>
-    </table>
+
+    {if not $smarty.request.print}
+        <a
+            target=_blank
+            href="?action=tasting_program_costs&report_user=1&program_id={$smarty.request.program_id}&login={$smarty.request.login}&view=1&print=1&excel=1&filename=report">
+            Передать в Excel
+        </a>
+        <table>
+            <tr>
+                <td>
+                    <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn or $is_mservice}disabled="disabled"{/if} {$acc_disabled} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
+                    <p>очтет обработан <select {$disabled} {if not $is_acceptor or $is_mservice}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
+                    <script>
+                        $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
+                        $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
+                    </script>
+                </td>
+                <td>&nbsp&nbsp&nbsp</td>
+                <td>
+                    <p>
+                        Текст сообщения:
+                        <br>
+                        <textarea {$disabled} {if $is_mservice}disabled="disabled"{/if} cols=20 rows=3 name=vals[msg] id="msg">{$x.msg}</textarea>
+                        <br>
+                        <input {$disabled} {if $is_mservice}disabled="disabled"{/if} id="button_send_msg" type="button" value="Отправить сообщение" onClick="send_msg();"></p>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    {else}
+        <p>отчет принят: {if $x.is_accepted}да{/if}</p>
+        <p>очтет обработан: {if $x.is_processed}да{/if}</p>
+    {/if}
     <p>Дегустационная программа <b>{$program_name}</b></p>
     <p>Сотрудник <b>{$login_fio}</b></p>
     <table border="1">
         <tr style="font-weight: bold">
             <td></td>
             <td>Затраты</td>
-            <td>Подтверждающие документы</td>
+            {if not $smarty.request.print}<td>Подтверждающие документы</td>{/if}
+            <td>Комментарии</td>
         </tr>
         <tr style="vertical-align: top">
             <td>Мотивация (ЗП)</td>
-            <td><input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}"></td>
-            <td id="motivation_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('motivation_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}">{else}{$x.motivation|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="motivation_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('motivation_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[motivation_comm]" value="{$x.motivation_comm}">{else}{$x.motivation_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Транспортные затраты</td>
-            <td><input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}"
-                    onChange="$('#amort').html(Math.round('{$amort}'*this.value*100)/100)" id="transportation_costs"></td>
-            <td id="transportation_costs_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('transportation_costs_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}" onChange="calc();">{else}{$x.transportation_costs|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="transportation_costs_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('transportation_costs_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[transportation_costs_comm]" value="{$x.transportation_costs_comm}">{else}{$x.transportation_costs_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Амортизация</td>
             <td><div id="amort"></div></td>
-            <td></td>
-        </tr>		
-    <script>
-        $("#transportation_costs").change();
-    </script>
+        </tr>
         <tr>
             <td>Логистика (транспорт)</td>
-            <td><input {$disabled} class="number" name="vals[log_trasport]" value="{$x.log_trasport}"></td>
-            <td id="log_trasport_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('log_trasport_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[log_trasport]" value="{$x.log_trasport}" onChange="calc();">{else}{$x.log_trasport|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="log_trasport_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('log_trasport_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[log_trasport_comm]" value="{$x.log_trasport_comm}">{else}{$x.log_trasport_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Логистика (грузчики)</td>
-            <td><input {$disabled} class="number" name="vals[log_loaders]" value="{$x.log_loaders}"></td>
-            <td id="log_loaders_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('log_loaders_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[log_loaders]" value="{$x.log_loaders}" onChange="calc();">{else}{$x.log_loaders|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="log_loaders_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('log_loaders_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[log_loaders_comm]" value="{$x.log_loaders_comm}">{else}{$x.log_loaders_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Логистика (аренда склад)</td>
-            <td><input {$disabled} class="number" name="vals[log_lease_warehouse]" value="{$x.log_lease_warehouse}"></td>
-            <td id="log_lease_warehouse_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('log_lease_warehouse_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[log_lease_warehouse]" value="{$x.log_lease_warehouse}" onChange="calc();">{else}{$x.log_lease_warehouse|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="log_lease_warehouse_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('log_lease_warehouse_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[log_lease_warehouse_comm]" value="{$x.log_lease_warehouse_comm}">{else}{$x.log_lease_warehouse_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Организационные затраты</td>
-            <td><input {$disabled} class="number" name="vals[organizational_costs]" value="{$x.organizational_costs}"></td>
-            <td id="organizational_costs_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('organizational_costs_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[organizational_costs]" value="{$x.organizational_costs}" onChange="calc();">{else}{$x.organizational_costs|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="organizational_costs_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('organizational_costs_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[organizational_costs_comm]" value="{$x.organizational_costs_comm}">{else}{$x.organizational_costs_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Расходные материалы</td>
-            <td><input {$disabled} class="number" name="vals[consumables]" value="{$x.consumables}"></td>
-            <td id="consumables_files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('consumables_files');">
-            </td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[consumables]" value="{$x.consumables}" onChange="calc();">{else}{$x.consumables|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="consumables_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('consumables_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[consumables_comm]" value="{$x.consumables_comm}">{else}{$x.consumables_comm}{/if}</td>
         </tr>		
+        <tr>
+            <td>банковские услуги</td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[bank_services]" value="{$x.bank_services}" onChange="calc();">{else}{$x.bank_services|num:2}{/if}</td>
+            {if not $smarty.request.print}<td id="bank_services_files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('bank_services_files');"></td>{/if}
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[bank_services_comm]" value="{$x.bank_services_comm}">{else}{$x.bank_services_comm}{/if}</td>
+        </tr>		
+        <tr style="font-weight: bold">
+            <td>итого</td>
+            <td>{if not $smarty.request.print}<div id="total"></div>{else}{$x.costs_amount|num:2}{/if}</td>
+        </tr>
     </table>
-    <p><input {$disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
+    {if not $smarty.request.print}
+    <p><input {$disabled} {$acc_disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
     </form>
+    {literal}
+    <script>
+        function calc(){
+            $('#amort').html(Math.round('{/literal}{$amort}{literal}'*
+                    $("input[name='vals[transportation_costs]']").val()
+                    *100)/100);
+            $('#total').html(
+                    Number($("input[name='vals[motivation]']").val())+
+                    Number($("input[name='vals[transportation_costs]']").val())+
+                    Number($("input[name='vals[log_trasport]']").val())+
+                    Number($("input[name='vals[log_loaders]']").val())+
+                    Number($("input[name='vals[log_lease_warehouse]']").val())+
+                    Number($("input[name='vals[organizational_costs]']").val())+
+                    Number($("input[name='vals[consumables]']").val())+
+                    Number($("input[name='vals[bank_services]']").val())+
+                    Math.round('{/literal}{$amort}{literal}'*
+                        $("input[name='vals[transportation_costs]']").val()
+                        *100)/100
+                );
+        }
+        calc();
+    </script>
+    {/literal}
+    {/if}
 {elseif $smarty.request.report_promo}
     {if $program_readonly eq 1 or $smarty.request.view}
     {assign var=disabled value='disabled="disabled"'}
     {/if}
+    {if $is_acceptor}
+    {assign var=acc_disabled value='disabled="disabled"'}
+    {/if}
+    {if not $smarty.request.print}
     <form name=form_tasting id=form_tasting target=_self method=post enctype="multipart/form-data"
           action="?action=tasting_program_costs">
     <input type="hidden" name=keys[program_id] value="{$smarty.request.program_id}">
     <input type="hidden" name=keys[login] value="{$smarty.request.login}">
+    {/if}
     <h1>Отчет о затратах</h1>
-    <table>
-        <tr>
-            <td>
-                <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn}disabled="disabled"{/if} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
-                <p>очтет обработан <select {$disabled} {if not $is_acceptor}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
-                <script>
-                    $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
-                    $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
-                </script>
-            </td>
-            <td>&nbsp&nbsp&nbsp</td>
-            <td>
-                <p>
-                    Текст сообщения:
-                    <br>
-                    <textarea cols=20 rows=3 name=vals[msg] id="msg">{$x.msg}</textarea>
-                    <br>
-                    <input id="button_send_msg" type="button" value="Отправить сообщение" onClick="send_msg();"></p>
-                </p>
-            </td>
-        </tr>
-    </table>
+    {if not $smarty.request.print}
+        <a
+            target=_blank
+            href="?action=tasting_program_costs&report_promo=1&program_id={$smarty.request.program_id}&login={$smarty.request.login}&view=1&print=1&excel=1&filename=report">
+            Передать в Excel
+        </a>
+        <table>
+            <tr>
+                <td>
+                    <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn or $is_mservice}disabled="disabled"{/if} {$acc_disabled} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
+                    <p>очтет обработан <select {$disabled} {if not $is_acceptor or $is_mservice}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
+                    <script>
+                        $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
+                        $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
+                    </script>
+                </td>
+                <td>&nbsp&nbsp&nbsp</td>
+                <td>
+                    <p>
+                        Текст сообщения:
+                        <br>
+                        <textarea {$disabled} cols=20 rows=3 name=vals[msg] id="msg">{$x.msg}</textarea>
+                        <br>
+                        <input {$disabled} id="button_send_msg" type="button" value="Отправить сообщение" onClick="send_msg();"></p>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    {else}
+        <p>отчет принят: {if $x.is_accepted}да{/if}</p>
+        <p>очтет обработан: {if $x.is_processed}да{/if}</p>
+    {/if}
     <p>Дегустационная программа <b>{$program_name}</b></p>
     <p>Сотрудник <b>{$login_fio}</b></p>
     <table border="1">
         <tr style="font-weight: bold">
             <td></td>
             <td>Затраты</td>
+            <td>Комментарии</td>
         </tr>
         <tr style="vertical-align: top">
             <td>Мотивация (ЗП)</td>
-            <td><input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}"></td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[motivation]" value="{$x.motivation}" onChange="calc();">{else}{$x.motivation|num:2}{/if}</td>
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[motivation_comm]" value="{$x.motivation_comm}">{else}{$x.motivation_comm}{/if}</td>
         </tr>		
         <tr>
             <td>Транспортные затраты</td>
-            <td><input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}"></td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[transportation_costs]" value="{$x.transportation_costs}" onChange="calc();">{else}{$x.transportation_costs|num:2}{/if}</td>
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[transportation_costs_comm]" value="{$x.transportation_costs_comm}">{else}{$x.transportation_costs_comm}{/if}</td>
         </tr>		
         <tr>
+            <td>банковские услуги</td>
+            <td>{if not $smarty.request.print}<input {$disabled} class="number" name="vals[bank_services]" value="{$x.bank_services}" onChange="calc();">{else}{$x.bank_services|num:2}{/if}</td>
+            <td>{if not $smarty.request.print}<input {$disabled} {$acc_disabled} name="vals[bank_services_comm]" value="{$x.bank_services_comm}">{else}{$x.bank_services_comm}{/if}</td>
+        </tr>
+        {if not $smarty.request.print}
+        <tr>
             <td>Вложения</td>
-            <td id="files">
-                <input {$disabled} type="button" value="добавить" onClick="add_file('files');">
-            </td>
-        </tr>		
+            <td id="files"><input {$disabled} {$acc_disabled} type="button" value="добавить" onClick="add_file('files');"></td>
+        </tr>
+        {/if}
+        <tr style="font-weight: bold">
+            <td>итого</td>
+            <td>{if not $smarty.request.print}<div id="total"></div>{else}{$x.costs_amount|num:2}{/if}</td>
+        </tr>
     </table>
-    <p><input {$disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
+    {if not $smarty.request.print}
+    <p><input {$disabled} {$acc_disabled} id="button_save" type="button" value="Сохранить" onClick="save_user_report();"></p>
     </form>
+    {literal}
+    <script>
+        function calc(){
+            $('#total').html(
+                    Number($("input[name='vals[motivation]']").val())+
+                    Number($("input[name='vals[transportation_costs]']").val())+
+                    Number($("input[name='vals[bank_services]']").val())
+                );
+        }
+        calc();
+    </script>
+    {/literal}
+    {/if}
 {elseif $smarty.request.save_user_report}
 {elseif $smarty.request.getFiles}
     {if $program_readonly eq 1 or $smarty.request.view}
     {assign var=disabled value='disabled="disabled"'}
     {/if}
+    {if $is_acceptor}
+    {assign var=acc_disabled value='disabled="disabled"'}
+    {/if}
     {if $x.motivation_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.motivation_files}
         {foreach from=$keywords item=keyword}
-            $('#motivation_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#motivation_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[motivation_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.transportation_costs_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.transportation_costs_files}
         {foreach from=$keywords item=keyword}
-            $('#transportation_costs_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#transportation_costs_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[transportation_costs_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.log_trasport_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_trasport_files}
         {foreach from=$keywords item=keyword}
-            $('#log_trasport_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#log_trasport_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[log_trasport_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.log_loaders_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_loaders_files}
         {foreach from=$keywords item=keyword}
-            $('#log_loaders_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#log_loaders_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[log_loaders_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.log_lease_warehouse_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.log_lease_warehouse_files}
         {foreach from=$keywords item=keyword}
-            $('#log_lease_warehouse_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#log_lease_warehouse_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[log_lease_warehouse_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.organizational_costs_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.organizational_costs_files}
         {foreach from=$keywords item=keyword}
-            $('#organizational_costs_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#organizational_costs_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[organizational_costs_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.consumables_files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.consumables_files}
         {foreach from=$keywords item=keyword}
-            $('#consumables_files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#consumables_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[consumables_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
+        {/foreach}
+    {/if}
+    {if $x.bank_services_files}
+        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.bank_services_files}
+        {foreach from=$keywords item=keyword}
+            $('#bank_services_files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
+                    onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[bank_services_files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
     {if $x.files}
         {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$x.files}
         {foreach from=$keywords item=keyword}
-            $('#files').append($('<div class=tr_files><input {$disabled} type=button value=удалить \n\
+            $('#files').append($('<div class=tr_files><input {$disabled} {$acc_disabled} type=button value=удалить \n\
                     onClick="$(\'#form_tasting\').append($(\'<input type=hidden name=del_files[files][{$keyword}]>\'));$(this).parent().remove();"><a target=_blank href="files/{$keyword}">{$keyword}</a></div>'));
         {/foreach}
     {/if}
@@ -392,8 +497,8 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    console.log(data);
-                    eval(data);
+                    //console.log(data);
+                    Number(data);
                 }
         });
     }
