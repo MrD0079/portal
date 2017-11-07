@@ -44,6 +44,7 @@ if (isset($_REQUEST["select_tasting_program"])){
     $smarty->assign('x', $r);
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
 } else if (isset($_REQUEST["get_data"])){
+    $smarty->assign('program_name', $db->getOne("SELECT name FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
     $smarty->assign('program_readonly', $db->getOne("SELECT closed FROM tasting_program WHERE id = '".$_REQUEST["program_id"]."'"));
     $smarty->assign('period',$db->getRow("SELECT TO_CHAR (MIN (dt), 'dd.mm.yyyy') min_dt, TO_CHAR (MAX (dt), 'dd.mm.yyyy') max_dt FROM tasting t WHERE t.program_id = '".$_REQUEST["program_id"]."'", null, null, null, MDB2_FETCHMODE_ASSOC));
     $sql = "SELECT tpc.program_id,

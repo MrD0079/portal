@@ -111,6 +111,14 @@
 	</script>
 </p>
 <p>
+	“œ
+	<input onClick="$('#zatgt0').val(this.value)" type=radio name="zatgt0" value=1 checked>‚ÒÂ
+	<input onClick="$('#zatgt0').val(this.value)" type=radio name="zatgt0" value=2>Õ¿ + À¿ + Ã¿ > 0
+	<script>
+		$("input[name=zatgt0][value={$smarty.request.zatgt0}]").attr('checked',true);
+	</script>
+</p>
+<p>
 	 Ó‰ “œ
 	<input onChange="this.value==''?this.value=0:null;" class="number_int" name=tp_kod id=tp_kod>
 	<script>$('#tp_kod').val({$smarty.request.tp_kod});</script>
@@ -118,6 +126,7 @@
 {/if}
 
 <input type=hidden id=sort name=sort value='{$smarty.request.sort}'>
+<input type=hidden id=zatgt0 name=zatgt0 value='{$smarty.request.zatgt0}'>
 
 
 
@@ -145,6 +154,7 @@ $('#tp').load('?action=bud_svod_zat_tp_list&nohead=1',
 	db: $('#db').val(),
 	st: $('#st').val(),
 	sort: $('#sort').val(),
+	zatgt0: $('#zatgt0').val(),
 	tp_kod: $('#tp_kod').val(),
 }
 ,

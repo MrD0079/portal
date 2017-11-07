@@ -11,6 +11,7 @@ InitRequestVar("funds",0);
 InitRequestVar("db",0);
 InitRequestVar("st",0);
 InitRequestVar("sort",1);
+InitRequestVar("zatgt0",1);
 InitRequestVar("tp_kod",0);
 
 $params=array(
@@ -27,6 +28,7 @@ $params=array(
 	':db' => $_REQUEST["db"],
 	':st' => $_REQUEST["st"],
 	':sort' => $_REQUEST["sort"],
+	':zatgt0' => $_REQUEST["zatgt0"],
 	':tp_kod' => $_REQUEST["tp_kod"],
 );
 

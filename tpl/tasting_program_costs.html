@@ -4,9 +4,28 @@
     <option value="{$i.id}">{$i.name}</option>
     {/foreach}
 {elseif $smarty.request.get_data}
+
+
+
+
+    {if not $smarty.request.print}
+        <a
+            target=_blank
+            href="?action=tasting_program_costs&get_data=1&program_id={$smarty.request.program_id}&print=1&excel=1&filename=report">
+            Передать в Excel
+        </a>
+    {else}
+        <h1>{$program_name}</h1>
+    {/if}
+
+
+
+
+
+
     <p>Период проведения с {$period.min_dt} по {$period.max_dt}</p>
     <p>
-        итого:{$costs_amount}
+        итого:{$costs_amount|num:2}
         &nbsp&nbsp&nbsp
         {if $program_readonly neq 1}
             {if $my_pos_id eq 127707110 or $is_admin or $is_mservice}
@@ -124,16 +143,17 @@
     <h1>Отчет о затратах</h1>
 
     {if not $smarty.request.print}
-        <a
+    <!--    <a
             target=_blank
             href="?action=tasting_program_costs&report_user=1&program_id={$smarty.request.program_id}&login={$smarty.request.login}&view=1&print=1&excel=1&filename=report">
             Передать в Excel
         </a>
+    -->
         <table>
             <tr>
                 <td>
-                    <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn or $is_mservice}disabled="disabled"{/if} {$acc_disabled} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
-                    <p>очтет обработан <select {$disabled} {if not $is_acceptor or $is_mservice}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
+                    <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn}disabled="disabled"{/if} {$acc_disabled} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
+                    <p>отчет обработан <select {$disabled} {if not $is_acceptor}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
                     <script>
                         $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
                         $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
@@ -153,7 +173,7 @@
         </table>
     {else}
         <p>отчет принят: {if $x.is_accepted}да{/if}</p>
-        <p>очтет обработан: {if $x.is_processed}да{/if}</p>
+        <p>отчет обработан: {if $x.is_processed}да{/if}</p>
     {/if}
     <p>Дегустационная программа <b>{$program_name}</b></p>
     <p>Сотрудник <b>{$login_fio}</b></p>
@@ -263,16 +283,16 @@
     {/if}
     <h1>Отчет о затратах</h1>
     {if not $smarty.request.print}
-        <a
+        <!--<a
             target=_blank
             href="?action=tasting_program_costs&report_promo=1&program_id={$smarty.request.program_id}&login={$smarty.request.login}&view=1&print=1&excel=1&filename=report">
             Передать в Excel
-        </a>
+        </a>-->
         <table>
             <tr>
                 <td>
-                    <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn or $is_mservice}disabled="disabled"{/if} {$acc_disabled} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
-                    <p>очтет обработан <select {$disabled} {if not $is_acceptor or $is_mservice}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
+                    <p>отчет принят <select {$disabled} {if $tn neq $x.chief_tn}disabled="disabled"{/if} {$acc_disabled} id=is_accepted name="vals[is_accepted]"><option value="0">нет<option value="1">да</select></p>
+                    <p>отчет обработан <select {$disabled} {if not $is_acceptor}disabled="disabled"{/if} id=is_processed name="vals[is_processed]"><option value="0">нет<option value="1">да</select></p>
                     <script>
                         $('#is_accepted option[value="{$x.is_accepted}"]').prop('selected', true);
                         $('#is_processed option[value="{$x.is_processed}"]').prop('selected', true);
@@ -292,7 +312,7 @@
         </table>
     {else}
         <p>отчет принят: {if $x.is_accepted}да{/if}</p>
-        <p>очтет обработан: {if $x.is_processed}да{/if}</p>
+        <p>отчет обработан: {if $x.is_processed}да{/if}</p>
     {/if}
     <p>Дегустационная программа <b>{$program_name}</b></p>
     <p>Сотрудник <b>{$login_fio}</b></p>
@@ -498,7 +518,7 @@
                 contentType: false,
                 success: function(data) {
                     //console.log(data);
-                    Number(data);
+                    eval(data);
                 }
         });
     }

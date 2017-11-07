@@ -1,4 +1,4 @@
-/* Formatted on 11/05/2016 12:16:41 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.11.2017 13:48:02 (QP5 v5.252.13127.32867) */
   SELECT c.mt || ' ' || m.y period_text,
          m.m,
          m.dt,
@@ -57,7 +57,8 @@
                    AND TO_CHAR (f.act_month, 'mm') = st.m
                    AND DECODE ( :st, 0, 0, 1) = 0
           GROUP BY f.act_month, st.tp_kod) act,
-         (  SELECT z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/ period,
+         (  SELECT z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/
+                                      period,
                    tp.tp_kod,
                    SUM (tp.bonus_sum) bonus_sum
               FROM bud_ru_zay z, akcii_local_tp tp
@@ -68,25 +69,31 @@
                    AND z.valid_no = 0
                    AND (SELECT rep_accepted
                           FROM bud_ru_zay_accept
-                         WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
+                         WHERE     z_id = z.id
+                               AND INN_not_ReportMA (tn) = 0
                                AND accept_order =
                                       DECODE (
                                          NVL (
                                             (SELECT MAX (accept_order)
                                                FROM bud_ru_zay_accept
                                               WHERE     z_id = z.id
-                                                    AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0),
+                                                    AND rep_accepted = 2
+                                                    AND INN_not_ReportMA (tn) = 0),
                                             0),
                                          0, (SELECT MAX (accept_order)
                                                FROM bud_ru_zay_accept
                                               WHERE     z_id = z.id
-                                                    AND rep_accepted IS NOT NULL AND INN_not_ReportMA (tn) = 0),
+                                                    AND rep_accepted IS NOT NULL
+                                                    AND INN_not_ReportMA (tn) = 0),
                                          (SELECT MAX (accept_order)
                                             FROM bud_ru_zay_accept
-                                           WHERE z_id = z.id AND rep_accepted = 2 AND INN_not_ReportMA (tn) = 0))) =
+                                           WHERE     z_id = z.id
+                                                 AND rep_accepted = 2
+                                                 AND INN_not_ReportMA (tn) = 0))) =
                           1
                    AND DECODE ( :st, 0, z.st, :st) = z.st
-          GROUP BY z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/, tp.tp_kod) act_local,
+          GROUP BY z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/
+                                      , tp.tp_kod) act_local,
          (  SELECT period, SUM (z_fakt) zat, tp_kod
               FROM (SELECT TRUNC (z1.dt_start, 'mm') period,
                            (SELECT rep_val_number * 1000
@@ -128,8 +135,7 @@
                                                   WHERE z_id = z1.id),
                                              (SELECT MAX (accept_order)
                                                 FROM bud_ru_zay_accept
-                                               WHERE     z_id = z1.id
-                                                     AND accepted = 2)))
+                                               WHERE z_id = z1.id AND accepted = 2)))
                               current_accepted_id
                       FROM bud_ru_zay z1
                      WHERE     z1.kat NOT IN (SELECT id
@@ -150,8 +156,8 @@
          AND m.dt = sv.dt(+)
          AND m.tab_num = u1.tab_num
          AND u1.dpt_id = :dpt_id
-     and u1.is_spd=1
-    AND p.tn = u1.tn
+         AND u1.is_spd = 1
+         AND p.tn = u1.tn
          AND p.parent = pu.tn
          AND m.dt = act.act_month(+)
          AND m.tp_kod = act.tp_kod(+)
@@ -176,10 +182,15 @@
               OR (SELECT NVL (is_traid_kk, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1)
-         AND (:eta_list is null OR :eta_list = m.h_eta)
+         AND ( :eta_list IS NULL OR :eta_list = m.h_eta)
          AND DECODE ( :tp_kod, 0, m.tp_kod, :tp_kod) = m.tp_kod
          AND d.manufak = m.country
          AND d.dpt_id = :dpt_id
+         AND (   :zatgt0 = 1
+              OR (    :zatgt0 = 2
+                  AND   NVL (act.bonus, 0)
+                      + NVL (act_local.bonus_sum, 0)
+                      + NVL (zay.zat, 0) > 0))
 ORDER BY DECODE ( :sort,  2, zat_total,  3, zat_perc,  NULL) DESC,
          pu.fio,
          u1.fio,
