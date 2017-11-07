@@ -127,35 +127,27 @@
                                         current_accepted_id,
                                      st.name st_name,
                                      kat.name kat_name,
-                                     (SELECT val_number * 1000
-                                        FROM bud_ru_zay_ff
-                                       WHERE     ff_id IN (SELECT id
-                                                             FROM bud_ru_ff
-                                                            WHERE dpt_id = :dpt_id AND var_name IN ('v3', 'v4'))
-                                             AND z_id = z.id)
+                                     (  NVL (getZayFieldVal (z.id, 'var_name', 'v3'), 0)
+            + NVL (getZayFieldVal (z.id, 'var_name', 'v4'), 0))
+         * 1000
                                         z_plan,
-                                     (SELECT rep_val_number * 1000
-                                        FROM bud_ru_zay_ff
-                                       WHERE     ff_id IN (SELECT id
-                                                             FROM bud_ru_ff
-                                                            WHERE dpt_id = :dpt_id AND rep_var_name IN ('rv3', 'rv4'))
-                                             AND z_id = z.id)
+                                     (  NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv3'), 0)
+            + NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv4'), 0))
+         * 1000
                                         z_fakt,
-                                     NVL ( (SELECT val_bool
-                                              FROM bud_ru_zay_ff
-                                             WHERE     ff_id IN (SELECT id
-                                                                   FROM bud_ru_ff
-                                                                  WHERE dpt_id = :dpt_id AND admin_id = 8)
-                                                   AND z_id = z.id),
-                                          0)
+                                     NVL (
+                                                TO_NUMBER (
+                                                   getZayFieldVal (z.id,
+                                                                   'admin_id',
+                                                                   8)),
+                                                0)
                                         by_goods,
-                                     NVL ( (SELECT val_bool
-                                              FROM bud_ru_zay_ff
-                                             WHERE     ff_id IN (SELECT id
-                                                                   FROM bud_ru_ff
-                                                                  WHERE dpt_id = :dpt_id AND admin_id = 9)
-                                                   AND z_id = z.id),
-                                          0)
+                                     NVL (
+                                                TO_NUMBER (
+                                                   getZayFieldVal (z.id,
+                                                                   'admin_id',
+                                                                   9)),
+                                                0)
                                         via_db
                                 FROM bud_ru_zay z,
                                      user_list u,
@@ -227,25 +219,27 @@
                            (  SELECT z.id,
                                      COUNT (*) c,
                                      SUM (s.summa) summa,
-                                     SUM (t.bonus_sum) bonus_sum,
-                                       SUM (t.bonus_sum)
+                                     (  NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv3'), 0)
+            + NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv4'), 0))
+         * 1000 bonus_sum,
+                                       (  NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv3'), 0)
+            + NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv4'), 0))
+         * 1000
                                      * CASE
-                                          WHEN NVL ( (SELECT val_bool
-                                                        FROM bud_ru_zay_ff
-                                                       WHERE     ff_id IN (SELECT id
-                                                                             FROM bud_ru_ff
-                                                                            WHERE dpt_id = :dpt_id AND admin_id = 9)
-                                                             AND z_id = z.id),
-                                                    0) = 1
+                                          WHEN NVL (
+                                                TO_NUMBER (
+                                                   getZayFieldVal (z.id,
+                                                                   'admin_id',
+                                                                   9)),
+                                                0) = 1
                                           THEN
                                              0
-                                          WHEN NVL ( (SELECT val_bool
-                                                        FROM bud_ru_zay_ff
-                                                       WHERE     ff_id IN (SELECT id
-                                                                             FROM bud_ru_ff
-                                                                            WHERE dpt_id = :dpt_id AND admin_id = 8)
-                                                             AND z_id = z.id),
-                                                    0) = 0
+                                          WHEN NVL (
+                                                TO_NUMBER (
+                                                   getZayFieldVal (z.id,
+                                                                   'admin_id',
+                                                                   8)),
+                                                0) = 0
                                           THEN
                                              1
                                           ELSE
@@ -260,20 +254,23 @@
                                                  WHERE id = z.fil)
                                        END
                                         compens_distr,
-                                       SUM (t.bonus_sum)
+                                       (  NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv3'), 0)
+            + NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv4'), 0))
+         * 1000
                                      * CASE
-                                          WHEN NVL ( (SELECT val_bool
-                                                        FROM bud_ru_zay_ff
-                                                       WHERE     ff_id IN (SELECT id
-                                                                             FROM bud_ru_ff
-                                                                            WHERE dpt_id = :dpt_id AND admin_id = 9)
-                                                             AND z_id = z.id),
-                                                    0) = 1
+                                          WHEN NVL (
+                                                TO_NUMBER (
+                                                   getZayFieldVal (z.id,
+                                                                   'admin_id',
+                                                                   9)),
+                                                0) = 1
                                           THEN
                                              1
                                        END
                                         compens_db,
-                                     SUM (t.bonus_sum) fakt_distr
+                                     (  NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv3'), 0)
+            + NVL (getZayFieldVal (z.id, 'rep_var_name', 'rv4'), 0))
+         * 1000 fakt_distr
                                 FROM (SELECT m.dt,
                                              m.tab_num,
                                              m.tp_kod,

@@ -1,4 +1,4 @@
-/* Formatted on 07.11.2017 13:48:02 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.11.2017 18:23:37 (QP5 v5.252.13127.32867) */
   SELECT c.mt || ' ' || m.y period_text,
          m.m,
          m.dt,
@@ -96,22 +96,14 @@
                                       , tp.tp_kod) act_local,
          (  SELECT period, SUM (z_fakt) zat, tp_kod
               FROM (SELECT TRUNC (z1.dt_start, 'mm') period,
-                           (SELECT rep_val_number * 1000
-                              FROM bud_ru_zay_ff
-                             WHERE     ff_id IN (SELECT id
-                                                   FROM bud_ru_ff
-                                                  WHERE     dpt_id = :dpt_id
-                                                        AND rep_var_name IN ('rv3',
-                                                                             'rv4'))
-                                   AND z_id = z1.id)
+                             (  NVL (getZayFieldVal (z1.id, 'rep_var_name', 'rv3'),
+                                     0)
+                              + NVL (getZayFieldVal (z1.id, 'rep_var_name', 'rv4'),
+                                     0))
+                           * 1000
                               z_fakt,
-                           (SELECT val_list
-                              FROM bud_ru_zay_ff
-                             WHERE     ff_id IN (SELECT id
-                                                   FROM bud_ru_ff
-                                                  WHERE     dpt_id = :dpt_id
-                                                        AND admin_id = 4)
-                                   AND z_id = z1.id)
+                           NVL (TO_NUMBER (getZayFieldVal (z1.id, 'admin_id', 4)),
+                                0)
                               tp_kod,
                            DECODE ( (SELECT COUNT (*)
                                        FROM bud_ru_zay_accept

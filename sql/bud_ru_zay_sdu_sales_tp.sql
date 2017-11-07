@@ -1,4 +1,4 @@
-/* Formatted on 03/06/2016 17:07:42 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.11.2017 18:00:26 (QP5 v5.252.13127.32867) */
   SELECT c.data,
          c.y,
          c.my,
@@ -20,18 +20,16 @@
                  (  SELECT tp_kod, MAX (tp_ur) tp_ur, MAX (tp_addr) tp_addr
                       FROM a14mega m
                      WHERE     m.tp_kod =
-                                  (SELECT zff.val_list
-                                     FROM bud_ru_ff ff, bud_ru_zay_ff zff
-                                    WHERE     zff.z_id = :z_id
-                                          AND zff.ff_id = ff.id
-                                          AND ff.admin_id = 4)
+                                  NVL (
+                                     TO_NUMBER (
+                                        getZayFieldVal ( :z_id, 'admin_id', 4)),
+                                     0)
                            AND m.dpt_id = (SELECT u.dpt_id
                                              FROM bud_ru_zay z, user_list u
                                             WHERE z.id = :z_id AND u.tn = z.tn)
                   GROUP BY tp_kod) m
-           WHERE     c.data BETWEEN (SELECT ADD_MONTHS (
-                                               TRUNC (dt_start, 'yyyy'),
-                                               -12)
+           WHERE     c.data BETWEEN (SELECT ADD_MONTHS (TRUNC (dt_start, 'yyyy'),
+                                                        -12)
                                                sd
                                        FROM bud_ru_zay
                                       WHERE id = :z_id)
@@ -91,7 +89,8 @@
                                WHERE     f.act = st.act
                                      AND TO_CHAR (f.act_month, 'mm') = st.m
                             GROUP BY f.act_month, st.tp_kod, st.dpt_id) act,
-                           (  SELECT z.cost_assign_month/*TRUNC (z.dt_start, 'mm')*/ period,
+                           (  SELECT z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/
+                                                        period,
                                      tp.tp_kod,
                                      SUM (tp.bonus_sum) bonus_sum
                                 FROM bud_ru_zay z, akcii_local_tp tp
@@ -102,72 +101,63 @@
                                      AND z.valid_no = 0
                                      AND (SELECT rep_accepted
                                             FROM bud_ru_zay_accept
-                                           WHERE     z_id = z.id AND INN_not_ReportMA (tn) = 0
+                                           WHERE     z_id = z.id
+                                                 AND INN_not_ReportMA (tn) = 0
                                                  AND accept_order =
                                                         DECODE (
                                                            NVL (
                                                               (SELECT MAX (
                                                                          accept_order)
                                                                  FROM bud_ru_zay_accept
-                                                                WHERE     z_id =
-                                                                             z.id
+                                                                WHERE     z_id = z.id
                                                                       AND rep_accepted =
-                                                                             2 AND INN_not_ReportMA (tn) = 0),
+                                                                             2
+                                                                      AND INN_not_ReportMA (
+                                                                             tn) = 0),
                                                               0),
                                                            0, (SELECT MAX (
                                                                          accept_order)
                                                                  FROM bud_ru_zay_accept
-                                                                WHERE     z_id =
-                                                                             z.id
+                                                                WHERE     z_id = z.id
                                                                       AND rep_accepted
-                                                                             IS NOT NULL AND INN_not_ReportMA (tn) = 0),
-                                                           (SELECT MAX (
-                                                                      accept_order)
+                                                                             IS NOT NULL
+                                                                      AND INN_not_ReportMA (
+                                                                             tn) = 0),
+                                                           (SELECT MAX (accept_order)
                                                               FROM bud_ru_zay_accept
                                                              WHERE     z_id = z.id
                                                                    AND rep_accepted =
-                                                                          2 AND INN_not_ReportMA (tn) = 0))) = 1
-                            GROUP BY z.cost_assign_month/*TRUNC (z.dt_start, 'mm')*/, tp.tp_kod)
-                           act_local,
+                                                                          2
+                                                                   AND INN_not_ReportMA (
+                                                                          tn) = 0))) =
+                                            1
+                            GROUP BY z.cost_assign_month /*TRUNC (z.dt_start, 'mm')*/
+                                                        , tp.tp_kod) act_local,
                            (  SELECT period, SUM (z_fakt) zat, tp_kod
                                 FROM (SELECT TRUNC (z1.dt_start, 'mm') period,
-                                             (SELECT rep_val_number * 1000
-                                                FROM bud_ru_zay_ff
-                                               WHERE     ff_id IN (SELECT id
-                                                                     FROM bud_ru_ff
-                                                                    WHERE     dpt_id =
-                                                                                 (SELECT u.dpt_id
-                                                                                    FROM bud_ru_zay z,
-                                                                                         user_list u
-                                                                                   WHERE     z.id =
-                                                                                                :z_id
-                                                                                         AND u.tn =
-                                                                                                z.tn)
-                                                                          AND rep_var_name IN ('rv3',
-                                                                                               'rv4'))
-                                                     AND z_id = z1.id)
+                                               (  NVL (
+                                                     getZayFieldVal (z1.id,
+                                                                     'rep_var_name',
+                                                                     'rv3'),
+                                                     0)
+                                                + NVL (
+                                                     getZayFieldVal (z1.id,
+                                                                     'rep_var_name',
+                                                                     'rv4'),
+                                                     0))
+                                             * 1000
                                                 z_fakt,
-                                             (SELECT val_list
-                                                FROM bud_ru_zay_ff
-                                               WHERE     ff_id IN (SELECT id
-                                                                     FROM bud_ru_ff
-                                                                    WHERE     dpt_id =
-                                                                                 (SELECT u.dpt_id
-                                                                                    FROM bud_ru_zay z,
-                                                                                         user_list u
-                                                                                   WHERE     z.id =
-                                                                                                :z_id
-                                                                                         AND u.tn =
-                                                                                                z.tn)
-                                                                          AND admin_id =
-                                                                                 4)
-                                                     AND z_id = z1.id)
+                                             NVL (
+                                                TO_NUMBER (
+                                                   getZayFieldVal (z1.id,
+                                                                   'admin_id',
+                                                                   4)),
+                                                0)
                                                 tp_kod,
                                              DECODE (
                                                 (SELECT COUNT (*)
                                                    FROM bud_ru_zay_accept
-                                                  WHERE     z_id = z1.id
-                                                        AND accepted = 2),
+                                                  WHERE z_id = z1.id AND accepted = 2),
                                                 0, 0,
                                                 1)
                                                 deleted,
@@ -230,11 +220,10 @@
                                                FROM bud_ru_zay
                                               WHERE id = :z_id)
                            AND m.tp_kod =
-                                  (SELECT zff.val_list
-                                     FROM bud_ru_ff ff, bud_ru_zay_ff zff
-                                    WHERE     zff.z_id = :z_id
-                                          AND zff.ff_id = ff.id
-                                          AND ff.admin_id = 4)
+                                  NVL (
+                                     TO_NUMBER (
+                                        getZayFieldVal ( :z_id, 'admin_id', 4)),
+                                     0)
                            AND m.dpt_id = (SELECT u.dpt_id
                                              FROM bud_ru_zay z, user_list u
                                             WHERE z.id = :z_id AND u.tn = z.tn))

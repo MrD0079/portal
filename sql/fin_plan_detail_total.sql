@@ -1,4 +1,4 @@
-/* Formatted on 09/10/2015 12:49:35 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.11.2017 18:22:09 (QP5 v5.252.13127.32867) */
 SELECT SUM (m.cnt) cnt,
        SUM (m.total) total,
        DECODE (
@@ -13,14 +13,13 @@ SELECT SUM (m.cnt) cnt,
                               AND YEAR = :y)),
                 0, 0,
                   SUM (m.total)
-                / AVG (
-                     (SELECT NVL (SUM (PLAN), 0)
-                        FROM networkplanfact
-                       WHERE     id_net = (SELECT sw_kod
-                                             FROM nets
-                                            WHERE id_net = n.id_net)
-                             AND DECODE ( :MONTH, 0, MONTH, :MONTH) = MONTH
-                             AND YEAR = :y))
+                / AVG ( (SELECT NVL (SUM (PLAN), 0)
+                           FROM networkplanfact
+                          WHERE     id_net = (SELECT sw_kod
+                                                FROM nets
+                                               WHERE id_net = n.id_net)
+                                AND DECODE ( :MONTH, 0, MONTH, :MONTH) = MONTH
+                                AND YEAR = :y))
                 * 100),
           4, DECODE (
                 AVG ( (SELECT NVL (SUM (PLAN), 0)
@@ -32,14 +31,13 @@ SELECT SUM (m.cnt) cnt,
                               AND YEAR = :y)),
                 0, 0,
                   SUM (m.total)
-                / AVG (
-                     (SELECT NVL (SUM (PLAN), 0)
-                        FROM networkplanfact
-                       WHERE     id_net = (SELECT sw_kod
-                                             FROM nets
-                                            WHERE id_net = n.id_net)
-                             AND DECODE ( :MONTH, 0, MONTH, :MONTH) = MONTH
-                             AND YEAR = :y))
+                / AVG ( (SELECT NVL (SUM (PLAN), 0)
+                           FROM networkplanfact
+                          WHERE     id_net = (SELECT sw_kod
+                                                FROM nets
+                                               WHERE id_net = n.id_net)
+                                AND DECODE ( :MONTH, 0, MONTH, :MONTH) = MONTH
+                                AND YEAR = :y))
                 * 100),
           DECODE (
              SUM (
@@ -90,17 +88,14 @@ SELECT SUM (m.cnt) cnt,
                i.payer,
                p.name payer_name,
                ms.bud_z_id inv_bud_z_id,
-               (SELECT val_string
-                  FROM bud_ru_zay_ff
-                 WHERE     z_id = ms.bud_z_id
-                       AND ff_id = (SELECT id
-                                      FROM bud_ru_ff
-                                     WHERE dpt_id = :dpt_id AND admin_id = 7))
-                  bud_z_tz_address,i.urlic,ur.name ur_name
+               getZayFieldVal (ms.bud_z_id, 'admin_id', 7) bud_z_tz_address,
+               i.urlic,
+               ur.name ur_name
           FROM invoice_detail id,
                invoice i,
                bud_fil p,
-               nets_plan_month ms, urlic ur
+               nets_plan_month ms,
+               urlic ur
          WHERE     i.id = id.invoice
                AND :plan_type IN (5, 7)
                AND i.oplachen = 1
@@ -109,17 +104,13 @@ SELECT SUM (m.cnt) cnt,
                AND ms.id = id.statya
                AND (   ( :plan_type = 7 AND i.act_prov_month IS NOT NULL)
                     OR :plan_type <> 7)
-					and i.urlic=ur.id(+)
-					
-					) inv
+               AND i.urlic = ur.id(+)) inv
  WHERE     (   :distr_compensation = 1
             OR :distr_compensation = 2 AND m.distr_compensation = 1
             OR :distr_compensation = 3 AND m.distr_compensation = 0)
        AND m.id = inv.inv_statya(+)
-       AND DECODE ( :plan_type,
-                   5, inv.inv_statya,
-                   7, inv.inv_statya,
-                   m.id) = m.id
+       AND DECODE ( :plan_type,  5, inv.inv_statya,  7, inv.inv_statya,  m.id) =
+              m.id
        AND m.plan_type = DECODE ( :plan_type,  5, 4,  7, 4,  :plan_type)
        AND m.YEAR(+) = :y
        AND n.id_net = m.id_net(+)
@@ -139,9 +130,7 @@ SELECT SUM (m.cnt) cnt,
        AND s.PARENT IN ( :GROUPS)
        AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
        AND DECODE ( :payment_type, 0, pt.ID, :payment_type) = pt.ID
-       AND (   (    DECODE ( :plan_type,  5, 4,  7, 4,  :plan_type) IN (1,
-                                                                        2,
-                                                                        3)
+       AND (   (    DECODE ( :plan_type,  5, 4,  7, 4,  :plan_type) IN (1, 2, 3)
                 AND :tn IN (DECODE ( (SELECT pos_id
                                         FROM spdtree
                                        WHERE svideninn = :tn),

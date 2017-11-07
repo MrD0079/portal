@@ -1,7 +1,6 @@
-/* Formatted on 20/11/2015 11:08:28 AM (QP5 v5.252.13127.32867) */
+/* Formatted on 07.11.2017 18:22:33 (QP5 v5.252.13127.32867) */
 SELECT ROWNUM,
-       DECODE (ROUND (ROWNUM / 10 - 0.5) * 10 + 1 - ROWNUM, 0, 1, 0)
-          draw_head,
+       DECODE (ROUND (ROWNUM / 10 - 0.5) * 10 + 1 - ROWNUM, 0, 1, 0) draw_head,
        DECODE (ROUND (ROWNUM / 2) * 2, ROWNUM, 1, 0) color,
        z.*
   FROM (  SELECT n.tn_rmkk,
@@ -25,8 +24,7 @@ SELECT ROWNUM,
                             WHERE     id_net = (SELECT sw_kod
                                                   FROM nets
                                                  WHERE id_net = n.id_net)
-                                  AND DECODE ( :MONTH, 0, MONTH, :MONTH) =
-                                         MONTH
+                                  AND DECODE ( :MONTH, 0, MONTH, :MONTH) = MONTH
                                   AND YEAR = :y),
                           0, 0,
                             m.total
@@ -45,8 +43,7 @@ SELECT ROWNUM,
                             WHERE     id_net = (SELECT sw_kod
                                                   FROM nets
                                                  WHERE id_net = n.id_net)
-                                  AND DECODE ( :MONTH, 0, MONTH, :MONTH) =
-                                         MONTH
+                                  AND DECODE ( :MONTH, 0, MONTH, :MONTH) = MONTH
                                   AND YEAR = :y),
                           0, 0,
                             m.total
@@ -111,7 +108,9 @@ SELECT ROWNUM,
                          WHERE id = m.payer)
                  END
                     payer_name,
-                 m.distr_compensation,inv.urlic,inv.ur_name
+                 m.distr_compensation,
+                 inv.urlic,
+                 inv.ur_name
             FROM nets n,
                  nets_plan_month m,
                  statya s,
@@ -135,19 +134,15 @@ SELECT ROWNUM,
                          i.payer,
                          p.name payer_name,
                          ms.bud_z_id inv_bud_z_id,
-                         (SELECT val_string
-                            FROM bud_ru_zay_ff
-                           WHERE     z_id = ms.bud_z_id
-                                 AND ff_id =
-                                        (SELECT id
-                                           FROM bud_ru_ff
-                                          WHERE     dpt_id = :dpt_id
-                                                AND admin_id = 7))
-                            bud_z_tz_address,i.urlic,ur.name ur_name
+                         getZayFieldVal (ms.bud_z_id, 'admin_id', 7)
+                            bud_z_tz_address,
+                         i.urlic,
+                         ur.name ur_name
                     FROM invoice_detail id,
                          invoice i,
                          bud_fil p,
-                         nets_plan_month ms, urlic ur
+                         nets_plan_month ms,
+                         urlic ur
                    WHERE     i.id = id.invoice
                          AND :plan_type IN (5, 7)
                          AND i.oplachen = 1
@@ -157,9 +152,7 @@ SELECT ROWNUM,
                          AND (   (    :plan_type = 7
                                   AND i.act_prov_month IS NOT NULL)
                               OR :plan_type <> 7)
-							  and i.urlic=ur.id(+)
-							  
-							  ) inv
+                         AND i.urlic = ur.id(+)) inv
            WHERE     (   :distr_compensation = 1
                       OR :distr_compensation = 2 AND m.distr_compensation = 1
                       OR :distr_compensation = 3 AND m.distr_compensation = 0)

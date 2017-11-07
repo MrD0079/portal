@@ -1,4 +1,4 @@
-/* Formatted on 31.07.2017 18:11:24 (QP5 v5.252.13127.32867) */
+/* Formatted on 07.11.2017 20:15:14 (QP5 v5.252.13127.32867) */
   SELECT pu.tn chief_tn,
          pu.fio chief_fio,
          u1.tn ts_tn,
@@ -24,259 +24,79 @@
                  TRUNC (z1.dt_start, 'mm') period,
                  z1.id,
                  TO_CHAR (z1.created, 'dd.mm.yyyy hh24:mi:ss') created,
-                 (SELECT val_list
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE dpt_id = :dpt_id AND admin_id = 4)
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'admin_id', 4)), 0)
                     tp_kod,
-                 (SELECT val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v4')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v4')), 0)
                     z_v4,
-                 (SELECT rep_val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv4')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv4')),
+                      0)
                     z_rv4,
-                 (SELECT val_bool
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE dpt_id = :dpt_id AND admin_id = 8)
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'admin_id', 8)), 0)
                     z_adminid8,
-                 (SELECT val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v15')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v15')), 0)
                     z_v15,
-                 (SELECT rep_val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv15')
-                         AND z_id = z1.id)
-                    z_rv15,
-                 (SELECT val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v16')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v16')), 0)
                     z_v16,
-                 (SELECT rep_val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv16')
-                         AND z_id = z1.id)
-                    z_rv16,
-                 (SELECT val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v17')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v17')), 0)
                     z_v17,
-                 (SELECT rep_val_number * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv17')
-                         AND z_id = z1.id)
-                    z_rv17,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v18')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v18')), 0)
                     z_v18,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv18')
-                         AND z_id = z1.id)
-                    z_rv18,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v19')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v19')), 0)
                     z_v19,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv19')
-                         AND z_id = z1.id)
-                    z_rv19,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v20')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v20')), 0)
                     z_v20,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv20')
-                         AND z_id = z1.id)
-                    z_rv20,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v21')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v21')), 0)
                     z_v21,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv21')
-                         AND z_id = z1.id)
-                    z_rv21,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v22')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v22')), 0)
                     z_v22,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv22')
-                         AND z_id = z1.id)
-                    z_rv22,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v23')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v23')), 0)
                     z_v23,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv23')
-                         AND z_id = z1.id)
-                    z_rv23,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v24')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v24')), 0)
                     z_v24,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv24')
-                         AND z_id = z1.id)
-                    z_rv24,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v25')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v25')), 0)
                     z_v25,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv25')
-                         AND z_id = z1.id)
-                    z_rv25,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v26')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v26')), 0)
                     z_v26,
-                 (SELECT rep_val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND rep_var_name = 'rv26')
-                         AND z_id = z1.id)
-                    z_rv26,
-                 (SELECT val_bool
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND admin_id = 370)
-                         AND z_id = z1.id)
-                    z_adminid370,
-                 (SELECT val_bool
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE dpt_id = :dpt_id AND var1 = 370)
-                         AND z_id = z1.id)
-                    z_var1370,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v27')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v27')), 0)
                     z_v27,
-                 (SELECT val_number_int * 1
-                    FROM bud_ru_zay_ff
-                   WHERE     ff_id IN (SELECT id
-                                         FROM bud_ru_ff
-                                        WHERE     dpt_id = :dpt_id
-                                              AND var_name = 'v28')
-                         AND z_id = z1.id)
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'var_name', 'v28')), 0)
                     z_v28,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv15')),
+                      0)
+                    z_rv15,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv16')),
+                      0)
+                    z_rv16,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv17')),
+                      0)
+                    z_rv17,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv18')),
+                      0)
+                    z_rv18,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv19')),
+                      0)
+                    z_rv19,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv20')),
+                      0)
+                    z_rv20,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv21')),
+                      0)
+                    z_rv21,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv22')),
+                      0)
+                    z_rv22,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv23')),
+                      0)
+                    z_rv23,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv24')),
+                      0)
+                    z_rv24,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv25')),
+                      0)
+                    z_rv25,
+                 NVL (TO_NUMBER (getZayFieldVal (z1.id, 'rep_var_name', 'rv26')),
+                      0)
+                    z_rv26,
                  NVL (kat.tu, 0) tu
             FROM bud_ru_zay z1, BUD_RU_st_ras kat
            WHERE     z1.valid_no = 0
