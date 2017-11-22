@@ -28,6 +28,7 @@ $params=array(
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_list_fil.sql'));
 $sql=stritr($sql,$params);
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+//echo $sql;
 
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_list.sql'));
 $sql=stritr($sql,$params);
@@ -72,6 +73,7 @@ foreach ($x as $k=>$v)
 		$x[$k]['act_total']=$v1;
 	}
 }
+//echo $sql;
 
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_act_local.sql'));
 $sql=stritr($sql,$params);
