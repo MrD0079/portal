@@ -18,24 +18,15 @@
           GROUP BY p1.parent) f,
          user_list u,
          (SELECT tplist.tp_kod,
-                 NVL (part1.fio_ts,                           /*part2.fio_ts*/
+                 NVL (part1.fio_ts,                          
                                    0) ts_fio,
-                 NVL (part1.bonus, 0)              /* + NVL (part2.bonus, 0)*/
+                 NVL (part1.bonus, 0)             
                                      bonus_sum1,
-                 NVL (part1.db_tn,                             /*part2.db_tn*/
+                 NVL (part1.db_tn,                         
                                   0) parent_tn
             FROM (SELECT d.tp_kod
                     FROM a16115p d, a16115p_select tp
-                   WHERE d.tp_kod = tp.tp_kod /*UNION
-                                              SELECT n.tp_kod
-                                                FROM a16115pnet d,
-                                                     a16115pnet_select net,
-                                                     a16115pn_nettp tp,
-                                                     tp_nets n
-                                               WHERE     n.h_net = net.net_kod
-                                                     AND n.tp_kod = tp.tp_kod(+)
-                                                     AND n.tp_kod = n.tp_kod
-                                                     AND d.net_name = n.net*/
+                   WHERE d.tp_kod = tp.tp_kod
                                              ) tplist,
                  (SELECT NVL (m4.summa, 0) + NVL (m4.coffee, 0) - NVL (m4.s_ya, 0) sales,
                          tp.bonus_sum1 bonus,
@@ -65,42 +56,9 @@
                          AND m3.dt(+) = TO_DATE ('01/10/2016', 'dd/mm/yyyy')
                          AND d.tp_kod = m4.tp_kod
                          AND m4.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy'))
-                 part1 /*,
-                  (SELECT nvl(m4.summa,0)+nvl(m4.coffee,0) - NVL (m4.s_ya, 0) sales,
-                          tp.bonus_sum1 bonus,
-                          n.tp_kod,
-                          fn_getname ( (SELECT parent
-                                          FROM parents
-                                         WHERE tn = st.tn))
-                             fio_db,
-                          st.fio fio_ts,
-                          st.tab_num ts_tab_num,
-                          m4.eta fio_eta,
-                          m4.h_eta h_fio_eta,
-                          (SELECT parent
-                             FROM parents
-                            WHERE tn = st.tn)
-                             db_tn
-                     FROM a16115pnet d,
-                          user_list st,
-                          a16115pnet_select net,
-                          a16115pn_nettp tp,
-                          a14mega m3,
-                          a14mega m4,
-                          tp_nets n
-                    WHERE     m4.tab_num = st.tab_num
-                          AND st.dpt_id = :dpt_id
-                          AND n.h_net = net.net_kod
-                          AND tp.bonus_dt1 IS NOT NULL
-                          AND n.tp_kod = tp.tp_kod(+)
-                          AND n.tp_kod = m3.tp_kod(+)
-                          AND m3.dt(+) = TO_DATE ('01/10/2016', 'dd/mm/yyyy')
-                          AND n.tp_kod = m4.tp_kod
-                          AND m4.dt = TO_DATE ('01/11/2016', 'dd/mm/yyyy')
-                          AND n.tp_kod = n.tp_kod
-                          AND d.net_name = n.net) part2*/
-           WHERE tplist.tp_kod = part1.tp_kod(+) /*AND tplist.tp_kod = part2.tp_kod(+)*/
-                                                AND NVL (part1.bonus, 0) /* + NVL (part2.bonus, 0)*/
+                 part1 
+           WHERE tplist.tp_kod = part1.tp_kod(+) 
+                                                AND NVL (part1.bonus, 0) 
                                                                         > 0)
          x
    WHERE     x.parent_tn = v.tn
@@ -109,7 +67,7 @@
          AND v.m = :month
          AND v.act = :act
          AND v.part1 = 1
-/*AND v.part2 = 1*/
+
 GROUP BY x.parent_tn,
          u.fio,
          v.ok_traid,

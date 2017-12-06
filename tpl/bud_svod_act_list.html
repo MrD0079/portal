@@ -7,8 +7,8 @@
 <table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
   <tbody>
     <tr style="font-weight: bold; text-align:center">
-      <td>ФИО ЭТА</td>
-      <td>Кол-во<br>ТП</td>
+      <td>{if $i.tp}ФИО ЭТА{/if}</td>
+      <td>Кол-во<br>ТП/сетей</td>
       <td>Объем<br>продаж,<br>{$valuta}</td>
       <td>Сумма<br>бонуса<br>ФАКТИЧЕСКАЯ,<br>{$valuta}</td>
       <td>%<br>затрат</td>
@@ -17,7 +17,7 @@
     </tr>
 {foreach key=k1 item=i1 from=$i.detail}
     <tr>
-      <td>{$i1.fio_eta}</td>
+      <td>{if $i.tp}{$i1.fio_eta}{/if}</td>
       <td style="text-align:right">{$i1.tp}</td>
       <td style="text-align:right">{$i1.sales|num:2}</td>
       <td style="text-align:right">{$i1.bonus|num:2}</td>

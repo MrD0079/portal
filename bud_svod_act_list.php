@@ -38,6 +38,7 @@ $x[$k]['detail'] = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 $sql = rtrim(file_get_contents('sql/bud_svod_act_list_total.sql'));
 $sql=stritr($sql,$params);
+//echo $sql;
 $x[$k]['total'] = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 }
 

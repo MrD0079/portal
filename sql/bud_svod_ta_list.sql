@@ -433,59 +433,111 @@
                                        WHERE tn = :tn) = 1)
                              AND u.tn = DECODE ( :db, 0, u.tn, :db)
                     GROUP BY z.fil, z.funds) act_local,
-                   (  SELECT zp.fil,
-                             z.fund_id,
-                             SUM (s.sales) sales,
-                             SUM (s.bonus) bonus,
-                               SUM (s.bonus)
-                             * (  1
-                                -   NVL (
-                                       (SELECT discount
-                                          FROM bud_fil_discount_body
-                                         WHERE     dt = TO_DATE ( :dt, 'dd.mm.yyyy')
-                                               AND distr = zp.fil),
-                                       0)
-                                  / 100)
-                             * (SELECT bonus_log_koef
-                                  FROM bud_fil
-                                 WHERE id = zp.fil)
-                                compens_distr
-                        FROM bud_act_fund z,
-                             act_svod s,
-                             user_list u,
-                             (SELECT fil, h_eta
-                                FROM bud_svod_zp
+                   (/* Formatted on 06.12.2017 10:05:07 (QP5 v5.252.13127.32867) */
+  SELECT fil,
+         fund_id,
+         SUM (sales) sales,
+         SUM (bonus) bonus,
+         SUM (compens_distr) compens_distr
+    FROM (  SELECT zp.fil,
+                   z.fund_id,
+                   SUM (s.sales) sales,
+                   SUM (s.bonus) bonus,
+                     SUM (s.bonus)
+                   * (  1
+                      -   NVL (
+                             (SELECT discount
+                                FROM bud_fil_discount_body
                                WHERE     dt = TO_DATE ( :dt, 'dd.mm.yyyy')
-                                     AND dpt_id = :dpt_id
-                                     AND fil IS NOT NULL) zp
-                       WHERE     u.tab_num = s.ts_tab_num
-                             AND u.dpt_id = :dpt_id
-                             AND s.dpt_id = :dpt_id
-                             AND zp.h_eta = s.h_fio_eta
-                             AND DECODE ( :fil, 0, zp.fil, :fil) = zp.fil
-                             AND (   zp.fil IN (SELECT fil_id
-                                                  FROM clusters_fils
-                                                 WHERE :clusters = CLUSTER_ID)
-                                  OR :clusters = 0)
-                             AND z.act = s.act
-                             AND TO_NUMBER (TO_CHAR (z.act_month, 'mm')) = s.m
-                             AND z.act_month = TO_DATE ( :dt, 'dd.mm.yyyy')
-                             AND (   :exp_list_without_ts = 0
-                                  OR u.tn IN (SELECT slave
-                                                FROM full
-                                               WHERE master = :exp_list_without_ts))
-                             AND u.is_spd = 1
-                             AND (   u.tn IN (SELECT slave
-                                                FROM full
-                                               WHERE master = :tn)
-                                  OR (SELECT NVL (is_traid, 0)
-                                        FROM user_list
-                                       WHERE tn = :tn) = 1
-                                  OR (SELECT NVL (is_traid_kk, 0)
-                                        FROM user_list
-                                       WHERE tn = :tn) = 1)
-                             AND s.db_tn = DECODE ( :db, 0, s.db_tn, :db)
-                    GROUP BY zp.fil, z.fund_id) act,
+                                     AND distr = zp.fil),
+                             0)
+                        / 100)
+                   * (SELECT bonus_log_koef
+                        FROM bud_fil
+                       WHERE id = zp.fil)
+                      compens_distr
+              FROM bud_act_fund z,
+                   act_svod s,
+                   user_list u,
+                   (SELECT fil, h_eta
+                      FROM bud_svod_zp
+                     WHERE     dt = TO_DATE ( :dt, 'dd.mm.yyyy')
+                           AND dpt_id = :dpt_id
+                           AND fil IS NOT NULL) zp
+             WHERE     u.tab_num = s.ts_tab_num
+                   AND u.dpt_id = :dpt_id
+                   AND s.dpt_id = :dpt_id
+                   AND zp.h_eta = s.h_fio_eta
+                   AND DECODE ( :fil, 0, zp.fil, :fil) = zp.fil
+                   AND (   zp.fil IN (SELECT fil_id
+                                        FROM clusters_fils
+                                       WHERE :clusters = CLUSTER_ID)
+                        OR :clusters = 0)
+                   AND z.act = s.act
+                   AND TO_NUMBER (TO_CHAR (z.act_month, 'mm')) = s.m
+                   AND z.act_month = TO_DATE ( :dt, 'dd.mm.yyyy')
+                   AND (   :exp_list_without_ts = 0
+                        OR u.tn IN (SELECT slave
+                                      FROM full
+                                     WHERE master = :exp_list_without_ts))
+                   AND u.is_spd = 1
+                   AND (   u.tn IN (SELECT slave
+                                      FROM full
+                                     WHERE master = :tn)
+                        OR (SELECT NVL (is_traid, 0)
+                              FROM user_list
+                             WHERE tn = :tn) = 1
+                        OR (SELECT NVL (is_traid_kk, 0)
+                              FROM user_list
+                             WHERE tn = :tn) = 1)
+                   AND s.db_tn = DECODE ( :db, 0, s.db_tn, :db)
+          GROUP BY zp.fil, z.fund_id
+          UNION
+            SELECT s.fil_kod,
+                   z.fund_id,
+                   SUM (s.sales) sales,
+                   SUM (s.bonus) bonus,
+                     SUM (s.bonus)
+                   * (  1
+                      -   NVL (
+                             (SELECT discount
+                                FROM bud_fil_discount_body
+                               WHERE     dt = TO_DATE ( :dt, 'dd.mm.yyyy')
+                                     AND distr = s.fil_kod),
+                             0)
+                        / 100)
+                   * (SELECT bonus_log_koef
+                        FROM bud_fil
+                       WHERE id = s.fil_kod)
+                      compens_distr
+              FROM bud_act_fund z, act_svodn s, user_list u
+             WHERE     u.tab_num = s.ts_tab_num
+                   AND u.dpt_id = :dpt_id
+                   AND DECODE ( :fil, 0, s.fil_kod, :fil) = s.fil_kod
+                   AND (   s.fil_kod IN (SELECT fil_id
+                                           FROM clusters_fils
+                                          WHERE :clusters = CLUSTER_ID)
+                        OR :clusters = 0)
+                   AND z.act = s.act
+                   AND TO_NUMBER (TO_CHAR (z.act_month, 'mm')) = s.m
+                   AND z.act_month = TO_DATE ( :dt, 'dd.mm.yyyy')
+                   AND (   :exp_list_without_ts = 0
+                        OR u.tn IN (SELECT slave
+                                      FROM full
+                                     WHERE master = :exp_list_without_ts))
+                   AND u.is_spd = 1
+                   AND (   u.tn IN (SELECT slave
+                                      FROM full
+                                     WHERE master = :tn)
+                        OR (SELECT NVL (is_traid, 0)
+                              FROM user_list
+                             WHERE tn = :tn) = 1
+                        OR (SELECT NVL (is_traid_kk, 0)
+                              FROM user_list
+                             WHERE tn = :tn) = 1)
+                   AND s.db_tn = DECODE ( :db, 0, s.db_tn, :db)
+          GROUP BY s.fil_kod, z.fund_id)
+GROUP BY fil, fund_id) act,
                    (SELECT cust_id,
                            cust_name,
                            sales_fact * 1000 sales_fact,

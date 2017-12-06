@@ -29,10 +29,12 @@ $sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
 $sql=stritr($sql,$params);
 $exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list_without_ts', $exp_list_without_ts);
-$sql = rtrim(file_get_contents('sql/'.$_REQUEST['act'].'_report_a_eta_list.sql'));
-$sql=stritr($sql,$params);
-$eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('eta_list', $eta_list);
+if (file_exists('sql/'.$_REQUEST['act'].'_report_a_eta_list.sql')){
+    $sql = rtrim(file_get_contents('sql/'.$_REQUEST['act'].'_report_a_eta_list.sql'));
+    $sql=stritr($sql,$params);
+    $eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('eta_list', $eta_list);
+}
 if (isset($_REQUEST["del_file"]))
 {
 	foreach ($_REQUEST["del_file"] as $k=>$v)

@@ -43,6 +43,7 @@
          LIMITPER,
          AVANS,
          DECODE (NVL (AMORT, 0), 0, NULL, 'да') amort,
+         AMORT amort_val,
          CAR_BRAND,
          CAR_RASHOD,
          TAB_NUM,
