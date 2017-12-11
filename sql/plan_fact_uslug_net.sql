@@ -16,6 +16,20 @@
             ef_fin_plan,
          DECODE (SUM (PLAN), 0, 0, SUM (o_total) / SUM (PLAN) * 100) ef_plan,
          DECODE (SUM (fakt), 0, 0, SUM (fu_total) / SUM (fakt) * 100) ef_fakt
+    FROM (/* Formatted on 08.12.2017 14:51:52 (QP5 v5.252.13127.32867) */
+  SELECT SUM (fin_cnt) fin_cnt,
+         SUM (fin_total) fin_total,
+         SUM (fin_bonus) fin_bonus,
+         SUM (o_cnt) o_cnt,
+         SUM (o_total) o_total,
+         SUM (o_bonus) o_bonus,
+         SUM (fu_cnt) fu_cnt,
+         SUM (fu_total) fu_total,
+         SUM (fu_bonus) fu_bonus,
+         id_net,
+         PLAN,
+         fakt,
+         SUM (fin_plan) fin_plan
     FROM (  SELECT SUM (fin.cnt) fin_cnt,
                    SUM (fin.total) fin_total,
                    SUM (fin.bonus) fin_bonus,
@@ -28,7 +42,7 @@
                    n.id_net,
                    n.PLAN PLAN,
                    n.fakt fakt,
-                   y.sales fin_plan
+                   y.sales fin_plan,st.month
               FROM (SELECT n1.net_name,
                            n1.id_net,
                            n1.tn_mkk,
@@ -92,8 +106,7 @@
                                   WHEN s.parent = 96882041 THEN 2
                                   WHEN s.parent = 42 THEN 3
                                END IN ( :mgroups)
-                           AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                  s.ID
+                           AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                            AND m.statya = s.id
                            AND YEAR = :y
                            AND payment_format = pf.id) st,
@@ -115,8 +128,7 @@
                                     WHEN s.parent = 96882041 THEN 2
                                     WHEN s.parent = 42 THEN 3
                                  END IN ( :mgroups)
-                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                    s.ID
+                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                              AND m.statya = s.id
                              AND YEAR = :y
                     GROUP BY statya,
@@ -140,8 +152,7 @@
                                     WHEN s.parent = 96882041 THEN 2
                                     WHEN s.parent = 42 THEN 3
                                  END IN ( :mgroups)
-                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                    s.ID
+                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                              AND m.statya = s.id
                              AND YEAR = :y
                     GROUP BY statya,
@@ -165,8 +176,7 @@
                                     WHEN s.parent = 96882041 THEN 2
                                     WHEN s.parent = 42 THEN 3
                                  END IN ( :mgroups)
-                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                    s.ID
+                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                              AND m.statya = s.id
                              AND YEAR = :y
                     GROUP BY statya,
@@ -222,6 +232,7 @@
           GROUP BY n.id_net,
                    n.PLAN,
                    n.fakt,
-                   y.sales
+                   y.sales,st.month
           ORDER BY n.id_net)
+GROUP BY id_net, PLAN, fakt)
 GROUP BY id_net

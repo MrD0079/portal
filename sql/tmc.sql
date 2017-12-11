@@ -20,7 +20,7 @@
          TO_CHAR (t.zakup_dt, 'dd.mm.yyyy ') zakup_dt,
          TO_CHAR (t.buh_dt, 'dd.mm.yyyy ') buh_dt,
          t.comm,
-         t.fn
+         t.fn,t.comm_removed
     FROM tmc t, tmcs s, user_list u
    WHERE t.tn = :tn AND t.tmcs = s.id AND t.moved = u.tn(+)
 ORDER BY t.dtv, t.name

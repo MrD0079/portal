@@ -3,7 +3,7 @@
 <table border="0">
         <tr style="vertical-align: top; text-align: center">
             <td>
-                <h3>Редактирование задачи</h3>
+                <h3>Редактирование задачи №{$smarty.request.id}</h3>
                 <form name=ms_task id=ms_task target=_self method=post enctype="multipart/form-data" action="?action=ms_task">
                 <input id=task_id name=id type="hidden" value="{$smarty.request.id}">
                 <table border="1" id="table">
@@ -12,6 +12,17 @@
                     <tr><td>Ответственный</td><td><div id="svms"></div>{$x.svms}</td></tr>
                     <tr><td>Тема</td><td>{$x.subject}</td></tr>
                     <tr><td>Описание</td><td>{$x.descr}</td></tr>
+                    <tr><td>дата визита</td><td>{$x.visit_date}</td></tr>
+                    <tr><td>фото</td><td>
+                        {if $x.photo_id}
+                        <div class="pics">
+                            <a target=_blank href="{$x.photo}">
+                                <img src="{$x.photo}" height=50px>
+                            </a>
+                            <img src="{$x.photo}" class="hov">
+                        </div>
+                        {/if}
+                        </td></tr>
                     <tr><td>Тип задачи</td><td>{$x.type}</td></tr>
                     <tr><td>Выполнить до</td><td>
                             {if $x.status_kod lt 1}
@@ -263,10 +274,12 @@
     <td>Дней в "работе" ост</td>
     <td>Статус</td>
     <td>Отчет с фото</td>
+    <td>ФИО постановщика задачи</td>
+    <td>Связка</td>
     </tr>
     {foreach key=k item=i from=$x name=x}
     <tr>
-    <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+    <td style="text-align:center">{$i.id}</td>
     <td>{$i.ag_name}</td>
     <td>{$i.svms}</td>
     <td>{$i.address}</td>
@@ -276,12 +289,14 @@
     <td style="text-align:center">{$i.days_remain}</td>
     <td>{$i.status}</td>
     <td style="text-align:center">{if $i.rep_w_photo}да{/if}</td>
+    <td>{$i.producer}</td>
+    <td>{$i.source}</td>
     <td style="text-align:center"><a target="_blank" href="?action=ms_task&id={$i.id}&edit=1">редакт</a></td>
     </tr>
     {/foreach}
     </table>
 {else}
-    <h1>Задачи</h1>
+    <h1>Лист задач</h1>
     <table>
         <tr><td>Дата созадния задачи</td><td>с&nbsp<input size=8 id=sd class="datepicker" value="{$now}">&nbspпо&nbsp<input size=8 id=ed class="datepicker" value="{$now}"></td></tr>
         <tr><td>Заказчик</td><td><select id="agents"></select></td></tr>

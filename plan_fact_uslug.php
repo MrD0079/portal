@@ -36,7 +36,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["generate"]))
 	$sql_pay=stritr($sql_pay,$params);
 	$sql_net=stritr($sql_net,$params);
 	$sql_total=stritr($sql_total,$params);
-	//echo $sql_net;
+	//echo $sql_total;
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$data_st = $db->getAll($sql_st, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$data_pay = $db->getAll($sql_pay, null, null, null, MDB2_FETCHMODE_ASSOC);

@@ -66,6 +66,8 @@ if (isset($_REQUEST["save"])){
          a.name ag_name,
          NVL (us.fio, 'не определен') svms,
          TO_CHAR (m.created, 'dd.mm.yyyy') created,
+         TO_CHAR (m.visit_date, 'dd.mm.yyyy') visit_date,
+         m.photo_id,
          cpp.ur_tz_name || ' ' || cpp.tz_address address,
          m.rep_w_photo,
          m.subject,
@@ -75,19 +77,31 @@ if (isset($_REQUEST["save"])){
          m.status status,
          s.name status_name,
          s.kod status_kod,
-         m.end_date - TRUNC (SYSDATE) - 1 days_remain
+         m.end_date - TRUNC (SYSDATE) - 1 days_remain,
+         m.photo_id,
+         '/merch_spec_report_files/'
+         || TO_CHAR (m.visit_date, 'dd.mm.yyyy')
+         || '/'
+         || m.ag_id
+         || '/'
+         || m.kod_tp
+         || '/'
+         || f.fn
+         photo
     FROM ms_task m,
          routes_agents a,
          cpp,
          user_list us,
          ms_task_type t,
-         ms_task_status s
+         ms_task_status s,
+         merch_spec_report_files f
    WHERE     m.ag_id = a.id
          AND m.kod_tp = cpp.kodtp(+)
          AND m.svms_tn = us.tn(+)
          AND m.ttype = t.id(+)
          AND m.status = s.id(+)
          AND m.id = ".$_REQUEST["id"]."
+              AND m.photo_id = f.id(+)
 ORDER BY ag_name,
          svms,
          m.created,
@@ -143,7 +157,9 @@ ORDER BY id
          TO_CHAR (m.end_date, 'dd.mm.yyyy') end_date,
          t.name TYPE,
          s.name status,
-         m.end_date - TRUNC (SYSDATE) - 1 days_remain
+         m.end_date - TRUNC (SYSDATE) - 1 days_remain,
+         (SELECT fio FROM user_list WHERE login = m.creator) producer,
+         get_ms_task_source (m.id) source
     FROM ms_task m,
          routes_agents a,
          cpp,
@@ -159,6 +175,16 @@ ORDER BY id
          and (m.ag_id = '".$_REQUEST["agent"]."' or length('".$_REQUEST["agent"]."') is null)
          and (m.svms_tn = '".$_REQUEST["svms"]."' or length('".$_REQUEST["svms"]."') is null)
          and (m.status = '".$_REQUEST["status"]."' or length('".$_REQUEST["status"]."') is null)
+         and (m.svms_tn in (SELECT slave
+                             FROM full
+                            WHERE master=".$tn.")
+                OR (SELECT NVL (is_ma, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1
+                OR (SELECT NVL (is_admin, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1
+                       )
 ORDER BY ag_name,
          svms,
          m.created,

@@ -53,7 +53,10 @@
                         </tr>
                         <tr>
                             <td>Файл</td>
-                            <td><a target=_blank href="files/{$i.fn}">{$i.fn}</a></td>
+                            <td>
+                                <a target=_blank href="files/{$i.fn}">{$i.fn}</a>
+                                <input {if not $is_it}disabled{/if} name=files[{$i.id}][fn] type=file>
+                            </td>
                         </tr>
                     </table>
 		</td>
@@ -65,16 +68,23 @@
                                 <nobr><input type=radio name=data[{$i.id}][removed] onClick="$('.data{$i.id}').attr('disabled',true)" value=0> не определено</nobr>
                                 <nobr><input type=radio name=data[{$i.id}][removed] onClick="$('.data{$i.id}').attr('disabled',false)" value=1> снять</nobr>
                                 <nobr><input type=radio name=data[{$i.id}][removed] onClick="$('.data{$i.id}').attr('disabled',true)" value=2> списать</nobr>
-                                <script>$('input[name="data[{$i.id}][removed]"][value={$i.removed}]').attr('checked',true);</script>
+                                <script>
+                                    $('input[name="data[{$i.id}][removed]"][value={$i.removed}]').attr('checked',true);
+                                    $('input[name="data[{$i.id}][removed]"][value={$i.removed}]').click();
+                                </script>
                             </td>
                         </tr>
                         <tr>
                             <td>Состояние при снятии</td>
-                            <td><input required disabled size=50 class='data{$i.id}' name=data[{$i.id}][state_removed]></td>
+                            <td><input required disabled size=50 class='data{$i.id}' name=data[{$i.id}][state_removed] value="{$i.state_removed}"></td>
                         </tr>
                         <tr>
                             <td>Дата снятия</td>
-                            <td><input required disabled class='data{$i.id} datepicker' size=8 name=data[{$i.id}][dtr]></td>
+                            <td><input required disabled class='data{$i.id} datepicker' size=8 name=data[{$i.id}][dtr] value="{$i.dtr}"></td>
+                        </tr>
+                        <tr>
+                            <td>Комментарий при снятии</td>
+                            <td><textarea disabled class='data{$i.id}' name=data[{$i.id}][comm_removed]>{$i.comm_removed}</textarea></td>
                         </tr>
                         <tr>
                             <td>Перенести на сотрудника</td>

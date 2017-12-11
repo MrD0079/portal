@@ -1,4 +1,7 @@
 {if $smarty.request.ms_tasks_list}
+    {if not $smarty.request.print}
+    <p><a href="?action=ms_task_report&ms_tasks_list=1&sd={$smarty.request.sd}&ed={$smarty.request.ed}&print=1&excel=1&generate=1&filename=ќтчет по задачам">Ёкспорт в Excel</a></p>
+    {/if}
     <p>ќбша€</p>
     <table border="1" style="width: 700px">
         <tr style="font-weight:bold; text-align:center;">
@@ -44,16 +47,22 @@
             <td>¬рем€ работы по задаче</td>
             <td>задача выполнена в срок</td>
             <td>задача закрыта с вложением</td>
+            <td>постановка задачи</td>
+            <td>прин€тие задачи</td>
+            <td>выполнено</td>
         </tr>
         {foreach key=k item=i from=$x name=x}
         <tr>
-            <td style="text-align:center">{$smarty.foreach.x.iteration}</td>
+            <td style="text-align:center">{$i.id}</td>
             <td><nobr>{$i.svms}</nobr></td>
             <td><nobr>{$i.ag_name}</nobr></td>
             <td style="text-align:center">{$i.accepted_time}</td>
             <td style="text-align:center">{$i.work_time}</td>
             <td style="text-align:center">{$i.completed_in_srok}</td>
             <td style="text-align:center">{if $i.rfiles_exists}да{else}нет{/if}</td>
+            <td style="text-align:center"><nobr>{$i.created_text}</nobr></td>
+            <td style="text-align:center"><nobr>{$i.accepted_text}</nobr></td>
+            <td style="text-align:center"><nobr>{$i.completed_text}</nobr></td>
         </tr>
         {/foreach}
     </table>

@@ -14,7 +14,9 @@ if (isset($_REQUEST["ms_tasks_list"])){
          completed_dt - accepted_dt work_time, /*Время работы по задаче*/
          CASE WHEN completed_dt <= end_date THEN 1 END completed_in_srok, /*задача выполнена в срок*/
          CASE WHEN accepted - created < 1 THEN 1 END accepted_in_srok, /*своевременно принято в работу*/
-         NULL
+         to_char(created, 'dd.mm.yyyy hh24:mi:ss') created_text,
+         to_char(accepted, 'dd.mm.yyyy hh24:mi:ss') accepted_text,
+         to_char(completed, 'dd.mm.yyyy hh24:mi:ss') completed_text
     FROM (SELECT m.id,
                  a.name ag_name,
                  NVL (us.fio, 'не определен') svms,
@@ -34,6 +36,13 @@ if (isset($_REQUEST["ms_tasks_list"])){
                                            WHERE kod = 2)
                          AND task_id = m.id)
                     accepted_dt, /*дата принятия задачи СВ МС*/
+                 (SELECT MIN (lu)
+                    FROM ms_task_status_log
+                   WHERE     status_id = (SELECT id
+                                            FROM ms_task_status
+                                           WHERE kod = 4)
+                         AND task_id = m.id)
+                    completed, /*вреия последнего значения Выполнено*/
                  (SELECT TRUNC (MIN (lu), 'dd')
                     FROM ms_task_status_log
                    WHERE     status_id = (SELECT id
@@ -53,7 +62,18 @@ if (isset($_REQUEST["ms_tasks_list"])){
                  AND m.kod_tp = cpp.kodtp(+)
                  AND m.svms_tn = us.tn(+)
                  AND m.ttype = t.id(+)
-                 AND m.status = s.id(+) /*dt*/
+                 AND m.status = s.id(+)
+                 /*dt*/
+                   and (m.svms_tn in (SELECT slave
+                             FROM full
+                            WHERE master=".$tn.")
+                OR (SELECT NVL (is_ma, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1
+                OR (SELECT NVL (is_admin, 0)
+                    FROM user_list
+                   WHERE tn = ".$tn.") = 1
+                       )
                                        ) z
 ORDER BY ag_name, svms, created
          ";
@@ -77,11 +97,11 @@ ORDER BY ag_name, svms, created
     $sql = "select
             sum(c) c,
             sum(accepted_in_srok) accepted_in_srok,
-            round(sum(accepted_in_srok)/count(*)*100,2) accepted_in_srok_perc,
+            round(sum(accepted_in_srok)/sum(c)*100,2) accepted_in_srok_perc,
             sum(completed_dt) completed_dt,
-            round(sum(completed_dt)/count(*)*100,2) completed_dt_perc,
+            round(sum(completed_dt)/sum(c)*100,2) completed_dt_perc,
             sum(completed_in_srok) completed_in_srok,
-            round(sum(completed_in_srok)/count(*)*100,2) completed_in_srok_perc,
+            round(sum(completed_in_srok)/sum(c)*100,2) completed_in_srok_perc,
             null
             from (".$sql.")";
     $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

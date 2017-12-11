@@ -7,8 +7,18 @@ if (isset($_REQUEST["save"]))
 	if (isset($_REQUEST["data"]))
 	{
 		$_REQUEST["data"] = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST["data"]);
+		$_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
 		foreach ($_REQUEST["data"] as $k=>$v)
 		{
+			if (isset($_FILES["files"]["name"][$k]))
+			{
+				if (is_uploaded_file($_FILES["files"]["tmp_name"][$k]["fn"]))
+				{
+					$fn=get_new_file_id()."_".translit($_FILES["files"]["name"][$k]["fn"]);
+					move_uploaded_file($_FILES["files"]["tmp_name"][$k]["fn"], "files/".$fn);
+					$v["fn"] = $fn;
+				}
+			}
                         isset($v["removed"])&&($v["removed"]==1) ? $v["removed_fio"]=$fio : null;
 			isset($v["dtr"]) ? $v["dtr"]=OraDate2MDBDate($v["dtr"]) : null;
 			isset($v["zakup_dt"]) ? $v["zakup_dt"]=OraDate2MDBDate($v["zakup_dt"]) : null;
@@ -26,6 +36,7 @@ if (isset($_REQUEST["add"]))
 		if ($_REQUEST["tmc_new"]["name"]!=''&&$_REQUEST["tmc_new"]["tmcs"]!='')
 		{
 			$_REQUEST["tmc_new"] = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST["tmc_new"]);
+                        $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
 			if (isset($_FILES["tmc_new"]))
 			{
 				if (is_uploaded_file($_FILES["tmc_new"]["tmp_name"]["fn"]))

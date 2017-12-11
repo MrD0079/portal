@@ -1,23 +1,19 @@
-/* Formatted on 23/06/2016 15:41:55 (QP5 v5.252.13127.32867) */
-  SELECT id_net,
-         payment_format,
-         pay_format,
-         SUM (fin_cnt) fin_cnt,
+/* Formatted on 08.12.2017 14:55:20 (QP5 v5.252.13127.32867) */
+  SELECT SUM (fin_cnt) fin_cnt,
          SUM (fin_total) fin_total,
-         AVG (fin_bonus) fin_bonus,
+         SUM (fin_bonus) fin_bonus,
          SUM (o_cnt) o_cnt,
          SUM (o_total) o_total,
-         AVG (o_bonus) o_bonus,
+         SUM (o_bonus) o_bonus,
          SUM (fu_cnt) fu_cnt,
          SUM (fu_total) fu_total,
-         AVG (fu_bonus) fu_bonus,
-         SUM (fin_plan) fin_plan,
-         SUM (PLAN) PLAN,
-         SUM (fakt) fakt,
-         DECODE (SUM (fin_plan), 0, 0, SUM (fin_total) / SUM (fin_plan) * 100)
-            ef_fin_plan,
-         DECODE (SUM (PLAN), 0, 0, SUM (o_total) / SUM (PLAN) * 100) ef_plan,
-         DECODE (SUM (fakt), 0, 0, SUM (fu_total) / SUM (fakt) * 100) ef_fakt
+         SUM (fu_bonus) fu_bonus,
+         id_net,
+         PLAN,
+         fakt,
+         payment_format,
+         pay_format,
+         SUM (fin_plan) fin_plan
     FROM (  SELECT SUM (fin.cnt) fin_cnt,
                    SUM (fin.total) fin_total,
                    SUM (fin.bonus) fin_bonus,
@@ -32,7 +28,7 @@
                    n.fakt fakt,
                    st.payment_format,
                    st.pay_format,
-                   y.sales fin_plan
+                   y.sales fin_plan,st.month
               FROM (SELECT n1.net_name,
                            n1.id_net,
                            n1.tn_mkk,
@@ -96,8 +92,7 @@
                                   WHEN s.parent = 96882041 THEN 2
                                   WHEN s.parent = 42 THEN 3
                                END IN ( :mgroups)
-                           AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                  s.ID
+                           AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                            AND m.statya = s.id
                            AND YEAR = :y
                            AND payment_format = pf.id) st,
@@ -119,8 +114,7 @@
                                     WHEN s.parent = 96882041 THEN 2
                                     WHEN s.parent = 42 THEN 3
                                  END IN ( :mgroups)
-                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                    s.ID
+                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                              AND m.statya = s.id
                              AND YEAR = :y
                     GROUP BY statya,
@@ -144,8 +138,7 @@
                                     WHEN s.parent = 96882041 THEN 2
                                     WHEN s.parent = 42 THEN 3
                                  END IN ( :mgroups)
-                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                    s.ID
+                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                              AND m.statya = s.id
                              AND YEAR = :y
                     GROUP BY statya,
@@ -169,8 +162,7 @@
                                     WHEN s.parent = 96882041 THEN 2
                                     WHEN s.parent = 42 THEN 3
                                  END IN ( :mgroups)
-                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) =
-                                    s.ID
+                             AND DECODE ( :statya_list, 0, s.ID, :statya_list) = s.ID
                              AND m.statya = s.id
                              AND YEAR = :y
                     GROUP BY statya,
@@ -228,6 +220,10 @@
                    n.fakt,
                    st.payment_format,
                    st.pay_format,
-                   y.sales
+                   y.sales,st.month
           ORDER BY n.id_net)
-GROUP BY id_net, payment_format, pay_format
+GROUP BY id_net,
+         PLAN,
+         fakt,
+         payment_format,
+         pay_format
