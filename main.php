@@ -199,7 +199,7 @@ $sql = stritr($sql, $params1);
 $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $xxxxxxx[11]=microtime(true);$smarty->assign('bud_ru_zay_accept_total_tu1', $data);
 
-//$params1[":wait4myaccept"]=0;
+$params1[":wait4myaccept"]=0;
 $params1[":tu"]=0;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total_main.sql'));
@@ -208,7 +208,7 @@ $data = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $xxxxxxx[12]=microtime(true);$smarty->assign('bud_ru_zay_report_accept_total_tu0', $data);
 
 $params1[":wait4myaccept"]=0;
-//$params1[":tu"]=1;
+$params1[":tu"]=1;
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_accept_total_main.sql'));
 $sql = stritr($sql, $params1);

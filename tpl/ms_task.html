@@ -82,7 +82,11 @@
                 <h3>чат</h3>
                 <div id="chat_table" style="text-align: left; width: 500px"></div>
                 <p><input id="msg" size="50"></p>
-                <p><input id="button_add_msg" type="button" value="Добавить" onClick="add_msg();"></p>
+                <p>
+                    <input id="button_add_msg" type="button" value="Добавить" onClick="add_msg();">
+                    &nbsp&nbsp&nbsp
+                    <input type="button" value="Обновить" onClick="get_chat();">
+                </p>
             </td>
         </tr>
     </table>
@@ -116,7 +120,7 @@
             });
         }
         $(function(){
-            DisabledDates={"period":[{ "from": "01/01/1999", "to": "{/literal}{$datePlus2DaysJS}{literal}"}]};
+            DisabledDates={"period":[{ "from": "01/01/1999", "to": "{/literal}{$datePlus7DaysJS}{literal}"}]};
         })
         function save(){
             console.clear();
@@ -164,6 +168,7 @@
                         $(".tr_files").remove();
                         get_Files();
                         successNoty("Сохранено");
+                        get_chat();
                     }
             });
         }
@@ -259,7 +264,7 @@
 {elseif $smarty.request.getStatuses}
     <option></option>
     {foreach key=k item=i from=$x name=x}
-    <option {if $i.available_to_svms neq 1}disabled{/if} value="{$i.id}">{$i.name}</option>
+    <option {if $i.available_to_svms neq 1 and not $smarty.request.all}disabled{/if} value="{$i.id}">{$i.name}</option>
     {/foreach}
 {elseif $smarty.request.ms_tasks_list}
     <table border="1">
@@ -317,7 +322,7 @@
     }
     function getStatuses()
     {
-        $('#statuses').load('?action=ms_task&nohead=1&getStatuses=1');
+        $('#statuses').load('?action=ms_task&nohead=1&getStatuses=1&all=1');
     }
     function load_ms_tasks_list()
     {

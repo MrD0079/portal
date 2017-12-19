@@ -36,7 +36,6 @@ if (isset($_REQUEST["save"]))
                         );
 		$db->query("BEGIN PR_PROMO_OK_SZ_CREATE (".$_REQUEST['tn'].", ".$_REQUEST['year'].", ".$_REQUEST['month']."); END;");
 		send_mail($mails,$subj,$text,$fn);
-		//send_mail("denis.yakovenko@avk.ua",$mails." *** ".$subj,$text,$attaches);
 	}
 }
 else
