@@ -8,6 +8,7 @@
          d.nakl,
          d.act_nabor_1,
          d.act_nabor_2,
+         d.act_nabor_3,
          TO_CHAR (d.data, 'dd.mm.yyyy') data,
          TO_CHAR (an.bonus_dt1, 'dd.mm.yyyy') bonus_dt1,
          d.nakl_summ,

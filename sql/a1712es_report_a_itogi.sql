@@ -4,6 +4,7 @@ SELECT COUNT (DISTINCT an.H_TP_KOD_DATA_NAKL) cnt_nakl,
        SUM (d.nakl_summ) nakl_summ,
        SUM (d.act_nabor_1) act_nabor_1,
        SUM (d.act_nabor_2) act_nabor_2,
+       SUM (d.act_nabor_3) act_nabor_3,
        SUM (DECODE (an.bonus_dt1, NULL, NULL, 1)) if_cnt,
        SUM (an.bonus_sum1) if_sum,
        SUM (an.bonus_sum2) if_sum2

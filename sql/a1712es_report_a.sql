@@ -8,8 +8,9 @@
          d.nakl_summ,
          d.act_nabor_1,
          d.act_nabor_2,
+         d.act_nabor_3,
          /* TRUNC (d.act_nabor / 1000) * 100 */
-         NVL (d.act_nabor_1, 0) * 163 + NVL (d.act_nabor_2, 0) * 131
+         NVL (d.act_nabor_1, 0) * 163 + NVL (d.act_nabor_2, 0) * 131 + NVL (d.act_nabor_3, 0) * 131
             max_bonus,
          --TRUNC (d.act_nabor / 2) max_bonus2,
          d.tp_addr,
