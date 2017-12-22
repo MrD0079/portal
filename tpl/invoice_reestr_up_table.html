@@ -1,0 +1,59 @@
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr style="font-weight:bold; text-align: center">
+	<td>ТП/Сети</td>
+	<td>Месяц</td>
+	<td>Торговое Предприятие/Персонал-Территория</td>
+	<td>Филиал/По дистрибьюторах</td>
+	<td>Продажи факт</td>
+	<td>Продажи прайс</td>
+	<td>30% от "Продажи факт"</td>
+	<td>Остаток от итоговой суммы, тыс грн</td>
+	<td>Привязать затраты</td>
+	<td>Подтверждение ТМКК суммы комиссии, тыс грн</td>
+	<td>Комментарий, при отклонении фактической цифры от расчетной.</td>
+	<td>Вложить файл</td>
+	<td>Подтверждение затрат ТМ</td>
+	<td>Подтверждение ФМ</td>
+	<td>Комиссия, форма оплаты</td>
+</tr>
+{foreach key=key item=item from=$invoice name=invoice}
+{math assign="color" equation='x-y' x=1 y=$smarty.foreach.invoice.iteration%2} 
+<input type=hidden name=key[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][y] value="{$item.y}">
+<input type=hidden name=key[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][m] value="{$item.m}">
+<input type=hidden name=key[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][fil_id] value="{$item.fil_id}">
+<input type=hidden name=key[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][id_net] value="{$item.id_net}">
+<tr>
+        <td>{$item.net_name}</td>
+	<td>{$item.period}</td>
+	<td>{$item.tmkk}</td>
+	<td>{$item.fil_name}</td>
+	<td style="text-align:right">{$item.fakt|default:0|num:3}</td>
+	<td style="text-align:right">{$item.price|default:0|num:3}</td>
+	<td style="text-align:right">{$item.fakt03|default:0|num:3}</td>
+	<td style="text-align:right">{$item.remain|default:0|num:3}</td>
+        <td>
+		<input onclick="$('#data_{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}_link_costs').val(this.checked?1:0);" {if not $is_mkk and not $is_admin}disabled{/if} {if $item.link_costs eq 1}checked="checked"{/if} type="checkbox">
+		<input type=hidden name=data[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][link_costs] id=data_{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}_link_costs value="{$item.link_costs}">
+        </td>
+        <td><input size=10 name=data[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][comission_sum] class="number3" value="{$item.comission_sum}" {if not $is_mkk and not $is_admin}disabled{/if}></td>
+        <td><input size=15 name=data[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][deviation_comm] value="{$item.deviation_comm}" {if not $is_mkk and not $is_admin}disabled{/if}></td>
+	<td>
+            {if $item.fn}
+            <p><a target=_blank href="files/{$item1.fn}">{$item.fn}</a></p>
+            {/if}
+            <input type="file" name=files[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}] {if not $is_mkk and not $is_admin}disabled{/if}>
+        </td>
+        <td>
+		<input onclick="$('#data_{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}_ok_tm').val(this.checked?1:0);" {if not $is_mkk and not $is_admin}disabled{/if} {if $item.ok_tm eq 1}checked="checked"{/if} type="checkbox">
+		<input type=hidden name=data[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][ok_tm] id=data_{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}_ok_tm value="{$item.ok_tm}">
+        </td>
+        <td>
+		<input onclick="$('#data_{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}_ok_fm').val(this.checked?1:0);" {if not $is_fin_man and not $is_admin}disabled{/if} {if $item.ok_fm eq 1}checked="checked"{/if} type="checkbox">
+		<input type=hidden name=data[{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}][ok_fm] id=data_{$item.y}_{$item.m}_{$item.fil_id}_{$item.id_net}_ok_fm value="{$item.ok_fm}">
+        </td>
+	<td>Укрпочта</td>
+</tr>
+{/foreach}
+</tbody>
+</table>

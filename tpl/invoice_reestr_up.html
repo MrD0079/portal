@@ -1,0 +1,30 @@
+<h1>–еестр ”крпочта</h1>
+{if not $smarty.request.print}
+<table>
+<tr style="vertical-align:top;">
+<td>
+{include file="invoice_reestr_up_select.html"}
+</td>
+</tr>
+</table>
+<form target="_self" method="POST" name=form3 id=form3 enctype="multipart/form-data">
+<input type=hidden name=nets value={$smarty.request.nets}>
+<input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
+<input type=hidden name=calendar_months value={$smarty.request.calendar_months}>
+<input type=hidden name=tn_mkk value={$smarty.request.tn_mkk}>
+<input type=hidden name=tn_rmkk value={$smarty.request.tn_rmkk}>
+<input type=hidden name=format value="{$smarty.request.format}">
+<input type=hidden name=ok value="{$smarty.request.ok}">
+{if $smarty.request.generate}
+<input type=hidden name=generate value="{$smarty.request.generate}">
+{/if}
+<h3>–еестр ”крпочта</h3>
+<!--
+<p><a href="?action=invoice_reestr_up&generate&print=1&excel=1&filename=–есстр счетов">Ёкспорт в Excel</a></p>
+-->
+<p><input name="save" value="—охранить" type="submit"></p>
+{/if}
+{include file="invoice_reestr_up_table.html"}
+{if not $smarty.request.print}
+</form>
+{/if}
