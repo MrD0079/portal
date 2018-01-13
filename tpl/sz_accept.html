@@ -88,16 +88,29 @@
 			{/if}
 		</td>
 		<td>
-			{foreach key=k1 item=i1 from=$i.chat}
-				<font style="color:red">{$i1.chat_time}</font>
-				<font style="color:green">{$i1.chater}:</font>
-				<br>
-				<font style="color:blue">{$i1.text}</font>
-				<br>
-			{/foreach}
+                        {foreach key=k1 item=i1 from=$i.chat}
+                            {if $i1.priority eq 1 }
+                                <font style="font-weight: bold">
+                            {/if}
+                                <font style="color:red">{$i1.chat_time}</font>
+                                <font style="color:green">{$i1.chater}:</font>
+                                <br>
+                                <font style="color:blue">{$i1.text}</font>
+                                <br>
+                            {if $i1.priority eq 1 }
+                                </font>
+                            {/if}
+                        {/foreach}
 			<textarea rows=5 cols=20 name="sz_accept_chat[{$i.head.id}]"></textarea>
 			<br>
-			<input type="submit" name="add_chat" id="add_chat" value="Добавить">
+
+                        {if $ShowHighPriorityCheckBoxInMemos}
+                        <input type=checkbox name="sz_accept_chat_high_priority[{$i.head.id}]" value="1">
+                        это важный комментарий
+			<br>
+                        {/if}
+
+                        <input type="submit" name="add_chat" id="add_chat" value="Добавить">
 		</td>
 	</tr>
 	{/foreach}
@@ -109,4 +122,3 @@
 </p>
 
 </form>
-

@@ -1,4 +1,4 @@
-/* Formatted on 22.10.2017 13:30:40 (QP5 v5.252.13127.32867) */
+/* Formatted on 13.01.2018 18:12:46 (QP5 v5.252.13127.32867) */
 SELECT SUM (DECODE (full, -2, 1, 0)) full2,
        SUM (DECODE (full, 1, 1, 0)) + SUM (DECODE (full, 0, 1, 0)) full01,
        COUNT (*) c,
@@ -32,24 +32,7 @@ SELECT SUM (DECODE (full, -2, 1, 0)) full2,
                        bud_ru_zay.report_data,
                        bud_ru_zay.tn creator_tn,
                        bud_ru_zay.id_net,
-                       (SELECT accepted
-                          FROM bud_ru_zay_accept
-                         WHERE     z_id = bud_ru_zay.id
-                               AND accept_order =
-                                      DECODE (
-                                         NVL (
-                                            (SELECT MAX (accept_order)
-                                               FROM bud_ru_zay_accept
-                                              WHERE     z_id = bud_ru_zay.id
-                                                    AND accepted = 2),
-                                            0),
-                                         0, (SELECT MAX (accept_order)
-                                               FROM bud_ru_zay_accept
-                                              WHERE z_id = bud_ru_zay.id),
-                                         (SELECT MAX (accept_order)
-                                            FROM bud_ru_zay_accept
-                                           WHERE     z_id = bud_ru_zay.id
-                                                 AND accepted = 2)))
+                       get_bud_ru_zay_cur_status (bud_ru_zay.id)
                           current_accepted_id,
                        (SELECT COUNT (tn)
                           FROM bud_ru_zay_accept

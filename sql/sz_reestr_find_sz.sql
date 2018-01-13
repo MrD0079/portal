@@ -1,8 +1,16 @@
-/* Formatted on 14/10/2014 14:02:53 (QP5 v5.227.12220.39724) */
+/* Formatted on 13.01.2018 18:39:21 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) exist,
        NVL (
           AVG (
-             DECODE (slaves1 + slaves2 + slaves3 + slaves4 + is_do + i_am_is_acceptor, 0, 0, 1)),
+             DECODE (
+                  slaves1
+                + slaves2
+                + slaves3
+                + slaves4
+                + is_do
+                + i_am_is_acceptor,
+                0, 0,
+                1)),
           0)
           visible
   FROM (SELECT sz.id,
@@ -12,17 +20,17 @@ SELECT COUNT (*) exist,
                sz.body,
                sz.valid_no,
                sz.valid_tn,
-               fn_getname ( sz.valid_tn) valid_fio,
+               fn_getname (sz.valid_tn) valid_fio,
                TO_CHAR (sz.valid_lu, 'dd.mm.yyyy hh24:mi:ss') valid_lu,
                sz.valid_text,
-               fn_getname ( sz.tn) creator,
+               fn_getname (sz.tn) creator,
                sz.tn creator_tn,
                sz.recipient recipient_tn,
-               fn_getname ( sz.recipient) recipient,
+               fn_getname (sz.recipient) recipient,
                sz_executors.tn executor_tn,
-               fn_getname ( sz_executors.tn) executor_name,
+               fn_getname (sz_executors.tn) executor_name,
                sz_accept.tn acceptor_tn,
-               fn_getname ( sz_accept.tn) acceptor_name,
+               fn_getname (sz_accept.tn) acceptor_name,
                sz_accept.accepted,
                sz_accept.failure,
                sz_accept.accept_order,
@@ -38,42 +46,8 @@ SELECT COUNT (*) exist,
                        1)
                   deleted,
                f.fn,
-               (SELECT accepted
-                  FROM sz_accept
-                 WHERE     sz_id = sz.id
-                       AND accept_order =
-                              DECODE (
-                                 NVL (
-                                    (SELECT MAX (accept_order)
-                                       FROM sz_accept
-                                      WHERE     sz_id = sz.id
-                                            AND accepted = 2),
-                                    0),
-                                 0, (SELECT MAX (accept_order)
-                                       FROM sz_accept
-                                      WHERE sz_id = sz.id),
-                                 (SELECT MAX (accept_order)
-                                    FROM sz_accept
-                                   WHERE sz_id = sz.id AND accepted = 2)))
-                  current_accepted_id,
-               (SELECT lu
-                  FROM sz_accept
-                 WHERE     sz_id = sz.id
-                       AND accept_order =
-                              DECODE (
-                                 NVL (
-                                    (SELECT MAX (accept_order)
-                                       FROM sz_accept
-                                      WHERE     sz_id = sz.id
-                                            AND accepted = 2),
-                                    0),
-                                 0, (SELECT MAX (accept_order)
-                                       FROM sz_accept
-                                      WHERE sz_id = sz.id),
-                                 (SELECT MAX (accept_order)
-                                    FROM sz_accept
-                                   WHERE sz_id = sz.id AND accepted = 2)))
-                  current_accepted_date,
+               get_sz_current_status (sz.id) current_accepted_id,
+               get_sz_current_status_lu (sz.id) current_accepted_date,
                (SELECT COUNT (tn)
                   FROM sz_accept
                  WHERE sz_id = sz.id AND tn = :tn)
@@ -113,7 +87,7 @@ SELECT COUNT (*) exist,
                sz_executors.execute_order,
                sc.id cat_id,
                sc.name cat_name,
-               fn_getname ( a.tn) chater,
+               fn_getname (a.tn) chater,
                a.text,
                a.lu chat_time_d,
                TO_CHAR (a.lu, 'dd.mm.yyyy hh24:mi:ss') chat_time,

@@ -5,6 +5,10 @@
 //audit ("открыл форму согласования СЗ","sz");
 InitRequestVar("wait4myaccept",0);
 
+if (strpos($parameters["ShowHighPriorityCheckBoxInMemos"]["val_string"], (string)$tn)!==false)
+{
+    $smarty->assign('ShowHighPriorityCheckBoxInMemos', 1);
+}
 
 if (isset($_REQUEST["save"]))
 {
@@ -166,25 +170,27 @@ if (isset($_REQUEST["add_chat"]))
 		{
 			if ($v!="")
 			{
-				Table_Update("sz_chat",array("tn"=>$tn,"sz_id"=>$k,"text"=>$v),array("tn"=>$tn,"sz_id"=>$k,"text"=>$v));
-				audit ("оставил по СЗ №".$k." комментарий: ".$v,"sz");
-				//Table_Update("sz_accept_chat",array("acc_id"=>$k,"text"=>$v),array("acc_id"=>$k,"text"=>$v));
-				$sql=rtrim(file_get_contents('sql/sz_accept_chat.sql'));
-				$params=array(':sz_id' => $k,':tn' => $tn);
-				$sql=stritr($sql,$params);
-				//echo $sql;
-				$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-				//print_r($data);
-				foreach ($data as $k1=>$v1)
-				{
-					$subj="Уточнение по СЗ №".$v1["sz_id"]." по теме: ".$v1["head"]." от ".$v1["created"];
-					$text="Здравствуйте ".$v1["fio"]."<br>";
-					$text.="По СЗ №".$v1["sz_id"]." по теме: ".$v1["head"]." от ".$v1["created"]."<br>";
-					$text.=$fio." оставил(а) комментарий/уточнение: ".$v."<br>";
-					$text.="Просьба ответить на комментарий/уточнение по данной СЗ в разделе <a href=\"https://ps.avk.ua/?action=sz_accept\">Согласование СЗ</a>";
-					$email=$v1["email"];
-					send_mail($email,$subj,$text);
-				}
+                            $keys=array("tn"=>$tn,"sz_id"=>$k,"text"=>$v);
+                            if (isset($_REQUEST["sz_accept_chat_high_priority"][$k]))
+                                $keys["priority"]=1;
+                            Table_Update("sz_chat",$keys,$keys);
+                            audit ("оставил по СЗ №".$k." комментарий: ".$v,"sz");
+                            $sql=rtrim(file_get_contents('sql/sz_accept_chat.sql'));
+                            $params=array(':sz_id' => $k,':tn' => $tn);
+                            $sql=stritr($sql,$params);
+                            //echo $sql;
+                            $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                            //print_r($data);
+                            foreach ($data as $k1=>$v1)
+                            {
+                                $subj="Уточнение по СЗ №".$v1["sz_id"]." по теме: ".$v1["head"]." от ".$v1["created"];
+                                $text="Здравствуйте ".$v1["fio"]."<br>";
+                                $text.="По СЗ №".$v1["sz_id"]." по теме: ".$v1["head"]." от ".$v1["created"]."<br>";
+                                $text.=$fio." оставил(а) комментарий/уточнение: ".$v."<br>";
+                                $text.="Просьба ответить на комментарий/уточнение по данной СЗ в разделе <a href=\"https://ps.avk.ua/?action=sz_accept\">Согласование СЗ</a>";
+                                $email=$v1["email"];
+                                send_mail($email,$subj,$text);
+                            }
 			}
 		}
 	}
@@ -200,6 +206,8 @@ $smarty->assign('accept_types', $data);
 $sql=rtrim(file_get_contents('sql/sz_accept.sql'));
 $params=array(':tn' => $tn, ":sz_cat"=>0,':wait4myaccept'=>$_REQUEST['wait4myaccept']);
 $sql=stritr($sql,$params);
+//$_REQUEST["sql"]=$sql;
+//ses_req();
 //echo $sql;
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 

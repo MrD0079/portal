@@ -3,20 +3,24 @@
 <table border=1 cellpadding=3 cellspacing=0>
 <tr style="font-weight:bold">
 <td>[x]</td>
-<td>название параметра</td>
-<td>значение типа число</td>
-<td>значение типа строка</td>
-<td>значение типа дата</td>
+<td>параметр</td>
 <td>комментарий</td>
 </tr>
 {foreach key=key item=item from=$parameters}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][param_name] size=30 value="{$item.param_name}"></td>
-<td><input name=data[{$item.id}][val_number] class="number" value="{$item.val_number}"></td>
-<td><input name=data[{$item.id}][val_string] size=70 value="{$item.val_string|escape}"></td>
-<td><input name=data[{$item.id}][val_date] value="{$item.val_date}" class="datepicker"></td>
-<td><input name=data[{$item.id}][comm] size=80 value="{$item.comm|escape}"></td>
+<td>
+    название параметра <input name=data[{$item.id}][param_name] size=50 value="{$item.param_name}">
+    <br>
+    значение типа число <input name=data[{$item.id}][val_number] class="number" value="{$item.val_number}">
+    <br>
+    значение типа строка <input name=data[{$item.id}][val_string] size=120 value="{$item.val_string|escape}">
+    <br>
+    значение типа дата <input name=data[{$item.id}][val_date] size=8 value="{$item.val_date}" class="datepicker">
+</td>
+<td>
+    <textarea name=data[{$item.id}][comm] cols="70" rows="3">{$item.comm|escape}</textarea>
+</td>
 </tr>
 {/foreach}
 </table>

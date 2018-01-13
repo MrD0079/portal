@@ -1,4 +1,4 @@
-/* Formatted on 18.06.2014 11:06:54 (QP5 v5.227.12220.39724) */
+/* Formatted on 13.01.2018 18:25:21 (QP5 v5.252.13127.32867) */
   SELECT ff.v, COUNT (xx.full) c
     FROM (  SELECT DISTINCT
                    v.id,
@@ -24,64 +24,9 @@
                    DECODE (v.replacement, NULL, v.replacement_fio_eta, u1.fio)
                       replacement_fio,
                    v.sz_id,
-                   (SELECT accept_types.name1
-                      FROM sz_accept, accept_types
-                     WHERE     sz_id = v.sz_id
-                           AND accepted = accept_types.id(+)
-                           AND accept_order =
-                                  DECODE (
-                                     NVL (
-                                        (SELECT accept_order
-                                           FROM sz_accept
-                                          WHERE     sz_id = v.sz_id
-                                                AND accepted = 2),
-                                        0),
-                                     0, (SELECT MAX (accept_order)
-                                           FROM sz_accept
-                                          WHERE sz_id = v.sz_id),
-                                     (SELECT accept_order
-                                        FROM sz_accept
-                                       WHERE     sz_id = v.sz_id
-                                             AND accepted = 2)))
-                      sz_status,
-                   (SELECT accepted
-                      FROM sz_accept
-                     WHERE     sz_id = v.sz_id
-                           AND accept_order =
-                                  DECODE (
-                                     NVL (
-                                        (SELECT accept_order
-                                           FROM sz_accept
-                                          WHERE     sz_id = v.sz_id
-                                                AND accepted = 2),
-                                        0),
-                                     0, (SELECT MAX (accept_order)
-                                           FROM sz_accept
-                                          WHERE sz_id = v.sz_id),
-                                     (SELECT accept_order
-                                        FROM sz_accept
-                                       WHERE     sz_id = v.sz_id
-                                             AND accepted = 2)))
-                      sz_status_id,
-                   (SELECT failure
-                      FROM sz_accept
-                     WHERE     sz_id = v.sz_id
-                           AND accept_order =
-                                  DECODE (
-                                     NVL (
-                                        (SELECT accept_order
-                                           FROM sz_accept
-                                          WHERE     sz_id = v.sz_id
-                                                AND accepted = 2),
-                                        0),
-                                     0, (SELECT MAX (accept_order)
-                                           FROM sz_accept
-                                          WHERE sz_id = v.sz_id),
-                                     (SELECT accept_order
-                                        FROM sz_accept
-                                       WHERE     sz_id = v.sz_id
-                                             AND accepted = 2)))
-                      failure,
+                   get_sz_current_status_name (v.sz_id) sz_status,
+                   get_sz_current_status (v.sz_id) sz_status_id,
+                   get_sz_failure (v.sz_id) failure,
                    DECODE ( (SELECT COUNT (*)
                                FROM sz_accept
                               WHERE sz_id = v.sz_id AND accepted <> 0),

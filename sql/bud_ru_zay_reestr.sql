@@ -1,4 +1,4 @@
-/* Formatted on 05/04/2016 18:57:18 (QP5 v5.252.13127.32867) */
+/* Formatted on 13.01.2018 18:40:49 (QP5 v5.252.13127.32867) */
   SELECT z.*, NVL (current_accepted_id, 0) current_status
     FROM (SELECT bud_ru_zay.id,
                  bud_ru_zay.report_done,
@@ -22,8 +22,7 @@
                  bud_ru_zay.valid_no,
                  bud_ru_zay.valid_tn,
                  fn_getname (bud_ru_zay.valid_tn) valid_fio,
-                 TO_CHAR (bud_ru_zay.valid_lu, 'dd.mm.yyyy hh24:mi:ss')
-                    valid_lu,
+                 TO_CHAR (bud_ru_zay.valid_lu, 'dd.mm.yyyy hh24:mi:ss') valid_lu,
                  bud_ru_zay.valid_text,
                  fn_getname (bud_ru_zay.tn) creator,
                  bud_ru_zay.tn creator_tn,
@@ -35,10 +34,9 @@
                  bud_ru_zay_accept.failure,
                  bud_ru_zay_accept.accept_order,
                  zat.name accepted_name,
-                 DECODE (
-                    bud_ru_zay_accept.accepted,
-                    0, NULL,
-                    TO_CHAR (bud_ru_zay_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
+                 DECODE (bud_ru_zay_accept.accepted,
+                         0, NULL,
+                         TO_CHAR (bud_ru_zay_accept.lu, 'dd.mm.yyyy hh24:mi:ss'))
                     accepted_date,
                  DECODE ( (SELECT COUNT (*)
                              FROM bud_ru_zay_accept
@@ -46,43 +44,8 @@
                          0, 0,
                          1)
                     deleted,
-                 (SELECT accepted
-                    FROM bud_ru_zay_accept
-                   WHERE     z_id = bud_ru_zay.id
-                         AND accept_order =
-                                DECODE (
-                                   NVL (
-                                      (SELECT MAX (accept_order)
-                                         FROM bud_ru_zay_accept
-                                        WHERE     z_id = bud_ru_zay.id
-                                              AND accepted = 2),
-                                      0),
-                                   0, (SELECT MAX (accept_order)
-                                         FROM bud_ru_zay_accept
-                                        WHERE z_id = bud_ru_zay.id),
-                                   (SELECT MAX (accept_order)
-                                      FROM bud_ru_zay_accept
-                                     WHERE     z_id = bud_ru_zay.id
-                                           AND accepted = 2)))
-                    current_accepted_id,
-                 (SELECT lu
-                    FROM bud_ru_zay_accept
-                   WHERE     z_id = bud_ru_zay.id
-                         AND accept_order =
-                                DECODE (
-                                   NVL (
-                                      (SELECT MAX (accept_order)
-                                         FROM bud_ru_zay_accept
-                                        WHERE     z_id = bud_ru_zay.id
-                                              AND accepted = 2),
-                                      0),
-                                   0, (SELECT MAX (accept_order)
-                                         FROM bud_ru_zay_accept
-                                        WHERE z_id = bud_ru_zay.id),
-                                   (SELECT MAX (accept_order)
-                                      FROM bud_ru_zay_accept
-                                     WHERE     z_id = bud_ru_zay.id
-                                           AND accepted = 2)))
+                 get_bud_ru_zay_cur_status (bud_ru_zay.id) current_accepted_id,
+                 get_bud_ru_zay_cur_status_lu (bud_ru_zay.id)
                     current_accepted_date,
                  (SELECT COUNT (tn)
                     FROM bud_ru_zay_accept
@@ -234,58 +197,15 @@
                                     bud_ru_zay.dt_start
                               END,
                            2, DECODE (
-                                 (SELECT accepted
-                                    FROM bud_ru_zay_accept
-                                   WHERE     z_id = bud_ru_zay.id
-                                         AND accept_order =
-                                                DECODE (
-                                                   NVL (
-                                                      (SELECT accept_order
-                                                         FROM bud_ru_zay_accept
-                                                        WHERE     z_id =
-                                                                     bud_ru_zay.id
-                                                              AND accepted = 2),
-                                                      0),
-                                                   0, (SELECT MAX (
-                                                                 accept_order)
-                                                         FROM bud_ru_zay_accept
-                                                        WHERE z_id =
-                                                                 bud_ru_zay.id),
-                                                   (SELECT accept_order
-                                                      FROM bud_ru_zay_accept
-                                                     WHERE     z_id =
-                                                                  bud_ru_zay.id
-                                                           AND accepted = 2))),
+                                 get_bud_ru_zay_cur_status (bud_ru_zay.id),
                                  0, NULL,
-                                 (SELECT lu
-                                    FROM bud_ru_zay_accept
-                                   WHERE     z_id = bud_ru_zay.id
-                                         AND accept_order =
-                                                DECODE (
-                                                   NVL (
-                                                      (SELECT accept_order
-                                                         FROM bud_ru_zay_accept
-                                                        WHERE     z_id =
-                                                                     bud_ru_zay.id
-                                                              AND accepted = 2),
-                                                      0),
-                                                   0, (SELECT MAX (
-                                                                 accept_order)
-                                                         FROM bud_ru_zay_accept
-                                                        WHERE z_id =
-                                                                 bud_ru_zay.id),
-                                                   (SELECT accept_order
-                                                      FROM bud_ru_zay_accept
-                                                     WHERE     z_id =
-                                                                  bud_ru_zay.id
-                                                           AND accepted = 2)))))) BETWEEN TO_DATE (
-                                                                                             :dates_list1,
-                                                                                             'dd.mm.yyyy')
-                                                                                      AND TO_DATE (
-                                                                                             :dates_list2,
-                                                                                             'dd.mm.yyyy')
-                 AND DECODE ( :z_id, 0, bud_ru_zay.id, :z_id) = bud_ru_zay.id)
-         z
+                                 get_bud_ru_zay_cur_status_lu (bud_ru_zay.id)))) BETWEEN TO_DATE (
+                                                                                            :dates_list1,
+                                                                                            'dd.mm.yyyy')
+                                                                                     AND TO_DATE (
+                                                                                            :dates_list2,
+                                                                                            'dd.mm.yyyy')
+                 AND DECODE ( :z_id, 0, bud_ru_zay.id, :z_id) = bud_ru_zay.id) z
    WHERE     DECODE ( :status,  0, 0,  1, 1,  2, 0,  3, 0,  4, 0) =
                 DECODE ( :status,
                         0, 0,
