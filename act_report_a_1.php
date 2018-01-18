@@ -10,7 +10,7 @@ InitRequestVar("is_act",1);
 $params=array(
 	':tn' => $tn,
 	':dpt_id' => $_SESSION["dpt_id"],
-	':month' => $_REQUEST['month'],
+	':month' => $actParams['my'],
 	':eta_list' => "'".$_REQUEST["eta_list"]."'",
 	':exp_list_without_ts' => $_REQUEST["exp_list_without_ts"],
 	':exp_list_only_ts' => $_REQUEST["exp_list_only_ts"],
@@ -56,7 +56,7 @@ if (isset($_FILES["new_fn"]))
 			$fn=get_new_file_id().'_'.translit($_FILES["new_fn"]["name"]);
 			move_uploaded_file($_FILES["new_fn"]["tmp_name"], $d1.$fn);
 			$_REQUEST["new"]["fn"]=$fn;
-			$_REQUEST["new"]["m"]=$_REQUEST['month'];
+			$_REQUEST["new"]["m"]=$actParams['my'];
 			$_REQUEST["new"]["act"]=$_REQUEST['act'];
 			Table_Update("act_files",$_REQUEST["new"],$_REQUEST["new"]);
 		}

@@ -32,7 +32,7 @@ if (isset($_REQUEST["select"]))
 	$sql = rtrim(file_get_contents('sql/'.$table.'.sql'));
 	!isset($_REQUEST["prg"])?$_REQUEST["prg"]=null:null;
 	$params = array(
-	':table' => $table,
+	//':table' => $table,
 	':prg' => "'".$_REQUEST["prg"]."'",
 	":dates_list1"=>"'".$_REQUEST["dates_list1"]."'",
 	":dates_list2"=>"'".$_REQUEST["dates_list2"]."'",

@@ -225,6 +225,7 @@ if ($a->getAuth())
 		$sql=rtrim(file_get_contents('sql/currencies.sql'));
 		$currencies = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('currencies', $currencies);
+                isset($_REQUEST['act']) ? $actParams = $db->getRow("select c.y,c.my from bud_act_fund b,calendar c where b.act='".$_REQUEST['act']."' and b.act_month=c.data", null, null, null, MDB2_FETCHMODE_ASSOC) : null;
 		if ($_SESSION["dpt_id"]!=0)
 		{
 			$sql=rtrim(file_get_contents('sql/parameters.sql'));

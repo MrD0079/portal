@@ -307,10 +307,11 @@ function audit($info = "",$prg = "admin")
 {
 	global $db,$tn,$login;
 	$fields_values = array(
-		'login'=>$login,
-		'tn'=>$tn,
-		'text'=>$info,
-		'prg'=>$prg
+            'login'=>$login,
+            'tn'=>$tn,
+            'text'=>$info,
+            'prg'=>$prg,
+            'ip'=>filter_input(INPUT_SERVER, "REMOTE_ADDR")
 	);
 	$affectedRows = $db->extended->autoExecute('full_log', $fields_values, MDB2_AUTOQUERY_INSERT, null);
 }
@@ -319,9 +320,10 @@ function audit_mail($info = "")
 {
 	global $db,$tn,$login;
 	$fields_values = array(
-		'login'=>$login,
-		'tn'=>$tn,
-		'text'=>$info
+            'login'=>$login,
+            'tn'=>$tn,
+            'text'=>$info,
+            'ip'=>filter_input(INPUT_SERVER, "REMOTE_ADDR")
 	);
 	$affectedRows = $db->extended->autoExecute('full_log_mail', $fields_values, MDB2_AUTOQUERY_INSERT, null);
 }

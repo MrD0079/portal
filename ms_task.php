@@ -1,5 +1,5 @@
 <?
-if (isset($_REQUEST["save"])){
+if (isset($_REQUEST["save"])&&isset($_REQUEST["data"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     $id=$_REQUEST["id"];
     isset($_REQUEST["data"]["end_date"])?$_REQUEST["data"]["end_date"]=OraDate2MDBDate($_REQUEST["data"]["end_date"]):null;

@@ -3,7 +3,7 @@
 $params=array(
     ':tn' => $tn,
     ':dpt_id' => $_SESSION["dpt_id"],
-    ':month' => $_REQUEST['month'],
+    ':month' => $actParams['my'],
     ':act' => "'".$_REQUEST['act']."'",
 );
 
@@ -25,7 +25,7 @@ if (isset($_REQUEST["save"]))
 		{
 			foreach($v as $k1=>$v1)
 			{
-				$keys = array('tn'=>$k,'m'=>$_REQUEST['month'],'act'=>$_REQUEST['act']);
+				$keys = array('tn'=>$k,'m'=>$actParams['my'],'act'=>$_REQUEST['act']);
 				if ($k1!="empty")
 				{
 					$keys["fil"] = $k1;
@@ -58,7 +58,7 @@ if (isset($_REQUEST["save"]))
     }
     if (isset($_REQUEST["fund"]))
     {
-        $keys = array('act'=>$_REQUEST['act'],"TO_NUMBER (TO_CHAR (act_month, 'mm'))"=>$_REQUEST['month']);
+        $keys = array('act'=>$_REQUEST['act'],"TO_NUMBER (TO_CHAR (act_month, 'mm'))"=>$actParams['my']);
 	isset($_REQUEST["m"])?$_REQUEST["m"]=OraDate2MDBDate($_REQUEST["m"]):null;
         $vals = array(
 		'fund_id'=>$_REQUEST["fund"],
@@ -86,12 +86,12 @@ $bud_funds = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_funds', $bud_funds);
 
 $sql=rtrim(file_get_contents('sql/bud_act_fund_get.sql'));
-$p = array(":act" => "'".$_REQUEST['act']."'",":m"=>$_REQUEST['month']);
+$p = array(":act" => "'".$_REQUEST['act']."'",":m"=>$actParams['my']);
 $sql=stritr($sql,$p);
 $act = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('act', $act);
 
-$smarty->assign('m_cur', get_month_name($_REQUEST['month']));
+$smarty->assign('m_cur', get_month_name($actParams['my']));
 
 $smarty->display('act_report_v.html');
 

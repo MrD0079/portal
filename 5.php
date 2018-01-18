@@ -4,6 +4,14 @@
 //echo phpinfo();
 
 
+echo $_SERVER["REMOTE_ADDR"]."<br>";
+var_dump(filter_input(INPUT_SERVER, "REMOTE_ADDR"));
+echo $_SERVER["HTTP_COOKIE"]."<br>";
+echo $_COOKIE["PHPSESSID"]."<br>";
+echo $_COOKIE["authchallenge"]."<br>";
+
+exit;
+
 //$arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
 ////$arr['a']=$arr;
 

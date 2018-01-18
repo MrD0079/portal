@@ -53,6 +53,6 @@ if (isset($_REQUEST["generate"]))
 	$x = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign("ok_chief_4ts", $x);
 }
-$smarty->assign('m_cur', get_month_name($_REQUEST['month']));
+$smarty->assign('m_cur', get_month_name($actParams['my']));
 $smarty->display($_REQUEST['act'].'_report_a.html');
 ?>

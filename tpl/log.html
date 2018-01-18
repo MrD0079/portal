@@ -52,6 +52,7 @@ function send_form(delta){
 <table border=1 cellpadding=0 cellspacing=0>
   <tr align=center>
     <td><b>№ п/п</b></td>
+    <td><b>ip</b></td>
     <td><b>Дата,время</b></td>
     <td><b>login</b></td>
     <td><b>Пользователь</b></td>
@@ -64,6 +65,7 @@ function send_form(delta){
   {foreach key=key item=log from=$log}
   <tr style="vertical-align: top">
     <td>{$log.rn}</td>
+    <td>{$log.ip}</td>
     <td><nobr>{$log.lu}</nobr></td>
     <td>{$log.login}</td>
     <td>{$log.name}</td>
