@@ -11,6 +11,7 @@ $smarty->assign('route', $r);
 $sql = rtrim(file_get_contents('sql/merch_report_new_vv_tp.sql'));
 $p=array(":route"=>$r["id"]);
 $sql=stritr($sql,$p);
+echo $sql;
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('vv_tp', $res);
 

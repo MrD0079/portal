@@ -11,6 +11,12 @@ if (isset($_REQUEST["a14mega_make_good"]))
 	$sql = rtrim(file_get_contents('sql/a14mega_make_good.sql'));
 	$res = $db->Query($sql);
 }
+if (isset($_REQUEST["start_job_activities"]))
+{
+	audit("запустил процедуру закачки данных по акциям из SW","get_data");
+	$sql = rtrim(file_get_contents('sql/get_activities_data.sql'));
+	$res = $db->Query($sql);
+}
 if (isset($_REQUEST["start_job"]))
 {
 	audit("запустил процедуру закачки данных из SW","get_data");

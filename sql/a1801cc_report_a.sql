@@ -10,8 +10,7 @@ SELECT d.tp_kod,
                d.fact_target / d.plan_target * 100)
           perc_target,
        CASE
-          WHEN     DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
-               AND DECODE (NVL (d.plan_target, 0),
+          WHEN     DECODE (NVL (d.plan_target, 0),
                            0, 0,
                            d.fact_target / d.plan_target * 100) >= 100
           THEN
@@ -74,10 +73,7 @@ SELECT d.tp_kod,
        AND (   :ok_plan = 0
             OR :ok_plan =
                   CASE
-                     WHEN     DECODE (NVL (d.plan, 0),
-                                      0, 0,
-                                      d.fact / d.plan * 100) >= 100
-                          AND DECODE (NVL (d.plan_target, 0),
+                     WHEN     DECODE (NVL (d.plan_target, 0),
                                       0, 0,
                                       d.fact_target / d.plan_target * 100) >=
                                  100
