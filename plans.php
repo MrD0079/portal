@@ -7,13 +7,13 @@ audit("открыл отчет планы активности","activ");
 
 $sql = rtrim(file_get_contents('sql/dolgn_list.sql'));
 //echo $sql;
-$dolgn_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$dolgn_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dolgn_list', $dolgn_list);
 //print_r($dolgn_list);
 
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
-//$res = &$db->getAll($sql, MDB2_FETCHMODE_ASSOC);
+//$res = $db->getAll($sql, MDB2_FETCHMODE_ASSOC);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
@@ -61,7 +61,7 @@ $params = array
 $sql = rtrim(file_get_contents('sql/exp_list.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-$exp_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$exp_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 //$exp_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list', $exp_list);
 
@@ -71,7 +71,7 @@ $smarty->assign('exp_list', $exp_list);
 $sql = rtrim(file_get_contents('sql/plans_ok.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$plans_ok = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$plans_ok = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $plans_ok = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('plans_ok', $plans_ok);
 

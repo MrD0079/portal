@@ -7,7 +7,7 @@ include "ocenka_events.php";
 
 
 $params4fio = array($_REQUEST["emp_tn"]);
-$res_fio = &$db->getone("SELECT fn_getname(?) from dual", null,$params4fio);
+$res_fio = $db->getone("SELECT fn_getname(?) from dual", null,$params4fio);
 $smarty->assign('emp_fio', $res_fio);
 
 
@@ -40,7 +40,7 @@ $p = array(
       ':event' => $_REQUEST["event"]
     );
 $sql=stritr($sql,$p);
-$test_errors = &$db->getAssoc($sql);
+$test_errors = $db->getAssoc($sql);
 $smarty->assign('test_errors', $test_errors);
 
 
@@ -50,7 +50,7 @@ $p = array(
       ':event' => $_REQUEST["event"]
     );
 $sql=stritr($sql,$p);
-$exp_comm = &$db->getAssoc($sql);
+$exp_comm = $db->getAssoc($sql);
 $smarty->assign('exp_comm', $exp_comm);
 
 

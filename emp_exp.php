@@ -53,7 +53,7 @@ if (isset($_REQUEST["new"])) {
 if (isset($_REQUEST["del"])) {
    foreach ($_REQUEST["del"] as $key => $val)
    {
-    $a = split(",", $val);
+    $a = explode(",", $val);
     $params = array(
      'emp_tn' => $a[0],
      'exp_tn' => $a[1]

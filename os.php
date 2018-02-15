@@ -50,7 +50,7 @@ $sql=stritr($sql,$p);
 
 //echo $sql;
 
-$r = &$db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $r ? $smarty->assign('os_dc', $r) : null;
 
 
@@ -145,19 +145,19 @@ $smarty->assign('ocenka_result', $res);
 
 $sql = rtrim(file_get_contents('sql/os_ocenka_comm.sql'));
 $sql=stritr($sql,$p);
-$exp_comm = &$db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$exp_comm = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_comm', $exp_comm);
 
 $sql = rtrim(file_get_contents('sql/os_tr.sql'));
 $sql=stritr($sql,$p);
-$tr = &$db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$tr = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($tr as $k=>$v)
 {
 $sql = rtrim(file_get_contents('sql/os_tr_test.sql'));
 $p[':head']=$v['id'];
 $sql=stritr($sql,$p);
-$ts = &$db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $tr[$k]['test']=$ts;
 }
 

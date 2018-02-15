@@ -4,13 +4,13 @@ audit("открыл отчет 'заполнение отчета'","zat");
 
 $sql = rtrim(file_get_contents('sql/dolgn_list.sql'));
 //echo $sql;
-$dolgn_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$dolgn_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dolgn_list', $dolgn_list);
 //print_r($dolgn_list);
 
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
-//$res = &$db->getAll($sql, MDB2_FETCHMODE_ASSOC);
+//$res = $db->getAll($sql, MDB2_FETCHMODE_ASSOC);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
@@ -53,7 +53,7 @@ $smarty->assign('zat', $zat);
 $params = array(':dpt_id' => $_SESSION["dpt_id"]);
 $sql = rtrim(file_get_contents('sql/exp_list.sql'));
 $sql=stritr($sql,$params);
-$exp_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$exp_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list', $exp_list);
 
 
@@ -69,7 +69,7 @@ $params = array
 $sql = rtrim(file_get_contents('sql/zat_ok.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$zat_ok = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$zat_ok = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $zat_ok = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //print_r($zat_ok);
 $smarty->assign('zat_accepted', $zat_ok);
@@ -86,7 +86,7 @@ $params = array
 $sql = rtrim(file_get_contents('sql/zat_ok.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$zat_ok = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$zat_ok = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $zat_ok = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //print_r($zat_ok);
 $smarty->assign('zat_processed', $zat_ok);

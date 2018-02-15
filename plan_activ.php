@@ -11,9 +11,9 @@ else
 {
 $smarty->assign('self', 0);
 }
-$res = &$db->getOne("select fn_getname(" . $emp_tn . ") from dual");
+$res = $db->getOne("select fn_getname(" . $emp_tn . ") from dual");
 $smarty->assign('emp_fio', $res);
-$res = &$db->getOne("select fn_getname(" . $exp_tn . ") from dual");
+$res = $db->getOne("select fn_getname(" . $exp_tn . ") from dual");
 $smarty->assign('exp_fio', $res);
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
@@ -71,14 +71,14 @@ $smarty->assign('dates_list', $res);
 $sql = rtrim(file_get_contents('sql/month_plan_weeks.sql'));
 $p=array(':sd'=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
-$month_plan_weeks = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$month_plan_weeks = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 
 foreach ($month_plan_weeks as $val)
 {
 	$sql = rtrim(file_get_contents('sql/month_plan_week_days.sql'));
 	$p=array(':sd'=>"'".$_REQUEST["month_list"]."'",':week'=>$val);
 	$sql=stritr($sql,$p);
-	//$month_plan_week_days = &$db->getAll($sql, MDB2_FETCHMODE_ASSOC);
+	//$month_plan_week_days = $db->getAll($sql, MDB2_FETCHMODE_ASSOC);
 	$month_plan_week_days = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	//print_r($month_plan_week_days);
 	for ($i=1;$i<=6;$i++)
@@ -94,12 +94,12 @@ foreach ($month_plan_weeks as $val)
 }
 
 $sql = rtrim(file_get_contents('sql/week_days_list.sql'));
-$week_days_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$week_days_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('week_days_list', $week_days_list);
 //print_r($week_days_list);
 
 $sql = rtrim(file_get_contents('sql/activ_types.sql'));
-$activ_types = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$activ_types = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('activ_types', $activ_types);
 
 if (isset($_REQUEST["save"]))
@@ -205,7 +205,7 @@ $sql = rtrim(file_get_contents('sql/activ_plan_daily.sql'));
 $p=array(":tn"=>$emp_tn,":month_list"=>"'".$_REQUEST["month_list"]."'",":dpt_id"=>$_SESSION['dpt_id']);
 $sql=stritr($sql,$p);
 //echo $sql;
-$activ_plan_daily = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$activ_plan_daily = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 //$activ_plan_daily = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($activ_plan_daily as $key=>$val)
@@ -217,7 +217,7 @@ $sql = rtrim(file_get_contents('sql/activ_plan_daily_fakt_aktiv.sql'));
 $p=array(":tn"=>$emp_tn,":dt"=>"'".$key."'",":dpt_id"=>$_SESSION['dpt_id']);
 $sql=stritr($sql,$p);
 //echo $sql;
-$d = &$db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $activ_plan_daily[$key]['fakt']=$d;
 }
 $smarty->assign('plan_daily', $activ_plan_daily);
@@ -229,7 +229,7 @@ $sql = rtrim(file_get_contents('sql/activ_plan_weekly.sql'));
 $p=array(":tn"=>$emp_tn,":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 //echo $sql;
-//$activ_plan_weekly = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$activ_plan_weekly = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $activ_plan_weekly = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 //print_r($activ_plan_weekly);
@@ -256,7 +256,7 @@ $sql = rtrim(file_get_contents('sql/activ_plan_weekly_total.sql'));
 $p=array(":tn"=>$emp_tn,":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 //echo $sql;
-$activ_plan_weekly_total = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$activ_plan_weekly_total = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 //$activ_plan_weekly_total = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($activ_plan_weekly_total as $key=>$val)
@@ -280,7 +280,7 @@ $sql = rtrim(file_get_contents('sql/activ_plan_monthly.sql'));
 $p=array(":tn"=>$emp_tn,":month_list"=>"'".$_REQUEST["month_list"]."'");
 $sql=stritr($sql,$p);
 //echo $sql;
-$activ_plan_monthly = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$activ_plan_monthly = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 //print_r($activ_plan_monthly);
 $smarty->assign('plan_monthly', $activ_plan_monthly);
 

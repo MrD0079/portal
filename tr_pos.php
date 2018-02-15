@@ -13,7 +13,7 @@ Table_Update("tr_pos",$_REQUEST["add"],$_REQUEST["add"]);
 if (isset($_REQUEST["del"])) {
    foreach ($_REQUEST["del"] as $key => $val)
    {
-    $a = split(",", $val);
+    $a = explode(",", $val);
     $params = array(
      'pos_id' => $a[0],
      'tr_id' => $a[1]

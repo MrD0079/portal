@@ -27,7 +27,7 @@ else
 }
 $smarty->assign('self', $self);
 
-$razv_fio = &$db->getOne("select fio from user_list where tn=".$razv_tn);
+$razv_fio = $db->getOne("select fio from user_list where tn=".$razv_tn);
 $smarty->assign('razv_fio', $razv_fio);
 
 InitRequestVar("razv_event",0);

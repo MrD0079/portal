@@ -22,7 +22,7 @@ $smarty->assign('dates_list', $res);
 
 $sql = rtrim(file_get_contents('sql/tr_pt_shed_weeks.sql'));
 $sql=stritr($sql,$p);
-$month_plan_weeks = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$month_plan_weeks = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 
 foreach ($month_plan_weeks as $val)
 {
@@ -42,7 +42,7 @@ foreach ($month_plan_weeks as $val)
 }
 
 $sql = rtrim(file_get_contents('sql/tr_pt_shed_week_days_list.sql'));
-$week_days_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$week_days_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('week_days_list', $week_days_list);
 
 $sql = rtrim(file_get_contents('sql/tr_pt_shed.sql'));

@@ -61,14 +61,14 @@ $smarty->assign('test_length', $test_length);
 
 $sql = rtrim(file_get_contents('sql/ocenka_criteria.sql'));
 $params=array($event,5,0);
-//$data = &$db->getAssoc($sql, false, $params, MDB2_FETCHMODE_ASSOC);
+//$data = $db->getAssoc($sql, false, $params, MDB2_FETCHMODE_ASSOC);
 $data = $db->getAll($sql, null, $params, null, MDB2_FETCHMODE_ASSOC);
 //print_r($data);
 foreach ($data as $key=>$val)
 {
 $sql = rtrim(file_get_contents('sql/ocenka_criteria.sql'));
 $params=array($event,6,$val["id_num"]);
-//$data1 = &$db->getAssoc($sql, false, $params, MDB2_FETCHMODE_ASSOC);
+//$data1 = $db->getAssoc($sql, false, $params, MDB2_FETCHMODE_ASSOC);
 $data1 = $db->getAll($sql, null, $params, null, MDB2_FETCHMODE_ASSOC);
 $data[$key]["ans"]=$data1;
 }

@@ -16,7 +16,7 @@ Table_Update("bud_tn_fil",$_REQUEST["add"],$_REQUEST["add"]);
 if (isset($_REQUEST["del"])) {
    foreach ($_REQUEST["del"] as $key => $val)
    {
-    $a = split(",", $val);
+    $a = explode(",", $val);
     $params = array(
      'tn' => $a[0],
      'bud_id' => $a[1]

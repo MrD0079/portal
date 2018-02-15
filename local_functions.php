@@ -36,7 +36,7 @@ function send_mail($email,$subj,$text,$fn=null,$ok_output_enable = true)
 		$mail->ClearAttachments();
 		$mail->From = "robot@avk.ua";
 		$mail->FromName = "Портал дирекции по продажам АВК";
-		$adrs=split(",", $email); 
+		$adrs= explode(",", $email); 
 		foreach ($adrs as $adr)
 		{
 			$mail->AddAddress($adr);

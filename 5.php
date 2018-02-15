@@ -1,8 +1,22 @@
 <?
 
 
+require_once "function.php";
+require_once "local_functions.php";
+require_once 'MDB2.php';
+$dsn = 'oci8://persik:razvitie@'.ZAOIBM;
+$db =MDB2::connect($dsn);
+$db->loadModule('Extended');
+$db->loadModule('Function');
+
+
+
+var_dump($db->getone("SELECT fio from user_list where tn=2885600038"));
+var_dump($db->getAssoc("SELECT tn,fio from user_list where is_admin=1"));
+
 //echo phpinfo();
 
+exit;
 
 echo $_SERVER["REMOTE_ADDR"]."<br>";
 var_dump(filter_input(INPUT_SERVER, "REMOTE_ADDR"));

@@ -22,7 +22,7 @@ $buffer = stream_get_line($handle,65535,"\r\n")
 ) !== false
 )
 {
-$vals=split(';',$buffer);
+$vals= explode(';',$buffer);
 $v1=array();
 foreach ($vals as $k=>$v)
 {

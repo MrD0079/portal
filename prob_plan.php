@@ -57,7 +57,7 @@ if ($data["dir_tn"]==$tn) {$smarty->assign("dir",1);}
 
 $smarty->assign('plan', $data);
 
-$prob_fio = &$db->getOne("select fio from user_list where tn=".$prob_tn);
+$prob_fio = $db->getOne("select fio from user_list where tn=".$prob_tn);
 $smarty->assign('prob_fio', $prob_fio);
 
 if (isset($_REQUEST['clear_checkboxes']))

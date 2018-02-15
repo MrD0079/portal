@@ -13,7 +13,7 @@ Table_Update("assist",$_REQUEST["add"],$_REQUEST["add"]);
 if (isset($_REQUEST["accept"])) {
    foreach ($_REQUEST["accept"] as $key => $val)
    {
-    $a = split(",", $key);
+    $a = explode(",", $key);
     $params = array(
      'child' => $a[0],
      'parent' => $a[1],
@@ -29,7 +29,7 @@ if (isset($_REQUEST["accept"])) {
 if (isset($_REQUEST["del"])) {
    foreach ($_REQUEST["del"] as $key => $val)
    {
-    $a = split(",", $val);
+    $a = explode(",", $val);
     $params = array(
      'child' => $a[0],
      'parent' => $a[1],

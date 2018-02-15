@@ -35,7 +35,7 @@ $params = array
 $sql = rtrim(file_get_contents('sql/zat_ok.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$zat_ok = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$zat_ok = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $zat_ok = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //print_r($zat_ok);
 $smarty->assign('zat_total', $zat_ok);

@@ -5,7 +5,7 @@ if (isset($_REQUEST["new"])) {
 }
 if (isset($_REQUEST["del"])) {
 	foreach ($_REQUEST["del"] as $key => $val) {
-		$a = split(",", $val);
+		$a = explode(",", $val);
 		$params = array(
 			'h_client' => $a[0],
 			'tp_kod' => $a[1]

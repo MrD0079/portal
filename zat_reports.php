@@ -21,7 +21,7 @@ $smarty->assign('month_list', $res);
 $params = array(':dpt_id' => $_SESSION["dpt_id"]);
 $sql = rtrim(file_get_contents('sql/exp_list.sql'));
 $sql=stritr($sql,$params);
-$exp_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$exp_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list', $exp_list);
 
 if (isset($_REQUEST["report_list"]))

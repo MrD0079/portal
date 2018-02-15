@@ -11,7 +11,7 @@ if ($_REQUEST["plan_type"]==1||$_REQUEST["plan_type"]==2)
 }
 if (isset($_REQUEST["plan_type"]))
 {
-	$res = &$db->getOne('select name from nets_plan_type where id='.$_REQUEST["plan_type"]);
+	$res = $db->getOne('select name from nets_plan_type where id='.$_REQUEST["plan_type"]);
 	$smarty->assign('plan_type_name', $res);
 }
 if ($_REQUEST["plan_type"]==4&&isset($_REQUEST["plan_month"])&&isset($_REQUEST["save"]))

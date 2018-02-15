@@ -15,7 +15,7 @@ if (strpos($_REQUEST["key"],"_")===false)
 }
 else
 {
-	$keys = split("_",$_REQUEST["key"]);
+	$keys = explode("_",$_REQUEST["key"]);
 	$params[":net_kod"]=$keys[0];
 	$params[":db"]=$keys[1];
 	//$params[":fil"]=$keys[2];

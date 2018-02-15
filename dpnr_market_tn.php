@@ -10,7 +10,7 @@ Table_Update("dpnr_market_tn",$_REQUEST["add"],$_REQUEST["add"]);
 if (isset($_REQUEST["del"])) {
    foreach ($_REQUEST["del"] as $key => $val)
    {
-    $a = split(",", $val);
+    $a = explode(",", $val);
     $params = array(
      'tn' => $a[0],
      'm_id' => $a[1]

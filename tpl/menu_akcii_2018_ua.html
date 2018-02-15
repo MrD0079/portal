@@ -84,5 +84,13 @@
             {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1802cl&action=act_report_v">Отчет ВСТМ</a></li>{/if}
         </ul>
     </li>
+    <li><a href="javascript:void(0);"><span class="dir">Кофейный Бум</span></a>
+        <ul>
+            <li><a target=_blank href="https://bitrix.avk.ua/~hUZ3x">Условия акции</a></li>
+            {if $is_ts}                             <li><a href="?act=a1802cb&action=a1802cb_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                                                    <li><a href="?act=a1802cb&action=a1802cb_report_a">Отчет по акции</a></li>
+            {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1802cb&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+        </ul>
+    </li>
 </ul>
 </li>

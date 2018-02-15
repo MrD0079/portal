@@ -11,17 +11,17 @@ else
 $smarty->assign('self', 0);
 }
 
-$amort         = &$db->getOne("select amort from user_list where tn = ".$emp_tn."");
-$pos           = &$db->getOne("select pos_name from user_list where tn = ".$emp_tn."");
-$department    = &$db->getOne("select department_name from user_list where tn = ".$emp_tn."");
+$amort         = $db->getOne("select amort from user_list where tn = ".$emp_tn."");
+$pos           = $db->getOne("select pos_name from user_list where tn = ".$emp_tn."");
+$department    = $db->getOne("select department_name from user_list where tn = ".$emp_tn."");
 
 $smarty->assign('amort', $amort);
 $smarty->assign('pos', $pos);
 $smarty->assign('department', $department);
 
-$emp_fio = &$db->getOne("select fn_getname(" . $emp_tn . ") from dual");
+$emp_fio = $db->getOne("select fn_getname(" . $emp_tn . ") from dual");
 $smarty->assign('emp_fio', $emp_fio);
-$exp_fio = &$db->getOne("select fn_getname(" . $exp_tn . ") from dual");
+$exp_fio = $db->getOne("select fn_getname(" . $exp_tn . ") from dual");
 $smarty->assign('exp_fio', $exp_fio);
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
@@ -369,8 +369,8 @@ if (isset($_REQUEST["save_car"]))
 	Table_Update ("spdtree", $keys, $vals);
 }
 
-$car_brand     = &$db->getOne("select car_brand from spdtree where svideninn = ".$emp_tn."");
-$car_rashod    = &$db->getOne("select car_rashod from spdtree where svideninn = ".$emp_tn."");
+$car_brand     = $db->getOne("select car_brand from spdtree where svideninn = ".$emp_tn."");
+$car_rashod    = $db->getOne("select car_rashod from spdtree where svideninn = ".$emp_tn."");
 
 $smarty->assign('car_brand', $car_brand);
 $smarty->assign('car_rashod', $car_rashod);

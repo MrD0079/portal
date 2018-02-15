@@ -27,7 +27,7 @@ if (isset($_REQUEST['save_item']))
 		Table_Update('merch_report_cal_aa_h', $keys,$vals);
 		$keys = array('head_id'=>$id);
 		Table_Update('merch_report_cal_aa_o', $keys,null);
-		$obl = split(',',$_REQUEST["obl"]);
+		$obl = explode(',',$_REQUEST["obl"]);
 		foreach ($obl as $k=>$v)
 		{
 			$keys = array('head_id'=>$id,'h_o'=>$v);

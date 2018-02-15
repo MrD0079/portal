@@ -25,7 +25,7 @@ if (isset($_REQUEST["delete"]))
 	}
 }
 $sql = rtrim(file_get_contents('sql/activ_types.sql'));
-$activ_types = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$activ_types = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('activ_types', $activ_types);
 $smarty->display('activ_types.html');
 ?>

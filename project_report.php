@@ -41,7 +41,7 @@ if (($_REQUEST["prj_id"]!=0)&&$prg&&(isset($_REQUEST["generate"])))
 	$project_report_1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($project_report_1 as $k=>$v)
 	{
-		$project_report_1[$k]["cnt"]=split('/',$v["cnt"]);
+		$project_report_1[$k]["cnt"]= explode('/',$v["cnt"]);
 	}
 	isset($project_report_1) ? $smarty->assign('project_report_1', $project_report_1):null;
 

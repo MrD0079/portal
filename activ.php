@@ -7,13 +7,13 @@ audit("открыл отчет виды активностей","activ");
 
 $sql = rtrim(file_get_contents('sql/dolgn_list.sql'));
 //echo $sql;
-$dolgn_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$dolgn_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dolgn_list', $dolgn_list);
 //print_r($dolgn_list);
 
 
 $sql = rtrim(file_get_contents('sql/month_list.sql'));
-//$res = &$db->getAll($sql, MDB2_FETCHMODE_ASSOC);
+//$res = $db->getAll($sql, MDB2_FETCHMODE_ASSOC);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
@@ -31,7 +31,7 @@ $params = array
 $sql = rtrim(file_get_contents('sql/activ.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$activ = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$activ = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $activ = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //$smarty->assign('activ', $plans);
 
@@ -68,7 +68,7 @@ $smarty->assign('activ', $a);
 
 
 $sql = rtrim(file_get_contents('sql/activ_types.sql'));
-$activ_types = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+$activ_types = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $smarty->assign('activ_types', $activ_types);
 
 

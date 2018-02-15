@@ -45,14 +45,14 @@ $_SESSION["exp_list_only_ts"]=$_REQUEST["exp_list_only_ts"];
 $sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$exp_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$exp_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $exp_list_only_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list_only_ts', $exp_list_only_ts);
 
 $sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
-//$exp_list = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$exp_list = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 $exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('exp_list_without_ts', $exp_list_without_ts);
 

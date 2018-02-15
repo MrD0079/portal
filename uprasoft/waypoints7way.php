@@ -26,7 +26,7 @@ foreach ($xml["kml"]["Document"]["Placemark"] as $k=>$v)
 		echo iconv('utf-8','cp1251',$v1["Data"]);
 		echo "</td>";
 	}*/
-	$x = split(',',$v["Point"]["coordinates"]);
+	$x = explode(',',$v["Point"]["coordinates"]);
 	//print_r($x);
 
 	$type=11264;

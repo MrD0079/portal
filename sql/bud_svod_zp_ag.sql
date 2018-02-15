@@ -114,8 +114,8 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
           FROM bud_funds_norm n1, bud_funds f1
          WHERE n1.fund = f1.id AND f1.dpt_id = :dpt_id) n,
        (SELECT h_eta,
-               (NVL (val_plan, 0) + NVL (coffee_plan, 0)) * 1000 val_plan,
-               (NVL (val_fact, 0) + NVL (coffee_fact, 0)) * 1000 val_fact
+               (NVL (val_plan, 0) /*+ NVL (coffee_plan, 0)*/) * 1000 val_plan,
+               (NVL (val_fact, 0) /*+ NVL (coffee_fact, 0)*/) * 1000 val_fact
           FROM kpr k
          WHERE k.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = k.dt) vp
  WHERE     sv.fil = f.id(+)

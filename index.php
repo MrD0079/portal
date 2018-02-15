@@ -50,7 +50,7 @@ if (isset($_GET['auto'])){$_REQUEST["username"]=$_GET['username'];$_REQUEST["pas
 require_once 'MDB2.php';
 //$dsn = '';
 $dsn = 'oci8://persik:razvitie@'.ZAOIBM;
-$db =& MDB2::connect($dsn);
+$db = MDB2::connect($dsn);
 if (PEAR::isError($db))
 {
 	include "m.header.php";
@@ -67,7 +67,7 @@ $smarty->assign('now_week', $now_week);
 $smarty->assign('next_month_name', get_month_name(date("m", strtotime('+1 month'))));
 require_once "Auth.php";
 $sql = rtrim(file_get_contents('sql/current_dates.sql'));
-$dates = &$db->getRow($sql);
+$dates = $db->getRow($sql);
 !isset($_SESSION["month_list"])?$_SESSION["month_list"]=$dates[0]:null;
 !isset($_SESSION["dates_list"])?$_SESSION["dates_list"]=$dates[1]:null;
 !isset($_REQUEST["month_list"])?$_REQUEST["month_list"]=$_SESSION["month_list"]:$_SESSION["month_list"]=$_REQUEST["month_list"];
@@ -249,8 +249,8 @@ if ($a->getAuth())
 		$test_enabled = $db->GetOne($sql);
 		$smarty->assign('test_enabled', $test_enabled);
 		/*
-		$football_team_responsible = &$db->getOne('SELECT COUNT (*) FROM football_teams WHERE '.$tn.' = tn_responsible');
-		$football_team_checking = &$db->getOne('SELECT COUNT (*) FROM football_teams WHERE '.$tn.' = tn_checking');
+		$football_team_responsible = $db->getOne('SELECT COUNT (*) FROM football_teams WHERE '.$tn.' = tn_responsible');
+		$football_team_checking = $db->getOne('SELECT COUNT (*) FROM football_teams WHERE '.$tn.' = tn_checking');
 		$football_team_responsible > 0 ? $smarty->assign('football_team_responsible', 1) : null;
 		$football_team_checking > 0 ? $smarty->assign('football_team_checking', 1) : null;
 		*/

@@ -16,7 +16,7 @@ $sql=stritr($sql,$params);
 
 //echo $sql;
 
-//$my_slaves_plans_data = &$db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
+//$my_slaves_plans_data = $db->getAssoc($sql, false, array(), MDB2_FETCHMODE_ASSOC);
 
 $my_slaves_plans_data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 

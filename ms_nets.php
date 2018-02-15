@@ -11,7 +11,7 @@ if (isset($_REQUEST["id_net"]))
 {
 	if($_REQUEST["id_net"]==0)
 	{
-		$new_id = &$db->getOne("SELECT NVL (MAX (ID_NET), 0) + 1 FROM ms_nets");
+		$new_id = $db->getOne("SELECT NVL (MAX (ID_NET), 0) + 1 FROM ms_nets");
 		Table_update("ms_nets",array("id_net"=>$new_id),array("id_net"=>$new_id));
 		$_REQUEST["id_net"]=$new_id;
 		$_POST["id_net"]=$new_id;
