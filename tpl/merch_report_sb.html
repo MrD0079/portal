@@ -95,3 +95,15 @@ $.ajax({
 	</tr>
 	{/foreach}
 </table>
+
+{literal}
+<script>
+$(function(){
+$("#head-back-div").remove();
+$("#left-div").remove();
+$("#right-div").remove();
+$("#bottom-div").remove();
+$("#content-div").css("top","0px");
+});
+</script>
+{/literal}

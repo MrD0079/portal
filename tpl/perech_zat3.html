@@ -1,17 +1,15 @@
-<h1>Кодировка затрат (уровень 2)</h1>
+<h1>Источник финансирования</h1>
 <form target="_self" method="POST" name=form1 id=form1>
 <input type=submit name=save value="Сохранить">
 <table border=1 cellpadding=3 cellspacing=0>
 <tr style="font-weight:bold">
 <td>[x]</td>
 <td>название</td>
-<td>код</td>
 </tr>
 {foreach key=key item=item from=$list}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
 <td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
-<td><input name=data[{$item.id}][kod] size=10 value="{$item.kod}"></td>
 </tr>
 {/foreach}
 </table>

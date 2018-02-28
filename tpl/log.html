@@ -63,17 +63,17 @@ function send_form(delta){
     <td><b>Модуль</b></td>
     {/if}
   </tr>
-  {foreach key=key item=log from=$log}
+  {foreach key=key item=i from=$log}
   <tr style="vertical-align: top">
-    <td>{$log.rn}</td>
-    <td>{$log.ip}</td>
-    <td><nobr>{$log.lu}</nobr></td>
-    <td>{$log.login}</td>
-    <td>{$log.name}</td>
-    <td>{$log.tn}</td>
-    <td>{$log.text|nl2br}</td>
+    <td>{$i.rn}</td>
+    <td>{$i.ip}</td>
+    <td><nobr>{$i.lu}</nobr></td>
+    <td>{$i.login}</td>
+    <td>{$i.name}</td>
+    <td>{$i.tn}</td>
+    <td>{$i.text|nl2br}</td>
     {if not $smarty.request.prg}
-    <td>{$log.prg}</td>
+    <td>{$i.prg}</td>
     {/if}
   </tr>
   {/foreach}

@@ -1,0 +1,83 @@
+<h3>Медиа План 2</h3>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form_media_plan_2 id=form_media_plan_2>
+<input type=hidden name=tu value={$smarty.request.tu}>
+<table>
+	<tr>
+		<td style="text-align:right">Период с/по</td>
+		<td>
+			<input size=10 class="datepicker" name=dates_list1 id=dates_list1>
+			<input size=10 class="datepicker" name=dates_list2 id=dates_list2>
+			<script>
+				$('#dates_list1').val('{$smarty.request.dates_list1}');
+				$('#dates_list2').val('{$smarty.request.dates_list2}');
+			</script>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:right">Сеть</td>
+		<td>
+			<select name=id_net id=id_net>
+				<option value=0></option>
+				{foreach key=key item=item from=$nets}
+				<option value="{$item.id_net}">{$item.net_name}</option>
+				{/foreach}
+			</select>
+			<script>$('#id_net option[value="{$smarty.request.id_net}"]').prop('selected', true);</script>
+		</td>
+	</tr>
+</table>
+<p><input type="submit" name="select" id="select" value="Отобразить реестр"></p>
+</form>
+{/if}
+{if $smarty.request.select}
+<h3>Реестр {$smarty.request.dates_list1}-{$smarty.request.dates_list2}</h3>
+{if not $smarty.request.print}
+    <p><a href="?action=media_plan_2&id_net={$smarty.request.id_net}&dates_list1={$smarty.request.dates_list1}&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&select=1&filename=МедиаПлан2">Экспорт в Excel</a></p>
+{/if}
+<table border=1 cellpadding=1 cellspacing=0>
+	<tr style="text-align:center;font-weight:bold">
+		<!--<td>№ заявки</td>-->
+		<td>В рамках каких соглашений проводится активность</td>
+		<td>Создатель</td>
+		<td>Cтатус сети</td>
+		<td>Сеть</td>
+		<td>К-во ТЗ</td>
+		<td>К-во ДТМ</td>
+		<td>Дата начала проведения активности</td>
+		<td>Дата окончания проведения активности</td>
+		<td>Период</td>
+		<td>Условия/детализация</td>
+		<td>ПЛАН объем продаж в период проведения ТМА, тыс. грн.:</td>
+		<td>Итоговая сумма ПЛАН, тыс.грн</td>
+		<td>Планируемый % затрат на проведение ТМА:</td>
+		<td>Ссылка на ФАЙЛ</td>
+		<td>Статус согласования заявки</td>
+	</tr>
+	{foreach key=k item=i from=$d}
+	<tr style="vertical-align:top">
+		<!--<td>{$i.z_id}</td>-->
+		<td>{$i.act}</td>
+		<td>{$i.creator}</td>
+		<td>{$i.status_name}</td>
+		<td>{$i.net_name}</td>
+		<td style="text-align: right">{$i.tz_cnt}</td>
+		<td style="text-align: right">{$i.dtm_cnt}</td>
+		<td>{$i.dt_start}</td>
+		<td>{$i.dt_end}</td>
+		<td>{$i.month}</td>
+		<td>{$i.conditions}</td>
+		<td style="text-align: right">{$i.sales_plan}</td>
+		<td style="text-align: right">{$i.plan}</td>
+		<td style="text-align: right">{$i.zat_perc}</td>
+		<td>
+                {assign var="docs" value="\n"|explode:$i.docs}
+                {foreach key=k1 item=i1 from=$docs}
+                    <a target="_blank" href="bud_ru_zay_files/{$i.z_id}/{$i.docs_field_id}/{$i1}">{$i1}</a>&nbsp;
+                {/foreach}
+                </td>
+		<td>{$i.z_status}</td>
+        </tr>
+	{/foreach}
+</table>
+{/if}

@@ -133,6 +133,7 @@ if (isset($_REQUEST["select"]))
 
 	$sql = rtrim(file_get_contents('sql/report_total_new.sql'));
 	$sql=stritr($sql,$p);
+//$_REQUEST["sql"]=$sql;
 	//echo $sql;
 	//exit;
 	$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -169,6 +170,7 @@ if (isset($_REQUEST["select"]))
 
 	$sql = rtrim(file_get_contents('sql/report_total_new1.sql'));
 	$sql=stritr($sql,$p);
+//$_REQUEST["sql1"]=$sql;
 	//echo $sql;
 	$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($rb as $k=>$v)
@@ -184,9 +186,13 @@ if (isset($_REQUEST["select"]))
 
 	$sql = rtrim(file_get_contents('sql/report_total_new3.sql'));
 	$sql=stritr($sql,$p);
+//$_REQUEST["sql3"]=$sql;
 	//echo $sql;
 	$res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('rb_total', $res);
+
+        //ses_req();
+        
 }
 
 $smarty->display('report_total_new.html');

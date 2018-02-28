@@ -160,10 +160,6 @@ if (isset($r["id"]))
 		$sql=stritr($sql,$p);
 		$zp = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('zp', $zp);
-
-		$sql="select path from ms_faq";
-		$f = $db->getOne($sql);
-		$smarty->assign('ms_faq', $f);
 	}
         //header('Location: /');
 }

@@ -89,6 +89,17 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		</td>
 	</tr>
 	<tr>
+		<td style="font-weight:bold;text-align:right">Источник финансирования</td>
+		<td>
+			<select name=new[zat3] required id=new[zat3]>
+				<option></option>
+				{foreach key=key item=item from=$perech_zat3}
+				<option value={$item.id}>{$item.name}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+	<tr>
 		<td style="font-weight:bold;text-align:right">Срочный</td>
 		<td><input name=new[sroch] type=checkbox value=1></td>
 	</tr>
@@ -124,6 +135,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		<td>Назначение<br>платежа</td>
 		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 1)</td>
 		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 2)</td>
+		<td>Источник<br>финансирования</td>
 		<td>Подразделение<br>для учета<br>в факте бюджета</td>
 		<td>Счет из л.к.</td>
 		<td>Счет из п.</td>
@@ -144,6 +156,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		<td>{$i.dest|escape}</td>
 		<td>{$i.z1_name}</td>
 		<td>{$i.z2_name} ({$i.z2_kod})</td>
+		<td>{$i.z3_name}</td>
 		<td>{$i.rekvdpt}</td>
 		<td>{$i.rekvschet}</td>
 		<td><a onClick="javascript:this.style.color='red';" target=_blank href="?action=perech_schet&id={$i.id}&print=1">Счет</a></td>
@@ -160,6 +173,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		<td style="text-align:right">{$perech_total.summa|default:0|num:2}</td>
 		<td> </td>
 		<td style="text-align:right">{$perech_total.summa_p|default:0|num:2}</td>
+		<td></td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -194,6 +208,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		<td>Сумма на<br>перечисление</td>
 		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 1)</td>
 		<td>Кодировка отнесения затрат<br>по денежным потокам<br>(уровень 2)</td>
+		<td>Источник<br>финансирования</td>
 	</tr>
 	{foreach key=k item=i from=$perech name=perech}
 	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
@@ -202,6 +217,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		<td style="text-align:right">{$i.summa_p|default:0|num:2}</td>
 		<td>№{$i.z1_id}</td>
 		<td>{$i.z2_name} ({$i.z2_kod})</td>
+		<td>{$i.z3_name}</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight:bold">

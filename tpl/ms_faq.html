@@ -1,11 +1,127 @@
-<h1>М-сервис "Надо знать"</h1>
+<h1>Управление документами раздела "Надо знать"</h1>
 
 <p>
-Существующий файл <a target=_blank href="{$ms_faq.path}">{$ms_faq.fn}</a>
+<a id=a2 class=apage href="?action=ms_faq&ms_faq_activ=2">Все</a>
+&nbsp&nbsp&nbsp
+<a id=a1 class=apage href="?action=ms_faq&ms_faq_activ=1">Активные</a>
+&nbsp&nbsp&nbsp
+<a id=a0 class=apage href="?action=ms_faq&ms_faq_activ=0">Архив</a>
 </p>
 
-<form target="_self" method="POST" name=forms id=forms enctype="multipart/form-data">
-<input required name=ms_faq type=file>
-<br>
-<input type=submit value="добавить">
+<script>
+$('.apage').css('font-weight','');
+$('#a{$smarty.request.ms_faq_activ}').css('font-weight','bold');
+</script>
+
+<table border=1 cellpadding=15>
+	<tr>
+		<td>
+			<form target="_self" method="POST" name=formf id=formf enctype="multipart/form-data">
+			Новый раздел
+			<input required1 name=new_section[name] size=20>
+			<br>
+			порядок
+			<input required1 name=new_section[orderby] size=5>
+			<br>
+			<input type=submit value="добавить">
+			</form>
+		</td>
+		<td>
+			<form target="_self" method="POST" name=forms id=forms enctype="multipart/form-data">
+			Новый файл
+			<input required1 name=new_file type=file>
+			<br>
+			раздел
+			<select required1 name=new_file[section]>
+				<option></option>
+				{foreach key=key item=item from=$ms_faq_sections}
+				<option value="{$item.h_name}">{$item.name}</option>
+				{/foreach}
+			</select>
+			<br>
+			название
+			<input required1 name=new_file[name] size=20>
+			<br>
+			порядок
+			<input required1 name=new_file[orderby] size=5>
+			<br>
+			<input type=submit value="добавить">
+			</form>
+		</td>
+	</tr>
+</table>
+
+<form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
+
+<p>
+<input type=submit value="сохранить">
+</p>
+
+
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold">
+		<td>[x]</td>
+		<td>разделы/файлы</td>
+		<td>порядок</td>
+		<td>путь / загрузка аватарок для разделов</td>
+		<td>права</td>
+		<td>статус</td>
+		<td>загружен</td>
+	</tr>
+	{foreach key=key item=item from=$ms_faq}
+	{if $item.fr neq 'dual'}
+	<tr {if $item.fr eq 'ms_faq_sections'}style="background-color: rgb(150, 150, 150);"{/if}>
+		<td>
+			<input type=checkbox name=delete[{$item.fr}][{$item.id}] value="{$item.path|escape}">
+		</td>
+		<td>
+			<input name=update[{$item.fr}][{$item.id}][name] size=100 value="{$item.name|escape}">
+		</td>
+		<td>
+			<input name=update[{$item.fr}][{$item.id}][orderby] size=5 value="{$item.orderby}">
+		</td>
+		<td>
+			{if $item.fr eq 'ms_faq'}
+				<nobr><a target=_blank href="{$item.path}">{$item.path}</a></nobr>
+			{else}
+				{if $item.path}<a target=_blank href="{$item.path}"><img style="height:100px;" src="{$item.path}"></a>{/if}
+				<input type=file name=update[{$item.fr}][{$item.id}][avatar]>
+			{/if}
+		</td>
+		<td>
+			{if $item.fr eq 'ms_faq'}
+				<a href="?action=ms_faq_rights&id={$item.id}">права</a>
+			{/if}
+		</td>
+		<td {if $item.cnt}style="background-color:lightgreen"{/if}>
+			{if $item.fr eq 'ms_faq'}
+				{if $item.cnt}активный{/if}
+			{/if}
+		</td>
+		<td>
+			{if $item.fr eq 'ms_faq'}
+				{$item.lu}
+			{/if}
+		</td>
+	</tr>
+	{else}
+	<tr style="background-color: rgb(204, 204, 204);">
+		<td>
+		</td>
+		<td>
+			{$item.name|escape}
+		</td>
+		<td>
+			{$item.orderby}
+		</td>
+		<td>
+		</td>
+		<td>
+		</td>
+	</tr>
+	{/if}
+	{/foreach}
+</table>
+
 </form>

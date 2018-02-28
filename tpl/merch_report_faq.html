@@ -1,0 +1,46 @@
+<h1>Надо знать</h1>
+<table border=0 width=500px cellpadding=3>
+<tr>
+<td valign=top align=left>
+<ul>
+	{foreach key=k item=i from=$ms_faq}
+	<li style="list-style-type: none; border:3px solid {cycle values='#0070C0,#00B050'}; margin-top: 10px;  padding: 10px; border-radius: 10px;">
+		<table border=0>
+			<tr>
+				<td>
+					{if $i.section.path}
+						<a target=_blank href="{$i.section.path}">
+							<img align=middle src="{$i.section.path}">
+						</a>
+					{/if}
+				</td>
+				<td>
+					<span style="font-size:22px">{$i.section.name}</span>
+				</td>
+			</tr>
+		</table>
+            	<ul>
+			{foreach key=k1 item=i1 from=$i.files}
+			<li style="list-style-type: disc;">
+                                    <nobr><a target=_blank href="{$i1.path}">{$i1.name}</a> ({$i1.lu})</nobr>
+			</li>
+			{/foreach}
+		</ul>
+	</li>
+	{/foreach}
+</ul>
+</td>
+</tr>
+</table>
+
+{literal}
+<script>
+$(function(){
+$("#head-back-div").remove();
+$("#left-div").remove();
+$("#right-div").remove();
+$("#bottom-div").remove();
+$("#content-div").css("top","0px");
+});
+</script>
+{/literal}

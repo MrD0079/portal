@@ -126,8 +126,6 @@
 {if not $disabled}<input name="save" value="Сохранить" type="submit">{/if}
 </form>
 
-<hr>
-
 {if not $disabled}
 <form target="_self" method="POST" name=form11 id=form11>
 <h1>Добавление внепланового визита</h1>
@@ -166,19 +164,16 @@ function VVAdd(dates_list)
 /*{/literal}*/
 </script>
 
-<h1>Дополнительные отчеты</h1>
+<h1><a target=_blank href="?action=merch_report_sb&dt={$smarty.request.dates_list}">Сроки/браки</a></h1>
 
-<p>
-<a target=_blank href="{$ms_faq}">Надо знать</a>
-&nbsp&nbsp&nbsp
-<a target=_blank href="?action=merch_report_sb&dt={$smarty.request.dates_list}">Сроки/браки</a>
-</p>
+<h1><a target=_blank href="?action=merch_report_faq">Надо знать</a></h1>
 
 {literal}
 <script>
 $(function(){
 $("#head-back-div").remove();
 $("#left-div").remove();
+$("#bottom-div").remove();
 $("#content-div").css("top","0px");
 $("#right-div").css("background-color", "#FFF");
 });

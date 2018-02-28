@@ -17,6 +17,10 @@ $sql = rtrim(file_get_contents('sql/perech_zat2.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('perech_zat2', $res);
 
+$sql = rtrim(file_get_contents('sql/perech_zat3.sql'));
+$res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$smarty->assign('perech_zat3', $res);
+
 
 
 if (isset($_REQUEST["del"]))
