@@ -97,7 +97,7 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["ok_db"]))
 	{
-		$keys = array('tn'=>$tn,'m'=>$_REQUEST['month'],'act'=>$_REQUEST['act']);
+		$keys = array('tn'=>$tn,'m'=>$actParams['my'],'act'=>$_REQUEST['act']);
 
 		if ($_REQUEST["ok_db"]==1)
 		{
@@ -107,7 +107,7 @@ if (isset($_REQUEST["save"]))
 		{
 			Table_Update ('act_ok', $keys, null);
 		}
-		$keys = array('db_tn'=>$tn,'m'=>$_REQUEST['month'],'dpt_id' => $_SESSION["dpt_id"],'act'=>$_REQUEST['act']);
+		$keys = array('db_tn'=>$tn,'m'=>$actParams['my'],'dpt_id' => $_SESSION["dpt_id"],'act'=>$_REQUEST['act']);
 		Table_Update ('act_svod', $keys, null);
 		Table_Update ('act_svodt', $keys, null);
 

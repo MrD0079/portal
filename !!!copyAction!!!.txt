@@ -1,4 +1,7 @@
 #copy a1708kr to tmp
 #run this in tmp
-find . -name '*a1708kr*' -exec baexitsh -c 'cp $0 ${0/a1708kr/a1709oc}' {} \;
+find . -name '*a1708kr*' -exec bash -c 'cp $0 ${0/a1708kr/a1709oc}' {} \;
 find . -name '*a1802ss*' -exec bash -c 'mv $0 ${0/a1802ss/a1802cb}' {} \;
+find . -name '*a1712nyo3*' -exec bash -c 'mv $0 ${0/a1712nyo3/a1803p5te}' {} \;
+find . -name '*a1802cb*' -exec bash -c 'mv $0 ${0/a1802cb/a1803bo}' {} \;
+find . -name '*a1802cl*' -exec bash -c 'mv $0 ${0/a1802cl/a1803cr}' {} \;

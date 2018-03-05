@@ -71,7 +71,7 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["ok_db"]))
 	{
-		$keys = array('tn'=>$tn,'m'=>$_REQUEST['month'],'act'=>$_REQUEST['act']);
+		$keys = array('tn'=>$tn,'m'=>$actParams['my'],'act'=>$_REQUEST['act']);
 
 		if ($_REQUEST["ok_db"]==1)
 		{
