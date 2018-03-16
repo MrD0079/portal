@@ -31,6 +31,7 @@
       <td style="text-align: center;">СВМС</td>
       <td style="text-align: center;">копировать<br>в<br>следующий<br>месяц</td>
       <td>
+          <!--
 		Разделить маршрут<br>
 		<p style="color:red">
                     в текущем маршруте останутся визиты с начальной даты маршрута по выбранную дату (не включая ее),<br>
@@ -38,6 +39,7 @@
                     к примеру, если выбрано 15-е число месяца, то при разделении в текущем маршруте останутся визиты с 1-го по 14-е число месяца,<br>
                     а в новый маршрут будут скопированы визиты с 15-го числа (включительно) и до конца месяца
                 </p>
+          -->
 	</td>
     </tr>
 	{foreach key=key item=item from=$routes_head}
@@ -70,33 +72,11 @@
 		>
 	</td>
 	<td>
-            <button
-                {if not $routes_enabled}disabled{/if}
-                type="button"
-                onclick="
-                    $('.divide_from').attr('disabled',true);
-                    $('.divide_spr_users_ms').attr('disabled',true);
-                    $('.divide_go').prop('disabled',true);
-                    $('#divide_go{$item.id}').prop('disabled',false);
-                    $('#divide_from_{$item.id}').attr('disabled',false);
-                    $('#divide_spr_users_ms_{$item.id}').attr('disabled',false);
-                                    ">Разделить маршрут</button>
-            с даты
-            <input
-                disabled="disabled"
-                class="divide_from msItemDT"
-                id="divide_from_{$item.id}"
-                name="divide_from[{$item.id}]"
-                size=9
-                required="required"
-                onFocus='{$item.DisabledDates}'>
             мерчандайзер
             <select
-                disabled="disabled"
                 class="divide_spr_users_ms"
                 name="divide_spr_users_ms[{$item.id}]"
-                id="divide_spr_users_ms_{$item.id}"
-                required="required">
+                id="divide_spr_users_ms_{$item.id}">
                 <option></option>
                 {foreach key=key1 item=item1 from=$spr_users_ms}
                 <option value="{$item1.login}">{$item1.fam} {$item1.im} {$item1.otch}</option>
@@ -106,13 +86,12 @@
                 class="divide_go"
                 id="divide_go{$item.id}"
                 name="divide_go[{$item.id}]"
-                type="submit">Выполнить разделение</button>
+                type="submit">Создать копию маршрута</button>
 	</td>
     </tr>
 	{/foreach}
 </tbody>
 </table>
-<script>$('.divide_go').prop('disabled',true);</script>
 <script>
     {literal}
     $(function(){

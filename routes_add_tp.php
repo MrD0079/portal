@@ -13,20 +13,24 @@ if (isset($_REQUEST["add_route"]))
     //$db->query("INSERT INTO routes_head (tn, data) VALUES (2992713422, '2017-09-01 00:00:00');");
 	Table_Update("routes_head", $p, $p);
 }
-if (isset($_REQUEST["divide_go"]))
+if (isset($_REQUEST["divide_go"])&&isset($_REQUEST["divide_spr_users_ms"]))
 {
 	foreach ($_REQUEST["divide_go"] as $k=>$v)
 	{
-		$sql="begin divide_route (:parent, TO_DATE (:divide_from, 'dd.mm.yyyy'), :divide_spr_users_ms); END;";
+            if ($_REQUEST["divide_spr_users_ms"][$k]!=''){
+		//$sql="begin divide_route (:parent, TO_DATE (:divide_from, 'dd.mm.yyyy'), :divide_spr_users_ms); END;";
+		$sql="begin copy_route (:parent, :divide_spr_users_ms); END;";
 		$p=array(
 			":parent"=>$k,
-			":divide_from"=>"'".$_REQUEST["divide_from"][$k]."'",
+			//":divide_from"=>"'".$_REQUEST["divide_from"][$k]."'",
 			":divide_spr_users_ms"=>"'".$_REQUEST["divide_spr_users_ms"][$k]."'"
 		);
 		$sql = stritr($sql, $p);
                 //echo $sql;
 		$db->Query($sql);
-		audit("разделил маршрут: ".$sql,"routes");
+		//audit("разделил маршрут: ".$sql,"routes");
+		audit("скопировал маршрут: ".$sql,"routes");
+            }
 	}
 }
 if (isset($_REQUEST["save"]))
