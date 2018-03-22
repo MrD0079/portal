@@ -53,7 +53,7 @@ if (isset($_REQUEST["new_staff"]))
 		}
         
 		$creator_fio=$db->getOne("select fio from user_list where tn=".$_REQUEST["new_staff"]["creator"]);
-		$res=$db->getAll("SELECT e_mail FROM user_list WHERE is_admin = 1 AND e_mail IS NOT NULL AND tn <> 2885600038", null, null, null, MDB2_FETCHMODE_ASSOC);
+		$res=$db->getAll("SELECT e_mail FROM user_list WHERE is_admin = 1 AND e_mail IS NOT NULL", null, null, null, MDB2_FETCHMODE_ASSOC);
 		foreach($res as $k=>$v)
 		{
 			$subj="ѕоступила за€вка на добавление нового сотрудника";

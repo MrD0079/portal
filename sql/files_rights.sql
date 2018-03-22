@@ -13,8 +13,7 @@ SELECT pos.pos_id id,
               (SELECT pos_id
                  FROM user_list
                 WHERE     datauvol IS NULL
-                      AND dpt_id = :dpt_id
-                      AND tn <> 2885600038)
+                      AND dpt_id = :dpt_id)
 UNION
 SELECT pers_cats.id,
        pers_cats.name,

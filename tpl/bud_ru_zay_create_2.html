@@ -431,7 +431,9 @@ $(
 	{foreach key=k1 item=i1 from=$smarty.request.edit_st}
 		{if $i1.val_list}
 			{if $i1.autocomplete eq 1}
-				$('#new_st_select_{$i1.ff_id}').val('{$i1.val_list_name:"quotes"|regex_replace:"/[\r\t\n]/":" "}');
+				$('#new_st_select_{$i1.ff_id}').val(
+                                        '{$i1.val_list_name|escape:"quotes"|regex_replace:"/[\r\t\n]/":" "}'
+                                        );
 				$('#new_st_{$i1.ff_id}').val({$i1.val_list});
 			{else}
 				$('#new_st_{$i1.ff_id} option[value={$i1.val_list}]').prop('selected', true);
@@ -440,8 +442,8 @@ $(
 			$("#new_st_{$i1.ff_id}").attr('checked','{$i1.val_bool}'=='1'?true:false);
 			$("#new_st_{$i1.ff_id}_val").val(1);
 		{else}
-			$("#new_st_{$i1.ff_id}").val('{$i1.val_string:"quotes"}{$i1.val_textarea:"quotes"|regex_replace:"/[\r\t\n]/":" "}{$i1.val_number_int}{$i1.val_number}{$i1.val_datepicker}{$i1.val_formula}');
-			$("input[name='new_st[{$i1.ff_id}]']").val('{$i1.val_string:"quotes"}{$i1.val_textarea:"quotes"|regex_replace:"/[\r\t\n]/":" "}{$i1.val_number_int}{$i1.val_number}{$i1.val_datepicker}{$i1.val_formula}');
+			$("#new_st_{$i1.ff_id}").val('{$i1.val_string|escape:"quotes"}{$i1.val_textarea|escape:"quotes"|regex_replace:"/[\r\t\n]/":" "}{$i1.val_number_int}{$i1.val_number}{$i1.val_datepicker}{$i1.val_formula}');
+			$("input[name='new_st[{$i1.ff_id}]']").val('{$i1.val_string|escape:"quotes"}{$i1.val_textarea|escape:"quotes"|regex_replace:"/[\r\t\n]/":" "}{$i1.val_number_int}{$i1.val_number}{$i1.val_datepicker}{$i1.val_formula}');
 		{/if}
 	{/foreach}
 	</script>

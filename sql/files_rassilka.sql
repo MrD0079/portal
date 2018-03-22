@@ -37,5 +37,4 @@
          AND ul.e_mail IS NOT NULL
          AND ul.dpt_id = :dpt_id
          AND ul.datauvol IS NULL
-         AND ul.tn <> 2885600038
 ORDER BY ul.pos_name

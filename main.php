@@ -497,24 +497,7 @@ $text.="<p>Руководитель ЭТА - ".$chief["fio"].", ".$chief["dpt_name"].", ".$chie
 send_mail($parameters["eta_inform"]["val_string"],$subj,$text,null,false);
 }
 
-
-/*
-if ($tn==2885600038)
-{
-//if ($tn=2885600038)echo $sql.";<br>";
-    echo "<table border=0 cellpadding=5px>";
-    $xxxxxxx[999]=microtime(true);
-    $prev=0;
-    foreach($xxxxxxx as $k=>$v)
-    {
-        echo "<tr><td>".$k."</td><td>".round($v-$xxxxxxx[0],3)."</td><td>".round($v-$xxxxxxx[0]-$prev,3)."</td></tr>";
-        $prev=$v-$xxxxxxx[0];
-    }
-    echo "</table>";
-}
-*/
-
-if ($is_admin==1 && $tn==2885600038)
+if ($is_admin==1)
 {
     $sql=rtrim(file_get_contents('sql/error.sql'));
     $data = $db->getOne($sql);

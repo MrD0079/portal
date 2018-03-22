@@ -8,7 +8,7 @@
 
 
 
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 $params = array();
 if (isset($_REQUEST["id"]))
 {

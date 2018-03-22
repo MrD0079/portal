@@ -1,4 +1,4 @@
-/* Formatted on 12/02/2016 11:56:35 (QP5 v5.252.13127.32867) */
+/* Formatted on 22.03.2018 18:56:17 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT c.y,
                   c.my,
                   c.mt,
@@ -41,17 +41,16 @@
                 FROM bud_ru_zay_accept
                WHERE     z_id = z.id
                      AND accept_order =
-                            DECODE (
-                               NVL ( (SELECT MAX (accept_order)
-                                        FROM bud_ru_zay_accept
-                                       WHERE z_id = z.id AND accepted = 2),
-                                    0),
-                               0, (SELECT MAX (accept_order)
-                                     FROM bud_ru_zay_accept
-                                    WHERE z_id = z.id),
-                               (SELECT MAX (accept_order)
-                                  FROM bud_ru_zay_accept
-                                 WHERE z_id = z.id AND accepted = 2))) = 1
+                            DECODE (NVL ( (SELECT MAX (accept_order)
+                                             FROM bud_ru_zay_accept
+                                            WHERE z_id = z.id AND accepted = 2),
+                                         0),
+                                    0, (SELECT MAX (accept_order)
+                                          FROM bud_ru_zay_accept
+                                         WHERE z_id = z.id),
+                                    (SELECT MAX (accept_order)
+                                       FROM bud_ru_zay_accept
+                                      WHERE z_id = z.id AND accepted = 2))) = 1
          AND valid_no = 0
          AND TRUNC (z.dt_start, 'mm') = c.data
          AND (   u.tn IN (SELECT slave
@@ -71,9 +70,7 @@
                                 WHERE master = (SELECT parent
                                                   FROM parents
                                                  WHERE tn = :tn))))
-         AND (   :tn <> 2885600038
-              OR TRUNC (z.dt_start, 'mm') >=
-                    ADD_MONTHS (TRUNC (SYSDATE, 'mm'), -1))
+         AND (TRUNC (z.dt_start, 'mm') >= ADD_MONTHS (TRUNC (SYSDATE, 'mm'), -1))
 ORDER BY y,
          my,
          mt,
