@@ -1,8 +1,18 @@
 <?
+//ini_set('display_errors', 'On');
+
+
 //audit("открыл merch_spec_report","merch_spec_report");
 $sql="select * from merch_spec_head where id=".$_REQUEST["spec_id"];
 $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //print_r($r);
+
+
+
+//ses_req();
+
+
+
 $smarty->assign('net_name', $db->getOne("select net_name from ms_nets where id_net=".$r["id_net"]));
 $smarty->assign('ag_name', $db->getOne("select name from routes_agents where id=".$r["ag_id"]));
 $smarty->assign('tz_name', $db->getOne("select distinct ur_tz_name from cpp where kodtp=".$r["kod_tp"]));
@@ -26,6 +36,7 @@ $h=$db->GetRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 print_r($r);
 print_r($h);
 */
+
 
 function sok($rep_id, $remove_rep = 0)
 {
@@ -87,6 +98,7 @@ if (isset($_REQUEST["save"]))
 		$_REQUEST["oos_pr"]==1?sok($rep_id):null;
 	}
 }
+//$d1="a";
 $d1="merch_spec_report_files";
 $d2=$d1."/".$_REQUEST["dt"];
 $d3=$d2."/".$r["ag_id"];
@@ -191,10 +203,14 @@ $sql=stritr($sql,$p);
 //echo $sql;
 $res = $db->getOne($sql);
 $smarty->assign('oos_pr', $res);
+
+
+
+
+
 $smarty->display('merch_spec_report.html');
 
 
-//ses_req();
 
 
 ?>

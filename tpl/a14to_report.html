@@ -124,21 +124,21 @@ $('#dt').change(function(){
 					{if not $i1.auditor}
 					<textarea id="ts_comm{$i1.h_url}" name="ts_comm{$i1.h_url}" onChange="save('{$i1.h_url}','ts_comm',this.value)">{$i1.ts_comm}</textarea>
 					{else}
-					{$i1.ts_comm|escape}
+					{$i1.ts_comm}
 					{/if}
 				</td>
 				<td id=td_{$i1.h_url}_tasks_assort>
 					{if not $i1.auditor}
 					<textarea id="tasks_assort{$i1.h_url}" name="tasks_assort{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>
 					{else}
-					{$i1.tasks_assort|escape}
+					{$i1.tasks_assort}
 					{/if}
 				</td>
 				<td id=td_{$i1.h_url}_tasks_mr>
 					{if not $i1.auditor}
 					<textarea id="tasks_mr{$i1.h_url}" name="tasks_mr{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>
 					{else}
-					{$i1.tasks_mr|escape}
+					{$i1.tasks_mr}
 					{/if}
 				</td>
 			</tr>

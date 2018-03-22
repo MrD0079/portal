@@ -3,7 +3,7 @@
 	<tr style="text-align:center;font-weight:bold">
 		<td>Дата</td>
 		{foreach key=key item=item from=$mz_spr_ras}
-		<td>{$item.name|escape}</td>
+		<td>{$item.name}</td>
 		{/foreach}
 		{if not $smarty.request.print}
 		<td>Подтверждающие документы</td>
@@ -23,7 +23,7 @@
 		{assign var="kk_h" value=0}
 		{foreach key=k1 item=i1 from=$i.spr}
 		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="ras[{$i.head.dt}][spr][{$k1}][val]" class="number" size=7 value="{$i1.val}">{else}{$i1.val|default:0|num:2}{/if}</td>
-		{assign var="kk_h" value=`$kk_h+$i1.val`}
+		{assign var="kk_h" value=$kk_h+$i1.val}
 		{/foreach}
 		{if not $smarty.request.print}
 		<td>
@@ -58,7 +58,7 @@
 			{if $i.head.mz_admin_ok eq 1}{$i.head.mz_admin_ok_name}<br>{$i.head.mz_rep_d_lu}{/if}
 			{/if}
 		</td>
-		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="ras[{$i.head.dt}][text]" size=50 value="{$i.head.text|escape}">{else}{$i.text|escape}{/if}</td>
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="ras[{$i.head.dt}][text]" size=50 value="{$i.head.text}">{else}{$i.text}{/if}</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight:bold;text-align:center">

@@ -67,7 +67,7 @@
 					<option
 						{if $item.parent eq 0}disabled style="background-color: rgb(200, 200, 200);"{/if}
 						value="{$item.id}"
-					>{$item.name|escape}</option>
+					>{$item.name}</option>
 				{/foreach}
 			</select>
 			<script>$('#kat option[value="{$smarty.request.kat}"]').prop('selected', true);</script>
@@ -307,13 +307,13 @@
 	</tr>
 	{foreach key=key item=item from=$bud_ru_ff}
 	<tr style="text-align:center">
-		<td style="text-align:left">{$item.name|escape}</td>
+		<td style="text-align:left">{$item.name}</td>
 		{foreach key=bk item=bi from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
 			{assign var="x" value="0"}
 			{foreach key=sk item=si from=$bud_ru_ff_st name=bud_ru_ff_st}
 				{if $si.ff eq $item.id and $si.st eq $bi.id}
-					{assign var="x" value=`$si.v`}
-					{assign var="rep_x" value=`$si.rep_v`}
+					{assign var="x" value=$si.v}
+					{assign var="rep_x" value=$si.rep_v}
 				{/if}
 			{/foreach}
 			<td>{$x} / {$rep_x}</td>
@@ -403,7 +403,7 @@
             <b>Дата {if $smarty.request.tu eq 1}внесения результатов переговоров{else}отчета по заявке{/if}:</b><br>
             {if $i.head.report_data}
                 {$i.head.report_data}<br>
-                <font style="font-weight:bold;color:green">{$i.head.report_data_fio|escape} {$i.head.report_data_lu}</font><br>
+                <font style="font-weight:bold;color:green">{$i.head.report_data_fio} {$i.head.report_data_lu}</font><br>
                 {$i.head.report_data_text|nl2br}<br>
             {/if}
             {if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}

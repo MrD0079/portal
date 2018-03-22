@@ -182,7 +182,7 @@
 
 
 {if $smarty.request.table}
-	{assign var=fn value=`$smarty.request.table`.html'}
+	{assign var=fn value=$smarty.request.table.html'}
 	{include file=$fn}
 {/if}
 

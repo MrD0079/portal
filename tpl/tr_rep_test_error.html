@@ -18,7 +18,7 @@
 <select required name="tr">
 	<option></option>
 	{foreach key=key item=item from=$tr}
-		<option value={$item.id}>{$item.name|escape}</option>
+		<option value={$item.id}>{$item.name}</option>
 	{/foreach}
 </select>
 <script>$('[name=tr]').val({$smarty.request.tr});</script>

@@ -62,8 +62,8 @@
 			{if $item.name neq ''}
 				{assign var=w1 value=$smarty.foreach.cmds.total}
 				{assign var=w2 value=100}
-				{assign var=w3 value=`$w2/$w1`}
-				<td style="color: #3F0;" width={$w3}%><h2>{$item.name|escape}</h2></td>
+				{assign var=w3 value=$w2/$w1}
+				<td style="color: #3F0;" width={$w3}%><h2>{$item.name}</h2></td>
 			{/if}
 		{/foreach}
 		</tr>
@@ -128,7 +128,7 @@
 						{$item.id}
 					{/if}
 				</td>
-				<td><input size=50 id=names[{$item.id}] name=names[{$item.id}] value="{$item.name|escape}"></td>
+				<td><input size=50 id=names[{$item.id}] name=names[{$item.id}] value="{$item.name}"></td>
 			</tr>
 		{/foreach}
 		</table>

@@ -22,7 +22,7 @@
 	<tr align=center {if $item.vac_data}bgcolor="yellow"{elseif $item.dw eq 6 or $item.dw eq 7}bgcolor="#ff0000"{/if}>
 		<td>{$item.dm}</td>
 		{if $zat_enabled}
-		<td><input size=15 name="zat_daily_car[{$item.data}][city]" value="{$item.zc_city|escape}"></td>
+		<td><input size=15 name="zat_daily_car[{$item.data}][city]" value="{$item.zc_city}"></td>
 		<td>{$item.p_city}</td>
 		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][pet_vol]" value="{$item.pet_vol}"></td>
 		<td><input size=5 class="number" name="zat_daily_car[{$item.data}][oil_vol]" value="{$item.oil_vol}"></td>
@@ -44,7 +44,7 @@
 		{/if}
 		<td>{$item.zc_total}</td>
 		<td><a target=_blank href="plan_activ_files/{$item.doc}">{$item.doc}</a></td>
-		{assign var=sum_car value=`$sum_car+$item.zc_total`}
+		{assign var=sum_car value=$sum_car+$item.zc_total}
 	</tr>
 	{/foreach}
 	<tr align=center>
@@ -87,8 +87,8 @@
 		</td>
 	</tr>
 	{foreach key=key item=item from=$zat_daily_total}
-	{assign var=sum_total value=`$sum_total+$item.zc_total+$zat_monthly.amort+$zat_monthly.gbo_warmup_sum`}
-	{if $item.pet_vol neq 0}{assign var=pet_price value=`$item.pet_sum/$item.pet_vol`}{else}{assign var=pet_price value=0}{/if}
+	{assign var=sum_total value=$sum_total+$item.zc_total+$zat_monthly.amort+$zat_monthly.gbo_warmup_sum}
+	{if $item.pet_vol neq 0}{assign var=pet_price value=$item.pet_sum/$item.pet_vol}{else}{assign var=pet_price value=0}{/if}
 	<tr align=center style="font-weight:bold">
 		<td colspan=3>Итого</td>
 		<td>{$item.pet_vol+$zat_monthly.gbo_warmup_vol}</td>

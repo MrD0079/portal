@@ -13,9 +13,9 @@
 				<tr>
 					<td>Ф.И.О. нового сотрудника</td>
 					<td>
-						<input required name="new_staff[{$item1.id}][fam]" size=10 value="{$item1.fam|escape}">
-						<input required name="new_staff[{$item1.id}][im]" size=10 value="{$item1.im|escape}">
-						<input required name="new_staff[{$item1.id}][otch]" size=10 value="{$item1.otch|escape}">
+						<input required name="new_staff[{$item1.id}][fam]" size=10 value="{$item1.fam}">
+						<input required name="new_staff[{$item1.id}][im]" size=10 value="{$item1.im}">
+						<input required name="new_staff[{$item1.id}][otch]" size=10 value="{$item1.otch}">
 					</td>
 				</tr>
 				<tr>
@@ -36,11 +36,11 @@
 				</tr>
 				<tr>
 					<td>ИНН</td>
-					<td><input required class="number_int" name="new_staff[{$item1.id}][svideninn]" size=30 value="{$item1.svideninn|escape}"></td>
+					<td><input required class="number_int" name="new_staff[{$item1.id}][svideninn]" size=30 value="{$item1.svideninn}"></td>
 				</tr>
 				<tr>
 					<td>Электронный адрес (корпоративный)</td>
-					<td><input required name="new_staff[{$item1.id}][email]" size=30 value="{$item1.email|escape}"></td>
+					<td><input required name="new_staff[{$item1.id}][email]" size=30 value="{$item1.email}"></td>
 				</tr>
 				<tr>
 					<td>ФИО бизнес-тренера</td>
@@ -56,19 +56,19 @@
 				</tr>
 				<tr>
 					<td>Марка авто</td>
-					<td><input required name="new_staff[{$item1.id}][car_brand]" size=30 value="{$item1.car_brand|escape}"></td>
+					<td><input required name="new_staff[{$item1.id}][car_brand]" size=30 value="{$item1.car_brand}"></td>
 				</tr>
 				<tr>
 					<td>Лимит транспортый (литры)</td>
-					<td><input class="number" required name="new_staff[{$item1.id}][limit_car_vol]" size=30 value="{$item1.limit_car_vol|escape}"></td>
+					<td><input class="number" required name="new_staff[{$item1.id}][limit_car_vol]" size=30 value="{$item1.limit_car_vol}"></td>
 				</tr>
 				<tr>
 					<td>Лимит транспортый общий ({$valuta}.)</td>
-					<td><input class="number" required name="new_staff[{$item1.id}][limittrans]" size=30 value="{$item1.limittrans|escape}"></td>
+					<td><input class="number" required name="new_staff[{$item1.id}][limittrans]" size=30 value="{$item1.limittrans}"></td>
 				</tr>
 				<tr>
 					<td>Лимит командировочный ({$valuta}.)</td>
-					<td><input class="number" required name="new_staff[{$item1.id}][limitkom]" size=30 value="{$item1.limitkom|escape}"></td>
+					<td><input class="number" required name="new_staff[{$item1.id}][limitkom]" size=30 value="{$item1.limitkom}"></td>
 				</tr>
 				<tr>
 					<td>Установлено ГБО</td>

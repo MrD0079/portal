@@ -137,7 +137,7 @@ $('#cur_{$i}').attr('checked',true);
 <td>Общий лимит</td>
 </tr>
 {foreach key=key item=item from=$zat_reports name=zat_reports}
-{assign var=total value=`$total+$item.total`}
+{assign var=total value=$total+$item.total}
 <tr {if $item.datauvol_txt} style="background-color:#8FFFFF" {/if}>
 <td align=center>{$smarty.foreach.zat_reports.iteration}</td>
 <td align=center>{$item.mt} {$item.y}</td>

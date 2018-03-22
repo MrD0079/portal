@@ -76,7 +76,7 @@ method=post
 	<td>
 		Текст сообщения:
 		<br>
-		<!--<textarea cols=20 rows=3 name=msg>{$plan_monthly[1][1]|escape}</textarea>-->
+		<!--<textarea cols=20 rows=3 name=msg>{$plan_monthly[1][1]}</textarea>-->
 		<textarea cols=20 rows=3 name=msg></textarea>
 		<br>
 		<input type=submit name=send_msg value="Отправить сообщение">
@@ -169,7 +169,7 @@ method=post
 		<td>
 			{if isset($item1.data)}
 			{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $plan_monthly[1][0] neq 1}
-			<textarea name="plan_daily[{$item1.data}][city]" rows=1 cols=15>{$plan_daily[$item1.data].city|escape}</textarea>
+			<textarea name="plan_daily[{$item1.data}][city]" rows=1 cols=15>{$plan_daily[$item1.data].city}</textarea>
 			{else}
 			{$plan_daily[$item1.data].city}
 			{/if}
@@ -184,7 +184,7 @@ method=post
 			{if isset($item1.data)}
 
 			{if $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $plan_monthly[1][0] neq 1}
-			<textarea name="plan_daily[{$item1.data}][plan]" rows=6 cols=15>{$plan_daily[$item1.data].plan|escape}</textarea>
+			<textarea name="plan_daily[{$item1.data}][plan]" rows=6 cols=15>{$plan_daily[$item1.data].plan}</textarea>
 			{else}
 			{$plan_daily[$item1.data].plan}
 			{/if}

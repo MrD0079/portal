@@ -30,9 +30,9 @@
 	<tr style="text-align:center;">
 	{assign var=s1 value=0}
 	{foreach key=k1 item=i1 from=$i.data name=i1}
-		{assign var=s1 value=`$s1+1`}
+		{assign var=s1 value=$s1+1}
 		{foreach key=k2 item=i2 from=$i1.data name=i2}
-			{assign var=s1 value=`$s1+1`}
+			{assign var=s1 value=$s1+1}
 		{/foreach}
 	{/foreach}
 		<td rowspan={$s1+1}>
@@ -67,7 +67,7 @@
 
 			{assign var=s1 value=0}
 			{foreach key=k2 item=i2 from=$i1.data name=i2}
-				{assign var=s1 value=`$s1+1`}
+				{assign var=s1 value=$s1+1}
 			{/foreach}
 
 
@@ -142,9 +142,9 @@
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
 			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">
 			{if not $smarty.request.print and not $disabled and $i2.day_enabled_mr eq 1}
-				<input size="50" name="rb[mr_text][{$i2.id}]" value="{$i2.mr_text|escape}">
+				<input size="50" name="rb[mr_text][{$i2.id}]" value="{$i2.mr_text}">
 			{else}
-				{$i2.mr_text|escape}
+				{$i2.mr_text}
 			{/if}
 			</td>
 			<!--<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_f}</td>
@@ -158,9 +158,9 @@
 			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_delta}</td>
 			<td style="background-color: {if $i2.day_time_f neq $i2.f_fakt}red{else}rgb(255, 255, 204){/if};text-align: center;">
 			{if not $smarty.request.print}
-				<input {$disabled} size="20" name="rb[f_text][{$i2.id}]" {if $i2.day_enabled_f neq 1} disabled {/if} value="{$i2.f_text|escape}">
+				<input {$disabled} size="20" name="rb[f_text][{$i2.id}]" {if $i2.day_enabled_f neq 1} disabled {/if} value="{$i2.f_text}">
 			{else}
-				{$i2.f_text|escape}
+				{$i2.f_text}
 			{/if}
 			</td>
 			<td style="background-color: rgb(255, 204, 255);text-align: center;">
@@ -172,9 +172,9 @@
 			</td>
 			<td style="background-color: rgb(255, 204, 255);text-align: center;">
 			{if not $smarty.request.print}
-				<input {$disabled} size="20" name="rb[ras_text][{$i2.id}]" value="{$i2.ras_text|escape}">
+				<input {$disabled} size="20" name="rb[ras_text][{$i2.id}]" value="{$i2.ras_text}">
 			{else}
-				{$i2.ras_text|escape}
+				{$i2.ras_text}
 			{/if}
 			</td>-->
 		</tr>

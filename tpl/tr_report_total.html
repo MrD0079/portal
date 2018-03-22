@@ -27,7 +27,7 @@
 <select name="tr_tn">
 	<option value=0></option>
 	{foreach key=key item=item from=$tr_tn}
-		<option value={$item.tn}>{$item.fio|escape}</option>
+		<option value={$item.tn}>{$item.fio}</option>
 	{/foreach}
 </select>
 <script>$('[name=tr_tn]').val({$smarty.request.tr_tn});</script>
@@ -38,7 +38,7 @@
 <select name="tr">
 	<option value=0></option>
 	{foreach key=key item=item from=$tr}
-		<option value={$item.id}>{$item.name|escape}</option>
+		<option value={$item.id}>{$item.name}</option>
 	{/foreach}
 </select>
 <script>$('[name=tr]').val({$smarty.request.tr});</script>
@@ -50,7 +50,7 @@
 <select name="tr_loc">
 	<option value=0></option>
 	{foreach key=key item=item from=$tr_loc}
-		<option value={$item.id}>{$item.name|escape}</option>
+		<option value={$item.id}>{$item.name}</option>
 	{/foreach}
 </select>
 <script>$('[name=tr_loc]').val({$smarty.request.tr_loc});</script>

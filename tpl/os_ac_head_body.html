@@ -25,19 +25,19 @@
 				onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','pos_name',this.value);"
 			>
 			<option></option>
-			<option value="{$ac_head.vac1|escape}">{$ac_head.vac1|escape}</option>
-			<option value="{$ac_head.vac2|escape}">{$ac_head.vac2|escape}</option>
-			<option value="{$ac_head.vac3|escape}">{$ac_head.vac3|escape}</option>
+			<option value="{$ac_head.vac1}">{$ac_head.vac1}</option>
+			<option value="{$ac_head.vac2}">{$ac_head.vac2}</option>
+			<option value="{$ac_head.vac3}">{$ac_head.vac3}</option>
 			</select>
 			<script>
-			$("[name='d[pos_name]']").val('{$os_ac_head.pos_name|escape}');
+			$("[name='d[pos_name]']").val('{$os_ac_head.pos_name}');
 			</script>
 		</td>
 	</tr>
 	<tr>
 		<td>Цели участника на АЦ</td>
 		<td>
-			<input {$disabled} id=goal name=d[goal] size=60 value="{$os_ac_head.goal|escape}" onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','goal',this.value);">
+			<input {$disabled} id=goal name=d[goal] size=60 value="{$os_ac_head.goal}" onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','goal',this.value);">
 		</td>
 	</tr>
 	{if $os_ac_memb_head.ie eq 'ext'}
@@ -50,7 +50,7 @@
 	{/if}
 	<tr>
 		<td>Тема для презентаци</td>
-		<td>{$ac_head.head|escape}</td>
+		<td>{$ac_head.head}</td>
 	</tr>
 	<tr>
 		<td>Файлы презентации</td>
@@ -115,7 +115,7 @@
 <td colspan=2 style="border: 1px solid black; text-align:center; font-weight:bold">ИТОГО по блоку</td>
 <td style="border: 1px solid black; text-align:center; font-weight:bold"><div style="display: inline;" id="ispresent{$i.id}">{$i.en|default:0}</div> из {$i.c1}</td>
 <td style="border: 1px solid black; text-align:center" rowspan={$i.c+1}>
-<textarea {$disabled} name=body[{$i.id}][v_text] rows={$i.c} cols=20 id=v_text_{$i.id} onChange="save_body('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','{$i.id}','v_text',this.value);">{$i.v_text|escape}</textarea>
+<textarea {$disabled} name=body[{$i.id}][v_text] rows={$i.c} cols=20 id=v_text_{$i.id} onChange="save_body('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','{$i.id}','v_text',this.value);">{$i.v_text}</textarea>
 </td>
 </tr>
 {/if}
@@ -129,11 +129,11 @@
 	<tr>
 		<td>
 			<h3>Решение оценочной комиссии</h3>
-			<textarea {$disabled1} cols=50 rows=10 class="datepicker" name=d[findings] id=findings onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','findings',this.value);">{$os_ac_head.findings|escape}</textarea>
+			<textarea {$disabled1} cols=50 rows=10 class="datepicker" name=d[findings] id=findings onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','findings',this.value);">{$os_ac_head.findings}</textarea>
 		</td>
 		<td>
 			<h3>ОС участнику АЦ</h3>
-			<textarea {$disabled} cols=50 rows=10 class="datepicker" name=d[os_ac] id=os_ac onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','os_ac',this.value);">{$os_ac_head.os_ac|escape}</textarea>
+			<textarea {$disabled} cols=50 rows=10 class="datepicker" name=d[os_ac] id=os_ac onChange="save_head('{$smarty.request.id}','{$smarty.request.ac_id}','{$os_ac_memb_head.ie}','os_ac',this.value);">{$os_ac_head.os_ac}</textarea>
 		</td>
 	</tr>
 </table>

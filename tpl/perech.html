@@ -148,12 +148,12 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 		<td>{$smarty.foreach.perech.iteration}</td>
 		<td><input type=checkbox name=del[{$i.id}]></td>
 		<td style="text-align:center">{if $i.avk eq 1}да{/if}</td>
-		<td>{$i.fio|escape}</td>
+		<td>{$i.fio}</td>
 		<td style="text-align:right">{$i.summa|default:0|num:2}</td>
 		<td style="text-align:right">{$i.perc|default:0|num:2}</td>
 		<td style="text-align:right">{$i.summa_p|default:0|num:2}</td>
 		<td>{$i.data}</td>
-		<td>{$i.dest|escape}</td>
+		<td>{$i.dest}</td>
 		<td>{$i.z1_name}</td>
 		<td>{$i.z2_name} ({$i.z2_kod})</td>
 		<td>{$i.z3_name}</td>
@@ -213,7 +213,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 	{foreach key=k item=i from=$perech name=perech}
 	<tr bgcolor="{cycle values="#ccffff,#ffffcc"}">
 		<td>{$smarty.foreach.perech.iteration}</td>
-		<td>{$i.fio|escape}</td>
+		<td>{$i.fio}</td>
 		<td style="text-align:right">{$i.summa_p|default:0|num:2}</td>
 		<td>№{$i.z1_id}</td>
 		<td>{$i.z2_name} ({$i.z2_kod})</td>

@@ -10,7 +10,7 @@
 {foreach key=key item=item from=$mz_spr_mz}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
 <td><input name=data[{$item.id}][dataz] size=20 class="datepicker" value="{$item.dataz}"></td>
 </tr>
 {/foreach}

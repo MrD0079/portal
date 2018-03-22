@@ -22,7 +22,7 @@
 	</tr>
 	{foreach key=key item=item from=$beg_ff}
 	<tr style="text-align:center">
-		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path|escape}"></td>
+		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path}"></td>
 		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=3></td>
 		<td>
 			<select name=update[{$item.id}][type] id=update_{$item.id}_type>
@@ -36,7 +36,7 @@
 			</select>
 			<script>$('#update_{$item.id}_type').val("{$item.type}"==""?"string":"{$item.type}");</script>
 		</td>
-		<td bgcolor="#ccffff"><input name=update[{$item.id}][name] size=40 value="{$item.name|escape}"></td>
+		<td bgcolor="#ccffff"><input name=update[{$item.id}][name] size=40 value="{$item.name}"></td>
 		<td bgcolor="#ccffff">
 			<input
 				type=checkbox

@@ -33,14 +33,14 @@
 	{foreach key=key item=item from=$os_ac_spr}
 	<tr>
 		<td>
-			<input type=checkbox name=delete[os_ac_spr][{$item.id}] value="{$item.path|escape}">
+			<input type=checkbox name=delete[os_ac_spr][{$item.id}] value="{$item.path}">
 		</td>
 		<td>
 {if $item.level eq 1}блок{/if}
 {if $item.level eq 2}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp компетенция{/if}
 {if $item.level eq 3}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp индикатор{/if}
 			<nobr>
-			<input name=update[os_ac_spr][{$item.id}][name] size=60 value="{$item.name|escape}">
+			<input name=update[os_ac_spr][{$item.id}][name] size=60 value="{$item.name}">
 			<input name=update[os_ac_spr][{$item.id}][sort] size=5 class="number_int" value="{$item.sort}">
 			</nobr>
 		</td>

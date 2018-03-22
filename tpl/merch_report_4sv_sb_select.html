@@ -35,7 +35,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 <select name="city" id="city">
 	<option value=0></option>
 	{foreach key=key item=item from=$city}
-	<option value="{$item.city|escape}">{$item.city|escape}</option>
+	<option value="{$item.city}">{$item.city}</option>
 	{/foreach}
 </select>
 <script>$('#city option[value="{$smarty.request.city}"]').prop('selected', true);</script>

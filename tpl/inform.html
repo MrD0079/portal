@@ -8,7 +8,7 @@
 	</select>
 	<br>
 	<script>$('#dolgn_msg option[value="{$smarty.request.dolgn_msg}"]').prop('selected', true);</script>
-	<textarea name=msg id=msg cols=80 rows=20>{foreach key=pos_key item=pos_item from=$dolgn_msg}{if $pos_item.pos_id eq $smarty.request.dolgn_msg}{$pos_item.pos_msg|escape}{/if}{/foreach}</textarea>
+	<textarea name=msg id=msg cols=80 rows=20>{foreach key=pos_key item=pos_item from=$dolgn_msg}{if $pos_item.pos_id eq $smarty.request.dolgn_msg}{$pos_item.pos_msg}{/if}{/foreach}</textarea>
 	<br>
 	<input value="Сохранить" name="save" type="submit">
 </form>

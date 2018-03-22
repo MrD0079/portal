@@ -54,7 +54,7 @@
 			{if $item.level eq 1}раздел{/if}
 			{if $item.level eq 2}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp подраздел{/if}
 			<input type=checkbox name=delete[{$item.id}]>
-			<input name=update[{$item.id}][name] size=60 value="{$item.name|escape}">
+			<input name=update[{$item.id}][name] size=60 value="{$item.name}">
 			порядок
 			<input name=update[{$item.id}][sort] size=5 value="{$item.sort}">
 			{if $item.level eq 2}

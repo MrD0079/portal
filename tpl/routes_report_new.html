@@ -77,9 +77,9 @@
 
 		{assign var="x" value=0}
 		{foreach key=k1 item=i1 from=$i.body name=body}
-			{assign var="x" value=`$x+1`}
+			{assign var="x" value=$x+1}
 			{foreach key=k2 item=i2 from=$i1.agents name=agent}
-				{assign var="x" value=`$x+1`}
+				{assign var="x" value=$x+1}
 			{/foreach}
 		{/foreach}
 

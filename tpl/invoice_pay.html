@@ -363,7 +363,7 @@
 
 		{if not $smarty.request.print}
 		<td>
-			<textarea {if not $is_fin_man}disabled{/if} name=data[{$item.id}][comm] rows=3 cols=20>{$item.comm|escape}</textarea>
+			<textarea {if not $is_fin_man}disabled{/if} name=data[{$item.id}][comm] rows=3 cols=20>{$item.comm}</textarea>
 			<input {if not $is_fin_man}disabled{/if} type=submit name=sendmsg[{$item.id}][sendmsg] value="Отправить сообщение">
 		</td>
 		{/if}

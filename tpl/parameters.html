@@ -14,12 +14,12 @@
     <br>
     значение типа число <input name=data[{$item.id}][val_number] class="number" value="{$item.val_number}">
     <br>
-    значение типа строка <input name=data[{$item.id}][val_string] size=120 value="{$item.val_string|escape}">
+    значение типа строка <input name=data[{$item.id}][val_string] size=120 value="{$item.val_string}">
     <br>
     значение типа дата <input name=data[{$item.id}][val_date] size=8 value="{$item.val_date}" class="datepicker">
 </td>
 <td>
-    <textarea name=data[{$item.id}][comm] cols="70" rows="3">{$item.comm|escape}</textarea>
+    <textarea name=data[{$item.id}][comm] cols="70" rows="3">{$item.comm}</textarea>
 </td>
 </tr>
 {/foreach}

@@ -1,5 +1,8 @@
 <?
 
+echo phpinfo();
+
+exit;
 
 require_once "function.php";
 require_once "local_functions.php";
@@ -14,7 +17,6 @@ $db->loadModule('Function');
 var_dump($db->getone("SELECT fio from user_list where tn=2885600038"));
 var_dump($db->getAssoc("SELECT tn,fio from user_list where is_admin=1"));
 
-//echo phpinfo();
 
 exit;
 

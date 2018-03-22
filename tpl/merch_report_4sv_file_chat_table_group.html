@@ -9,7 +9,7 @@
 {foreach key=k item=i from=$d name=d}
 	{assign var=s1 value=0}
 	{foreach key=k1 item=i1 from=$i.data name=i1}
-		{assign var=s1 value=`$s1+1`}
+		{assign var=s1 value=$s1+1}
 	{/foreach}
 	<tr style="vertical-align:top;">
 	<td rowspan={$s1+1}>

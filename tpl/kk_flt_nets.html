@@ -5,14 +5,14 @@
 	<select name=id id=id onChange="javascript:form3.submit()">
 		<option value=0></option>
 		{foreach key=key item=item from=$kk_flt_nets}
-		<option value={$item.id}>{$item.name|escape}</option>
+		<option value={$item.id}>{$item.name}</option>
 		{/foreach}
 	</select>
 	<br>
 	<script>$('#id option[value="{$smarty.request.id}"]').prop('selected', true);</script>
 	Название фильтра:
 	<br>
-	<input size=100 name=name value="{foreach key=key item=item from=$kk_flt_nets}{if $item.id eq $smarty.request.id}{$item.name|escape}{/if}{/foreach}">
+	<input size=100 name=name value="{foreach key=key item=item from=$kk_flt_nets}{if $item.id eq $smarty.request.id}{$item.name}{/if}{/foreach}">
 	<br>
 	{if $smarty.request.id}
 	<input value="Сохранить" name="save" type="submit">
@@ -26,7 +26,7 @@
 	{foreach key=key item=item from=$kk_flt_nets_detail name=fe}
 		{math assign="color" equation='y' y=$smarty.foreach.fe.iteration%4} 
 		{if $color eq 1}<tr></tr>{/if}
-		<td {if $item.id}style="background-color:#66FF66"{/if}><input name="detail[{$item.id_net}]" {if $item.id}checked{/if} type=checkbox>{$item.net_name|escape}</td>
+		<td {if $item.id}style="background-color:#66FF66"{/if}><input name="detail[{$item.id_net}]" {if $item.id}checked{/if} type=checkbox>{$item.net_name}</td>
 	{/foreach}
 </tr></table>
 

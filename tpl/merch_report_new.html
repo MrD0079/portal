@@ -56,7 +56,7 @@
 {foreach key=k item=i from=$d name=d}
 	{assign var=s1 value=0}
 	{foreach key=k1 item=i1 from=$i.data name=i1}
-		{assign var=s1 value=`$s1+1`}
+		{assign var=s1 value=$s1+1}
 	{/foreach}
 	<tr>
 		<td rowspan={$s1+1}>{$smarty.foreach.d.iteration}.<br>{$i.head.tz_oblast}<br>{$i.head.net_name}<br>{$i.head.ur_tz_name}<br>{$i.head.tz_address}</td>
@@ -104,11 +104,11 @@
 				<select onchange="$('#rb_mr_text_{$i1.id}').val(this.value);">
 					<option></option>
 					{foreach key=key item=item from=$routes_text}
-					<option value="{$item.name|escape}">{$item.name|escape}</option>
+					<option value="{$item.name}">{$item.name}</option>
 					{/foreach}
 				</select>
 				<br>
-				<input size="35" name="rb[mr_text][{$i1.id}]" id="rb_mr_text_{$i1.id}" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_text|escape}">
+				<input size="35" name="rb[mr_text][{$i1.id}]" id="rb_mr_text_{$i1.id}" {if $i1.day_enabled_mr neq 1} disabled {/if} value="{$i1.mr_text}">
                             {else}
                                 {$i1.mr_text}
                             {/if}

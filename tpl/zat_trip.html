@@ -18,7 +18,7 @@
 	<tr align=center {if $item.vac_data}bgcolor="yellow"{elseif $item.dw eq 6 or $item.dw eq 7}bgcolor="#ff0000"{/if}>
 		<td>{$item.dm}</td>
 		{if $zat_enabled}
-		<td><input size=15 name="zat_daily_trip[{$item.data}][city]" value="{$item.zt_city|escape}"></td>
+		<td><input size=15 name="zat_daily_trip[{$item.data}][city]" value="{$item.zt_city}"></td>
 		<td>{$item.p_city}</td>
 
 		<td {if $item.tr or $item.dc}style="background-color: rgb(153, 255, 153);"{/if}>{if $item.tr or $item.dc}{$item.tr}/{$item.dc}{/if}</td>
@@ -44,7 +44,7 @@
 
 
 	{foreach key=key item=item from=$zat_daily_total}
-	{assign var=sum_total value=`$sum_total+$item.zt_total`}
+	{assign var=sum_total value=$sum_total+$item.zt_total}
 	<tr align=center align=center style="font-weight:bold">
 		<td colspan=3>Итого</td>
 

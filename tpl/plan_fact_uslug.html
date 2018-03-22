@@ -123,7 +123,7 @@
 				<select name=flt_id id=flt_id>
 					<option value=0></option>
 					{foreach key=key item=item from=$kk_flt_nets}
-					<option value={$item.id}>{$item.name|escape}</option>
+					<option value={$item.id}>{$item.name}</option>
 					{/foreach}
 				</select>
 				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>
@@ -183,9 +183,9 @@
 	{foreach key=k item=i from=$fin_report name=fin_report}
 		{assign var=s value=0}
 		{foreach key=k1 item=i1 from=$i.data name=detail}
-			{assign var=s value=`$s+1`}
+			{assign var=s value=$s+1}
 			{foreach key=k2 item=i2 from=$i1.data name=detail2}
-				{assign var=s value=`$s+1`}
+				{assign var=s value=$s+1}
 			{/foreach}
 		{/foreach}
 		{cycle values="#ccffff,#ffffcc" assign=bgcolor name=bgcolor}
@@ -215,7 +215,7 @@
 		{foreach key=k1 item=i1 from=$i.data name=detail}
 			{assign var=s value=0}
 			{foreach key=k2 item=i2 from=$i1.data name=detail2}
-				{assign var=s value=`$s+1`}
+				{assign var=s value=$s+1}
 			{/foreach}
 			<tr style="background-color:{$bgcolor};font-weight:bold">
 				<td rowspan={$s+1} style="text-align:center;">{$i1.total.pay_format}</td>

@@ -9,7 +9,7 @@
 {foreach key=key item=item from=$mz_spr_ras}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
 </tr>
 {/foreach}
 </table>

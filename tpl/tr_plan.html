@@ -15,7 +15,7 @@
 	{foreach key=k item=i from=$tr_plan}
 	<tr style="vertical-align:top">
 		<td bgcolor="{cycle values="#ccffff,#ffffcc"}">
-			<h3><a href="javascript:void(0)" onclick="javascript:show1('text_{$i.id}')">{$i.name|escape}</a></h3>
+			<h3><a href="javascript:void(0)" onclick="javascript:show1('text_{$i.id}')">{$i.name}</a></h3>
 			<div class="tr_plan_text"  id=text_{$i.id}>{$i.text|nl2br}</div>
 			<script>$('#text_{$i.id}').hide();</script>
 		</td>

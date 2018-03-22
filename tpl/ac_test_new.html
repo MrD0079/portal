@@ -3,7 +3,7 @@
 		<a href='javascript:void(0);' onClick="del_ac_test({$id})">[x]</a>
 		название <input id=d_{$id}_name size=50 value="{$name}" onChange="save_ac_test({$id},'name',this.value);">
 		длительность,сек <input id=d_{$id}_test_len size=8 class="number_int" value="{$test_len}" onChange="save_ac_test({$id},'test_len',this.value);">
-		комментарий <textarea id=d_{$id}_comm onChange="save_ac_test({$id},'comm',this.value);">{$comm|escape}</textarea>
+		комментарий <textarea id=d_{$id}_comm onChange="save_ac_test({$id},'comm',this.value);">{$comm}</textarea>
 		<a href='javascript:void(0);' onClick="show_q_items({$id})">Вопросы теста</a>
 		<div style="margin-left:50px" id=detail_{$id}></div>
 	</td>

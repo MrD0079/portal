@@ -126,7 +126,7 @@
 		{cycle values="#ccffff,#ffffcc" assign=bgcolor}
 			{assign var=s1 value=0}
 			{foreach key=k1 item=i1 from=$i.data}
-				{assign var=s1 value=`$s1+1`}
+				{assign var=s1 value=$s1+1}
 			{/foreach}
 			{foreach key=k1 item=i1 from=$i.data name=detail1}
 				<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
@@ -235,11 +235,11 @@
 			{assign var=s1 value=0}
 			{foreach key=k1 item=i1 from=$i.data}
 				{foreach key=k2 item=i2 from=$i1.data}
-					{assign var=s1 value=`$s1+1`}
+					{assign var=s1 value=$s1+1}
 				{/foreach}
-				{assign var=s1 value=`$s1+1`}
+				{assign var=s1 value=$s1+1}
 			{/foreach}
-			{assign var=s1 value=`$s1+1`}
+			{assign var=s1 value=$s1+1}
 			<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
 				<td rowspan={$s1} style="text-align:left;vertical-align:top">{$i.head.mt}</td>
 				<td colspan=99 style="display: none;"></td>
@@ -247,9 +247,9 @@
 			{foreach key=k1 item=i1 from=$i.data name=detail1}
 				{assign var=s2 value=0}
 				{foreach key=k2 item=i2 from=$i1.data}
-					{assign var=s2 value=`$s2+1`}
+					{assign var=s2 value=$s2+1}
 				{/foreach}
-				{assign var=s2 value=`$s2+1`}
+				{assign var=s2 value=$s2+1}
 				<tr bgcolor="{$bgcolor111111111111}" style="text-align:right">
 					<!--2--><td rowspan={$s2} style="text-align:left;vertical-align:top">{$i1.head.fil_name}</td>
 					<!--2.1--><td style="text-align:left"></td>

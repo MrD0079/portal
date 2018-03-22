@@ -37,74 +37,82 @@
 
 {if $smarty.request.nets and $smarty.request.calendar_years}
 
-	{if $dog_plan_disabled}
-		<p style="font-weight:bold;color:red">
-		Работа с договорным планированием возможна только после завершения договорной кампании.
-		<br>
-		Для этого проверьте, выставлен ли статус "Договорная кампания завершена" в разделе "Договорная кампания/Встречи с клиентом".
-		</p>
-	{/if}
+    {if $dog_plan_disabled}
+    <p style="font-weight:bold;color:red">
+    Работа с договорным планированием возможна только после завершения договорной кампании.
+    <br>
+    Для этого проверьте, выставлен ли статус "Договорная кампания завершена" в разделе "Договорная кампания/Встречи с клиентом".
+    </p>
+    {/if}
+
+    {if $plan_year_type_1.ok_rmkk_tmkk neq 1 and $smarty.request.plan_type eq 3}
+    <p style="font-weight:bold;color:red">
+    Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование НМКК.
+    </p>
+    {assign var=oper_plan_disabled value=1}
+    {/if}
+
+    {if $smarty.request.plan_type eq 3 and not $oper_plan_disabled and $plan_year_type_2.ok_fin_man neq 1}
+    <p style="font-weight:bold;color:red">Договорное планирование по данной сети не утверждено ФМ</p>
+    {/if}
+
+    {if not $dog_plan_disabled and $smarty.request.plan_type neq 3 and $smarty.request.plan_type neq 4}
+    {include file="fin_plan_year.html"}
+    {/if}
+
+    {if not ($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $dog_plan_disabled)}
+    {include file="fin_plan_year_ok.html"}
+    {/if}
+
+    {if $smarty.request.plan_type eq 4 and $smarty.request.plan_month}
+        {include file="fin_plan_fakt_uslug_base.html"}
+        {if $fakt_uslug_ok.ok_rmkk_tmkk eq 1}
+            {include file="fin_plan_dog_plan_one_month.html"}
+        {/if}
+    {/if}
 
 
-	{if $plan_year_type_1.ok_rmkk_tmkk neq 1 and $smarty.request.plan_type eq 3}
-		<p style="font-weight:bold;color:red">
-		Оперативное планирование по выбранной сети невозможно, так как на выбранный год не утверждено финансовое планирование НМКК.
-		</p>
-		{assign var=oper_plan_disabled value=1}
-	{/if}
+    
+    {if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3 and $smarty.request.plan_month and $plan_year_type_2.ok_fin_man eq 1}
+    {include file="fin_plan_dog_plan_one_month.html"}
+    {/if}
 
-	{if $smarty.request.plan_type eq 3 and not $oper_plan_disabled and $plan_year_type_2.ok_fin_man neq 1}
-		<p style="font-weight:bold;color:red">Договорное планирование по данной сети не утверждено ФМ</p>
-	{/if}
 
-	{if not $dog_plan_disabled and $smarty.request.plan_type neq 3 and $smarty.request.plan_type neq 4}
-										{include file="fin_plan_year.html"}
-											{/if}
+    {if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3}
+    {include file="fin_plan_month_ok.html"}
+    {/if}
 
-	{if not ($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $dog_plan_disabled)}
-										{include file="fin_plan_year_ok.html"}
-											{/if}
+    {if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3}
+    {include file="fin_plan_one_month.html"}
+    {/if}
 
-	{if $smarty.request.plan_type eq 4 and $smarty.request.plan_month}
-										{include file="fin_plan_fakt_uslug_base.html"}
-		{if $fakt_uslug_ok.ok_rmkk_tmkk eq 1}
-										{include file="fin_plan_dog_plan_one_month.html"}
-		{/if}
-											{/if}
+    {if $dog_plan_enabled and $enabled}
+    <form target="_self" method="POST" name=fin2dog id=fin2dog>
+    <input type=hidden name=nets value={$smarty.request.nets}>
+    <input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
+    <input type=submit name=fin2dog value="Скопировать финансовое планирование в договорное">
+    </form>
+    <form target="_self" method="POST" name=senddog2fm id=senddog2fm>
+    <input type=hidden name=nets value={$smarty.request.nets}>
+    <input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
+    <input type=submit name=senddog2fm value="Отправить договорное планирование ФМ на проверку">
+    </form>
+    <hr>
+    {/if}
 
-	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3 and $smarty.request.plan_month and $plan_year_type_2.ok_fin_man eq 1}
-										{include file="fin_plan_dog_plan_one_month.html"}
-											{/if}
+    {if $enabled and not $oper_plan_disabled}
+    {include file="fin_plan_plan_month_edit.html"}
+    {/if}
+    {if $enabled and not $oper_plan_disabled and not (($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4) and not $smarty.request.edit)}
+    {/if}
 
-	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3}
-										{include file="fin_plan_month_ok.html"}
-											{/if}
+    {if not $dog_plan_disabled and not $oper_plan_disabled and ($smarty.request.plan_type eq 1 or $smarty.request.plan_type eq 2 or $smarty.request.plan_type eq 3 or $smarty.request.plan_month)}
+    {include file="fin_plan_plan_month_table.html"}
+    {/if}
+    
+    {if 0 eq 1}
 
-	{if $oper_plan_disabled neq 1 and $smarty.request.plan_type eq 3}
-										{include file="fin_plan_one_month.html"}
-											{/if}
+    {/if}
 
-	{if $dog_plan_enabled and $enabled}
-		<form target="_self" method="POST" name=fin2dog id=fin2dog>
-		<input type=hidden name=nets value={$smarty.request.nets}>
-		<input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
-		<input type=submit name=fin2dog value="Скопировать финансовое планирование в договорное">
-		</form>
-		<form target="_self" method="POST" name=senddog2fm id=senddog2fm>
-		<input type=hidden name=nets value={$smarty.request.nets}>
-		<input type=hidden name=calendar_years value={$smarty.request.calendar_years}>
-		<input type=submit name=senddog2fm value="Отправить договорное планирование ФМ на проверку">
-		</form>
-		<hr>
-	{/if}
-
-	{if $enabled and not $oper_plan_disabled}
-										{include file="fin_plan_plan_month_edit.html"}
-											{/if}
-	{if $enabled and not $oper_plan_disabled and not (($smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4) and not $smarty.request.edit)}
-											{/if}
-
-	{if not $dog_plan_disabled and not $oper_plan_disabled and ($smarty.request.plan_type eq 1 or $smarty.request.plan_type eq 2 or $smarty.request.plan_type eq 3 or $smarty.request.plan_month)}
-										{include file="fin_plan_plan_month_table.html"}
-											{/if}
+    
 {/if}

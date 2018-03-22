@@ -23,9 +23,9 @@
 		<tr style="vertical-align:middle; background-color: lightgreen">
 		{assign var=s1 value=0}
 		{foreach key=key1 item=item1 from=$item.data}
-			{assign var=s1 value=`$s1+1`}
+			{assign var=s1 value=$s1+1}
 			{foreach key=key2 item=item2 from=$item1.data}
-				{assign var=s1 value=`$s1+1`}
+				{assign var=s1 value=$s1+1}
 			{/foreach}
 		{/foreach}
 		<td rowspan={$s1+1} style="text-align:center">{$item.head.rmkk_name}</td>
@@ -74,7 +74,7 @@
 			<tr style="vertical-align:middle; background-color: lightblue">
 				{assign var=s1 value=0}
 				{foreach key=key2 item=item2 from=$item1.data}
-					{assign var=s1 value=`$s1+1`}
+					{assign var=s1 value=$s1+1}
 				{/foreach}
 				<td rowspan={$s1+1} style="text-align:center">{$item1.head.mkk_name}</td>
 				<td>»ÚÓ„Ó ÔÓ “Ã   </td>

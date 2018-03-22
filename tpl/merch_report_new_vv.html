@@ -13,7 +13,7 @@
 		<b>Заказчик</b>
 		<br>
 		{foreach key=key item=item from=$routes_agents}
-		<input type=checkbox name=vv_new[{$new_id}][ag][] value={$item.id}>{$item.name|escape}</option>
+		<input type=checkbox name=vv_new[{$new_id}][ag][] value={$item.id}>{$item.name}</option>
 		{/foreach}
 	</td>
 </tr>

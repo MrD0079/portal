@@ -54,7 +54,7 @@
 						"Наложено удержание в сумме... за....<br>
 						(Достигнута договоренность...) и т.д.
 					</td>
-					<td><textarea required cols="85" rows="5" name="free_staff[{$item1.id}][params]">{$item1.params|escape}</textarea></td>
+					<td><textarea required cols="85" rows="5" name="free_staff[{$item1.id}][params]">{$item1.params}</textarea></td>
 				</tr>
 				<tr>
 					<td>Дата блокировки корпоративного электронного адреса</td>
@@ -81,7 +81,7 @@
 						{/foreach}
 						</select>
 						<input type=radio name="free_staff[{$item1.id}][val_new]" value=3 onClick="$('#y1_{$item1.id}').attr('disabled',true);$('#f1_{$item1.id}').attr('disabled',false);$('#s1_{$item1.id}').attr('disabled',true)">другое (указать ФИО, должность) 
-						<input required disabled size="50" id=f1_{$item1.id} name="free_staff[{$item1.id}][fio_new]" value="{$item1.fio_new|escape}">
+						<input required disabled size="50" id=f1_{$item1.id} name="free_staff[{$item1.id}][fio_new]" value="{$item1.fio_new}">
 					</td>
 					<script>$('input:radio[name="free_staff[{$item1.id}][val_new]"]').filter('[value="{$item1.val_new}"]').click();</script>
 					<script>$('#s1_{$item1.id}').val('{$item1.tn_new}');</script>

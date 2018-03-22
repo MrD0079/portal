@@ -68,7 +68,7 @@
 					<option
 						{if $item.parent eq 0}disabled style="background-color: rgb(200, 200, 200);"{/if}
 						value="{$item.id}"
-					>{$item.name|escape}</option>
+					>{$item.name}</option>
 				{/foreach}
 			</select>
 			<script>$('#kat option[value="{$smarty.request.kat}"]').prop('selected', true);</script>
@@ -290,12 +290,12 @@
 	</tr>
 	{foreach key=key item=item from=$bud_ru_ff}
 	<tr style="text-align:center">
-		<td style="text-align:left">{$item.name|escape}</td>
+		<td style="text-align:left">{$item.name}</td>
 		{foreach key=bk item=bi from=$bud_ru_ff_st_ras name=bud_ru_ff_st_ras}
 			{assign var="x" value="0"}
 			{foreach key=sk item=si from=$bud_ru_ff_st name=bud_ru_ff_st}
 				{if $si.ff eq $item.id and $si.st eq $bi.id}
-					{assign var="x" value=`$si.v`}
+					{assign var="x" value=$si.v}
 				{/if}
 			{/foreach}
 			<td>{$x}</td>
@@ -432,7 +432,7 @@
 			{/if}
 			{if $i.head.report_data}
 				{$i.head.report_data}<br>
-				<font style="font-weight:bold;color:green">{$i.head.report_data_fio|escape} {$i.head.report_data_lu}</font><br>
+				<font style="font-weight:bold;color:green">{$i.head.report_data_fio} {$i.head.report_data_lu}</font><br>
 				{$i.head.report_data_text|nl2br}<br>
 			{/if}
 			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}
@@ -515,9 +515,9 @@
 				<br>
 				<input type=hidden name="d[{$i.head.id}][valid_tn]" value="{$tn}">
 				<input type=hidden name="d[{$i.head.id}][valid_no]" id="valid_no_{$i.head.id}" disabled>
-				<textarea rows=5 cols=20 name="d[{$i.head.id}][valid_text]" id="valid_text_{$i.head.id}" {if $i.head.valid_no eq 0}disabled{/if}>{$i.head.valid_text|escape}</textarea>
+				<textarea rows=5 cols=20 name="d[{$i.head.id}][valid_text]" id="valid_text_{$i.head.id}" {if $i.head.valid_no eq 0}disabled{/if}>{$i.head.valid_text}</textarea>
 			{else}
-				<font style="color:green">{$i.head.valid_text|escape}</font>
+				<font style="color:green">{$i.head.valid_text}</font>
 			{/if}
 		</td>
 	</tr>

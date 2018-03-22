@@ -191,7 +191,7 @@
 {if $d2_total[$key1] neq 0}
 	<!--{$item2/100*$dolya_polki[$key2].data_sales[$key1]/$d2_total[$key1]|default:0|num:4}-->
 
-	{assign var=s value=`$s+$item2/100*$dolya_polki[$key2].data_sales[$key1]/$d2_total[$key1]`}
+	{assign var=s value=$s+$item2/100*$dolya_polki[$key2].data_sales[$key1]/$d2_total[$key1]}
 {/if}
 <!--<br>-->
 

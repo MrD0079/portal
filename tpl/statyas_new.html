@@ -1,7 +1,7 @@
 <tr id=list_{$id}>
 	<td>
 		<a href='javascript:void(0);' onClick="del_item({$id})">[x]</a>
-		<input id=d_{$id}_cost_item size=50 value="{$cost_item|escape}" onChange="save_item({$id},'cost_item',this.value);">
+		<input id=d_{$id}_cost_item size=50 value="{$cost_item}" onChange="save_item({$id},'cost_item',this.value);">
 		{if $smarty.request.id eq 0}
 		<a href='javascript:void(0);' onClick="show_items({$id})">Развернуть</a>
 		<div style="margin-left:50px" id=detail_{$id}></div>

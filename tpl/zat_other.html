@@ -126,12 +126,12 @@
 
 	{assign var=sum_total value=0}
 	{foreach key=key item=item from=$zat_daily_total}
-	{assign var=sum_total value=`$sum_total+$item.zc_total+$zat_monthly.amort+$zat_monthly.gbo_warmup_sum`}
+	{assign var=sum_total value=$sum_total+$item.zc_total+$zat_monthly.amort+$zat_monthly.gbo_warmup_sum}
 	{/foreach}
 	{foreach key=key item=item from=$zat_daily_total}
-	{assign var=sum_total value=`$sum_total+$item.zt_total`}
+	{assign var=sum_total value=$sum_total+$item.zt_total}
 	{/foreach}
-	{assign var=sum_total value=`$sum_total+$zat_monthly.other_total`}
+	{assign var=sum_total value=$sum_total+$zat_monthly.other_total}
 
 
 			{$sum_total|default:0|num:2}

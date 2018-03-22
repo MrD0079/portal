@@ -137,9 +137,9 @@
 	
 	{assign var=d1 value=0}
 	{foreach key=k1 item=i1 from=$i.data name=d1}
-	{assign var=d1 value=`$d1+1`}
+	{assign var=d1 value=$d1+1}
 	{foreach key=k2 item=i2 from=$i1.data name=d2}
-	{assign var=d1 value=`$d1+1`}
+	{assign var=d1 value=$d1+1}
 	{/foreach}
 	{/foreach}
 	

@@ -12,7 +12,7 @@
 
 {if $smarty.request.select}
 
-<a target=_blank href="?action=ms_agenda&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=График визитов{if $smarty.request.agent neq 0} по заказчику {foreach key=key item=item from=$routes_head_agents}{if $smarty.request.agent eq $item.id}{$item.name|escape}{/if}{/foreach}{/if}&select=1">экспорт в Excel</a>
+<a target=_blank href="?action=ms_agenda&dates_list2={$smarty.request.dates_list2}&print=1&excel=1&filename=График визитов{if $smarty.request.agent neq 0} по заказчику {foreach key=key item=item from=$routes_head_agents}{if $smarty.request.agent eq $item.id}{$item.name}{/if}{/foreach}{/if}&select=1">экспорт в Excel</a>
 <br>
 <br>
 

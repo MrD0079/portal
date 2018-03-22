@@ -5,7 +5,7 @@
 			<select required id="tr_loc" onChange="$('[name=tr_loc]').attr('disabled',this.value=={$loc}?true:false);$('[name=tr_loc]').val(this.value);">
 				<option></option>
 				{foreach key=key item=item from=$tr_loc}
-					<option value={$item.id}>{$item.name|escape}</option>
+					<option value={$item.id}>{$item.name}</option>
 				{/foreach}
 			</select>
 			<input type=hidden disabled name="tr_loc">

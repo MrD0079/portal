@@ -2,7 +2,7 @@
 a=0;
 </script>
 
-{foreach key=key item=item from=$tr name=x1}{if $smarty.request.tr eq $item.id}{assign var=tr_index value=`$smarty.foreach.x1.iteration-1`}{/if}{/foreach}
+{foreach key=key item=item from=$tr name=x1}{if $smarty.request.tr eq $item.id}{assign var=tr_index value=$smarty.foreach.x1.iteration-1}{/if}{/foreach}
 
 <!--
 {$tr.$tr_index.name}

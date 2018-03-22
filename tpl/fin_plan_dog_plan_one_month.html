@@ -30,7 +30,21 @@
 					<td>Подтвердить статью</td>
 				{/if}
 			</tr>
-			{include file=fin_plan_dog_plan_one_month_t.html}
+                        <tr style="font-weight:bold;background-color:yellow">
+                                <td colspan=9>Итого % затрат{if $smarty.request.plan_type eq 4}(от оперативного плана на сеть){if $npft.plan neq 0}{$nets_dog_plan_one_month_total.zatr/$npft.plan*100|num:2}{else}{0|num:2}{/if}{else}{$nets_dog_plan_one_month_total.perc_zatr|num:2}{/if}%</td>
+                                <td align=right>{$nets_dog_plan_one_month_total.zatr|num:3}</td>
+                                <td colspan=99></td>
+                        </tr>
+                        <tr style="font-weight:bold;background-color:olive">
+                                <td colspan=9>Итого % затрат кофе{if $smarty.request.plan_type eq 4}(от оперативного плана на сеть){if $npft.plan_coffee neq 0}{$nets_dog_plan_one_month_total.zatr_coffee/$npft.plan_coffee*100|num:2}{else}{0|num:2}{/if}{else}{$nets_dog_plan_one_month_total.perc_zatr_coffee|num:2}{/if}%</td>
+                                <td align=right>{$nets_dog_plan_one_month_total.zatr_coffee|num:3}</td>
+                                <td colspan=99></td>
+                        </tr>
+                        <tr style="font-weight:bold;background-color:lightblue">
+                                <td colspan=9>Итого % затрат НГ{if $smarty.request.plan_type eq 4}(от оперативного плана на сеть){if $npft.plan_ng neq 0}{$nets_dog_plan_one_month_total.zatr_ng/$npft.plan_ng*100|num:2}{else}{0|num:2}{/if}{else}{$nets_dog_plan_one_month_total.perc_zatr_ng|num:2}{/if}%</td>
+                                <td align=right>{$nets_dog_plan_one_month_total.zatr_ng|num:3}</td>
+                                <td colspan=99></td>
+                        </tr>
 			{foreach key=key item=item from=$nets_dog_plan_one_month}
 			<tr {if $item.bud_z_id}style="background-color: yellow;"{/if}>
 				<td>{$item.month_name}</td>
@@ -79,7 +93,21 @@
 				</td>
 			</tr>
 			{/foreach}
-			{include file=fin_plan_dog_plan_one_month_t.html}
+                        <tr style="font-weight:bold;background-color:yellow">
+                                <td colspan=9>Итого % затрат{if $smarty.request.plan_type eq 4}(от оперативного плана на сеть){if $npft.plan neq 0}{$nets_dog_plan_one_month_total.zatr/$npft.plan*100|num:2}{else}{0|num:2}{/if}{else}{$nets_dog_plan_one_month_total.perc_zatr|num:2}{/if}%</td>
+                                <td align=right>{$nets_dog_plan_one_month_total.zatr|num:3}</td>
+                                <td colspan=99></td>
+                        </tr>
+                        <tr style="font-weight:bold;background-color:olive">
+                                <td colspan=9>Итого % затрат кофе{if $smarty.request.plan_type eq 4}(от оперативного плана на сеть){if $npft.plan_coffee neq 0}{$nets_dog_plan_one_month_total.zatr_coffee/$npft.plan_coffee*100|num:2}{else}{0|num:2}{/if}{else}{$nets_dog_plan_one_month_total.perc_zatr_coffee|num:2}{/if}%</td>
+                                <td align=right>{$nets_dog_plan_one_month_total.zatr_coffee|num:3}</td>
+                                <td colspan=99></td>
+                        </tr>
+                        <tr style="font-weight:bold;background-color:lightblue">
+                                <td colspan=9>Итого % затрат НГ{if $smarty.request.plan_type eq 4}(от оперативного плана на сеть){if $npft.plan_ng neq 0}{$nets_dog_plan_one_month_total.zatr_ng/$npft.plan_ng*100|num:2}{else}{0|num:2}{/if}{else}{$nets_dog_plan_one_month_total.perc_zatr_ng|num:2}{/if}%</td>
+                                <td align=right>{$nets_dog_plan_one_month_total.zatr_ng|num:3}</td>
+                                <td colspan=99></td>
+                        </tr>
 		</table>
 		{if $smarty.request.plan_type eq 4}
 			<input type=submit name=add_st value="Сохранить и пересчитать">

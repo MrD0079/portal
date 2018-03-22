@@ -29,13 +29,13 @@
                         {assign var=s1 value=0}
                         {if $smarty.request.detalisation <= 2}
                         {foreach key=key1 item=i1 from=$i.data}
-                                {assign var=s1 value=`$s1+1`}
+                                {assign var=s1 value=$s1+1}
                                 {if $smarty.request.detalisation <= 1}
                                 {foreach key=key2 item=i2 from=$i1.data}
-                                        {assign var=s1 value=`$s1+1`}
+                                        {assign var=s1 value=$s1+1}
                                         {if $smarty.request.detalisation <= 0}
                                         {foreach key=key3 item=i3 from=$i2.data}
-                                                {assign var=s1 value=`$s1+1`}
+                                                {assign var=s1 value=$s1+1}
                                         {/foreach}
                                         {/if}
                                 {/foreach}
@@ -66,10 +66,10 @@
 				{assign var=s1 value=0}
 				{if $smarty.request.detalisation <= 1}
                                 {foreach key=key2 item=i2 from=$i1.data}
-                                        {assign var=s1 value=`$s1+1`}
+                                        {assign var=s1 value=$s1+1}
                                         {if $smarty.request.detalisation <= 0}
                                         {foreach key=key3 item=i3 from=$i2.data}
-                                                {assign var=s1 value=`$s1+1`}
+                                                {assign var=s1 value=$s1+1}
                                         {/foreach}
                                         {/if}
                                 {/foreach}
@@ -97,7 +97,7 @@
                                         {assign var=s1 value=0}
                                         {if $smarty.request.detalisation <= 0}
                                         {foreach key=key3 item=i3 from=$i2.data}
-                                                {assign var=s1 value=`$s1+1`}
+                                                {assign var=s1 value=$s1+1}
                                         {/foreach}
                                         {/if}
 					<td rowspan={$s1+1} style="text-align:left; vertical-align: top">{$i2.head.net_name}</td>

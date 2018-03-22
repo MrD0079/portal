@@ -1,24 +1,24 @@
-{assign var=t value=`0`}
+{assign var=t value=0}
 {foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
 	{if (($is_rmkk and $fin_report_item.ok_rmkk_tmkk neq 1) or ($is_fin_man and $fin_report_item.ok_fm neq 1)) and $fin_report_item.no_budget neq 1}
-	{assign var=t value=`$t+1`}
+	{assign var=t value=$t+1}
 	{/if}
 {/foreach}
 {if $t>0}
 <h1 style="color:red">На {$now_month} {$now_year}г.
 <br>вами не подтверждено оперативное планирование
 <br>по следующим сетям:</h1>
-{assign var=x value=`$t/3`}
-{assign var=x1 value=`0`}
+{assign var=x value=$t/3}
+{assign var=x1 value=0}
 <table border=0>
 <tr valign=top>
 <td>
 {foreach key=fin_report_key item=fin_report_item from=$fin_report name=fin_report}
 	{if (($is_rmkk and $fin_report_item.ok_rmkk_tmkk neq 1) or ($is_fin_man and $fin_report_item.ok_fm neq 1)) and $fin_report_item.no_budget neq 1}
-		{assign var=x1 value=`$x1+1`}
+		{assign var=x1 value=$x1+1}
 		<a target=_blank href="?action=fin_plan&plan_type=3&nets={$fin_report_item.id_net}&calendar_years={$y}&plan_month={$m}">{$fin_report_item.net_name}</a><br>
 		{if $x1>$x}
-			{assign var=x1 value=`0`}
+			{assign var=x1 value=0}
 			</td><td>
 		{/if}
 	{/if}

@@ -81,10 +81,10 @@ $('#a{$smarty.request.files_activ}').css('font-weight','bold');
 	{if $item.fr neq 'dual'}
 	<tr {if $item.fr eq 'files_sections'}style="background-color: rgb(150, 150, 150);"{/if}>
 		<td>
-			<input type=checkbox name=delete[{$item.fr}][{$item.id}] value="{$item.path|escape}">
+			<input type=checkbox name=delete[{$item.fr}][{$item.id}] value="{$item.path}">
 		</td>
 		<td>
-			<input name=update[{$item.fr}][{$item.id}][name] size=100 value="{$item.name|escape}">
+			<input name=update[{$item.fr}][{$item.id}][name] size=100 value="{$item.name}">
 		</td>
 		<td>
 			<input name=update[{$item.fr}][{$item.id}][orderby] size=5 value="{$item.orderby}">
@@ -118,7 +118,7 @@ $('#a{$smarty.request.files_activ}').css('font-weight','bold');
 		<td>
 		</td>
 		<td>
-			{$item.name|escape}
+			{$item.name}
 		</td>
 		<td>
 			{$item.orderby}

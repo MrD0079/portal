@@ -12,7 +12,7 @@ SELECT d.tp_kod,
                            0, 0,
                            d.fact_target / d.plan_target * 100) >= 100
           THEN
-             NVL (d.fact, 0) * 0.05
+             NVL (d.plan, 0) * 0.05
        END
           max_bonus,
        d.fio_eta,

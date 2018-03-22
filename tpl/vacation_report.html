@@ -58,14 +58,14 @@
 						cols="20" rows="10"
 						id=tasks_{$item1.id}_replacement_result
 						name="tasks[{$item1.id}][replacement_result]"
-					>{$item1.replacement_result|escape}</textarea>
+					>{$item1.replacement_result}</textarea>
 				</td>
 				<td style="vertical-align: top; text-align: center;">
 					<input {if not $item0.head.i_am_vac}disabled{/if} {if $item1.chief_ok}checked{/if} type="checkbox" onclick="$('#tasks_{$item1.id}_chief_ok').val(this.checked?1:0);">
 					<input {if not $item0.head.i_am_vac}disabled{/if} {if $item1.chief_ok}value=1{/if} name="tasks[{$item1.id}][chief_ok]" id=tasks_{$item1.id}_chief_ok type="hidden">
 				</td>
 				<td style="vertical-align: top; text-align: center;">
-					<textarea {if not $item0.head.i_am_vac}disabled{/if} class="comment{$key0}" required cols="20" rows="10" id=tasks_{$item1.id}_chief_comment name="tasks[{$item1.id}][chief_comment]">{$item1.chief_comment|escape}</textarea>
+					<textarea {if not $item0.head.i_am_vac}disabled{/if} class="comment{$key0}" required cols="20" rows="10" id=tasks_{$item1.id}_chief_comment name="tasks[{$item1.id}][chief_comment]">{$item1.chief_comment}</textarea>
 				</td>
 			</tr>
 			{/foreach}

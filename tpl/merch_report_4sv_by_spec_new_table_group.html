@@ -26,17 +26,14 @@
 
 </tr>
 
-
-
-
 {foreach key=k item=i from=$d name=d}
 	{assign var=s1 value=0}
 	{foreach key=k1 item=i1 from=$i.data name=i1}
-		{assign var=s1 value=`$s1+1`}
+		{assign var=s1 value=$s1+1}
 		{foreach key=k2 item=i2 from=$i1.data name=i2}
-			{assign var=s1 value=`$s1+1`}
+			{assign var=s1 value=$s1+1}
 			{foreach key=k3 item=i3 from=$i2.data name=i3}
-				{assign var=s1 value=`$s1+1`}
+				{assign var=s1 value=$s1+1}
 			{/foreach}
 		{/foreach}
 	{/foreach}
@@ -58,9 +55,9 @@
 
 		{assign var=s2 value=0}
 		{foreach key=k2 item=i2 from=$i1.data name=i2}
-			{assign var=s2 value=`$s2+1`}
+			{assign var=s2 value=$s2+1}
 			{foreach key=k3 item=i3 from=$i2.data name=i3}
-				{assign var=s2 value=`$s2+1`}
+				{assign var=s2 value=$s2+1}
 			{/foreach}
 		{/foreach}
 
@@ -88,7 +85,7 @@
 
 			{assign var=s3 value=0}
 			{foreach key=k3 item=i3 from=$i2.data name=i3}
-				{assign var=s3 value=`$s3+1`}
+				{assign var=s3 value=$s3+1}
 			{/foreach}
 
 			<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
@@ -173,9 +170,9 @@
 				<td>{$i3.msb_kod}</td>
 				{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
 				<td style="text-align:center;background-color: rgb(204, 255, 255)">
-				{assign var="field_name" value="msr_`$item1.name`"}
+				{assign var="field_name" value="msr_$item1.name"}
 				{if $item1.tip eq 'float'}{$i3.$field_name|num:2}{/if}
-				{if $item1.tip eq 'text'}{$i3.$field_name|escape}{/if}
+				{if $item1.tip eq 'text'}{$i3.$field_name}{/if}
 				{if $item1.tip eq 'bool'}{$i3.$field_name}{/if}
 				</td>
 				{/foreach}
@@ -184,15 +181,18 @@
 		{/foreach}
 	{/foreach}
 {/foreach}
+
+
+
 	<tr style="text-align: center;font-weight:bold">
 		<td colspan="7" style="">хрнцн</td>
 		<td style="text-align:right">{$rb_total.msb_weight|default:0|num:2}</td>
 		<td></td>
 {foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
 <td style="text-align:center">
-{assign var="field_name" value="msr_`$item1.name`"}
+{assign var="field_name" value="msr_$item1.name"}
 {if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
-{if $item1.tip eq 'text'}{$rb_total.$field_name|escape}{/if}
+{if $item1.tip eq 'text'}{$rb_total.$field_name}{/if}
 {if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}
 {if $field_name eq 'msr_oos'} / {$rb_total.perc_oos|default:0|num:2}%{/if}
 </td>

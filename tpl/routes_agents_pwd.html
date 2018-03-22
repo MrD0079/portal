@@ -62,8 +62,8 @@
 		<td style="text-align:center"><input type=checkbox name=pwd[{$i1.login}]></td>
 		<td style="text-align:center"><a target=_blank href="?action=routes_logins_oblast&login={$i1.login}">области</a></td>
 		<td style="text-align:center"><a target=_blank href="?action=routes_logins_nets&login={$i1.login}">сети</a></td>
-		<td style="text-align:center"><input name=comm[{$i1.login}] size=50 value="{$i1.comm|escape}"></td>
-		<td style="text-align:center"><input name=email[{$i1.login}] size=50 value="{$i1.email|escape}"></td>
+		<td style="text-align:center"><input name=comm[{$i1.login}] size=50 value="{$i1.comm}"></td>
+		<td style="text-align:center"><input name=email[{$i1.login}] size=50 value="{$i1.email}"></td>
 	</tr>
 	{/foreach}
 	{/foreach}

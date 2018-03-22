@@ -11,7 +11,7 @@
 {foreach key=key item=item from=$bud_funds}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
 <td><input id=cb_{$item.id}_planned type=checkbox onChange="$('#val_{$item.id}_planned').val(this.checked?1:'');"></td>
 <td><input name=data[{$item.id}][norm] size=10 class="number" value="{$item.norm}"></td>
 <input type=hidden id=val_{$item.id}_planned name=data[{$item.id}][planned]>

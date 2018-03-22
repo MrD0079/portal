@@ -6,13 +6,13 @@
 			<select name=fund id=fund>
 				<option></option>
 				{foreach key=key item=item from=$bud_funds}
-				<option value={$item.id}>{$item.name|escape}</option>
+				<option value={$item.id}>{$item.name}</option>
 				{/foreach}
 			</select>
 			<script>$('#fund').val({$act.fund_id});</script>
 		{else}
 			{foreach key=key item=item from=$bud_funds}
-				{if $act.fund_id eq $item.id}<b>{$item.name|escape}</b>{/if}
+				{if $act.fund_id eq $item.id}<b>{$item.name}</b>{/if}
 			{/foreach}
 		{/if}
 	</p>
@@ -49,7 +49,7 @@
 		{cycle assign=color values="#ccffff,#ffffcc"}
 		{assign var=cnt value=0}
 		{foreach key=k item=i from=$im name=im}
-			{assign var=cnt value=`$cnt+1`}
+			{assign var=cnt value=$cnt+1}
 		{/foreach}
 		{foreach key=k item=i from=$im name=im}
 		<tr bgcolor='{$color}'>

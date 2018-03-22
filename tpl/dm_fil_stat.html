@@ -106,13 +106,13 @@
 		{/if}
 	</td>
 	{/foreach}
-	{assign var=data_column value=`$smarty.foreach.data_column.iteration`}
-	{assign var=data_row value=`$smarty.foreach.data_row.iteration`}
-	{assign var=tabindex1 value=`$data_column*1000+$data_row+1000`}
-	{assign var=tabindex2 value=`$data_column*1000+$data_row+2000`}
-	{assign var=tabindex3 value=`$data_column*1000+$data_row+3000`}
-	{assign var=tabindex4 value=`$data_column*1000+$data_row+4000`}
-	{assign var=tabindex5 value=`$data_column*1000+$data_row+4000`}
+	{assign var=data_column value=$smarty.foreach.data_column.iteration}
+	{assign var=data_row value=$smarty.foreach.data_row.iteration}
+	{assign var=tabindex1 value=$data_column*1000+$data_row+1000}
+	{assign var=tabindex2 value=$data_column*1000+$data_row+2000}
+	{assign var=tabindex3 value=$data_column*1000+$data_row+3000}
+	{assign var=tabindex4 value=$data_column*1000+$data_row+4000}
+	{assign var=tabindex5 value=$data_column*1000+$data_row+4000}
 	<td id="td{$i.tn}{$i.bud_id}doc1c" style="background-color: #F5E3BF; text-align:right">
 		{if $tn eq $i.tn}
 		<input

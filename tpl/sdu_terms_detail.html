@@ -39,8 +39,8 @@
 		{if $item.color eq 0}style="text-align:center; background-color: rgb(255, 255, 204);"{/if}
 	>
 		<td>{$item.cooperation_term_name}</td>
-		<td><b>Затраты:</b> {$sdu_terms_year_last_ver2[$item.id].summa}{$sdu_terms_year_last_ver2[$item.id].pay_format}<br><b>Описание:</b> {$sdu_terms_year_last_ver2[$item.id].txt|escape}</td>
-		<td><b>Затраты:</b> {$sdu_terms_year_last_ver1[$item.id].summa}{$sdu_terms_year_last_ver1[$item.id].pay_format}<br><b>Описание:</b> {$sdu_terms_year_last_ver1[$item.id].txt|escape}</td>
+		<td><b>Затраты:</b> {$sdu_terms_year_last_ver2[$item.id].summa}{$sdu_terms_year_last_ver2[$item.id].pay_format}<br><b>Описание:</b> {$sdu_terms_year_last_ver2[$item.id].txt}</td>
+		<td><b>Затраты:</b> {$sdu_terms_year_last_ver1[$item.id].summa}{$sdu_terms_year_last_ver1[$item.id].pay_format}<br><b>Описание:</b> {$sdu_terms_year_last_ver1[$item.id].txt}</td>
 
 		{foreach from=$sdu item=s_item key=s_key}
 			{if not $smarty.request.print}
@@ -62,7 +62,7 @@
 					<script>$("input[name='terms[{$s_item.ver}][{$item.id}][pay_format]'][value={$sdu_terms_year[$s_item.ver][$item.id].pay_format|default:0}]").attr('checked',true);</script>
 				</td>
 				<td><input size=10 {$disabled} name=terms[{$s_item.ver}][{$item.id}][summa] value="{$sdu_terms_year[$s_item.ver][$item.id].summa}"></td>
-				<td><textarea {$disabled} name=terms[{$s_item.ver}][{$item.id}][txt] cols=30 rows=5>{$sdu_terms_year[$s_item.ver][$item.id].txt|escape}</textarea></td>
+				<td><textarea {$disabled} name=terms[{$s_item.ver}][{$item.id}][txt] cols=30 rows=5>{$sdu_terms_year[$s_item.ver][$item.id].txt}</textarea></td>
 			{else}
 				<td>
 					{foreach key=key1 item=item1 from=$payment_format}
@@ -70,7 +70,7 @@
 					{/foreach}
 				</td>
 				<td>{$sdu_terms_year[$s_item.ver][$item.id].summa}</td>
-				<td>{$sdu_terms_year[$s_item.ver][$item.id].txt|escape}</td>
+				<td>{$sdu_terms_year[$s_item.ver][$item.id].txt}</td>
 			{/if}
 		{/foreach}
 

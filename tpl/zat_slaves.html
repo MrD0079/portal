@@ -51,7 +51,7 @@
 {assign var=rownum value=0}
 {foreach key=key1 item=item1 from=$zat_slaves}
 {if $item1.full eq 1}
-{assign var=rownum value=`$rownum+1`}
+{assign var=rownum value=$rownum+1}
 <tr align=left>
 <td>
 {$rownum}
@@ -79,7 +79,7 @@
 {assign var=rownum value=0}
 {foreach key=key1 item=item1 from=$zat_slaves}
 {if $item1.full neq 1}
-{assign var=rownum value=`$rownum+1`}
+{assign var=rownum value=$rownum+1}
 <tr align=left>
 <td>
 {$rownum}

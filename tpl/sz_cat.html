@@ -10,8 +10,8 @@
 {foreach key=key item=item from=$sz_cat}
 <tr>
 <td>{$item.id}<br><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=50 value="{$item.name|escape}"></td>
-<td><textarea cols=80 rows=6 name=data[{$item.id}][hint]>{$item.hint|escape}</textarea></td>
+<td><input name=data[{$item.id}][name] size=50 value="{$item.name}"></td>
+<td><textarea cols=80 rows=6 name=data[{$item.id}][hint]>{$item.hint}</textarea></td>
 </tr>
 {/foreach}
 </table>

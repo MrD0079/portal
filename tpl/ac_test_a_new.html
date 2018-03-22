@@ -1,7 +1,7 @@
 <tr id=ac_test_{$id} {if $a_ok}style="background-color:lightgreen"{/if}>
 	<td>
 		<a href='javascript:void(0);' onClick="del_ac_test({$id})">[x]</a>
-		текст ответа <textarea id=d_{$id}_name size=50 onChange="save_ac_test({$id},'name',this.value);">{$name|escape}</textarea>
+		текст ответа <textarea id=d_{$id}_name size=50 onChange="save_ac_test({$id},'name',this.value);">{$name}</textarea>
 		правильный <input id=d_{$id}_a_ok size=8 class="number_int" value="{$a_ok}" onChange="save_ac_test({$id},'a_ok',this.value);">
 	</td>
 </tr>

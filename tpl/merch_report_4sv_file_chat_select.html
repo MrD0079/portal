@@ -31,7 +31,7 @@
 <select name="select_route_numb" id="select_route_numb">
 	<option value=0></option>
 	{foreach key=key item=item from=$routes_head}
-	<option value="{$item.id}">{$item.fio|escape} - маршрут:</font> {$item.num} - ФИО отв. сотр.: {$item.fio_otv}</option>
+	<option value="{$item.id}">{$item.fio} - маршрут:</font> {$item.num} - ФИО отв. сотр.: {$item.fio_otv}</option>
 	{/foreach}
 </select>
 <script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>
@@ -96,7 +96,7 @@
 <select name=agent id=agent>
 	<option value=0></option>
 	{foreach key=key item=item from=$routes_head_agents}
-	<option value="{$item.id}">{$item.name|escape}</option>
+	<option value="{$item.id}">{$item.name}</option>
 	{/foreach}
 </select>
 <script>$('#agent option[value="{$smarty.request.agent}"]').prop('selected', true);</script>

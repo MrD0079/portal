@@ -2,8 +2,8 @@
 <script type='text/javascript'>
 $a=1;
 $cnt=0;
-$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>{/if}{/foreach}{literal}";
-$ac_test="<option></option>{/literal}{foreach key=key item=item from=$ac_test}<option value={$item.id}>{$item.name|escape}</option>{/foreach}{literal}";
+$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>{/if}{/foreach}{literal}";
+$ac_test="<option></option>{/literal}{foreach key=key item=item from=$ac_test}<option value={$item.id}>{$item.name}</option>{/foreach}{literal}";
 /*
 function check_required(increment)
 {

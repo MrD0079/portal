@@ -19,8 +19,8 @@
 	</tr>
 	{foreach key=key item=item from=$bud_ru_st_pri}
 	<tr>
-		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path|escape}"></td>
-		<td><input name=update[{$item.id}][name] size=60 value="{$item.name|escape}"></td>
+		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path}"></td>
+		<td><input name=update[{$item.id}][name] size=60 value="{$item.name}"></td>
 		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=10></td>
 	</tr>
 	{/foreach}

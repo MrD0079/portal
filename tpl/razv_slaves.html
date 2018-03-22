@@ -19,7 +19,7 @@
 <table border=0 cellspacing=0 cellpadding=1>
 {assign var=rownum value=0}
 {foreach key=key1 item=item1 from=$razv_slaves_full_1}
-{assign var=rownum value=`$rownum+1`}
+{assign var=rownum value=$rownum+1}
 <tr align=left>
 <td>
 {$rownum}
@@ -35,7 +35,7 @@
 <table border=0 cellspacing=0 cellpadding=1>
 {assign var=rownum value=0}
 {foreach key=key1 item=item1 from=$razv_slaves_full_0}
-{assign var=rownum value=`$rownum+1`}
+{assign var=rownum value=$rownum+1}
 <tr align=left>
 <td>
 {$rownum}

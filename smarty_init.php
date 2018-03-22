@@ -1,6 +1,6 @@
 <?php
 //require('/home/httpd/server2/Smarty/libs/Smarty.class.php');
-require('Smarty/libs/Smarty.class.php');
+require('Smarty3/libs/Smarty.class.php');
 $smarty = new Smarty;
 //$smarty->debugging=true;
 //$smarty->config_dir   = 'c:/web/smarty/configs/';

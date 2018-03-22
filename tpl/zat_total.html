@@ -45,35 +45,35 @@
 	</tr>
 	{foreach key=key item=item from=$zat_total}
 	<tr align=right {if $item.rep_date neq $smarty.request.month_list and $item.rep_date neq null}style="color:orange;"{elseif $item.accepted_in_time neq 1}style="color:red;"{/if}>
-		{assign var=tn value=`$item.emp_tn`}
+		{assign var=tn value=$item.emp_tn}
 
 
 {if $item.accepted_in_time eq 1 or $item.rep_date neq $smarty.request.month_list}
 
 
-		{assign var=avans         value=`$avans+$item.avans`}
-		{assign var=cost_transp   value=`$cost_transp+$item.cost_transp`}
-		{assign var=cost_kom      value=`$cost_kom+$item.cost_kom`}
-		{assign var=present_cost  value=`$present_cost+$item.present_cost`}
-		{assign var=stationery    value=`$stationery+$item.stationery`}
-		{assign var=media_advert  value=`$media_advert+$item.media_advert`}
-		{assign var=mail          value=`$mail+$item.mail`}
-		{assign var=conference    value=`$conference+$item.conference`}
-		{assign var=training_food value=`$training_food+$item.training_food`}
-		{assign var=esv           value=`$esv+$item.esv`}
-		{assign var=single_tax    value=`$single_tax+$item.single_tax`}
-		{assign var=account_payments value=`$account_payments+$item.account_payments`}
-		{assign var=mobile        value=`$mobile+$item.mobile`}
-		{assign var=amort         value=`$amort+$item.amort`}
+		{assign var=avans         value=$avans+$item.avans}
+		{assign var=cost_transp   value=$cost_transp+$item.cost_transp}
+		{assign var=cost_kom      value=$cost_kom+$item.cost_kom}
+		{assign var=present_cost  value=$present_cost+$item.present_cost}
+		{assign var=stationery    value=$stationery+$item.stationery}
+		{assign var=media_advert  value=$media_advert+$item.media_advert}
+		{assign var=mail          value=$mail+$item.mail}
+		{assign var=conference    value=$conference+$item.conference}
+		{assign var=training_food value=$training_food+$item.training_food}
+		{assign var=esv           value=$esv+$item.esv}
+		{assign var=single_tax    value=$single_tax+$item.single_tax}
+		{assign var=account_payments value=$account_payments+$item.account_payments}
+		{assign var=mobile        value=$mobile+$item.mobile}
+		{assign var=amort         value=$amort+$item.amort}
 {/if}
 
 
 
 
 {if $smarty.request.refresh}
-		{assign var=total_line         value=`$item.total-$smarty.request.avans.$tn`}
+		{assign var=total_line         value=$item.total-$smarty.request.avans.$tn}
 {else}
-		{assign var=total_line         value=`$item.total-$item.avans`}
+		{assign var=total_line         value=$item.total-$item.avans}
 {/if}
 
 		<td>{$item.rownum}</td>
@@ -119,7 +119,7 @@
 
 {if $item.accepted_in_time eq 1 or $item.rep_date neq $smarty.request.month_list}
 		{$total_line|num:2}
-		{assign var=total         value=`$total+$total_line`}
+		{assign var=total         value=$total+$total_line}
 {else}
 			0
 {/if}

@@ -8,7 +8,7 @@ if (isset($_REQUEST["save"]))
         foreach ($_REQUEST["data"] as $key => $val)
         {
             $keys = array('tp_kod'=>$key);
-            $sql="
+            /*$sql="
                 SELECT COUNT (*)
                   FROM (select tp_kod FROM a1712nyo1_select
                         union
@@ -20,9 +20,9 @@ if (isset($_REQUEST["save"]))
                 echo "<p>Данная накладная уже участвует в одной из акций!!!</p>";
             }
             else
-            {
+            {*/
                 Table_Update ("a1803p5te_select", $keys, $val);
-            }
+            //}
         }
     }
     if (isset($_REQUEST["del"]))

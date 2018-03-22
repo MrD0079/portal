@@ -65,7 +65,7 @@ fn_href('a1','dates_list');
 {assign var=rownum value=0}
 {foreach key=key1 item=item1 from=$my_slaves_plans}
 {if $item1.full eq 1}
-{assign var=rownum value=`$rownum+1`}
+{assign var=rownum value=$rownum+1}
 <tr align=left>
 <td>
 {$rownum}
@@ -90,7 +90,7 @@ fn_href('a1','dates_list');
 {assign var=rownum value=0}
 {foreach key=key1 item=item1 from=$my_slaves_plans}
 {if $item1.full eq 0}
-{assign var=rownum value=`$rownum+1`}
+{assign var=rownum value=$rownum+1}
 <tr align=left>
 <td>
 {$rownum}

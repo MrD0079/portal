@@ -93,7 +93,7 @@
 			<td style="text-align:right">{$tp_item.december|default:0|num:2}</td>
 			<td style="text-align:right">{$tp_item.january|default:0|num:2}</td>
 			<td style="text-align:right">{$tp_item.jan_plan|default:0|num:2}</td>
-			<td>{$tp_item.contact_lpr|escape}</td>
+			<td>{$tp_item.contact_lpr}</td>
 			<td {if $tp_item.ok_traid eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
 				<input
 					onclick="javascript:check_item({$tp_item.kod_tp},this.checked)"

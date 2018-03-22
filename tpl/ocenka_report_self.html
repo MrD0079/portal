@@ -25,7 +25,7 @@
     <td align=right>{$report_self.chief_plus_exp_avg_score|default:'0,00'|num:2}</td>
     <td align=right>{$report_self.total_score|default:'0,00'|num:2}</td>
     {assign var=z value=$report_self.total_score|num:0}
-    {assign var=sum value=`$sum+$z`}
+    {assign var=sum value=$sum+$z}
   </tr>
   {/foreach}
   <tr align=center>
@@ -44,7 +44,7 @@
     </td>
     <td>{$test_result|default:0|num:1}</td>
     {assign var=z value=$test_result|default:0|num:0}
-    {assign var=sum value=`$sum+$z`}
+    {assign var=sum value=$sum+$z}
   </tr>
   <tr align=center>
     <td colspan=7 align=left>

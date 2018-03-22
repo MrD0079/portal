@@ -198,7 +198,7 @@
 					{if not $i.tm and $is_ts}
 					<textarea id="ts_comm_{$i.visitdate_key}_{$i.tp_kod_key}" name="ts_comm_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','ts_comm',this.value)">{$i.ts_comm}</textarea>
 					{else}
-					{$i.ts_comm|escape}
+					{$i.ts_comm}
 					{/if}
 				</td>
 				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_tm_comm>
@@ -249,14 +249,14 @@
 					{if not $i.tm and $is_ts}
 					<textarea id="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}" name="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','tasks_assort',this.value)">{$i.tasks_assort}</textarea>
 					{else}
-					{$i.tasks_assort|escape}
+					{$i.tasks_assort}
 					{/if}
 				</td>
 				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_tasks_mr>
 					{if not $i.tm and $is_ts}
 					<textarea id="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}" name="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','tasks_mr',this.value)">{$i.tasks_mr}</textarea>
 					{else}
-					{$i.tasks_mr|escape}
+					{$i.tasks_mr}
 					{/if}
 				</td>
                                 <td>

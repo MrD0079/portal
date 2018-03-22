@@ -1,7 +1,7 @@
 {foreach key=key item=item from=$routes_head_agents}
 {if $item.id eq $smarty.request.agent}
 {assign var=ag_name value='по клиенту '}
-{assign var=ag_name value=$ag_name`$item.name`}
+{assign var=ag_name value="{$ag_name}{$item.name}"}
 {/if}
 {/foreach}
 
@@ -71,7 +71,7 @@
 <select name="city" id="city">
 	<option value=0></option>
 	{foreach key=key item=item from=$city}
-	<option value="{$item.city|escape}">{$item.city|escape}</option>
+	<option value="{$item.city}">{$item.city}</option>
 	{/foreach}
 </select>
 <script>$('#city option[value="{$smarty.request.city}"]').prop('selected', true);</script>
@@ -85,7 +85,7 @@
 <select name=agent id=agent required>
 	<option></option>
 	{foreach key=key item=item from=$routes_head_agents}
-	<option value="{$item.id}">{$item.name|escape}</option>
+	<option value="{$item.id}">{$item.name}</option>
 	{/foreach}
 </select>
 <script>$('#agent option[value="{$smarty.request.agent}"]').prop('selected', true);</script>

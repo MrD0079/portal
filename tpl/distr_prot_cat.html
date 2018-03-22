@@ -10,9 +10,9 @@
 <tr>
 <td>{$item.id}<br><input name=del[{$item.id}] type=checkbox></td>
 <td>
-<input name=data[{$item.id}][name] size=50 value="{$item.name|escape}">
+<input name=data[{$item.id}][name] size=50 value="{$item.name}">
 <br>
-<textarea name=data[{$item.id}][q]>{$item.q|escape}</textarea></td>
+<textarea name=data[{$item.id}][q]>{$item.q}</textarea></td>
 </tr>
 {/foreach}
 </table>

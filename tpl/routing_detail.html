@@ -18,7 +18,7 @@
 	{assign var=z value=0}
 	{foreach key=list_detail_key item=list_detail_item from=$list_detail name=list_detail}
 		{if $list_item.day eq $list_detail_item.day and $list_item.h_eta eq $list_detail_item.h_eta and $list_item.ts eq $list_detail_item.ts}
-			{assign var=z value=`$z+1`}
+			{assign var=z value=$z+1}
 			<tr
 				{if $list_detail_item.color eq 2}style="background-color: #FF4500;"{/if}
 				{if $list_detail_item.color eq 1}style="background-color: rgb(204, 255, 255);"{/if}
