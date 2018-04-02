@@ -170,7 +170,7 @@
 				<td>{$i3.msb_kod}</td>
 				{foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
 				<td style="text-align:center;background-color: rgb(204, 255, 255)">
-				{assign var="field_name" value="msr_$item1.name"}
+				{assign var="field_name" value="msr_{$item1.name}"}
 				{if $item1.tip eq 'float'}{$i3.$field_name|num:2}{/if}
 				{if $item1.tip eq 'text'}{$i3.$field_name}{/if}
 				{if $item1.tip eq 'bool'}{$i3.$field_name}{/if}
@@ -190,7 +190,7 @@
 		<td></td>
 {foreach key=key1 item=item1 from=$merch_spec_report_fields name=fields}
 <td style="text-align:center">
-{assign var="field_name" value="msr_$item1.name"}
+{assign var="field_name" value="msr_{$item1.name}"}
 {if $item1.tip eq 'float'}{$rb_total.$field_name|num:2}{/if}
 {if $item1.tip eq 'text'}{$rb_total.$field_name}{/if}
 {if $item1.tip eq 'bool'}{$rb_total.$field_name}{/if}

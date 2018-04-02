@@ -1,8 +1,10 @@
 <?
 
-//echo phpinfo();
+echo phpinfo();
 
-//exit;
+
+
+exit;
 
 require_once "function.php";
 require_once "local_functions.php";

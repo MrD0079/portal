@@ -17,6 +17,7 @@
 <td>бонус<br>логистика</td>
 <td>страна</td>
 <td>КК</td>
+<td>Доп наценка на База-0</td>
 </tr>
 {foreach key=key item=item from=$bud_fil}
 <tr id=tr_{$item.id} style="text-align:center;vertical-align:top">
@@ -108,6 +109,9 @@
 		<option value=1>да</option>
 	</select>
 	<script>$("#div_{$item.id}_kk").val("{$item.kk}");</script>
+</td>
+<td>
+	<input id="div_{$item.id}_nacenka_base0" onChange="save_fil({$item.id},'nacenka_base0',this.value);" class="number_int" name=data[{$item.id}][nacenka_base0] size=10 value="{$item.nacenka_base0}">
 </td>
 </tr>
 {/foreach}

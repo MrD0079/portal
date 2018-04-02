@@ -1,46 +1,56 @@
 <h1>Юр. лица</h1>
 <form target="_self" method="POST" name="form1" id="form1">
-
-
-{if $is_fin_man or $is_admin}
-<input type=submit name=save value="Сохранить">
-{/if}
-
-
-<table border=1 cellpadding=3 cellspacing=0>
-<tr style="font-weight:bold">
-<td>[x]</td>
-<td>название</td>
-<td>№ договора</td>
-<td>дата начала<br>действия договора</td>
-<td>дата окончания<br>действия договора</td>
-</tr>
-{foreach key=key item=item from=$list}
-<tr>
-{if $is_fin_man or $is_admin}
-<td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
-<td><input name=data[{$item.id}][dog_num] size=20 value="{$item.dog_num}"></td>
-<td><input name=data[{$item.id}][dog_start] size=10 class="datepicker" value="{$item.dog_start}"></td>
-<td><input name=data[{$item.id}][dog_end] size=10 class="datepicker" value="{$item.dog_end}"></td>
-{else}
-<td></td>
-<td>{$item.name}</td>
-<td>{$item.dog_num}</td>
-<td>{$item.dog_start}</td>
-<td>{$item.dog_end}</td>
-{/if}
-</tr>
-{/foreach}
-</table>
-
-
-{if $is_fin_man or $is_admin}
-название
-<br>
-<input size=80 name=new_name>
-<br>
-<input type=submit name=new value="Добавить запись">
-{/if}
-
+    {if $is_fin_man or $is_admin}
+        <p>
+            название
+            <input size=80 name="new_name" id="new_name">
+            <input type=submit name=new value="Добавить запись">
+        </p>
+    {/if}
+    {if $is_fin_man or $is_admin}
+        <p><input type=submit name=save value="Сохранить"></p>
+    {/if}
+    <table border=1 cellpadding=3 cellspacing=0>
+        <tr style="font-weight:bold">
+            <td>[x]</td>
+            <td>название</td>
+            <td>№ договора</td>
+            <td>дата начала<br>действия договора</td>
+            <td>дата окончания<br>действия договора</td>
+        </tr>
+        {foreach key=key item=item from=$list}
+        <tr>
+            {if $is_fin_man or $is_admin}
+                <td><input name=del[{$item.id}] type=checkbox></td>
+                <td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
+                <td><input name=data[{$item.id}][dog_num] size=20 value="{$item.dog_num}"></td>
+                <td><input name=data[{$item.id}][dog_start] size=10 class="itemDT" value="{$item.dog_start}"></td>
+                <td><input name=data[{$item.id}][dog_end] size=10 class="itemDT" value="{$item.dog_end}"></td>
+            {else}
+                <td></td>
+                <td>{$item.name}</td>
+                <td>{$item.dog_num}</td>
+                <td>{$item.dog_start}</td>
+                <td>{$item.dog_end}</td>
+            {/if}
+        </tr>
+        {/foreach}
+    </table>
+    {if $is_fin_man or $is_admin}
+        <p><input type=submit name=save value="Сохранить"></p>
+    {/if}
 </form>
+<script>
+    {literal}
+    $(function(){
+        $('.itemDT').focusin(function(){
+            $('.itemDT').removeClass('datepicker');
+            $('.itemDT').datepicker("destroy");
+            if (!$(this).hasClass('datepicker')){
+                $(this).addClass('datepicker');
+                init_form();
+            }
+        });
+    })
+    {/literal}
+</script>

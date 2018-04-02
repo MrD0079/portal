@@ -15,7 +15,8 @@
          z.gsm,
          z.bonus_log_koef,
          z.dpt_id,
-         z.kk
+         z.kk,
+         z.nacenka_base0
     FROM bud_fil z, spr_users s
    WHERE z.dpt_id = :dpt_id AND z.login = s.login(+)
 ORDER BY z.name

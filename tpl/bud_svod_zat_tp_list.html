@@ -31,7 +31,7 @@
 {/if}
 <table border=1>
 <tr style="font-weight:bold; text-align:center">
-<td colspan=8>ИТОГО (записей: {$list_total.c} ТП: {$list_total.tpc})</td>
+<td colspan=9>ИТОГО (записей: {$list_total.c} ТП: {$list_total.tpc})</td>
 <td style="text-align:right">{$list_total.act_bonus|num:2}</td>
 <td style="text-align:right">{$list_total.act_local_bonus|num:2}</td>
 <td style="text-align:right">{$list_total.zay_zat|num:2}</td>
@@ -44,14 +44,15 @@
 {foreach key=k item=i from=$xx name=xx}
 {if $smarty.foreach.xx.iteration%10 eq 1}
 <tr style="font-weight:bold; text-align:center">
+<td></td>
 <td>период</td>
 <td>ФИО рук-ля</td>
 <td>ФИО ТС</td>
 <td>ФИО ЭТА</td>
 <td>Тип ТП</td>
 <td>Код ТП</td>
-<td>Название ТП</td>
-<td>Адрес ТП</td>
+<td>ТП</td>
+<td>ТУ по ТП</td>
 <td>Затраты: Национальные акции, грн</td>
 <td>Затраты: Локальные акции, грн</td>
 <td>Затраты: заявки на активность</td>
@@ -60,17 +61,19 @@
 <td style="background-color: rgb(153, 255, 153);">ИТОГО затраты, грн</td>
 <td>Продажи за период, грн</td>
 <td style="background-color: rgb(255, 204, 153);">% затрат от продаж</td>
+<td>Скидка по ТП</td>
 </tr>
 {/if}
 <tr>
+<td>{$smarty.foreach.xx.iteration}</td>
 <td>{$i.period_text}</td>
 <td>{$i.chief_fio}</td>
 <td>{$i.ts_fio}</td>
 <td>{$i.eta}</td>
 <td>{$i.tp_type}</td>
 <td>{$i.tp_kod}</td>
-<td>{$i.tp_ur}</td>
-<td>{$i.tp_addr}</td>
+<td>{$i.tp_ur} {$i.tp_addr}</td>
+<td>{$i.tus}</td>
 <td style="text-align:right">{$i.act_bonus|num:2}</td>
 <td style="text-align:right">{$i.act_local_bonus|num:2}</td>
 <td style="text-align:right">{$i.zay_zat|num:2}</td>
@@ -79,6 +82,7 @@
 <td style="text-align:right;background-color: rgb(153, 255, 153);">{$i.zat_total|num:2}</td>
 <td style="text-align:right">{$i.summa|num:2}</td>
 <td style="text-align:right;background-color: rgb(255, 204, 153);">{$i.zat_perc|num:2}</td>
+<td style="text-align:right">{$i.discount_tp|num:0}</td>
 </tr>
 {/foreach}
 </table>

@@ -8,6 +8,8 @@ InitRequestVar("tn_mkk",0);
 InitRequestVar("calendar_months",0);
 InitRequestVar("ok_filter",0);
 
+//ini_set('display_errors', 1);
+
 if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 {
 	foreach ($_REQUEST["msg"] as $k=>$v)

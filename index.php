@@ -1,5 +1,6 @@
 <?
 //ini_set('display_errors', 0);
+//ini_set("upload_max_filesize", "20Mb");
 //ses_req();
 require_once "function.php";
 require_once "local_functions.php";

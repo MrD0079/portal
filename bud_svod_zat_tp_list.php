@@ -1,5 +1,7 @@
 <?
 
+//ini_set('display_errors', 'On');
+
 InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("exp_list_only_ts",0);
 InitRequestVar("eta_list",$_SESSION["h_eta"]);
@@ -47,10 +49,17 @@ $sql = rtrim(file_get_contents('sql/bud_svod_zat_tp_list.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
 $xx = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+//print_r($xx);
 $smarty->assign('xx', $xx);
 
+
+//$_REQUEST["sql"]=$sql;
+//ses_req();
+
+$params[":sql"]=$sql;
 $sql = rtrim(file_get_contents('sql/bud_svod_zat_tp_list_total.sql'));
 $sql=stritr($sql,$params);
+//echo $sql;
 $x = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('list_total', $x);
 

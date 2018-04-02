@@ -131,15 +131,15 @@
 	{foreach key=k1 item=i1 from=$fin_report_item.detail name=detail}
 	<tr>
 		<td><b>{$i1.cost_item}</b> ({$i1.cost_item_parent})</td>
-		<td class="bg-f" style="text-align:right">{if $i1.f_cnt   neq 0}{$i1.f_cnt  |default:0|num:3}{/if}</td>
+		<td class="bg-f" style="text-align:right">{if $i1.f_cnt   neq 0}{$i1.f_cnt|default:0|num:3}{/if}</td>
 		<td class="bg-f" style="text-align:right">{if $i1.f_price neq 0}{$i1.f_price|default:0|num:3}{/if}</td>
 		<td class="bg-f" style="text-align:right">{if $i1.f_bonus neq 0}{$i1.f_bonus|default:0|num:3}{/if}</td>
 		<td class="bg-f" style="text-align:right">{if $i1.f_total neq 0}{$i1.f_total|default:0|num:3}{/if}</td>
-		<td class="bg-o" style="text-align:right">{if $i1.o_cnt   neq 0}{$i1.o_cnt  |default:0|num:3}{/if}</td>
+		<td class="bg-o" style="text-align:right">{if $i1.o_cnt   neq 0}{$i1.o_cnt|default:0|num:3}{/if}</td>
 		<td class="bg-o" style="text-align:right">{if $i1.o_price neq 0}{$i1.o_price|default:0|num:3}{/if}</td>
 		<td class="bg-o" style="text-align:right">{if $i1.o_bonus neq 0}{$i1.o_bonus|default:0|num:3}{/if}</td>
 		<td class="bg-o" style="text-align:right">{if $i1.o_total neq 0}{$i1.o_total|default:0|num:3}{/if}</td>
-		<td {if ($i1.o_cnt   neq 0 and $i1.o_cnt   > $i1.u_cnt  ) or ($i1.d_cnt   neq 0 and $i1.d_cnt   > $i1.u_cnt  )}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_cnt   neq 0}{$i1.u_cnt  |default:0|num:3}{/if}</td>
+		<td {if ($i1.o_cnt   neq 0 and $i1.o_cnt   > $i1.u_cnt  ) or ($i1.d_cnt   neq 0 and $i1.d_cnt   > $i1.u_cnt  )}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_cnt   neq 0}{$i1.u_cnt|default:0|num:3}{/if}</td>
 		<td {if ($i1.o_price neq 0 and $i1.o_price < $i1.u_price) or ($i1.d_price neq 0 and $i1.d_price < $i1.u_price)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_price neq 0}{$i1.u_price|default:0|num:3}{/if}</td>
 		<td {if ($i1.o_bonus neq 0 and $i1.o_bonus < $i1.u_bonus) or ($i1.d_bonus neq 0 and $i1.d_bonus < $i1.u_bonus)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_bonus neq 0}{$i1.u_bonus|default:0|num:3}{/if}</td>
 		<td {if ($i1.o_total neq 0 and $i1.o_total < $i1.u_total) or ($i1.d_total neq 0 and $i1.d_total < $i1.u_total)}class="bg-red"{else}class="bg-u"{/if} style="text-align:right">{if $i1.u_total neq 0}{$i1.u_total|default:0|num:3}{/if}</td>
@@ -203,7 +203,7 @@
 			{$fin_report_item.plan4.fakt_coffee/1000|default:0|num:3}
 =
 -->
-			{$fin_report_item.plan4.fakt_all/1000|default:0|num:3}
+			{$fin_report_item.plan4.fakt_all|default:0|num:3}
 		</td>
 	</tr>
 	<tr style="font-weight:bold">
@@ -239,7 +239,7 @@
 			{$fin_report_item.plan4.perc_zatr_coffee*1000|default:0|num:2}
 =
 -->
-			{$fin_report_item.plan4.perc_zatr_all*1000|default:0|num:2}
+			{$fin_report_item.plan4.perc_zatr_all|default:0|num:2}
 		</td>
 	</tr>
 <!--

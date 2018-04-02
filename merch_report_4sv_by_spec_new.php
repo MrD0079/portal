@@ -72,6 +72,8 @@ $p=array(
 $sql = rtrim(file_get_contents('sql/merch_report_4sv_by_spec_new.sql'));
 $sql=stritr($sql,$p);
 //echo $sql;
+$_REQUEST["sql"]=$sql;
+ses_req();
 //exit;
 $rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 

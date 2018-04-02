@@ -26,30 +26,19 @@ if (isset($_REQUEST["ok_sdu"]))
 
 if (isset($_REQUEST["save"]))
 {
-	if (isset($_REQUEST["perc"]))
+	if (isset($_REQUEST["nets_props_year"]))
 	{
 		$keys=array(
 			"id_net" => $_REQUEST["nets"],
 			"year" => $_REQUEST["calendar_years"]
 		);
-		foreach ($_REQUEST["perc"] as $k=>$v)
-		{
-			$values=array("perc" => str_replace(",", ".", $v));
-			$keys["prop_id"]=$k;
+		foreach ($_REQUEST["nets_props_year"] as $k=>$v) {
+		foreach ($v as $k1=>$v1) {
+			$values=$v1;
+			$keys["shop_format"]=$k;
+			$keys["prop_id"]=$k1;
 			Table_Update ("nets_props_year", $keys, $values);
 		}
-	}
-	if (isset($_REQUEST["face"]))
-	{
-		$keys=array(
-			"id_net" => $_REQUEST["nets"],
-			"year" => $_REQUEST["calendar_years"]
-		);
-		foreach ($_REQUEST["face"] as $k=>$v)
-		{
-			$values=array("face" => str_replace(",", ".", $v));
-			$keys["prop_id"]=$k;
-			Table_Update ("nets_props_year", $keys, $values);
 		}
 	}
 
@@ -254,6 +243,38 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('nets_proportions_face', $data);
 
+                
+                
+                
+                
+                $sql=rtrim(file_get_contents('sql/sdu_props.sql'));
+		$params=array(':year'=>$_REQUEST["calendar_years"],':net'=>$_REQUEST["nets"]);
+		$sql=stritr($sql,$params);
+		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                $props=array();
+                foreach ($data as $k=>$v){
+                    $props[$v["y"]][$v["format_id"]]["h"]["format_name"]=$v["format_name"];
+                    //$props[$v["y"]][$v["format_id"]]["d"][$v["prop_id"]]["h"]["proportion_name"]=$v["proportion_name"];
+                    $props[$v["y"]][$v["format_id"]]["d"][$v["prop_id"]]["d"]["face"]=$v["face"];
+                    $props[$v["y"]][$v["format_id"]]["d"][$v["prop_id"]]["d"]["perc"]=$v["perc"];
+                }
+                $smarty->assign('props', $props);
+                foreach ($data as $k=>$v){
+                    $propnames[$v["prop_id"]]=$v["proportion_name"];
+                }
+                $smarty->assign('propnames', $propnames);
+                
+                
+               
+                
+                
+                
+                
+                
+                
+                
+                
+                
 		for ($i=0;$i<=2;$i++)
 		{
 		$sql=rtrim(file_get_contents('sql/sdu_budjet_last_ver.sql'));
@@ -266,7 +287,10 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 
 		}
 
-
+ 
+                
+                
+                
 
 
 		$sql=rtrim(file_get_contents('sql/sdu.sql'));

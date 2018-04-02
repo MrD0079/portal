@@ -15,39 +15,39 @@
 <form target="_self" method="POST" name=form_admin_list>
 <table border=1 cellspacing=0 cellpadding=2>
 	{foreach key=k item=i from=$admin_list name=admin_list}
-	{if $i.draw_head eq 1}
+	{if $smarty.foreach.admin_list.iteration%20 eq 1}
 	<tr style="font-weight:bold; text-align:center">
 		<td>№ п/п</td>
 		<td>Сотрудник</td>
 		<td>Логин</td>
 		<td>Пароль</td>
 		<td>Отправить<br>на почту<br>сотруднику</td>
-		<td align=center>Доступ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Супер<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Ассептор<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Топ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Трейд ЛР<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Фин.<br>мен.<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>MS<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>MS<br>админ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Без<br>КК<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>ДБ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>ДО<br>админ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>МШ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>МШ<br>админ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>МШ<br>бух.<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Тренер<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Оценка<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Тест<br>админ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>КПР<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Трейд КК<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>ДЦ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Бюджет<br>админ<br><a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>ИТ<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Бег<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Дон<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>ДМ<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
-		<td align=center>Преза<a href="javascript:void(0)" onclick="javascript:form_admin_list.submit()">+</a></td>
+		<td align=center>Дос<br>туп</td>
+		<td align=center>Су<br>пер</td>
+		<td align=center>Ассеп<br>тор</td>
+		<td align=center>Топ</td>
+		<td align=center>Трейд<br>ЛР</td>
+		<td align=center>Фин.<br>мен.</td>
+		<td align=center>MS</td>
+		<td align=center>MS<br>ад<br>мин</td>
+		<td align=center>Без<br>КК</td>
+		<td align=center>ДБ</td>
+		<td align=center>ДО<br>ад<br>мин</td>
+		<td align=center>МШ</td>
+		<td align=center>МШ<br>ад<br>мин</td>
+		<td align=center>МШ<br>бух.</td>
+		<td align=center>Тре<br>нер</td>
+		<td align=center>Оцен<br>ка</td>
+		<td align=center>Тест<br>ад<br>мин</td>
+		<td align=center>КПР</td>
+		<td align=center>Трейд<br>КК</td>
+		<td align=center>ДЦ</td>
+		<td align=center>Бюд<br>жет<br>ад<br>мин</td>
+		<td align=center>ИТ</td>
+		<td align=center>Бег</td>
+		<td align=center>Дон</td>
+		<td align=center>ДМ</td>
+		<td align=center>Пре<br>за</td>
 	</tr>
 	{/if}
 	<tr style="text-align:center">
@@ -71,34 +71,62 @@
 			</a>
 			</div>
 		</td>
-		<td {if $i.access_ocenka eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p01_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.access_ocenka eq 1}checked{/if}>		<input type=hidden id=p01_{$i.tn} name=ds[spr_users][tn][access_ocenka][{$i.tn}]>		</td>
-		<td {if $i.is_super eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p02_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_super eq 1}checked{/if}>		<input type=hidden id=p02_{$i.tn} name=ds[spdtree][svideninn][is_super][{$i.tn}]>		</td>
-		<td {if $i.is_acceptor eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p03_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_acceptor eq 1}checked{/if}>		<input type=hidden id=p03_{$i.tn} name=ds[spdtree][svideninn][is_acceptor][{$i.tn}]>		</td>
-		<td {if $i.is_top eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p04_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_top eq 1}checked{/if}>			<input type=hidden id=p04_{$i.tn} name=ds[spdtree][svideninn][is_top][{$i.tn}]>			</td>
-		<td {if $i.is_traid eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p05_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_traid eq 1}checked{/if}>		<input type=hidden id=p05_{$i.tn} name=ds[spdtree][svideninn][is_traid][{$i.tn}]>		</td>
-		<td {if $i.is_fin_man eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p06_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_fin_man eq 1}checked{/if}>		<input type=hidden id=p06_{$i.tn} name=ds[spdtree][svideninn][is_fin_man][{$i.tn}]>		</td>
-		<td {if $i.is_mservice eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p08_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_mservice eq 1}checked{/if}>		<input type=hidden id=p08_{$i.tn} name=ds[spdtree][svideninn][is_mservice][{$i.tn}]>		</td>
-		<td {if $i.is_ma eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p09_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_ma eq 1}checked{/if}>			<input type=hidden id=p09_{$i.tn} name=ds[spdtree][svideninn][is_ma][{$i.tn}]>			</td>
-		<td {if $i.without_kk eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p10_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.without_kk eq 1}checked{/if}>		<input type=hidden id=p10_{$i.tn} name=ds[spdtree][svideninn][without_kk][{$i.tn}]>		</td>
-		<td {if $i.is_db eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p11_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_db eq 1}checked{/if}>			<input type=hidden id=p11_{$i.tn} name=ds[spdtree][svideninn][is_db][{$i.tn}]>			</td>
-		<td {if $i.is_do eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p12_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_do eq 1}checked{/if}>			<input type=hidden id=p12_{$i.tn} name=ds[spdtree][svideninn][is_do][{$i.tn}]>			</td>
-		<td {if $i.is_mz eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p13_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_mz eq 1}checked{/if}>			<input type=hidden id=p13_{$i.tn} name=ds[spdtree][svideninn][is_mz][{$i.tn}]>			</td>
-		<td {if $i.is_mz_admin eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p14_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_mz_admin eq 1}checked{/if}>		<input type=hidden id=p14_{$i.tn} name=ds[spdtree][svideninn][is_mz_admin][{$i.tn}]>		</td>
-		<td {if $i.is_mz_buh eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p15_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_mz_buh eq 1}checked{/if}>		<input type=hidden id=p15_{$i.tn} name=ds[spdtree][svideninn][is_mz_buh][{$i.tn}]>		</td>
-		<td {if $i.is_coach eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p16_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_coach eq 1}checked{/if}>		<input type=hidden id=p16_{$i.tn} name=ds[spdtree][svideninn][is_coach][{$i.tn}]>		</td>
-		<td {if $i.ocenka eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p17_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.ocenka eq 1}checked{/if}>			<input type=hidden id=p17_{$i.tn} name=ds[spdtree][svideninn][ocenka][{$i.tn}]>			</td>
-		<td {if $i.is_test_admin eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p18_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_test_admin eq 1}checked{/if}>		<input type=hidden id=p18_{$i.tn} name=ds[spdtree][svideninn][is_test_admin][{$i.tn}]>		</td>
-		<td {if $i.is_kpr eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p19_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_kpr eq 1}checked{/if}>			<input type=hidden id=p19_{$i.tn} name=ds[spdtree][svideninn][is_kpr][{$i.tn}]>			</td>
-		<td {if $i.is_traid_kk eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p20_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_traid_kk eq 1}checked{/if}>		<input type=hidden id=p20_{$i.tn} name=ds[spdtree][svideninn][is_traid_kk][{$i.tn}]>		</td>
-		<td {if $i.is_dc eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p21_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_dc eq 1}checked{/if}>			<input type=hidden id=p21_{$i.tn} name=ds[spdtree][svideninn][is_dc][{$i.tn}]>			</td>
-		<td {if $i.is_bud_admin eq 1}bgcolor="#00ff00"{/if}>		<input onclick="javascript:$('#p22_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_bud_admin eq 1}checked{/if}>		<input type=hidden id=p22_{$i.tn} name=ds[spdtree][svideninn][is_bud_admin][{$i.tn}]>		</td>
-		<td {if $i.is_it eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p23_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_it eq 1}checked{/if}>			<input type=hidden id=p23_{$i.tn} name=ds[spdtree][svideninn][is_it][{$i.tn}]>			</td>
-		<td {if $i.is_run eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p24_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_run eq 1}checked{/if}>			<input type=hidden id=p24_{$i.tn} name=ds[spdtree][svideninn][is_run][{$i.tn}]>			</td>
-		<td {if $i.is_don eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p26_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_don eq 1}checked{/if}>			<input type=hidden id=p26_{$i.tn} name=ds[spdtree][svideninn][is_don][{$i.tn}]>		</td>
-		<td {if $i.is_dm eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p27_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_dm eq 1}checked{/if}>			<input type=hidden id=p27_{$i.tn} name=ds[spdtree][svideninn][is_dm][{$i.tn}]>		</td>
-		<td {if $i.is_prez eq 1}bgcolor="#00ff00"{/if}>			<input onclick="javascript:$('#p28_{$i.tn}').val(this.checked?1:0)"	type=checkbox {if $i.is_prez eq 1}checked{/if}>			<input type=hidden id=p28_{$i.tn} name=ds[spdtree][svideninn][is_prez][{$i.tn}]>		</td>
-	</tr>
+                <td {if $i.access_ocenka eq 1}bgcolor="#00ff00"{/if} id="spr_users_tn_{$i.tn}_access_ocenka"     ><input onclick="save('spr_users','tn'       ,'{$i.tn}','access_ocenka',this.checked?1:0)" type=checkbox {if $i.access_ocenka eq 1}checked{/if}></td>
+                <td {if $i.is_super      eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_super"     ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_super'     ,this.checked?1:0)" type=checkbox {if $i.is_super      eq 1}checked{/if}></td>
+                <td {if $i.is_acceptor   eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_acceptor"  ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_acceptor'  ,this.checked?1:0)" type=checkbox {if $i.is_acceptor   eq 1}checked{/if}></td>
+                <td {if $i.is_top        eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_top"       ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_top'       ,this.checked?1:0)" type=checkbox {if $i.is_top        eq 1}checked{/if}></td>
+                <td {if $i.is_traid      eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_traid"     ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_traid'     ,this.checked?1:0)" type=checkbox {if $i.is_traid      eq 1}checked{/if}></td>
+                <td {if $i.is_fin_man    eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_fin_man"   ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_fin_man'   ,this.checked?1:0)" type=checkbox {if $i.is_fin_man    eq 1}checked{/if}></td>
+                <td {if $i.is_mservice   eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_mservice"  ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_mservice'  ,this.checked?1:0)" type=checkbox {if $i.is_mservice   eq 1}checked{/if}></td>
+                <td {if $i.is_ma         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_ma"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_ma'        ,this.checked?1:0)" type=checkbox {if $i.is_ma         eq 1}checked{/if}></td>
+                <td {if $i.without_kk    eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_without_kk"   ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','without_kk'   ,this.checked?1:0)" type=checkbox {if $i.without_kk    eq 1}checked{/if}></td>
+                <td {if $i.is_db         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_db"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_db'        ,this.checked?1:0)" type=checkbox {if $i.is_db         eq 1}checked{/if}></td>
+                <td {if $i.is_do         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_do"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_do'        ,this.checked?1:0)" type=checkbox {if $i.is_do         eq 1}checked{/if}></td>
+                <td {if $i.is_mz         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_mz"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_mz'        ,this.checked?1:0)" type=checkbox {if $i.is_mz         eq 1}checked{/if}></td>
+                <td {if $i.is_mz_admin   eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_mz_admin"  ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_mz_admin'  ,this.checked?1:0)" type=checkbox {if $i.is_mz_admin   eq 1}checked{/if}></td>
+                <td {if $i.is_mz_buh     eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_mz_buh"    ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_mz_buh'    ,this.checked?1:0)" type=checkbox {if $i.is_mz_buh     eq 1}checked{/if}></td>
+                <td {if $i.is_coach      eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_coach"     ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_coach'     ,this.checked?1:0)" type=checkbox {if $i.is_coach      eq 1}checked{/if}></td>
+                <td {if $i.ocenka        eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_ocenka"       ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','ocenka'       ,this.checked?1:0)" type=checkbox {if $i.ocenka        eq 1}checked{/if}></td>
+                <td {if $i.is_test_admin eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_test_admin"><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_test_admin',this.checked?1:0)" type=checkbox {if $i.is_test_admin eq 1}checked{/if}></td>
+                <td {if $i.is_kpr        eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_kpr"       ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_kpr'       ,this.checked?1:0)" type=checkbox {if $i.is_kpr        eq 1}checked{/if}></td>
+                <td {if $i.is_traid_kk   eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_traid_kk"  ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_traid_kk'  ,this.checked?1:0)" type=checkbox {if $i.is_traid_kk   eq 1}checked{/if}></td>
+                <td {if $i.is_dc         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_dc"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_dc'        ,this.checked?1:0)" type=checkbox {if $i.is_dc         eq 1}checked{/if}></td>
+                <td {if $i.is_bud_admin  eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_bud_admin" ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_bud_admin' ,this.checked?1:0)" type=checkbox {if $i.is_bud_admin  eq 1}checked{/if}></td>
+                <td {if $i.is_it         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_it"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_it'        ,this.checked?1:0)" type=checkbox {if $i.is_it         eq 1}checked{/if}></td>
+                <td {if $i.is_run        eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_run"       ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_run'       ,this.checked?1:0)" type=checkbox {if $i.is_run        eq 1}checked{/if}></td>
+                <td {if $i.is_don        eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_don"       ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_don'       ,this.checked?1:0)" type=checkbox {if $i.is_don        eq 1}checked{/if}></td>
+                <td {if $i.is_dm         eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_dm"        ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_dm'        ,this.checked?1:0)" type=checkbox {if $i.is_dm         eq 1}checked{/if}></td>
+                <td {if $i.is_prez       eq 1}bgcolor="#00ff00"{/if} id="spdtree_svideninn_{$i.tn}_is_prez"      ><input onclick="save('spdtree'  ,'svideninn','{$i.tn}','is_prez'      ,this.checked?1:0)" type=checkbox {if $i.is_prez       eq 1}checked{/if}></td>
+        </tr>
 	{/foreach}
 </table>
-<input type=submit name=admin_length_save id=admin_length_save value="Сохранить">
 </form>
+<script>
+/*{literal}*/
+    function save(table,key_field,key,val_field,val){
+        var fd = new FormData();
+        fd.append('table',  table);
+        fd.append('key_field',  key_field);
+        fd.append('val_field',  val_field);
+        fd.append('key',  key);
+        fd.append('val',  val);
+        $.ajax({
+                type: 'POST',
+                url: '?action=admin_list&print=1&nohead=1&save=1',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    //console.log(data);
+                    //console.log(val);
+                    //console.log(val==1);
+                    //console.log('#'+table+'_'+key_field+'_'+key+'_'+val_field);
+                    val==1?
+                    $('#'+table+'_'+key_field+'_'+key+'_'+val_field).css("background-color","#00ff00"):
+                    $('#'+table+'_'+key_field+'_'+key+'_'+val_field).css("background-color","white");
+                    successNoty("Сохранено");
+                }
+        });
+    }
+/*{/literal}*/
+</script>
