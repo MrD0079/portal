@@ -21,7 +21,7 @@
             <td style="text-align:center">{$i.visit_fakt}</td>
             <td style="text-align:center">{if $i.report_exists}да{/if}</td>
             <td style="text-align:center">{if $i.started eq '1'}да{/if}{if $i.started eq '0'}нет{/if}</td>
-            <td style="text-align:center">{if $i.report_exists}<a target="_blank" href="?action=merch_report_aa_report&id={$i.aa_id}&head_id={$i.head_id}&kodtp={$i.kodtp}&print=1">отчет по акции</a>{/if}</td>
+            <td style="text-align:center">{if $i.report_exists}<a target="_blank" href="?action=merch_report_aa_report&id={$i.aa_id}&kodtp={$i.kodtp}&print=1">отчет по акции</a>{/if}</td>
         </tr>
         {/foreach}
     </table>

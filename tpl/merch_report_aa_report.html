@@ -23,7 +23,6 @@
         <input type=hidden name=id value="{$smarty.request.id}">
         <input type=hidden name=ag_id value="{$h.ag_id}">
         <input type=hidden id=need_photo value="{$h.need_photo}">
-        <input type=hidden name=head_id value="{$smarty.request.head_id}">
         <input type=hidden name=kodtp value="{$smarty.request.kodtp}">
         <table border="1" cellpadding="3" cellspacing="0">
             <tr>
@@ -278,7 +277,6 @@
             var fd = new FormData();
             fd.append('id',  '{/literal}{$smarty.request.id}{literal}');
             fd.append('ag_id',  '{/literal}{$h.ag_id}{literal}');
-            fd.append('head_id',  '{/literal}{$smarty.request.head_id}{literal}');
             fd.append('kodtp',  '{/literal}{$smarty.request.kodtp}{literal}');
             $.ajax({
                     type: 'POST',

@@ -7,15 +7,14 @@ if (isset($_REQUEST["getReport"])){
         ":tn"=>$tn,
         ":activity"=>$_REQUEST["activity"]
     );
-    $sql="/* Formatted on 17.04.2018 23:52:22 (QP5 v5.252.13127.32867) */
+    $sql="/* Formatted on 22.04.2018 19:03:19 (QP5 v5.252.13127.32867) */
   SELECT plan.tz_address,
          plan.fio,
-         plan.head_id,
          plan.kodtp,
          SUM (NVL (fakt.fakt_mr, 0)) visit_fakt,
-         aa.started,
-         aa.aa_id,
-         DECODE (aa.lu, NULL, NULL, 1) report_exists
+         MAX (aa.started) started,
+         MAX (aa.aa_id) aa_id,
+         MAX (DECODE (aa.lu, NULL, NULL, 1)) report_exists
     FROM (SELECT c.data,
                  u.fio,
                  rh.id head_id,
@@ -50,17 +49,15 @@ if (isset($_REQUEST["getReport"])){
                  AND rh.id = rt.head_id
                  AND rb.kodtp = rt.kodtp
                  AND rh.tn = s.tn
-                 
-         AND (   rh.tn IN (SELECT slave
-                               FROM full
-                              WHERE master = :tn)
+                 AND (   rh.tn IN (SELECT slave
+                                     FROM full
+                                    WHERE master = :tn)
                       OR (SELECT is_admin
                             FROM user_list
                            WHERE tn = :tn) = 1
                       OR (SELECT is_ma
                             FROM user_list
                            WHERE tn = :tn) = 1)
-
                  AND rb.vv = rha.vv
                  AND rha.vv = rt.vv
                  AND cpp1.tz_oblast = s.oblast
@@ -125,25 +122,20 @@ if (isset($_REQUEST["getReport"])){
          AND :ag_id = r.ag_id
          AND plan.kodtp = r.kodtp
          AND r.aa_id = aa_h.id
-         AND plan.head_id = aa.head_id(+)
          AND :ag_id = aa.ag_id(+)
          AND plan.kodtp = aa.kodtp(+)
          AND r.aa_id = :activity
          AND :activity = aa.aa_id(+)
 GROUP BY plan.tz_address,
          plan.fio,
-         plan.head_id,
-         plan.kodtp,
-         aa.started,
-         aa.aa_id,
-         aa.lu
+         plan.kodtp
 ORDER BY tz_address, fio";
     $sql=stritr($sql,$p);
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
     
-    $sql="/* Formatted on 18.04.2018 16:00:28 (QP5 v5.252.13127.32867) */
-SELECT aa.photo, plan.tz_address
+    $sql="/* Formatted on 22.04.2018 19:18:52 (QP5 v5.252.13127.32867) */
+SELECT DISTINCT aa.photo, plan.tz_address
   FROM (SELECT c.data,
                u.fio,
                rh.id head_id,
@@ -251,7 +243,6 @@ SELECT aa.photo, plan.tz_address
        AND :ag_id = r.ag_id
        AND plan.kodtp = r.kodtp
        AND r.aa_id = aa_h.id
-       AND plan.head_id = aa.head_id(+)
        AND :ag_id = aa.ag_id(+)
        AND plan.kodtp = aa.kodtp(+)
        AND r.aa_id = :activity
@@ -278,18 +269,6 @@ SELECT aa.photo, plan.tz_address
         $zip->close();
         $smarty->assign('archive', $archive);
     }
-    
-/*} else if (isset($_REQUEST["resizePhoto"])){
-    include_once('SimpleImage.php');
-    $image = new SimpleImage();
-    $image->load('files/'.$_REQUEST["photo"]);
-    $handle=$image->getHeight();
-    if ($image->getHeight()>600)
-    {
-    $image->resizeToHeight(600);
-    }
-    $image->save('files/'.$_REQUEST["photo"]);
-    echo $image->getHeight();*/
 } else if (isset($_REQUEST["getAgents"])){
     $smarty->assign('x', $db->getAll("select id, name from routes_agents order by name", null, null, null, MDB2_FETCHMODE_ASSOC));
 } else if (isset($_REQUEST["getActivities"])){
@@ -298,7 +277,7 @@ SELECT aa.photo, plan.tz_address
         ":ed"=>"'".$_REQUEST["ed"]."'",
         ":ag_id"=>$_REQUEST["agent"]
     );
-    $sql="/* Formatted on 22.04.2018 18:42:40 (QP5 v5.252.13127.32867) */
+    $sql="
   SELECT DISTINCT h.id,
                   n.net_name,
                   TO_CHAR (h.dts, 'dd.mm.yyyy') dts_s,

@@ -6,7 +6,6 @@ if (isset($_REQUEST['save_item'])) {
     $keys=array(
         'aa_id'=>$_REQUEST["id"],
         'kodtp'=>$_REQUEST["kodtp"],
-        'head_id'=>$_REQUEST["head_id"],
         'ag_id'=>$_REQUEST["ag_id"]
     );
     isset($_REQUEST['report'])?Table_Update('merch_report_aa_report', $keys,$_REQUEST['report']):null;
@@ -14,7 +13,6 @@ if (isset($_REQUEST['save_item'])) {
         $keys=array(
             'aa_id'=>$_REQUEST["id"],
             'kodtp'=>$_REQUEST["kodtp"],
-            'head_id'=>$_REQUEST["head_id"],
             'ag_id'=>$_REQUEST["ag_id"]
         );
         foreach ($_REQUEST["sku"] as $k=>$v) {
@@ -23,17 +21,14 @@ if (isset($_REQUEST['save_item'])) {
             Table_Update('merch_report_aa_report_s', $keys,$vals);
         }
     }
-
     $keys=array(
                 'aa_id'=>$_REQUEST["id"],
                 'kodtp'=>$_REQUEST["kodtp"],
-                'head_id'=>$_REQUEST["head_id"],
                 'ag_id'=>$_REQUEST["ag_id"]
             );
     $p=array(
         ':aa_id'=>$_REQUEST["id"],
         ':kodtp'=>$_REQUEST["kodtp"],
-        ':head_id'=>$_REQUEST["head_id"],
         ':ag_id'=>$_REQUEST["ag_id"],
     );
     if (isset($_FILES['file']))
@@ -48,7 +43,6 @@ if (isset($_REQUEST['save_item'])) {
                 $fn=$id.'_'.translit($_FILES['file']['name'][$k]);
                 $sql="select photo from merch_report_aa_report WHERE     aa_id = :aa_id
                 AND kodtp = :kodtp
-                AND head_id = :head_id
                 AND ag_id = :ag_id";
                 $sql=stritr($sql,$p);
                 $files = $db->getOne($sql);
@@ -73,7 +67,6 @@ if (isset($_REQUEST['save_item'])) {
             echo $v."\n";
             $sql="select photo from merch_report_aa_report WHERE     aa_id = :aa_id
             AND kodtp = :kodtp
-            AND head_id = :head_id
             AND ag_id = :ag_id";
             $sql=stritr($sql,$p);
             $files = $db->getOne($sql);
@@ -83,25 +76,21 @@ if (isset($_REQUEST['save_item'])) {
             Table_Update('merch_report_aa_report', $keys,$vals);
         }
     }
-
-
-
-
-
     $keys=array(
         'aa_id'=>$_REQUEST["id"],
         'kodtp'=>$_REQUEST["kodtp"],
-        'head_id'=>$_REQUEST["head_id"],
         'ag_id'=>$_REQUEST["ag_id"],
         'rep_id'=>6
     );
     Table_Update('merch_report_cal_sok', $keys,null);
-    $sql='INSERT INTO merch_report_cal_sok (aa_id,head_id,
+    $sql='INSERT INTO merch_report_cal_sok (aa_id,
+                                  head_id,
                                   ag_id,
                                   kodtp,
                                   data,
                                   rep_id)
-     SELECT aa_id,head_id,
+     SELECT aa_id,
+            head_id,
             ag_id,
             kodtp,
             data,
@@ -109,12 +98,10 @@ if (isset($_REQUEST['save_item'])) {
        FROM merch_report_cal_reminders
       WHERE     aa_id = :aa_id
             AND kodtp = :kodtp
-            AND head_id = :head_id
             AND ag_id = :ag_id';
     $p=array(
         ':aa_id'=>$_REQUEST["id"],
         ':kodtp'=>$_REQUEST["kodtp"],
-        ':head_id'=>$_REQUEST["head_id"],
         ':ag_id'=>$_REQUEST["ag_id"],
     );
     $sql=stritr($sql,$p);
@@ -123,12 +110,10 @@ if (isset($_REQUEST['save_item'])) {
         $p=array(
             ':aa_id'=>$_REQUEST["id"],
             ':kodtp'=>$_REQUEST["kodtp"],
-            ':head_id'=>$_REQUEST["head_id"],
             ':ag_id'=>$_REQUEST["ag_id"],
         );
                 $sql="select photo from merch_report_aa_report WHERE     aa_id = :aa_id
                 AND kodtp = :kodtp
-                AND head_id = :head_id
                 AND ag_id = :ag_id";
                 $sql=stritr($sql,$p);
     $photo = $db->getOne($sql);
@@ -163,14 +148,11 @@ if (isset($_REQUEST['save_item'])) {
 	$sql=stritr($sql,$p);
     $h = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('h', $h);
-
     $p=array(
         ':aa_id'=>$_REQUEST["id"],
         ':kodtp'=>$_REQUEST["kodtp"],
-        ':head_id'=>$_REQUEST["head_id"],
         ':ag_id'=>$h["ag_id"],
     );
-
     $sql = "SELECT sa.*, sr.price_rack
     FROM merch_report_cal_aa_s sa, merch_report_aa_report_s sr
     WHERE  sa.head_id = :aa_id
@@ -178,33 +160,19 @@ if (isset($_REQUEST['save_item'])) {
        AND sa.id = sr.sku_id(+)
        AND sr.aa_id(+) = :aa_id
        AND sr.kodtp(+) = :kodtp
-       AND sr.head_id(+) = :head_id
        AND sr.ag_id(+) = :ag_id
     order by sa.id";
     $sql=stritr($sql,$p);
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('s', $r);
-    
-    
-    
-
     $p=array(
         ':aa_id'=>$_REQUEST["id"],
         ':kodtp'=>$_REQUEST["kodtp"],
-        ':head_id'=>$_REQUEST["head_id"],
         ':ag_id'=>$h["ag_id"],
     );
-
-    $sql="select * from merch_report_aa_report where aa_id=:aa_id and kodtp=:kodtp and head_id=:head_id and ag_id=:ag_id";
+    $sql="select * from merch_report_aa_report where aa_id=:aa_id and kodtp=:kodtp and ag_id=:ag_id";
     $sql=stritr($sql,$p);
     $rep = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('rep', $rep);
-
-    
-    
-    
-    
-    
-    
 }
 $smarty->display('merch_report_aa_report.html');
