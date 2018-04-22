@@ -70,7 +70,7 @@
                                 WHERE master = (SELECT parent
                                                   FROM parents
                                                  WHERE tn = :tn))))
-         AND (TRUNC (z.dt_start, 'mm') >= ADD_MONTHS (TRUNC (SYSDATE, 'mm'), -1))
+         AND (TRUNC (z.dt_start, 'mm') >= ADD_MONTHS (TRUNC (SYSDATE, 'mm'), -5/*1*/))
 ORDER BY y,
          my,
          mt,

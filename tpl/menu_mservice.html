@@ -1,6 +1,4 @@
-
-{if ($is_admin or $is_ma) and not $is_acceptor}
-
+{if $is_admin or $is_ma}
 <li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
 	<ul>
 		<li><a href="javascript:void(0);"><span class="dir">Справочники</span></a>
@@ -47,10 +45,7 @@
 		<li><a href="?action=routes_move">перепривязка маршрута между СВ МС</a></li>
 	</ul>
 </li>
-
 {/if}
-
-{if not $is_acceptor}
 <li><a href="javascript:void(0);"><span class="dir">Маршруты</span></a>
 	<ul>
 
@@ -76,6 +71,7 @@
 		<li><a href="?action=ms_tabel">Табельный учет</a></li>
 		<li><a href="?action=ms_agenda">Дни визитов</a></li>
 		<li><a href="?action=msreportbyvisits">Отчет по визитам</a></li>
+		<li><a href="?action=merch_report_aa_reports">Результаты акции</a></li>
 	</ul>
 </li>
 <li><a href="javascript:void(0);"><span class="dir">Документы</span></a>
@@ -83,7 +79,6 @@
 		<li><a href="?action=ms_vac">Заявка на отпуск Мерчандайзера</a></li>
 	</ul>
 </li>
-{/if}
 <li><a href="javascript:void(0);"><span class="dir">Дегустация</span></a>
 	<ul>
 		<li><a href="?action=tasting_program">Дегустационные программы</a></li>
@@ -94,11 +89,9 @@
 		<li><a href="?action=tasting_program_costs">Затраты</a></li>
 	</ul>
 </li>
-{if not $is_acceptor}
 <li><a href="javascript:void(0);"><span class="dir">Задачи</span></a>
 	<ul>
 		<li><a href="?action=ms_task">Лист задач</a></li>
 		<li><a href="?action=ms_task_report">Отчет</a></li>
 	</ul>
 </li>
-{/if}

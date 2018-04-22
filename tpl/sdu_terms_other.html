@@ -12,7 +12,7 @@
             <tr>
                 <td>{$i1.h.format_name}</td>
             {foreach key=k2 item=i2 from=$i1.d}
-                {if $k eq $smarty.request.calendar_years}
+                {if $k eq $smarty.request.calendar_years and $i1.h.readonly neq 1}
                     <td>
                         <input class="number" {$disabled} name=nets_props_year[{$k1}][{$k2}][perc] value="{$i2.d.perc}" size=7>
                     </td>
@@ -38,7 +38,7 @@
             <tr>
                 <td>{$i1.h.format_name}</td>
             {foreach key=k2 item=i2 from=$i1.d}
-                {if $k eq $smarty.request.calendar_years}
+                {if $k eq $smarty.request.calendar_years and $i1.h.readonly neq 1}
                     <td>
                         <input class="number" {$disabled} name=nets_props_year[{$k1}][{$k2}][face] value="{$i2.d.face}" size=7>
                     </td>

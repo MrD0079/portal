@@ -254,6 +254,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
                 $props=array();
                 foreach ($data as $k=>$v){
                     $props[$v["y"]][$v["format_id"]]["h"]["format_name"]=$v["format_name"];
+                    $props[$v["y"]][$v["format_id"]]["h"]["readonly"]=$v["readonly"];
                     //$props[$v["y"]][$v["format_id"]]["d"][$v["prop_id"]]["h"]["proportion_name"]=$v["proportion_name"];
                     $props[$v["y"]][$v["format_id"]]["d"][$v["prop_id"]]["d"]["face"]=$v["face"];
                     $props[$v["y"]][$v["format_id"]]["d"][$v["prop_id"]]["d"]["perc"]=$v["perc"];

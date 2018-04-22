@@ -1,10 +1,280 @@
+{if $smarty.request.save_item}
+{elseif $smarty.request.get_list}
+    {if not $smarty.request.print}
+    <p>
+        <a target=_blank href="?action=merch_report_cal_aa&get_list=1&excel=1&print=1&list_ag_id={$smarty.request.list_ag_id}&list_dt={$smarty.request.list_dt}&filename=Акционные активности">Excel</a>
+    </p>
+    {/if}
+    <table border=1 cellspacing=0 cellpadding=3 style="align:left">
+        <thead>
+            <tr style="font-weight: bold; text-align: center">
+                {if not $smarty.request.print}<td>[x]</td>{/if}
+                <td>№</td>
+                <td>Добавлено / обновлено</td>
+                <td>Заказчик</td>
+                <td>Дата начала / окончания</td>
+                <!--<td>Области</td>-->
+                <td>Город</td>
+                <td>Сеть</td>
+                <td>СКЮ акции</td>
+                <td>Суть/Задачи по акции</td>
+                <td>предоставить фото отчет</td>
+                <td>указать факт. акционную цену</td>
+                <td>отменена</td>
+                {if not $smarty.request.print}<td><a target="_blank" href="?action=merch_report_cal_aa&new=1">добавить</a></td>{/if}
+            </tr>
+        </thead>
+        <tbody>
+        {foreach key=k item=i from=$tbl}
+        <tr id="tr_{$i.id}" style="vertical-align:top">
+            {if not $smarty.request.print}<td><a href="javascript:void(0);" onClick="del_item({$i.id});">[x]</a></td>{/if}
+            <td>{$i.id}</td>
+            <td>{$i.lut}</td>
+            <td>{$i.ag_name}</td>
+            <td>{$i.dts} {$i.dte}</td>
+            <!--<td>{$i.obl}</td>-->
+            <td>{$i.city}</td>
+            <td>{$i.net_name}</td>
+            <td>{$i.sku|nl2br}</td>
+            <td>{$i.tasks|nl2br}</td>
+            <td style="text-align:center">{if $i.need_photo}да{/if}</td>
+            <td style="text-align:center">{if $i.actual_promo_price}да{/if}</td>
+            <td style="text-align:center">{if $i.cancelled}да{/if}</td>
+            {if not $smarty.request.print}<td style="text-align:center"><a target="_blank" href="?action=merch_report_cal_aa&id={$i.id}">редактировать</a></td>{/if}
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+{elseif $smarty.request.id or $smarty.request.new}
+    <h1>Акционная активность {$smarty.request.id}</h1>
+    <form id="form_edit_item">
+        <table width=800px border="1" cellpadding="3" cellspacing="0">
+            <tr>
+                <td style="text-align: right">Дата начала-окончания</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input required="required" name="aa[dts]" id="dts" value="{$h.dts}" class="datepicker">
+                        <input required="required" name="aa[dte]" id="dte" value="{$h.dte}" class="datepicker">
+                    {else}
+                        {$h.dts} - {$h.dte}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">
+                    Области
+                    {if not $smarty.request.print}
+                        {literal}
+                        <a href="javascript:void(0);" onclick="$('.obl:enabled').each(function(){$(this).prop('checked',true);});">[+]</a>
+                        <a href="javascript:void(0);" onclick="$('.obl:enabled').each(function(){$(this).prop('checked',false);});">[-]</a>
+                        {/literal}
+                    {/if}
+                </td>
+                <td>
+                    {if not $smarty.request.print}
+                        {foreach key=key item=item from=$o}
+                        <nobr><input {if $item.h_o}checked{/if} name=obl[] type=checkbox class=obl value="{$item.h_tz_oblast}" id="{$item.h_tz_oblast}">{$item.tz_oblast}</nobr>
+                        {/foreach}
+                    {else}
+                        {foreach key=key item=item from=$o}
+                            {if $item.h_o}{$item.tz_oblast},&nbsp;{/if}
+                        {/foreach}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Заказчик</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <select name="aa[ag_id]" id=ag_id>
+                        <option></option>
+                        {foreach key=key item=item from=$agents}
+                        <option value="{$item.id}">{$item.name}</option>
+                        {/foreach}
+                        </select>
+                        <script>$('#ag_id option[value={$h.ag_id}]').prop('selected', true);</script>
+                    {else}
+                        {$h.ag_name}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Город</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <select name="aa[h_city]" id=h_city>
+                        <option></option>
+                        {foreach key=key item=item from=$cities}
+                                <option value="{$item.h_city}">{$item.city}</option>
+                        {/foreach}
+                        </select>
+                        <script>$('#h_city option[value={$h.h_city}]').prop('selected', true);</script>
+                    {else}
+                        {$h.city}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Сеть</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <select name="aa[id_net]" id=id_net>
+                        <option></option>
+                        {foreach key=key item=item from=$nets}
+                                <option value="{$item.id_net}">{$item.net_name}</option>
+                        {/foreach}
+                        </select>
+                        <script>$('#id_net option[value={$h.id_net}]').prop('selected', true);</script>
+                    {else}
+                        {$h.net_name}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">СКЮ акции</td>
+                <td>
+                    {if not $smarty.request.print}
+                    {else}
+                    {/if}
+                    <table id="t_sku" border="1" cellpadding="3" cellspacing="0">
+                        <tr style="text-align: center">
+                            {if not $smarty.request.print}<td>
+                                <input
+                                    type="button"
+                                    value="добавить"
+                                    onClick="counter--;
+                                        $('#t_sku').append($(
+                                                '<tr>\n\
+                                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                                    <td><input size=50 name=sku['+counter+'][sku]></td>\n\
+                                                    <td><input size=20 name=sku['+counter+'][price_act] class=number></td>\n\
+                                                    <td><input size=20 name=sku['+counter+'][price_wo_act] class=number></td>\n\
+                                                </tr>'));init_number('init');">
+                            </td>{/if}
+                            <td>Наименование СКЮ</td>
+                            <td>Цена в период акции</td>
+                            <td>Цена без Акции</td>
+                        </tr>
+                        {foreach key=k item=i from=$s}
+                            <tr>
+                                {if not $smarty.request.print}
+                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>
+                                {/if}
+                                {if not $smarty.request.print}
+                                    <td><input size=50 name=sku[{$i.id}][sku] value="{$i.sku}"></td>
+                                    <td><input size=20 name=sku[{$i.id}][price_act] value="{$i.price_act}" class=number></td>
+                                    <td><input size=20 name=sku[{$i.id}][price_wo_act] value="{$i.price_wo_act}" class=number></td>
+                                {else}
+                                    <td>{$i.sku}</td>
+                                    <td>{$i.price_act|num:2}</td>
+                                    <td>{$i.price_wo_act|num:2}</td>
+                                {/if}
+                            </tr>
+                        {/foreach}                    
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Задачи по акции</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <textarea name="aa[tasks]" id=tasks cols=100 rows=5>{$h.tasks}</textarea>
+                    {else}
+                        {$h.tasks|nl2br}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">предоставить фото отчет</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#need_photo').val(this.checked?1:0);" {if $h.need_photo}checked{/if}>
+                        <input type="hidden" value="{$h.need_photo}" name="aa[need_photo]" id="need_photo">
+                    {else}
+                        {if $h.need_photo}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">указать факт. акционную цену</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#actual_promo_price').val(this.checked?1:0);" {if $h.actual_promo_price}checked{/if}>
+                        <input type="hidden" value="{$h.actual_promo_price}" name="aa[actual_promo_price]" id="actual_promo_price">
+                    {else}
+                        {if $h.actual_promo_price}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            {if not $smarty.request.new}
+            <tr>
+                <td style="text-align: right">отменена</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#cancelled').val(this.checked?1:0);" {if $h.cancelled}checked{/if}>
+                        <input type="hidden" value="{$h.cancelled}" name="aa[cancelled]" id="cancelled">
+                    {else}
+                        {if $h.cancelled}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            {/if}
+        </table>
+        {if not $smarty.request.print}
+        <p><input id="button_save" type="button" value="Сохранить" onClick="save_item('{$smarty.request.id}');"></p>
+        {/if}
+    </form>
+    {if not $smarty.request.print}
+        <script>
+        /*{literal}*/
+        var counter = -1;
+        function save_item(id)
+        {
+                console.clear();
+                var bad_data = false;
+                var error_text = '';
+                if (!$('#ag_id').val()){
+                    bad_data = true;
+                    error_text = error_text + 'заказчик не заполнен'+'<br>';
+                }
+                if (!$('#dts').val()){
+                    bad_data = true;
+                    error_text = error_text + 'дата начала не заполнена'+'<br>';
+                }
+                if (!$('#dte').val()){
+                    bad_data = true;
+                    error_text = error_text + 'дата окончания не заполнена'+'<br>';
+                }
+                if (bad_data) {
+                    errorNoty('Ошибка сохранения'+'<br>'+error_text);
+                    return;
+                }
+                $('#button_save').prop("disabled",true);
+                var fd = new FormData(document.getElementById('form_edit_item'));
+                var selectedIdsArray = $(".obl:checked").map(function(){return this.value;});
+                var selectedIdsStr = selectedIdsArray.get().toString();
+                fd.append('obl',  selectedIdsStr);
+                $.ajax({
+                        type: 'POST',
+                        url: '?action=merch_report_cal_aa&id='+id+'&save_item=1&nohead=1',
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            $('#button_save').prop("disabled",false);
+                            successNoty("Сохранено");
+                            console.log(data);
+                        }
+                });
+        }
+        /*{/literal}*/
+        </script>
+    {/if}
+{else}
 <h1>Акционные активности</h1>
-
 <script>
-{literal}
-
-function del_item(id)
-{
+/*{literal}*/
+function del_item(id) {
 	var fd = new FormData();
 	fd.append('id',  id);
 	$.ajax({
@@ -19,32 +289,7 @@ function del_item(id)
 	});
 
 }
-
-function get_item(id)
-{
-	//$('#td_'+field+key2).css('background-color','red');
-	var fd = new FormData();
-	fd.append('id',  id);
-	$.ajax({
-		type: 'POST',
-		url: '?action=merch_report_cal_aa&get_item=1&nohead=1',
-		data: fd,
-		processData: false,
-		contentType: false,
-		success: function(data) {
-			//$('#td_'+field+key2).css('background-color','white');
-			//$('#ok').html(data);
-			//field==='msg'?$('#chat').load('?action=kcm_chat&nohead=1&sd='+dt):null;
-			//$(''+data+'').insertAfter('#tr_'+coach);
-			//$('#tbl>tbody:last').append(''+data+'');
-			//alert(data);
-		}
-	});
-
-}
-
-function get_list()
-{
+function get_list() {
 	x=loadwait_show('tbl');
 	var fd = new FormData();
 	fd.append('list_ag_id',  $('#list_ag_id').val());
@@ -62,105 +307,24 @@ function get_list()
 	});
 
 }
-
-function save_item()
-{
-        $("#form_edit_item :input").prop("disabled", true);
-	var fd = new FormData();
-	fd.append('id',  $('#id').val());
-	var selectedIdsArray = $(".obl:checked").map(function(){return this.value;});
-	var selectedIdsStr = selectedIdsArray.get().toString();
-	fd.append('obl',  selectedIdsStr);
-	fd.append('dts',  $('#dts').val());
-	fd.append('dte',  $('#dte').val());
-	fd.append('ag_id',  $('#ag_id').val());
-	fd.append('h_city',  $('#h_city').val());
-	fd.append('id_net',  $('#id_net').val());
-	fd.append('text',  $('#text').val());
-	fd.append('tasks',  $('#tasks').val());
-	$.ajax({
-		type: 'POST',
-		url: '?action=merch_report_cal_aa&save_item=1&nohead=1',
-		data: fd,
-		processData: false,
-		contentType: false,
-		success: function(data) {
-			$('#result').html(''+data+'');
-                        $("#form_edit_item :input").prop("disabled", false);
-                        $('#form_edit_item').trigger("reset");
-			get_list();
-		}
-	});
-}
-
-function update_item(id,field,val)
-{
-	$('#item_'+id+'_'+field).css('background-color','red');
-	var fd = new FormData();
-	fd.append('id',  id);
-	fd.append('field',  field);
-	fd.append('val',  val);
-	$.ajax({
-		type: 'POST',
-		url: '?action=merch_report_cal_aa&update_item=1&nohead=1',
-		data: fd,
-		processData: false,
-		contentType: false,
-		success: function(data) {
-			$('#result').html(''+data+'');
-                        $("#form_edit_item :input").prop("disabled", false);
-                        $('#form_edit_item').trigger("reset");
-                	$('#item_'+id+'_'+field).css('background-color','white');
-			//get_list();
-		}
-            });
-}
-
-function get_form()
-{
-	$.ajax({
-		type: 'GET',
-		url: '?action=merch_report_cal_aa&get_form=1&nohead=1',
-		processData: false,
-		contentType: false,
-		success: function(data) {
-			$('#edit_item').html(''+data+'');
-		}
-	});
-}
-
-{/literal}
+/*{/literal}*/
 </script>
-
-<div id=ok></div>
-<div id=edit_item></div>
-
-<p id="result" style="color:red"></p>
-
-<h3>Реестр активностей</h3>
-
 <p>
-Заказчик
-<select id=list_ag_id>
-<option value=0></option>
-{foreach key=key item=item from=$agents}
-<option value="{$item.id}">{$item.name}</option>
-{/foreach}
-</select>
+    Заказчик
+    <select id=list_ag_id>
+    <option value=0></option>
+    {foreach key=key item=item from=$agents}
+    <option value="{$item.id}">{$item.name}</option>
+    {/foreach}
+    </select>
 </p>
-
 <p>
-<input type=radio id="list_dt" name="list_dt" value=1 checked>Текущие
-<input type=radio id="list_dt" name="list_dt" value=2>Завершенные
-<input type=radio id="list_dt" name="list_dt" value=3>Все
+    <input type=radio id="list_dt" name="list_dt" value=1 checked>Текущие
+    <input type=radio id="list_dt" name="list_dt" value=2>Завершенные
+    <input type=radio id="list_dt" name="list_dt" value=3>Все
+    <input type=radio id="list_dt" name="list_dt" value=4>Дата начала/окончания в диапазоне +- месяц
 </p>
-
-
 <p><a href="javascript:void(0);" onclick="get_list();">Отобразить реестр</a></p>
-
 <div id=tbl></div>
-
-<script>
-        get_form();
-        get_list();
-</script>
+<script>get_list();</script>
+{/if}

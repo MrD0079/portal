@@ -133,11 +133,15 @@ if (isset($r["id"]))
 			$p=array(":route"=>$r["id"],":ag_id"=>$v["ag_id"],":kodtp"=>$v["kodtp"],":dates_list"=>"'".$_REQUEST["dates_list"]."'");
 
 			$sqlr=stritr($sqlr,$p);
+                        //echo $sqlr;
                         $rb1r = $db->getAll($sqlr, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 			$d[$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']=null;
 			foreach ($rb1r as $kr=>$vr)
 			{
+                            if ($vr['rep_id']==6)
+				$d[$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']][$vr['aa_id']]=$vr;
+                            else
 				$d[$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']]=$vr;
 			}
 		}
@@ -147,6 +151,9 @@ if (isset($r["id"]))
 		}
 
 		isset($d) ? $smarty->assign('d', $d) : null;
+                
+                //print_array($d);
+                
                 //isset($d) ? audit("D:\n".print_array($d, 0, 0),"merch_report_new") : null;
 
 		$sql = rtrim(file_get_contents('sql/merch_report_new_routes_body_total.sql'));

@@ -1,0 +1,111 @@
+{if $smarty.request.getReport}
+    {if not $smarty.request.print}
+    <p><a href="?action=merch_report_aa_reports&getReport=1&sd={$smarty.request.sd}&ed={$smarty.request.ed}&agent={$smarty.request.agent}&activity={$smarty.request.activity}&print=1&excel=1&generate=1&filename=Результаты акции">Экспорт в Excel</a></p>
+    {/if}
+    {if not $smarty.request.print and $archive}
+    <p><a target=_blank href="{$archive}">Скачать фото отчет</a></p>
+    {/if}
+    <table border="1">
+        <tr style="font-weight:bold; text-align:center">
+            <td>ТЗ</td>
+            <td>СВ МС</td>
+            <td>Кол-во виз, факт</td>
+            <td>Есть отчет о акции</td>
+            <td>акция стартовала ?</td>
+            <td>Ссылка на отчет по акции</td>
+        </tr>
+        {foreach key=k item=i from=$x name=x}
+        <tr>
+            <td>{$i.tz_address}</td>
+            <td>{$i.fio}</td>
+            <td style="text-align:center">{$i.visit_fakt}</td>
+            <td style="text-align:center">{if $i.report_exists}да{/if}</td>
+            <td style="text-align:center">{if $i.started eq '1'}да{/if}{if $i.started eq '0'}нет{/if}</td>
+            <td style="text-align:center">{if $i.report_exists}<a target="_blank" href="?action=merch_report_aa_report&id={$i.aa_id}&head_id={$i.head_id}&kodtp={$i.kodtp}&print=1">отчет по акции</a>{/if}</td>
+        </tr>
+        {/foreach}
+    </table>
+    {if 1 eq 0}
+        {if not $smarty.request.print}
+        {foreach key=k item=i from=$photo}
+            {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$i.photo}
+            {foreach from=$keywords item=keyword}
+                <a target=_blank href="files/{$keyword}"><img src="files/{$keyword}" height="50px"></a>
+                <!--<a href="javascript:void(0);" onClick="
+                   var fd = new FormData();
+                   console.log('{$keyword}');
+                        $.ajax(/*{literal}*/{/*{/literal}*/
+                                type: 'POST',
+                                url: '?action=merch_report_aa_reports&photo={$keyword}&resizePhoto=1&nohead=1',
+                                data: fd,
+                                processData: false,
+                                contentType: false,
+                                success: function(data) /*{literal}*/{/*{/literal}*/
+                                    successNoty('Сохранено');
+                                    console.log(data);
+                                /*{literal}*/}/*{/literal}*/
+                        /*{literal}*/}/*{/literal}*/);
+
+
+                   ">r</a>-->
+            {/foreach}
+        {/foreach}
+        {/if}
+    {/if}
+{elseif $smarty.request.resizePhoto}
+{elseif $smarty.request.getAgents}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.name}</option>
+    {/foreach}
+{elseif $smarty.request.getActivities}
+    <option></option>
+    {foreach key=k item=i from=$x name=x}
+    <option value="{$i.id}">{$i.id} {$i.net_name} с {$i.dts_s} по {$i.dte_s}</option>
+    {/foreach}
+{else}
+    <h1>Результаты акции</h1>
+    <table>
+        <tr><td>Период проведения</td><td>с&nbsp<input size=8 id=sd class="datepicker" value="{$now}">&nbspпо&nbsp<input size=8 id=ed class="datepicker" value="{$now}"></td></tr>
+        <tr><td>Заказчик</td><td><select id="agents"></select></td></tr>
+        <tr><td>Акции</td><td><select id="activities"></select></td></tr>
+    </table>
+    <p><input type="button" value="Показать данные" onClick="getReport();"></p>
+    <div id="list" style="display: inline;"></div>
+    <script>
+    /*{literal}*/
+    $('#sd').on("change",function(){getActivities();});
+    $('#ed').on("change",function(){getActivities();});
+    $('#agents').on("change",function(){getActivities();});
+    function getReport()
+    {
+        if ($('#activities').val()=='') return;
+        x=loadwait_show('list');
+        $('#list').load('?action=merch_report_aa_reports&getReport=1&nohead=1',
+        {
+            sd:$('#sd').val(),
+            ed:$('#ed').val(),
+            agent:$('#agents').val(),
+            activity:$('#activities').val()
+        },function(){loadwait_hide(x);});
+    }
+    function getActivities()
+    {
+        if ($('#agents').val()=='') return;
+        $('#activities').html('');
+        $('#activities').load('?action=merch_report_aa_reports&getActivities=1&nohead=1',
+        {
+            sd:$('#sd').val(),
+            ed:$('#ed').val(),
+            agent:$('#agents').val()
+        });
+    }
+    function getAgents()
+    {
+        $('#agents').load('?action=ms_task&nohead=1&getAgents=1');
+    }
+    /*{/literal}*/
+    getAgents();
+    //getReport();
+    </script>
+{/if}

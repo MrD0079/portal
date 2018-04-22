@@ -5,12 +5,6 @@ InitRequestVar("dates_list2",$now);
 InitRequestVar("log_r1",1);
 InitRequestVar("log_r2",1000);
 isset($_REQUEST["table"])?$table=$_REQUEST["table"]:$table="full_log";
-if (isset($_REQUEST["a14mega_make_good"]))
-{
-	audit("запустил процедуру исправления a14mega","get_data");
-	$sql = rtrim(file_get_contents('sql/a14mega_make_good.sql'));
-	$res = $db->Query($sql);
-}
 if (isset($_REQUEST["start_job_activities"]))
 {
 	audit("запустил процедуру закачки данных по акциям из SW","get_data");

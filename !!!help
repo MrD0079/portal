@@ -1,2 +1,12 @@
 
 ini_set('display_errors', 'On');
+
+                var isFormDataEmpty= true;
+                for (var p of fd) {
+                    console.log(p);
+                    isFormDataEmpty= false;
+                    break;
+                }
+                
+                if (!isFormDataEmpty){
+                console.log('form data is not empty');

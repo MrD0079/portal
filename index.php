@@ -2,6 +2,8 @@
 //ini_set('display_errors', 0);
 //ini_set("upload_max_filesize", "20Mb");
 //ses_req();
+ini_set("memory_limit", "512M");
+//ini_set("max_input_vars", "10000");
 require_once "function.php";
 require_once "local_functions.php";
 $now=date("d.m.Y");
@@ -255,6 +257,8 @@ if ($a->getAuth())
 		$football_team_responsible > 0 ? $smarty->assign('football_team_responsible', 1) : null;
 		$football_team_checking > 0 ? $smarty->assign('football_team_checking', 1) : null;
 		*/
+                $login_type = strpos($login,'ms')!==false? 'ms' : 'general';
+                $smarty->assign('login_type', $login_type);
                 if (!($action=='merch_report_new'&&isset($_POST))) {
                     if (!isset($_REQUEST["pdf"])){require_once "m.header.php";}
                     if (!isset($_REQUEST["print"])&&!isset($_REQUEST["nohead"])) {

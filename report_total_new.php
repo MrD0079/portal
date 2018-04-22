@@ -57,23 +57,23 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["svms_ok"]))
 	{
-		$table_name = "merch_report_ok";
-		foreach ($_REQUEST["svms_ok"] as $k => $v)
-		{
-			//echo $k."<br>";
-			foreach ($v as $k1 => $v1)
-			{
-			foreach ($v1 as $k2 => $v2)
-			{
-				//echo $k1."<br>";
-				$keys = array('head_id'=>$k,'dt'=>OraDate2MDBDate($k1));
-				$values = array($k2=>$v2);
-				//print_r($keys);
-				//print_r($values);
-				Table_Update ($table_name, $keys, $values);
-			}
-			}
-		}
+            $table_name = "merch_report_ok";
+            foreach ($_REQUEST["svms_ok"] as $k => $v)
+            {
+                //echo $k."<br>";
+                foreach ($v as $k1 => $v1)
+                {
+                    foreach ($v1 as $k2 => $v2)
+                    {
+                            //echo $k1."<br>";
+                            $keys = array('head_id'=>$k,'dt'=>OraDate2MDBDate($k1));
+                            $values = array($k2=>$v2);
+                            //print_r($keys);
+                            //print_r($values);
+                            Table_Update ($table_name, $keys, $values);
+                    }
+                }
+            }
 	}
 }
 
@@ -133,7 +133,7 @@ if (isset($_REQUEST["select"]))
 
 	$sql = rtrim(file_get_contents('sql/report_total_new.sql'));
 	$sql=stritr($sql,$p);
-//$_REQUEST["sql"]=$sql;
+        //$_REQUEST["sql"]=$sql;
 	//echo $sql;
 	//exit;
 	$rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -161,6 +161,9 @@ if (isset($_REQUEST["select"]))
 			$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']=null;
 			foreach ($rb1r as $kr=>$vr)
 			{
+                            if ($vr['rep_id']==6)
+				$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']][$vr['aa_id']]=$vr;
+                            else
 				$d[$v["dt"].$v["head_id"]]["data"][$v["kodtp"]]["data"][$v["ag_id"].".".$v["vv"]]['reminders']["rep".$vr['rep_id']]=$vr;
 			}
 /*
@@ -196,5 +199,7 @@ if (isset($_REQUEST["select"]))
 }
 
 $smarty->display('report_total_new.html');
+
+//echo phpinfo();
 
 ?>

@@ -82,14 +82,14 @@
 			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep3}*/height:36px;width:36px;background-color:{$i1.reminders.rep3.color};/*{/if}*/">{if $i1.reminders.rep3}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep3.pict}">{/if}</td>
 			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep4}*/height:36px;width:36px;background-color:{$i1.reminders.rep4.color};/*{/if}*/">{if $i1.reminders.rep4}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep4.pict}">{/if}</td>
 			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep5}*/height:36px;width:36px;background-color:{$i1.reminders.rep5.color};/*{/if}*/">{if $i1.reminders.rep5}<img style="height:30px;width:30px;" src="files/{$i1.reminders.rep5.pict}">{/if}</td>
-			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep6}*/height:36px;width:36px;background-color:{$i1.reminders.rep6.color};/*{/if}*/">
-				{if $i1.reminders.rep6}
-				<div style="display:inline;cursor:pointer;" onclick="$('#text_{$i1.spec_id}').show();">
-					<img style="height:29px;width:29px;" src="files/{$i1.reminders.rep6.pict}">
-				</div>
-				<div style="display:none;width:300px;" id="text_{$i1.spec_id}">{$i1.reminders.rep6.text}</div>
-				{/if}
-			</td>
+			<td style="vertical-align:middle;text-align:center;/*{if $i1.reminders.rep6}*/height:36px;width:36px;/*{/if}*/">
+                            {foreach key=k2 item=i2 from=$i1.reminders.rep6}
+                                <div style="vertical-align:middle;text-align:center;height:36px;width:36px;background-color:{$i2.color};">
+                                    <a target="_blank" href="?action=merch_report_aa_report&id={$i2.aa_id}&head_id={$route.id}&kodtp={$i1.kodtp}{if $disabled}&print=1{/if}">
+                                        <img style="height:30px;width:30px;" src="files/{$i2.pict}"></a>
+                                </div>
+                            {/foreach}
+                        </td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i1.vv eq 1}внеплановый визит{/if}{$i1.day_time_mr}</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">
                             {if not $disabled}

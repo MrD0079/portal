@@ -1,0 +1,313 @@
+{if $smarty.request.save_item}
+{elseif $smarty.request.getFiles}
+                    {if $photo}
+                    {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$photo}
+                    {foreach from=$keywords item=keyword}
+                    $('<tr class="tr_files loaded_files">\n\
+                        <td style="text-align:right">\n\
+                            <input type=button value=удалить onClick="\n\
+                                del_files.push(\'{$keyword}\');\n\
+                                $(this).parent().parent().remove();\n\
+                                   ">\n\
+                        </td>\n\
+                        <td colspan=2>\n\
+                            <a target=_blank href="files/{$keyword}"><img src="files/{$keyword}" height="50px"></a>\n\
+                        </td>\n\
+                    </tr>\n\
+                    ').insertAfter($('#files'));
+                    {/foreach}
+                    {/if}
+{else}
+    <h1>Отчет по акции {$smarty.request.id}</h1>
+    <form id="form_edit_item" enctype="multipart/form-data">
+        <input type=hidden name=id value="{$smarty.request.id}">
+        <input type=hidden name=ag_id value="{$h.ag_id}">
+        <input type=hidden id=need_photo value="{$h.need_photo}">
+        <input type=hidden name=head_id value="{$smarty.request.head_id}">
+        <input type=hidden name=kodtp value="{$smarty.request.kodtp}">
+        <table border="1" cellpadding="3" cellspacing="0">
+            <tr>
+                <td style="text-align: right">Период проведения</td>
+                <td>{$h.dts} - {$h.dte}</td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Задачи</td>
+                <td>{$h.tasks|nl2br}</td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Ассортимент</td>
+                <td>
+                    <table id="t_sku" border="1" cellpadding="3" cellspacing="0">
+                        <tr style="text-align: center">
+                            <td>Наименование СКЮ</td>
+                            <td>Цена в период акции</td>
+                            <td>Цена без Акции</td>
+                            <td>Цена на полке</td>
+                        </tr>
+                        {foreach key=k item=i from=$s}
+                            <tr>
+                                <td>{$i.sku}</td>
+                                <td>{$i.price_act|num:2}</td>
+                                <td>{$i.price_wo_act|num:2}</td>
+                                <td>
+                                    {if not $smarty.request.print and $h.actual_promo_price}
+                                        <input size=20 id="{$i.id}" name=sku[{$i.id}][price_rack] value="{$i.price_rack}" class="number sku">
+                                    {else}
+                                        {$i.price_rack|num:2}
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/foreach}                    
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Акция стартовала?</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <select name="report[started]" id=started>
+                        <option></option>
+                        <option value="1">да</option>
+                        <option value="0">нет</option>
+                        </select>
+                        <script>$('#started option[value="{$rep.started}"]').prop('selected', true);</script>
+                    {else}
+                        {if $rep.started eq '1'}да{/if}
+                        {if $rep.started eq '0'}нет{/if}
+                    {/if}
+                </td>
+            </tr>
+            {if $h.need_photo}
+            <tr id="files">
+                <td style="text-align: right">фото</td>
+                <td>
+                    {if not $smarty.request.print}
+                    <input
+                        type="button"
+                        value="добавить"
+                        onClick="$(
+                                    '<tr class=tr_files>\n\
+                                        <td style=text-align:right><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                        <td><input type=file class=input_files name=file[]></td>\n\
+                                    </tr>').insertAfter($('#files'))">
+                    {else}
+                        {if $rep.photo}
+                        {assign var="keywords" value='/\r\n|\r|\n/'|preg_split:$rep.photo}
+                        {foreach from=$keywords item=keyword}
+                            <a target=_blank href="files/{$keyword}"><img src="files/{$keyword}" height="50px"></a>
+                        {/foreach}
+                        {/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Комментарий (фото)</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <textarea name="report[photo_comm]" id=photo_comm cols=50 rows=3>{$rep.photo_comm}</textarea>
+                    {else}
+                        {$rep.photo_comm|nl2br}
+                    {/if}
+                </td>
+            </tr>
+            {/if}
+            <tr>
+                <td style="text-align: right">Не соблюдение акции</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Нет инфо в ТЗ по активности</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#info_absent').val(this.checked?1:0);" {if $rep.info_absent}checked{/if}>
+                        <input type="hidden" value="{$rep.info_absent}" name="report[info_absent]" id="info_absent" class="aa_compliance">
+                    {else}
+                        {if $rep.info_absent}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Нет акционного товара</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#promo_item_absent').val(this.checked?1:0);" {if $rep.promo_item_absent}checked{/if}>
+                        <input type="hidden" value="{$rep.promo_item_absent}" name="report[promo_item_absent]" id="promo_item_absent" class="aa_compliance">
+                    {else}
+                        {if $rep.promo_item_absent}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Недостаточный товарный запас</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#small_stock').val(this.checked?1:0);" {if $rep.small_stock}checked{/if}>
+                        <input type="hidden" value="{$rep.small_stock}" name="report[small_stock]" id="small_stock" class="aa_compliance">
+                    {else}
+                        {if $rep.small_stock}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Не предоставлено ДМП</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#dmp_not_provided').val(this.checked?1:0);" {if $rep.dmp_not_provided}checked{/if}>
+                        <input type="hidden" value="{$rep.dmp_not_provided}" name="report[dmp_not_provided]" id="dmp_not_provided" class="aa_compliance">
+                    {else}
+                        {if $rep.dmp_not_provided}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Не предоставлен акционный ценник</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#promo_price_list_absent').val(this.checked?1:0);" {if $rep.promo_price_list_absent}checked{/if}>
+                        <input type="hidden" value="{$rep.promo_price_list_absent}" name="report[promo_price_list_absent]" id="promo_price_list_absent" class="aa_compliance">
+                    {else}
+                        {if $rep.promo_price_list_absent}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Нет акционной цены</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <input type="checkbox" onClick="$('#promo_price_absent').val(this.checked?1:0);" {if $rep.promo_price_absent}checked{/if}>
+                        <input type="hidden" value="{$rep.promo_price_absent}" name="report[promo_price_absent]" id="promo_price_absent" class="aa_compliance">
+                    {else}
+                        {if $rep.promo_price_absent}да{/if}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">Прочие комментарии</td>
+                <td>
+                    {if not $smarty.request.print}
+                        <textarea name="report[other_comm]" id=other_comm cols=50 rows=3>{$rep.other_comm}</textarea>
+                    {else}
+                        {$rep.other_comm|nl2br}
+                    {/if}
+                </td>
+            </tr>
+        </table>
+        {if not $smarty.request.print}
+        <p><input id="button_save" type="button" value="Сохранить" onClick="save_item('{$smarty.request.id}');"></p>
+        {/if}
+    </form>
+    {if not $smarty.request.print}
+        <script>
+        /*{literal}*/
+        function save_item(id)
+        {
+                console.clear();
+                var bad_data = false;
+                var error_text = '';
+                if (!$('#started').val()){
+                    bad_data = true;
+                    error_text = error_text + 'Акция стартовала - не заполнено'+'<br>';
+                }
+                $(".sku").each(function() {
+                    if($(this).val() === ""){
+                        bad_data = true;
+                        error_text = error_text + 'Цена на полке не заполнена'+'<br>';
+                    }
+                });
+                if ($('#need_photo').val()==1){
+                    var empty_files_count=0;
+                    $(".input_files").each(function() {
+                        if($(this).val() === ""){
+                            empty_files_count++;
+                        }
+                    });
+                    /*console.log($(".loaded_files").length);
+                    console.log($(".input_files").length);
+                    console.log(empty_files_count);
+                    console.log($(".loaded_files").length+$(".input_files").length-empty_files_count);*/
+                    if (
+                            ($(".loaded_files").length+$(".input_files").length-empty_files_count)==0
+                            &&
+                            ($("#photo_comm").val()==="")
+                            ){
+                        bad_data = true;
+                        error_text = error_text + 'не загружено фото или не заполнен комментарий(фото)'+'<br>';
+                    }
+                }
+                if ($('#started').val() !== "1"){
+                    var aa_compliance_count=0;
+                    $(".aa_compliance").each(function() {
+                        console.log($(this).val());
+                        if($(this).val() !== "1"){
+                            aa_compliance_count++;
+                            //console.log(aa_compliance_count);
+                        }
+                    });
+                    if (($(".aa_compliance").length-aa_compliance_count)==0){
+                        bad_data = true;
+                        error_text = error_text + 'Не соблюдение акции - не выбрано'+'<br>';
+                    }
+                }
+                if (bad_data) {
+                    if (del_files.length>0) {
+                        del_files = [];
+                        get_Files();
+                    }
+                    errorNoty('Ошибка сохранения'+'<br>'+error_text);
+                    return;
+                }
+                $('#button_save').prop("disabled",true);
+                var fd = new FormData(document.getElementById('form_edit_item'));
+                if (del_files.length>0) fd.append('del_files',del_files);
+                $.ajax({
+                        type: 'POST',
+                        url: '?action=merch_report_aa_report&id='+id+'&save_item=1&nohead=1',
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            $('#button_save').prop("disabled",false);
+                            $(".tr_files").remove();
+                            get_Files();
+                            successNoty("Сохранено");
+                            console.log(data);
+                        }
+                });
+        }
+        function get_Files(){
+            var fd = new FormData();
+            fd.append('id',  '{/literal}{$smarty.request.id}{literal}');
+            fd.append('ag_id',  '{/literal}{$h.ag_id}{literal}');
+            fd.append('head_id',  '{/literal}{$smarty.request.head_id}{literal}');
+            fd.append('kodtp',  '{/literal}{$smarty.request.kodtp}{literal}');
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=merch_report_aa_report&print=1&nohead=1&getFiles=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        //console.log(data);
+                        eval(data);
+                    }
+            });
+        }
+        get_Files();
+        /*{/literal}*/
+        var del_files = [];
+        </script>
+    {/if}
+    {if $login_type eq 'ms'}
+        {literal}
+        <script>
+        $(function(){
+        $("#head-back-div").remove();
+        $("#left-div").remove();
+        $("#right-div").remove();
+        $("#bottom-div").remove();
+        $("#content-div").css("top","0px");
+        });
+        </script>
+        {/literal}
+    {/if}
+{/if}

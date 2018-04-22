@@ -22,9 +22,9 @@ margin-top: 0px;
 <div id="center-div">
 <h3>
     <!--{foreach key=key item=item from=$countries}-->
-    <!--{if $item.checked eq 1}-->
-    <a {if $item.cnt_name eq $cnt_name} style="font-size:18px" {/if} href="?action=main&select_country={$item.cnt_kod}">{$item.cnt_name}</a>
-    <!--{/if}-->
+        <!--{if $item.checked eq 1}-->
+            <a {if $item.cnt_name eq $cnt_name} style="font-size:18px" {/if} href="?action=main&select_country={$item.cnt_kod}">{$item.cnt_name}</a>
+        <!--{/if}-->
     <!--{/foreach}-->
 </h3>
 <ul
@@ -40,69 +40,39 @@ margin-top: 0px;
 	</li>
 	<li><a href="javascript:void(0);"><span class="dir">Команда</span></a>
 		<ul>
-
 			{include file="menu_team.html"}
-
 		</ul>
 	</li>
-
 	<!--{if not $is_eta}-->
-
-	<li><a href="javascript:void(0);"><span class="dir">Дистрибутор</span></a>
-		<ul>
-
-			{include file="menu_distr.html"}
-
-		</ul>
-	</li>
-
+            <li><a href="javascript:void(0);"><span class="dir">Дистрибутор</span></a>
+                    <ul>
+                            {include file="menu_distr.html"}
+                    </ul>
+            </li>
+            <li><a href="javascript:void(0);"><span class="dir">Расходы</span></a>
+                    <ul>
+                            {include file="menu_costs.html"}
+                    </ul>
+            </li>
+            <li><a href="javascript:void(0);"><span class="dir">Документооборот</span></a>
+                    <ul>
+                            {include file="menu_document_workflow.html"}
+                    </ul>
+            </li>
+            <!--{if ($is_mservice or $is_admin or $is_ma) and $cnt_kod eq "ua"}-->
+                <li><a href="javascript:void(0);"><span class="dir">М-Сервис</span></a>
+                        <ul>
+                                {include file="menu_mservice.html"}
+                        </ul>
+                </li>
+            <!--{/if}-->
 	<!--{/if}-->
-
-	<!--{if not $is_eta}-->
-
-	<li><a href="javascript:void(0);"><span class="dir">Расходы</span></a>
-		<ul>
-			{include file="menu_costs.html"}
-		</ul>
-	</li>
-
-	<!--{/if}-->
-
-	<!--{if not $is_eta}-->
-
-	<li><a href="javascript:void(0);"><span class="dir">Документооборот</span></a>
-		<ul>
-
-			{include file="menu_document_workflow.html"}
-
-		</ul>
-	</li>
-
-	<!--{if ($is_mservice or $is_admin or $is_ma or $is_acceptor) and $cnt_kod eq "ua"}-->
-
-	<li><a href="javascript:void(0);"><span class="dir">М-Сервис</span></a>
-		<ul>
-
-			{include file="menu_mservice.html"}
-
-		</ul>
-	</li>
-
-	<!--{/if}-->
-
-	<!--{/if}-->
-
 	<!--{if $is_admin or $is_acceptor or $is_do or $is_test_admin or $is_coach}-->
-
-	<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
-		<ul>
-
-			{include file="menu_admin.html"}
-
-		</ul>
-	</li>
-
+            <li><a href="javascript:void(0);"><span class="dir">Админ</span></a>
+                    <ul>
+                            {include file="menu_admin.html"}
+                    </ul>
+            </li>
 	<!--{/if}-->
-
 </ul>
 </div>

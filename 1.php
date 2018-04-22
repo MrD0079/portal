@@ -1,13 +1,9 @@
 <?
 
-/*
 ?>
-<iframe src="https://bitrix.avk.ua/about/news_ex.php"></iframe> 
-<br>
-<iframe src="https://ps2.avk.ua" style="width: 100%; height: 300px; border: none"></iframe> 
+<iframe height="500" width="600" src="https://bitrix.avk.ua/about/news_ex.php" style="border: 1px dotted red"></iframe>
 <?
 exit;
-*/
 
 $url="https://bitrix.avk.ua/about/news_ex.php";
 include_once('simple_html_dom.php');
