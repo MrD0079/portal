@@ -3,6 +3,42 @@
 {if $smarty.request.all eq 1}Работающие{/if}
 {if $smarty.request.all eq -1}Уволенные{/if}
 )</h1>
+<script>
+    {literal}
+    $(function(){
+        $('.msItemDT').focusin(function(){
+            $('.msItemDT').removeClass('datepicker');
+            $('.msItemDT').datepicker("destroy");
+            if (!$(this).hasClass('datepicker')){
+                $(this).addClass('datepicker');
+                init_form();
+            }
+        });
+        $('.msItem').change(function(){
+            //console.log($(this).closest('tr').attr('id')+' '+$(this).val());
+            $(this).closest('td').css('background-color','red');
+            //console.log($(this).prev().val());
+            var fd = new FormData();
+            fd.append("id", $(this).closest('tr').attr('id'));
+            fd.append("field", $(this).prev().val());
+            fd.append("val", $(this).val());
+            //console.log(fd.size);
+            //console.log($(this).closest('tr').attr('id'));
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=spr_users_ms&nohead=1&save=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        //console.log(data);
+                        $('#'+data).children().css('background-color','white');
+                    }
+            });
+        })
+    })
+    {/literal}
+</script>
 <p>
 <a href="?action=spr_users_ms&all=0">Все</a>
 &nbsp&nbsp&nbsp
@@ -90,32 +126,3 @@
 </tr>
 {/foreach}
 </table>
-<script>
-    {literal}
-    $(function(){
-        $('.msItemDT').focusin(function(){
-            $('.msItemDT').removeClass('datepicker');
-            $('.msItemDT').datepicker("destroy");
-            if (!$(this).hasClass('datepicker')){
-                $(this).addClass('datepicker');
-                init_form();
-            }
-        });
-        $('.msItem').change(function(){
-            //console.log($(this).closest('tr').attr('id')+' '+$(this).val());
-            $(this).closest('td').css('background-color','red');
-            //console.log($(this).prev().val());
-            $.get(
-                '?action=spr_users_ms&nohead=1&save=1',
-                {"id": $(this).closest('tr').attr('id'), "field": $(this).prev().val(), "val": $(this).val()},
-                function(data){
-                    $('#'+data).children().css('background-color','white');
-                    //console.log(data);
-                }
-            );
-        })
-        //$(".dt").addClass('datepicker');
-        //init_form();
-    })
-    {/literal}
-</script>

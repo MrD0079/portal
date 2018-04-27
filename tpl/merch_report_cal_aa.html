@@ -145,7 +145,7 @@
                                     onClick="counter--;
                                         $('#t_sku').append($(
                                                 '<tr>\n\
-                                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>\n\
+                                                    <td><input type=button value=удалить onClick=$(this).parent().parent().hide();></td>\n\
                                                     <td><input size=50 name=sku['+counter+'][sku]></td>\n\
                                                     <td><input size=20 name=sku['+counter+'][price_act] class=number></td>\n\
                                                     <td><input size=20 name=sku['+counter+'][price_wo_act] class=number></td>\n\
@@ -158,7 +158,12 @@
                         {foreach key=k item=i from=$s}
                             <tr>
                                 {if not $smarty.request.print}
-                                    <td><input type=button value=удалить onClick=$(this).parent().parent().remove();></td>
+                                    <td>
+                                        <input type=button value=удалить onClick="
+                                            $('#sku_del_{$i.id}').val(1);
+                                            $(this).parent().parent().hide();">
+                                        <input type=hidden name=sku_del[{$i.id}] id="sku_del_{$i.id}">
+                                    </td>
                                 {/if}
                                 {if not $smarty.request.print}
                                     <td><input size=50 name=sku[{$i.id}][sku] value="{$i.sku}"></td>

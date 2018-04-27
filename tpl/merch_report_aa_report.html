@@ -18,7 +18,7 @@
                     {/foreach}
                     {/if}
 {else}
-    <h1>Отчет по акции {$smarty.request.id}</h1>
+    <h1>Отчет по акции {$smarty.request.id} {$h.net_name}</h1>
     <form id="form_edit_item" enctype="multipart/form-data">
         <input type=hidden name=id value="{$smarty.request.id}">
         <input type=hidden name=ag_id value="{$h.ag_id}">

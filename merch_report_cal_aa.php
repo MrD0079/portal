@@ -27,6 +27,12 @@ if (isset($_REQUEST['save_item'])) {
             }
             Table_Update('merch_report_cal_aa_s', $keys,$vals);
         }
+        foreach ($_REQUEST["sku_del"] as $k=>$v) {
+            if ($v==1){
+                $keys=array('id'=>$k);
+                Table_Update('merch_report_cal_aa_s', $keys,null);
+            }
+        }
     }
 } else if (isset($_REQUEST['del_item'])) {
 	Table_Update('merch_report_cal_aa_h', array('id'=>$_REQUEST["id"]),null);
