@@ -59,7 +59,7 @@
          s.skype,
          s.res,
          s.res_pos_id,
-         TO_CHAR (res_dt, 'dd.mm.yyyy') res_dt
+         TO_CHAR (res_dt, 'dd.mm.yyyy') res_dt,s.sign
     FROM PERSIK.SPDTREE s, departments d, limits_current l
    WHERE s.dpt_id = D.DPT_ID AND id = :id AND s.svideninn = l.tn(+)
 ORDER BY d.sort,

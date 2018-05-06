@@ -229,7 +229,7 @@
                                             WHERE z.id = :z_id AND u.tn = z.tn))
           GROUP BY dt, m, tp_kod) m,
          (  SELECT dt, tp_kod, SUM (total) total
-              FROM svs_new_view
+              FROM mv_svs_new_view
              WHERE dpt_id = (SELECT u.dpt_id
                                FROM bud_ru_zay z, user_list u
                               WHERE z.id = :z_id AND u.tn = z.tn)

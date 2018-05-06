@@ -25,6 +25,7 @@
 	{/if}
 	<td rowspan=2 style="text-align: center;">Счет в реестр добавлен</td>
 	<td rowspan=2 style="text-align: center;">Проверено и подтверждено ФМ</td>
+	<td rowspan=2 style="text-align: center;">Проверено и подтверждено НМКК</td>
 	<td rowspan=2 style="text-align: center;">Счет отправлен</td>
 	<td rowspan=2 style="text-align: center;">№ акта</td>
 	<td rowspan=2 style="text-align: center;">Дата акта</td>
@@ -140,6 +141,14 @@
 		<input type=hidden name=data[{$item.id}][ok_fm] id=data_{$item.id}_ok_fm value="{$item.ok_fm}">
 	{else}
 		{if $item.ok_fm eq 1}да{/if}
+	{/if}
+	</td>
+	<td style="text-align: center;/*{if $item.ok_rmkk eq 1}*/background-color: rgb(51, 255, 51);/*{/if}*/">
+	{if not $smarty.request.print}
+		<input onclick="$('#data_{$item.id}_ok_rmkk').val(this.checked?1:0);" {if not $is_rmkk}disabled{/if} {if $item.ok_rmkk eq 1}checked="checked"{/if} type="checkbox">
+		<input type=hidden name=data[{$item.id}][ok_rmkk] id=data_{$item.id}_ok_rmkk value="{$item.ok_rmkk}">
+	{else}
+		{if $item.ok_rmkk eq 1}да{/if}
 	{/if}
 	</td>
 	<td style="text-align: center;/*{if $item.invoice_sended eq 1}*/background-color: rgb(51, 255, 51);/*{else}*/background-color: red;/*{/if}*/">

@@ -1,7 +1,7 @@
 <?
 //ses_req();
+ini_set('display_errors', 'On');
 audit("открыл invoice_reestr","invoice_reestr");
-
 InitRequestVar("nets",0);
 InitRequestVar("calendar_years",0);
 InitRequestVar("tn_rmkk",0);
@@ -11,11 +11,10 @@ InitRequestVar("format",0);
 InitRequestVar("payer",0);
 InitRequestVar("urlic",0);
 InitRequestVar("num",'');
-InitRequestVar("okfm","all");
+InitRequestVar("ok_fm","all");
+InitRequestVar("ok_rmkk","all");
 InitRequestVar("invoice_sended","all");
 InitRequestVar("ok_acts_redisplayed","all");
-
-
 if (isset($_REQUEST["add"]))
 {
 	$v=$_REQUEST["new"];
@@ -80,8 +79,6 @@ if (isset($_REQUEST["add"]))
 		echo "<p style=\"color:red\">Не все поля заполнены, запись не добавлена!</p>";
 	}
 }
-
-
 if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 {
 	foreach ($_REQUEST["data"] as $k=>$v)
@@ -91,7 +88,6 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
 		Table_Update ("invoice", $keys, $v);
 	}
 }
-
 if (isset($_FILES['files']))
 {
 	foreach($_FILES['files']['name'] as $k=>$v)
@@ -138,8 +134,6 @@ if (isset($_FILES['acts']))
 	}
 	}
 }
-
-
 if (isset($_REQUEST["del_files"]))
 {
 	foreach ($_REQUEST["del_files"] as $k=>$v)
@@ -154,7 +148,6 @@ if (isset($_REQUEST["del_acts"]))
 		Table_Update("invoice_acts", array('id'=>$v),null);
 	}
 }
-
 if (isset($_REQUEST["del"]))
 {
 	foreach ($_REQUEST["del"] as $k=>$v)
@@ -162,7 +155,6 @@ if (isset($_REQUEST["del"]))
 		Table_Update("invoice", array('id'=>$v),null);
 	}
 }
-
 if (isset($_REQUEST["sendmsg"]))
 {
 	foreach ($_REQUEST["sendmsg"] as $k=>$v)
@@ -184,7 +176,6 @@ if (isset($_REQUEST["sendmsg"]))
 		}
 	}
 }
-
 function getTable($payer,$invoice_sended)
 {
 	global $db, $tn, $smarty;
@@ -199,7 +190,8 @@ function getTable($payer,$invoice_sended)
 		':payer'=>$payer,
 		':urlic'=>$_REQUEST["urlic"],
 		':num'=>"'".str_replace("'","''",$_REQUEST["num"])."'",
-		':okfm'=>"'".$_REQUEST["okfm"]."'",
+		':ok_fm'=>"'".$_REQUEST["ok_fm"]."'",
+		':ok_rmkk'=>"'".$_REQUEST["ok_rmkk"]."'",
 		':ok_acts_redisplayed'=>"'".$_REQUEST["ok_acts_redisplayed"]."'",
 		':invoice_sended'=>"'".$invoice_sended."'",
 		':calendar_months'=>$_REQUEST["calendar_months"],
@@ -229,8 +221,6 @@ if (($_REQUEST["calendar_years"]!=0)&&(isset($_REQUEST["generate"])))
 	$invoices_all = getTable($_REQUEST["payer"],$_REQUEST["invoice_sended"]);
 	$smarty->assign('invoice', $invoices_all);
 }
-
-
 $sql=rtrim(file_get_contents('sql/distr_prot_di_kk.sql'));
 $p = array(":dpt_id" => $_SESSION["dpt_id"],':tn'=>$tn);
 $sql=stritr($sql,$p);
@@ -271,41 +261,62 @@ isset($_REQUEST["print"]) ? $print = $_REQUEST["print"] : $print = null;
 isset($_REQUEST["format"]) ? $format = $_REQUEST["format"] : $format = null;
 if (isset($_REQUEST["send_invoices"]))
 {
-	$_REQUEST["print"] = 1;
-	$_REQUEST["format"] = 1;
-	foreach ($invoices_all as $k => $v)
-	{
-		$v["invoice_sended"]==0 ? $payers_list[$v["payer"]]["name"]=$v["payer_name"] : null;
-		$v["invoice_sended"]==0 ? $payers_list[$v["payer"]]["mail"]=$v["invoice_mail"] : null;
-	}
-	foreach ($payers_list as $k => $v)
-	{
-		$invoices = getTable($k,'no');
-		$smarty->assign('invoice', $invoices);
-		$table = $smarty->fetch('invoice_reestr_table.html');
-		$fn = get_new_file_id().".xls";
-		file_put_contents("files/invoices".$fn, $table);
-		//$subj="Реестр счетов для оплаты, информативно"." PAYER(ONLY FOR TEST): ".$v["name"]." MAIL: ".$v["mail"];
-		$subj="Реестр счетов для оплаты, информативно";
-                send_mail($v["mail"],$subj,$subj,["files/invoices".$fn]);
-	}
-	foreach ($invoices_all as $k => $v)
-	{
-		$v["invoice_sended"]==0 ? Table_Update ("invoice", array("id"=>$v["id"]), array("invoice_sended"=>1)) : null;
-		$v["invoice_sended"]==0 ? $invoices_all[$k]["invoice_sended"]=1 : null;
-	}
+    $cnt=0;
+    $_REQUEST["print"] = 1;
+    $_REQUEST["format"] = 1;
+    foreach ($invoices_all as $k => $v)
+    {
+        if ($v["invoice_sended"]==0)
+        {
+            $payers_list[$v["payer"]]["name"]=$v["payer_name"];
+            $payers_list[$v["payer"]]["mail"]=$v["invoice_mail"];
+            $payers_list[$v["payer"]]["rmkk"]=$v["rmkk"];
+            $payers_list[$v["payer"]]["rmkk_mail"]=$v["rmkk_mail"];
+            $payers_list[$v["payer"]]["rmkk_sign"]=$v["rmkk_sign"];
+        }
+        if ($v["invoice_sended"]==0&&($v["ok_fm"]==1)&&($v["ok_rmkk"]==0))
+        {
+            $cnt++;
+            $rmkk_list[$v["rmkk_mail"]]=$v["rmkk_mail"];
+        }
+    }
+    foreach ($rmkk_list as $k => $v)
+    {
+        send_mail(
+                'denis.yakovenko@avk.ua'/*$k*/,
+                'Подтверждение счетов клиентов на оплату',
+                'Счета ожидают вашего подтверждения для оплаты <font style="color:red">(всего счетов '.$cnt.')</font><br>'.
+                'Для подтверждения перейдите по <a href='
+                . 'https://ps.avk.ua/?action=invoice_reestr&generate&'
+                . 'ok_rmkk=no&'
+                . 'calendar_years='.$_REQUEST["calendar_years"].'&'
+                . 'calendar_months='.$_REQUEST["calendar_months"].'>ссылке</a>'
+                );
+    }
+    $_REQUEST["ok_fm"]='ok';
+    $_REQUEST["ok_rmkk"]='ok';
+    foreach ($payers_list as $k => $v)
+    {
+        $invoices = getTable($k,/*'no'*/'all');
+        $smarty->assign('invoice', $invoices);
+        $table = $smarty->fetch('invoice_reestr_table.html');
+        $fn = get_new_file_id().".xls";
+        file_put_contents("files/invoices".$fn, $table);
+        //$subj="Реестр счетов для оплаты, информативно"." PAYER(ONLY FOR TEST): ".$v["name"]." MAIL: ".$v["mail"];
+        $subj="Реестр счетов для оплаты, информативно";
+        $text=$v['rmkk'].'<br><img height=100px src="https://ps.avk.ua/files/'.$v['rmkk_sign'].'">';
+        send_mail($v["mail"],$subj,$text,["files/invoices".$fn]);
+    }
+    foreach ($invoices_all as $k => $v)
+    {
+            $v["invoice_sended"]==0 ? Table_Update ("invoice", array("id"=>$v["id"]), array("invoice_sended"=>1)) : null;
+            $v["invoice_sended"]==0 ? $invoices_all[$k]["invoice_sended"]=1 : null;
+    }
 }
 $_REQUEST["print"] = $print;
 $_REQUEST["format"] = $format;
-
 isset($invoices_all) ? $smarty->assign('invoice', $invoices_all) : null;
-
-
-
-
-
 $smarty->display('kk_start.html');
 $smarty->display('invoice_reestr.html');
 $smarty->display('kk_end.html');
-
 ?>

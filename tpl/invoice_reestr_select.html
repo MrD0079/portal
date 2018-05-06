@@ -86,10 +86,19 @@
 <tr>
 	<td>Подтверждено ФМ</td>
 	<td>
-		<input checked="checked" name="okfm" id="okfm" value="all" type="radio"> все
-		<input name="okfm" id="okfm" value="no" type="radio"> не подтверждено
-		<input name="okfm" id="okfm" value="ok" type="radio"> подтверждено
-		<script>$("input[name=okfm][value={$smarty.request.okfm}]").attr('checked',true);</script>
+		<input checked="checked" name="ok_fm" id="ok_fm" value="all" type="radio"> все
+		<input name="ok_fm" id="ok_fm" value="no" type="radio"> не подтверждено
+		<input name="ok_fm" id="ok_fm" value="ok" type="radio"> подтверждено
+		<script>$("input[name=ok_fm][value={$smarty.request.ok_fm}]").attr('checked',true);</script>
+	</td>
+</tr>
+<tr>
+	<td>Подтверждено НМКК</td>
+	<td>
+		<input checked="checked" name="ok_rmkk" id="ok_rmkk" value="all" type="radio"> все
+		<input name="ok_rmkk" id="ok_rmkk" value="no" type="radio"> не подтверждено
+		<input name="ok_rmkk" id="ok_rmkk" value="ok" type="radio"> подтверждено
+		<script>$("input[name=ok_rmkk][value={$smarty.request.ok_rmkk}]").attr('checked',true);</script>
 	</td>
 </tr>
 <tr>

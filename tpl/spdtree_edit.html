@@ -1,5 +1,5 @@
 <h1>Личная карточка СПД - {$spdtree_edit.fam} {$spdtree_edit.im} {$spdtree_edit.otch}</h1>
-<form name=form target=_self method=post>
+<form target="_self" method="POST" enctype="multipart/form-data">
 <p><input type=submit name=save value="Сохранить"></p>
 
 <table cellspacing=0 cellpadding=3 align=center border=0>
@@ -318,6 +318,18 @@ $('#res1_pos_id').attr('disabled',{$spdtree_edit.res}==1?false:true);
 <td>
     <a href="?action=zat&emp_tn={$spdtree_edit.svideninn}&readonly=1&full=0">Изменить лимиты</a>
 </td>
+</tr>
+<tr>
+<td colspan=2 style="background-color:rgb(204,204,204);text-align:center">Образец подписи</td>
+</tr>
+<tr>
+<td style="text-align:right">Образец подписи</td>
+<td>
+    <input type=file name="item[sign]">
+    {if $spdtree_edit.sign}
+        <img height=100px src="/files/{$spdtree_edit.sign}">
+    {/if}
+</td>    
 </tr>
 </table>
 <p><input type=submit name=save value="Сохранить"></p>

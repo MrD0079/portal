@@ -1,13 +1,17 @@
-/* Formatted on 17/06/2016 15:08:23 (QP5 v5.252.13127.32867) */
+/* Formatted on 06.05.2018 17:18:16 (QP5 v5.252.13127.32867) */
   SELECT i.*,
          n.net_name,
          fn_getname (n.tn_mkk) mkk,
          fn_getname (n.tn_rmkk) rmkk,
+         urmkk.e_mail rmkk_mail,
+         (SELECT SIGN
+            FROM spdtree
+           WHERE svideninn = n.tn_rmkk)
+            rmkk_sign,
          TO_CHAR (i.DATA, 'dd.mm.yyyy') data_t,
          TO_CHAR (i.act_dt, 'dd.mm.yyyy') act_dt_t,
          TO_CHAR (i.lu, 'dd.mm.yyyy hh24:mi:ss') lu_t,
-         TO_CHAR (i.invoice_sended_lu, 'dd.mm.yyyy hh24:mi:ss')
-            invoice_sended_lu,
+         TO_CHAR (i.invoice_sended_lu, 'dd.mm.yyyy hh24:mi:ss') invoice_sended_lu,
          TO_CHAR (i.acts_redisplayed_lu, 'dd.mm.yyyy hh24:mi:ss')
             acts_redisplayed_lu,
          (SELECT COUNT (*)
@@ -38,8 +42,10 @@
     FROM invoice i,
          nets n,
          bud_fil p,
-         urlic u
-   WHERE     n.id_net = i.id_net
+         urlic u,
+         user_list urmkk
+   WHERE     n.tn_rmkk = urmkk.tn
+         AND n.id_net = i.id_net
          AND i.payer = p.id(+)
          AND u.id(+) = i.urlic
          AND :tn IN (DECODE ( (SELECT pos_id
@@ -61,9 +67,12 @@
          AND DECODE ( :nets, 0, n.id_net, :nets) = n.id_net
          AND DECODE ( :y, 0, i.y, :y) = i.y
          AND DECODE ( :calendar_months, 0, i.m, :calendar_months) = i.m
-         AND (   DECODE ( :okfm, 'all', 0) = 0
-              OR DECODE ( :okfm, 'no', 0) = NVL (i.ok_fm, 0)
-              OR DECODE ( :okfm, 'ok', 1) = NVL (i.ok_fm, 0))
+         AND (   DECODE ( :ok_fm, 'all', 0) = 0
+              OR DECODE ( :ok_fm, 'no', 0) = NVL (i.ok_fm, 0)
+              OR DECODE ( :ok_fm, 'ok', 1) = NVL (i.ok_fm, 0))
+         AND (   DECODE ( :ok_rmkk, 'all', 0) = 0
+              OR DECODE ( :ok_rmkk, 'no', 0) = NVL (i.ok_rmkk, 0)
+              OR DECODE ( :ok_rmkk, 'ok', 1) = NVL (i.ok_rmkk, 0))
          AND (   DECODE ( :ok_acts_redisplayed, 'all', 0) = 0
               OR DECODE ( :ok_acts_redisplayed, 'no', 0) =
                     NVL (i.acts_redisplayed, 0)

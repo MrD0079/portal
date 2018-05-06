@@ -35,8 +35,8 @@
                    m.zat_perc,
                    m.sku,
                    m.skidka,
-                   SUM (svs_new_view.total) total_net
-              FROM svs_new_view,
+                   SUM (mv_svs_new_view.total) total_net
+              FROM mv_svs_new_view,
                    (SELECT *
                       FROM calendar c,
                            (  SELECT tp_kod,
@@ -256,10 +256,10 @@
                     GROUP BY dt, m, tp_kod) m
              WHERE     c.data = m.dt(+)
                    AND c.tp_kod = m.tp_kod(+)
-                   AND svs_new_view.net_kod(+) =
+                   AND mv_svs_new_view.net_kod(+) =
                           TO_NUMBER (getZayFieldVal ( :z_id, 'admin_id', 14))
-                   AND svs_new_view.dpt_id(+) = :zayDptId
-                   AND svs_new_view.dt(+) = c.data
+                   AND mv_svs_new_view.dpt_id(+) = :zayDptId
+                   AND mv_svs_new_view.dt(+) = c.data
           GROUP BY c.data,
                    c.y,
                    c.my,
