@@ -283,7 +283,7 @@ if (isset($_REQUEST["send_invoices"]))
     foreach ($rmkk_list as $k => $v)
     {
         send_mail(
-                'denis.yakovenko@avk.ua'/*$k*/,
+                $k,
                 'ѕодтверждение счетов клиентов на оплату',
                 '—чета ожидают вашего подтверждени€ дл€ оплаты <font style="color:red">(всего счетов '.$cnt.')</font><br>'.
                 'ƒл€ подтверждени€ перейдите по <a href='
