@@ -1,4 +1,4 @@
-/* Formatted on 19.07.2017 11:23:56 (QP5 v5.252.13127.32867) */
+/* Formatted on 08.05.2018 19:04:20 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) c,
        SUM (dz_return) dz_return,
        SUM (dz_return_norm) dz_return_norm,
@@ -9,9 +9,7 @@ SELECT COUNT (*) c,
        SUM (gbo) gbo,
        SUM (amort) amort,
        SUM (total1) total1,
-       DECODE (SUM (fal_payment),
-               0, 0,
-               SUM (amort) / SUM (fal_payment) * 100)
+       DECODE (SUM (fal_payment), 0, 0, SUM (amort) / SUM (fal_payment) * 100)
           amort_perc,
        SUM (DECODE (fil_id, NULL, 1, 0)) fil_null,
        SUM (DECODE (fil_id, NULL, 0, 1)) fil_not_null,
@@ -28,73 +26,15 @@ SELECT COUNT (*) c,
                s.eta eta,
                NVL (vp.val_fact, 0) val_fact,
                vp.val_plan dz_return,
-                 CASE
-                    WHEN s.eta_coffee = 1
-                    THEN
-                       0.03
-                    WHEN DECODE (NVL (vp.val_plan, 0),
-                                 0, 0,
-                                 (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
-                            80
-                    THEN
-                       0.01
-                    ELSE
-                       0.02
-                 END
-               * sv.sales
-                  dz_return_norm,
-                 CASE
-                    WHEN s.eta_coffee = 1
-                    THEN
-                       0.03
-                    WHEN DECODE (NVL (vp.val_plan, 0),
-                                 0, 0,
-                                 (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
-                            80
-                    THEN
-                       0.01
-                    ELSE
-                       0.02
-                 END
-               * 100
-                  sales_perc,
+               0.01 * sv.sales dz_return_norm,
+               0.01 * 100 sales_perc,
                DECODE (NVL (vp.val_plan, 0),
                        0, 0,
                        (NVL (vp.val_fact, 0)) / vp.val_plan * 100)
                   plan_perc,
                sv.fal_payment,
-                 CASE
-                    WHEN s.eta_coffee = 1
-                    THEN
-                       0.03
-                    WHEN DECODE (NVL (vp.val_plan, 0),
-                                 0, 0,
-                                 (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
-                            80
-                    THEN
-                       0.01
-                    ELSE
-                       0.02
-                 END
-               * sv.sales
-                  zp_plan,
-               ROUND (
-                    CASE
-                       WHEN s.eta_coffee = 1
-                       THEN
-                          0.03
-                       WHEN DECODE (
-                               NVL (vp.val_plan, 0),
-                               0, 0,
-                               (NVL (vp.val_fact, 0)) / vp.val_plan * 100) <
-                               80
-                       THEN
-                          0.01
-                       ELSE
-                          0.02
-                    END
-                  * sv.sales)
-                  zp_fakt_def,
+               0.01 * sv.sales zp_plan,
+               ROUND (0.01 * sv.sales) zp_fakt_def,
                sv.zp_fakt,
                NVL (sv.unscheduled, 0) unscheduled,
                s.eta_tab_number,
@@ -144,10 +84,8 @@ SELECT COUNT (*) c,
                   FROM bud_funds_norm n1, bud_funds f1
                  WHERE n1.fund = f1.id AND f1.dpt_id = :dpt_id) n,
                (SELECT h_eta,
-                       (NVL (val_plan, 0) /*+ NVL (coffee_plan, 0)*/) * 1000
-                          val_plan,
-                       (NVL (val_fact, 0) /*+ NVL (coffee_fact, 0)*/) * 1000
-                          val_fact
+                       (NVL (val_plan, 0)) * 1000 val_plan,
+                       (NVL (val_fact, 0)) * 1000 val_fact
                   FROM kpr k
                  WHERE     k.dpt_id = :dpt_id
                        AND TO_DATE ( :dt, 'dd.mm.yyyy') = k.dt) vp

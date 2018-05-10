@@ -2,7 +2,6 @@
 
 //ses_req();
 
-//print_r($_bud_ru_st_ras);
 if (isset($_REQUEST["new"]))
 {
 	foreach ($_REQUEST["new"] as $k=>$v)
@@ -53,6 +52,7 @@ $params=array(':dpt_id' => $_SESSION["dpt_id"]);
 $sql=stritr($sql,$params);
 $bud_ru_st_ras = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_st_ras', $bud_ru_st_ras);
+//print_r($bud_ru_st_ras);
 
 
 

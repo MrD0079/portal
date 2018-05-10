@@ -1,6 +1,6 @@
 <?
 //ses_req();
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 audit("открыл invoice_reestr","invoice_reestr");
 InitRequestVar("nets",0);
 InitRequestVar("calendar_years",0);
@@ -287,17 +287,28 @@ if (isset($_REQUEST["send_invoices"]))
                 'ѕодтверждение счетов клиентов на оплату',
                 '—чета ожидают вашего подтверждени€ дл€ оплаты <font style="color:red">(всего счетов '.$cnt.')</font><br>'.
                 'ƒл€ подтверждени€ перейдите по <a href='
-                . 'https://ps.avk.ua/?action=invoice_reestr&generate&'
-                . 'ok_rmkk=no&'
-                . 'calendar_years='.$_REQUEST["calendar_years"].'&'
-                . 'calendar_months='.$_REQUEST["calendar_months"].'>ссылке</a>'
+                . 'https://ps.avk.ua/?action=invoice_reestr&generate&ok_rmkk=no'
+                . '&calendar_years='.$_REQUEST["calendar_years"]
+                . '&calendar_months='.$_REQUEST["calendar_months"]
+                . '&tn_rmkk='.$_REQUEST["tn_rmkk"]
+                . '&tn_mkk='.$_REQUEST["tn_mkk"]
+                . '&nets='.$_REQUEST["nets"]
+                . '&format='.$_REQUEST["format"]
+                . '&payer='.$_REQUEST["payer"]
+                . '&urlic='.$_REQUEST["urlic"]
+                . '&num='.$_REQUEST["num"]
+                . '&ok_fm='.$_REQUEST["ok_fm"]
+                . '&invoice_sended='.$_REQUEST["invoice_sended"]
+                . '&ok_acts_redisplayed='.$_REQUEST["ok_acts_redisplayed"]
+                . '>ссылке</a>'
                 );
     }
     $_REQUEST["ok_fm"]='ok';
     $_REQUEST["ok_rmkk"]='ok';
     foreach ($payers_list as $k => $v)
     {
-        $invoices = getTable($k,/*'no'*/'all');
+        $invoices = getTable($k,'no');
+        if (count($invoices)>0){
         $smarty->assign('invoice', $invoices);
         $table = $smarty->fetch('invoice_reestr_table.html');
         $fn = get_new_file_id().".xls";
@@ -306,11 +317,15 @@ if (isset($_REQUEST["send_invoices"]))
         $subj="–еестр счетов дл€ оплаты, информативно";
         $text=$v['rmkk'].'<br><img height=100px src="https://ps.avk.ua/files/'.$v['rmkk_sign'].'">';
         send_mail($v["mail"],$subj,$text,["files/invoices".$fn]);
+        }
     }
     foreach ($invoices_all as $k => $v)
     {
-            $v["invoice_sended"]==0 ? Table_Update ("invoice", array("id"=>$v["id"]), array("invoice_sended"=>1)) : null;
-            $v["invoice_sended"]==0 ? $invoices_all[$k]["invoice_sended"]=1 : null;
+        if ($v["invoice_sended"]==0&&($v["ok_fm"]==1)&&($v["ok_rmkk"]==1))
+        {
+            Table_Update ("invoice", array("id"=>$v["id"]), array("invoice_sended"=>1));
+            $invoices_all[$k]["invoice_sended"] = 1;
+        }
     }
 }
 $_REQUEST["print"] = $print;

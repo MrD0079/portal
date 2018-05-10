@@ -1,8 +1,4 @@
 <?
-
-//ses_req();
-
-//print_r($_bud_ru_st_pri);
 if (isset($_REQUEST["new"]))
 {
 	foreach ($_REQUEST["new"] as $k=>$v)
@@ -17,8 +13,6 @@ if (isset($_REQUEST["new"]))
 			}
 	}
 }
-
-
 if (isset($_REQUEST["update"]))
 {
 	foreach ($_REQUEST["update"] as $k=>$v)
@@ -32,8 +26,6 @@ if (isset($_REQUEST["update"]))
 		echo "<br>";*/
 	}
 }
-
-
 if (isset($_REQUEST["delete"]))
 {
 	foreach ($_REQUEST["delete"] as $k=>$v)
@@ -45,19 +37,10 @@ if (isset($_REQUEST["delete"]))
 		echo "<br>";*/
 	}
 }
-
-
-
 $sql=rtrim(file_get_contents('sql/bud_ru_st_pri.sql'));
 $params=array(':dpt_id' => $_SESSION["dpt_id"]);
 $sql=stritr($sql,$params);
 $bud_ru_st_pri = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_st_pri', $bud_ru_st_pri);
-
-
-
 $smarty->display('bud_ru_st_pri.html');
-
-
-
 ?>

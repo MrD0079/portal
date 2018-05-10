@@ -1,16 +1,12 @@
 <h1>Статьи приходов</h1>
-
 <form target="_self" method="POST" name=form id=form enctype="multipart/form-data">
-
 <p>
 <input type=submit value="сохранить">
 </p>
-
 <p>
 новая статья <input name=new[0][name] size=40>
 <input type=hidden name=new[0][dpt_id] value="{$dpt_id}">
 </p>
-
 <table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold">
 		<td>[x]</td>
@@ -19,11 +15,10 @@
 	</tr>
 	{foreach key=key item=item from=$bud_ru_st_pri}
 	<tr>
-		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path}"></td>
-		<td><input name=update[{$item.id}][name] size=60 value="{$item.name}"></td>
+		<td><input type=checkbox name=delete[{$item.id}] value="{$item.id}"></td>
+		<td><input name=update[{$item.id}][name] size=60 value="{$item.name|escape}"></td>
 		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=10></td>
 	</tr>
 	{/foreach}
 </table>
-
 </form>

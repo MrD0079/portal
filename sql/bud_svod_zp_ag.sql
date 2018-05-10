@@ -1,4 +1,4 @@
-/* Formatted on 06.12.2016 15:13:56 (QP5 v5.252.13127.32867) */
+/* Formatted on 08.05.2018 19:04:43 (QP5 v5.252.13127.32867) */
 SELECT NVL (sv.id, FN_GET_NEW_ID) id,
        u.fio ts,
        u.tab_num ts_tn,
@@ -6,77 +6,22 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
        s.eta eta,
        NVL (vp.val_fact, 0) val_fact,
        vp.val_plan dz_return,
-         CASE
-            WHEN s.eta_coffee = 1
-            THEN
-               0.03
-            WHEN DECODE (NVL (vp.val_plan, 0),
-                         0, 0,
-                         (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
-            THEN
-               0.01
-            ELSE
-               0.02
-         END
-       * sv.sales
-          dz_return_norm,
-         CASE
-            WHEN s.eta_coffee = 1
-            THEN
-               0.03
-            WHEN DECODE (NVL (vp.val_plan, 0),
-                         0, 0,
-                         (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
-            THEN
-               0.01
-            ELSE
-               0.02
-         END
-       * 100
-          sales_perc,
+       0.01 * sv.sales dz_return_norm,
+       0.01 * 100 sales_perc,
        DECODE (NVL (vp.val_plan, 0),
                0, 0,
                (NVL (vp.val_fact, 0)) / vp.val_plan * 100)
           plan_perc,
        sv.fal_payment,
-         CASE
-            WHEN s.eta_coffee = 1
-            THEN
-               0.03
-            WHEN DECODE (NVL (vp.val_plan, 0),
-                         0, 0,
-                         (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
-            THEN
-               0.01
-            ELSE
-               0.02
-         END
-       * sv.sales
-          zp_plan,
-       ROUND (
-            CASE
-               WHEN s.eta_coffee = 1
-               THEN
-                  0.03
-               WHEN DECODE (NVL (vp.val_plan, 0),
-                            0, 0,
-                            (NVL (vp.val_fact, 0)) / vp.val_plan * 100) < 80
-               THEN
-                  0.01
-               ELSE
-                  0.02
-            END
-          * sv.sales)
-          zp_fakt_def,
+       0.01 * sv.sales zp_plan,
+       ROUND (0.01 * sv.sales) zp_fakt_def,
        sv.zp_fakt,
        NVL (sv.unscheduled, 0) unscheduled,
        s.eta_tab_number,
        sv.probeg,
        sv.gbo,
        sv.amort,
-       DECODE (NVL (sv.fal_payment, 0),
-               0, 0,
-               sv.amort / sv.fal_payment * 100)
+       DECODE (NVL (sv.fal_payment, 0), 0, 0, sv.amort / sv.fal_payment * 100)
           amort_perc,
        NVL (sv.fal_payment, 0) + NVL (sv.amort, 0) + NVL (sv.gbo_warmup, 0)
           total1,
@@ -114,8 +59,8 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
           FROM bud_funds_norm n1, bud_funds f1
          WHERE n1.fund = f1.id AND f1.dpt_id = :dpt_id) n,
        (SELECT h_eta,
-               (NVL (val_plan, 0) /*+ NVL (coffee_plan, 0)*/) * 1000 val_plan,
-               (NVL (val_fact, 0) /*+ NVL (coffee_fact, 0)*/) * 1000 val_fact
+               (NVL (val_plan, 0)) * 1000 val_plan,
+               (NVL (val_fact, 0)) * 1000 val_fact
           FROM kpr k
          WHERE k.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = k.dt) vp
  WHERE     sv.fil = f.id(+)
@@ -127,8 +72,8 @@ SELECT NVL (sv.id, FN_GET_NEW_ID) id,
             OR :clusters = 0)
        AND s.tab_num = u.tab_num
        AND u.dpt_id = :dpt_id
-  and u.is_spd=1
-     AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
+       AND u.is_spd = 1
+       AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
        AND :dpt_id = sv.dpt_id(+)
        AND s.h_eta = sv.h_eta(+)
        AND s.h_eta = vp.h_eta(+)
@@ -173,9 +118,7 @@ SELECT sv.id,
        sv.probeg,
        sv.gbo,
        sv.amort,
-       DECODE (NVL (sv.fal_payment, 0),
-               0, 0,
-               sv.amort / sv.fal_payment * 100)
+       DECODE (NVL (sv.fal_payment, 0), 0, 0, sv.amort / sv.fal_payment * 100)
           amort_perc,
        NVL (sv.fal_payment, 0) + NVL (sv.amort, 0) + NVL (sv.gbo_warmup, 0)
           total1,
@@ -207,8 +150,8 @@ SELECT sv.id,
             OR :clusters = 0)
        AND sv.tn = u.tn
        AND u.dpt_id = sv.dpt_id
-  and u.is_spd=1
-     AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
+       AND u.is_spd = 1
+       AND TO_DATE ( :dt, 'dd.mm.yyyy') = sv.dt(+)
        AND (   :exp_list_without_ts = 0
             OR u.tn IN (SELECT slave
                           FROM full

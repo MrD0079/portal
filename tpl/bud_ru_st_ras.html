@@ -22,8 +22,8 @@
 	</tr>
 	{foreach key=key item=item from=$bud_ru_st_ras}
 	<tr {if $item.parent eq 0}style="background-color: rgb(150, 150, 150);"{/if}>
-		<td><input type=checkbox name=delete[{$item.id}] value="{$item.path}"></td>
-		<td><input name=update[{$item.id}][name] size=60 value="{$item.name}"></td>
+		<td><input type=checkbox name=delete[{$item.id}] value="{$item.id}"></td>
+		<td><input name=update[{$item.id}][name] size=60 value="{$item.name|escape}"></td>
 		<td><input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=3></td>
 
 		<td>

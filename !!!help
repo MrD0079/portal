@@ -10,3 +10,48 @@ ini_set('display_errors', 'On');
                 
                 if (!isFormDataEmpty){
                 console.log('form data is not empty');
+
+
+
+ini_set('display_errors', 'On');
+
+/*
+//ini_set('default_charset', 'cp1251');
+
+
+header("Content-Type: text/html; charset=\"windows-1251\"");
+putenv("NLS_LANG=RUSSIAN_CIS.CL8MSWIN1251");
+define('ZAOIBM','(DESCRIPTION =    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(PORT = 1521)(HOST = oracle2.avk.company))    )    (CONNECT_DATA =      (SERVICE_NAME = ZAOAVK)      (SERVER = DEDICATED)    )  )');
+
+
+//mb_internal_charset('Windows-1251');
+mb_internal_encoding("windows-1251");
+define('SMARTY_RESOURCE_CHAR_SET', 'windows-1251');
+echo mb_internal_encoding();
+
+//require('/home/httpd/server2/Smarty/libs/Smarty.class.php');
+require('Smarty3/libs/Smarty.class.php');
+$smarty = new Smarty;
+//$smarty->debugging=true;
+//$smarty->config_dir   = 'c:/web/smarty/configs/';
+//$smarty->cache_dir    = 'c:/php/smarty/cache/';
+$smarty->compile_dir  = 'templates_c/';
+$smarty->template_dir = 'tpl/';
+//$smarty->escape_html = true;
+
+//$smarty->default_modifiers = array('escape:"htmlall"');
+//$smarty->assign('name','fish boy!');
+//$smarty->display('index.html');
+
+require_once "local_functions.php";
+
+require_once 'MDB2.php';
+$dsn = 'oci8://persik:razvitie@'.ZAOIBM;
+$db = MDB2::connect($dsn);
+$db->loadModule('Extended');
+$db->loadModule('Function');
+
+$smarty->assign('dpt_id', 1);
+*/
+
+//print_r($_bud_ru_st_pri);

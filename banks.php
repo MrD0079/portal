@@ -1,7 +1,7 @@
 <?
 
 //print_r($_SESSION);
-
+ini_set('display_errors', 'On');
 //ses_req();
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))
