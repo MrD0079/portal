@@ -62,7 +62,7 @@ $("#oblast option[value='{$smarty.request.oblast}']").prop('selected', true);
 <select name="city" id="city">
 	<option value=0></option>
 	{foreach key=key item=item from=$city}
-	<option value="{$item.city}">{$item.city}</option>
+	<option value="{$item.city|escape}">{$item.city|escape}</option>
 	{/foreach}
 </select>
 <script>
@@ -104,7 +104,7 @@ $("#svms_list option[value={$smarty.request.svms_list}]").prop('selected', true)
 <select name=agent id=agent>
 	<option value=0></option>
 	{foreach key=key item=item from=$routes_head_agents}
-	<option value="{$item.id}">{$item.name}</option>
+	<option value="{$item.id}">{$item.name|escape}</option>
 	{/foreach}
 </select>
 <script>

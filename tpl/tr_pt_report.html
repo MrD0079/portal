@@ -29,7 +29,7 @@
 				">
 				<input {$disabled} type=hidden id=completed_{$i.id} name=a[{$i.id}][completed] disabled>
 			</td>
-			<td><textarea {$disabled} cols="50" rows="5" id=os_{$i.id} name=a[{$i.id}][os] {if $i.completed neq 1}disabled{/if}>{$i.os}</textarea></td>
+			<td><textarea {$disabled} cols="50" rows="5" id=os_{$i.id} name=a[{$i.id}][os] {if $i.completed neq 1}disabled{/if}>{$i.os|escape}</textarea></td>
 			<td style="text-align:center;
 				/*{if $i.test eq 2}*/background-color:#00ff00;/*{/if}*/
 				/*{if $i.test eq 3}*/background-color:#ff0000;/*{/if}*/

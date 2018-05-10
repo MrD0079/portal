@@ -11,8 +11,8 @@
 {foreach key=key item=item from=$routes_agents}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=40 value="{$item.name}"></td>
-<td><input name=data[{$item.id}][contact_avk] size=100 value="{$item.contact_avk}"></td>
+<td><input name=data[{$item.id}][name] size=40 value="{$item.name|escape}"></td>
+<td><input name=data[{$item.id}][contact_avk] size=100 value="{$item.contact_avk|escape}"></td>
 <td>
 <img src="files/{$item.logo}" alt="">
 <input name=logo[{$item.id}] type=file></td>

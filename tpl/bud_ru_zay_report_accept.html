@@ -96,7 +96,7 @@
 			<b>Дата {if $smarty.request.tu eq 1}внесения результатов переговоров{else}отчета по заявке{/if}:</b><br>
 			{if $i.head.report_data}
 				{$i.head.report_data}<br>
-				<font style="font-weight:bold;color:green">{$i.head.report_data_fio} {$i.head.report_data_lu}</font><br>
+				<font style="font-weight:bold;color:green">{$i.head.report_data_fio|escape} {$i.head.report_data_lu}</font><br>
 				{$i.head.report_data_text|nl2br}<br>
 			{/if}
 			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}

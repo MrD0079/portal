@@ -40,13 +40,13 @@
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_mr}</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_fakt}</td>
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
-			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">{$i2.mr_text}</td>
+			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">{$i2.mr_text|escape}</td>
 			<!--<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_f}</td>
 			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_fakt}</td>
 			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_delta}</td>
-			<td style="background-color: {if $i2.day_time_f neq $i2.f_fakt}red{else}rgb(255, 255, 204){/if};text-align: center;">{$i2.f_text}</td>
+			<td style="background-color: {if $i2.day_time_f neq $i2.f_fakt}red{else}rgb(255, 255, 204){/if};text-align: center;">{$i2.f_text|escape}</td>
 			<td style="background-color: rgb(255, 204, 255);text-align: center;">{$i2.ras}</td>
-			<td style="background-color: rgb(255, 204, 255);text-align: center;">{$i2.ras_text}</td>-->
+			<td style="background-color: rgb(255, 204, 255);text-align: center;">{$i2.ras_text|escape}</td>-->
 
 
 			<td {if $i1.head.is_red}bgcolor="red"{else}style="background-color: rgb(153, 255, 153);"{/if}>

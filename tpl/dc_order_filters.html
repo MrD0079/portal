@@ -28,7 +28,7 @@ function addSel(v,v1)
 			<select required name="dc_loc">
 				<option></option>
 				{foreach key=key item=item from=$dc_loc}
-					<option value={$item.id}>{$item.name}</option>
+					<option value={$item.id}>{$item.name|escape}</option>
 				{/foreach}
 			</select>
 			<script>$('[name=dc_loc]').val({$smarty.request.dc_loc});</script>
@@ -52,7 +52,7 @@ function addSel(v,v1)
 					<select>
 						<option></option>
 						{foreach key=key item=item from=$cnt}
-							<option value={$item.dpt_id}>{$item.cnt_name}</option>
+							<option value={$item.dpt_id}>{$item.cnt_name|escape}</option>
 						{/foreach}
 					</select>
 					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->
@@ -86,7 +86,7 @@ function addSel(v,v1)
 					<select>
 						<option></option>
 						{foreach key=key item=item from=$pos}
-							<option value={$item.pos_id}>{$item.pos_name}</option>
+							<option value={$item.pos_id}>{$item.pos_name|escape}</option>
 						{/foreach}
 					</select>
 					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->
@@ -115,7 +115,7 @@ function addSel(v,v1)
 					<select>
 						<option></option>
 						{foreach key=key item=item from=$parents}
-							<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+							<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>
 						{/foreach}
 					</select>
 					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->

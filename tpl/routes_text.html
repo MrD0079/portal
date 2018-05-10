@@ -9,7 +9,7 @@
 {foreach key=key item=item from=$routes_text}
 <tr>
 <td><input name=del[{$item.id}] type=checkbox></td>
-<td><input name=data[{$item.id}][name] size=80 value="{$item.name}"></td>
+<td><input name=data[{$item.id}][name] size=80 value="{$item.name|escape}"></td>
 </tr>
 {/foreach}
 </table>

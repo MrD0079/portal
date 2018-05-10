@@ -11,7 +11,7 @@
 		<tr id=prob_test_{$i.id} {if $i.a_ok}style="background-color:lightgreen"{/if}>
 			<td>
 				<a href='javascript:void(0);' onClick="del_prob_test({$i.id})">[x]</a>
-				текст ответа <textarea id=d_{$i.id}_name size=50 onChange="save_prob_test({$i.id},'name',this.value);">{$i.name}</textarea>
+				текст ответа <textarea id=d_{$i.id}_name size=50 onChange="save_prob_test({$i.id},'name',this.value);">{$i.name|escape}</textarea>
 				правильный <input id=d_{$i.id}_a_ok size=8 class="number_int" value="{$i.a_ok}" onChange="save_prob_test({$i.id},'a_ok',this.value);">
 			</td>
 		</tr>

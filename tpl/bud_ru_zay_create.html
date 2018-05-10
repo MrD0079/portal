@@ -49,7 +49,7 @@
                                         <option
                                                 {if $item.parent eq 0}disabled style="background-color: rgb(200, 200, 200);"{/if}
                                                 value="{$item.id}"
-                                        >{$item.name}</option>
+                                        >{$item.name|escape}</option>
                 {/if}
                                 {/foreach}
                                 </select>
@@ -64,7 +64,7 @@
                                 >
                                 <!--<option></option>
                                 {foreach key=key item=item from=$fil}
-                                        <option value="{$item.bud_id}">{$item.bud_name}</option>
+                                        <option value="{$item.bud_id}">{$item.bud_name|escape}</option>
                                 {/foreach}-->
                                 </select>
                                 <script>$('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);</script>
@@ -79,7 +79,7 @@
                                 >
                                 <option></option>
                                 {foreach key=key item=item from=$funds}
-                                        <option value="{$item.id}">{$item.name}</option>
+                                        <option value="{$item.id}">{$item.name|escape}</option>
                                 {/foreach}
                                 </select>
                                 <script>$('#new_funds option[value="{$smarty.request.new.funds}"]').prop('selected', true);</script>
@@ -131,7 +131,7 @@
                                 >
                                 <option></option>
                                 {foreach key=key item=item from=$nets}
-                                        <option value="{$item.id_net}">{$item.net_name}</option>
+                                        <option value="{$item.id_net}">{$item.net_name|escape}</option>
                                 {/foreach}
                                 </select>
                                 <script>$('#net option[value="{$smarty.request.new.id_net}"]').prop('selected', true);</script>

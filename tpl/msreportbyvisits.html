@@ -41,7 +41,7 @@
 			{math assign="color" equation='y' y=$smarty.foreach.d.iteration%4} 
 			{if $color eq 1}<br>{/if}
 			<input class=chk_all name=head_agents[{$item.id}] id="head_agents_{$item.id}" type=checkbox {foreach key=key1 item=item1 from=$smarty.request.head_agents}{if $item.id eq $key1}checked{/if}{/foreach} {if $s eq 0}checked{/if}>
-			{$item.name}
+			{$item.name|escape}
 		{/foreach}
 		<br>
 		<input type=submit name=select value="Построить отчет">

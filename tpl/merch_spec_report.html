@@ -73,7 +73,7 @@
 {assign var="field_name" value="{$item1.name}"}
 {if not $smarty.request.print}
 	{if $item1.tip eq 'float'}<input name=rb[{$item.id}][{$item1.name}] value="{$item.$field_name}" class="number3">{/if}
-	{if $item1.tip eq 'text'}<input name=rb[{$item.id}][{$item1.name}] value="{$item.$field_name}">{/if}
+	{if $item1.tip eq 'text'}<input name=rb[{$item.id}][{$item1.name}] value="{$item.$field_name|escape}">{/if}
 	{if $item1.tip eq 'bool'}
 	<input
 	class="bool_{$item1.name}"
@@ -94,7 +94,7 @@
 	{/if}
 {else}
 	{if $item1.tip eq 'float'}{$item.$field_name}{/if}
-	{if $item1.tip eq 'text'}{$item.$field_name}{/if}
+	{if $item1.tip eq 'text'}{$item.$field_name|escape}{/if}
 	{if $item1.tip eq 'bool'}{if $item.$field_name eq 1}да{/if}{/if}
 {/if}
 </td>

@@ -53,7 +53,7 @@
 
 <td>
 {if $item.parent neq 0}
-<textarea cols=20 rows=3 name=update[{$item.id}][req_att]>{$item.req_att}</textarea>
+<textarea cols=20 rows=3 name=update[{$item.id}][req_att]>{$item.req_att|escape}</textarea>
 {/if}
 </td>
 
@@ -65,7 +65,7 @@
 		{/if}
 
 {if $item.parent eq 0}
-<td><textarea cols=20 rows=3 name=update[{$item.id}][hint]>{$item.hint}</textarea></td>
+<td><textarea cols=20 rows=3 name=update[{$item.id}][hint]>{$item.hint|escape}</textarea></td>
 {/if}
 
 

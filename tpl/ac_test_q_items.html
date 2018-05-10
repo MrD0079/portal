@@ -12,7 +12,7 @@
 		<tr id=ac_test_{$i.id}>
 			<td>
 				<a href='javascript:void(0);' onClick="del_ac_test({$i.id})">[x]</a>
-				текст вопроса <textarea id=d_{$i.id}_name size=50 onChange="save_ac_test({$i.id},'name',this.value);">{$i.name}</textarea>
+				текст вопроса <textarea id=d_{$i.id}_name size=50 onChange="save_ac_test({$i.id},'name',this.value);">{$i.name|escape}</textarea>
 				порядок <input id=d_{$i.id}_q_sort size=8 class="number_int" value="{$i.q_sort}" onChange="save_ac_test({$i.id},'q_sort',this.value);">
 				картинка
 				<div id=div_{$i.id}_pict style="display: inline;">

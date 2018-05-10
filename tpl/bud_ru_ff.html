@@ -59,7 +59,7 @@
 
 	<tr style="text-align:center;background-color:{$bgcolor}">
 		<td rowspan=2>
-			<input type=checkbox name=delete[{$item.id}] value="{$item.path}">
+			<input type=checkbox name=delete[{$item.id}] value="{$item.path|escape}">
 			<input name=update[{$item.id}][sort] class="number_int" value="{$item.sort}" size=2>
 			<select name=update[{$item.id}][type] id=update_{$item.id}_type
 				onChange="
@@ -150,7 +150,7 @@
 		</td>
 		<td style="background-color:#80FFFF">
 			<nobr>
-			<textarea style="background-color:#80FFFF" name=update[{$item.id}][name]>{$item.name}</textarea>
+			<textarea style="background-color:#80FFFF" name=update[{$item.id}][name]>{$item.name|escape}</textarea>
 			<input
 				type=checkbox
 				id=chk_{$item.id}_required
@@ -198,7 +198,7 @@
 	<tr style="text-align:center">
 		<td style="background-color:#FFFF80">
 			<nobr>
-			<textarea style="background-color:#FFFF80" name=update[{$item.id}][rep_name]>{$item.rep_name}</textarea>
+			<textarea style="background-color:#FFFF80" name=update[{$item.id}][rep_name]>{$item.rep_name|escape}</textarea>
 			<input
 				type=checkbox
 				id=chk_{$item.id}_rep_required

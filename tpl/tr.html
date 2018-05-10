@@ -9,7 +9,7 @@
 		</td>
 		<td>
 			название<br>
-			<input name=data[{$item.id}][name] size=50 value="{$item.name}"><br>
+			<input name=data[{$item.id}][name] size=50 value="{$item.name|escape}"><br>
 			код<br>
 			<input name=data[{$item.id}][kod] size=5 value="{$item.kod}" class="number_int"><br>
 			максимальное количество слушателей<br>
@@ -31,7 +31,7 @@
 		</td>
 		<td>
 			текст<br>
-			<textarea name=data[{$item.id}][text] rows=10 cols=100>{$item.text}</textarea>
+			<textarea name=data[{$item.id}][text] rows=10 cols=100>{$item.text|escape}</textarea>
 		</td>
 	</tr>
 	{/foreach}

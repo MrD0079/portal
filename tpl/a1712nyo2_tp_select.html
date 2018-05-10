@@ -28,7 +28,7 @@
                                ">
 				<input type=hidden disabled=disabled id=selected_changed_{$tp_item.tp_kod} name=del[{$tp_item.tp_kod}]>
 			</td>
-			<td><input {if $tp_item.selected neq 1} disabled {/if} type=text required="required" size=25 name=data[{$tp_item.tp_kod}][contact_lpr] id=contact_lpr_{$tp_item.tp_kod} value="{$tp_item.contact_lpr}"></td>
+			<td><input {if $tp_item.selected neq 1} disabled {/if} type=text required="required" size=25 name=data[{$tp_item.tp_kod}][contact_lpr] id=contact_lpr_{$tp_item.tp_kod} value="{$tp_item.contact_lpr|escape}"></td>
 		</tr>
 		{/foreach}
 		<tr style="font-weight:bold; text-align:center">

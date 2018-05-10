@@ -59,7 +59,7 @@
 				<input type=hidden name=december[{$tp_item.kod_tp}] value="{$tp_item.december}">
 			</td>
 			<td><input {if $tp_item.selected neq 1 or $tp_item.ok_traid neq null} disabled {/if} required size=8 name=jan_plan[{$tp_item.kod_tp}] id=jan_plan[{$tp_item.kod_tp}] value="{$tp_item.jan_plan}"></td>
-			<td><input {if $tp_item.selected neq 1 or $tp_item.ok_traid neq null} disabled {/if} required size=25 name=contact_lpr[{$tp_item.kod_tp}] id=contact_lpr[{$tp_item.kod_tp}] value="{$tp_item.contact_lpr}"></td>
+			<td><input {if $tp_item.selected neq 1 or $tp_item.ok_traid neq null} disabled {/if} required size=25 name=contact_lpr[{$tp_item.kod_tp}] id=contact_lpr[{$tp_item.kod_tp}] value="{$tp_item.contact_lpr|escape}"></td>
 		</tr>
 		{/foreach}
 		<tr style="font-weight:bold; text-align:center">

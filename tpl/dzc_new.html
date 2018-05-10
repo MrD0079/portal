@@ -24,7 +24,7 @@
 <script type='text/javascript'>
 $a=1;
 $cnt=0;
-$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>{/if}{/foreach}{literal}";
+$s="<option></option>{/literal}{foreach key=key item=item from=$spd_list}{if $item.tn neq $smarty.request.bud_ru.tn}<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>{/if}{/foreach}{literal}";
 function add_acceptor(id)
 {
 	$("<div id=\"div_dzc_acceptors_new"+$a+"\"><a href=\"javascript:void(0);\" onclick=\"check_required(-1);$('#dzc_acceptors_new"+$a+"').val(null);$('#dzc_acceptors_new"+$a+"').attr('disabled',true);$('#div_dzc_acceptors_new"+$a+"').hide();\">[X]</a></div>").insertBefore($("#ac1"));

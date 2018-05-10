@@ -11,8 +11,8 @@
 			<tr id=dm_cat_appeals_{$i.id}>
 				<td>
 					<a href='javascript:void(0);' onClick="del_dm_cat_appeals({$i.id})">[x]</a>
-					название <input id=d_{$i.id}_name size=50 value="{$i.name}" onChange="save_dm_cat_appeals({$i.id},'name',this.value);">
-					приоритет <input id=d_{$i.id}_priority size=50 value="{$i.priority}" onChange="save_dm_cat_appeals({$i.id},'priority',this.value);">
+					название <input id=d_{$i.id}_name size=50 value="{$i.name|escape}" onChange="save_dm_cat_appeals({$i.id},'name',this.value);">
+					приоритет <input id=d_{$i.id}_priority size=50 value="{$i.priority|escape}" onChange="save_dm_cat_appeals({$i.id},'priority',this.value);">
 					нормативное время <input id=d_{$i.id}_norm_time size=8 value="{$i.norm_time}" class="number_int" onChange="save_dm_cat_appeals({$i.id},'norm_time',this.value);">
 					<div style="margin-left:50px" id=detail_{$i.id}></div>
 				</td>

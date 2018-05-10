@@ -66,10 +66,10 @@
 </tr>
 {foreach key=key item=item from=$distr_access}
 <tr style="text-align:center">
-<td style="text-align:left">{$item.name}</td>
+<td style="text-align:left">{$item.name|escape}</td>
 <td>{$item.name_nd}</td>
 <td style="text-align:left">{$item.db_list}</td>
-<td style="text-align:left">{$item.comm}</td>
+<td style="text-align:left">{$item.comm|escape}</td>
 <td>{$item.login}</td>
 <td><div style="display: inline;" id=div_change_{$item.id}>{$item.password}</div></td>
 <td>

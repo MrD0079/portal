@@ -9,13 +9,13 @@
 </td>
 <td>
 название локации<br>
-<input name=data[{$item.id}][name] size=150 value="{$item.name}"><br>
+<input name=data[{$item.id}][name] size=150 value="{$item.name|escape}"><br>
 адрес локации<br>
-<input name=data[{$item.id}][addr] size=150 value="{$item.addr}"><br>
+<input name=data[{$item.id}][addr] size=150 value="{$item.addr|escape}"><br>
 комментарии<br>
-<textarea name=data[{$item.id}][text] rows=10 cols=100>{$item.text}</textarea><br>
-ссылка на карту <a target=_blank href="{$item.url}">Посмотреть</a><br>
-<textarea name=data[{$item.id}][url] rows=10 cols=100>{$item.url}</textarea><br>
+<textarea name=data[{$item.id}][text] rows=10 cols=100>{$item.text|escape}</textarea><br>
+ссылка на карту <a target=_blank href="{$item.url|escape}">Посмотреть</a><br>
+<textarea name=data[{$item.id}][url] rows=10 cols=100>{$item.url|escape}</textarea><br>
 </td>
 </tr>
 {/foreach}

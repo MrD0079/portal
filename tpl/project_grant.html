@@ -26,7 +26,7 @@
 	</tr>
 	{foreach key=k item=i from=$project_grant}
 	<tr style="vertical-align:top">
-		<td>{$i.head.name}</td>
+		<td>{$i.head.name|escape}</td>
 		<td>
 			<p><a href="javascript:void(0)" onclick="javascript:add_grant('tn','otv','{$i.head.id}');">Добавить Ф.И.О.</a></p>			<div id="tn_otv{$i.head.id}"></div>
 			{foreach key=k1 item=i1 from=$i.data.tn.otv}

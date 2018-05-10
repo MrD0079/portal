@@ -149,7 +149,7 @@
 				<select name=flt_id id=flt_id>
 					<option value=0></option>
 					{foreach key=key item=item from=$kk_flt_nets}
-					<option value={$item.id}>{$item.name}</option>
+					<option value={$item.id}>{$item.name|escape}</option>
 					{/foreach}
 				</select>
 				<script>$('#flt_id option[value="{$smarty.request.flt_id}"]').prop('selected', true);</script>

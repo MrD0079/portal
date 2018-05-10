@@ -18,8 +18,8 @@
 	{foreach key=key1 item=item1 from=$item.data}
 	<tr id="{$item.head.part_id}_{$item1.id}">
 		<td style="text-align: center;"><a href="javascript:void(0);" onclick="$('#{$item.head.part_id}_{$item1.id}').remove();$i[{$item.head.part_id}]--;">[õ]</a></td>
-		<td style="vertical-align: top; background-color: rgb(204, 255, 255); text-align: center;"><textarea required cols="70" rows="2" name="tasks[{$item.head.part_id}][{$item1.id}][task]">{$item1.task}</textarea></td>
-		<td style="vertical-align: top; background-color: rgb(255, 255, 204); text-align: center;"><textarea required cols="30" rows="2" name="tasks[{$item.head.part_id}][{$item1.id}][result]">{$item1.result}</textarea></td>
+		<td style="vertical-align: top; background-color: rgb(204, 255, 255); text-align: center;"><textarea required cols="70" rows="2" name="tasks[{$item.head.part_id}][{$item1.id}][task]">{$item1.task|escape}</textarea></td>
+		<td style="vertical-align: top; background-color: rgb(255, 255, 204); text-align: center;"><textarea required cols="30" rows="2" name="tasks[{$item.head.part_id}][{$item1.id}][result]">{$item1.result|escape}</textarea></td>
 		<td style="vertical-align: top; background-color: rgb(153, 255, 153); text-align: center;"><input required name="tasks[{$item.head.part_id}][{$item1.id}][dt_end]" class="datepicker" value="{$item1.dt_end}"></td>
 	</tr>
 	{/foreach}

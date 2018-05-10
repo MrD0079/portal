@@ -18,7 +18,7 @@
                 {if $ms_nets_item.id_net eq $smarty.request.id_net}
                 <input type=hidden name=edit_id_net value="{$smarty.request.id_net}">
                 <tr>
-                    <td><input size=30 name=edit[net_name] value="{$ms_nets_item.net_name}"></td>
+                    <td><input size=30 name=edit[net_name] value="{$ms_nets_item.net_name|escape}"></td>
                     <td>
                             <select name=edit[tn_tmkk] id=edit[tn_tmkk]>
                                     <option></option>

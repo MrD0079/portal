@@ -35,13 +35,13 @@
 <input name=del[{$item.dpt_id}] type=checkbox>
 </td>
 <td>
-<input name=data[{$item.dpt_id}][dpt_name] size=50 value="{$item.dpt_name}">
+<input name=data[{$item.dpt_id}][dpt_name] size=50 value="{$item.dpt_name|escape}">
 </td>
 <td>
-<input name=data[{$item.dpt_id}][cnt_name] size=50 value="{$item.cnt_name}">
+<input name=data[{$item.dpt_id}][cnt_name] size=50 value="{$item.cnt_name|escape}">
 </td>
 <td>
-<input name=data[{$item.dpt_id}][cnt_kod] size=5 value="{$item.cnt_kod}">
+<input name=data[{$item.dpt_id}][cnt_kod] size=5 value="{$item.cnt_kod|escape}">
 </td>
 <td>
 <input name=data[{$item.dpt_id}][sort] size=5 value="{$item.sort}" class="number_int">

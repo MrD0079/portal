@@ -25,7 +25,7 @@
 <td>
 <a href="javascript:void(0);" onclick="del_fil({$item.id});">[x]</a>
 </td>
-<td><input id="div_{$item.id}_name" onChange="save_fil({$item.id},'name',this.value);" name=data[{$item.id}][name] size=30 value="{$item.name}"></td>
+<td><input id="div_{$item.id}_name" onChange="save_fil({$item.id},'name',this.value);" name=data[{$item.id}][name] size=30 value="{$item.name|escape}"></td>
 <td><input id="div_{$item.id}_sw_kod" onChange="save_fil({$item.id},'sw_kod',this.value);" name=data[{$item.id}][sw_kod] size=3 value="{$item.sw_kod}"></td>
 <td>
 	<select id="div_{$item.id}_nd" onchange="save_fil({$item.id},'nd',this.value);" name=data[{$item.id}][nd]>
@@ -50,7 +50,7 @@
 		</select>
 		<script>$('#div_{$item.id}_data_end').val('{$item.data_end}');</script>
 </td>
-<td><textarea id="div_{$item.id}_comm" onChange="save_fil({$item.id},'comm',this.value);" name=data[{$item.id}][comm]>{$item.comm}</textarea></td>
+<td><textarea id="div_{$item.id}_comm" onChange="save_fil({$item.id},'comm',this.value);" name=data[{$item.id}][comm]>{$item.comm|escape}</textarea></td>
 <td>
 	Логин/Пароль: <div style="display: inline; font-weight:bold;">{$item.login}</div>/<div style="display: inline; font-weight:bold;" id=div_change_{$item.id}>{$item.password}</div>
 	<br>

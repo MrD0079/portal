@@ -21,7 +21,7 @@ function addSel(v,v1)
 			<select required name="tr">
 				<option></option>
 				{foreach key=key item=item from=$tr}
-					<option value={$item.id}>{$item.name}</option>
+					<option value={$item.id}>{$item.name|escape}</option>
 				{/foreach}
 			</select>
 			<script>$('[name=tr]').val({$smarty.request.tr});</script>
@@ -40,7 +40,7 @@ function addSel(v,v1)
 			<select required name="tr_loc">
 				<option></option>
 				{foreach key=key item=item from=$tr_loc}
-					<option value={$item.id}>{$item.name}</option>
+					<option value={$item.id}>{$item.name|escape}</option>
 				{/foreach}
 			</select>
 			<script>$('[name=tr_loc]').val({$smarty.request.tr_loc});</script>
@@ -72,7 +72,7 @@ function addSel(v,v1)
 					<select>
 						<option></option>
 						{foreach key=key item=item from=$parents}
-							<option value={$item.tn}>{$item.fio} - {$item.dpt_name}</option>
+							<option value={$item.tn}>{$item.fio|escape} - {$item.dpt_name|escape}</option>
 						{/foreach}
 					</select>
 					<!--<a href="javascript:void(0);" onclick="$(this).parent().remove();">Удалить</a>-->

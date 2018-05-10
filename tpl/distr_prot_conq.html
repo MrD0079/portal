@@ -23,9 +23,9 @@
 
 <td>
 <input id="div_{$item.id}_activ" onclick="save_conq({$item.id},'activ',this.checked?1:0);" {if $item.activ}checked{/if} type=checkbox>
-<input id="div_{$item.id}_name" onChange="save_conq({$item.id},'name',this.value);" name=data[{$item.id}][name] size=50 value="{$item.name}">
+<input id="div_{$item.id}_name" onChange="save_conq({$item.id},'name',this.value);" name=data[{$item.id}][name] size=50 value="{$item.name|escape}">
 <br>
-<textarea id="div_{$item.id}_q" onChange="save_conq({$item.id},'q',this.value);" name=data[{$item.id}][q]>{$item.q}</textarea>
+<textarea id="div_{$item.id}_q" onChange="save_conq({$item.id},'q',this.value);" name=data[{$item.id}][q]>{$item.q|escape}</textarea>
 <br>
 Филиалы
 <a href='javascript:void(0);' onClick="show_fils({$item.id})">[показать]</a>

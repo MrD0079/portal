@@ -27,7 +27,7 @@
 <select name="dc_loc">
 	<option value=0></option>
 	{foreach key=key item=item from=$dc_loc}
-		<option value={$item.id}>{$item.name}</option>
+		<option value={$item.id}>{$item.name|escape}</option>
 	{/foreach}
 </select>
 <script>$('[name=dc_loc]').val({$smarty.request.dc_loc});</script>
@@ -44,7 +44,7 @@
 <select name="pos">
 	<option value=0></option>
 	{foreach key=key item=item from=$pos}
-		<option value={$item.pos_id}>{$item.pos_name}</option>
+		<option value={$item.pos_id}>{$item.pos_name|escape}</option>
 	{/foreach}
 </select>
 <script>$('[name=pos]').val({$smarty.request.pos});</script>

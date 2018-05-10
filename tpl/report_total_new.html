@@ -78,7 +78,7 @@ $('#dates_list2').val('{$smarty.request.dates_list2}');
 	{/foreach}
 	{if $s eq 0}checked{/if}
 	>
-	{$item.name}
+	{$item.name|escape}
 {/foreach}
 
 <br>

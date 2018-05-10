@@ -87,7 +87,7 @@
 </td>
 <td>
 {if not $smarty.request.print}
-<input {$disabled} name=d[subj] size=60 value="{$os_head.subj}">
+<input {$disabled} name=d[subj] size=60 value="{$os_head.subj|escape}">
 {else}
 <b>{$os_head.subj|nl2br}</b>
 {/if}
@@ -99,7 +99,7 @@
 </td>
 <td>
 {if not $smarty.request.print}
-<input {$disabled} name=d[case_name] size=60 value="{$os_head.case_name}">
+<input {$disabled} name=d[case_name] size=60 value="{$os_head.case_name|escape}">
 {else}
 <b>{$os_head.case_name|nl2br}</b>
 {/if}
@@ -111,7 +111,7 @@
 </td>
 <td>
 {if not $smarty.request.print}
-<input {$disabled} name=d[goal] size=60 value="{$os_head.goal}">
+<input {$disabled} name=d[goal] size=60 value="{$os_head.goal|escape}">
 {else}
 <b>{$os_head.goal|nl2br}</b>
 {/if}
@@ -207,7 +207,7 @@ function del_file(rid)
 <td style="border: 1px solid black; text-align:center; font-weight:bold">{$i.en|default:0} из {$i.c1}</td>
 <td style="border: 1px solid black; text-align:center" rowspan={$i.c+1}>
 	{if not $smarty.request.print}
-		<textarea {$disabled} name=body[{$i.id}][v_text] rows={$i.c} cols=20>{$i.v_text}</textarea><br><input type=submit {$disabled} value=Сохранить name=save>
+		<textarea {$disabled} name=body[{$i.id}][v_text] rows={$i.c} cols=20>{$i.v_text|escape}</textarea><br><input type=submit {$disabled} value=Сохранить name=save>
 	{else}
 		{$i.v_text|nl2br}
 	{/if}
@@ -226,7 +226,7 @@ function del_file(rid)
 <td>
 <h3>Решение оценочной комиссии</h3>
 	{if not $smarty.request.print}
-		<textarea {$disabled1} cols=50 rows=10 class="datepicker" name=d[findings]>{$os_head.findings}</textarea>
+		<textarea {$disabled1} cols=50 rows=10 class="datepicker" name=d[findings]>{$os_head.findings|escape}</textarea>
 	{else}
 		{$os_head.findings|nl2br}
 	{/if}
@@ -234,7 +234,7 @@ function del_file(rid)
 <td>
 <h3>ОС участнику ДЦ</h3>
 	{if not $smarty.request.print}
-		<textarea cols=50 rows=10 class="datepicker" name=d[os]>{$os_head.os}</textarea>
+		<textarea cols=50 rows=10 class="datepicker" name=d[os]>{$os_head.os|escape}</textarea>
 	{else}
 		{$os_head.os|nl2br}
 	{/if}

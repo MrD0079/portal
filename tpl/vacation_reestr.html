@@ -227,9 +227,9 @@
 						<td>{$i2.result}</td>
 						<td>{$i2.dt_end}</td>
 						<td style="text-align: center;">{if $i2.replacement_ok}да{/if}</td>
-						<td>{$i2.replacement_result}</td>
+						<td>{$i2.replacement_result|escape}</td>
 						<td style="text-align: center;">{if $i2.chief_ok}да{/if}</td>
-						<td>{$i2.chief_comment}</td>
+						<td>{$i2.chief_comment|escape}</td>
 					</tr>
 					{/foreach}
 					{/foreach}

@@ -3,7 +3,7 @@
 	<tr style="text-align:center;font-weight:bold">
 		<td>Дата</td>
 		{foreach key=key item=item from=$mz_spr_inv}
-		<td>{$item.name}</td>
+		<td>{$item.name|escape}</td>
 		{/foreach}
 		<td>ИТОГО</td>
 		<td>Комментарий</td>
@@ -17,7 +17,7 @@
 		{assign var="kk_h" value=$kk_h+$i1.val}
 		{/foreach}
 		<td>{$kk_h}</td>
-		<td>{if not $smarty.request.print}<input {$disabled_edit} name="inv[{$i.head.dt}][text]" size=50 value="{$i.head.text}">{else}{$i.head.text}{/if}</td>
+		<td>{if not $smarty.request.print}<input {$disabled_edit} name="inv[{$i.head.dt}][text]" size=50 value="{$i.head.text|escape}">{else}{$i.head.text|escape}{/if}</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight:bold;text-align:center">

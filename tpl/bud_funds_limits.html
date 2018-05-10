@@ -41,7 +41,7 @@
 				onChange="
 					save('b','plan',this.value,{$i.db},'');
 					save('b','db_fio','{$i.db_fio}','{$i.db}','');
-					save('b','fil_list','{$i.fil_list}','{$i.db}','');
+					save('b','fil_list','{$i.fil_list|escape}','{$i.db}','');
 				"
 			>
 		</td>

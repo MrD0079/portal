@@ -35,7 +35,7 @@
 	{if $item.level eq 1}style="background-color:#cccccc;font-weight:bold"{/if}
 	{if $item.level eq 2}style="background-color:#dddddd"{/if}
 	>
-		<td {if $item.level eq 1}colspan=6{/if}>{$item.name}</td>
+		<td {if $item.level eq 1}colspan=6{/if}>{$item.name|escape}</td>
 		{if $item.level eq 2}
 		<td>{$item.dt_start}</td>
 		<td>{$item.dt_end}</td>
@@ -62,7 +62,7 @@
 			<br>{$item.ok_chief_fio}
 		</td>
 		<td>
-			<textarea rows=3 cols=30 {if $item.ok_chief_tn}disabled{/if} name=z[{$item.id}][text]>{$item.text}</textarea>
+			<textarea rows=3 cols=30 {if $item.ok_chief_tn}disabled{/if} name=z[{$item.id}][text]>{$item.text|escape}</textarea>
 		</td>
 		{/if}
 	</tr>

@@ -257,9 +257,9 @@
 				<br>
 				<input type=hidden name="d[{$i.head.id}][valid_tn]" value="{$tn}">
 				<input type=hidden name="d[{$i.head.id}][valid_no]" id="valid_no_{$i.head.id}">
-				<textarea rows=5 cols=20 name="d[{$i.head.id}][valid_text]" id="valid_text_{$i.head.id}" {if $i.head.valid_no eq 0}disabled{/if}>{$i.head.valid_text}</textarea>
+				<textarea rows=5 cols=20 name="d[{$i.head.id}][valid_text]" id="valid_text_{$i.head.id}" {if $i.head.valid_no eq 0}disabled{/if}>{$i.head.valid_text|escape}</textarea>
 			{else}
-				<font style="color:green">{$i.head.valid_text}</font>
+				<font style="color:green">{$i.head.valid_text|escape}</font>
 			{/if}
 		</td>
 	</tr>

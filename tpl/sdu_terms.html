@@ -13,7 +13,7 @@
 
 	<tr>
 		<td>Уточненный период</td>
-		<td><input {$disabled} size="70" name="specified_period" id="specified_period" value="{$nets_plan_year.specified_period}"></td>
+		<td><input {$disabled} size="70" name="specified_period" id="specified_period" value="{$nets_plan_year.specified_period|escape}"></td>
 	</tr>
 	<tr>
 		<td>Условия работы сети</td>
@@ -75,7 +75,7 @@
 			<br>
 			Детализация условий оплаты по реализации:
 			<br>
-			<textarea required {if $disabled or $nets_plan_year.pay_type neq 2}disabled{/if} rows="5"  cols="50" name="pay_detail" id="pay_detail">{$nets_plan_year.pay_detail}</textarea>
+			<textarea required {if $disabled or $nets_plan_year.pay_type neq 2}disabled{/if} rows="5"  cols="50" name="pay_detail" id="pay_detail">{$nets_plan_year.pay_detail|escape}</textarea>
 		</td>
 	</tr>
 </table>

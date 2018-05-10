@@ -7,7 +7,7 @@
 					{if $i.perc eq 100}style="background-color:lightgreen"{/if}
 					{if $i.perc > 0 and $i.perc < 100}style="background-color:yellow"{/if}
 				>
-					<a href="?action=tasks&id={$i.id}">{$i.created_t} / {$i.lu_t} / {$i.perc}% / {$i.name}</a>
+					<a href="?action=tasks&id={$i.id}">{$i.created_t} / {$i.lu_t} / {$i.perc}% / {$i.name|escape}</a>
 				</td>
 			</tr>
 			<tr>
@@ -35,7 +35,7 @@
 				{if $i.perc < 1}style="background-color:#FF8888"{/if}
 				{if $i.perc eq 100}style="background-color:lightgreen"{/if}
 				{if $i.perc > 0 and $i.perc < 100}style="background-color:yellow"{/if}
-				value={$i.id}>{$i.created_t} / {$i.lu_t} / {$i.perc}% / {$i.name|truncate:77}</option>
+				value={$i.id}>{$i.created_t} / {$i.lu_t} / {$i.perc}% / {$i.name|escape|truncate:77}</option>
 			{/foreach}
 		</select>
 	<script>$('#id option[value="{$smarty.request.id}"]').prop('selected', true);</script>
@@ -47,7 +47,7 @@
 				<input value="Delete" name="del" type="submit">
 				{/if}
 			</td>
-			<td style="font-weight:bold">Task name <input required name=task[name] size=200 value="{$task.name}"></td>
+			<td style="font-weight:bold">Task name <input required name=task[name] size=200 value="{$task.name|escape}"></td>
 		</tr>
 		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
 			<td>
@@ -57,7 +57,7 @@
 				<input value="Save" name="save" type="submit">
 				{/if}
 			</td>
-			<td rowspan=7><textarea class="WYSIWYG" name=task[text]>{$task.text}</textarea></td>
+			<td rowspan=7><textarea class="WYSIWYG" name=task[text]>{$task.text|escape}</textarea></td>
 		</tr>
 		<tr style="vertical-align:center;background-color:lightgrey;text-align:center">
 			<td>% completed<br><input name=task[perc] size=8 value="{$task.perc}" class="number_int"></td>

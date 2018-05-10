@@ -48,5 +48,5 @@
 	<input type=submit name=generate id=generate value='Выбрать'>
 
 {if $smarty.request.generate}
-	<p><a href="?action=akcii_local_report&print=1&excel=1&generate=1&z_id={$smarty.request.z_id}&filename=Отчет по акции {$act_head.val_string}">Экспорт в Excel</a></p>
+	<p><a href="?action=akcii_local_report&print=1&excel=1&generate=1&z_id={$smarty.request.z_id}&filename=Отчет по акции {$act_head.val_string|escape}">Экспорт в Excel</a></p>
 {/if}

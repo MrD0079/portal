@@ -150,9 +150,9 @@
 			<td style="background-color: rgb(204, 255, 255);text-align: center;">{$i2.mr_delta}</td>
 			<td style="background-color: {if $i2.day_time_mr neq $i2.mr_fakt}red{else}rgb(204, 255, 255){/if};text-align: center;">
 			{if not $smarty.request.print and not $disabled and $i2.day_enabled_mr eq 1}
-				<input size="50" name="rb[mr_text][{$i2.id}]" value="{$i2.mr_text}">
+				<input size="50" name="rb[mr_text][{$i2.id}]" value="{$i2.mr_text|escape}">
 			{else}
-				{$i2.mr_text}
+				{$i2.mr_text|escape}
 			{/if}
 			</td>
 			<!--<td style="background-color: rgb(255, 255, 204);text-align: center;">{if $i2.vv eq 1}внеплановый визит{/if}{$i2.day_time_f}</td>
@@ -166,9 +166,9 @@
 			<td style="background-color: rgb(255, 255, 204);text-align: center;">{$i2.f_delta}</td>
 			<td style="background-color: {if $i2.day_time_f neq $i2.f_fakt}red{else}rgb(255, 255, 204){/if};text-align: center;">
 			{if not $smarty.request.print}
-				<input {$disabled} size="20" name="rb[f_text][{$i2.id}]" {if $i2.day_enabled_f neq 1} disabled {/if} value="{$i2.f_text}">
+				<input {$disabled} size="20" name="rb[f_text][{$i2.id}]" {if $i2.day_enabled_f neq 1} disabled {/if} value="{$i2.f_text|escape}">
 			{else}
-				{$i2.f_text}
+				{$i2.f_text|escape}
 			{/if}
 			</td>
 			<td style="background-color: rgb(255, 204, 255);text-align: center;">
@@ -180,9 +180,9 @@
 			</td>
 			<td style="background-color: rgb(255, 204, 255);text-align: center;">
 			{if not $smarty.request.print}
-				<input {$disabled} size="20" name="rb[ras_text][{$i2.id}]" value="{$i2.ras_text}">
+				<input {$disabled} size="20" name="rb[ras_text][{$i2.id}]" value="{$i2.ras_text|escape}">
 			{else}
-				{$i2.ras_text}
+				{$i2.ras_text|escape}
 			{/if}
 			</td>-->
 		</tr>

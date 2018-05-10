@@ -3,7 +3,7 @@
 	<tr style="text-align:center;font-weight:bold">
 		<td>Дата</td>
 		{foreach key=key item=item from=$mz_spr_ras}
-		<td>{$item.name}</td>
+		<td>{$item.name|escape}</td>
 		{/foreach}
 		{if not $smarty.request.print}
 		<td>Подтверждающие документы</td>
@@ -36,7 +36,7 @@
 		</td>
 		{/if}
 		<td>{$kk_h}</td>
-		<td>{if not $smarty.request.print}<input {$disabled_edit} name="rss[{$i.head.dt}][text]" size=50 value="{$i.head.text}">{else}{$i.text}{/if}</td>
+		<td>{if not $smarty.request.print}<input {$disabled_edit} name="rss[{$i.head.dt}][text]" size=50 value="{$i.head.text|escape}">{else}{$i.text|escape}{/if}</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight:bold;text-align:center">

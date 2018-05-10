@@ -38,7 +38,7 @@
 
 	<input type=hidden name=edit_id_net value="{$smarty.request.id_net}">
 	<tr>
-		<td><input size=30 name=edit[net_name] value="{$nets_item.net_name}"></td>
+		<td><input size=30 name=edit[net_name] value="{$nets_item.net_name|escape}"></td>
 		<td>
 			<!--<input size=3 name=edit[id_status] value="{$nets_item.id_status}">-->
 			<select name=edit[id_status] id=edit[id_status]>

@@ -29,7 +29,7 @@
 	<select name="select_route_numb" id="select_route_numb">
 	<option value=0></option>
 	{foreach key=key item=item from=$routes_head}
-		<option value="{$item.id}">{$item.fio} {$item.num}</option>
+		<option value="{$item.id}">{$item.fio|escape} {$item.num}</option>
 	{/foreach}
 	</select>
 	<script>$('#select_route_numb option[value="{$smarty.request.select_route_numb}"]').prop('selected', true);</script>

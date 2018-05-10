@@ -60,23 +60,23 @@
 </tr>
 <tr>
 <td>Портфель дистрибутора (торговые марки)</td>
-<td {if not $p.portfolio}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_portfolio" onChange="save_fil({$p.id},'portfolio',this.value);">{$p.portfolio}</textarea>{else}{$p.portfolio}{/if}</td>
+<td {if not $p.portfolio}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_portfolio" onChange="save_fil({$p.id},'portfolio',this.value);">{$p.portfolio|escape}</textarea>{else}{$p.portfolio}{/if}</td>
 </tr>
 <tr>
 <td>Перечень обслуживаемых территорий</td>
-<td {if not $p.areas}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_areas" onChange="save_fil({$p.id},'areas',this.value);">{$p.areas}</textarea>{else}{$p.areas}{/if}</td>
+<td {if not $p.areas}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_areas" onChange="save_fil({$p.id},'areas',this.value);">{$p.areas|escape}</textarea>{else}{$p.areas}{/if}</td>
 </tr>
 <tr>
 <td>Фактический адрес</td>
-<td {if not $p.address_fakt}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_address_fakt" onChange="save_fil({$p.id},'address_fakt',this.value);">{$p.address_fakt}</textarea>{else}{$p.address_fakt}{/if}</td>
+<td {if not $p.address_fakt}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_address_fakt" onChange="save_fil({$p.id},'address_fakt',this.value);">{$p.address_fakt|escape}</textarea>{else}{$p.address_fakt}{/if}</td>
 </tr>
 <tr>
 <td>Юридический адрес</td>
-<td {if not $p.address_ur}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_address_ur" onChange="save_fil({$p.id},'address_ur',this.value);">{$p.address_ur}</textarea>{else}{$p.address_ur}{/if}</td>
+<td {if not $p.address_ur}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_address_ur" onChange="save_fil({$p.id},'address_ur',this.value);">{$p.address_ur|escape}</textarea>{else}{$p.address_ur}{/if}</td>
 </tr>
 <tr>
 <td>Реквизиты</td>
-<td {if not $p.props}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_props" onChange="save_fil({$p.id},'props',this.value);">{$p.props}</textarea>{else}{$p.props}{/if}</td>
+<td {if not $p.props}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_props" onChange="save_fil({$p.id},'props',this.value);">{$p.props|escape}</textarea>{else}{$p.props}{/if}</td>
 </tr>
 <tr>
 <td>Площадь склада, м2</td>
@@ -84,7 +84,7 @@
 </tr>
 <tr>
 <td>Фактический адрес склада</td>
-<td {if not $p.ws_addres_fakt}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_ws_addres_fakt" onChange="save_fil({$p.id},'ws_addres_fakt',this.value);">{$p.ws_addres_fakt}</textarea>{else}{$p.ws_addres_fakt}{/if}</td>
+<td {if not $p.ws_addres_fakt}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_ws_addres_fakt" onChange="save_fil({$p.id},'ws_addres_fakt',this.value);">{$p.ws_addres_fakt|escape}</textarea>{else}{$p.ws_addres_fakt}{/if}</td>
 </tr>
 <tr>
 <td>Транспорт на развозке продукции - собственный, кол-во машин</td>
@@ -134,7 +134,7 @@ $("#div_{$p.id}_retailer").attr('checked','{$p.retailer}'=='1'?true:false);
 </tr>
 <tr>
 <td>Прочая информация</td>
-<td {if not $p.other}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_other" onChange="save_fil({$p.id},'other',this.value);">{$p.other}</textarea>{else}{$p.other}{/if}</td>
+<td {if not $p.other}style="background-color:red"{/if}>{if not $smarty.request.print}<textarea id="div_{$p.id}_other" onChange="save_fil({$p.id},'other',this.value);">{$p.other|escape}</textarea>{else}{$p.other}{/if}</td>
 </tr>
 </tbody>
 </table>

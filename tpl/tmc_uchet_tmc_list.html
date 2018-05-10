@@ -92,7 +92,7 @@
                                 <select required disabled class='data{$i.id}' name=data[{$i.id}][moved]>
                                     <option></option>
                                     {foreach key=key item=item from=$emp}
-                                    <option {if $item.tn eq $i.moved}selected{/if} value="{$item.tn}">{$item.fio} - {$item.dpt_name}</option>
+                                    <option {if $item.tn eq $i.moved}selected{/if} value="{$item.tn}">{$item.fio|escape} - {$item.dpt_name|escape}</option>
                                     {/foreach}
                                 </select>
                             </td>
@@ -111,7 +111,7 @@
 			<select class='add' required name=tmc_new[tmcs]>
 				<option></option>
 				{foreach key=tk item=ti from=$tmcs}
-				<option value="{$ti.id}">{$ti.name}</option>
+				<option value="{$ti.id}">{$ti.name|escape}</option>
 				{/foreach}
 			</select>
 		</td>

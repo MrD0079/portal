@@ -48,7 +48,7 @@
 			{if $i.mz_admin_ok eq 1}{$i.mz_admin_ok_name}<br>{$i.lu}{/if}
 			{/if}
 		</td>
-		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="pds[{$i.id}][text]" size=50 value="{$i.text}">{else}{$i.text}{/if}</td>
+		<td>{if not $smarty.request.print}<input {$disabled} {$disabled_all} {$disabled_edit} name="pds[{$i.id}][text]" size=50 value="{$i.text|escape}">{else}{$i.text|escape}{/if}</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight:bold;text-align:center">

@@ -32,12 +32,12 @@
 	{foreach key=k item=i from=$tru name=tru}
 	<tr style="vertical-align:top">
 		<td><!--{$i.head.tn}-->{$i.head.fio}</td>
-		<td style="background-color: rgb(204, 255, 255); width:100px">{$i.head.s_cj}</td>
-		<td style="background-color: rgb(204, 255, 255); width:100px">{$i.head.w_cj}</td>
-		<td style="background-color: rgb(255, 255, 204); width:100px">{$i.head.s_tm}</td>
-		<td style="background-color: rgb(255, 255, 204); width:100px">{$i.head.w_tm}</td>
-		<td style="background-color: rgb(153, 255, 153); width:100px">{$i.head.s_to}</td>
-		<td style="background-color: rgb(153, 255, 153); width:100px">{$i.head.w_to}</td>
+		<td style="background-color: rgb(204, 255, 255); width:100px">{$i.head.s_cj|escape}</td>
+		<td style="background-color: rgb(204, 255, 255); width:100px">{$i.head.w_cj|escape}</td>
+		<td style="background-color: rgb(255, 255, 204); width:100px">{$i.head.s_tm|escape}</td>
+		<td style="background-color: rgb(255, 255, 204); width:100px">{$i.head.w_tm|escape}</td>
+		<td style="background-color: rgb(153, 255, 153); width:100px">{$i.head.s_to|escape}</td>
+		<td style="background-color: rgb(153, 255, 153); width:100px">{$i.head.w_to|escape}</td>
 		<td style="vertical-align:top; text-align:left">
 			{foreach key=k1 item=i1 from=$i.tests name=tests}
 				<nobr><b>{$i1.test_ball} / {$i1.test_perc}</b> - {$i1.test_lu}<nobr><br>

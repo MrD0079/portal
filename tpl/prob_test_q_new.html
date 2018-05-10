@@ -1,7 +1,7 @@
 <tr id=prob_test_{$id}>
 	<td>
 		<a href='javascript:void(0);' onClick="del_prob_test({$id})">[x]</a>
-		текст вопроса <textarea id=d_{$id}_name size=50 onChange="save_prob_test({$id},'name',this.value);">{$name}</textarea>
+		текст вопроса <textarea id=d_{$id}_name size=50 onChange="save_prob_test({$id},'name',this.value);">{$name|escape}</textarea>
 		порядок <input id=d_{$id}_q_sort size=8 class="number_int" value="{$q_sort}" onChange="save_prob_test({$id},'q_sort',this.value);">
 		картинка
 		<div id=div_{$id}_pict style="display: inline;">

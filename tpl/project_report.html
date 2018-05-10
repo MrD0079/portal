@@ -77,12 +77,12 @@ $('#exp_list_without_ts option[value="{$smarty.request.exp_list_without_ts}"]').
 	{if $item.level eq 1}style="background-color:#cccccc;font-weight:bold"{/if}
 	>
 		{if $item.level eq 1}
-		<td colspan=3>{$item.name}</td>
+		<td colspan=3>{$item.name|escape}</td>
 		<td style="text-align:right">{$item.cnt.0|default:0}</td>
 		<td colspan=5></td>
 		{/if}
 		{if $item.level eq 2}
-		<td>{$item.name}</td>
+		<td>{$item.name|escape}</td>
 		<td>{$item.dt_start}</td>
 		<td>{$item.dt_end}</td>
 		<td style="text-align:right"></td>
