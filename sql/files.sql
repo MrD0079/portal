@@ -1,4 +1,4 @@
-/* Formatted on 21/08/2015 14:55:39 (QP5 v5.227.12220.39724) */
+/* Formatted on 11/05/2018 09:05:36 (QP5 v5.252.13127.32867) */
            SELECT LEVEL,
                   f1.*,
                   (SELECT COUNT (*)
@@ -34,21 +34,20 @@
                           f.orderby,
                           TO_CHAR (f.lu, 'dd.mm.yyyy hh24:mi:ss') lu,
                           'files' fr
-                     FROM files f) f1
-            WHERE    DECODE (
-                        :files_activ,
-                        2, 2,
-                        DECODE (
-                           (SELECT COUNT (*)
-                              FROM files_rights
-                             WHERE     file_id = f1.id
-                                   AND pos_id IN
-                                          (SELECT pos_id
-                                             FROM user_list
-                                            WHERE datauvol IS NULL AND dpt_id = :dpt_id)),
-                           0, 0,
-                           1)) = :files_activ
-                  OR LEVEL = 1
+                     FROM files f
+                    WHERE DECODE (
+                             :files_activ,
+                             2, 2,
+                             DECODE (
+                                (SELECT COUNT (*)
+                                   FROM files_rights
+                                  WHERE     file_id = f.id
+                                        AND pos_id IN (SELECT pos_id
+                                                         FROM user_list
+                                                        WHERE     datauvol IS NULL
+                                                              AND dpt_id = :dpt_id)),
+                                0, 0,
+                                1)) = :files_activ) f1
        START WITH f1.PARENT IS NULL
        CONNECT BY PRIOR f1.ID = f1.PARENT
 ORDER SIBLINGS BY f1.orderby
