@@ -90,20 +90,22 @@
 				<td colspan=9>Визитов: {$i.total.visits}, Общее время работы: МР - {$i.total.day_time_mr} мин.<!--, Ф - {$i.total.day_time_f} мин.--></td>
 			</tr>
 		{foreach key=k1 item=i1 from=$i.body name=body}
+			{assign var="y" value=0}
 			{foreach key=k2 item=i2 from=$i1.agents name=agent}
+				{assign var="y" value=$y+1}
 			{/foreach}
 				<tr bgcolor="#ffffcc">
-					<td rowspan="{$smarty.foreach.agent.total+1}">{$smarty.foreach.body.iteration}</td>
-					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.tz_oblast}</td>
-					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.net_name}</td>
-					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.ur_tz_name}</td>
-					<td rowspan="{$smarty.foreach.agent.total+1}">{$i1.head.tz_address}</td>
+					<td rowspan="{$y+1}">{$smarty.foreach.body.iteration}</td>
+					<td rowspan="{$y+1}">{$i1.head.tz_oblast}</td>
+					<td rowspan="{$y+1}">{$i1.head.net_name}</td>
+					<td rowspan="{$y+1}">{$i1.head.ur_tz_name}</td>
+					<td rowspan="{$y+1}">{$i1.head.tz_address}</td>
 					<td colspan=4></td>
 				</tr>
 			{foreach key=k2 item=i2 from=$i1.agents name=agent}
 				<tr bgcolor="#ccffff">
 					<td>{$smarty.foreach.agent.iteration}</td>
-					<td>{$k2}</td>
+					<td>{$i2.ag_name}</td>
 					<td style="text-align: center;">{$i2.day_time_mr}</td>
 					<!--<td style="text-align: center;">{$i2.day_time_f}</td>-->
 				</tr>

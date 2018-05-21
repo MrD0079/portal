@@ -1,4 +1,4 @@
-/* Formatted on 25.01.2014 17:13:29 (QP5 v5.227.12220.39724) */
+/* Formatted on 17.05.2018 16:09:46 (QP5 v5.252.13127.32867) */
   SELECT cpp.tz_oblast,
          (SELECT net_name
             FROM ms_nets
@@ -12,7 +12,8 @@
          rb.day_time_mr,
          /*rb.day_enabled_f,
          rb.day_time_f,*/
-         a.name ag_name
+         a.name ag_name,
+         rb.ag_id
     FROM cpp,
          (SELECT *
             FROM svms_oblast
@@ -29,7 +30,8 @@
          AND rt.head_id = :route
          AND A.ID = rb.ag_id
          AND rb.day_num = :day
-         AND (rb.day_enabled_mr = 1 /*OR rb.day_enabled_f = 1*/)
+         AND (rb.day_enabled_mr = 1 /*OR rb.day_enabled_f = 1*/
+                                   )
          AND rt.vv = 0
          AND rb.vv = 0
 ORDER BY cpp.tz_oblast,

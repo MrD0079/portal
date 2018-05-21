@@ -49,8 +49,9 @@ $routes[$k]["body"][$v1["kodtp"]]["head"]["tz_oblast"]=$v1["tz_oblast"];
 $routes[$k]["body"][$v1["kodtp"]]["head"]["net_name"]=$v1["net_name"];
 $routes[$k]["body"][$v1["kodtp"]]["head"]["ur_tz_name"]=$v1["ur_tz_name"];
 $routes[$k]["body"][$v1["kodtp"]]["head"]["tz_address"]=$v1["tz_address"];
-$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_name"]]["day_enabled_mr"]=$v1["day_enabled_mr"];
-$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_name"]]["day_time_mr"]=$v1["day_time_mr"];
+$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_id"]]["ag_name"]=$v1["ag_name"];
+$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_id"]]["day_enabled_mr"]=$v1["day_enabled_mr"];
+$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_id"]]["day_time_mr"]=$v1["day_time_mr"];
 //$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_name"]]["day_enabled_f"]=$v1["day_enabled_f"];
 //$routes[$k]["body"][$v1["kodtp"]]["agents"][$v1["ag_name"]]["day_time_f"]=$v1["day_time_f"];
 }

@@ -33,7 +33,7 @@
 <p><a href="?action=invoice_reestr&generate&print=1&excel=1&filename=–есстр счетов">Ёкспорт в Excel</a></p>
 <p>
 <input name="save" value="—охранить" type="submit">
-{if $is_fin_man}<input name="send_invoices" value="ќтправить счета плательщикам" type="submit">{/if}
+{if $is_fin_man or $is_rmkk}<input name="send_invoices" value="ќтправить счета плательщикам" type="submit">{/if}
 </p>
 
 {/if}

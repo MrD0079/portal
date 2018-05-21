@@ -176,7 +176,7 @@ if (isset($_REQUEST["sendmsg"]))
 		}
 	}
 }
-function getTable($payer,$invoice_sended)
+function getTable($payer,$invoice_sended,$ok_fm,$ok_rmkk)
 {
 	global $db, $tn, $smarty;
 	$sql=rtrim(file_get_contents('sql/invoice_reestr.sql'));
@@ -190,8 +190,8 @@ function getTable($payer,$invoice_sended)
 		':payer'=>$payer,
 		':urlic'=>$_REQUEST["urlic"],
 		':num'=>"'".str_replace("'","''",$_REQUEST["num"])."'",
-		':ok_fm'=>"'".$_REQUEST["ok_fm"]."'",
-		':ok_rmkk'=>"'".$_REQUEST["ok_rmkk"]."'",
+		':ok_fm'=>"'".$ok_fm."'",
+		':ok_rmkk'=>"'".$ok_rmkk."'",
 		':ok_acts_redisplayed'=>"'".$_REQUEST["ok_acts_redisplayed"]."'",
 		':invoice_sended'=>"'".$invoice_sended."'",
 		':calendar_months'=>$_REQUEST["calendar_months"],
@@ -218,7 +218,11 @@ function getTable($payer,$invoice_sended)
 
 if (($_REQUEST["calendar_years"]!=0)&&(isset($_REQUEST["generate"])))
 {
-	$invoices_all = getTable($_REQUEST["payer"],$_REQUEST["invoice_sended"]);
+	$invoices_all = getTable(
+                $_REQUEST["payer"],
+                $_REQUEST["invoice_sended"],
+                $_REQUEST["ok_fm"],
+                $_REQUEST["ok_rmkk"]);
 	$smarty->assign('invoice', $invoices_all);
 }
 $sql=rtrim(file_get_contents('sql/distr_prot_di_kk.sql'));
@@ -274,40 +278,10 @@ if (isset($_REQUEST["send_invoices"]))
             $payers_list[$v["payer"]]["rmkk_mail"]=$v["rmkk_mail"];
             $payers_list[$v["payer"]]["rmkk_sign"]=$v["rmkk_sign"];
         }
-        if ($v["invoice_sended"]==0&&($v["ok_fm"]==1)&&($v["ok_rmkk"]==0))
-        {
-            $cnt++;
-            $rmkk_list[$v["rmkk_mail"]]=$v["rmkk_mail"];
-        }
     }
-    foreach ($rmkk_list as $k => $v)
-    {
-        send_mail(
-                $k,
-                'ѕодтверждение счетов клиентов на оплату',
-                '—чета ожидают вашего подтверждени€ дл€ оплаты <font style="color:red">(всего счетов '.$cnt.')</font><br>'.
-                'ƒл€ подтверждени€ перейдите по <a href='
-                . 'https://ps.avk.ua/?action=invoice_reestr&generate&ok_rmkk=no'
-                . '&calendar_years='.$_REQUEST["calendar_years"]
-                . '&calendar_months='.$_REQUEST["calendar_months"]
-                . '&tn_rmkk='.$_REQUEST["tn_rmkk"]
-                . '&tn_mkk='.$_REQUEST["tn_mkk"]
-                . '&nets='.$_REQUEST["nets"]
-                . '&format='.$_REQUEST["format"]
-                . '&payer='.$_REQUEST["payer"]
-                . '&urlic='.$_REQUEST["urlic"]
-                . '&num='.$_REQUEST["num"]
-                . '&ok_fm='.$_REQUEST["ok_fm"]
-                . '&invoice_sended='.$_REQUEST["invoice_sended"]
-                . '&ok_acts_redisplayed='.$_REQUEST["ok_acts_redisplayed"]
-                . '>ссылке</a>'
-                );
-    }
-    $_REQUEST["ok_fm"]='ok';
-    $_REQUEST["ok_rmkk"]='ok';
     foreach ($payers_list as $k => $v)
     {
-        $invoices = getTable($k,'no');
+        $invoices = getTable($k,'no','ok','ok');
         if (count($invoices)>0){
         $smarty->assign('invoice', $invoices);
         $table = $smarty->fetch('invoice_reestr_table.html');

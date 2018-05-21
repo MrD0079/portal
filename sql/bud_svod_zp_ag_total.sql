@@ -1,4 +1,4 @@
-/* Formatted on 08.05.2018 19:04:20 (QP5 v5.252.13127.32867) */
+/* Formatted on 17.05.2018 16:30:13 (QP5 v5.252.13127.32867) */
 SELECT COUNT (*) c,
        SUM (dz_return) dz_return,
        SUM (dz_return_norm) dz_return_norm,
@@ -26,15 +26,15 @@ SELECT COUNT (*) c,
                s.eta eta,
                NVL (vp.val_fact, 0) val_fact,
                vp.val_plan dz_return,
-               0.01 * sv.sales dz_return_norm,
-               0.01 * 100 sales_perc,
+               s.per_zp * sv.sales dz_return_norm,
+               s.per_zp * 100 sales_perc,
                DECODE (NVL (vp.val_plan, 0),
                        0, 0,
                        (NVL (vp.val_fact, 0)) / vp.val_plan * 100)
                   plan_perc,
                sv.fal_payment,
-               0.01 * sv.sales zp_plan,
-               ROUND (0.01 * sv.sales) zp_fakt_def,
+               s.per_zp * sv.sales zp_plan,
+               ROUND (s.per_zp * sv.sales) zp_fakt_def,
                sv.zp_fakt,
                NVL (sv.unscheduled, 0) unscheduled,
                s.eta_tab_number,
@@ -62,7 +62,8 @@ SELECT COUNT (*) c,
                          m.eta_tab_number,
                          SUM (m.summa) summa,
                          SUM (m.coffee) coffee,
-                         eta_coffee
+                         eta_coffee,
+                         per_zp/100 per_zp
                     FROM a14mega m
                    WHERE     m.dpt_id = :dpt_id
                          AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt
@@ -70,7 +71,8 @@ SELECT COUNT (*) c,
                          m.h_eta,
                          m.eta,
                          m.eta_tab_number,
-                         eta_coffee) s,
+                         m.eta_coffee,
+                 m.per_zp) s,
                user_list u,
                bud_svod_zp sv,
                bud_fil f,

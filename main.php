@@ -30,6 +30,14 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dzc_accept', $data);
 */
+
+if ($is_rmkk==1){
+    $sql=rtrim(file_get_contents('sql/main_rmkk_reestr.sql'));
+    $sql=stritr($sql,$params);
+    $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('rmkk_reestr', $data);
+}
+
 $sql=rtrim(file_get_contents('sql/main_bud_svod_ta.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
