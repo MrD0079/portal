@@ -176,6 +176,14 @@
             {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1805db&action=act_report_v">Отчет ВСТМ</a></li>{/if}
         </ul>
     </li>
+    <li><a href="javascript:void(0);"><span class="dir">Сезон Baristi 2</span></a>
+        <ul>
+            <li><a target=_blank href="https://bitrix.avk.ua/~73kPa">Условия акции</a></li>
+            {if $is_ts}                             <li><a href="?act=a1805sb2&action=a1805sb2_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                                                    <li><a href="?act=a1805sb2&action=a1805sb2_report_a">Отчет по акции</a></li>
+            {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1805sb2&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+        </ul>
+    </li>
 </ul>
 </li>
 <!--
