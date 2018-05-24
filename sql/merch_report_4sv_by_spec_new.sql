@@ -26,6 +26,7 @@
          msr.r_id msr_id,
          msr.r_remain msr_remain,
          DECODE (NVL (msr.r_oos, 0), 0, '', 'Да') msr_oos,
+         DECODE (NVL (msr.r_gos, 0), 0, '', 'Да') msr_gos,
          msr.r_fcount msr_fcount,
          msr.r_price msr_price,
          msr.r_text msr_text,
@@ -46,6 +47,7 @@
                  r_dt,
                  r_remain,
                  r_oos,
+                 r_gos,
                  r_fcount,
                  r_price,
                  r_text

@@ -5,4 +5,4 @@
             FROM merch_spec_fld_ag
            WHERE ag_id = :ag_id) a
    WHERE f.id = a.field_id
-ORDER BY f.name
+ORDER BY f.sort

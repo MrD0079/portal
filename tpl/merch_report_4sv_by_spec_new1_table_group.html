@@ -19,21 +19,21 @@
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 		{assign var=s1 value=0}
-		{foreach key=k1 item=i1 from=$i.data name=i1}
+		{foreach key=k1 item=i1 from=$i.data name=data1}
 			{assign var=s1 value=$s1+1}
-			{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{foreach key=k2 item=i2 from=$i1.data name=data2}
 				{assign var=s1 value=$s1+1}
-				{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{foreach key=k3 item=i3 from=$i2.data name=data3}
 					{assign var=s1 value=$s1+1}
 				{/foreach}
 			{/foreach}
 		{/foreach}
 		<tr style="vertical-align:top;">
 			<td rowspan={$s1+1}>
-				Дата <b>{$i1.head.dt}</b><br>
-				СВ МС <b>{$i1.head.svms_name}</b><br>
-				Маршрут <b>{$i1.head.num}</b><br>
-				Ф.И.О. отв. <b>{$i1.head.fio_otv}</b>
+				Дата <b>{$i.head.dt}</b><br>
+				СВ МС <b>{$i.head.svms_name}</b><br>
+				Маршрут <b>{$i.head.num}</b><br>
+				Ф.И.О. отв. <b>{$i.head.fio_otv}</b>
 			</td>
 			<td colspan={$smarty.foreach.fields.total+8}></td>
 			{if not $smarty.request.nophoto}
@@ -41,37 +41,37 @@
 			{/if}
 			<td></td>
 		</tr>
-		{foreach key=k1 item=i1 from=$i.data name=i1}
+		{foreach key=k1 item=i1 from=$i.data name=data1}
 			{assign var=s2 value=0}
-			{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{foreach key=k2 item=i2 from=$i1.data name=data2}
 				{assign var=s2 value=$s2+1}
-				{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{foreach key=k3 item=i3 from=$i2.data name=data3}
 					{assign var=s2 value=$s2+1}
 				{/foreach}
 			{/foreach}
 			{cycle assign=bgcolor values="#ccffff,#ffffcc"}
 			<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
 				<td rowspan={$s2+1}>
-				Область <b>{$i2.head.tz_oblast}</b><br>
-				Город <b>{$i2.head.city}</b><br>
-				Сеть <b>{$i2.head.net_name}</b><br>
-				Юридическое название ТЗ <b>{$i2.head.ur_tz_name}</b><br>
-				Адрес ТЗ <b>{$i2.head.tz_address}</b>
+				Область <b>{$i1.head.tz_oblast}</b><br>
+				Город <b>{$i1.head.city}</b><br>
+				Сеть <b>{$i1.head.net_name}</b><br>
+				Юридическое название ТЗ <b>{$i1.head.ur_tz_name}</b><br>
+				Адрес ТЗ <b>{$i1.head.tz_address}</b>
 				</td>
 				<td colspan={$smarty.foreach.fields.total+7}></td>
 				{if not $smarty.request.nophoto}
-				<td>{if $i2.head.file_list}<a href="{$i1.head.archive}">Фотоархив</a>{/if}</td>
+				<td>{if $i1.head.file_list}<a href="{$i1.head.archive}">Фотоархив</a>{/if}</td>
 				{/if}
 				<td></td>
 			</tr>
 			{assign var=s1 value=0}
-			{foreach key=k2 item=i2 from=$i1.data name=i2}
+			{foreach key=k2 item=i2 from=$i1.data name=data2}
 				{assign var=s3 value=0}
-				{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{foreach key=k3 item=i3 from=$i2.data name=data3}
 					{assign var=s3 value=$s3+1}
 				{/foreach}
 				<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
-					<td rowspan={$s3+1}>{$i3.ag_name}</td>
+					<td rowspan={$s3+1}>{$i2.head.ag_name}</td>
 					<td colspan={$smarty.foreach.fields.total+6}></td>
 					{if not $smarty.request.nophoto}
 					<td rowspan={$s3+1} style="width:300px;text-align:left">
@@ -131,7 +131,7 @@
 						{/if}
 					</td>
 				</tr>
-				{foreach key=k3 item=i3 from=$i2.data name=i3}
+				{foreach key=k3 item=i3 from=$i2.data name=data3}
 				<tr style="vertical-align:top;" bgcolor="{$bgcolor}">
 						<td>{$i3.msb_art}</td>
 						<td>{$i3.msb_name}</td>

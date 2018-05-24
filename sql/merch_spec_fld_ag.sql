@@ -2,4 +2,4 @@
   SELECT a.*, DECODE (ha.id, NULL, 0, 1) checked
     FROM merch_spec_fld_ag ha, MERCH_SPEC_FIELDS a
    WHERE hA.ag_ID(+) = :ag AND A.ID = HA.field_ID(+)
-ORDER BY a.name
+ORDER BY a.sort

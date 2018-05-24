@@ -9,6 +9,7 @@
          msb.kod,
          msr.remain,
          msr.oos,
+         msr.gos,
          msr.fcount,
          msr.price,
          msr.text

@@ -28,7 +28,7 @@
 
 
 {foreach key=k item=i from=$d name=d}
-	{foreach key=k1 item=i1 from=$i.data name=i1}
+	{foreach key=k1 item=i1 from=$i.data name=data1}
 
 {if $color eq '#ccffff'}
 {assign var=color value='#ffffcc'}
@@ -36,8 +36,8 @@
 {assign var=color value='#ccffff'}
 {/if}
 
-		{foreach key=k2 item=i2 from=$i1.data name=i2}
-			{foreach key=k3 item=i3 from=$i2.data name=i3}
+		{foreach key=k2 item=i2 from=$i1.data name=data2}
+			{foreach key=k3 item=i3 from=$i2.data name=data3}
 				<tr bgcolor="{$color}">
 				<td>{$i3.dt}</td>
 				<td>{$i3.svms_name}</td>

@@ -33,6 +33,7 @@ f.chat_closed,
                  r_dt,
                  r_remain,
                  r_oos,
+                 r_gos,
                  r_fcount,
                  r_price,
                  r_text

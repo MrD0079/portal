@@ -243,7 +243,11 @@
 			<br>
 			<b>Приложения</b><br>
 			{foreach key=k1 item=i1 from=$i.files}
-				<nobr><a target=_blank href="sz_files/{$i1.fn}">{$i1.fn}</a></nobr>&nbsp
+				<nobr><a target=_blank href="sz_files/{$i1.fn}">{$i1.fn}</a>
+                                {if $i.head.cat_id eq 927668 and $i.head.current_status eq 1 and ($is_admin or $i.head.slaves4 gt 0)}
+                                <input type="button" value="Экспорт заявки в SCM" onClick="send2scm('{$i1.fn}','{$i.head.id}');">
+                                {/if}
+                                </nobr>&nbsp
 			{/foreach}
 		</td>
 		<td>{$i.head.head}</td>
@@ -308,3 +312,26 @@
 </table>
 {/if}
 </form>
+
+<script>
+        var del_tfiles = [];
+        var del_rfiles = [];
+        /*{literal}*/
+        function send2scm(fn,sz_id){
+            var fd = new FormData();
+            fd.append('fn',  fn);
+            fd.append('sz_id',  sz_id);
+            $.ajax({
+                    type: 'POST',
+                    url: '?action=sz_reestr&print=1&nohead=1&send2scm=1',
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        console.log(data);
+                        successNoty("Заявка "+fn+" по СЗ "+sz_id+" отправлена");
+                    }
+            });
+        }
+        /*{/literal}*/
+    </script>

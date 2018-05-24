@@ -2,6 +2,7 @@
 SELECT SUM (msb.weight) msb_weight,
        SUM (msr.r_remain) msr_remain,
        SUM (msr.r_oos) msr_oos,
+       SUM (msr.r_gos) msr_gos,
        SUM (msr.r_fcount) msr_fcount,
        SUM (msr.r_price) msr_price,
        COUNT (*) c,

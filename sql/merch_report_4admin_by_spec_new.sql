@@ -27,6 +27,7 @@
                    msr.r_id msr_id,
                    msr.r_remain msr_remain,
                    msr.r_oos msr_oos,
+                   msr.r_gos msr_gos,
                    msr.r_fcount msr_fcount,
                    msr.r_price msr_price,
                    msr.r_text msr_text
@@ -74,6 +75,7 @@
                    msr.r_id,
                    msr.r_remain,
                    msr.r_oos,
+                   msr.r_gos,
                    msr.r_fcount,
                    msr.r_price,
                    msr.r_text)

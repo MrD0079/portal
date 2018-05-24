@@ -2,6 +2,7 @@
   SELECT SUM (msb.weight) weight,
          SUM (msr.remain) remain,
          SUM (msr.oos) oos,
+         SUM (msr.gos) gos,
          SUM (msr.fcount) fcount,
          SUM (msr.price) price
     FROM merch_spec_body msb,
