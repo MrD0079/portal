@@ -5,6 +5,7 @@ function ProductAdd(kodtp,id)
 var fd = new FormData();
 fd.append('kodtp', kodtp);
 fd.append('id', id);
+fd.append('dt', '{/literal}{$smarty.request.dt}{literal}');
 $.ajax({
 	type: 'POST',
 	url: '?action=merch_report_sb_item&nohead=1',
@@ -98,12 +99,12 @@ $.ajax({
 
 {literal}
 <script>
-$(function(){
+/*$(function(){
 $("#head-back-div").remove();
 $("#left-div").remove();
 $("#right-div").remove();
 $("#bottom-div").remove();
 $("#content-div").css("top","0px");
-});
+});*/
 </script>
 {/literal}

@@ -46,6 +46,7 @@
 	</ul>
 </li>
 {/if}
+{if not $is_smr}
 <li><a href="javascript:void(0);"><span class="dir">Маршруты</span></a>
 	<ul>
 
@@ -59,21 +60,23 @@
 		<li><a href="?action=routes_report_new">Маршрутный лист</a></li>
 	</ul>
 </li>
+{/if}
 <li><a href="javascript:void(0);"><span class="dir">Отчеты</span></a>
 	<ul>
 		<li><a href="?action=report_total_new">Общий сводный отчет</a></li>
 		<li><a href="?action=merch_report_4sv_by_spec_new">Сводный отчет по спецификациям для СВ</a></li>
 		<li><a href="?action=merch_report_4sv_by_spec_new1">Сводный отчет по спецификациям для СВ (за период)</a></li>
 		<li><a href="?action=merch_report_4sv_by_spec_new1&nophoto=1">Сводный отчет по спецификациям для СВ (за период, без фото)</a></li>
-		<li><a href="?action=merch_report_4sv_file_chat">Комментарии по работе в ТЗ</a></li>
+		{if not $is_smr}<li><a href="?action=merch_report_4sv_file_chat">Комментарии по работе в ТЗ</a></li>{/if}
 		<li><a href="?action=merch_photo_report_new">Выгрузка фотоотчета</a></li>
-		<li><a href="?action=report_gps_new">Отчет по GPS</a></li>
-		<li><a href="?action=ms_tabel">Табельный учет</a></li>
+		{if not $is_smr}<li><a href="?action=report_gps_new">Отчет по GPS</a></li>{/if}
+		{if not $is_smr}<li><a href="?action=ms_tabel">Табельный учет</a></li>{/if}
 		<li><a href="?action=ms_agenda">Дни визитов</a></li>
-		<li><a href="?action=msreportbyvisits">Отчет по визитам</a></li>
+		{if not $is_smr}<li><a href="?action=msreportbyvisits">Отчет по визитам</a></li>{/if}
 		<li><a href="?action=merch_report_aa_reports">Результаты акции</a></li>
 	</ul>
 </li>
+{if not $is_smr}
 <li><a href="javascript:void(0);"><span class="dir">Документы</span></a>
 	<ul>
 		<li><a href="?action=ms_vac">Заявка на отпуск Мерчандайзера</a></li>
@@ -95,3 +98,4 @@
 		<li><a href="?action=ms_task_report">Отчет</a></li>
 	</ul>
 </li>
+{/if}

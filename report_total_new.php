@@ -91,13 +91,13 @@ $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('dates_list', $res);
 
 $sql=rtrim(file_get_contents('sql/svms_list.sql'));
-$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id']);
+$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id'],":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('svms_list', $data);
 
 $sql = rtrim(file_get_contents('sql/report_total_new_routes_head.sql'));
-$p=array(":tn"=>$tn,":sd"=>"'".$_REQUEST["dates_list1"]."'",":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p=array(":tn"=>$tn,":sd"=>"'".$_REQUEST["dates_list1"]."'",":ed"=>"'".$_REQUEST["dates_list2"]."'",":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_head', $res);
@@ -129,6 +129,7 @@ if (isset($_REQUEST["select"]))
 		":svms_list"=>$_REQUEST["svms_list"],
 		":sd"=>"'".$_REQUEST["dates_list1"]."'",
 		":ed"=>"'".$_REQUEST["dates_list2"]."'",
+            ":login"=>"'".$login."'"
 		);
 
 	$sql = rtrim(file_get_contents('sql/report_total_new.sql'));

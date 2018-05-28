@@ -41,7 +41,7 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('nets', $data);
 
 $sql=rtrim(file_get_contents('sql/svms_list.sql'));
-$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id']);
+$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id'],":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('svms_list', $data);
@@ -74,7 +74,7 @@ $p=array(
 ":svms_list"=>$_REQUEST["svms_list"],
 ":ed"=>"'".$period."'",
 ":city"=>"'".$_REQUEST["city"]."'",
-":oblast"=>"'".$_REQUEST["oblast"]."'"
+":oblast"=>"'".$_REQUEST["oblast"]."'",":login"=>"'".$login."'"
 );
 
 $sql = rtrim(file_get_contents('sql/ms_agenda.sql'));

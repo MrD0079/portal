@@ -142,6 +142,8 @@ if ($a->getAuth())
 		$smarty->assign('is_tm', $a->getAuthData('is_tm'));
 		$smarty->assign('is_top', $a->getAuthData('is_top'));
 		$smarty->assign('is_mservice', $a->getAuthData('is_mservice'));
+		$smarty->assign('is_smr', $a->getAuthData('is_smr'));
+                $is_smr = $a->getAuthData('is_smr');
 		$smarty->assign('is_ma', $a->getAuthData('is_ma'));
                 $is_ma = $a->getAuthData('is_ma');
 		$smarty->assign('is_do', $a->getAuthData('is_do'));
@@ -260,12 +262,17 @@ if ($a->getAuth())
 		*/
                 $login_type = strpos($login,'ms')!==false? 'ms' : 'general';
                 $smarty->assign('login_type', $login_type);
-                if (!($action=='merch_report_new'&&isset($_POST))) {
+                //if (!($action=='merch_report_new'&&isset($_POST))) {
                     if (!isset($_REQUEST["pdf"])){require_once "m.header.php";}
                     if (!isset($_REQUEST["print"])&&!isset($_REQUEST["nohead"])) {
                             if (
                                     /*(strpos($login,'akr_avk_')===false)&&(strpos($login,'akr_ag_')===false)&&(strpos($login,'atd_avk_')===false)&&(strpos($login,'atd_ag_')===false)&&(strpos($login,'azl_avk_')===false)&&(strpos($login,'azl_ag_')===false)&&*/
-                                    ((strpos($login,'ms')===false)&&
+                                    (
+                                    /*(
+                                            strpos($login,'ms')===false
+                                            ||
+                                            (strpos($login,'ms')!==false&&$is_smr==1)
+                                            )&&*/
                                     (strpos($login,'avk')===false)&&
                                     (strpos($login,'ag0')===false)&&
                                     (strpos($login,'fil0')===false)&&
@@ -273,7 +280,7 @@ if ($a->getAuth())
                             ) {include "menu.php";}
                             include "content-div-start.php";
                     }
-                }
+                //}
 		if (count(glob($action.".php"))==0) {
 			/*if (strpos($login,'akr_avk_')!==false){include "akr_report.php";}elseif (strpos($login,'akr_ag_')!==false){include "akr_ag_report.php";}elseif (strpos($login,'atd_avk_')!==false){include "atd_report.php";}elseif (strpos($login,'atd_ag_')!==false){include "atd_ag_report.php";}elseif (strpos($login,'azl_avk_')!==false){include "azl_report.php";}elseif (strpos($login,'azl_ag_')!==false){include "azl_ag_report.php";}else*/
 			if (strpos($login,'ms')!==false){include "merch_report_new.php";}

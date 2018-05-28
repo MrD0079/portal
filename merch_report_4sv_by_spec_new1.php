@@ -17,7 +17,7 @@ $p = array(
 	':dpt_id' => $_SESSION["dpt_id"],
 	":sd"=>"'".$_REQUEST["dates_list1"]."'",
 	":ed"=>"'".$_REQUEST["dates_list2"]."'",
-	":tn"=>$tn
+	":tn"=>$tn,":login"=>"'".$login."'",":login"=>"'".$login."'"
 );
 
 $sql = rtrim(file_get_contents('sql/dates_list.sql'));
@@ -70,7 +70,7 @@ if (isset($_REQUEST["select"]))
 		":ed"=>"'".$_REQUEST["dates_list2"]."'",
 		":city"=>"'".$_REQUEST["city"]."'",
 		":oblast"=>"'".$_REQUEST["oblast"]."'",
-		":tp"=>$_REQUEST["tp"],
+		":tp"=>$_REQUEST["tp"],":login"=>"'".$login."'"
 	);
 	$sql = rtrim(file_get_contents('sql/merch_report_4sv_by_spec_new1.sql'));
 	$sql=stritr($sql,$p);

@@ -46,7 +46,7 @@ $p=array(
 ":ed"=>"'".$_REQUEST["dates_list2"]."'",
 ":nets"=>$_REQUEST["nets"],
 ":city"=>"'".$_REQUEST["city"]."'",
-":oblast"=>"'".$_REQUEST["oblast"]."'",
+":oblast"=>"'".$_REQUEST["oblast"]."'",":login"=>"'".$login."'"
 );
 
 $sql = rtrim(file_get_contents('sql/merch_photo_report_new.sql'));

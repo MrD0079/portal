@@ -5,7 +5,7 @@ if (isset($_REQUEST["getReport"])){
         ":ed"=>"'".$_REQUEST["ed"]."'",
         ":ag_id"=>$_REQUEST["agent"],
         ":tn"=>$tn,
-        ":activity"=>$_REQUEST["activity"]
+        ":activity"=>$_REQUEST["activity"],":login"=>"'".$login."'"
     );
     $sql="/* Formatted on 22.04.2018 19:03:19 (QP5 v5.252.13127.32867) */
   SELECT plan.tz_address,
@@ -51,7 +51,13 @@ if (isset($_REQUEST["getReport"])){
                  AND rh.tn = s.tn
                  AND (   rh.tn IN (SELECT slave
                                      FROM full
-                                    WHERE master = :tn)
+                                    WHERE master = :tn UNION
+                        SELECT chief
+                          FROM spr_users_ms
+                         WHERE     login = :login
+                               AND (SELECT is_smr
+                                      FROM user_list
+                                     WHERE login = :login) = 1)
                       OR (SELECT is_admin
                             FROM user_list
                            WHERE tn = :tn) = 1
@@ -172,7 +178,13 @@ SELECT DISTINCT aa.photo, plan.tz_address
                AND rh.tn = s.tn
                AND (   rh.tn IN (SELECT slave
                                    FROM full
-                                  WHERE master = :tn)
+                                  WHERE master = :tn UNION
+                        SELECT chief
+                          FROM spr_users_ms
+                         WHERE     login = :login
+                               AND (SELECT is_smr
+                                      FROM user_list
+                                     WHERE login = :login) = 1)
                     OR (SELECT is_admin
                           FROM user_list
                          WHERE tn = :tn) = 1

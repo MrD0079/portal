@@ -1,5 +1,4 @@
 <?php
-
 audit("открыл сводный отчет М-Сервис","merch_report_4sv_by_spec_new");
 
 InitRequestVar("dates_list2",$_REQUEST["dates_list"]);
@@ -26,19 +25,19 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('nets', $data);
 
 $sql=rtrim(file_get_contents('sql/svms_list.sql'));
-$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id']);
+$p = array(":tn"=>$tn,':dpt_id'=>$_SESSION['dpt_id'],":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('svms_list', $data);
 
 $sql = rtrim(file_get_contents('sql/merch_report_4sv_by_spec_new_routes_head.sql'));
-$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["dates_list2"]."'",":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_head', $res);
 
 $sql = rtrim(file_get_contents('sql/merch_report_4sv_by_spec_new_routes_head_fio_otv.sql'));
-$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["dates_list2"]."'");
+$p=array(":tn"=>$tn,":ed"=>"'".$_REQUEST["dates_list2"]."'",":login"=>"'".$login."'");
 $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_head_fio_otv', $res);
@@ -65,15 +64,15 @@ $p=array(
 ":svms_list"=>$_REQUEST["svms_list"],
 ":ed"=>"'".$_REQUEST["dates_list2"]."'",
 ":city"=>"'".$_REQUEST["city"]."'",
-":oblast"=>"'".$_REQUEST["oblast"]."'"
+":oblast"=>"'".$_REQUEST["oblast"]."'",":login"=>"'".$login."'"
 );
 
 
 $sql = rtrim(file_get_contents('sql/merch_report_4sv_by_spec_new.sql'));
 $sql=stritr($sql,$p);
 //echo $sql;
-$_REQUEST["sql"]=$sql;
-ses_req();
+//$_REQUEST["sql"]=$sql;
+//ses_req();
 //exit;
 $rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 

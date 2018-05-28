@@ -88,7 +88,13 @@
                 DECODE (:select_route_fio_otv, 0, 0, :select_route_fio_otv)
          AND (ms_rep_routes1.rh_tn IN (SELECT slave
                                FROM full
-                              WHERE master = :tn)
+                              WHERE master = :tn UNION
+                        SELECT chief
+                          FROM spr_users_ms
+                         WHERE     login = :login
+                               AND (SELECT is_smr
+                                      FROM user_list
+                                     WHERE login = :login) = 1)
               OR (SELECT is_ma
                     FROM user_list
                    WHERE tn = :tn) = 1 OR (SELECT is_admin

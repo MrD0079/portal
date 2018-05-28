@@ -21,7 +21,6 @@ if (isset($_REQUEST["save"])){
     $sql=stritr($sql,$p);
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('spr_users_ms', $data);
-    //$sql=rtrim(file_get_contents('sql/svms_list.sql'));
     $sql="SELECT tn, fio
     FROM user_list
    WHERE     pos_id in ( 69,127707110)

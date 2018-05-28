@@ -12,7 +12,7 @@
 	<h2>Внесение данных запрещено</h2>
 {/if}
 
-<form target="_self" method="GET" name=form0 id=form0>
+<form target="_self" method="POST" name=form0 id=form0>
     <p>
         Дата
         <select name=dates_list id=dates_list onChange="$('#form0').trigger('submit');">
@@ -170,6 +170,7 @@ function VVAdd(dates_list)
 
 {literal}
 <script>
+/*
 $(function(){
 $("#head-back-div").remove();
 $("#left-div").remove();
@@ -177,5 +178,6 @@ $("#bottom-div").remove();
 $("#content-div").css("top","0px");
 $("#right-div").css("background-color", "#FFF");
 });
+*/
 </script>
 {/literal}

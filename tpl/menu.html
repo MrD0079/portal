@@ -31,8 +31,16 @@ margin-top: 0px;
 	id="nav"
 	class="dropdown dropdown-horizontal"
 >
-	<li><a href="?action=main">Главная</a></li>
-	<li><a href="?action=faq">Надо знать</a></li>
+        <!--{if $login_type neq 'ms'}-->
+        <li><a href="?action=main">Главная</a></li>
+        <!--{/if}-->
+        <!--{if $login_type eq 'ms'}-->
+        <li><a href="?action=merch_report_new">Отчет МР</a></li>
+        <li><a href="?action=merch_report_faq">Надо знать</a></li>
+        <!--{else}-->
+        <li><a href="?action=faq">Надо знать</a></li>
+        <!--{/if}-->
+        <!--{if $login_type neq 'ms'}-->
 	<li><a href="javascript:void(0);"><span class="dir">Территория</span></a>
 		<ul>
 		{include file="menu_territory.html"}
@@ -43,7 +51,9 @@ margin-top: 0px;
 			{include file="menu_team.html"}
 		</ul>
 	</li>
+        <!--{/if}-->
 	<!--{if not $is_eta}-->
+            <!--{if $login_type neq 'ms'}-->
             <li><a href="javascript:void(0);"><span class="dir">Дистрибутор</span></a>
                     <ul>
                             {include file="menu_distr.html"}
@@ -59,7 +69,8 @@ margin-top: 0px;
                             {include file="menu_document_workflow.html"}
                     </ul>
             </li>
-            <!--{if ($is_mservice or $is_admin or $is_ma) and $cnt_kod eq "ua"}-->
+            <!--{/if}-->
+            <!--{if (($is_mservice or $is_admin or $is_ma) and $cnt_kod eq "ua") or ($login_type eq 'ms' and $my_pos_id eq 157758941)}-->
                 <li><a href="javascript:void(0);"><span class="dir">М-Сервис</span></a>
                         <ul>
                                 {include file="menu_mservice.html"}

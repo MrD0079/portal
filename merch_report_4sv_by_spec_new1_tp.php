@@ -26,7 +26,7 @@ $p = array(
 	":city"=>"'".$_REQUEST["city"]."'",
 	":oblast"=>"'".$_REQUEST["oblast"]."'",
 	":nets"=>$_REQUEST["nets"],
-	":tn"=>$tn
+	":tn"=>$tn,":login"=>"'".$login."'"
 );
 
 

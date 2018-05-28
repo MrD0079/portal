@@ -18,10 +18,9 @@ $options = array(
 );
 try
 {  
+	//$client = new SoapClient("http://10.3.11.55/Orders/ws/Orders/?wsdl"/*,$options*/);
 	//$client = new SoapClient("http://10.10.11.4/Orders/ws/Orders/?wsdl"/*,$options*/);
-	$client = new SoapClient("http://scm.avk.company/SCM/ws/SCM_Exchange?wsdl"/*,$options*/);
-//	var_dump($client->__getFunctions());
-//	var_dump($client->__getTypes());
+	$client = new SoapClient("http://scm.avk.company/SCM/ws/SCM_Exchange?wsdl",$options);
 }
 catch (Exception $e)
 { 
@@ -29,14 +28,14 @@ catch (Exception $e)
 }  
 
 
-
+//exit;
 
 $result = $client->ExecuteProcessing(
         array
         (
-                'BinaryData'=>base64_encode(file_get_contents("sz_files/sz6013285.xls")),
-                'Processing'=>'WebSendOrder',
-                'StringData'=>'155582467'
+                'BinaryData'=>base64_encode(file_get_contents("146.xls")),
+                'Processing'=>mb_convert_encoding('ИмпортЗаказовСПортала','windows-1251','utf-8'),
+                'StringData'=>'1234567890'
         )
 )->return;
 
@@ -44,6 +43,9 @@ echo "<pre>";
 var_dump($result);
 //var_dump($result->Result);
 echo "</pre>";
+
+var_dump($client->__getFunctions());
+var_dump($client->__getTypes());
 
 /*
 if (!$result->Result->Result)
