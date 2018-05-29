@@ -1,5 +1,5 @@
 <?
-ini_set('display_errors', 'On');
+//ini_set('display_errors', 'On');
 
 
 //audit("открыл merch_spec_report","merch_spec_report");

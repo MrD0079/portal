@@ -1,6 +1,7 @@
 <?php
-$output = `find /srv/www/files/ -type f -exec chmod 0777 {} \;`;
-exit;
+#$output = `find /srv/www/files/ -type d -exec chmod 0777 {} \;`;
+#exit;
+#$output = `find /srv/www/files/ -type f -exec chmod 0777 {} \;`;
 #$output = `chmod -R 777 /srv/www/merch_photo_report_new_archives/*`;
 #$output = `chmod -R 777 /srv/www/merch_spec_report_archives/*`;
 $output = `find /srv/www/files/uprasoft/Loaded/                   -mtime +3 -delete`;
