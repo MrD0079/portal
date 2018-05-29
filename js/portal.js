@@ -155,12 +155,12 @@ $.ajax({
 });
 }
 
-function successNoty(text) {
+function successNoty(text, timeout = 1000) {
     new Noty({
         text: text,
         type: 'success',
         layout: 'bottomRight',
-        timeout: 1000
+        timeout: timeout
     }).show();
 }
 

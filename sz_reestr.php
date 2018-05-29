@@ -26,7 +26,11 @@ if (isset($_REQUEST["send2scm"])){
                     'StringData'=>$_REQUEST["sz_id"]
             )
     )->return;
-    var_dump($result);
+    //echo mb_convert_encoding($result,'utf-8','windows-1251');
+    $keys=array("tn"=>$tn,"sz_id"=>$_REQUEST["sz_id"],"text"=>"Результат загрузки заявки в SCM: ".mb_convert_encoding($result,'windows-1251','utf-8'));
+    Table_Update("sz_chat",$keys,$keys);
+    echo mb_convert_encoding($result,'windows-1251','utf-8');
+    //var_dump($result);
     //var_dump($result->Result);
 } else {
     //audit ("открыл реестр СЗ","sz");

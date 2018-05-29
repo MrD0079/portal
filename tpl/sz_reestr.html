@@ -321,6 +321,7 @@
             var fd = new FormData();
             fd.append('fn',  fn);
             fd.append('sz_id',  sz_id);
+            successNoty("Заявка "+fn+" по СЗ "+sz_id+" отправлена...",5000);
             $.ajax({
                     type: 'POST',
                     url: '?action=sz_reestr&print=1&nohead=1&send2scm=1',
@@ -328,8 +329,7 @@
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        console.log(data);
-                        successNoty("Заявка "+fn+" по СЗ "+sz_id+" отправлена");
+                        successNoty(data,5000);
                     }
             });
         }

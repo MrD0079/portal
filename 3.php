@@ -1,13 +1,11 @@
 <?php
+//header('Content-Type: text/html; charset="Windows-1251"');
 header('Content-Type: text/html; charset="UTF-8"');
 header("Cache-Control: no-store, no-cache,  must-revalidate"); 
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-
 ini_set('display_errors', 'On');
-
-
 ?><pre><?
-          	
+      	
 
 ini_set("soap.wsdl_cache_enabled", "0");
 $options = array(
@@ -26,21 +24,21 @@ catch (Exception $e)
 { 
 	echo $e->getMessage();
 }  
-
-
-//exit;
-
+//echo 'ИмпортЗаказовСПортала';
+//echo  mb_convert_encoding('ИмпортЗаказовСПортала','Windows-1251','UTF-8');
 $result = $client->ExecuteProcessing(
         array
         (
                 'BinaryData'=>base64_encode(file_get_contents("146.xls")),
-                'Processing'=>mb_convert_encoding('ИмпортЗаказовСПортала','windows-1251','utf-8'),
+                'Processing'=>'WebSendOrder',
+                //'Processing'=>mb_convert_encoding('ИмпортЗаказовСПортала','windows-1251','utf-8'),
                 'StringData'=>'1234567890'
         )
 )->return;
 
 echo "<pre>";
 var_dump($result);
+//var_dump(mb_convert_encoding($result,'utf-8','windows-1251'));
 //var_dump($result->Result);
 echo "</pre>";
 
