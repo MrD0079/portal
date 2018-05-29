@@ -243,7 +243,7 @@
 			<br>
 			<b>Приложения</b><br>
 			{foreach key=k1 item=i1 from=$i.files}
-				<nobr><a target=_blank href="sz_files/{$i1.fn}">{$i1.fn}</a>
+				<nobr><a target=_blank href="files/{$i1.fn}">{$i1.fn}</a>
                                 {if $i.head.cat_id eq 927668 and $i.head.current_status eq 1 and ($is_admin or $i.head.slaves4 gt 0)}
                                 <input type="button" value="Экспорт заявки в SCM" onClick="send2scm('{$i1.fn}','{$i.head.id}');">
                                 {/if}

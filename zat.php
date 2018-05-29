@@ -316,7 +316,7 @@ if (isset($_REQUEST["del_file"]))
 	}
 }
 
-$d1="zat_files";
+$d1="files/zat_files";
 $d2=$d1."/".$y;
 $d3=$d2."/".$m;
 $d5=$d3."/".$emp_tn;

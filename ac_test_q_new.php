@@ -7,17 +7,17 @@ if (is_uploaded_file($_FILES["pict"]['tmp_name']))
 	$a=pathinfo($_FILES["pict"]["name"]);
 	$fn="pict".get_new_file_id().".".$a["extension"];
 	$_REQUEST['pict']=$fn;
-	move_uploaded_file($_FILES["pict"]['tmp_name'], "ac_test_files/".$fn);
+	move_uploaded_file($_FILES["pict"]['tmp_name'], "files/ac_test_files/".$fn);
 
 	include_once('SimpleImage.php');
 	$image = new SimpleImage();
-	$image->load("ac_test_files/".$fn);
+	$image->load("files/ac_test_files/".$fn);
 	$h=$image->getHeight();
 	if ($image->getHeight()>600)
 	{
 	$image->resizeToHeight(600);
 	}
-	$image->save("ac_test_files/".$fn);
+	$image->save("files/ac_test_files/".$fn);
 }
 else
 {

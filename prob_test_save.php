@@ -10,19 +10,19 @@ if ($_REQUEST['field']=='pict')
 		$a=pathinfo($_FILES["pict"]["name"]);
 		$fn="pict".get_new_file_id().".".$a["extension"];
 		$_REQUEST['val']=$fn;
-		move_uploaded_file($_FILES["pict"]['tmp_name'], "prob_test_files/".$fn);
+		move_uploaded_file($_FILES["pict"]['tmp_name'], "files/prob_test_files/".$fn);
 
 		include_once('SimpleImage.php');
 		$image = new SimpleImage();
-		$image->load("prob_test_files/".$fn);
+		$image->load("files/prob_test_files/".$fn);
 		$h=$image->getHeight();
 		if ($image->getHeight()>600)
 		{
 		$image->resizeToHeight(600);
 		}
-		$image->save("prob_test_files/".$fn);
+		$image->save("files/prob_test_files/".$fn);
 
-		echo '<a target=_blank href="prob_test_files/'.$_REQUEST['val'].'"><img height=50px src="prob_test_files/'.$_REQUEST['val'].'"></a>';
+		echo '<a target=_blank href="files/prob_test_files/'.$_REQUEST['val'].'"><img height=50px src="files/prob_test_files/'.$_REQUEST['val'].'"></a>';
 	}
 }
 

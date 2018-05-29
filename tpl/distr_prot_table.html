@@ -35,7 +35,7 @@
 {if not $smarty.request.print}
 <td style="text-align:left">
 	{foreach key=k1 item=i1 from=$i.files name=files}
-		<b>{$smarty.foreach.files.iteration}.</b> <a target=_blank href="distr_prot_files/{$i1.fn}">{$i1.fn}</a><br>
+		<b>{$smarty.foreach.files.iteration}.</b> <a target=_blank href="files/distr_prot_files/{$i1.fn}">{$i1.fn}</a><br>
 	{/foreach}
 </td>
 <td><a target=_blank href="?action=bud_fil_passport_get&nohead=1&id={$i.fil_id}&print=1">паспорт</a></td>

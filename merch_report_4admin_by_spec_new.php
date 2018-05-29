@@ -79,20 +79,20 @@ $files = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 //ses_req();
 
-recursive_remove_directory("merch_spec_report_archives/".$tn,true);
-if (!file_exists("merch_spec_report_archives/".$tn)) {mkdir("merch_spec_report_archives/".$tn,0777,true);}
+recursive_remove_directory("files/merch_spec_report_archives/".$tn,true);
+if (!file_exists("files/merch_spec_report_archives/".$tn)) {mkdir("files/merch_spec_report_archives/".$tn,0777,true);}
 
 
 foreach ($files as $k=>$v)
 {
-	$v["path"]="merch_spec_report_files/".$v["path"];
+	$v["path"]="files/merch_spec_report_files/".$v["path"];
 	$d[$v["dt"]]["data"][$v["tz_oblast"]]["data"][$v["city"]]["data"][$v["net_name"]]["data"][$v["ur_tz_name"]]["data"][$v["tz_address"]]["files"][]=$v;
 
 	$zip = new ZipArchive();
-	$archive="merch_spec_report_archives/".$tn."/".$_REQUEST["dates_list2"]."_".translit($v["tz_address"])."."."zip";
+	$archive="files/merch_spec_report_archives/".$tn."/".$_REQUEST["dates_list2"]."_".translit($v["tz_address"])."."."zip";
 
 	$zip->open($archive, ZIPARCHIVE::CREATE);
-	$zip->addFile("merch_spec_report_files/".$v["dt"]."/".$_REQUEST["agent"]."/".$v["kodtp"]."/".$v["fn"], translit($v["tz_oblast"])."/".translit($v["net_name"])."/".translit($v["dt"])."/".$v["fn"]);
+	$zip->addFile("files/merch_spec_report_files/".$v["dt"]."/".$_REQUEST["agent"]."/".$v["kodtp"]."/".$v["fn"], translit($v["tz_oblast"])."/".translit($v["net_name"])."/".translit($v["dt"])."/".$v["fn"]);
 	$zip->close();
 
 	$d[$v["dt"]]["data"][$v["tz_oblast"]]["data"][$v["city"]]["data"][$v["net_name"]]["data"][$v["ur_tz_name"]]["data"][$v["tz_address"]]["archive"]=$archive;

@@ -88,7 +88,7 @@ if (isset($_REQUEST["save"]))
 			{
 				$a=pathinfo($v["name"]);
 				$fn="sz".get_new_file_id().".".$a["extension"];
-				move_uploaded_file($v["tmp_name"], "sz_files/".$fn);
+				move_uploaded_file($v["tmp_name"], "files/".$fn);
 				$keys = array("sz_id"=>$id,"fn"=>$fn);
 				$files[]=$fn;
 				Table_Update ("sz_files", $keys, $keys);
@@ -123,7 +123,7 @@ if (isset($_REQUEST["id"]))
 	{
 		foreach ($_REQUEST["sz_files_del"] as $k=>$v)
 		{
-			unlink("sz_files/".$v);
+			unlink("files/".$v);
 			Table_Update("sz_files",array("fn"=>$v),null);
 			audit ("удалил из СЗ №".$_REQUEST["id"]." файл ".$v,"sz");
 

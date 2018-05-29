@@ -40,12 +40,12 @@ if (isset($_REQUEST["save"]))
 			//print_r($x);
 			foreach($x as $k=>$v)
 			{
-				$path="bud_ru_zay_files/".$v["id"]."/sup_doc";
+				$path="files/bud_ru_zay_files/".$v["id"]."/sup_doc";
 				if (!file_exists($path)) {mkdir($path,0777,true);}
 				$x1 = explode("\n",$v["sup_doc"]);
 				foreach($x1 as $k1=>$v1)
 				{
-					copy("files/".$v1,"bud_ru_zay_files/".$v["id"]."/sup_doc/".$v1);
+					copy("files/".$v1,"files/bud_ru_zay_files/".$v["id"]."/sup_doc/".$v1);
 				}
 			}
 

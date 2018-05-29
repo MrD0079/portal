@@ -318,7 +318,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		function fl_func($prefix)
 		{
 			global $smarty;
-			$d1="nets_files/".$_REQUEST["calendar_years"]."/";
+			$d1="files/nets_files/".$_REQUEST["calendar_years"]."/";
 			$d2=$d1.$_REQUEST["nets"]."/";
 			$d3=$d2.$prefix."/";
 			if (!file_exists($d1)) {mkdir($d1);}

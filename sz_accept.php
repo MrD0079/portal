@@ -108,14 +108,14 @@ if (isset($_REQUEST["save"]))
 							}
                                                         $text.="<a href='https://ps.avk.ua/?action=sz_reestr&sz_id=".$h["id"]."&select=1'>—сылка</a> на документ в реестре документов"."<br>";
 							$r = file_get_contents("https://ps.avk.ua/sz_view.php?id=".$h["id"]."&print=1&pdf=1&to_file=1");
-							$fn=array("sz_files/attach".$h["id"].".pdf");
+							$fn=array("files/attach".$h["id"].".pdf");
 							$sql=rtrim(file_get_contents('sql/sz_files.sql'));
 							$params=array(':id'=>$h["id"]);
 							$sql=stritr($sql,$params);
 							$data = $db->getAssoc($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 							foreach ($data as $k3=>$v3)
 							{
-								$fn[]="sz_files/".$v3["fn"];
+								$fn[]="files/".$v3["fn"];
 							}
 							foreach ($e as $k2=>$v2)
 							{

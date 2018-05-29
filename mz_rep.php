@@ -73,7 +73,7 @@ if (isset($_REQUEST["save"])&&$_REQUEST["mz_list"]>0)
 			if (is_uploaded_file($v['tmp_name'][$k1]))
 			{
 				//echo $mz." ".$k." ".$k1." ".$v1."<br>";
-				$dir = "mz_rep_files/".$k."/".$k1."/".$mz."/";
+				$dir = "files/mz_rep_files/".$k."/".$k1."/".$mz."/";
 				if (!file_exists($dir)) {mkdir($dir,0777,true);}
 				$a=pathinfo($v1);
 				$fn="mz".get_new_file_id().".".$a["extension"];

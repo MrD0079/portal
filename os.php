@@ -27,7 +27,7 @@ if (isset($_REQUEST["save"]))
 	{
 	if ($_FILES["fn"]["name"]!='')
 	{
-		$d1="os_files/".$_REQUEST["head_id"];
+		$d1="files/os_files/".$_REQUEST["head_id"];
 		if (!file_exists($d1)) {mkdir($d1);}
 		$fn=translit($_FILES["fn"]["name"]);
 		//if ($_FILES["fn"]["error"][$k]==0){Table_Update("os_head",$_REQUEST["k"],array('fn'=>$fn));}
@@ -113,7 +113,7 @@ $smarty->assign('os_body', $res);
 //ses_req();
 
 
-$d1="os_files/".$head_id;
+$d1="files/os_files/".$head_id;
 if (!file_exists($d1)) {mkdir($d1);}
 $file_list=array();
 if ($handle = opendir($d1)) {

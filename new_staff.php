@@ -18,7 +18,7 @@ if (isset($_REQUEST["new_staff"]))
 		$_REQUEST["new_staff"]["gbo_installed"]=$_REQUEST["new_staff"]["gbo_installed"];
 		$_REQUEST["new_staff"]["dpt_id"]=$_SESSION["dpt_id"];
 		$_REQUEST["new_staff"]["id"]=$id;
-		$d1="new_staff_files";
+		$d1="files/new_staff_files";
 		if (!file_exists($d1)) {mkdir($d1);}
 		foreach ($_FILES as $k=>$v)
 		{

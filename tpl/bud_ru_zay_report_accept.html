@@ -114,7 +114,7 @@
 				{if $i1.type eq 'bool'}		{if $i1.val_bool eq 1}да{else}нет{/if}{/if}
 				{if $i1.type eq 'file'}
 					{foreach key=k2 item=i2 from=$i1.val_file}
-						<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>&nbsp
+						<nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>&nbsp
 					{/foreach}
 				{/if}
 				<br>
@@ -177,7 +177,7 @@
 					{if $i1.type eq 'bool'}		{if $i1.val_bool eq 1}да{else}нет{/if}{/if}
 					{if $i1.type eq 'file'}
 						{foreach key=k2 item=i2 from=$i1.val_file}
-							<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>&nbsp
+							<nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>&nbsp
 						{/foreach}
 					{/if}
 						</td>
@@ -190,7 +190,7 @@
 							{if $i1.type eq 'file'}
 								<input id=new_st_{$i1.id} name=new_st[{$i1.id}][] type=file multiple {if $i1.rep_required and not $i1.rep_val_file}required{/if}>
 								{foreach key=k2 item=i2 from=$i1.rep_val_file}
-									<br><input type=checkbox name="bud_ru_zay_files_del[{$i1.id}][{$i2}]" value="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>
+									<br><input type=checkbox name="bud_ru_zay_files_del[{$i1.id}][{$i2}]" value="files/bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}"><nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>
 								{/foreach}
 								{if $i1.rep_val_file}<br>Выбрать для удаления{/if}
 							{else}
@@ -238,7 +238,7 @@
 						{if $i1.type eq 'textarea'}	{$i1.rep_val_textarea}{/if}
 						{if $i1.type eq 'file'}
 							{foreach key=k2 item=i2 from=$i1.rep_val_file}
-								<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>&nbsp
+								<nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>&nbsp
 							{/foreach}
 						{/if}
 						{if $i1.type eq 'formula'}	{$i1.rep_val_formula}{/if}
@@ -257,14 +257,14 @@
 			{if $i.head.creator_tn eq $tn and $i.head.not_seen}
 				<b>Подтверждающие документы:&nbsp;</b> <input id="sup_doc_{$i.head.id}" name="sup_doc[{$i.head.id}][]" multiple="" type="file">
 				{foreach key=k2 item=i2 from=$i.head.sup_doc}
-					<br><input type=checkbox name="sup_doc_del[{$i.head.id}][{$i2}]" value="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>
+					<br><input type=checkbox name="sup_doc_del[{$i.head.id}][{$i2}]" value="files/bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}"><nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>
 				{/foreach}
 				{if $i.head.sup_doc}<br>Выбрать для удаления{/if}
 			{else}
 				{if $i.head.sup_doc}
 				<b>Подтверждающие документы:&nbsp;</b>
 				{foreach key=k2 item=i2 from=$i.head.sup_doc}
-					<nobr><a target=_blank href="bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>&nbsp
+					<nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/sup_doc/{$i2}">{$i2}</a></nobr>&nbsp
 				{/foreach}
 				{/if}
 			{/if}

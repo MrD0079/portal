@@ -78,7 +78,7 @@ if (isset($_REQUEST["save"]))
 			{
 				$a=pathinfo($_FILES['ac_memb_ext']["name"][$k]);
 				$fn="ac".get_new_file_id().".".$a["extension"];
-				move_uploaded_file($_FILES['ac_memb_ext']['tmp_name'][$k], "ac_files/".$fn);
+				move_uploaded_file($_FILES['ac_memb_ext']['tmp_name'][$k], "files/ac_files/".$fn);
 
 				//$keys = array("memb_ext_order"=>$k,"ac_id"=>$id);
 				//$vals = array("resume"=>$fn);
@@ -113,7 +113,7 @@ if (isset($_REQUEST["save"]))
 			{
 				$a=pathinfo($_FILES['ac_memb_ext']["name"][$k]);
 				$fn="ac".get_new_file_id().".".$a["extension"];
-				move_uploaded_file($v, "ac_files/".$fn);
+				move_uploaded_file($v, "files/ac_files/".$fn);
 				$keys = array("memb_ext_order"=>$k,"ac_id"=>$id);
 				$vals = array("resume"=>$fn);
 				Table_Update ("ac_memb_ext", $keys, $vals);
@@ -153,11 +153,11 @@ if (isset($_REQUEST["id"]))
 	$_REQUEST["ac_memb_int"]=$data;
 
 /*
-	if (isset($_REQUEST["ac_files_del"]))
+	if (isset($_REQUEST["files/ac_files_del"]))
 	{
-		foreach ($_REQUEST["ac_files_del"] as $k=>$v)
+		foreach ($_REQUEST["files/ac_files_del"] as $k=>$v)
 		{
-			unlink("ac_files/".$v);
+			unlink("files/ac_files/".$v);
 			Table_Update("ac_files",array("fn"=>$v),null);
 			audit ("удалил из заявки на проведение АЦ №".$_REQUEST["id"]." файл ".$v,"ac");
 
@@ -168,7 +168,7 @@ if (isset($_REQUEST["id"]))
 	$params=array(':id'=>$_REQUEST["id"]);
 	$sql=stritr($sql,$params);
 	$data = $db->getAssoc($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$_REQUEST["ac_files"]=$data;
+	$_REQUEST["files/ac_files"]=$data;
 */
 }
 else

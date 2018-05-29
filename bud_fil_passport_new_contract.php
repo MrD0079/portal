@@ -30,7 +30,7 @@ foreach($_FILES['img']['name'] as $k=>$v)
 		$f[$id]=$fn;
 		Table_Update('bud_fil_contracts', $keys,$vals);
 		if (!file_exists('bud_fil_files')) {mkdir('bud_fil_files',0777,true);}
-		move_uploaded_file($_FILES['img']['tmp_name'][$k], 'bud_fil_files/'.$fn);
+		move_uploaded_file($_FILES['img']['tmp_name'][$k], 'files/'.$fn);
 	}
 }
 }

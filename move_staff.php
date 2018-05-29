@@ -11,7 +11,7 @@ if (isset($_REQUEST["move_staff"]))
 	{
 		if (is_uploaded_file($_FILES['fn']['tmp_name']))
 		{
-			$d1="move_staff_files";
+			$d1="files/move_staff_files";
 			if (!file_exists($d1)) {mkdir($d1,0777,true);}
 			$fn=get_new_file_id().'_'.$_FILES['fn']["name"];
 			move_uploaded_file($_FILES['fn']["tmp_name"], $d1."/".translit($fn));

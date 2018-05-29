@@ -1,5 +1,5 @@
 <?
-//ini_set('display_errors', 'On');
+ini_set('display_errors', 'On');
 
 
 //audit("открыл merch_spec_report","merch_spec_report");
@@ -9,7 +9,7 @@ $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 
 
-//ses_req();
+ses_req();
 
 
 
@@ -99,7 +99,7 @@ if (isset($_REQUEST["save"]))
 	}
 }
 //$d1="a";
-$d1="merch_spec_report_files";
+$d1="files/merch_spec_report_files";
 $d2=$d1."/".$_REQUEST["dt"];
 $d3=$d2."/".$r["ag_id"];
 $d4=$d3."/".$r["kod_tp"];

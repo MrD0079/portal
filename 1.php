@@ -63,30 +63,30 @@ global $image;
 
 
 
-//rg('/home/httpd/server2/merch_spec_report_files/01.06.2013');
-rg('/home/httpd/server2/merch_spec_report_files/02.06.2013');
+//rg('/home/httpd/server2/files/merch_spec_report_files/01.06.2013');
+rg('/home/httpd/server2/files/merch_spec_report_files/02.06.2013');
 
 
 /*
 
-if ($handle = opendir("merch_spec_report_files")) {
+if ($handle = opendir("files/merch_spec_report_files")) {
 	while (false !== ($file = readdir($handle)))
 	{
 		if ($file != "." && $file != "..")
 		{
-			if ($handle1 = opendir("merch_spec_report_files/".$file))
+			if ($handle1 = opendir("files/merch_spec_report_files/".$file))
 			{
 				while (false !== ($file1 = readdir($handle1)))
 				{
 					if ($file1 != "." && $file1 != "..")
 					{
-						if ($handle2 = opendir("merch_spec_report_files/".$file."/".$file1))
+						if ($handle2 = opendir("files/merch_spec_report_files/".$file."/".$file1))
 						{
 							while (false !== ($file2 = readdir($handle2)))
 							{
 								if ($file2 != "." && $file2 != "..")
 								{
-									if ($handle3 = opendir("merch_spec_report_files/".$file."/".$file1."/".$file2))
+									if ($handle3 = opendir("files/merch_spec_report_files/".$file."/".$file1."/".$file2))
 									{
 										while (false !== ($file3 = readdir($handle3)))
 										{
@@ -96,14 +96,14 @@ if ($handle = opendir("merch_spec_report_files")) {
 												//$a=pathinfo($file3);
 												//$fn="msrf".$db->getOne("select SEQ_FILES.nextval from dual").".".$a["extension"];
 												//echo $file3."=>".$fn."<br>";
-												//rename("merch_spec_report_files/".$file."/".$file1."/".$file2."/".$file3,"merch_spec_report_files/".$file."/".$file1."/".$file2."/".$fn);
+												//rename("files/merch_spec_report_files/".$file."/".$file1."/".$file2."/".$file3,"files/merch_spec_report_files/".$file."/".$file1."/".$file2."/".$fn);
 												//$keys = array("dt"=>OraDate2MDBDate($file),"ag_id"=>$file1,"kod_tp"=>$file2,"fn"=>$fn);
-												//Table_Update ("merch_spec_report_files", $keys, $keys);
+												//Table_Update ("files/merch_spec_report_files", $keys, $keys);
 
 
 
-		//echo "merch_spec_report_files/".$file."/".$file1."/".$file2."/".$file3."<br>";
-		$fn="merch_spec_report_files/".$file."/".$file1."/".$file2."/".$file3;
+		//echo "files/merch_spec_report_files/".$file."/".$file1."/".$file2."/".$file3."<br>";
+		$fn="files/merch_spec_report_files/".$file."/".$file1."/".$file2."/".$file3;
 		$image->load($fn);
 		$h=$image->getHeight();
 		if ($image->getHeight()>600)

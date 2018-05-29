@@ -21,7 +21,7 @@ if (isset($_REQUEST["send2scm"])){
     $result = $client->ExecuteProcessing(
             array
             (
-                    'BinaryData'=>base64_encode(file_get_contents('sz_files/'.$_REQUEST["fn"])),
+                    'BinaryData'=>base64_encode(file_get_contents('files/'.$_REQUEST["fn"])),
                     'Processing'=>'WebSendOrder',
                     'StringData'=>$_REQUEST["sz_id"]
             )

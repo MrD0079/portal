@@ -69,7 +69,7 @@
 			<b>Внешние кандидаты:</b><br>
 			{foreach key=k1 item=i1 from=$i.ext name=ext}
 				{if $i1.me_fio neq null}
-				<b>{$smarty.foreach.ext.iteration}.</b> {$i1.me_fio} {$i1.email} <nobr><a target=_blank href="ac_files/{$i1.resume}">{$i1.resume}</a></nobr> <b>тест логика:</b> {$i1.me_logic} <b>тест математика:</b> {$i1.me_math}<br>
+				<b>{$smarty.foreach.ext.iteration}.</b> {$i1.me_fio} {$i1.email} <nobr><a target=_blank href="files/ac_files/{$i1.resume}">{$i1.resume}</a></nobr> <b>тест логика:</b> {$i1.me_logic} <b>тест математика:</b> {$i1.me_math}<br>
 				{/if}
 			{/foreach}
 		</td>

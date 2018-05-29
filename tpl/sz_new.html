@@ -152,7 +152,7 @@ $('#cat_hint').load('?action=sz_new_get_cat_hint&nohead=1&id='+$val);
 {/if}
 
 {foreach from=$smarty.request.sz_files key=k item=i name=fl}
-<input type=checkbox name="sz_files_del[]" value={$i.fn}><a target=_blank href="sz_files/{$i.fn}">{$i.fn}</a><br>
+<input type=checkbox name="sz_files_del[]" value={$i.fn}><a target=_blank href="files/{$i.fn}">{$i.fn}</a><br>
 {/foreach}
 
 

@@ -40,7 +40,7 @@ $url.="\n".$d["data"][$k]["accepted_date"]." ".$d["data"][$k]["acceptor_name"];
 }
 $url=mb_convert_encoding($url,"UTF-8","Windows-1251");
 include "phpqrcode/qrlib.php";
-QRcode::png($url, "sz_files/chart".$_REQUEST["id"].".png", "L", 2, 2);
+QRcode::png($url, "files/chart".$_REQUEST["id"].".png", "L", 2, 2);
 isset($d) ? $smarty->assign('d', $d) : null;
 
 if (!isset($_REQUEST["pdf"]))
@@ -74,7 +74,7 @@ else
 $dompdf1 = new DOMPDF();
 $dompdf1->load_html($b);
 $dompdf1->render();
-file_put_contents("sz_files/attach".$_REQUEST["id"].".pdf", $dompdf1->output());
+file_put_contents("files/attach".$_REQUEST["id"].".pdf", $dompdf1->output());
 }
 }
 ?>

@@ -58,7 +58,7 @@ if ($_REQUEST["calendar_years"]!="")
 
 	foreach ($data as $k=>$v)
 	{
-		$d1="nets_files/".$_REQUEST["calendar_years"]."/";
+		$d1="files/nets_files/".$_REQUEST["calendar_years"]."/";
 		$d2=$d1.$v["id_net"]."/";
 		$d3=$d2."dus/";
 		if (is_dir($d3))

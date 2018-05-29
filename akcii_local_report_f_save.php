@@ -29,8 +29,8 @@ $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
 			'fn'=>$fn
 		);
 		Table_Update('akcii_local_files', $vals,$vals);
-		if (!file_exists('akcii_local_files')) {mkdir('akcii_local_files',0777,true);}
-		move_uploaded_file($_FILES['file']['tmp_name'], 'akcii_local_files/'.$fn);
+		if (!file_exists('files/akcii_local_files')) {mkdir('files/akcii_local_files',0777,true);}
+		move_uploaded_file($_FILES['file']['tmp_name'], 'files/akcii_local_files/'.$fn);
 	}
 	else
 	{

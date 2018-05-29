@@ -9,7 +9,7 @@
 	{foreach key=k1 item=i1 from=$i.data}
 	<tr id="reestr_tr_{$k1}" style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
 		<td>{if $is_ts and not $smarty.request.print}<a href="javascript:void(0);" onclick="del_reestr({$k1});">[x]</a>{/if}</td>
-		<td><a target=_blank href="bud_svod_sc_files/{$i1.fn}">{$i1.fn}</a></td>
+		<td><a target=_blank href="files/{$i1.fn}">{$i1.fn}</a></td>
 		<td>{$i1.summa|default:0|num:2}</td>
 	</tr>
 	{/foreach}

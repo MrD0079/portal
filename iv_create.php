@@ -11,7 +11,7 @@ if (isset($_REQUEST["add"])&&isset($_REQUEST["head"])&&isset($_REQUEST["data"]))
 	$_REQUEST["head"]["dpt_id"]=$_SESSION['dpt_id'];
 	if (isset($_FILES['resume']))
 	{
-		$d1="iv_files";
+		$d1="files/iv_files";
 		if (!file_exists($d1)) {mkdir($d1,0777,true);}
 		if (is_uploaded_file($_FILES["resume"]['tmp_name']))
 		{

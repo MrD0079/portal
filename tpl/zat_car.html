@@ -43,7 +43,7 @@
 		<td>{$item.parking}</td>
 		{/if}
 		<td>{$item.zc_total}</td>
-		<td><a target=_blank href="plan_activ_files/{$item.doc}">{$item.doc}</a></td>
+		<td><a target=_blank href="files/plan_actfiles/iv_files/{$item.doc}">{$item.doc}</a></td>
 		{assign var=sum_car value=$sum_car+$item.zc_total}
 	</tr>
 	{/foreach}

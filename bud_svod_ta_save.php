@@ -26,8 +26,8 @@ if (isset($_REQUEST["get_prot_db"])){
                     $prot_db[]=$fn;
                     $vals = array($_REQUEST['field']=>join("\n",$prot_db));
                     Table_Update('bud_svod_ta'.$_REQUEST['table'], $keys,$vals);
-                    if (!file_exists('bud_svod_ta_files')) {mkdir('bud_svod_ta_files',0777,true);}
-                    move_uploaded_file($_FILES['file']['tmp_name'], 'bud_svod_ta_files/'.$fn);
+                    if (!file_exists('files/bud_svod_ta_files')) {mkdir('files/bud_svod_ta_files',0777,true);}
+                    move_uploaded_file($_FILES['file']['tmp_name'], 'files/bud_svod_ta_files/'.$fn);
             }
             else
             {echo 'Ошибка загрузки файла<br>';}

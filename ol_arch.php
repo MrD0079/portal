@@ -54,11 +54,11 @@ $data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $data[$k]['body']=$data1;
 foreach ($data1 as $k1=>$v1)
 {
-if (file_exists("ol_files/".$v1["id"]))
+if (file_exists("files/ol_files/".$v1["id"]))
 {
 
 			$file_list=array();
-			if ($handle = opendir("ol_files/".$v1["id"])) {
+			if ($handle = opendir("files/ol_files/".$v1["id"])) {
 				while (false !== ($file = readdir($handle)))
 				{
 					if ($file != "." && $file != "..") {$file_list[] = $file;}
@@ -114,7 +114,7 @@ $dompdf->stream($_REQUEST["filename"].".pdf");
 }
 else
 {
-file_put_contents("ol_files/attach".$_REQUEST["ol_arch_id"].".pdf", $dompdf->output());
+file_put_contents("files/ol_files/attach".$_REQUEST["ol_arch_id"].".pdf", $dompdf->output());
 }
 
 

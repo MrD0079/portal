@@ -346,7 +346,7 @@ $(
 						{foreach key=k1 item=i1 from=$smarty.request.edit_st}
 							{if $i1.type eq 'file' and $i1.ff_id eq $i.id}
 								{foreach key=k2 item=i2 from=$i1.val_file}
-									<br><input type=checkbox name="bud_ru_zay_files_del[{$i1.ff_id}][{$i2}]" value="bud_ru_zay_files/{$smarty.request.id}/{$i1.ff_id}/{$i2}"><nobr><a target=_blank href="bud_ru_zay_files/{$smarty.request.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>
+									<br><input type=checkbox name="bud_ru_zay_files_del[{$i1.ff_id}][{$i2}]" value="files/bud_ru_zay_files/{$smarty.request.id}/{$i1.ff_id}/{$i2}"><nobr><a target=_blank href="files/bud_ru_zay_files/{$smarty.request.id}/{$i1.ff_id}/{$i2}">{$i2}</a></nobr>
 								{/foreach}
 							{/if}
 						{/foreach}

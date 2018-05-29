@@ -30,9 +30,9 @@
 			{foreach key=k2 item=i2 from=$i.files}
 				{if $i2}
 					{if not $disabled and not $disabled_edit}
-					<a href="javascript:void(0);" onClick="javascript:del_file('mz_rep_files/ras/{$i.head.dt}/{$smarty.request.mz_list}/{$i2}','ras');">[X]</a>
+					<a href="javascript:void(0);" onClick="javascript:del_file('files/mz_rep_files/ras/{$i.head.dt}/{$smarty.request.mz_list}/{$i2}','ras');">[X]</a>
 					{/if}
-					<a target=_blank href="mz_rep_files/ras/{$i.head.dt}/{$smarty.request.mz_list}/{$i2}">{$i2}</a>
+					<a target=_blank href="files/mz_rep_files/ras/{$i.head.dt}/{$smarty.request.mz_list}/{$i2}">{$i2}</a>
 					<br>
 				{/if}
 			{/foreach}

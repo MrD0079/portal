@@ -35,7 +35,7 @@ if (isset($_REQUEST['save'])&&isset($_REQUEST['data']))
 					$_REQUEST["print"]=1;
 					$_REQUEST["select"]=1;
 					include "ol_arch.php";
-					$fn=array("ol_files/attach".$o.".pdf");
+					$fn=array("files/ol_files/attach".$o.".pdf");
 					$accept1=$parameters["accept1"]["val_string"];
 					$accept2=$parameters["accept2"]["val_string"];
 					$subj="Завершено подписание обходного листа по сотруднику ".$f;

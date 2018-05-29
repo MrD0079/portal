@@ -113,7 +113,7 @@ if (isset($_REQUEST["save"]))
 						$data = $db->getAssoc($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 						foreach ($data as $k3=>$v3)
 						{
-							$fn[]="ac_files/".$v3["resume"];
+							$fn[]="files/ac_files/".$v3["resume"];
 						}
 						//foreach ($e as $k2=>$v2)
 						//{

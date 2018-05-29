@@ -26,8 +26,8 @@ echo 30 * 5 . 7;
 exit;
 
 $fn=array(
-"new_staff_files/Foto Balasanyan.jpg",
-"new_staff_files/foto Aver`yanov.JPG"
+"files/new_staff_files/Foto Balasanyan.jpg",
+"files/new_staff_files/foto Aver`yanov.JPG"
 );
 
 
@@ -84,8 +84,8 @@ array('key'=>20811636,'val'=>'Podtverzhdayushchie dokumenti.zip'),
 foreach ($a as $k=>$v)
 {
 
-$pathold="bud_ru_zay_files/sup_doc";
-$pathnew="bud_ru_zay_files/".$v["key"]."/sup_doc";
+$pathold="files/bud_ru_zay_files/sup_doc";
+$pathnew="files/bud_ru_zay_files/".$v["key"]."/sup_doc";
 if (!file_exists($pathnew)) {mkdir($pathnew,0777,true);}
 copy($pathold."/".$v["val"],$pathnew."/".$v["val"]);
 

@@ -150,7 +150,7 @@ if (isset($_REQUEST["save"]))
 			{
 				$a=pathinfo($_FILES["new_st"]["name"][$k][$k1]);
 				$fn=translit($_FILES["new_st"]["name"][$k][$k1]);
-				$path="bud_ru_zay_files/".$id."/".$k;
+				$path="files/bud_ru_zay_files/".$id."/".$k;
 				if (!file_exists($path)) {mkdir($path,0777,true);}
 				move_uploaded_file($v1, $path."/".$fn);
 				$s[]=$fn;

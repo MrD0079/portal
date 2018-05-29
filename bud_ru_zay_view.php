@@ -41,7 +41,7 @@ $url.="\n".$d["data"][$k]["accepted_date"]." ".$d["data"][$k]["acceptor_name"];
 $url=mb_convert_encoding($url,"UTF-8","Windows-1251");
 
 include "phpqrcode/qrlib.php";
-QRcode::png($url, "bud_ru_zay_files/chart".$_REQUEST["id"].".png", "L", 2, 2);
+QRcode::png($url, "files/bud_ru_zay_files/chart".$_REQUEST["id"].".png", "L", 2, 2);
 
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
 	$p=array(':z_id' => $_REQUEST["id"]);
@@ -101,7 +101,7 @@ else
 $dompdf1 = new DOMPDF();
 $dompdf1->load_html($b);
 $dompdf1->render();
-file_put_contents("bud_ru_zay_files/attach".$_REQUEST["id"].".pdf", $dompdf1->output());
+file_put_contents("files/bud_ru_zay_files/attach".$_REQUEST["id"].".pdf", $dompdf1->output());
 }
 }
 ?>

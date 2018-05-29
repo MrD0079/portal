@@ -38,7 +38,7 @@
 	<p>
 	Приложения
 	{foreach key=k item=i from=$bonus_f}
-		<nobr><a target="_blank" href="sz_files/{$i.fn}">{$i.fn}</a></nobr>&nbsp;
+		<nobr><a target="_blank" href="files/{$i.fn}">{$i.fn}</a></nobr>&nbsp;
 	{/foreach}
 	</p>
 	{if $bonus_h.sz_not_seen or not $smarty.request.id}

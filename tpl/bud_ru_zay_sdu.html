@@ -226,7 +226,7 @@
 							{if $i2.type eq 'bool'}{if $i2.val_bool eq 1}да{else}нет{/if}{/if}
 							{if $i2.type eq 'file'}
 								{foreach key=k3 item=i3 from=$i2.val_file}
-									<nobr><a target=_blank href="bud_ru_zay_files/{$i1.id}/{$i2.ff_id}/{$i3}">{$i3}</a></nobr><br>
+									<nobr><a target=_blank href="files/bud_ru_zay_files/{$i1.id}/{$i2.ff_id}/{$i3}">{$i3}</a></nobr><br>
 								{/foreach}
 							{/if}
 						{/if}

@@ -26,15 +26,15 @@ if (isset($_REQUEST["add_comment"]))
 				if (is_uploaded_file($z["tmp_name"][$k]))
 				{
 					$fn=get_new_file_id()."_".translit(iconv ('UTF-8', 'Windows-1251', $z["name"][$k]));
-					move_uploaded_file($z["tmp_name"][$k], "merch_chat_files/".$fn);
+					move_uploaded_file($z["tmp_name"][$k], "files/merch_chat_files/".$fn);
 					$image = new SimpleImage();
-					$image->load("merch_chat_files/".$fn);
+					$image->load("files/merch_chat_files/".$fn);
 					$h=$image->getHeight();
 					if ($image->getHeight()>600)
 					{
 						$image->resizeToHeight(600);
 					}
-					$image->save("merch_chat_files/".$fn);
+					$image->save("files/merch_chat_files/".$fn);
 					$keys = array("chat_id"=>$id,"fn"=>$fn);
 					Table_Update ("merch_chat_f", $keys, $keys);
 				}

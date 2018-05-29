@@ -12,7 +12,7 @@ $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 
 if (isset($_REQUEST['del_file']))
 {
-	unlink('os_ac_files/'.$db->getOne('select fn from os_ac_f where id='.$_REQUEST['del_file']));
+	unlink('files/files/os_files/ac_files/'.$db->getOne('select fn from os_ac_f where id='.$_REQUEST['del_file']));
 	$keys = array(
 		'id'=>$_REQUEST['del_file'],
 	);
@@ -44,8 +44,8 @@ foreach($_FILES['img']['name'] as $k=>$v)
 		$fn=$id.'_'.translit($_FILES['img']['name'][$k]);
 		$vals=array('fn'=>$fn);
 		Table_Update('os_ac_f', $keys,$vals);
-		if (!file_exists('os_ac_files')) {mkdir('os_ac_files',0777,true);}
-		move_uploaded_file($_FILES['img']['tmp_name'][$k], 'os_ac_files/'.$fn);
+		if (!file_exists('files/files/os_files/ac_files')) {mkdir('files/files/os_files/ac_files',0777,true);}
+		move_uploaded_file($_FILES['img']['tmp_name'][$k], 'files/files/os_files/ac_files/'.$fn);
 	}
 	else
 	{

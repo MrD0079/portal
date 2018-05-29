@@ -177,13 +177,13 @@ $('#ac_vac3').val('{$smarty.request.ac.vac3}');*/
 </script>
 
 <!--
-{foreach from=$smarty.request.ac_files key=k item=i name=fl}
+{foreach from=$smarty.request.files/ac_files key=k item=i name=fl}
 {/foreach}
 {if $smarty.foreach.fl.total > 0 }
 <p>Отметить файлы для удаления</p>
 {/if}
-{foreach from=$smarty.request.ac_files key=k item=i name=fl}
-<input type=checkbox name="ac_files_del[]" value={$i.fn}><a target=_blank href="ac_files/{$i.fn}">{$i.fn}</a><br>
+{foreach from=$smarty.request.files/ac_files key=k item=i name=fl}
+<input type=checkbox name="files/ac_files_del[]" value={$i.fn}><a target=_blank href="files/ac_files/{$i.fn}">{$i.fn}</a><br>
 {/foreach}
 <p><a id="add_file" href="javascript:void(0)" onclick="javascript:add_file();">добавить файл</a></p>
 -->

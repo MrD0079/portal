@@ -181,11 +181,11 @@ if (isset($_REQUEST["save"]))
 		{
 			if ($v==0)
 			{
-				$d1="plan_activ_files";
+				$d1="files/plan_actfiles/iv_files";
 				if (!file_exists($d1)) {mkdir($d1,0777,true);}
 				$fn=get_new_file_id().'_'.translit($_FILES['doc']['name'][$k]);
 				//echo $fn."<br>";
-				move_uploaded_file($_FILES['doc']['tmp_name'][$k],"plan_activ_files/".$fn);
+				move_uploaded_file($_FILES['doc']['tmp_name'][$k],"files/plan_actfiles/iv_files/".$fn);
 				$table_name = 'p_activ_plan_daily';
 				$keys = array(
 					"tn"=>$emp_tn,

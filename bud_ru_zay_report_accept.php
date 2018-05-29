@@ -75,7 +75,7 @@ if (isset($_REQUEST["save"]))
 			{
 				$a=pathinfo($_FILES["new_st"]["name"][$k][$k1]);
 				$fn=translit($_FILES["new_st"]["name"][$k][$k1]);
-				$path="bud_ru_zay_files/".$id."/".$ff_id."/report";
+				$path="files/bud_ru_zay_files/".$id."/".$ff_id."/report";
 				if (!file_exists($path)) {mkdir($path,0777,true);}
 				move_uploaded_file($v1, $path."/".$fn);
 				$s[]=$fn;
@@ -120,7 +120,7 @@ if (isset($_REQUEST["save"]))
 			{
 				$a=pathinfo($_FILES["sup_doc"]["name"][$k][$k1]);
 				$fn=translit($_FILES["sup_doc"]["name"][$k][$k1]);
-				$path="bud_ru_zay_files/".$k."/sup_doc";
+				$path="files/bud_ru_zay_files/".$k."/sup_doc";
 				if (!file_exists($path)) {mkdir($path,0777,true);}
 				move_uploaded_file($v1, $path."/".$fn);
 				$s[]=$fn;

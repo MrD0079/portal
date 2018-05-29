@@ -185,7 +185,7 @@ $("#div_{$p.id}_retailer").attr('checked','{$p.retailer}'=='1'?true:false);
 {foreach key=k item=i from=$contracts}
 <tr id=trcr_{$i.id}>
 {if not $smarty.request.print}<td><a href="javascript:void(0);" onclick="del_contract({$i.id});">[x]</a></td>{/if}
-<td><a target="_blank" href="bud_fil_files/{$i.fn}">{$i.fn}</a></td>
+<td><a target="_blank" href="files/{$i.fn}">{$i.fn}</a></td>
 </tr>
 {/foreach}
 </tbody>

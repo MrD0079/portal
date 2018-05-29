@@ -8,8 +8,8 @@
 {foreach key=k1 item=i1 from=$chat_f}
 {if $i.id eq $i1.chat_id}
 <div class="pics">
-<a target=_blank href="/merch_chat_files/{$i1.fn}"><img src="/merch_chat_files/{$i1.fn}" height=50px></a>
-<img src="/merch_chat_files/{$i1.fn}" class="hov">
+<a target=_blank href="/files/merch_chat_files/{$i1.fn}"><img src="/files/merch_chat_files/{$i1.fn}" height=50px></a>
+<img src="/files/merch_chat_files/{$i1.fn}" class="hov">
 </div>
 {/if}
 {/foreach}

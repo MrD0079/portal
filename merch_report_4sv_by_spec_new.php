@@ -109,11 +109,11 @@ foreach ($rbf as $k=>$v)
 
 $zip = new ZipArchive();
 
-recursive_remove_directory("merch_spec_report_archives/".$tn,true);
+recursive_remove_directory("files/merch_spec_report_archives/".$tn,true);
 
 foreach ($rb as $k=>$v){
 
-$d1="merch_spec_report_archives";
+$d1="files/merch_spec_report_archives";
 $d2=$d1."/".$tn;
 $d3=$d2."/".translit($v["ag_name"]);
 $d4=$d3."/".translit($v["tz_oblast"]);
@@ -130,7 +130,7 @@ $p1=translit($v["ag_name"])."/".translit($v["tz_oblast"])."/".translit($v["net_n
 
 $archive=$d2."/".$_REQUEST["dates_list2"]."_".translit($v["tz_address"])."."."zip";
 
-$d1="merch_spec_report_files";
+$d1="files/merch_spec_report_files";
 $d2=$d1."/".$v["dt"];
 $d3=$d2."/".$v["ag_id"];
 $d4=$d3."/".$v["kodtp"];

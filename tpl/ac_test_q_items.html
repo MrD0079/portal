@@ -16,7 +16,7 @@
 				порядок <input id=d_{$i.id}_q_sort size=8 class="number_int" value="{$i.q_sort}" onChange="save_ac_test({$i.id},'q_sort',this.value);">
 				картинка
 				<div id=div_{$i.id}_pict style="display: inline;">
-				{if $i.pict}<a target=_blank href="ac_test_files/{$i.pict}"><img height=50px src="ac_test_files/{$i.pict}"></a>{/if}
+				{if $i.pict}<a target=_blank href="files/ac_test_files/{$i.pict}"><img height=50px src="files/ac_test_files/{$i.pict}"></a>{/if}
 				</div>
 				<input id=d_{$i.id}_pict type=file onChange="save_ac_test({$i.id},'pict',this.value);">
 				<a href='javascript:void(0);' onClick="show_a_items({$i.id})">Варианты ответов</a>

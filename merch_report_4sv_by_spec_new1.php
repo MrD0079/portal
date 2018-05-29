@@ -93,10 +93,10 @@ if (isset($_REQUEST["select"]))
 			$d[$v["dt"].$v["svms_name"].$v["num"].$v["fio_otv"]]["data"][$v["tz_oblast"].$v["city"].$v["net_name"].$v["ur_tz_name"].$v["tz_address"]]["data"][$v["ag_id"]]["head"]["file_list"][$v["msr_file_id"]]=$v;
 		}
 		$zip = new ZipArchive();
-		recursive_remove_directory("merch_spec_report_archives/".$tn,true);
+		recursive_remove_directory("files/merch_spec_report_archives/".$tn,true);
 		foreach ($rb as $k=>$v)
 		{
-			$d1="merch_spec_report_archives";
+			$d1="files/merch_spec_report_archives";
 			$d2=$d1."/".$tn;
 			$d3=$d2."/".translit($v["ag_name"]);
 			$d4=$d3."/".translit($v["tz_oblast"]);
@@ -105,7 +105,7 @@ if (isset($_REQUEST["select"]))
 			if (!file_exists($d6)) {mkdir($d6,0777,true);}
 			$p1=translit($v["ag_name"])."/".translit($v["tz_oblast"])."/".translit($v["net_name"])."/".translit($v["dt"]);
 			$archive=$d2."/".$_REQUEST["dates_list2"]."_".translit($v["tz_address"])."."."zip";
-			$d1="merch_spec_report_files";
+			$d1="files/merch_spec_report_files";
 			$d2=$d1."/".$v["dt"];
 			$d3=$d2."/".$v["ag_id"];
 			$d4=$d3."/".$v["kodtp"];

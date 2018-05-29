@@ -51,7 +51,7 @@
 		{foreach key=k item=i from=$qa name=q}
 		<div class="q" id=q_{$i.head.id}>
 			<p style="font-weight: bold;">Вопрос №{$smarty.foreach.q.iteration}:</p>
-			{if $i.head.pict}<p><img src="ac_test_files/{$i.head.pict}"></p>{/if}
+			{if $i.head.pict}<p><img src="files/ac_test_files/{$i.head.pict}"></p>{/if}
 			<p>{$i.head.name}</p>
 			<p style="font-weight: bold;">Варианты ответов:</p>
 			<p>

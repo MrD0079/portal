@@ -50,7 +50,7 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["new_staff"]))
 			$fio_staff=$db->getOne("select fam||' '||im||' '||otch from new_staff where id=".$k);
 			$file_name=$db->getOne("select fn from new_staff where id=".$k);
 			$file_name1=$db->getOne("select fn1 from new_staff where id=".$k);
-			$fn=array("new_staff_files/".$file_name,"new_staff_files/".$file_name1);
+			$fn=array("files/new_staff_files/".$file_name,"files/new_staff_files/".$file_name1);
 			if ($v==0)
 			{
 				$subj="Новый сотрудник ".$fio_staff." не добавлен";

@@ -61,17 +61,17 @@ foreach($_FILES['img']['name'] as $k=>$v)
 		$fn="beg_visit_to_f_".$id.".".$a["extension"];
 		$vals=array('fn'=>$fn);
 		Table_Update('beg_visit_to_f', $keys,$vals);
-		if (!file_exists('beg_visit_to_f_files')) {mkdir('beg_visit_to_f_files',0777,true);}
-		move_uploaded_file($_FILES['img']['tmp_name'][$k], 'beg_visit_to_f_files/'.$fn);
+		if (!file_exists('files/beg_visit_to_f_files')) {mkdir('files/beg_visit_to_f_files',0777,true);}
+		move_uploaded_file($_FILES['img']['tmp_name'][$k], 'files/beg_visit_to_f_files/'.$fn);
 
 		$image = new SimpleImage();
-		$image->load('beg_visit_to_f_files/'.$fn);
+		$image->load('files/beg_visit_to_f_files/'.$fn);
 		$h=$image->getHeight();
 		if ($image->getHeight()>600)
 		{
 		$image->resizeToHeight(600);
 		}
-		$image->save('beg_visit_to_f_files/'.$fn);
+		$image->save('files/beg_visit_to_f_files/'.$fn);
 
 		//$smarty->assign('fn',$fn);
 		//$smarty->display('beg_visit_2_to_f_save.html');

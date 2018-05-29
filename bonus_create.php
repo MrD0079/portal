@@ -28,7 +28,7 @@ if (isset($_REQUEST["add"])&&isset($_REQUEST["head"])&&isset($_REQUEST["data"]))
 		{
 			$a=pathinfo($_FILES["files"]['name'][$k]);
 			$fn="sz".get_new_file_id().".".$a["extension"];
-			move_uploaded_file($_FILES["files"]['tmp_name'][$k], "sz_files/".$fn);
+			move_uploaded_file($_FILES["files"]['tmp_name'][$k], "files/".$fn);
 			$keys = array("bonus_id"=>$id,"fn"=>$fn);
 			Table_Update ("bonus_files", $keys, $keys);
 		}

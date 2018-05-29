@@ -182,7 +182,7 @@ if /*not $is_ts and*/ not $is_admin
 							$('#uploadOutput{$k1}').remove();
 							">[x]</a>
 						{/if}
-						<a target=_blank href="sc_files/{$i1.fn}">{$i1.fn}</a>
+						<a target=_blank href="files/{$i1.fn}">{$i1.fn}</a>
 						{$i1.dt} загружен {$i1.lu}
 						</nobr>
 						<br>
@@ -195,7 +195,7 @@ if /*not $is_ts and*/ not $is_admin
 			<td>
 				{foreach key=k1 item=i1 from=$i.files name=files}
 					<nobr>
-					<a target=_blank href="sc_files/{$i1.fn}">{$i1.fn}</a>
+					<a target=_blank href="files/{$i1.fn}">{$i1.fn}</a>
 					{$i1.dt} загружен {$i1.lu}
 					</nobr>
 					<br>

@@ -45,7 +45,7 @@ if (isset($_REQUEST['del_file']))
 	);
 	$fn=$db->getOne("select fn from sc_files where id=".$_REQUEST['del_file']);
 	Table_Update('sc_files',$keys,null);
-	unlink('sc_files/'.$fn);
+	unlink('files/'.$fn);
 }
 
 if (isset($_REQUEST["save"]))
@@ -70,7 +70,7 @@ if (isset($_REQUEST["save"]))
 			$dt=$_REQUEST["files"]["dt"][$k];
 			$keys = array('tp_kod'=>$k,'dpt_id'=>$_SESSION["dpt_id"],'fn'=>$fn,'dt'=>$dt,'lu'=>null);
 			Table_Update ("sc_files", $keys, $keys);
-				$d1="sc_files";
+				$d1="files";
 			if (!file_exists($d1)) {mkdir($d1,0777,true);}
 			move_uploaded_file($_FILES["files"]["tmp_name"]["fn"][$k], $d1."/".$fn);
 			}

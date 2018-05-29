@@ -61,16 +61,16 @@ else if (isset($_REQUEST["save"]))
 				$a=explode("\n",$v1["val_file"]);
 				foreach ($a as $v)
 				{
-					$pathFrom="bud_ru_zay_files/".$zold."/".$v1['ff_id'];
-					$pathTo="bud_ru_zay_files/".$znew."/".$v1['ff_id'];
+					$pathFrom="files/bud_ru_zay_files/".$zold."/".$v1['ff_id'];
+					$pathTo="files/bud_ru_zay_files/".$znew."/".$v1['ff_id'];
 					if (!file_exists($pathTo)) {mkdir($pathTo,0777,true);}
 					copy($pathFrom."/".$v, $pathTo."/".$v);
 				}
 				$a=explode("\n",$v1["rep_val_file"]);
 				foreach ($a as $v)
 				{
-					$pathFrom="bud_ru_zay_files/".$zold."/".$v1['ff_id']."/report";
-					$pathTo="bud_ru_zay_files/".$znew."/".$v1['ff_id']."/report";
+					$pathFrom="files/bud_ru_zay_files/".$zold."/".$v1['ff_id']."/report";
+					$pathTo="files/bud_ru_zay_files/".$znew."/".$v1['ff_id']."/report";
 					if (!file_exists($pathTo)) {mkdir($pathTo,0777,true);}
 					copy($pathFrom."/".$v, $pathTo."/".$v);
 				}
@@ -95,7 +95,7 @@ else if (isset($_REQUEST["save"]))
 			foreach ($x1 as $k=>$v)
 			{
 				$fnnew=get_new_file_id()."_".$v["fn"];
-				copy("sc_files/".$v["fn"], "sc_files/".$fnnew);
+				copy("files/".$v["fn"], "files/".$fnnew);
 				$db->query("INSERT INTO SC_FILES (DPT_ID, DT, FN, TP_KOD) VALUES (".$v["dpt_id"].", TO_DATE('".$v["dt"]."','dd.mm.yyyy'), '".$fnnew."', ".$x["tpto"].")");
 			}
 		}

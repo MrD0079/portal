@@ -16,7 +16,7 @@ if (isset($_REQUEST["save"]))
 		$r = file_get_contents($url);
                 $r = trim(preg_replace('/\s+/', ' ', $r));
 		$fn="zakaz_nal_".get_new_file_id().".xls";
-		$fnWithPath="sz_files/".$fn;
+		$fnWithPath="files/".$fn;
 		$fp = fopen($fnWithPath, "w");
 		fwrite($fp, $r);
 		fclose($fp);

@@ -1,7 +1,7 @@
 {foreach key=k item=i from=$list}
 <nobr>
 <a href="javascript:void(0);" onclick="del_file({$i.id},{$smarty.request.memb_id},{$smarty.request.ac_id});">[x]</a>
-<a target=_blank href="os_ac_files/{$i.fn}">{$i.fn}</a>
+<a target=_blank href="files/files/os_files/ac_files/{$i.fn}">{$i.fn}</a>
 </nobr>
 <br>
 {/foreach}

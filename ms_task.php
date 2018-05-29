@@ -79,7 +79,7 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["data"])){
          s.kod status_kod,
          m.end_date - TRUNC (SYSDATE) - 1 days_remain,
          m.photo_id,
-         '/merch_spec_report_files/'
+         '/files/merch_spec_report_files/'
          || TO_CHAR (m.visit_date, 'dd.mm.yyyy')
          || '/'
          || m.ag_id

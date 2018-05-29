@@ -35,8 +35,8 @@ $_REQUEST['vals']=$vals;
 ses_req();
 */
 
-		if (!file_exists('bud_svod_sc_files')) {mkdir('bud_svod_sc_files',0777,true);}
-		move_uploaded_file($_FILES['file']['tmp_name'], 'bud_svod_sc_files/'.$fn);
+		if (!file_exists('files')) {mkdir('files',0777,true);}
+		move_uploaded_file($_FILES['file']['tmp_name'], 'files/'.$fn);
 	}
 	else
 	{
