@@ -1,5 +1,6 @@
-/* Formatted on 14/04/2015 13:22:25 (QP5 v5.227.12220.39724) */
-  SELECT tn,
+/* Formatted on 03/06/2018 12:00:48 (QP5 v5.252.13127.32867) */
+  SELECT DISTINCT
+         tn,
          emp_name,
          emp_svid,
          daily_plans_count,
@@ -23,7 +24,7 @@
                       FROM p_activ_plan_monthly m, calendar c
                      WHERE     m.m = c.my
                            AND m.y = c.y
-                           AND c.DATA = TO_DATE (:sd, 'dd.mm.yyyy')
+                           AND c.DATA = TO_DATE ( :sd, 'dd.mm.yyyy')
                            AND m.tn = e.tn)
                       monthly_plan_ok,
                    DECODE (full, 1, 0, 1) readonly,
@@ -35,8 +36,8 @@
                            AND u.tn = f.slave
                            AND NVL (u.is_top, 0) <> 1
                            AND NVL (ADD_MONTHS (TRUNC (u.datauvol, 'mm'), 1),
-                                    TO_DATE (:sd, 'dd.mm.yyyy')) >=
-                                  TO_DATE (:sd, 'dd.mm.yyyy')) e,
+                                    TO_DATE ( :sd, 'dd.mm.yyyy')) >=
+                                  TO_DATE ( :sd, 'dd.mm.yyyy')) e,
                    user_list u
              WHERE e.tn = u.tn AND NVL (u.is_top, 0) <> 1
           ORDER BY emp_name) z
