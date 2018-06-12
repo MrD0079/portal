@@ -11,9 +11,9 @@ function init_number(mode)
 		var target = e.target;
 		setTimeout(function(e) {
 			var str = $(self).val(); 
-			str = str.replace(/,/g, ".");
-			str = str.replace(/ /g, "");
-			if (Number($(self).val())!=Number(str))
+			str = str.trim().replace(/,/g, ".").replace(/ /g, "");
+			/*if (Number($(self).val())!=Number(str))*/
+			if ($(self).val()!=str)
 			{
 				//console.log($(self).val()+'=>'+str);
 				$(target).val(str);
