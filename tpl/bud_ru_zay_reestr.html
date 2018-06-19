@@ -313,19 +313,19 @@
 
 <table border=1 cellpadding=5 cellspacing=0>
 	<tr style="text-align:center;font-weight:bold">
-		<td rowspan=2>{if $smarty.request.tu eq 1}Общая информация{else}Заголовок заявки{/if}</td>
-		<td rowspan=2>{if $smarty.request.tu eq 1}Цели на переговоры{else}Поля заявки{/if}</td>
+		<td rowspan=2 width="300px">{if $smarty.request.tu eq 1}Общая информация{else}Заголовок заявки{/if}</td>
+		<td rowspan=2 width="300px">{if $smarty.request.tu eq 1}Цели на переговоры{else}Поля заявки{/if}</td>
 		<td colspan=3>Блок согласования</td>
 		<td rowspan=2>{if $smarty.request.tu eq 1}Цели на переговоры недействительны{else}Заявка недействительна{/if}</td>
 	</tr>
 	<tr style="text-align:center;font-weight:bold">
-		<td>
+		<td width="300px">
 				Должность, подразделение, <font style="color:red">согласователь</font>
 				<font style="color:green">статус</font>
 				<font style="color:blue">дата</font>
 		</td>
 		<td>Причина отказа</td>
-		<td>Комментарии / Уточнения</td>
+		<td width="200px">Комментарии / Уточнения</td>
 	</tr>
 	{foreach key=k item=i from=$d}
 

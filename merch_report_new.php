@@ -140,7 +140,7 @@ if (isset($r["id"]))
 		$p=array(":head_id"=>$r["id"]);
 		$sql=stritr($sql,$p);
 		$zp = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-		$smarty->assign('zp', $zp);
+		if ($zp) $smarty->assign('zp', $zp);
 	}
 }
 $smarty->display('merch_report_new.html');
