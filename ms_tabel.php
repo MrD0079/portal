@@ -54,7 +54,7 @@ $p=array(
 
 $sql = rtrim(file_get_contents('sql/ms_tabel.sql'));
 $sql=stritr($sql,$p);
-//echo $sql;
+//echo $sql.";";
 $rb = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 $sqld = rtrim(file_get_contents('sql/ms_tabel_detail.sql'));
@@ -63,6 +63,7 @@ foreach ($rb as $k=>$v)
 {
 $p[":head_id"]=$v['id'];
 $sql=stritr($sqld,$p);
+//echo $sql.";";
 $rb[$k]['detail'] = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 }
 $smarty->assign('d', $rb);
@@ -70,7 +71,7 @@ $smarty->assign('d', $rb);
 $sql = rtrim(file_get_contents('sql/ms_tabel_days.sql'));
 $sql=stritr($sql,$p);
 
-//echo $sql;
+//echo $sql.";";
 
 $days = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('days', $days);

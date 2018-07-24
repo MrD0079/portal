@@ -280,7 +280,7 @@
                                              m.h_eta,
                                              m.eta
                                         FROM a14mega m
-                                       WHERE m.dpt_id = :dpt_id AND m.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')) s,
+                                       WHERE m.dpt_id = :dpt_id /*AND m.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')*/) s,
                                      akcii_local_tp t,
                                      bud_ru_zay z
                                WHERE     s.tp_kod = t.tp_kod

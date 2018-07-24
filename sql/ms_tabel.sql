@@ -1,8 +1,9 @@
-/* Formatted on 05.06.2017 15:27:02 (QP5 v5.252.13127.32867) */
+/* Formatted on 17/07/2018 22:38:36 (QP5 v5.252.13127.32867) */
   SELECT q1.tn,
          q1.id,
          q1.fio,
          q1.fio_otv,
+         q1.mr_tn,
          q1.num,
          DECODE (NVL (t.work_hours, 0),
                  0, 0,
@@ -38,7 +39,8 @@
                             rh.num,
                             cpp1.id cpp1_id,
                             rh.num rh_num,
-                            COUNT (rb.kodtp) kodtp_cnt
+                            COUNT (rb.kodtp) kodtp_cnt,
+                            urh.tn mr_tn
               FROM merch_report mr,
                    routes_body1 rb,
                    routes_head rh,
@@ -49,8 +51,10 @@
                    svms_oblast s,
                    ms_nets n,
                    (SELECT DISTINCT data, dm FROM calendar) c,
-                   user_list u
-             WHERE     u.tn = rh.tn
+                   user_list u,
+                   user_list urh
+             WHERE     rh.login = urh.login
+                   AND u.tn = rh.tn
                    AND TRUNC (mr.dt, 'mm') = TO_DATE ( :ed, 'dd/mm/yyyy')
                    AND mr.dt = c.data
                    AND rb.day_num = c.dm
@@ -104,7 +108,8 @@
                    cpp1.id,
                    cpp1.city,
                    cpp1.tz_oblast,
-                   rh.num) q1,
+                   rh.num,
+                   urh.tn) q1,
          (  SELECT c1.data dt,
                    kod_ag,
                    c1.id kod_tp,
@@ -158,6 +163,7 @@ GROUP BY q1.tn,
          q1.id,
          q1.fio,
          q1.fio_otv,
+         q1.mr_tn,
          q1.num,
          q1.rh_num,
          t.justification,

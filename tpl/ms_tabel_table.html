@@ -1,6 +1,7 @@
 <table style="text-align: left;" border="1">
 	<tr style="text-align:center;font-weight:bold;">
 		<td rowspan=2>Маршрут</td>
+		<td rowspan=2>ИНН отв.</td>
 		<td rowspan=2>ФИО отв.</td>
 		<td rowspan=2>Факт, дн</td>
 		<td rowspan=2>Факт GPS, дн</td>
@@ -33,6 +34,7 @@
 	{/if}
 	<tr style="text-align: center;" bgcolor="{cycle values="#ccffff,#ffffcc"}">
 		<td>{$i.rh_num}</td>
+		<td>{$i.mr_tn}</td>
 		<td>{$i.fio_otv}</td>
 		<td>{$i.fakt|num:2}</td>
 		<td>{$i.fakt_gps|num:2}</td>
