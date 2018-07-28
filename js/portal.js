@@ -172,3 +172,8 @@ function errorNoty(text) {
         timeout: 3000
     }).show();
 }
+
+function myRound(val,precision){
+    koef = Math.pow(10, precision);
+    return Math.round(val * koef) / koef;
+}

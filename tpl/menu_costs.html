@@ -185,6 +185,10 @@
 
 		{/if}
 
+                {if $is_admin or $is_bud_admin or $is_fin_man}
+                <li><a href="?action=spec">загрузка специй</a></li>
+		{/if}
+
 		{if $is_admin or $is_bud_admin}
 
 		<li><a href="javascript:void(0);"><span class="dir">Админ</span></a>

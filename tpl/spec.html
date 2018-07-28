@@ -1,0 +1,26 @@
+<h1>загрузка спецификаций</h1>
+<form
+	target="_self"
+	method="POST"
+	name="form1"
+	id="form1"
+	enctype="multipart/form-data"
+>
+<p>мес€ц 
+<select name=month_list id=month_list>
+{foreach key=key item=item from=$month_list}
+        <option value="{$item.sd_c}">{$item.my}</option>
+{/foreach}
+</select></p>
+<script>$("#month_list option[value='{$smarty.request.month_list}']").prop('selected', true);</script>
+<p><input type=file name=fn></p>
+<p><input name="save" value="загрузить" type="submit"></p>
+</form>
+
+<h3>имеющиес€ специи</h3>
+<table border="1">
+    <tr><td>мес€ц</td><td>кол-во<br>продуктов</td><td>последнее<br>обновление</td></tr>
+{foreach key=k item=i from=$spec_list}
+<tr><td>{$i.period}</td><td>{$i.cnt}</td><td>{$i.lu}</td></tr>
+{/foreach}
+</table>
