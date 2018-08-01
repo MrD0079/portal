@@ -196,14 +196,20 @@
                             {else}
                                     $('#slave').val($('#master').val());
                             {/if}
+                                {if $smarty.request.new.st eq 169138069}
+                                    loadProductList($('#master').val(),$('#slave').val());
+                                {/if}
                             {literal}
-                            loadProductList($('#master').val(),$('#slave').val());
                     }
             );
             $('#slave').change(
                     function()
                     {
-                            loadProductList($('#master').val(),$('#slave').val());
+                            {/literal}
+                                {if $smarty.request.new.st eq 169138069}
+                                    loadProductList($('#master').val(),$('#slave').val());
+                                {/if}
+                            {literal}
                     }
             );
             {/literal}
