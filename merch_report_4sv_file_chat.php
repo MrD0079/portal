@@ -13,7 +13,7 @@ InitRequestVar("agent",0);
 InitRequestVar("city","0");
 InitRequestVar("flt_chat",0);
 
-//ses_req();
+
 
 $sql = rtrim(file_get_contents('sql/dates_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -100,7 +100,7 @@ isset($d) ? $smarty->assign('d', $d) : null;
 }
 
 
-//ses_req();
+
 
 $smarty->display('merch_report_4sv_file_chat.html');
 

@@ -1,7 +1,6 @@
 <?php
 if (isset($_REQUEST["save"]))
 {
-        //0ses_req();
         $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 	$keys = array('visitdate'=>OraDate2MDBDate($_REQUEST['visitdate']),'tp_kod'=>$_REQUEST['tp_kod']);
 	if ($_REQUEST['field1']=='undefined')

@@ -8,7 +8,7 @@ InitRequestVar("mgroups",1);
 InitRequestVar("ok_filter",0);
 if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 {
-	//ses_req();
+	
 	foreach ($_REQUEST["msg"] as $k=>$v)
 	{
 		if ($v["msg"]!="")
@@ -43,7 +43,7 @@ if (
 	isset($_REQUEST["ok"])
 )
 {
-	//ses_req();
+	
 	foreach ($_REQUEST["ok"] as $k=>$v)
 	{
 		$keys["year"]=$_REQUEST["calendar_years"];

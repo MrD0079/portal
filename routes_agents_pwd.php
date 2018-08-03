@@ -6,7 +6,7 @@ audit("открыл Пароли заказчиков","routes_agents_pwd");
 
 
 
-//ses_req();
+
 
 if (isset($_REQUEST["new"]))
 {

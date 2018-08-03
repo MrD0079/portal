@@ -2,7 +2,7 @@
 
 //audit ("начал тестирование по тренингу","tr");
 
-//ses_req();
+
 
 $p = array();
 $p[':ac_id'] = $_REQUEST["ac_id"];

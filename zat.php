@@ -426,6 +426,6 @@ $smarty->assign('limits', $res);
 
 $smarty->display('zat.html');
 
-//ses_req();
+
 
 ?>

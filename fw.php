@@ -5,7 +5,7 @@ audit("открыл график обучения за ".$_REQUEST["month_list"],"fw");
 InitRequestVar("fw_flt",1);
 InitRequestVar("pos",0);
 
-//ses_req();
+
 
 //$params=array(':pos_id'=>0,':dpt_id' => $_SESSION["dpt_id"],':files_activ'=>$_REQUEST["files_activ"]);
 $p=array();

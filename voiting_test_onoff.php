@@ -2,7 +2,7 @@
 
 InitRequestVar("tr",0);
 
-ses_req();
+
 
 if (isset($_REQUEST["test_on"])) {
     foreach ($_REQUEST["test_on"] as $key => $val) {

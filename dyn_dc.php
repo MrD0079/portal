@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 audit("открыл dyn_dc","dyn_dc");
 
@@ -27,7 +27,7 @@ $smarty->assign('os_head', $res);
 //print_r($res);
 
 //print_r($res);
-//ses_req();
+
 
 //for ($i=0;$i<2;$i++)
 //{
@@ -40,7 +40,7 @@ $smarty->assign('os_body'/*.$i*/, $res);
 
 
 //print_r($res);
-//ses_req();
+
 
 }
 

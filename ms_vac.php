@@ -70,7 +70,7 @@ if (isset($_REQUEST["save"])){
 } else if (isset($_REQUEST["vac_remove"])) {
         Table_Update('ms_vac', array('id'=>$_REQUEST["id"]), array('remover'=>$fio));
 } else if (isset($_REQUEST["add_vac"])) {
-    //ses_req();
+    
         $sql="SELECT DECODE (
                 SIGN (
                    ADD_MONTHS (TRUNC (SYSDATE), -12) - s.START_company + 1),

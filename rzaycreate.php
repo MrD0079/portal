@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 //audit("открыл rzay_reestr","rzay_reestr");
 /*
@@ -33,7 +33,7 @@ else
 {
 	if (isset($_REQUEST["add"]))
 	{
-		//ses_req();
+		
 		$id=get_new_id();
 		$v=$_REQUEST["new"];
 		$v["dt"]=OraDate2MDBDate($v["dt"]);

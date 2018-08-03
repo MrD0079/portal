@@ -1,7 +1,7 @@
 <?php
 if (isset($_REQUEST["save"]))
 {
-    ses_req();
+    
     include 'PHPExcel/Classes/PHPExcel/IOFactory.php';
 	if (isset($_FILES['fn']))
 	{

@@ -1,6 +1,6 @@
 <?
 //audit ("начал тестирование по тренингу","tr");
-//ses_req();
+
 if (isset($_REQUEST["test_end"]))
 {
 	$p = array();

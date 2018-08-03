@@ -10,7 +10,7 @@ InitRequestVar("country",$_SESSION["cnt_kod"]);
 InitRequestVar("orderby",1);
 InitRequestVar("dzc_id",0);
 
-//ses_req();
+
 
 
 
@@ -40,7 +40,7 @@ if (isset($_REQUEST["del_dzc"]))
 
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["d"]))
 	{
@@ -126,7 +126,7 @@ $smarty->display('dzc_reestr.html');
 
 
 
-//ses_req();
+
 
 
 

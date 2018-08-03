@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 InitRequestVar("v_from",$now);
 InitRequestVar("v_to",$now);
 audit ("открыл форму создания отпусков","vacation");

@@ -87,7 +87,7 @@ $smarty->assign('department_list', $data);
 
 if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	$keys = array("id"=>$_REQUEST["reset_z_id"]);
 	$vals = array("report_done"=>null,"report_zero_cost"=>null,"report_fakt_equal_plan"=>null);
@@ -107,7 +107,7 @@ if (
         &&isset($_REQUEST["cost_assign_month"])
         )
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
         if ($_REQUEST["cost_assign_month"]!=""){
             $keys = array("id"=>$_REQUEST["reset_z_id"]);
@@ -118,7 +118,7 @@ if (
 
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["report_done"]))
 	{
@@ -131,7 +131,7 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["report_zero_cost"]))
 	{
-		//ses_req();
+		
 		foreach ($_REQUEST["report_zero_cost"] as $k=>$v)
 		{
 			$keys = array("id"=>$k);
@@ -308,7 +308,7 @@ if (isset($_REQUEST["save"]))
 
 if (isset($_REQUEST["add_chat"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["bud_ru_zay_accept_chat"]))
 	{
@@ -476,7 +476,7 @@ foreach ($d as $k=>$v)
 //print_r($d);
 
 //$_REQUEST["d"]=$d;
-//ses_req();
+
 
 //print_r($params);
 
@@ -526,7 +526,7 @@ $smarty->assign('bud_ru_ff_st', $bud_ru_ff_st);
 
 
 
-//ses_req();
+
 $smarty->display('bud_ru_zay_report.html');
 
 ?>

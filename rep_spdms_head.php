@@ -32,5 +32,5 @@ else
 	//print_r($r);
 	$smarty->display('rep_spdms_head.html');
 }
-//ses_req();
+
 ?>

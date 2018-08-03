@@ -20,7 +20,7 @@ audit("открыл список заявок на тренинг","tr");
 
 
 
-//ses_req();
+
 
 
 if (isset($_REQUEST["save"])||isset($_REQUEST["ok_primary_retry"]))
@@ -297,7 +297,7 @@ if (isset($_REQUEST["generate"]))
 }
 
 
-//ses_req();
+
 
 $smarty->display('tr_pt_list.html');
 

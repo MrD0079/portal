@@ -30,7 +30,7 @@ if (isset($_REQUEST["save"]))
 
 if (isset($_REQUEST["add"]))
 {
-	//ses_req();
+	
 	if (isset($_REQUEST["tmc_new"]))
 	{
 		if ($_REQUEST["tmc_new"]["name"]!=''&&$_REQUEST["tmc_new"]["tmcs"]!='')

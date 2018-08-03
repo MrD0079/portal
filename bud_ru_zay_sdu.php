@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 
 
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_sdu_sales_get_tp_type.sql'));

@@ -1,7 +1,7 @@
 <?
 //ini_set('display_errors', 0);
 //ini_set("upload_max_filesize", "20Mb");
-//ses_req();
+
 ini_set("memory_limit", "512M");
 //ini_set("max_input_vars", "10000");
 require_once "function.php";

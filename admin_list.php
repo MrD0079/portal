@@ -5,7 +5,7 @@ if (isset($_REQUEST["save"])){
     $val_field=$_REQUEST["val_field"];
     $key=$_REQUEST["key"];
     $val=$_REQUEST["val"];
-    //ses_req();
+    
     Table_Update($table,array($key_field=>$key),array($val_field=>$val));
 } else {
     InitRequestVar('all',1);

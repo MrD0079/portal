@@ -195,7 +195,7 @@ if (isset($_REQUEST["select"]))
 	$res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('rb_total', $res);
 
-        //ses_req();
+        
         
 }
 

@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 audit("открыл fin_plan","fin_plan");
 InitRequestVar("nets");
 InitRequestVar("calendar_years");
@@ -220,7 +220,7 @@ if (isset($_REQUEST["add_month"]))
 			}
 		}
 	}
-	//ses_req();
+	
 	$_REQUEST["month"] = null;
 	$_REQUEST["edit"] = null;
 }

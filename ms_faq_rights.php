@@ -1,5 +1,5 @@
 <?
-ses_req();
+
 if (isset($_REQUEST["enabled1"]))
 {
 	$table="ms_faq_rights";

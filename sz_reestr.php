@@ -53,7 +53,7 @@ if (isset($_REQUEST["send2scm"])){
             $_REQUEST["sz_id"]=0;
     }
     */
-    //ses_req();
+    
     $params=array(':tn'=>$tn);
     $sql=rtrim(file_get_contents('sql/sz_cat.sql'));
     $sql=stritr($sql,$params);
@@ -93,7 +93,7 @@ if (isset($_REQUEST["send2scm"])){
     }
     if (isset($_REQUEST["save"]))
     {
-            //ses_req();
+            
             $_REQUEST["select"]=1;
             if (isset($_REQUEST["d"]))
             {
@@ -172,6 +172,6 @@ if (isset($_REQUEST["send2scm"])){
     $smarty->assign('d1', $data);
     }
     $smarty->display('sz_reestr.html');
-    //ses_req();
+    
 }
 ?>

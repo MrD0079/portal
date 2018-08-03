@@ -1,7 +1,7 @@
 <?
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	$id = get_new_id();
 	$keys = array("id"=>$id);
 	$_REQUEST['new']['tn']=$tn;

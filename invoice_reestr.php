@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 //ini_set('display_errors', 'On');
 audit("открыл invoice_reestr","invoice_reestr");
 InitRequestVar("nets",0);

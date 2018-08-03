@@ -4,7 +4,7 @@ if (isset($_REQUEST["get_prot_db"])){
     $smarty->assign('prot_db', $prot_db);
     $smarty->display('bud_svod_ta_list_prot_db.html');
 } else {
-    //ses_req();
+    
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     $keys = array('dt'=>OraDate2MDBDate($_REQUEST['dt']));
     $vals = array($_REQUEST['field']=>$_REQUEST['val']);

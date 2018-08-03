@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 //audit ("открыл форму согласования СЗ","sz");
 InitRequestVar("wait4myaccept",0);
@@ -208,7 +208,7 @@ $sql=rtrim(file_get_contents('sql/sz_accept.sql'));
 $params=array(':tn' => $tn, ":sz_cat"=>0,':wait4myaccept'=>$_REQUEST['wait4myaccept']);
 $sql=stritr($sql,$params);
 //$_REQUEST["sql"]=$sql;
-//ses_req();
+
 //echo $sql;
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 

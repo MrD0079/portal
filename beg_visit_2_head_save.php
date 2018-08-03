@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 //InitRequestVar("dt",$now);
 

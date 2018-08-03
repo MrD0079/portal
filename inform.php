@@ -3,7 +3,7 @@
 
 if (isset($_REQUEST["save"]))
 {
-//ses_req();
+
 Table_update("pos_msg",array("pos_id"=>$_REQUEST["dolgn_msg"]),array("pos_msg"=>addslashes($_REQUEST["msg"])));
 }
 

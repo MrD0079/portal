@@ -7,7 +7,7 @@ if (isset($_REQUEST["replace"]))
 {
 	if (($_REQUEST["replace_svms"]["svms_from"]!='')&&($_REQUEST["replace_svms"]["svms_to"]!=''))
 	{
-	//ses_req();
+	
 
 	$from=$_REQUEST["replace_svms"]["svms_from"];
 	$to=$_REQUEST["replace_svms"]["svms_to"];

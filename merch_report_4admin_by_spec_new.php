@@ -77,7 +77,7 @@ $sql=stritr($sql,$p);
 $files = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //$_REQUEST["sqlf"]=$sql;
 
-//ses_req();
+
 
 recursive_remove_directory("files/merch_spec_report_archives/".$tn,true);
 if (!file_exists("files/merch_spec_report_archives/".$tn)) {mkdir("files/merch_spec_report_archives/".$tn,0777,true);}
@@ -109,7 +109,7 @@ $res = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('rb_total', $res);
 //$_REQUEST["sqlt"]=$sql;
 
-//ses_req();
+
 
 $sql = rtrim(file_get_contents('sql/merch_spec_report_fields.sql'));
 $p=array(":ag_id"=>$_REQUEST["agent"]);

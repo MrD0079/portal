@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
 InitRequestVar("dates_list2",$now);

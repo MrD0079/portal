@@ -2,7 +2,7 @@
 
 audit("открыл dimproduct","dimproduct");
 
-//ses_req();
+
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["keys"]))
 {

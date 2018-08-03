@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 //print_r($_bud_ru_ff);
 if (isset($_REQUEST["new"]))
@@ -65,7 +65,7 @@ if (isset($_REQUEST["delete"]))
 
 if (isset($_REQUEST["rebuild"]))
 {
-	ses_req();
+	
 	foreach ($_REQUEST["rebuild"] as $k=>$v)
 	{
 		$sql=rtrim(file_get_contents('sql/bud_ru_ff_rebuild.sql'));

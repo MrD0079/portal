@@ -29,7 +29,7 @@ $params=array(
 $sql = rtrim(file_get_contents('sql/bud_svod_tus_tp.sql'));
 $sql=stritr($sql,$params);
 
-//ses_req();
+
 //echo $sql;
 
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

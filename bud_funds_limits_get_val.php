@@ -7,7 +7,7 @@
 		':db' => $_REQUEST["db"]
 	);
 
-//ses_req();
+
 
 	$sql=rtrim(file_get_contents('sql/bud_funds_limits_get_val.sql'));
 	$sql=stritr($sql,$params);

@@ -66,7 +66,7 @@
 		isset($x)?$smarty->assign('d', $x):null;
 		isset($x)?$_REQUEST["x"]=$x:null;
 		//$_REQUEST["sql"]=$sql;
-		//ses_req();
+		
 	}
 	$smarty->display('salesbychains.html');
 ?>

@@ -9,7 +9,7 @@ $smarty->assign("act_head", $data);
 /*
 $_REQUEST['z']=$data;
 $_REQUEST['z1']=$sql;
-ses_req();
+
 */
 
 $sql=rtrim(file_get_contents('sql/akcii_local_report_z_head.sql'));
@@ -83,7 +83,7 @@ $smarty->assign('sales', $x);
 /*
 $_REQUEST['z']=$x;
 $_REQUEST['z1']=$sql;
-ses_req();
+
 */
 
 

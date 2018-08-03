@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 
@@ -63,7 +63,7 @@ $head_id=$res["id"];
 
 
 //print_r($res);
-//ses_req();
+
 $sql = rtrim(file_get_contents('sql/os_ac_body.sql'));
 //$p = array(':tn' => $_REQUEST["k"]["tn"],':y'=>$_REQUEST["k"]["y"]);
 $p = array(
@@ -74,7 +74,7 @@ $sql=stritr($sql,$p);
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('os_ac_body', $res);
 //print_r($res);
-//ses_req();
+
 
 
 

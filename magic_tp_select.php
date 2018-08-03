@@ -1,6 +1,6 @@
 <?php
 //audit("вошел в список сетей");
-//ses_req();
+
 if (isset($_REQUEST["save"]))
 {
 	$table_name = "magic_tp_select";

@@ -9,7 +9,7 @@ $r = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 
 
-ses_req();
+
 
 
 
@@ -64,7 +64,7 @@ function sok($rep_id, $remove_rep = 0)
 
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	if (isset($_REQUEST["rb"]))
 	{
 		$table_name = "merch_spec_report";
@@ -138,7 +138,7 @@ if (isset($_REQUEST["rotate_file"]))
 	Table_Update ("merch_spec_report_files", $keys, $keys);
 	unlink($_REQUEST["rotate_file"]);
 	//var_dump ($fn_new);
-	//ses_req();
+	
 	sok(1);
 }
 

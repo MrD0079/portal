@@ -1,7 +1,7 @@
 <?
 
 
-//ses_req();
+
 
 InitRequestVar('da_db',0);
 InitRequestVar('da_di',0);
@@ -20,7 +20,7 @@ InitRequestVar('da_result',0/*$db->getOne('SELECT id FROM distr_prot_result WHER
 InitRequestVar('da_deleted',0);
 InitRequestVar("prot_id",0);
 
-//ses_req();
+
 
 
 

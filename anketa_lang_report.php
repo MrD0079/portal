@@ -16,7 +16,7 @@ $params=array(
 );
 //var_dump($lang);
 //var_dump($lang_level);
-//ses_req();
+
 
 $sql = rtrim(file_get_contents('sql/anketa_lang_level.sql'));
 $sql=stritr($sql,$params);

@@ -1,12 +1,12 @@
 <?
 
-//ses_req();
+
 
 //print_r($_FILES);
 
 InitRequestVar('ms_faq_activ',1);
 
-//ses_req();
+
 
 if (isset($_REQUEST["new_section"]))
 {
@@ -23,7 +23,7 @@ if (
 	is_uploaded_file($_FILES["new_file"]["tmp_name"])
 )
 {
-    ses_req();
+    
         $path = "files/faq_".get_new_file_id().'_'.translit($_FILES["new_file"]["name"]);
         copy($_FILES["new_file"]["tmp_name"],$path);
         $vals=$_REQUEST["new_file"];

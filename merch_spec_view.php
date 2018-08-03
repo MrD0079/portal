@@ -1,6 +1,6 @@
 <?php
 //audit("просмотрел спецификацию","merch_spec");
-//ses_req();
+
 $sql = rtrim(file_get_contents('sql/merch_spec_body.sql'));
 $p=array(":head_id"=>$_REQUEST["head_id"]);
 $sql=stritr($sql,$p);

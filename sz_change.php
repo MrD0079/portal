@@ -2,7 +2,7 @@
 
 
 
-//ses_req();
+
 
 audit("вошел в замену исполнителей/согласователей","sz_change");
 
@@ -29,7 +29,7 @@ if (isset($_REQUEST["replace_acceptors"]))
 	$sql="BEGIN SZREPLACCEPT (".$_REQUEST["acceptors_from"].", ".$_REQUEST["acceptors_to"]."); END;";
 	//echo $sql;
 	$db->query($sql);
-	//ses_req();
+	
 }
 
 $sql = rtrim(file_get_contents('sql/sz_change_executors_from.sql'));

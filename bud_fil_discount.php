@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 if (isset($_REQUEST['save']))
 {
@@ -43,7 +43,7 @@ if (isset($_REQUEST['copy_discount']))
 {
 if ($_REQUEST['copy_discount']==1)
 {
-	//ses_req();
+	
 	audit("скопировал скидки дистрибьюторов из ".$_REQUEST["fd"]." в ".$_REQUEST["sd"],"bud_fil_discount");
 	$p[':dt_to']="'".$_REQUEST["sd"]."'";
 	$p[':dt_from']="'".$_REQUEST["fd"]."'";

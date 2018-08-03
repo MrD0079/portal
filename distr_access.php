@@ -1,7 +1,7 @@
 <?
 
 
-//ses_req();
+
 
 InitRequestVar('da_db',0);
 InitRequestVar('da_di',0);

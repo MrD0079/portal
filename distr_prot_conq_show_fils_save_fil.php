@@ -7,7 +7,7 @@ $keys = array(
 	'fil'=>$_REQUEST['fil_id'],
 );
 
-//ses_req();
+
 
 $_REQUEST["val"]==1?Table_Update('distr_prot_conq_fil', $keys,$keys):Table_Update('distr_prot_conq_fil', $keys,null);
 

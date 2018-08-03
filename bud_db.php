@@ -38,6 +38,6 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_db', $data);
 $smarty->display('bud_db.html');
 
-//ses_req();
+
 
 ?>

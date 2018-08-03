@@ -14,7 +14,7 @@ InitRequestVar("num_list","0");
 InitRequestVar("report_gps_new_page","period");
 
 
-//ses_req();
+
 
 /*
 $sql = rtrim(file_get_contents('sql/dates_list.sql'));

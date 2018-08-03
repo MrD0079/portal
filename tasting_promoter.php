@@ -76,5 +76,5 @@ ORDER BY fio";
     //print_r($_REQUEST);
     //print_r($_FILES);
 }
-//ses_req();
+
 $smarty->display('tasting_promoter.html');

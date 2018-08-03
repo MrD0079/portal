@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 audit("открыл budget_gruppa","fin_plan");
 
 

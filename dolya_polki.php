@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 audit("открыл dolya_polki","fin_plan");
 
 
@@ -123,7 +123,7 @@ $dd[$v["id_net"]]=$d[$v["id_net"]];
 
 if (isset($_REQUEST["orderby"]))
 {
-//ses_req();
+
 if ($_REQUEST["orderby"]==1)
 {
 $d=$dd;

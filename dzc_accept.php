@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 audit ("открыл форму согласования заявок на компенсацию дистрибутору","dzc");
 InitRequestVar("wait4myaccept",0);

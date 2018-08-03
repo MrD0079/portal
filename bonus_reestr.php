@@ -9,7 +9,7 @@ InitRequestVar("eta_list",$_SESSION["h_eta"]);
 InitRequestVar("region_name","0");
 InitRequestVar("date_between","mz");
 //InitRequestVar("replacement",0);
-//ses_req();
+
 //audit ("открыл форму реестра отпусков","vacation");
 InitRequestVar("bst",array(0));
 $bst = join($_REQUEST["bst"],',');

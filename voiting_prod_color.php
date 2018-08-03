@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 if (isset($_REQUEST["saveProd"]))
 {
 	$_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);

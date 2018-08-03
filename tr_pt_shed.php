@@ -4,7 +4,7 @@ audit("открыл график обучения за ".$_REQUEST["month_list"],"tr");
 
 InitRequestVar("tr_pt_flt",1);
 
-//ses_req();
+
 
 $p=array();
 

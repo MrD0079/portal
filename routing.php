@@ -53,7 +53,7 @@ $routes_days_list_1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('routes_days_list_1', $routes_days_list_1);
 //$_REQUEST["sql2"]=$sql;
 
-//ses_req();
+
 //exit;
 
 

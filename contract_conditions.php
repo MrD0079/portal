@@ -13,7 +13,7 @@ if (isset($_REQUEST["save"]))
 }
 else
 {
-ses_req();
+        
 	if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"])&&isset($_REQUEST["generate"]))
 	{
 		$params=array(

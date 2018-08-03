@@ -1,7 +1,7 @@
 <?
 
 
-//ses_req();
+
 
 
 audit("открыл bud_doc","bud");

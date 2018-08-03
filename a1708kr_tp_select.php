@@ -1,6 +1,6 @@
 <?php
 //audit("вошел в список сетей");
-//ses_req();
+
 if (isset($_REQUEST["save"]))
 {
 	$table_name = "a1708kr_tp_select";

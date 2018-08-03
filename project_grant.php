@@ -2,7 +2,7 @@
 
 InitRequestVar("prj_id",0);
 
-//ses_req();
+
 
 $table="project_grant";
 

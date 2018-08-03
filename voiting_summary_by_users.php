@@ -27,7 +27,7 @@
          AND b.tn = u.tn
 ORDER BY b.test_ball, b.sec DESC, u.fio";
         //$_REQUEST["sql"]=$sql;
-        //ses_req();
+        
         /*
         $sql="SELECT u.fio, b.test_ball
     FROM tr, VOITING_ORDER_BODY b, user_list u

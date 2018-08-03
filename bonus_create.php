@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 //InitRequestVar("v_from",$now);
 //InitRequestVar("v_to",$now);
 //audit ("открыл форму создания отпусков","bonus");
@@ -20,7 +20,7 @@ if (isset($_REQUEST["add"])&&isset($_REQUEST["head"])&&isset($_REQUEST["data"]))
 		isset($vals["mz"]) ? $vals["mz"]=OraDate2MDBDate($vals["mz"]) : null;
 		Table_Update("bonus_body",$vals,$vals);
 	}
-	//ses_req();
+	
 	if (isset($_FILES["files"]))
 	foreach ($_FILES["files"]["name"] as $k=>$v)
 	{

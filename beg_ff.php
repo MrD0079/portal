@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 //print_r($_beg_ff);
 if (isset($_REQUEST["new"]))

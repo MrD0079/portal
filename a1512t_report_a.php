@@ -2,7 +2,7 @@
 include "act_report_a_1.php";
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	if (isset($_REQUEST["data"]))
 	{
 		foreach($_REQUEST["data"] as $k=>$v)

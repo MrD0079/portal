@@ -46,7 +46,7 @@ else
 /*
 $_REQUEST["keys"]=$keys;
 $_REQUEST["vals"]=$vals;
-ses_req();*/
+*/
 ?>
 
 

@@ -15,7 +15,7 @@ $sql = rtrim(file_get_contents('sql/month_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
-//ses_req();
+
 
 if (isset($_REQUEST["save"]))
 {
@@ -77,7 +77,7 @@ foreach($d as $k=>$v){
 isset($list)?$smarty->assign("list", $list):null;
 $_REQUEST["list"]=$d;
 isset($list)?$_REQUEST["list1"]=$list:null;
-//ses_req();
+
 
 $sql=rtrim(file_get_contents('sql/bud_funds.sql'));
 $p = array(":dpt_id" => $_SESSION["dpt_id"]);

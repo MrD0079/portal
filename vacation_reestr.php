@@ -21,7 +21,7 @@ InitRequestVar("planned",0);
 InitRequestVar("paided",0);
 
 
-//ses_req();
+
 
 
 audit ("открыл форму реестра отпусков","vacation");

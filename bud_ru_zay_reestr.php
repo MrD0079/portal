@@ -9,7 +9,7 @@ if (isset($_REQUEST["dyn_flt"]))
 		($v["subtype"]!=null)&&($v["item"]!=null)?$a1[]=$v["item"]:null;
 	}
 	(count($a1)>0)?$dyn_flt='AND bud_ru_zay.id IN (SELECT z_id FROM bud_ru_zay_ff WHERE val_list IN ('.join($a1,',').') HAVING COUNT (*) = '.count($a1).' GROUP BY z_id)':$dyn_flt='';
-	//ses_req();
+	
 	//print_r($dyn_flt);
 }
 
@@ -34,7 +34,7 @@ InitRequestVar("z_id",0);
 InitRequestVar("date_between_brzr","dt12");
 
 
-//ses_req();
+
 
 $params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
 
@@ -104,7 +104,7 @@ if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
 
 if (isset($_REQUEST["save"]))
 {
-//ses_req();
+
 	$_REQUEST["select"]=1;
 // 5. В ВИДЕ ИСКЛЮЧЕНИЯ:
 // на всех заявках (согласованных и в процессе согласования) дать возможность ДБ выставить клиентов из выпадающего списка в поле "Клиент",
@@ -200,7 +200,7 @@ $sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr.sql'));
 $sql=stritr($sql,$params);
 
 //$_REQUEST["SQL"]=$sql;
-//ses_req();
+
 //exit;
 
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -225,7 +225,7 @@ foreach ($d as $k=>$v)
 	$p=array(':z_id' => $k);
 	$sql=stritr($sql,$p);
 	//$_REQUEST["SQL"]=$sql;
-	//ses_req();
+	
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($data as $k1=>$v1)
 	{

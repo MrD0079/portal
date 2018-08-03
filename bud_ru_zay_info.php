@@ -11,7 +11,7 @@ $sql=rtrim(file_get_contents('sql/bud_ru_zay_info.sql'));
 $sql=stritr($sql,$params);
 //echo $sql;
 //$_REQUEST["SQL"]=$sql;
-//ses_req();
+
 //exit;
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('d', $data);

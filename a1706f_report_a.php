@@ -40,7 +40,7 @@ if (isset($_REQUEST["add"]))
 		}
 	}
 }
-ses_req();
+
 if (isset($_REQUEST["save"]))
 {
 	if (isset($_REQUEST["data"]))

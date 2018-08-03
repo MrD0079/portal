@@ -41,10 +41,10 @@ if (isset($_REQUEST["select"]))
 	);
         $sql=stritr($sql,$params);
         $_REQUEST["sql"]=$sql;
-        //ses_req();
+        
 	$res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('log', $res);
 }
 $smarty->display('log.html');
-//ses_req();
+
 ?>

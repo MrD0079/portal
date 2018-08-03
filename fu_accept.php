@@ -146,6 +146,6 @@ $smarty->display('kk_start.html');
 $smarty->display('fu_accept.html');
 $smarty->display('kk_end.html');
 
-//ses_req();
+
 
 ?>

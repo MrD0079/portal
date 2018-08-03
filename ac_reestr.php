@@ -17,7 +17,7 @@ InitRequestVar("region_name","0");
 InitRequestVar("department_name","0");
 InitRequestVar("ac_id",0);
 
-//ses_req();
+
 
 
 
@@ -72,7 +72,7 @@ if (isset($_REQUEST["del_ac"]))
 
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["d"]))
 	{
@@ -166,7 +166,7 @@ $smarty->display('ac_reestr.html');
 
 
 
-//ses_req();
+
 
 
 

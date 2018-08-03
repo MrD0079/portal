@@ -1,5 +1,5 @@
 <?php
-//ses_req();
+
 if (isset($_REQUEST["save"]))
 {
 	$_REQUEST['generate']=1;

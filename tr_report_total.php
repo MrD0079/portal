@@ -50,7 +50,7 @@ if (isset($_REQUEST["generate"]))
 	$smarty->assign('dt', $tr_report_total_total);
 }
 
-//ses_req();
+
 
 $smarty->display('tr_report_total.html');
 

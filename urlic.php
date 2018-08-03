@@ -1,6 +1,6 @@
 <?
 
-ses_req();
+
 //ini_set('display_errors', 'On');
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))

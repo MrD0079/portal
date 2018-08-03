@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 audit("открыл rep_compare_statya","fin_plan");
 
 

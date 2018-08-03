@@ -1,7 +1,7 @@
 <?
 
 audit ("открыл реестр ТМЦ","tmc");
-//ses_req();
+
 
 $sql=
 "
@@ -82,7 +82,7 @@ $smarty->display('tmc_reestr.html');
 
 
 
-//ses_req();
+
 
 
 

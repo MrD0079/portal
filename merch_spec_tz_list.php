@@ -12,7 +12,7 @@ InitRequestVar("merch_spec_oblast","0");
 InitRequestVar("merch_spec_sd",$now);
 InitRequestVar("merch_spec_tz","0");
 
-//ses_req();
+
 //
 
 $p=array();

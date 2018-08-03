@@ -278,6 +278,6 @@ if ((isset($_REQUEST["save"])||isset($_REQUEST["select"])||isset($_REQUEST["add_
 
 $smarty->display('mz_rep.html');
 
-//ses_req();
+
 
 ?>

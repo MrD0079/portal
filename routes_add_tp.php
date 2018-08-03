@@ -6,7 +6,7 @@ if (isset($_REQUEST["select_month"]))
 }
 if (isset($_REQUEST["add_route"]))
 {
-    //ses_req();
+    
     $p = array("id"=>null,"tn"=>$tn,"data"=>OraDate2MDBDate($_REQUEST["month_list"]));
     //print_r($p);
     //$db->query("INSERT INTO routes_head (tn, data) VALUES (2992713422, TO_DATE ('01.09.2017', 'dd.mm.yyyy'))");

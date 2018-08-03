@@ -17,7 +17,7 @@ $smarty->assign('accept_types', $data);
 
 if (isset($_REQUEST["save"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["report_done"]))
 	{
@@ -255,7 +255,7 @@ if (isset($_REQUEST["save"]))
 
 if (isset($_REQUEST["add_chat"]))
 {
-	//ses_req();
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["bud_ru_zay_accept_chat"]))
 	{

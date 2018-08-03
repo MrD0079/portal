@@ -4,7 +4,7 @@ audit ("открыл форму создания заявки на тренинг","tr");
 
 InitRequestVar('notPass','false');
 
-//ses_req();
+
 
 $p = array();
 $p[':tn'] = $tn;

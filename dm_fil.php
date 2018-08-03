@@ -1,6 +1,6 @@
 <?php
 
-//ses_req();
+
 audit("вошел в привязку филиалы-координаторы","dm_fil");
 
 if (isset($_REQUEST["new"])) {

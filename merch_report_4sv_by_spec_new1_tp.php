@@ -17,7 +17,7 @@ InitRequestVar("eta_list",$_SESSION["h_eta"]);
 InitRequestVar("ok_bonus",1);
 */
 
-//ses_req();
+
 
 $p = array(
 	':dpt_id' => $_SESSION["dpt_id"],
@@ -39,6 +39,6 @@ $smarty->assign('tp', $res);
 
 $smarty->display('merch_report_4sv_by_spec_new1_tp.html');
 
-//ses_req();
+
 
 ?>

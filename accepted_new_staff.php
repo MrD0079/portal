@@ -21,7 +21,7 @@ isset($_REQUEST["ed"]) ? $_SESSION["ed"]=$_REQUEST["ed"]: null;
 isset($_REQUEST["pos"]) ? $_SESSION["pos"]=$_REQUEST["pos"]: null;
 */
 
-//ses_req();
+
 
 
 $sql=rtrim(file_get_contents('sql/accepted_new_staff.sql'));

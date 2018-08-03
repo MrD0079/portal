@@ -133,7 +133,7 @@ NVL (REGEXP_COUNT (files, '[' || CHR (10) || ']') + 1, 0) files_count,
 } else if (isset($_REQUEST["save_user_report"])){
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     Table_Update('tasting_program_costs', $_REQUEST["keys"],$_REQUEST["vals"]);
-    //ses_req();
+    
     $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
     foreach ($_FILES as $key => $value)
     {

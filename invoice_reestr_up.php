@@ -1,5 +1,5 @@
 <?
-ses_req();
+
 audit("открыл invoice_reestr_up","invoice_reestr_up");
 
 InitRequestVar("tn_rmkk",0);

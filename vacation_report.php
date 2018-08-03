@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 $params=array(
 	':tn'=>$tn,

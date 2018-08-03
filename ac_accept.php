@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 audit ("открыл форму согласования заявок на проведение АЦ","ac");
 InitRequestVar("wait4myaccept",0);

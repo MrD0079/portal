@@ -266,7 +266,7 @@ ORDER BY name
             $smarty->assign('st', $st);
     }
     //$_REQUEST["zzz"]=$st;
-    //ses_req();
+    
 
     $sql = rtrim(file_get_contents('sql/emp_exp_spd_list.sql'));
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

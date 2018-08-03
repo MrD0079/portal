@@ -56,7 +56,7 @@ else
 	InitRequestVar("fils",0);
 	InitRequestVar("dm",0);
 	InitRequestVar("bud_id",0);
-	//ses_req();
+	
 	$p = array(
 		":tn" => $tn,
 		":dt" => "'".$_REQUEST["month_list"]."'",

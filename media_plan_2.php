@@ -18,7 +18,7 @@ if (isset($_REQUEST["select"]))
 $sql=rtrim(file_get_contents('sql/media_plan_2.sql'));
 $sql=stritr($sql,$params);
 //$_REQUEST["SQL"]=$sql;
-//ses_req();
+
 //exit;
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('d', $data);

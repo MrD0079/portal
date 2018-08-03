@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 if (isset($_REQUEST['save_item'])) {
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
     isset($_REQUEST['aa']['dts'])?$_REQUEST['aa']['dts']=OraDate2MDBDate($_REQUEST['aa']['dts']):null;

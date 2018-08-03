@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 audit("открыл negot_proc","fin_plan");
 

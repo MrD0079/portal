@@ -122,7 +122,7 @@ if (isset($_REQUEST["generate"]))
 }
 
 
-//ses_req();
+
 
 $smarty->display('dc_list.html');
 

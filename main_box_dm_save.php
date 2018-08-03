@@ -3,7 +3,7 @@ $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
 $_FILES = recursive_iconv ('UTF-8', 'Windows-1251', $_FILES);
 if (isset($_REQUEST["new"]))
 {
-	//ses_req();
+	
 	echo "Ваше сообщение направлено координатору";
 	$id=get_new_id();
 	$keys = array(

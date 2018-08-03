@@ -1,12 +1,12 @@
 <?
 
-//ses_req();
+
 
 //print_r($_FILES);
 
 InitRequestVar('files_activ',1);
 
-//ses_req();
+
 
 if (isset($_REQUEST["new_section"]))
 {

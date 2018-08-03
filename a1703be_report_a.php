@@ -43,7 +43,7 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["data"]))
 	{
-		//ses_req();
+		
 		foreach($_REQUEST["data"] as $k=>$v)
 		{
 			//если 2* [Планируемое количество "подарков"] + [Сумма бонуса продукцией "АВК", грн] / 130 <= [act_nabor] - то сохраняем!

@@ -3,7 +3,7 @@
 audit ("открыл форму редактирования обходного листа","ol");
 
 
-//ses_req();
+
 
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["data"]))

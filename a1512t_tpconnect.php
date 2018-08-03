@@ -1,5 +1,5 @@
 <?php
-//ses_req();
+
 if (isset($_REQUEST["new"])) {
 	Table_Update("A1512T_XLS_TPCLIENT",$_REQUEST["add"],$_REQUEST["add"]);
 }

@@ -32,7 +32,7 @@ if (isset($_FILES['file']))
 /*
 $_REQUEST['keys']=$keys;
 $_REQUEST['vals']=$vals;
-ses_req();
+
 */
 
 		if (!file_exists('files')) {mkdir('files',0777,true);}

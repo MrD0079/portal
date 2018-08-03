@@ -17,6 +17,6 @@ $smarty->assign('id', $id);
 //echo $id;
 //$_REQUEST['id']=$id;
 $smarty->display('dzc_new_list.html');
-//ses_req();
+
 //print_r($_REQUEST);
 ?>

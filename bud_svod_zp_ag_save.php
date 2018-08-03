@@ -43,5 +43,5 @@ else
 	);
 	Table_Update('bud_svod_zp', $keys,$vals);
     //$_REQUEST["CCCC"] = [$keys,$vals];
-    //ses_req();
+    
 }

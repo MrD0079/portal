@@ -4,7 +4,7 @@ InitRequestVar("prj_id",0);
 InitRequestVar("table",1);
 InitRequestVar("exp_list_without_ts",0);
 
-//ses_req();
+
 
 $params=array(
 	':prj_id' => $_REQUEST["prj_id"],

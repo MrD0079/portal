@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 audit("открыл saleskk","saleskk");
 
 InitRequestVar("sd",$_SESSION['month_list']);

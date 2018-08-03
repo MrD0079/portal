@@ -2,7 +2,7 @@
 //ini_set('display_errors', 'On');
 if (isset($_REQUEST['save_item'])) {
     $_REQUEST = recursive_iconv ('UTF-8', 'Windows-1251', $_REQUEST);
-    //ses_req();
+    
     $keys=array(
         'aa_id'=>$_REQUEST["id"],
         'kodtp'=>$_REQUEST["kodtp"],

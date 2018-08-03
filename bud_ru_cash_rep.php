@@ -91,7 +91,7 @@ $p["/*:kat*/"] = $kat;
 
 
 
-//ses_req();
+
 
 
 //print_r($p);

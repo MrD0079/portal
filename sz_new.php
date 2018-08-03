@@ -5,7 +5,7 @@
 
 if (isset($_REQUEST["debug"]))
 {
-//ses_req();
+
 //exit;
 }
 
@@ -57,7 +57,6 @@ if (isset($_REQUEST["save"]))
 	}
 	audit ("добавил в СЗ №".$id." согласователей ".serialize($_REQUEST["sz_acceptors"]),"sz");
 	
-//	ses_req();
 	if (isset($_REQUEST["sz_executors"]))
 	{
 		foreach ($_REQUEST["sz_executors"] as $k=>$v)
@@ -144,7 +143,7 @@ else
 
 if (isset($_REQUEST["debug"]))
 {
-ses_req();
+
 }
 
 

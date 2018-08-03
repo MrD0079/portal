@@ -7,7 +7,7 @@ InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("staff_list",0);
 InitRequestVar("not_accepted",1);
 InitRequestVar("date_between","accept_data");
-//ses_req();
+
 //InitRequestVar("ol_arch_id",0);
 !isset($_REQUEST["ol_arch_id"])?$_REQUEST["ol_arch_id"]=0:null;
 
@@ -75,7 +75,7 @@ $smarty->assign('ol_arch', $data);
 //$smarty->display('ol_arch.html');
 
 
-//ses_req();
+
 
 if(
 ($_REQUEST["ol_arch_id"]==0)
@@ -84,7 +84,7 @@ if(
 )
 {
 //$a = $smarty->fetch('ol_arch.html');
-//ses_req();
+
 $smarty->display('ol_arch.html');
 }
 else

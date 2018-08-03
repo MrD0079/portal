@@ -1,7 +1,7 @@
 <?
 
 
-//ses_req();
+
 
 
 audit("открыл departments","departments");

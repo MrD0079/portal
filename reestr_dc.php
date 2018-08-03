@@ -1,6 +1,6 @@
 <?php
 
-//ses_req();
+
 
 audit("открыл Реестр ДЦ","reestr_dc");
 

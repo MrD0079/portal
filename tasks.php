@@ -1,5 +1,5 @@
 <?
-//ses_req();
+
 if (isset($_REQUEST['del_files']))
 {
 	foreach ($_REQUEST['del_files'] as $k => $v)

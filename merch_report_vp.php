@@ -2,7 +2,7 @@
 
 audit("открыл merch_report_vp","merch_report_vp");
 
-//ses_req();
+
 
 if (isset($_REQUEST["save"])&&isset($_REQUEST["keys"]))
 {

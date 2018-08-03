@@ -13,7 +13,7 @@ if (isset($_REQUEST["save"])){
         $_REQUEST["new"]["datauvol"]!=''?$_REQUEST["new"]["datauvol"]=OraDate2MDBDate($_REQUEST["new"]["datauvol"]):null;
         $_REQUEST["new"]["start_company"]!=''?$_REQUEST["new"]["start_company"]=OraDate2MDBDate($_REQUEST["new"]["start_company"]):null;
         Table_Update('spr_users_ms', $_REQUEST["new"], $_REQUEST["new"]);
-        ses_req();
+        
     }
     InitRequestVar("all",1);
     $sql=rtrim(file_get_contents('sql/spr_users_ms.sql'));

@@ -1,6 +1,6 @@
 <?
 
-//ses_req();
+
 
 audit ("открыл отчет по тренингам test_error_detail","tr");
 

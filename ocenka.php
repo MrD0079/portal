@@ -6,7 +6,7 @@ audit("вошел в оценку","ocenka");
 include "ocenka_events.php";
 
 
-//ses_req();
+
 
 
 $params = array

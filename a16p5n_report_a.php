@@ -5,7 +5,7 @@ if (isset($_REQUEST["save"]))
 {
 	if (isset($_REQUEST["data"]))
 	{
-		//ses_req();
+		
 		foreach($_REQUEST["data"] as $k=>$v)
 		{
 			$keys = array('tp_kod'=>$k);

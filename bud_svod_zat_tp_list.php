@@ -54,7 +54,7 @@ $smarty->assign('xx', $xx);
 
 
 //$_REQUEST["sql"]=$sql;
-//ses_req();
+
 
 $params[":sql"]=$sql;
 $sql = rtrim(file_get_contents('sql/bud_svod_zat_tp_list_total.sql'));
