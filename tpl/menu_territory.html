@@ -35,37 +35,44 @@
 {/if}
 
 {if ($cnt_kod eq "ua" or $cnt_kod eq "exp") and not $is_eta and $cnt_kod neq 'nr'}
-
-<li><a href="javascript:void(0);"><span class="dir">Стандарт ТО</span></a>
-	<ul>
-		{if $cnt_kod eq "ua"}
-			{if $is_ts}<li><a href="?action=a14to_report2">Вечерний отчет</a></li>{/if}
-			<li><a href="?action=a14to_accept2">Подтверждение</a></li>
-			<li><a href="?action=a14to_stat2et">Статистика</a></li>
-			<li><a href="?action=a14to_stat2traid">Статистика (для анализа результатов)</a></li>
-		{/if}
-		{if $cnt_kod eq "exp"}
-			{if $is_ts}<li><a href="?action=a14to_report">Вечерний отчет</a></li>{/if}
-			<li><a href="?action=a14to_accept">Подтверждение</a></li>
-			<li><a href="?action=a14to_stat">Статистика</a></li>
-		{/if}
-		<li><a href="?action=a14to_nophoto">Нет фото</a></li>
-	</ul>
-</li>
-{if ($cnt_kod eq "ua" or $cnt_kod eq "exp")}
-<li><a href="javascript:void(0);"><span class="dir">Стандарт кофе</span></a>
-	<ul>
-			<li><a href="?action=a16cora">Вечерний отчет / Подтверждение</a></li>
-			<li><a href="?action=a16cost">Статистика</a></li>
-	</ul>
-</li>
-{/if}
-<li><a href="javascript:void(0);"><span class="dir">Отчетные собрания</span></a>
-	<ul>
-		<li><a href="?action=main">Отчетные собрания</a></li>
-	</ul>
-</li>
-
+    <li><a href="javascript:void(0);"><span class="dir">Стандарт ТО</span></a>
+            <ul>
+                    {if $cnt_kod eq "ua"}
+                            {if $is_ts}<li><a href="?action=a14to_report2">Вечерний отчет</a></li>{/if}
+                            <li><a href="?action=a14to_accept2">Подтверждение</a></li>
+                            <li><a href="?action=a14to_stat2et">Статистика</a></li>
+                            <li><a href="?action=a14to_stat2traid">Статистика (для анализа результатов)</a></li>
+                    {/if}
+                    {if $cnt_kod eq "exp"}
+                            {if $is_ts}<li><a href="?action=a14to_report">Вечерний отчет</a></li>{/if}
+                            <li><a href="?action=a14to_accept">Подтверждение</a></li>
+                            <li><a href="?action=a14to_stat">Статистика</a></li>
+                    {/if}
+                    <li><a href="?action=a14to_nophoto">Нет фото</a></li>
+            </ul>
+    </li>
+    {if $cnt_kod eq "ua"}
+        <li><a href="javascript:void(0);"><span class="dir">Стандарт ТО (Стандарт А минимум)</span></a>
+                <ul>
+                                {if $is_ts}<li><a href="?action=a18to_report">Вечерний отчет</a></li>{/if}
+                                <li><a href="?action=a18to_accept">Подтверждение</a></li>
+                                <li><a href="?action=a18to_stat">Статистика</a></li>
+                </ul>
+        </li>
+    {/if}
+    {if ($cnt_kod eq "ua" or $cnt_kod eq "exp")}
+        <li><a href="javascript:void(0);"><span class="dir">Стандарт кофе</span></a>
+                <ul>
+                                <li><a href="?action=a16cora">Вечерний отчет / Подтверждение</a></li>
+                                <li><a href="?action=a16cost">Статистика</a></li>
+                </ul>
+        </li>
+    {/if}
+    <li><a href="javascript:void(0);"><span class="dir">Отчетные собрания</span></a>
+            <ul>
+                    <li><a href="?action=main">Отчетные собрания</a></li>
+            </ul>
+    </li>
 {/if}
 
 {if $cnt_kod eq "ua" and not $is_eta and $cnt_kod neq 'nr'}

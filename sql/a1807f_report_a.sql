@@ -6,7 +6,7 @@
          d.tp_kod,
          d.tp_ur,
          d.nakl_summ,
-         /*TRUNC (d.nakl_summ / 1500)*/1 max_bonus,
+         /*TRUNC (d.nakl_summ / 1500)*/act_nabor_1 max_bonus,
          d.tp_addr,
          NVL (an.if1, 0) selected_if1,
          an.bonus_sum1,

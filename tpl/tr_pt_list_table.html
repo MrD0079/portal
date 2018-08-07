@@ -1,6 +1,6 @@
 <table border=1 cellspacing=0 cellpadding=3>
 	<tr style="font-weight:bold; text-align:center">
-		<td rowspan=2>
+		<td rowspan=2 style="width:300px">
 			Дата начала / Тренер / Тренинг / Локация
 		</td>
 		<td colspan=3>
@@ -9,7 +9,7 @@
 		<td colspan=2>
 			Подтверждение
 		</td>
-		<td rowspan=2 style="width:400px">
+		<td rowspan=2 style="width:300px">
 			Комментарии
 		</td>
 	</tr>
@@ -33,8 +33,11 @@
 
 	{foreach key=k item=i from=$d}
 		<tr>
-			{foreach key=k1 item=i1 from=$i.body name=body}{/foreach}
-			<td rowspan={$smarty.foreach.body.total+1} style="vertical-align:top">
+			{assign var=cnt value=1}
+			{foreach key=k1 item=i1 from=$i.body name=body}
+                            {assign var=cnt value=$cnt+1}
+			{/foreach}
+			<td rowspan={$cnt} style="vertical-align:top">
 				<b>Дата начала:</b> {$i.head.dt_start_t}<br>
 				<b>Тренер:</b> {$i.head.fio}<br>
 				<b>Тренинг:</b> {$i.head.name}<br>
@@ -51,19 +54,16 @@
 				<p><a target=_blank href="?action=tr_pt_order_edit&id={$i.head.id}">Добавление участников по факту проведения тренинга</a></p>
 				{/if}
 			</td>
-			<td>
-			</td>
-			<td>
-			</td>
-			<td>
-			</td>
-			<td rowspan={$smarty.foreach.body.total+1} style="text-align:center" {if $i.head.ok_primary eq 1}bgcolor="#00ff00"{/if}>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td rowspan={$cnt} style="text-align:center" {if $i.head.ok_primary eq 1}bgcolor="#00ff00"{/if}>
 				<input type=checkbox name=ok_primary[{$i.head.id}]
 				{if $i.head.ok_primary eq 1 or $i.head.ok_final eq 1 or not ($is_admin or $my_pos_id eq 63)}disabled{/if}
 				{if $i.head.ok_primary eq 1}checked{/if}
 				>
 			</td>
-			<td rowspan={$smarty.foreach.body.total+1} style="text-align:center" {if $i.head.ok_final eq 1}bgcolor="#00ff00"{/if}>
+			<td rowspan={$cnt} style="text-align:center" {if $i.head.ok_final eq 1}bgcolor="#00ff00"{/if}>
 				<input type=checkbox
 				onclick="
 					$('#ok_final_{$i.head.id}').attr('disabled',false);
@@ -74,7 +74,7 @@
 				>
 				<input type=hidden disabled name=ok_final[{$i.head.id}] id=ok_final_{$i.head.id}>
 			</td>
-			<td rowspan={$smarty.foreach.body.total+1} style="text-align:left;vertical-align:top">
+			<td rowspan={$cnt} style="text-align:left;vertical-align:top">
 				{foreach key=k1 item=i1 from=$i.chat}
 					<font style="color:red">{$i1.c_lu}</font>
 					<font style="color:green">{$i1.c_fio}:</font>

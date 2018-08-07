@@ -11,9 +11,12 @@
 					{include file="main_birthdays.html"}
 				{/if}
 		</td>
-		<td style="vertical-align:top;text-align:center; width:330px;">
-			{include file="main_it_tasks.html"}
+		<td style="vertical-align:top;text-align:center;
+                    {if not $is_eta} width:330px; {/if}
+                    "
+                    >
 			{if not $is_eta}
+                                {include file="main_it_tasks.html"}
 				{include file="main_works.html"}
 				{if not $is_dpu and 0 eq 1}
 					{include file="main_box_dpu.html"}
@@ -23,7 +26,9 @@
 				{/if}
 			{else}
 				{include file="main_eta_works.html"}
-				{include file="main_eta_inform.html"}
+                                {if 0 eq 1}
+                                    {include file="main_eta_inform.html"}
+                                {/if}
 			{/if}
 		</td>
 	</tr>

@@ -81,6 +81,8 @@ if(
 ($_REQUEST["ol_arch_id"]==0)
 ||
 (isset($_REQUEST["excel"]))
+||
+(isset($_REQUEST["test"]))
 )
 {
 //$a = $smarty->fetch('ol_arch.html');

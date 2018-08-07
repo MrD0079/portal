@@ -1,9 +1,10 @@
-/* Formatted on 13.01.2018 18:24:06 (QP5 v5.252.13127.32867) */
+/* Formatted on 06/08/2018 23:28:02 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT
          v.id,
          TO_CHAR (v.created, 'dd.mm.yyyy hh24:mi:ss') created,
          TO_CHAR (v.v_from, 'dd.mm.yyyy') v_from,
          TO_CHAR (v.v_to, 'dd.mm.yyyy') v_to,
+         v.v_to - v.v_from + 1 days,
          CASE WHEN TRUNC (SYSDATE) BETWEEN v.v_from AND v.v_to THEN 1 ELSE 0 END
             in_vac,
          CASE WHEN TRUNC (SYSDATE) > v.v_to THEN 1 ELSE 0 END vac_ended,

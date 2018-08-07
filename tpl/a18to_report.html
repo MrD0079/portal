@@ -1,0 +1,219 @@
+<h1>Вечерний отчет</h1>
+
+<form target="_self" method="POST" name=form_report id=form_report>
+
+<p>
+Дата: <input id=dt name=dt class=datepicker value='{$smarty.request.dt}'>
+
+<script>
+var now='{$now}';
+var yesterday='{$yesterday}';
+{literal}
+//$(function(){$('#dt').datepicker('option','minDate',-1);$('#dt').datepicker('option','maxDate',0);})
+$('#dt').datepicker();
+$('#dt').change(function(){
+//$('#dt').val()<yesterday?$('#dt').val(yesterday):null;
+//$('#dt').val()>now?$('#dt').val(now):null;
+});
+{/literal}
+</script>
+
+ЭТА:
+<select name=eta_list id=eta_list>
+<option value=''></option>
+{foreach key=key item=item from=$eta_list}
+<option value="{$item.h_eta}">{$item.eta}</option>
+{/foreach}
+</select>
+<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+
+</p>
+
+<p>
+	<table border=0>
+		<tr>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=1>все</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=2>есть фото</td>
+			<td><input type=radio id="ok_photo" name="ok_photo" value=3>нет фото</td>
+		</tr>
+		<script>$("input[name=ok_photo][value={$smarty.request.ok_photo}]").attr('checked',true);</script>
+		<tr>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=1>все</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=2>был визит</td>
+			<td><input type=radio id="ok_visit" name="ok_visit" value=3>не было визита</td>
+		</tr>
+		<script>$("input[name=ok_visit][value={$smarty.request.ok_visit}]").attr('checked',true);</script>
+	</table>
+</p>
+
+<p>
+<input type=submit name=generate id=generate value="Построить отчет">
+</p>
+
+<table border=1 cellspacing=0 cellpadding=3>
+	<tr style="font-weight:bold;text-align:center">
+		<td rowspan=2>№ п/п</td>
+		<td rowspan=2>ЭТА</td>
+		<td rowspan=2>Код ТП</td>
+		<td rowspan=2>Название/Адрес ТП</td>
+		<td rowspan=2>Тип ТП</td>
+		<td rowspan=2>Визит</td>
+		<td rowspan=2>ТО</td>
+		<td rowspan=2>Подтип стандарта</td>
+		<td rowspan=2>Фото</td>
+		<td colspan=3>Выполнение стандарта</td>
+		<td colspan=2>Задачи</td>
+	</tr>
+	<tr style="font-weight:bold;text-align:center">
+		<td>ТС</td>
+		<td>Аудит</td>
+		<td>Коммент ТС</td>
+		<td>ассортимент</td>
+		<td>мерчандайзинг</td>
+	</tr>
+	{foreach key=k item=i from=$d name=d}
+			<tr>
+				<td rowspan="{$i.cto.cnt+1}">{$smarty.foreach.d.iteration}</td>
+                                <td rowspan="{$i.cto.cnt+1}">{$i.fio_eta}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.tp_kod_key}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.tp_ur} / {$i.tp_addr}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.tp_type}</td>
+				<td rowspan="{$i.cto.cnt+1}" style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
+					{foreach key=k1 item=i1 from=$i.cto.data}
+                                        <tr>
+                                            <td style="text-align:center">{$i1.name_to}</td>
+                                            <td style="text-align:center"
+                                                id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_h_type_standart
+                                                >
+                                                <!--{$i1.type_standart}
+                                                *
+                                                {$i1.type_standart_def}-->
+                                                <select
+                                                    id="type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+                                                    name="type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+                                                    onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','h_type_standart',this.value)">
+                                                    <option></option>
+                                                        {foreach key=tsk item=tsi from=$type_standart}
+                                                        <option value="{$tsi.h_type_standart}">{$tsi.type_standart}</option>
+                                                        {/foreach}
+                                                </select>
+                                                <script>$('#type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to} option[value="{$i1.h_type_standart|default:$i1.h_type_standart_def}"]').prop('selected', true);</script>
+                                            </td>
+                                            <td>
+                                                    {foreach key=k2 item=i2 from=$i1.photos}
+                                                        <a target="_blank" href="{$i2.url}">Фото</a>
+                                                    {/foreach}
+                                            </td>
+                                            <td
+                                                    id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_ts
+                                                    {if $i1.ts eq 1}bgcolor="lightgreen"{/if}
+                                                    {if $i1.ts eq 2}bgcolor="red"{/if}
+                                            >
+                                                    {if not $i1.auditor}
+                                                            <nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=1 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts',this.value)">соответствует</nobr>
+                                                            <br>
+                                                            <nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=2 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts',this.value)">не соответствует</nobr>
+                                                            <script>$("input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}][value='{$i1.ts}']").attr('checked',true);</script>
+                                                    {else}
+                                                            {if $i1.ts eq 1}соответствует{/if}
+                                                            {if $i1.ts eq 2}не соответствует{/if}
+                                                    {/if}
+                                            </td>
+                                            <td
+                                                    id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_auditor
+                                                    {if $i1.auditor eq 1}bgcolor="lightgreen"{/if}
+                                                    {if $i1.auditor eq 2}bgcolor="red"{/if}
+                                            >
+                                                    {if $i1.auditor eq 1}соответствует{/if}
+                                                    {if $i1.auditor eq 2}не соответствует{/if}
+                                            </td>
+                                            <td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_ts_comm>
+                                                    {if not $i1.auditor}
+                                                    <textarea id="ts_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts_comm',this.value)">{$i1.ts_comm}</textarea>
+                                                    {else}
+                                                    {$i1.ts_comm|escape}
+                                                    {/if}
+                                            </td>
+                                            <td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_tasks_assort>
+                                                    {if not $i1.auditor}
+                                                    <textarea id="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>
+                                                    {else}
+                                                    {$i1.tasks_assort|escape}
+                                                    {/if}
+                                            </td>
+                                            <td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_tasks_mr>
+                                                    {if not $i1.auditor}
+                                                    <textarea id="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>
+                                                    {else}
+                                                    {$i1.tasks_mr|escape}
+                                                    {/if}
+                                            </td>
+                                        </tr>
+					{/foreach}
+			</tr>
+	{/foreach}
+</table>
+</form>
+
+<script>
+{literal}
+function save(visitdate,visitdate_key,tp_kod,h_name_to,field,val)
+{
+    console.clear();
+    var bad_data = false;
+    var error_text = '';
+    
+    
+/*    
+    console.log(field);
+    console.log(val);
+    console.log('1'+$('#type_standart_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_h_type_standart').length!=0);
+    console.log('2'+!$('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_h_type_standart').val());
+    console.log($('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_h_type_standart').val());
+    console.log('3'+$('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_h_type_standart').val());
+  */  
+    
+    if (
+            field=='ts'
+            &&
+            val==1
+            &&
+            $('#type_standart_'+visitdate_key+'_'+tp_kod+'_'+h_name_to).length!=0
+            &&
+            !$('#type_standart_'+visitdate_key+'_'+tp_kod+'_'+h_name_to).val()
+        ){
+        bad_data = true;
+        error_text = error_text + 'Подтип стандарта не выбран'+'<br>';
+    }
+    if (bad_data) {
+        errorNoty('Ошибка сохранения'+'<br>'+error_text);
+        return;
+    }
+    $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','red');
+    var fd = new FormData();
+    fd.append('visitdate',  visitdate);
+    fd.append('tp_kod',  tp_kod);
+    fd.append('h_name_to',  h_name_to);
+    fd.append('field',  field);
+    fd.append('val',  val);
+    $.ajax({
+        type: 'POST',
+        url: '?action=a18to_report&save=1&nohead=1',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (field=='ts')
+            {
+                (val==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','lightgreen') : null;
+                (val==2) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','red') : null;
+            }
+            else
+            {
+                $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','white');
+            }
+        }
+    });
+}
+{/literal}
+</script>
