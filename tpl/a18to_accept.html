@@ -40,8 +40,8 @@
 		По ЭТА:
 		<select name=eta_list id=eta_list>
 			<option value=""></option>
-			{foreach key=key item=item from=$eta_list}
-			<option value="{$item.h_eta}">{$item.eta}</option>
+			{foreach key=k item=i from=$eta_list}
+			<option value="{$i.h_eta}">{$i.eta}</option>
 			{/foreach}
 		</select>
 		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
@@ -86,12 +86,6 @@
 			<td><input type=radio id="st_auditor" name="st_auditor" value=3>не соответствует стандарту - ТМ</td>
 		</tr>
 		<script>$("input[name=st_auditor][value={$smarty.request.st_auditor}]").attr('checked',true);</script>
-		<tr>
-			<td><input type=radio id="type_standart" name="type_standart" value=1>все</td>
-			<td><input type=radio id="type_standart" name="type_standart" value=2>A-стандарт</td>
-			<td><input type=radio id="type_standart" name="type_standart" value=3>B-стандарт</td>
-		</tr>
-		<script>$("input[name=type_standart][value={$smarty.request.type_standart}]").attr('checked',true);</script>
 	</table>
 	</p>
 	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
@@ -134,10 +128,10 @@
 		<td rowspan=2>Код ТП</td>
 		<td rowspan=2>Название/Адрес ТП</td>
 		<td rowspan=2>Тип ТП</td>
-		<td rowspan=2>ТО</td>
 		<td rowspan=2>Визит</td>
-		<td rowspan=2>Тип стандарта</td>
+		<td rowspan=2>ТО</td>
 		<td rowspan=2>Фото</td>
+		<td rowspan=2>Подтип стандарта</td>
 		<td colspan=5>Выполнение стандарта</td>
 		<td colspan=2>Задачи</td>
                 <td rowspan=2>отг. цел. ассортимент</td>
@@ -153,63 +147,70 @@
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 			<tr>
-				<td>{$smarty.foreach.d.iteration}</td>
-				<td>{$i.vd}</td>
-				<td>{$i.fio_ts}</td>
-				<td>{$i.fio_eta}</td>
-				<td>{$i.tp_kod_key}</td>
-				<td>{$i.tp_ur} / {$i.tp_addr}</td>
-				<td>{$i.tp_type_short}</td>
-				<td style="text-align:center">{$i.cto}</td>
-				<td style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
-		<td style="text-align:center">{$i.type_standart}</td>
-				<td {if $i.urls eq 0}bgcolor="red"{/if}>
-					{foreach key=k1 item=i1 from=$i.photos name=photos}
-						<nobr><a target="_blank" href="{$i1.url}">Фото {$smarty.foreach.photos.iteration}</a></nobr><br>
-					{/foreach}
+				<td rowspan="{$i.cto.cnt+1}">{$smarty.foreach.d.iteration}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.vd}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.fio_ts}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.fio_eta}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.tp_kod_key}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.tp_ur} / {$i.tp_addr}</td>
+				<td rowspan="{$i.cto.cnt+1}">{$i.tp_type_short}</td>
+				<td rowspan="{$i.cto.cnt+1}" style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
+                                <td></td>
+                            {foreach key=k1 item=i1 from=$i.cto.data}
+                            <tr>
+                                <td style="text-align:center">{$i1.name_to}</td>
+				<td>
+                                    {foreach key=k2 item=i2 from=$i1.photos}
+                                        <a target="_blank" href="{$i2.url}">Фото</a>
+                                    {/foreach}
 				</td>
+                                <td style="text-align:center"
+                                    id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_h_type_standart
+                                    >
+                                    {$i1.type_standart}
+                                </td>
 				<td
-					id=td_{$i.h_url}_ts
-					{if $i.ts eq 1}bgcolor="lightgreen"{/if}
-					{if $i.ts eq 2}bgcolor="red"{/if}
+                                        id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_ts
+                                        {if $i1.ts eq 1}bgcolor="lightgreen"{/if}
+                                        {if $i1.ts eq 2}bgcolor="red"{/if}
 				>
-					{if $i.ts eq 1}соответствует{/if}
-					{if $i.ts eq 2}не соответствует{/if}
+					{if $i1.ts eq 1}соответствует{/if}
+					{if $i1.ts eq 2}не соответствует{/if}
 				</td>
 				<td
-					id=td_{$i.visitdate_key}_{$i.tp_kod_key}_auditor
-					{if $i.auditor eq 1}bgcolor="lightgreen"{/if}
-					{if $i.auditor eq 2}bgcolor="red"{/if}
+					id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_auditor
+					{if $i1.auditor eq 1}bgcolor="lightgreen"{/if}
+					{if $i1.auditor eq 2}bgcolor="red"{/if}
 				>
 					{if ($is_tm) and not $smarty.request.print}
-						<nobr><input type=radio id="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" name="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" value=1 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor',this.value);save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor_fio','{$fio}')">соответствует</nobr>
+						<nobr><input type=radio id="auditor_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="auditor_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=1 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','auditor',this.value);save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','auditor_fio','{$fio}')">соответствует</nobr>
 						<br>
-						<nobr><input type=radio id="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" name="auditor_{$i.visitdate_key}_{$i.tp_kod_key}" value=2 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor',this.value);save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor_fio','{$fio}')">не соответствует</nobr>
-						<script>$("input[name=auditor_{$i.visitdate_key}_{$i.tp_kod_key}][value={$i.auditor}]").attr('checked',true);</script>
+						<nobr><input type=radio id="auditor_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="auditor_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=2 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','auditor',this.value);save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','auditor_fio','{$fio}')">не соответствует</nobr>
+						<script>$("input[name=auditor_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}][value='{$i1.auditor}']").attr('checked',true);</script>
 					{else}
-						{if $i.auditor eq 1}соответствует{/if}
-						{if $i.auditor eq 2}не соответствует{/if}
+						{if $i1.auditor eq 1}соответствует{/if}
+						{if $i1.auditor eq 2}не соответствует{/if}
 					{/if}
-					{if $i.auditor}<br>{/if}{$i.auditor_fio} {$i.auditor_lu}
+					{if $i1.auditor}<br>{/if}{$i1.auditor_fio} {$i1.auditor_lu}
 				</td>
 				<td>
-					{$i.ts_comm|nl2br}
+					{$i1.ts_comm|nl2br}
 				</td>
-				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_auditor_comm>
+				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_auditor_comm>
 					{if ($is_tm) and not $smarty.request.print}
-						<textarea id="auditor_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
-                                                          name="auditor_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
-                                                          onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','auditor_comm',this.value)">{$i.auditor_comm}</textarea>
+						<textarea id="auditor_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+                                                          name="auditor_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+                                                          onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','auditor_comm',this.value)">{$i1.auditor_comm}</textarea>
 					{else}
-						{$i.auditor_comm|nl2br}
+						{$i1.auditor_comm|nl2br}
 					{/if}
 				</td>
-				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_traid_comm>
+				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_traid_comm>
 					{if ($is_traid) and not $smarty.request.print}
 						<textarea
-							id="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
-							name="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
-						>{$i.traid_comm}</textarea>
+							id="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+							name="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+						>{$i1.traid_comm}</textarea>
 						<br>
 						<a
 							href="javascript:void(0);"
@@ -218,32 +219,35 @@
                                                             '{$i.visitdate}'
                                                             ,'{$i.visitdate_key}'
                                                             ,'{$i.tp_kod_key}'
+                                                            ,'{$i1.h_name_to}'
                                                             ,'traid_comm'
-                                                            ,$('#traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}').val()
+                                                            ,$('#traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}').val()
                                                             ,'traid'
-                                                            ,$('#cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid').prop('checked')?1:0
+                                                            ,$('#cb_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_traid').prop('checked')?1:0
                                                             );
                                                         "
 						>Сохранить</a>
                                                 &nbsp;
-                                                <div style="display: inline; /*{if $i.traid eq 1}*/background-color:red;/*{/if}*/"
-                                                     id="td_{$i.visitdate_key}_{$i.tp_kod_key}_traid">
+                                                <div style="display: inline; /*{if $i1.traid eq 1}*/background-color:red;/*{/if}*/"
+                                                     id="td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_traid">
                                                 <input
                                                     type="checkbox"
-                                                    id="cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid"
+                                                    id="cb_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_traid"
                                                        > отк. станд
                                                 </div>
-                                                <script>$("#cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid").prop('checked','{$i.traid}'=='1'?true:false);</script>
+                                                <script>$("#cb_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_traid").prop('checked','{$i1.traid}'=='1'?true:false);</script>
 					{else}
-						{$i.traid_comm|nl2br}
-                                                {if $i.traid eq 1}&nbsp;<div style="display: inline; background-color:red;">отк. станд</div>{/if}
+						{$i1.traid_comm|nl2br}
+                                                {if $i1.traid eq 1}&nbsp;<div style="display: inline; background-color:red;">отк. станд</div>{/if}
 					{/if}
 				</td>
-				<td>{$i.tasks_assort|nl2br}</td>
-				<td>{$i.tasks_mr|nl2br}</td>
+				<td>{$i1.tasks_assort|nl2br}</td>
+				<td>{$i1.tasks_mr|nl2br}</td>
                                 <td>
-                                    <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
+                                    <div class="pics">{$i1.target}<div class="hov">{$i1.target_info|nl2br}</div></div>
                                 </td>
+                            </tr>
+                            {/foreach}
 			</tr>
 	{/foreach}
 </table>
@@ -254,16 +258,25 @@
 
 <script>
 /*{literal}*/
-function save(visitdate,visitdate_key,tp_kod,field,val,field1,val1)
+function save(visitdate,visitdate_key,tp_kod,h_name_to,field,val,field1,val1)
 {
-$('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','red');
+$('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','red');
 var fd = new FormData();
 fd.append('visitdate',  visitdate);
 fd.append('tp_kod',  tp_kod);
+fd.append('h_name_to',  h_name_to);
 fd.append('field',  field);
 fd.append('val',  val);
 fd.append('field1',  field1);
 fd.append('val1',  val1);
+/*console.log(visitdate);
+console.log(visitdate_key);
+console.log(tp_kod);
+console.log(h_name_to);
+console.log(field);
+console.log(val);
+console.log(field1);
+console.log(val1);*/
 $.ajax({
   type: 'POST',
   url: '?action=a18to_accept&save=1&nohead=1',
@@ -271,16 +284,16 @@ $.ajax({
   processData: false,
   contentType: false,
   success: function(data) {
-   $('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','white');
-   $('#td_'+visitdate_key+'_'+tp_kod+'_'+field1).css('background-color','white');
+   $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','white');
+   $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field1).css('background-color','white');
    if (field=='auditor')
    {
-    (val==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','lightgreen') : null;
-    (val==2) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+field).css('background-color','red') : null;
+    (val==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','lightgreen') : null;
+    (val==2) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field).css('background-color','red') : null;
    }
    if (field1=='traid')
    {
-    (val1==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+field1).css('background-color','red') : null;
+    (val1==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field1).css('background-color','red') : null;
    }
    //console.log(data);
   }

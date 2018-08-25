@@ -59,8 +59,8 @@ $('#dt').change(function(){
 		<td rowspan=2>Тип ТП</td>
 		<td rowspan=2>Визит</td>
 		<td rowspan=2>ТО</td>
-		<td rowspan=2>Подтип стандарта</td>
 		<td rowspan=2>Фото</td>
+		<td rowspan=2>Подтип стандарта</td>
 		<td colspan=3>Выполнение стандарта</td>
 		<td colspan=2>Задачи</td>
 	</tr>
@@ -79,30 +79,32 @@ $('#dt').change(function(){
 				<td rowspan="{$i.cto.cnt+1}">{$i.tp_ur} / {$i.tp_addr}</td>
 				<td rowspan="{$i.cto.cnt+1}">{$i.tp_type}</td>
 				<td rowspan="{$i.cto.cnt+1}" style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
+                                <td colspan="8"></td>
 					{foreach key=k1 item=i1 from=$i.cto.data}
                                         <tr>
                                             <td style="text-align:center">{$i1.name_to}</td>
-                                            <td style="text-align:center"
-                                                id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_h_type_standart
-                                                >
-                                                <!--{$i1.type_standart}
-                                                *
-                                                {$i1.type_standart_def}-->
-                                                <select
-                                                    id="type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
-                                                    name="type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
-                                                    onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','h_type_standart',this.value)">
-                                                    <option></option>
-                                                        {foreach key=tsk item=tsi from=$type_standart}
-                                                        <option value="{$tsi.h_type_standart}">{$tsi.type_standart}</option>
-                                                        {/foreach}
-                                                </select>
-                                                <script>$('#type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to} option[value="{$i1.h_type_standart|default:$i1.h_type_standart_def}"]').prop('selected', true);</script>
-                                            </td>
                                             <td>
                                                     {foreach key=k2 item=i2 from=$i1.photos}
                                                         <a target="_blank" href="{$i2.url}">Фото</a>
                                                     {/foreach}
+                                            </td>
+                                            <td style="text-align:center"
+                                                id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_h_type_standart
+                                                >
+                                                    {if not $i1.auditor}
+                                                        <select
+                                                            id="type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+                                                            name="type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}"
+                                                            onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','h_type_standart',this.value)">
+                                                            <option></option>
+                                                                {foreach key=tsk item=tsi from=$type_standart}
+                                                                <option value="{$tsi.h_type_standart}">{$tsi.type_standart}</option>
+                                                                {/foreach}
+                                                        </select>
+                                                        <script>$('#type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to} option[value="{$i1.h_type_standart|default:$i1.h_type_standart_def}"]').prop('selected', true);</script>
+                                                    {else}
+                                                            {$i1.type_standart}
+                                                    {/if}
                                             </td>
                                             <td
                                                     id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_ts
@@ -110,9 +112,9 @@ $('#dt').change(function(){
                                                     {if $i1.ts eq 2}bgcolor="red"{/if}
                                             >
                                                     {if not $i1.auditor}
-                                                            <nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=1 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts',this.value)">соответствует</nobr>
+                                                            <nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=1 onClick="$('#type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}').change();save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts',this.value)">соответствует</nobr>
                                                             <br>
-                                                            <nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=2 onClick="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts',this.value)">не соответствует</nobr>
+                                                            <nobr><input type=radio id="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" value=2 onClick="$('#type_standart_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}').change();save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','ts',this.value)">не соответствует</nobr>
                                                             <script>$("input[name=ts_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}][value='{$i1.ts}']").attr('checked',true);</script>
                                                     {else}
                                                             {if $i1.ts eq 1}соответствует{/if}

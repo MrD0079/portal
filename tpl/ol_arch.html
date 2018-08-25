@@ -163,7 +163,7 @@ $("."+p_old).attr('disabled',true);
 	</tr>
 	{/foreach}
 	<tr align="center">
-		<td colspan="8" rowspan="1" style="vertical-align: top;"><big><span style="font-weight: bold;">Итоговая сумма к удержанию: {$i.summa|default:0|num:2}</span></big></td>
+		<td colspan="8" rowspan="1" style="vertical-align: top;"><big><span style="font-weight: bold;">Итоговая сумма к {if $i.summa > 0}удержанию{else}доплате{/if}: {if $i.summa > 0}{$i.summa|default:0|num:2}{else}{-$i.summa|default:0|num:2}{/if}</span></big></td>
 	</tr>
 	</table>
 {/if}

@@ -33,22 +33,21 @@ if (isset($_REQUEST["save"]))
 	InitRequestVar("eta_list",$_SESSION["h_eta"]);
 	InitRequestVar("sd",$now);
 	InitRequestVar("ed",$now);
-	InitRequestVar("ok_ts",1);
+	/*InitRequestVar("ok_ts",1);
 	InitRequestVar("ok_auditor",1);
 	InitRequestVar("st_ts",1);
-	InitRequestVar("st_auditor",1);
+	InitRequestVar("st_auditor",1);*/
 	InitRequestVar("by_who",'eta');
 	InitRequestVar("rep_type",'brief');
 	InitRequestVar("ok_st_tm",1);
-	InitRequestVar("type_standart",1);
 	InitRequestVar("zst",1);
 	$params=array(
 		':dpt_id' => $_SESSION["dpt_id"],
 		':tn'=>$tn,
-		':ok_ts' => $_REQUEST["ok_ts"],
+		/*':ok_ts' => $_REQUEST["ok_ts"],
 		':ok_auditor' => $_REQUEST["ok_auditor"],
 		':st_ts' => $_REQUEST["st_ts"],
-		':st_auditor' => $_REQUEST["st_auditor"],
+		':st_auditor' => $_REQUEST["st_auditor"],*/
 		':eta_list' => "'".$_REQUEST["eta_list"]."'",
 		':region_list' => "'".$_REQUEST["region_list"]."'",
 		':sd' => "'".$_REQUEST["sd"]."'",
@@ -57,7 +56,6 @@ if (isset($_REQUEST["save"]))
 		':exp_list_only_ts' => $_REQUEST["exp_list_only_ts"],
 		':by_who'=>"'".$_REQUEST['by_who']."'",
 		':ok_st_tm' => $_REQUEST["ok_st_tm"],
-		':type_standart' => $_REQUEST["type_standart"],
 		':zst' => $_REQUEST["zst"],
 	);
 	$sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
@@ -72,25 +70,26 @@ if (isset($_REQUEST["save"]))
 	$sql=stritr($sql,$params);
 	$eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('eta_list', $eta_list);
-	$sql = rtrim(file_get_contents('sql/a18to_region_list.sql'));
-	$sql=stritr($sql,$params);
-	$region_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$smarty->assign('region_list', $region_list);
 	if (isset($_REQUEST['generate']))
 	{
+                $params[':brief']=rtrim(file_get_contents('sql/a18to_stat_brief.sql'));
 		if ($_REQUEST["rep_type"]=="brief")
 		{
 			$sql=rtrim(file_get_contents('sql/a18to_stat_'.$_REQUEST['by_who'].'.sql'));
 			$sql=stritr($sql,$params);
+			$sql=stritr($sql,$params);
 			$t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$sql=rtrim(file_get_contents('sql/a18to_stat_'.$_REQUEST['by_who'].'1.sql'));
 			$sql=stritr($sql,$params);
+                        $sql=stritr($sql,$params);
 			$t1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$sql=rtrim(file_get_contents('sql/a18to_stat_'.$_REQUEST['by_who'].'2.sql'));
 			$sql=stritr($sql,$params);
+                        $sql=stritr($sql,$params);
 			$t2 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			$sql=rtrim(file_get_contents('sql/a18to_stat_'.$_REQUEST['by_who'].'3.sql'));
 			$sql=stritr($sql,$params);
+                        $sql=stritr($sql,$params);
 			$t3 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 			foreach ($t as $k=>$v) {$d[$v['key']]['t']=$v;}
 			foreach ($t1 as $k=>$v) {$d[$v['key']]['t1']=$v;}
@@ -102,22 +101,29 @@ if (isset($_REQUEST["save"]))
 		{
 			$sql=rtrim(file_get_contents('sql/a18to_stat_detailed.sql'));
 			$sql=stritr($sql,$params);
+			$sql=stritr($sql,$params);
+                        //echo $sql;
 			$t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                        //print_r($t);
 			$smarty->assign('d', $t);
 		}
 		$sql=rtrim(file_get_contents('sql/a18to_stat_total.sql'));
 		$sql=stritr($sql,$params);
+                $sql=stritr($sql,$params);
 		$t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('tt', $t);
 		$sql=rtrim(file_get_contents('sql/a18to_stat_total1.sql'));
 		$sql=stritr($sql,$params);
+                $sql=stritr($sql,$params);
 		$t1 = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('tt1', $t1);
 		$sql=rtrim(file_get_contents('sql/a18to_stat_total2.sql'));
 		$sql=stritr($sql,$params);
+                $sql=stritr($sql,$params);
 		$t2 = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('tt2', $t2);
 		$sql=rtrim(file_get_contents('sql/a18to_stat_total3.sql'));
+                $sql=stritr($sql,$params);
 		$sql=stritr($sql,$params);
 		$t3 = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign('tt3', $t3);

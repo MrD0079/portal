@@ -349,7 +349,7 @@
                                                           -   NVL (
                                                                  (SELECT discount
                                                                     FROM bud_fil_discount_body
-                                                                   WHERE     dt = s.dt
+                                                                   WHERE     dt = TRUNC (z.dt_start, 'mm')
                                                                          AND distr =
                                                                                 z.fil),
                                                                  0)
@@ -430,7 +430,7 @@
                                                     OR :clusters = 0)
                                                AND s.dt IN (z.cost_assign_month,
                                                             TRUNC (z.dt_start, 'mm'))
-                                      GROUP BY z.id, z.fil, s.dt) t
+                                      GROUP BY z.id, z.fil, z.dt_start) t
                                WHERE     t.id = z.id
                                      AND z.id_net = n.id_net(+)
                                      AND z.fil = f.id

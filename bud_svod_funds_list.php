@@ -33,6 +33,7 @@ $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_list.sql'));
 $sql=stritr($sql,$params);
 $xx = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+//echo $sql;
 
 /*foreach ($x as $k=>$v)
 {
@@ -78,6 +79,7 @@ foreach ($x as $k=>$v)
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_act_local.sql'));
 $sql=stritr($sql,$params);
 $act_local = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+//echo $sql;
 
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_act_local_total.sql'));
 $sql=stritr($sql,$params);

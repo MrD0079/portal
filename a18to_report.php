@@ -37,28 +37,30 @@ else
 		foreach($d as $k=>$v)
 		{
 			$sql="
-/* Formatted on 05/08/2018 23:50:18 (QP5 v5.252.13127.32867) */
-  SELECT DISTINCT t.name_to,
-                  t.h_name_to,
-                  t.type_standart type_standart_def,
-                  t.h_type_standart h_type_standart_def,
-                  ats.type_standart,
-                  s.h_type_standart,
-                  s.ts,
-                  s.ts_comm,
-                  s.auditor,
-                  TO_CHAR (s.auditor_lu, 'dd.mm.yyyy hh24:mi:ss') auditor_lu,
-                  s.auditor_fio,
-                  s.tasks_assort,
-                  s.tasks_mr
-    FROM a18to t, a18totp s, a18to_type_standart ats
-   WHERE     t.tp_kod_key = :tp_kod
-         AND t.visitdate = TO_DATE ( :dt, 'dd.mm.yyyy')
-         AND t.visitdate = s.visitdate(+)
-         AND t.tp_kod_key = s.tp_kod(+)
-         AND t.h_name_to = s.h_name_to(+)
-         AND s.h_type_standart = ats.h_type_standart(+)
-ORDER BY t.name_to, t.type_standart";
+                                /* Formatted on 05/08/2018 23:50:18 (QP5 v5.252.13127.32867) */
+                                  SELECT DISTINCT t.name_to,
+                                                  t.h_name_to,
+                                                  t.type_standart type_standart_def,
+                                                  t.h_type_standart h_type_standart_def,
+                                                  ats.type_standart,
+                                                  s.h_type_standart,
+                                                  s.ts,
+                                                  s.ts_comm,
+                                                  s.auditor,
+                                                  s.auditor_comm,
+                                                  s.traid_comm,
+                                                  TO_CHAR (s.auditor_lu, 'dd.mm.yyyy hh24:mi:ss') auditor_lu,
+                                                  s.auditor_fio,
+                                                  s.tasks_assort,
+                                                  s.tasks_mr
+                                    FROM a18to t, a18totp s, a18to_type_standart ats
+                                   WHERE     t.tp_kod_key = :tp_kod
+                                         AND t.visitdate = TO_DATE ( :dt, 'dd.mm.yyyy')
+                                         AND t.visitdate = s.visitdate(+)
+                                         AND t.tp_kod_key = s.tp_kod(+)
+                                         AND t.h_name_to = s.h_name_to(+)
+                                         AND s.h_type_standart = ats.h_type_standart(+)
+                                ORDER BY t.name_to, t.type_standart";
 			$params[':tp_kod']=$v['tp_kod_key'];
 			$sql=stritr($sql,$params);
 			//echo $sql;

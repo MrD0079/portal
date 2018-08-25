@@ -1,4 +1,4 @@
-/* Formatted on 05/08/2018 18:11:41 (QP5 v5.252.13127.32867) */
+/* Formatted on 08/08/2018 23:28:36 (QP5 v5.252.13127.32867) */
   SELECT t.fio_ts,
          t.fio_eta,
          t.tp_kod_key,
@@ -30,8 +30,8 @@
          AND ( :eta_list IS NULL OR :eta_list = t.h_fio_eta)
          AND CASE
                 WHEN    :ok_visit = 1
-                     OR :ok_visit = 2 AND t.visit = 1
-                     OR :ok_visit = 3 AND t.visit = 0
+                     OR ( :ok_visit = 2 AND t.visit = 1)
+                     OR ( :ok_visit = 3 AND t.visit = 0)
                 THEN
                    1
                 ELSE
@@ -39,8 +39,8 @@
              END = 1
          AND CASE
                 WHEN    :ok_photo = 1
-                     OR :ok_photo = 2 AND t.urls > 0
-                     OR :ok_photo = 3 AND t.urls = 0
+                     OR ( :ok_photo = 2 AND t.urls > 0)
+                     OR ( :ok_photo = 3 AND t.urls = 0)
                 THEN
                    1
                 ELSE

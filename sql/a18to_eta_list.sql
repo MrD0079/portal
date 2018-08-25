@@ -1,19 +1,21 @@
-/* Formatted on 09/04/2015 18:13:10 (QP5 v5.227.12220.39724) */
+/* Formatted on 07/08/2018 19:48:42 (QP5 v5.252.13127.32867) */
   SELECT DISTINCT r.h_eta, r.eta
     FROM routes r, user_list st
    WHERE     r.tab_number = st.tab_num
          AND r.dpt_id = :dpt_id
          AND st.dpt_id = :dpt_id
-      and st.is_spd=1
-   AND (   st.tn IN
-                    (SELECT slave
-                       FROM full
-                      WHERE master IN
-                               (SELECT parent
-                                  FROM assist
-                                 WHERE child = :tn AND dpt_id = :dpt_id
-                                UNION
-                                SELECT DECODE (:tn, -1, master, :tn) FROM DUAL))
+         AND st.is_spd = 1
+         AND (   st.tn IN (SELECT slave
+                             FROM full
+                            WHERE master IN (SELECT parent
+                                               FROM assist
+                                              WHERE     child = :tn
+                                                    AND dpt_id = :dpt_id
+                                             UNION
+                                             SELECT DECODE ( :tn,
+                                                            -1, master,
+                                                            :tn)
+                                               FROM DUAL))
               OR (SELECT NVL (is_admin, 0)
                     FROM user_list
                    WHERE tn = :tn) = 1
