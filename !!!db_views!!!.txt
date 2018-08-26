@@ -1,0 +1,1434 @@
+VIEW_NAME	TEXT_LENGTH	TEXT	TYPE_TEXT_LENGTH	TYPE_TEXT	OID_TEXT_LENGTH	OID_TEXT	VIEW_TYPE_OWNER	VIEW_TYPE	SUPERVIEW_NAME	EDITIONING_VIEW	READ_ONLY
+A14TO_GR_BY_URL	545	SELECT VISITDATE,
+            FIO_TS,
+            TAB_NUM,
+            FIO_ETA,
+            DM_KOD,
+            TP_UR,
+            TP_ADDR,
+            TP_KOD_KEY,
+            VISIT,
+            H_FIO_ETA,
+            COUNT (URL) url,
+            COUNT (H_URL) h_url,
+            STANDART
+       FROM PERSIK.A14TO
+   GROUP BY VISITDATE,
+            FIO_TS,
+            TAB_NUM,
+            FIO_ETA,
+            DM_KOD,
+            TP_UR,
+            TP_ADDR,
+            TP_KOD_KEY,
+            VISIT,
+            H_FIO_ETA,
+            STANDART								N	N
+A14TO_MV	9296	SELECT urm.fio fio_rm,
+            urm.tn tn_rm,
+            utm.fio fio_tm,
+            utm.tn tn_tm,
+            u.tn,
+            u.region_name,
+            t.h_fio_eta,
+            t.visitdate,
+            c.y,
+            c.my,
+            u.fio fio_ts,
+            t.fio_eta,
+            t.tp_kod_key,
+            t.tp_ur,
+            t.tp_addr,
+            r.tp_place,
+            r.tp_type,
+            r.tp_type_short,
+            r.stelag,
+            r.tumb,
+            t.visit,
+            SUM (DECODE (t.url, 0, 0, 1)) urls,
+            DECODE (NVL (s.ts, 0), 1, 1, 0) ts1,
+            DECODE (NVL (s.auditor, 0), 1, 1, 0) auditor1,
+            /*DECODE (s.ts, NULL, 1, 0)*/
+            CASE
+               WHEN s.ts IS NULL AND SUM (DECODE (t.url, 0, 0, 1)) > 0 THEN 1
+               ELSE 0
+            END
+               tsnull,
+            DECODE (s.auditor, NULL, 1, 0) auditornull,
+            AVG (sp.VALUE) VALUE,
+            m.summa,
+            CASE
+               WHEN t.standart = 'A'
+               THEN
+                  CASE
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) <= 1000 THEN 0
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) >= 1000 THEN 60
+                  END
+               WHEN t.standart = 'B'
+               THEN
+                  CASE
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) <= 1000 THEN 0
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) >= 1000 THEN 40
+                  END
+            END
+               standart_price_eta,
+            CASE
+               WHEN t.standart = 'A'
+               THEN
+                  CASE
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) <= 1000 THEN 0
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) >= 1000 THEN 15
+                  END
+               WHEN t.standart = 'B'
+               THEN
+                  CASE
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) <= 1000 THEN 0
+                     WHEN NVL (m.summa, 0) + NVL (m.coffee, 0) >= 1000 THEN 10
+                  END
+            END
+               standart_price_ts,
+            TO_CHAR (zst.lu, 'dd.mm.yyyy hh24:mi:ss') zst_lu,
+            zst.lu_fio zst_lu_fio,
+            zst.comm zst_comm,
+            u.dpt_id,
+            u.dpt_name,
+            d.manufak,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.ts IS NOT NULL) THEN 2
+               WHEN (t.h_url IS NOT NULL AND s.ts IS NULL) THEN 3
+               ELSE 1
+            END
+               ok_ts,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.auditor IS NOT NULL) THEN 2
+               WHEN (t.h_url IS NOT NULL AND s.auditor IS NULL) THEN 3
+               ELSE 1
+            END
+               ok_auditor,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.ts = 1) THEN 2
+               WHEN (s.visitdate IS NOT NULL AND s.ts = 2) THEN 3
+               ELSE 1
+            END
+               st_ts,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.auditor = 1) THEN 2
+               WHEN (s.visitdate IS NOT NULL AND s.auditor = 2) THEN 3
+               ELSE 1
+            END
+               st_auditor,
+            CASE WHEN zst.lu_fio IS NOT NULL THEN 2 ELSE 1 END ok_st_tm,
+            m.eta_tab_number,
+            u.tab_num tab_num_ts,
+            utm.tab_num tab_num_tm,
+            urm.tab_num tab_num_rm,
+            t.standart,
+            CASE
+               WHEN DECODE (NVL (s.ts, 0), 1, 1, 0) = 1 THEN NVL (s.traid, 0)
+               ELSE 0
+            END
+               reject_traid,
+            CASE
+               WHEN     DECODE (NVL (s.ts, 0), 1, 1, 0) = 1
+                    AND (s.visitdate IS NOT NULL AND s.auditor = 2)
+               THEN
+                  1
+               ELSE
+                  0
+            END
+               reject_auditor,
+            CASE
+               WHEN     DECODE (NVL (s.ts, 0), 1, 1, 0) = 1
+                    AND (   NVL (s.traid, 0) = 1
+                         OR (s.visitdate IS NOT NULL AND s.auditor = 2))
+               THEN
+                  1
+               ELSE
+                  0
+            END
+               reject_traid_or_auditor,
+            CASE
+               WHEN     DECODE (NVL (s.ts, 0), 1, 1, 0) = 1
+                    AND NVL (s.traid, 0) = 0
+                    AND NOT (s.visitdate IS NOT NULL AND s.auditor = 2)
+               THEN
+                  1
+               ELSE
+                  0
+            END
+               ts1r,
+            CASE WHEN str.tp_kod IS NOT NULL THEN 1 END reject_traid_in_month
+       FROM a14tozst zst,
+            a14to_gr_by_url t,
+            (SELECT DISTINCT dpt_id,
+                             tp_place,
+                             tp_type,
+                             tp_type_short,
+                             stelag,
+                             tumb,
+                             tab_number,
+                             tp_kod
+               FROM routes) r,
+            user_list u,
+            a14totp s,
+            (  SELECT TRUNC (visitdate, 'mm') dt, tp_kod
+                 FROM a14totp
+                WHERE traid = 1
+             GROUP BY TRUNC (visitdate, 'mm'), tp_kod) str,
+            parents ptm,
+            user_list utm,
+            parents prm,
+            user_list urm,
+            (  SELECT data, h_fio_eta, AVG (VALUE) VALUE
+                 FROM a14tosp
+             GROUP BY data, h_fio_eta) sp,
+            (SELECT dpt_id,
+                    tp_kod,
+                    dt,
+                    summa,
+                    coffee,
+                    eta_tab_number
+               FROM a14mega) m,
+            calendar c,
+            departments d
+      WHERE     u.dpt_id = d.dpt_id
+            AND u.is_spd = 1
+            AND t.tp_kod_key = zst.tp_kod_key(+)
+            AND zst.dt(+) = TRUNC (t.visitdate, 'mm')
+            AND t.h_fio_eta = sp.h_fio_eta(+)
+            AND TRUNC (t.visitdate, 'mm') = sp.data(+)
+            AND ptm.parent = utm.tn
+            AND ptm.tn = u.tn
+            AND prm.parent = urm.tn
+            AND prm.tn = utm.tn
+            AND u.tab_num = t.tab_num
+            AND u.dpt_id = m.dpt_id
+            AND u.dpt_id = r.dpt_id
+            AND t.tp_kod_key = r.tp_kod
+            AND t.visitdate = s.visitdate(+)
+            AND t.tp_kod_key = s.tp_kod(+)
+            AND TRUNC (t.visitdate, 'mm') = str.dt(+)
+            AND t.tp_kod_key = str.tp_kod(+)
+            AND TRUNC (t.visitdate, 'mm') = m.dt(+)
+            AND t.tp_kod_key = m.tp_kod(+)
+            AND t.visitdate = c.data
+   /*AND (r.stelag > 0 OR r.tumb > 0)*/
+   GROUP BY urm.fio,
+            urm.tn,
+            utm.fio,
+            utm.tn,
+            u.tn,
+            s.ts,
+            s.auditor,
+            u.region_name,
+            t.h_fio_eta,
+            t.visitdate,
+            c.y,
+            c.my,
+            u.fio,
+            t.fio_eta,
+            t.tp_kod_key,
+            t.tp_ur,
+            t.tp_addr,
+            r.tp_place,
+            r.tp_type,
+            r.tp_type_short,
+            r.stelag,
+            r.tumb,
+            t.visit,
+            m.summa,
+            m.coffee,
+            zst.lu,
+            zst.lu_fio,
+            zst.comm,
+            u.dpt_id,
+            u.dpt_name,
+            d.manufak,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.ts IS NOT NULL) THEN 2
+               WHEN (t.h_url IS NOT NULL AND s.ts IS NULL) THEN 3
+               ELSE 1
+            END,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.auditor IS NOT NULL) THEN 2
+               WHEN (t.h_url IS NOT NULL AND s.auditor IS NULL) THEN 3
+               ELSE 1
+            END,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.ts = 1) THEN 2
+               WHEN (s.visitdate IS NOT NULL AND s.ts = 2) THEN 3
+               ELSE 1
+            END,
+            CASE
+               WHEN (s.visitdate IS NOT NULL AND s.auditor = 1) THEN 2
+               WHEN (s.visitdate IS NOT NULL AND s.auditor = 2) THEN 3
+               ELSE 1
+            END,
+            CASE WHEN zst.lu_fio IS NOT NULL THEN 2 ELSE 1 END,
+            m.eta_tab_number,
+            u.tab_num,
+            urm.tab_num,
+            utm.tab_num,
+            t.standart,
+            CASE
+               WHEN DECODE (NVL (s.ts, 0), 1, 1, 0) = 1 THEN NVL (s.traid, 0)
+               ELSE 0
+            END,
+            CASE
+               WHEN     DECODE (NVL (s.ts, 0), 1, 1, 0) = 1
+                    AND (s.visitdate IS NOT NULL AND s.auditor = 2)
+               THEN
+                  1
+               ELSE
+                  0
+            END,
+            CASE
+               WHEN     DECODE (NVL (s.ts, 0), 1, 1, 0) = 1
+                    AND NVL (s.traid, 0) = 0
+                    AND NOT (s.visitdate IS NOT NULL AND s.auditor = 2)
+               THEN
+                  1
+               ELSE
+                  0
+            END,
+            CASE
+               WHEN     DECODE (NVL (s.ts, 0), 1, 1, 0) = 1
+                    AND (   NVL (s.traid, 0) = 1
+                         OR (s.visitdate IS NOT NULL AND s.auditor = 2))
+               THEN
+                  1
+               ELSE
+                  0
+            END,
+            CASE WHEN str.tp_kod IS NOT NULL THEN 1 END								N	N
+A14TO_MV1	1347	SELECT u.tn,
+          t.h_fio_eta,
+          t.visitdate,
+          u.fio fio_ts,
+          t.fio_eta,
+          t.tp_kod_key,
+          t.tp_ur,
+          t.tp_addr,
+          t.visit,
+          DECODE (NVL (s.ts, 0), 1, 1, 0) ts1,
+          m.summa,
+          zst.lu_fio zst_lu_fio,
+          u.dpt_id,
+          t.standart
+     FROM a14tozst zst,
+          a14to_gr_by_url t,
+          (SELECT DISTINCT dpt_id,
+                           tp_place,
+                           tp_type,
+                           tp_type_short,
+                           stelag,
+                           tumb,
+                           tab_number,
+                           tp_kod
+             FROM routes) r,
+          user_list u,
+          a14totp s,
+          (SELECT dpt_id,
+                  tp_kod,
+                  dt,
+                  summa,
+                  eta_tab_number
+             FROM a14mega) m
+    WHERE     u.is_spd = 1
+          AND t.tp_kod_key = zst.tp_kod_key(+)
+          AND zst.dt(+) = TRUNC (t.visitdate, 'mm')
+          AND u.tab_num = t.tab_num
+          AND u.dpt_id = m.dpt_id
+          AND u.dpt_id = r.dpt_id
+          AND t.tp_kod_key = r.tp_kod
+          AND t.visitdate = s.visitdate(+)
+          AND t.tp_kod_key = s.tp_kod(+)
+          AND TRUNC (t.visitdate, 'mm') = m.dt(+)
+          AND t.tp_kod_key = m.tp_kod(+)								N	N
+A14TO_TASKS	332	SELECT t1.fio_ts,
+          t1.tab_num,
+          t1.h_url,
+          t1.url,
+          t1.visitdate,
+          t1.dm_kod,
+          t1.tp_kod_key,
+          t2.tasks_assort,
+          t2.tasks_mr
+     FROM a14to t1, a14tost t2
+    WHERE     t1.h_url = t2.h_url
+          AND (t2.tasks_assort IS NOT NULL OR t2.tasks_mr IS NOT NULL)								N	N
+A14TO_TASKS_V2	380	SELECT t1.fio_ts,
+          t1.tab_num,
+          t1.h_url,
+          t1.url,
+          t1.visitdate,
+          t1.dm_kod,
+          t1.tp_kod_key,
+          t2.tasks_assort,
+          t2.tasks_mr
+     FROM a14to t1, a14totp t2
+    WHERE     t1.tp_kod_key = t2.tp_kod
+          AND t1.visitdate = t2.visitdate
+          AND (t2.tasks_assort IS NOT NULL OR t2.tasks_mr IS NOT NULL)								N	N
+A16CO_MV	3269	SELECT urm.fio fio_rm,
+          urm.tn tn_rm,
+          utm.fio fio_tm,
+          utm.tn tn_tm,
+          u.tn,
+          t.h_fio_eta,
+          t.visitdate,
+          c.y,
+          c.my,
+          u.fio fio_ts,
+          t.fio_eta,
+          t.tp_kod_key,
+          t.tp,
+          r.tp_type_short,
+          m.eta_tab_number,
+          u.tab_num tab_num_ts,
+          utm.tab_num tab_num_tm,
+          urm.tab_num tab_num_rm,
+          u.dpt_id,
+          u.dpt_name,
+          d.manufak,
+          CASE WHEN s.ts IS NOT NULL THEN 2 WHEN s.ts IS NULL THEN 3 END ok_ts,
+          CASE WHEN s.tm IS NOT NULL THEN 2 WHEN s.tm IS NULL THEN 3 END ok_tm,
+          NVL (s.ts, 0) + 1 st_ts,
+          NVL (s.tm, 0) + 1 st_tm,
+          t.visitdate || t.tp_kod_key visit,
+          DECODE (NVL (s.ts, 0), 1, t.visitdate || t.tp_kod_key, NULL)
+             visit_st_ts,
+          DECODE (NVL (s.ts, 0), 1, t.tp_kod_key, NULL) tp_st_ts,
+          CASE
+             WHEN s.ts = 1 AND (s.tm = 2 OR s.traid = 1)
+             THEN
+                t.visitdate || t.tp_kod_key
+          END
+             visit_st_ts_reject_tm_or_traid,
+          CASE
+             WHEN s.ts = 1 AND NOT (NVL (s.tm, 0) = 2 OR NVL (s.traid, 0) = 1)
+             THEN
+                t.tp_kod_key
+          END
+             tp_st,
+            CASE
+               WHEN     s.ts = 1
+                    AND NOT (NVL (s.tm, 0) = 2 OR NVL (s.traid, 0) = 1)
+                    AND summa > 1000
+               THEN
+                  1
+               ELSE
+                  0
+            END
+          * 20
+             bonus_eta,
+            CASE
+               WHEN     s.ts = 1
+                    AND NOT (NVL (s.tm, 0) = 2 OR NVL (s.traid, 0) = 1)
+                    AND summa > 1000
+               THEN
+                  1
+               ELSE
+                  0
+            END
+          * 10
+             bonus_ts
+     FROM (SELECT DISTINCT t.VISITDATE,
+                           t.FIO_TS,
+                           t.TAB_NUM,
+                           t.FIO_ETA,
+                           t.DM_KOD,
+                           t.TP,
+                           t.TP_KOD_KEY,
+                           t.H_FIO_ETA
+             FROM PERSIK.a16co t, a16courl url
+            WHERE t.h_url = url.h_url) t,
+          (SELECT DISTINCT dpt_id, tp_type_short, tp_kod FROM routes) r,
+          user_list u,
+          a16cotp s,
+          parents ptm,
+          user_list utm,
+          parents prm,
+          user_list urm,
+          (SELECT dpt_id,
+                  tp_kod,
+                  dt,
+                  NVL (summa, 0) + NVL (coffee, 0) summa,
+                  eta_tab_number
+             FROM a14mega) m,
+          calendar c,
+          departments d
+    WHERE     u.dpt_id = d.dpt_id
+          AND u.is_spd = 1
+          AND ptm.parent = utm.tn
+          AND ptm.tn = u.tn
+          AND prm.parent = urm.tn
+          AND prm.tn = utm.tn
+          AND u.tab_num = t.tab_num
+          AND u.dpt_id = m.dpt_id
+          AND u.dpt_id = r.dpt_id
+          AND t.tp_kod_key = r.tp_kod
+          AND t.visitdate = s.visitdate(+)
+          AND t.tp_kod_key = s.tp_kod(+)
+          AND TRUNC (t.visitdate, 'mm') = m.dt(+)
+          AND t.tp_kod_key = m.tp_kod(+)
+          AND t.visitdate = c.data								N	N
+A18TO_GR_BY_URL	589	SELECT VISITDATE,
+            FIO_TS,
+            TAB_NUM,
+            FIO_ETA,
+            DM_KOD,
+            TP_UR,
+            TP_ADDR,
+            TP_KOD_KEY,
+            VISIT,
+            name_to,
+            H_FIO_ETA,
+            h_name_to,
+            COUNT (URL) url,
+            COUNT (H_URL) h_url
+       FROM PERSIK.A18TO
+   GROUP BY VISITDATE,
+            FIO_TS,
+            TAB_NUM,
+            FIO_ETA,
+            DM_KOD,
+            TP_UR,
+            TP_ADDR,
+            TP_KOD_KEY,
+            VISIT,
+            name_to,
+            H_FIO_ETA,
+            h_name_to								N	N
+A18TO_MV	7139	SELECT urm.fio fio_rm,
+            urm.tn tn_rm,
+            utm.fio fio_tm,
+            utm.tn tn_tm,
+            u.tn,
+            u.region_name,
+            t.h_fio_eta,
+            t.visitdate,
+            c.y,
+            c.my,
+            u.fio fio_ts,
+            t.fio_eta,
+            t.tp_kod_key,
+            t.tp_ur,
+            t.tp_addr,
+            r.tp_place,
+            r.tp_type,
+            r.tp_type_short,
+            t.visit,
+            TO_CHAR (zst.lu, 'dd.mm.yyyy hh24:mi:ss') zst_lu,
+            zst.lu_fio zst_lu_fio,
+            zst.comm zst_comm,
+            u.dpt_id,
+            u.dpt_name,
+            d.manufak,
+            m.summa,
+            m.eta_tab_number,
+            u.tab_num tab_num_ts,
+            utm.tab_num tab_num_tm,
+            urm.tab_num tab_num_rm,
+            COUNT (DISTINCT NVL (t.name_to, 'null')) cto,
+            CASE
+               WHEN wm_concat (
+                       DISTINCT NVL (
+                                   DECODE (NVL (s.ts, 0),
+                                           1, ats.type_standart,
+                                           NULL),
+                                   'null')) = 'Стандарт А'
+               THEN
+                  'Стандарт А'
+               WHEN wm_concat (
+                       DISTINCT NVL (
+                                   DECODE (NVL (s.ts, 0),
+                                           1, ats.type_standart,
+                                           NULL),
+                                   'null')) =
+                       'Стандарт А (минимум)'
+               THEN
+                  'Стандарт А (минимум)'
+            END
+               standart_tp,
+            CASE
+               WHEN wm_concat (
+                       DISTINCT NVL (
+                                   DECODE (NVL (s.ts, 0),
+                                           1, ats.type_standart,
+                                           NULL),
+                                   'null')) = 'Стандарт А'
+               THEN
+                  60
+               WHEN wm_concat (
+                       DISTINCT NVL (
+                                   DECODE (NVL (s.ts, 0),
+                                           1, ats.type_standart,
+                                           NULL),
+                                   'null')) =
+                       'Стандарт А (минимум)'
+               THEN
+                  10
+            END
+               standart_price,
+            AVG (sp.VALUE) VALUE,
+            SUM (DECODE (t.url, 0, 0, 1)) urls,
+            SUM (DECODE (NVL (s.ts, 0), 1, 1, 0)) ts1,
+            SUM (DECODE (NVL (s.auditor, 0), 1, 1, 0)) auditor1,
+            SUM (DECODE (s.ts, NULL, 1, 0)) tsnull,
+            SUM (DECODE (s.auditor, NULL, 1, 0)) auditornull,
+            /*
+               CASE
+                  WHEN SUM (DECODE (NVL (s.ts, 0), 1, 1, 0)) THEN 2
+                  WHEN SUM (DECODE (NVL (s.ts, 0), 1, 1, 0)) THEN 3
+                  ELSE 1
+               END
+               ok_ts,
+            SUM (
+               CASE
+                  WHEN (s.visitdate IS NOT NULL AND s.auditor IS NOT NULL) THEN 2
+                  WHEN (t.h_url IS NOT NULL AND s.auditor IS NULL) THEN 3
+                  ELSE 1
+               END)
+               ok_auditor,
+            SUM (CASE WHEN s.ts = 1 THEN 2 WHEN s.ts = 2 THEN 3 ELSE 1 END) st_ts,
+            SUM (
+               CASE
+                  WHEN s.auditor = 1 THEN 2
+                  WHEN s.auditor = 2 THEN 3
+                  ELSE 1
+               END)
+               st_auditor,*/
+            CASE WHEN zst.lu_fio IS NOT NULL THEN 2 ELSE 1 END ok_st_tm,
+            SUM (NVL (s.traid, 0)) reject_traid,
+            SUM (CASE WHEN s.auditor = 2 THEN 1 ELSE 0 END) reject_auditor,
+            SUM (CASE WHEN s.traid = 1 OR s.auditor = 2 THEN 1 ELSE 0 END)
+               reject_traid_or_auditor,
+            COUNT (
+               DISTINCT CASE
+                           WHEN s.ts = 1 AND s.traid <> 1 AND s.auditor <> 2
+                           THEN
+                              NVL (t.name_to, 'null')
+                        END)
+               ts1r,
+            CASE WHEN str.tp_kod IS NOT NULL THEN 1 END reject_traid_in_month
+       FROM A18TOzst zst,
+            A18TO_gr_by_url t,
+            (SELECT DISTINCT dpt_id,
+                             tp_place,
+                             tp_type,
+                             tp_type_short,
+                             tab_number,
+                             tp_kod
+               FROM routes) r,
+            user_list u,
+            A18TOtp s,
+            (  SELECT TRUNC (visitdate, 'mm') dt, tp_kod
+                 FROM A18TOtp
+                WHERE traid = 1
+             GROUP BY TRUNC (visitdate, 'mm'), tp_kod) str,
+            parents ptm,
+            user_list utm,
+            parents prm,
+            user_list urm,
+            (  SELECT data, h_fio_eta, AVG (VALUE) VALUE
+                 FROM A14TOsp
+             GROUP BY data, h_fio_eta) sp,
+            (SELECT dpt_id,
+                    tp_kod,
+                    dt,
+                    summa,
+                    coffee,
+                    eta_tab_number
+               FROM a14mega) m,
+            calendar c,
+            departments d,
+            a18to_type_standart ats
+      WHERE     u.dpt_id = d.dpt_id
+            AND u.is_spd = 1
+            AND t.tp_kod_key = zst.tp_kod_key(+)
+            AND zst.dt(+) = TRUNC (t.visitdate, 'mm')
+            AND t.h_fio_eta = sp.h_fio_eta(+)
+            AND TRUNC (t.visitdate, 'mm') = sp.data(+)
+            AND ptm.parent = utm.tn
+            AND ptm.tn = u.tn
+            AND prm.parent = urm.tn
+            AND prm.tn = utm.tn
+            AND u.tab_num = t.tab_num
+            AND u.dpt_id = m.dpt_id
+            AND u.dpt_id = r.dpt_id
+            AND t.tp_kod_key = r.tp_kod
+            AND t.visitdate = s.visitdate(+)
+            AND t.tp_kod_key = s.tp_kod(+)
+            AND t.h_name_to = s.h_name_to(+)
+            AND TRUNC (t.visitdate, 'mm') = str.dt(+)
+            AND t.tp_kod_key = str.tp_kod(+)
+            AND TRUNC (t.visitdate, 'mm') = m.dt(+)
+            AND t.tp_kod_key = m.tp_kod(+)
+            AND t.visitdate = c.data
+            AND s.h_type_standart = ats.h_type_standart(+)
+   /*AND t.visitdate BETWEEN '10/08/2018' AND '12/08/2018'
+   AND utm.tn = 3065107278
+   AND t.tp_kod_key = 3000736839*/
+   GROUP BY urm.fio,
+            urm.tn,
+            utm.fio,
+            utm.tn,
+            u.tn,
+            u.region_name,
+            t.h_fio_eta,
+            t.visitdate,
+            c.y,
+            c.my,
+            u.fio,
+            t.fio_eta,
+            t.tp_kod_key,
+            t.tp_ur,
+            t.tp_addr,
+            r.tp_place,
+            r.tp_type,
+            r.tp_type_short,
+            t.visit,
+            TO_CHAR (zst.lu, 'dd.mm.yyyy hh24:mi:ss'),
+            zst.lu_fio,
+            zst.comm,
+            u.dpt_id,
+            u.dpt_name,
+            d.manufak,
+            m.summa,
+            m.eta_tab_number,
+            u.tab_num,
+            utm.tab_num,
+            urm.tab_num,
+            str.tp_kod
+   ORDER BY tp_kod_key								N	N
+A18TO_NAME_TO	80	SELECT DISTINCT name_to, h_name_to
+     FROM a18to
+    WHERE name_to IS NOT NULL								N	N
+A18TO_TYPE_STANDART	98	SELECT DISTINCT type_standart, h_type_standart
+     FROM a18to
+    WHERE type_standart IS NOT NULL								N	N
+A18TO_VISITS	613	SELECT visitdate,
+            dm_kod,
+            tp_kod_key,
+            tp_ur,
+            tp_addr,
+            fio_ts,
+            fio_eta,
+            h_fio_eta,
+            visit,
+            target,
+            target_info,
+            tab_num,
+            SUM (DECODE (url, NULL, 0, 1)) urls,
+            COUNT (DISTINCT name_to) cto
+       FROM a18to
+   GROUP BY visitdate,
+            dm_kod,
+            tp_kod_key,
+            tp_ur,
+            tp_addr,
+            fio_ts,
+            fio_eta,
+            h_fio_eta,
+            visit,
+            target,
+            target_info,
+            tab_num								N	N
+ACTSVOD4BI	317	SELECT f.act,
+          f.act_name,
+          f.act_month,
+          s.tp_kod,
+          s.bonus
+     FROM bud_act_fund f, act_svodt s
+    WHERE     f.act = s.act
+          AND TO_NUMBER (TO_CHAR (f.act_month, 'mm')) = s.m
+          AND f.act_month >= TO_DATE ('01.01.2016', 'dd.mm.yyyy')
+/*AND NVL (s.bonus, 0) > 0*/								N	N
+CALENDAR1STDAY	132	SELECT "DATA","Y","Q","MY","WM","DY","DW","IS_WD","MT","DWT","DM","WY","DWTC"
+     FROM calendar
+    WHERE TRUNC (data, 'mm') = data								N	N
+COST_PLAN_NETS_KK	1250	SELECT "ID_NET",
+          "NET_NAME",
+          "PERIOD",
+          "TOTAL",
+          "CODE_BUDJET_TYPE",
+          "CODE_BUDJET_ITEM",
+          "KOD1S",
+          "PAY_FORMAT"
+     FROM (  SELECT n.id_net,
+                    n.net_name,
+                    TO_DATE ('01.' || m.month || '.' || m.year, 'dd.mm.yyyy')
+                       period,
+                    SUM (m.total) total,
+                    s.code_budjet_type,
+                    s.code_budjet_item,
+                    n.kod1s,
+                    f.pay_format
+               FROM nets_plan_month m,
+                    nets n,
+                    statya s,
+                    payment_format f
+              WHERE     m.plan_type = 3
+                    AND m.id_net = n.id_net
+                    AND m.statya = s.id
+                    AND m.payment_format = f.id
+           GROUP BY n.id_net,
+                    n.net_name,
+                    TO_DATE ('01.' || m.month || '.' || m.year, 'dd.mm.yyyy'),
+                    s.code_budjet_type,
+                    s.code_budjet_item,
+                    n.kod1s,
+                    f.pay_format)
+    WHERE period BETWEEN ADD_MONTHS (TRUNC (SYSDATE, 'mm'), -2)
+                     AND ADD_MONTHS (TRUNC (SYSDATE, 'mm'), 1)								N	N
+LIMITS_CURRENT	547	SELECT l.TN,
+          NVL (l.LIMITKOM, 0),
+          NVL (l.LIMITTRANS, 0),
+          NVL (l.LIMITPIT, 0),
+          NVL (l.LIMITPRED, 0),
+          NVL (l.LIMITKANC, 0),
+          NVL (l.LIMITMOB, 0),
+          NVL (l.LIMIT_CAR_VOL, 0),
+          NVL (l.gbo_installed, 0),
+          l.lu,
+          l.sz_id,
+          l.zay_id,
+          u.fio lu_fio
+     FROM limits l,
+          (  SELECT TN, MAX (lu) lu
+               FROM limits
+           GROUP BY tn) lm,
+          user_list u
+    WHERE l.tn = lm.tn AND l.lu = lm.lu AND l.lu_tn = u.tn(+)								N	N
+MEDIA_PLAN_2	1826	SELECT z.id z_id,
+          getZayFieldVal (z.id,
+                          'admin_id',
+                          6,
+                          1)
+             act,
+          fn_getname (z.tn) creator,
+          ns.status_name,
+          n.id_net,
+          n.net_name,
+          getZayFieldVal (z.id, 'admin_id', 10) tz_cnt,
+          getZayFieldVal (z.id, 'admin_id', 11) dtm_cnt,
+          dt_start,
+          dt_end,
+          (SELECT y || ' ' || mt
+             FROM calendar
+            WHERE data = dt_start AND ROWNUM = 1)
+             month,
+          getZayFieldVal (z.id, 'admin_id', 2) conditions,
+          getZayFieldVal (z.id, 'var_name', 'v8') sales_plan,
+          getZayFieldVal (z.id, 'var_name', 'v30') plan,
+          getZayFieldVal (z.id, 'var_name', 'v10') zat_perc,
+          getZayFieldVal (z.id, 'admin_id', 17) docs,
+          getZayFieldId (z.id, 'admin_id', 17) docs_field_id,
+          at.name1 z_status,
+          getZayFieldVal (z.id,
+                          'var_name',
+                          'v33',
+                          1)
+             is_price_action,
+          ss.cost_item
+     FROM bud_ru_zay z,
+          nets n,
+          nets_status ns,
+          accept_types at,
+          statya ss
+    WHERE     st IN (SELECT id
+                       FROM bud_ru_st_ras
+                      WHERE name LIKE 'КК: Заказ%')
+          AND z.id_net = n.id_net
+          AND n.id_status = ns.id
+          AND get_bud_ru_zay_cur_status (z.id) = at.id
+          /*AND z.dt_start >= '01.01.2017'*/
+          AND z.valid_no = 0
+          AND z.statya = ss.id
+          AND ss.id IN (3, 49476400)
+          AND get_bud_ru_zay_cur_status (z.id) <> 2
+/*AND getZayFieldVal (z.id,
+                       'var_name',
+                       'v33',
+                       1) = 'Да'*/
+/*ORDER BY z.lu DESC*/								N	N
+MSREPORTBYVISITS	4999	SELECT plan.DATA,
+          plan.FIO,
+          plan.NUM,
+          plan.FIO_OTV,
+          plan.TZ_OBLAST,
+          plan.NET_NAME,
+          plan.UR_TZ_NAME,
+          plan.TZ_ADDRESS,
+          plan.AG_NAME,
+          plan.PLAN_MINUTES,
+          plan.PLAN_MR,
+          fakt.fakt_minutes,
+          NVL (fakt.fakt_mr, 0) fakt_mr,
+          fakt.sku sku_count,
+          g.minutes gps_minutes,
+          plan.kodtp
+     FROM (SELECT c.data,
+                  u.fio,
+                  rh.num,
+                  rh.fio_otv,
+                  cpp1.tz_oblast,
+                  cpp1.id cpp1_id,
+                  n.net_name,
+                  ur_tz_name,
+                  tz_address,
+                  ra.name ag_name,
+                  rb.vv,
+                  rb.id rb_id,
+                  rb.day_TIME_MR plan_minutes,
+                  CASE WHEN rb.day_TIME_MR > 0 THEN 1 ELSE 0 END plan_mr,
+                  cpp1.kodtp
+             FROM routes_body1 rb,
+                  routes_head rh,
+                  routes_head_agents rha,
+                  routes_agents ra,
+                  routes_tp rt,
+                  cpp cpp1,
+                  svms_oblast s,
+                  ms_nets n,
+                  (SELECT DISTINCT data, dm FROM calendar) c,
+                  user_list u
+            WHERE     rh.data = TRUNC (c.data, 'mm')
+                  AND u.tn = rh.tn
+                  AND rb.day_num = c.dm
+                  AND rh.id = rb.head_id
+                  AND rh.id = rha.head_id
+                  AND ra.id = rha.ag_id
+                  AND ra.id = rb.ag_id
+                  AND rh.id = rt.head_id
+                  AND rb.kodtp = rt.kodtp
+                  AND rh.tn = s.tn
+                  AND rb.vv = rha.vv
+                  AND rha.vv = rt.vv
+                  AND cpp1.tz_oblast = s.oblast
+                  AND cpp1.kodtp = rb.kodtp
+                  AND cpp1.kodtp = rt.kodtp
+                  AND n.id_net = cpp1.id_net
+                  AND (rb.DAY_enabled_MR = 1)) plan,
+          (  SELECT mr.dt,
+                    mr.rb_id,
+                    MR_FAKT fakt_minutes,
+                    CASE WHEN MR_FAKT > 0 THEN 1 END fakt_mr,
+                    COUNT (DISTINCT msb.name) sku
+               FROM merch_report mr,
+                    routes_body1 rb,
+                    routes_head rh,
+                    routes_head_agents rha,
+                    routes_agents ra,
+                    routes_tp rt,
+                    cpp cpp1,
+                    svms_oblast s,
+                    ms_nets n,
+                    (SELECT DISTINCT data, dm FROM calendar) c,
+                    merch_report_ok mro,
+                    merch_spec_head msh,
+                    merch_spec_body msb
+              WHERE     rh.data = TRUNC (c.data, 'mm')
+                    AND mr.dt = c.data
+                    AND rb.day_num = c.dm
+                    AND rb.id = mr.rb_id
+                    AND rh.id = rb.head_id
+                    AND rh.id = rha.head_id
+                    AND ra.id = rha.ag_id
+                    AND ra.id = rb.ag_id
+                    AND rh.id = rt.head_id
+                    AND rb.kodtp = rt.kodtp
+                    AND rh.tn = s.tn
+                    AND rb.vv = rha.vv
+                    AND rha.vv = rt.vv
+                    AND cpp1.tz_oblast = s.oblast
+                    AND cpp1.kodtp = rb.kodtp
+                    AND cpp1.kodtp = rt.kodtp
+                    AND n.id_net = cpp1.id_net
+                    AND (  NVL (
+                              (SELECT id
+                                 FROM merch_report_vv
+                                WHERE     head_id = rh.id
+                                      AND ag_id = ra.id
+                                      AND kod_tp = cpp1.kodtp
+                                      AND dt = mr.dt),
+                              0)
+                         + rb.vv <> 1)
+                    AND (rb.DAY_enabled_MR = 1)
+                    AND mro.dt = mr.dt
+                    AND mro.head_id = rh.id
+                    AND rha.ag_id = msh.ag_id
+                    AND rb.kodtp = msh.kod_tp
+                    AND rb.ag_id = msh.ag_id
+                    AND rt.kodtp = msh.kod_tp
+                    AND msh.id = msb.head_id
+                    AND msh.id_net = cpp1.id_net
+                    AND msh.sd = fn_get_spec_dt (msh.id_net,
+                                                 msh.ag_id,
+                                                 msh.kod_tp,
+                                                 mr.dt)
+           GROUP BY mr.dt, mr.rb_id, MR_FAKT) fakt,
+          (  SELECT dt,
+                    kod_ag,
+                    kod_tp,
+                    SUM (time_out - time_in) * 24 * 60 minutes
+               FROM merch_report_gps
+           GROUP BY dt, kod_tp, kod_ag) g
+    WHERE     plan.data = fakt.dt(+)
+          AND plan.rb_id = fakt.rb_id(+)
+          AND plan.data = g.dt(+)
+          AND plan.cpp1_id = g.kod_tp(+)
+          AND plan.num = g.kod_ag(+)								N	N
+MS_CPP	380	SELECT DISTINCT cpp.id,
+                   cpp.tz_oblast,
+                   cpp.ur_tz_name,
+                   cpp.tz_address,
+                   cpp.id_net,
+                   cpp.city,
+                   u.tab_num
+     FROM user_list u,
+          routes_head h,
+          routes_body1 b,
+          cpp
+    WHERE u.tn(+) = h.tn AND h.id(+) = b.head_id AND cpp.kodtp = b.kodtp(+)								N	N
+MS_REP_HBR_DT_VIEW	1436	SELECT h.id_net,
+          h.ag_id,
+          h.kod_tp,
+          c.data,
+          (SELECT id
+             FROM merch_spec_head
+            WHERE     id_net = h.id_net
+                  AND ag_id = h.ag_id
+                  AND kod_tp = h.kod_tp
+                  AND sd <= c.data
+                  AND sd >=
+                         (SELECT MAX (sd)
+                            FROM merch_spec_head
+                           WHERE     id_net = h.id_net
+                                 AND ag_id = h.ag_id
+                                 AND kod_tp = h.kod_tp
+                                 AND sd <= c.data))
+             id
+     FROM merch_spec_head h, calendar c
+    WHERE     c.data >= h.sd
+          AND TRUNC (c.data, 'mm') IN (SELECT DISTINCT data FROM routes_head)
+          AND h.id =
+                 (SELECT id
+                    FROM merch_spec_head
+                   WHERE     id_net = h.id_net
+                         AND ag_id = h.ag_id
+                         AND kod_tp = h.kod_tp
+                         AND sd <= c.data
+                         AND sd >=
+                                (SELECT MAX (sd)
+                                   FROM merch_spec_head
+                                  WHERE     id_net = h.id_net
+                                        AND ag_id = h.ag_id
+                                        AND kod_tp = h.kod_tp
+                                        AND sd <= c.data))
+ 
+ 								N	N
+MS_SPEC_SKU_BY_TP	1009	SELECT cpp.id TP_ID,
+            r.rb_kodtp,
+            r.rb_data DT,
+            r.rb_ag_id AG_ID,
+            r.ra_name AG_NAME,
+            msb.art msb_art,
+            msb.name msb_name,
+            msb.brand msb_brand,
+            msb.izm msb_izm,
+            msb.weight msb_weight,
+            msb.kod msb_kod,
+            cpp.kodtp_new
+       FROM user_list u,
+            ms_rep_hbr_dt msh,
+            merch_spec_body msb,
+            (SELECT DISTINCT rb_kodtp,
+                             rb_data,
+                             rb_ag_id,
+                             ra_name,
+                             n_id_net,
+                             rh_tn
+               FROM ms_rep_routes1) r,
+            cpp
+      WHERE     r.rb_kodtp = cpp.kodtp
+            AND u.tn = r.rh_tn
+            AND msh.kod_tp = r.rb_kodtp
+            AND msh.ag_id = r.rb_ag_id
+            AND msh.id_net = r.n_id_net
+            AND msb.head_id = msh.id
+            AND msh.data = r.rb_data
+   ORDER BY tp_id, dt, ag_name								N	N
+MS_SPEC_SKU_BY_TP1	965	SELECT cpp.id tp_id,
+            r.rb_kodtp,
+            r.rb_data dt,
+            r.rb_ag_id ag_id,
+            r.ra_name ag_name,
+            COUNT (*) msb_cnt
+       FROM user_list u,
+            ms_rep_hbr_dt msh,
+            merch_spec_body msb,
+            (SELECT DISTINCT rb_kodtp,
+                             rb_data,
+                             rb_ag_id,
+                             ra_name,
+                             n_id_net,
+                             rh_tn
+               FROM ms_rep_routes1) r,
+            cpp
+      WHERE     r.rb_kodtp = cpp.kodtp
+            AND u.tn = r.rh_tn
+            AND msh.kod_tp = r.rb_kodtp
+            AND msh.ag_id = r.rb_ag_id
+            AND msh.id_net = r.n_id_net
+            AND msb.head_id = msh.id
+            AND msh.data = r.rb_data
+   GROUP BY cpp.id,
+            r.rb_kodtp,
+            r.rb_data,
+            r.ra_name,
+            r.rb_ag_id,
+            msb.head_id
+   ORDER BY tp_id, dt, ag_name								N	N
+MS_SPEC_SKU_BY_TP2	982	SELECT cpp.id TP_ID,
+            r.rb_kodtp,
+            r.rb_data DT,
+            r.rb_ag_id AG_ID,
+            r.ra_name AG_NAME,
+            msb.art msb_art,
+            msb.name msb_name,
+            msb.brand msb_brand,
+            msb.izm msb_izm,
+            msb.weight msb_weight,
+            msb.kod msb_kod
+       FROM user_list u,
+            ms_rep_hbr_dt msh,
+            merch_spec_body msb,
+            (SELECT DISTINCT rb_kodtp,
+                             rb_data,
+                             rb_ag_id,
+                             ra_name,
+                             n_id_net,
+                             rh_tn
+               FROM ms_rep_routes1) r,
+            cpp
+      WHERE     r.rb_kodtp = cpp.kodtp
+            AND u.tn = r.rh_tn
+            AND msh.kod_tp = r.rb_kodtp
+            AND msh.ag_id = r.rb_ag_id
+            AND msh.id_net = r.n_id_net
+            AND msb.head_id = msh.id
+            AND msh.data = r.rb_data
+   ORDER BY tp_id, dt, ag_name								N	N
+PARENTS	106	SELECT exp_tn parent, emp_tn tn
+       FROM emp_exp e
+      WHERE full = 1
+   ORDER BY parent, tn 
+ 
+ 
+ 
+ 								N	N
+PARENTS_ETA	416	SELECT DISTINCT r.tab_number,
+                   r.h_eta,
+                   r.eta,
+                   p.fio chief_fio,
+                   p.tn chief_tn,
+                   p.dpt_id,
+                   p.region_name,
+                   p.department_name
+     FROM routes r, user_list p
+    WHERE     r.tab_number > 0
+          AND p.tab_num = r.tab_number
+          AND r.dpt_id = p.dpt_id
+          AND p.is_spd = 1								N	N
+PROPORTIONS	1152	SELECT np.dpt_id,
+            np.cnt_name,
+            np.id_net,
+            np.net_name,
+            np.y year,
+            np.id proportion_id,
+            np.proportion_name,
+            np.shop_format_id,
+            np.shop_format_name,
+            ty.perc,
+            ty.face,
+            np.sw_kod
+       FROM (SELECT d.cnt_name,
+                    n.dpt_id,
+                    c.y,
+                    n.id_net,
+                    n.net_name,
+                    np.id,
+                    np.proportion_name,
+                    n.sw_kod,
+                    f.id shop_format_id,
+                    f.name shop_format_name
+               FROM departments d,
+                    (SELECT DISTINCT y FROM calendar) c,
+                    nets n,
+                    nets_proportions np,
+                    NETS_PROP_SHOP_FORMATS f
+              WHERE d.dpt_id = n.dpt_id AND n.activ = 1 AND np.visible = 1) np,
+            nets_props_year ty
+      WHERE     np.y = ty.year(+)
+            AND np.ID = ty.prop_id(+)
+            AND np.shop_format_id = ty.shop_format(+)
+            AND np.id_net = ty.id_net(+)
+   ORDER BY np.net_name, np.ID								N	N
+ST_A_B_COFFEE	4182	SELECT list.manufak,
+          list.y,
+          list.m,
+          list.fio_rm,
+          list.fio_tm,
+          list.fio_ts,
+          list.fio_eta,
+          st_ab.sttotp_a,
+          st_ab.sttotp_manual_a,
+          st_ab.stelag_a,
+          tumb_a,
+          st_ab.sttotp_b,
+          st_ab.sttotp_manual_b,
+          st_ab.stelag_b,
+          st_ab.tumb_b,
+          st_co.tp_st st_coffee
+     FROM (SELECT DISTINCT manufak,
+                           y,
+                           m,
+                           fio_rm,
+                           fio_tm,
+                           fio_ts,
+                           fio_eta,
+                           h_fio_eta
+             FROM a16co_mv
+           UNION
+           SELECT DISTINCT manufak,
+                           y,
+                           m,
+                           fio_rm,
+                           fio_tm,
+                           fio_ts,
+                           fio_eta,
+                           h_fio_eta
+             FROM a14to_mv) list,
+          (  SELECT manufak,
+                    y,
+                    m,
+                    h_fio_eta,
+                    SUM (CASE WHEN standart = 'A' THEN sttotp END) sttotp_a,
+                    SUM (CASE WHEN standart = 'A' THEN sttotp_manual END)
+                       sttotp_manual_a,
+                    SUM (CASE WHEN standart = 'A' THEN stelag END) stelag_a,
+                    SUM (CASE WHEN standart = 'A' THEN tumb END) tumb_a,
+                    SUM (CASE WHEN standart = 'B' THEN sttotp END) sttotp_b,
+                    SUM (CASE WHEN standart = 'B' THEN sttotp_manual END)
+                       sttotp_manual_b,
+                    SUM (CASE WHEN standart = 'B' THEN stelag END) stelag_b,
+                    SUM (CASE WHEN standart = 'B' THEN tumb END) tumb_b
+               FROM (  SELECT manufak,
+                              y,
+                              m,
+                              h_fio_eta,
+                              tp_kod_key,
+                              COUNT (
+                                 DISTINCT CASE
+                                             WHEN     zst_lu IS NOT NULL
+                                                  AND NVL (reject_traid_in_month,
+                                                           0) = 0
+                                             THEN
+                                                tp_kod_key
+                                          END)
+                                 sttotp,
+                              COUNT (
+                                 DISTINCT CASE
+                                             WHEN     zst_lu_fio IS NOT NULL
+                                                  AND NVL (reject_traid_in_month,
+                                                           0) = 0
+                                             THEN
+                                                tp_kod_key
+                                          END)
+                                 sttotp_manual,
+                              standart,
+                              stelag,
+                              tumb
+                         FROM a14to_mv z
+                     GROUP BY manufak,
+                              y,
+                              m,
+                              h_fio_eta,
+                              tp_kod_key,
+                              standart,
+                              stelag,
+                              tumb)
+           GROUP BY manufak,
+                    y,
+                    m,
+                    h_fio_eta) st_ab,
+          (  SELECT manufak,
+                    y,
+                    m,
+                    h_fio_eta,
+                    COUNT (DISTINCT tp_st) tp_st
+               FROM a16co_mv z
+           GROUP BY manufak,
+                    y,
+                    m,
+                    h_fio_eta) st_co
+    WHERE     list.manufak = st_ab.manufak
+          AND list.y = st_ab.y
+          AND list.m = st_ab.m
+          AND list.h_fio_eta = st_ab.h_fio_eta
+          AND list.manufak = st_co.manufak
+          AND list.y = st_co.y
+          AND list.m = st_co.m
+          AND list.h_fio_eta = st_co.h_fio_eta								N	N
+UNFINISHED_TASKS	2189	SELECT tsk.dt,
+            tsk.ag_id,
+            a.name ag_name,
+            tsk.kod_tp,
+            tsk.login,
+            tsk.lu,
+            tsk.text,
+            tsk.id,
+            tsk.task_type,
+            cpp.tz_oblast,
+            cpp.h_tz_oblast,
+            cpp.city,
+            cpp.h_city,
+            cpp.tz_address,
+            cpp.kodtp,
+            cpp.id_net,
+            n.net_name,
+            p.comm zak_name
+       FROM (SELECT f.dt,
+                    f.ag_id,
+                    f.kod_tp,
+                    c.login,
+                    c.lu,
+                    c.text,
+                    c.id,
+                    '1.file' task_type
+               FROM merch_spec_report_files f, MERCH_SPEC_REPORT_FILES_CHAT c
+              WHERE     f.id = c.msr_file_id
+                    AND f.chat_closed = 0
+                    AND f.last_is_spd = -1
+             UNION
+             SELECT c.dt,
+                    c.ag_id,
+                    c.kod_tp,
+                    c.login,
+                    c.lu,
+                    c.text,
+                    c.id,
+                    '2.tz' task_type
+               FROM merch_chat c, merch_chat_closed cc
+              WHERE     c.dt = cc.dt(+)
+                    AND c.ag_id = cc.ag_id(+)
+                    AND c.kod_tp = cc.kod_tp(+)
+                    AND cc.dt IS NULL
+                    AND cc.ag_id IS NULL
+                    AND cc.kod_tp IS NULL
+                    AND FN_GET_mc_last (c.dt, c.ag_id, c.kod_tp) = -1
+                    AND FN_GET_mc_closed (c.dt, c.ag_id, c.kod_tp) = 0
+             ORDER BY dt,
+                      ag_id,
+                      kod_tp,
+                      task_type,
+                      id) tsk,
+            cpp,
+            ms_nets n,
+            routes_agents a,
+            user_list u,
+            routes_agents_pwd p
+      WHERE     cpp.kodtp = tsk.kod_tp
+            AND cpp.id_net = n.id_net
+            AND tsk.ag_id = a.id
+            AND tsk.login = u.login
+            AND DECODE (u.is_spd, 1, 1, 0) = 0
+            AND tsk.login = p.login
+   ORDER BY tsk.dt,
+            tsk.ag_id,
+            tsk.kod_tp,
+            tsk.task_type,
+            tsk.id								N	N
+VIEW_BONUSES	1663	SELECT d.manufak,
+          d.dpt_name,
+          b.tab_num,
+          u.fio,
+          t.koef category_koef,
+          t.name category_name,
+          st.pcode subcategory_code,
+          st.name subcategory_name,
+          h.text,
+          b.summa,
+          h.sz_id cause_id,
+             'СЗ № '
+          || h.sz_id
+          || ' от '
+          || TO_CHAR ( (SELECT created
+                          FROM sz
+                         WHERE id = h.sz_id),
+                      'dd.mm.yyyy')
+             cause,
+          TO_DATE (TO_CHAR ( (SELECT created
+                                FROM sz
+                               WHERE id = h.sz_id),
+                            'dd.mm.yyyy'),
+                   'dd.mm.yyyy')
+             cause_created,
+          u.tn inn
+     FROM bonus_head h,
+          bonus_body b,
+          bonus_types t,
+          bonus_types st,
+          user_list u,
+          departments d
+    WHERE     ( (b.tn = u.tn AND u.tab_num IS NOT NULL) OR b.h_eta = u.h_eta)
+          AND u.dpt_id = d.dpt_id
+          AND u.datauvol IS NULL
+          AND d.manufak IS NOT NULL
+          AND EXISTS
+                 (SELECT *
+                    FROM sz
+                   WHERE id = h.sz_id)
+          AND DECODE (  (SELECT COUNT (*)
+                           FROM sz_accept
+                          WHERE sz_id = h.sz_id)
+                      - (SELECT COUNT (*)
+                           FROM sz_accept
+                          WHERE sz_id = h.sz_id AND accepted = 1),
+                      0, 1,
+                      0) = 1
+          AND h.id = b.bonus_id
+          AND t.id = h.bonus_type
+          AND st.id = h.bonus_subtype								N	N
+VIEW_VACATIONS	999	SELECT d.manufak,
+          d.dpt_name,
+          u.tab_num,
+          u.fio,
+          v.v_from vacation_start,
+          v.v_to vacation_finish,
+          v.v_to - v.v_from + 1 vacation_days,
+          v.sz_id order_id,
+          (SELECT created
+             FROM sz
+            WHERE id = v.sz_id)
+             order_created,
+          u.tn inn
+     FROM vacation v, user_list u, departments d
+    WHERE     v.tn = u.tn
+          AND u.dpt_id = d.dpt_id
+          AND u.datauvol IS NULL
+          AND u.tab_num IS NOT NULL
+          AND d.manufak IS NOT NULL
+          AND (SELECT COUNT (*)
+                 FROM sz
+                WHERE id = v.sz_id) = 1
+          AND DECODE (  (SELECT COUNT (*)
+                           FROM sz_accept
+                          WHERE sz_id = v.sz_id)
+                      - (SELECT COUNT (*)
+                           FROM sz_accept
+                          WHERE sz_id = v.sz_id AND accepted = 1),
+                      0, 1,
+                      0) = 1								N	N

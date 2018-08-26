@@ -1,0 +1,569 @@
+OWNER	MVIEW_NAME	CONTAINER_NAME	QUERY	QUERY_LEN	UPDATABLE	UPDATE_LOG	MASTER_ROLLBACK_SEG	MASTER_LINK	REWRITE_ENABLED	REWRITE_CAPABILITY	REFRESH_MODE	REFRESH_METHOD	BUILD_MODE	FAST_REFRESHABLE	LAST_REFRESH_TYPE	LAST_REFRESH_DATE	STALENESS	AFTER_FAST_REFRESH	UNKNOWN_PREBUILT	UNKNOWN_PLSQL_FUNC	UNKNOWN_EXTERNAL_TABLE	UNKNOWN_CONSIDER_FRESH	UNKNOWN_IMPORT	UNKNOWN_TRUSTED_FD	COMPILE_STATE	USE_NO_INDEX	STALE_SINCE	NUM_PCT_TABLES	NUM_FRESH_PCT_REGIONS	NUM_STALE_PCT_REGIONS
+PERSIK	A18TO_MV_ST	A18TO_MV_ST	SELECT fio_rm,
+            tn_rm,
+            fio_tm,
+            tn_tm,
+            fio_ts,
+            tn,
+            tp_kod_key,
+            region_name,
+            fio_eta,
+            h_fio_eta,
+            eta_tab_number,
+            tab_num_ts,
+            tab_num_tm,
+            tab_num_rm,
+            visitdate,
+            urls,
+            cto,
+            zst_lu,
+            visit,
+            VALUE,
+            summa,
+            SUM (ts1r) ts1r,
+            CASE
+               WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
+                       'Стандарт А'
+               THEN
+                  'Стандарт А'
+               WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
+                       'Стандарт А (минимум)'
+               THEN
+                  'Стандарт А (минимум)'
+            END
+               standart_tp
+       FROM (SELECT z.*
+               FROM a18to_mv z)
+   GROUP BY fio_rm,
+            tn_rm,
+            fio_tm,
+            tn_tm,
+            fio_ts,
+            tn,
+            tp_kod_key,
+            region_name,
+            fio_eta,
+            h_fio_eta,
+            eta_tab_number,
+            tab_num_ts,
+            tab_num_tm,
+            tab_num_rm,
+            visitdate,
+            urls,
+            cto,
+            zst_lu,
+            visit,
+            VALUE,
+            summa	1354	N				N	NONE	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	12/08/2018 14:32:30	NEEDS_COMPILE	NEEDS_COMPILE	N	N	N	N	N	N	NEEDS_COMPILE	N	21/08/2018 11:08:32	0		
+PERSIK	MV_SVS_NEW_VIEW	MV_SVS_NEW_VIEW	SELECT s.dpt_id,
+          s.dt,
+          zp.fil,
+          NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0) total,
+          -s.summskidka skidka_val,
+            (NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0))
+          * CASE
+               WHEN NVL (sv.cash, 0) = 1
+               THEN
+                  1
+               ELSE
+                    (  1
+                     -   NVL ( (SELECT discount
+                                  FROM bud_fil_discount_body
+                                 WHERE dt = s.dt AND distr = zp.fil),
+                              0)
+                       / 100)
+                  * (SELECT bonus_log_koef
+                       FROM bud_fil
+                      WHERE id = zp.fil)
+            END
+             compens_distr,
+          t.tp_kod,
+          tpn.net_kod
+     FROM a14mega s,
+          user_list u,
+          (SELECT DISTINCT
+                  TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4)) tp_kod,
+                  u.dpt_id
+             FROM bud_ru_zay z, user_list u
+            WHERE     (SELECT NVL (tu, 0)
+                         FROM bud_ru_st_ras
+                        WHERE id = z.kat) = 1
+                  AND z.tn = u.tn
+                  AND z.report_data IS NOT NULL
+                  AND (SELECT rep_accepted
+                         FROM bud_ru_zay_accept
+                        WHERE     z_id = z.id
+                              AND accept_order =
+                                     DECODE (
+                                        NVL (
+                                           (SELECT MAX (accept_order)
+                                              FROM bud_ru_zay_accept
+                                             WHERE     z_id = z.id
+                                                   AND rep_accepted = 2),
+                                           0),
+                                        0, (SELECT MAX (accept_order)
+                                              FROM bud_ru_zay_accept
+                                             WHERE     z_id = z.id
+                                                   AND rep_accepted IS NOT NULL),
+                                        (SELECT MAX (accept_order)
+                                           FROM bud_ru_zay_accept
+                                          WHERE     z_id = z.id
+                                                AND rep_accepted = 2))) = 1
+                  AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))
+                         IS NOT NULL) t,
+          sc_svodn sv,
+          bud_svod_zp zp,
+          tp_nets tpn
+    WHERE     s.h_eta = zp.h_eta
+          AND s.dt = zp.dt
+          AND s.dpt_id = zp.dpt_id
+          AND s.dt = sv.dt(+)
+          AND s.dpt_id = sv.dpt_id(+)
+          AND s.tp_kod = sv.tp_kod(+)
+          AND s.tab_num = u.tab_num
+          AND s.dpt_id = u.dpt_id
+          AND s.dpt_id = t.dpt_id
+          AND s.tp_kod = t.tp_kod
+          AND s.tp_kod = tpn.tp_kod(+)
+   UNION
+     SELECT s.dpt_id,
+            s.dt,
+            s.fil,
+            NVL (SUM (sv.bonus_fakt), 0) + NVL (SUM (sv.fixed_fakt), 0) total,
+            SUM (skidka_val) skidka_val,
+            SUM (
+                 (NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0))
+               * CASE
+                    WHEN NVL (sv.cash, 0) = 1 THEN 1
+                    ELSE s.compens_distr_koef
+                 END)
+               compens_distr,
+            NULL tp_kod,
+            s.net_kod
+       FROM (  SELECT s.dt,
+                      s.dpt_id,
+                      s.net_kod,
+                      s.db,
+                      s.fil,
+                      -SUM (s.summskidka) skidka_val,
+                        (  1
+                         -   NVL ( (SELECT discount
+                                      FROM bud_fil_discount_body
+                                     WHERE dt = s.dt AND distr = s.fil),
+                                  0)
+                           / 100)
+                      * (SELECT bonus_log_koef
+                           FROM bud_fil
+                          WHERE id = s.fil)
+                         compens_distr_koef
+                 FROM (SELECT tpn.net_kod,
+                              u.tn,
+                              p.parent db,
+                              m.h_eta,
+                              m.summskidka,
+                              f.id fil,
+                              m.dt,
+                              m.dpt_id
+                         FROM a14mega m,
+                              user_list u,
+                              parents p,
+                              tp_nets tpn,
+                              bud_fil f,
+                              bud_tn_fil tf
+                        WHERE     m.tp_kod = tpn.tp_kod
+                              AND u.tn = p.tn
+                              AND u.tab_num = m.tab_num
+                              AND u.dpt_id = m.dpt_id
+                              AND f.id = tf.bud_id
+                              AND tf.tn = p.parent
+                              AND f.dpt_id = m.dpt_id) s,
+                      (SELECT DISTINCT
+                              TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14))
+                                 chain,
+                              u.dpt_id
+                         FROM bud_ru_zay z, user_list u
+                        WHERE     (SELECT NVL (tu, 0)
+                                     FROM bud_ru_st_ras
+                                    WHERE id = z.kat) = 1
+                              AND z.tn = u.tn
+                              AND z.report_data IS NOT NULL
+                              AND (SELECT rep_accepted
+                                     FROM bud_ru_zay_accept
+                                    WHERE     z_id = z.id
+                                          AND accept_order =
+                                                 DECODE (
+                                                    NVL (
+                                                       (SELECT MAX (accept_order)
+                                                          FROM bud_ru_zay_accept
+                                                         WHERE     z_id = z.id
+                                                               AND rep_accepted = 2),
+                                                       0),
+                                                    0, (SELECT MAX (accept_order)
+                                                          FROM bud_ru_zay_accept
+                                                         WHERE     z_id = z.id
+                                                               AND rep_accepted
+                                                                      IS NOT NULL),
+                                                    (SELECT MAX (accept_order)
+                                                       FROM bud_ru_zay_accept
+                                                      WHERE     z_id = z.id
+                                                            AND rep_accepted = 2))) =
+                                     1
+                              AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 14))
+                                     IS NOT NULL) t,
+                      (SELECT fil,
+                              h_eta,
+                              dt,
+                              dpt_id
+                         FROM bud_svod_zp
+                        WHERE fil IS NOT NULL) zp
+                WHERE     s.dt = zp.dt
+                      AND s.fil = zp.fil
+                      AND s.dpt_id = zp.dpt_id
+                      AND s.h_eta = zp.h_eta
+                      AND s.net_kod = t.chain
+                      AND s.dpt_id = t.dpt_id
+             GROUP BY s.dt,
+                      s.dpt_id,
+                      s.net_kod,
+                      s.fil,
+                      s.db) s,
+            sc_svodn sv
+      WHERE     s.dt = sv.dt(+)
+            AND s.net_kod = sv.net_kod(+)
+            AND s.fil = sv.fil(+)
+            AND s.db = sv.db(+)
+            AND s.dpt_id = sv.dpt_id(+)
+   GROUP BY s.dpt_id,
+            s.dt,
+            s.fil,
+            s.net_kod
+   	8176	N				N	NONE	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 15:00:00	UNKNOWN	NA	N	Y	N	N	N	N	VALID	N		0	45	0
+PERSIK	MS_REP_HBR_DT	MS_REP_HBR_DT	SELECT id_net,
+       ag_id,
+       kod_tp,
+       data,
+       id
+  FROM MS_REP_HBR_DT_VIEW	92	N				N	GENERAL	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 13:00:00	FRESH	NA	N	N	N	N	N	N	VALID	N	26/08/2018 10:52:36	0		
+PERSIK	A14TO_MV_ST	A14TO_MV_ST	SELECT dpt_id,
+            TRUNC (visitdate, 'mm') period,
+            fio_ts,
+            fio_eta,
+            TP_UR,
+            TP_ADDR,
+            tn,
+            h_fio_eta,
+            tp_kod_key,
+            SUM (ts1) ts1,
+            AVG (summa) summa,
+            COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
+               visit_fakt,
+            CASE
+               WHEN COUNT (DISTINCT tp_kod_key || visitdate) = SUM (ts1) THEN 1
+            END
+               sttobytp,
+            CASE WHEN zst_lu_fio IS NOT NULL THEN 1 END ok_st_tm,
+            STANDART
+       FROM a14to_mv1
+   GROUP BY dpt_id,
+            TRUNC (visitdate, 'mm'),
+            fio_ts,
+            fio_eta,
+            TP_UR,
+            TP_ADDR,
+            tn,
+            h_fio_eta,
+            tp_kod_key,
+            zst_lu_fio,
+            STANDART	858	N				N	TEXTMATCH	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 14:30:00	STALE	NA	N	N	N	N	N	N	VALID	N	26/08/2018 11:52:45	0		
+PERSIK	MS_REP_HBR_NEW	MS_REP_HBR_NEW	SELECT h.id h_id,
+          h.id_net h_id_net,
+          h.ag_id h_ag_id,
+          h.kod_tp h_kod_tp,
+          h.data h_data,
+          b.id b_id,
+          b.head_id b_head_id,
+          b.sort b_sort,
+          b.art b_art,
+          b.name b_name,
+          b.brand b_brand,
+          b.izm b_izm,
+          b.weight b_weight,
+          b.kod b_kod,
+          r.id r_id,
+          r.spec_id r_spec_id,
+          r.dt r_dt,
+          r.remain r_remain,
+          r.oos r_oos,
+          r.gos r_gos,
+          r.fcount r_fcount,
+          r.price r_price,
+          r.text r_text
+     FROM MS_REP_HBR_DT h, merch_spec_body b, merch_spec_report r
+    WHERE b.head_id = h.id AND r.spec_id = b.id AND r.dt = h.data	714	N				N	GENERAL	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 13:53:36	NEEDS_COMPILE	NEEDS_COMPILE	N	N	N	N	N	N	NEEDS_COMPILE	N	26/08/2018 11:17:42	0		
+PERSIK	MS_REP_ROUTES1	MS_REP_ROUTES1	SELECT DISTINCT *
+     FROM (SELECT rh.id rh_id,
+                  rh.data rh_data,
+                  rh.tn rh_tn,
+                  rh.fio_otv rh_fio_otv,
+                  rh.num rh_num,
+                  rh.pos_otv rh_pos_otv,
+                  rh.login rh_login,
+                  n.id_net n_id_net,
+                  n.net_name n_net_name,
+                  rb.id rb_id,
+                  rb.ag_id rb_ag_id,
+                  rb.kodtp rb_kodtp,
+                  ra.name ra_name,
+                  cpp1.ur_tz_name cpp1_ur_tz_name,
+                  cpp1.tz_address cpp1_tz_address,
+                  cpp1.tz_oblast cpp1_tz_oblast,
+                  cpp1.h_tz_oblast cpp1_h_tz_oblast,
+                  cpp1.city cpp1_city,
+                  cpp1.h_city cpp1_h_city,
+                  cpp1.id cpp1_id,
+                  rb.vv vv,
+                  rb.day_num rb_day_num,
+                  c.data rb_data
+             FROM routes_body1 rb,
+                  routes_head rh,
+                  routes_head_agents rha,
+                  routes_agents ra,
+                  routes_tp rt,
+                  cpp cpp1,
+                  svms_oblast s,
+                  ms_nets n,
+                  (SELECT DISTINCT data, dm FROM calendar) c
+            WHERE     rh.id = rha.head_id
+                  AND rh.id = rb.head_id
+                  AND rh.id = rt.head_id
+                  AND rha.ag_id = rb.ag_id
+                  AND rb.kodtp = rt.kodtp
+                  AND rha.ag_id = ra.id
+                  AND rb.kodtp = cpp1.kodtp
+                  AND rh.tn = s.tn
+                  AND rb.vv = rha.vv
+                  AND rha.vv = rt.vv
+                  AND cpp1.tz_oblast = s.oblast
+                  AND n.id_net = cpp1.id_net
+                  AND rh.DATA = TRUNC (c.data, 'mm')
+                  AND c.dm = rb.day_num
+                  AND rb.DAY_enabled_MR = 1)	1870	N				N	GENERAL	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 09:38:19	NEEDS_COMPILE	NEEDS_COMPILE	N	N	N	N	N	N	NEEDS_COMPILE	N	26/08/2018 10:12:31	0		
+PERSIK	USER_LIST	USER_LIST	SELECT su.access_ocenka,
+          st.amort,
+          DECODE (sms.login, NULL, st.birthday, sms.birthday) birthday,
+          st.car_brand,
+          st.car_rashod,
+          DECODE (
+             sms.login,
+             NULL, DECODE (
+                      sue.login,
+                      NULL, DECODE (INSTR (su.login, 'fil'),
+                                    1, d_fil.cnt_kod,
+                                    d.cnt_kod),
+                      d_eta.cnt_kod),
+             (SELECT cnt_kod
+                FROM departments
+               WHERE dpt_id = 1))
+             cnt_kod,
+          DECODE (
+             sms.login,
+             NULL, DECODE (
+                      sue.login,
+                      NULL, DECODE (INSTR (su.login, 'fil'),
+                                    1, d_fil.cnt_name,
+                                    d.cnt_name),
+                      d_eta.cnt_name),
+             (SELECT cnt_name
+                FROM departments
+               WHERE dpt_id = 1))
+             cnt_name,
+          d.cur_id,
+          TO_CHAR (st.datastart, 'dd/mm/yyyy') datastart,
+          DECODE (sue.login,
+                  NULL, DECODE (sms.login, NULL, st.datauvol, sms.datauvol),
+                  sue.datauvol)
+             datauvol,
+          DECODE (
+             sue.login,
+             NULL, st.department_name,
+             (SELECT department_name
+                FROM spdtree
+               WHERE     tab_num =
+                            (SELECT tab_number
+                               FROM routes
+                              WHERE     h_eta = sue.h_eta
+                                    AND dpt_id = sue.dpt_id
+                                    AND ROWNUM = 1)
+                     AND ROWNUM = 1))
+             department_name,
+          DECODE (
+             sms.login,
+             NULL, DECODE (
+                      sue.login,
+                      NULL, DECODE (INSTR (su.login, 'fil'),
+                                    1, d_fil.dpt_id,
+                                    d.dpt_id),
+                      d_eta.dpt_id),
+             1)
+             dpt_id,
+          DECODE (
+             sms.login,
+             NULL, DECODE (
+                      sue.login,
+                      NULL, DECODE (INSTR (su.login, 'fil'),
+                                    1, d_fil.dpt_name,
+                                    d.dpt_name),
+                      d_eta.dpt_name),
+             (SELECT dpt_name
+                FROM departments
+               WHERE dpt_id = 1))
+             dpt_name,
+          st.email e_mail,
+          SUBSTR (NVL (fn_getname (su.tn), NVL (su.fio, '')), 0, 255) fio,
+          DECODE (sue.login, NULL, NULL, sue.h_eta) h_eta,
+          fn_has_child_db (st.svideninn) has_child_db,
+          fn_has_parent_db (st.svideninn) has_parent_db,
+          su.id,
+          su.login,
+          st.ocenka,
+          st.oplatakat,
+          su.password,
+          st.phone,
+          DECODE (sms.login, NULL, p.pos_id, sms.pos_id) pos_id,
+          DECODE (sms.login, NULL, p.pos_name, sms.dolgn) pos_name,
+          DECODE (
+             sue.login,
+             NULL, st.region_name,
+             (SELECT region_name
+                FROM spdtree
+               WHERE     tab_num =
+                            (SELECT tab_number
+                               FROM routes
+                              WHERE     h_eta = sue.h_eta
+                                    AND dpt_id = sue.dpt_id
+                                    AND ROWNUM = 1)
+                     AND ROWNUM = 1))
+             region_name,
+          st.res,
+          st.res_dt,
+          st.res_pos_id,
+          st.res_pos_name,
+          st.skype,
+          DECODE (sms.login, NULL, st.start_company, sms.start_company)
+             start_company,
+          st.start_pos,
+          DECODE (
+             sue.login,
+             NULL, st.tab_num,
+             (SELECT eta_tab_number
+                FROM routes
+               WHERE h_eta = sue.h_eta AND dpt_id = sue.dpt_id AND ROWNUM = 1))
+             tab_num,
+          /*DECODE (sue.login, NULL, su.tn, sue.tn)*/
+          su.tn tn,
+          su.update_date,
+          d.valuta,
+          st.without_kk,
+          st.is_acceptor,
+          st.is_admin,
+          fn_is_assist (st.svideninn) is_assist,
+          st.is_bud_admin,
+          st.is_coach,
+          st.is_db,
+          st.is_dc,
+          st.is_dm,
+          st.is_do,
+          st.is_don,
+          pk.is_dpu,
+          DECODE (sue.login, NULL, 0, 1) is_eta,
+          sue.is_eta_kk,
+          DECODE (INSTR (su.login, 'fil'), 1, 1, 0) is_fil,
+          st.is_fin_man,
+          st.is_it,
+          TO_NUMBER (
+             DECODE (
+                  NVL (pk.is_mkk, 0)
+                + NVL (pk.is_mkk_new, 0)
+                + NVL (pk.is_rmkk, 0)
+                + NVL (pk.is_nmkk, 0),
+                0, NULL,
+                1))
+             is_kk,
+          st.is_kpr,
+          st.is_ma,
+          pk.is_mkk,
+          pk.is_mkk_new,
+          DECODE (sms.pos_id, 157758941, 1, st.is_mservice) is_mservice,
+          DECODE (sms.pos_id, 157758941, 1, NULL) is_smr,
+          st.is_mz,
+          st.is_mz_admin,
+          st.is_mz_buh,
+          pk.is_ndp,
+          pk.is_nm,
+          pk.is_nmkk,
+          pk.is_nmms,
+          st.is_prez,
+          pk.is_rm,
+          pk.is_rmkk,
+          st.is_run,
+          TO_NUMBER (DECODE (st.svideninn, NULL, NULL, 1)) is_spd,
+          st.is_super,
+          st.is_test_admin,
+          pk.is_tm,
+          st.is_top,
+          st.is_traid,
+          st.is_traid_kk,
+          pk.is_ts,
+          DECODE (sms.login,
+                  NULL, DECODE (sue.login, NULL, p.parent, pe.chief_tn),
+                  sms.chief)
+             chief_tn,
+          DECODE (sue.login, NULL, sup.fio, pe.chief_fio) chief_fio
+     FROM spr_users su
+          LEFT JOIN spr_users_eta sue ON sue.login = su.login
+          LEFT JOIN spr_users_ms sms ON sms.login = su.login
+          LEFT JOIN bud_fil bf ON bf.login = su.login
+          LEFT JOIN spdtree st ON su.tn = st.svideninn
+          LEFT JOIN pos p
+             ON p.pos_id =
+                   DECODE (sue.login,
+                           NULL, st.pos_id,
+                           DECODE (sue.is_eta_kk, 1, 72, 16369373))
+          LEFT JOIN pos_kk pk ON pk.pos_id = st.pos_id
+          LEFT JOIN departments d_fil ON bf.dpt_id = d_fil.dpt_id
+          LEFT JOIN departments d ON st.dpt_id = d.dpt_id
+          LEFT JOIN departments d_eta ON sue.dpt_id = d_eta.dpt_id
+          LEFT JOIN parents p ON su.tn = p.tn
+          LEFT JOIN
+          (SELECT DISTINCT r.h_eta,
+                           s.svideninn chief_tn,
+                           s.fam || ' ' || s.im || ' ' || s.otch chief_fio,
+                           s.dpt_id dpt_id
+             FROM routes r, spdtree s
+            WHERE     r.tab_number > 0
+                  AND s.tab_num = r.tab_number
+                  AND r.dpt_id = s.dpt_id
+                  AND s.datauvol IS NULL) pe
+             ON pe.h_eta = sue.h_eta AND pe.dpt_id = sue.dpt_id
+          LEFT JOIN spr_users sup
+             ON TO_CHAR (
+                   DECODE (sms.login,
+                           NULL, p.parent,
+                           DECODE (NVL (sms.chief, 0), 0, NULL, sms.chief))) =
+                   sup.login	7302	N				N	NONE	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 14:30:00	FRESH	NA	N	N	N	N	N	N	VALID	N	26/08/2018 11:52:45	0		
+PERSIK	FULL	FULL	SELECT z3.full,
+          z3.master,
+          z3.slave,
+          s.dpt_id,
+          s.datauvol
+     FROM (SELECT z1.emp_tn master,
+                  z2.emp_tn slave,
+                  fn_get_full (z1.emp_tn, z2.emp_tn) full
+             FROM (SELECT emp_tn FROM emp_exp
+                   UNION
+                   SELECT exp_tn FROM emp_exp) z1,
+                  (SELECT emp_tn FROM emp_exp
+                   UNION
+                   SELECT exp_tn FROM emp_exp) z2) z3,
+          spdtree s
+    WHERE z3.full <> -1 AND z3.slave = s.svideninn	545	N				N	NONE	DEMAND	COMPLETE	IMMEDIATE	NO	COMPLETE	26/08/2018 06:50:02	UNKNOWN	NA	N	Y	N	N	N	N	VALID	N		0		
