@@ -7,8 +7,8 @@ SELECT SUM (bonus4tp) bonus4tp, sum(cto) cto
                             'Стандарт А'
                     THEN
                        60
-                    WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
-                            'Стандарт А (минимум)'
+                    WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) IN ('Стандарт А (минимум)',
+                                                                    'Стандарт А,Стандарт А (минимум)')
                     THEN
                        10
                  END

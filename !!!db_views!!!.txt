@@ -500,7 +500,7 @@ A18TO_GR_BY_URL	589	SELECT VISITDATE,
             name_to,
             H_FIO_ETA,
             h_name_to								N	N
-A18TO_MV	7139	SELECT urm.fio fio_rm,
+A18TO_MV	7225	SELECT urm.fio fio_rm,
             urm.tn tn_rm,
             utm.fio fio_tm,
             utm.tn tn_tm,
@@ -606,7 +606,9 @@ A18TO_MV	7139	SELECT urm.fio fio_rm,
                reject_traid_or_auditor,
             COUNT (
                DISTINCT CASE
-                           WHEN s.ts = 1 AND s.traid <> 1 AND s.auditor <> 2
+                           WHEN     s.ts = 1
+                                AND NVL (s.traid, 0) <> 1
+                                AND NVL (s.auditor, 0) <> 2
                            THEN
                               NVL (t.name_to, 'null')
                         END)

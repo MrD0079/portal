@@ -6,14 +6,14 @@
          tn_tm key,
          wm_concat (DISTINCT region_name) region_name,
          COUNT (DISTINCT tp_kod_key) tp_cnt,
-         COUNT (DISTINCT tp_kod_key || visitdate) visit_plan,
-         COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
+         sum(visitdate)/*COUNT (DISTINCT tp_kod_key || visitdate)*/ visit_plan,
+         sum(visit)/*   COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))*/
             visit_fakt,
          DECODE (
-            COUNT (DISTINCT tp_kod_key || visitdate),
+            sum(visitdate)/*COUNT (DISTINCT tp_kod_key || visitdate)*/,
             0, 0,
-              COUNT (DISTINCT DECODE (urls, 0, NULL, tp_kod_key || visitdate))
-            / COUNT (DISTINCT tp_kod_key || visitdate)
+              sum(visit)/*   COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))*/
+            / sum(visitdate)/*COUNT (DISTINCT tp_kod_key || visitdate)*/
             * 100)
             perc_photo_rep,
          /*COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, tp_kod_key)) STTOTP,*/

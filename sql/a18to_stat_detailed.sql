@@ -33,8 +33,8 @@
                     'Стандарт А'
             THEN
                60
-            WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
-                    'Стандарт А (минимум)'
+            WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) IN ('Стандарт А (минимум)',
+                                                                    'Стандарт А,Стандарт А (минимум)')
             THEN
                10
          END
@@ -50,8 +50,8 @@
                     'Стандарт А'
             THEN
                'Стандарт А'
-            WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
-                    'Стандарт А (минимум)'
+            WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) IN ('Стандарт А (минимум)',
+                                                                    'Стандарт А,Стандарт А (минимум)')
             THEN
                'Стандарт А (минимум)'
          END
@@ -61,8 +61,8 @@
                     'Стандарт А'
             THEN
                60
-            WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
-                    'Стандарт А (минимум)'
+            WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) IN ('Стандарт А (минимум)',
+                                                                    'Стандарт А,Стандарт А (минимум)')
             THEN
                10
          END
@@ -152,8 +152,8 @@ reject_traid_in_month*/
                              'Стандарт А'
                      THEN
                         'Стандарт А'
-                     WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) =
-                             'Стандарт А (минимум)'
+                     WHEN wm_concat (DISTINCT NVL (standart_tp, 'null')) IN ('Стандарт А (минимум)',
+                                                                    'Стандарт А,Стандарт А (минимум)')
                      THEN
                         'Стандарт А (минимум)'
                   END

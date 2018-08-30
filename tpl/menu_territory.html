@@ -35,7 +35,16 @@
 {/if}
 
 {if ($cnt_kod eq "ua" or $cnt_kod eq "exp") and not $is_eta and $cnt_kod neq 'nr'}
-    <li><a href="javascript:void(0);"><span class="dir">Стандарт ТО</span></a>
+    {if $cnt_kod eq "ua"}
+        <li><a href="javascript:void(0);"><span class="dir">Стандарт А 2.0</span></a>
+                <ul>
+                                {if $is_ts}<li><a href="?action=a18to_report">Вечерний отчет</a></li>{/if}
+                                <li><a href="?action=a18to_accept">Подтверждение</a></li>
+                                <li><a href="?action=a18to_stat">Статистика</a></li>
+                </ul>
+        </li>
+    {/if}
+    <li><a href="javascript:void(0);"><span class="dir">Стандарт Б</span></a>
             <ul>
                     {if $cnt_kod eq "ua"}
                             {if $is_ts}<li><a href="?action=a14to_report2">Вечерний отчет</a></li>{/if}
@@ -51,15 +60,6 @@
                     <li><a href="?action=a14to_nophoto">Нет фото</a></li>
             </ul>
     </li>
-    {if $cnt_kod eq "ua"}
-        <li><a href="javascript:void(0);"><span class="dir">Стандарт А 2.0</span></a>
-                <ul>
-                                {if $is_ts}<li><a href="?action=a18to_report">Вечерний отчет</a></li>{/if}
-                                <li><a href="?action=a18to_accept">Подтверждение</a></li>
-                                <li><a href="?action=a18to_stat">Статистика</a></li>
-                </ul>
-        </li>
-    {/if}
     {if ($cnt_kod eq "ua" or $cnt_kod eq "exp")}
         <li><a href="javascript:void(0);"><span class="dir">Стандарт кофе</span></a>
                 <ul>

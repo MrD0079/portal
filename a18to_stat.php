@@ -111,6 +111,7 @@ if (isset($_REQUEST["save"]))
 		$sql=stritr($sql,$params);
                 $sql=stritr($sql,$params);
 		$t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                //echo $sql;
 		$smarty->assign('tt', $t);
 		$sql=rtrim(file_get_contents('sql/a18to_stat_total1.sql'));
 		$sql=stritr($sql,$params);
