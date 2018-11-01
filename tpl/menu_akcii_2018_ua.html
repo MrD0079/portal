@@ -398,6 +398,22 @@
                 {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1810cf&action=act_report_v">Отчет ВСТМ</a></li>{/if}
             </ul>
         </li>
+        <li><a href="javascript:void(0);"><span class="dir">Только лучшее</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~W6UF9">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1810otb&action=a1810otb_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                                                        <li><a href="?act=a1810otb&action=a1810otb_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1810otb&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+        <li><a href="javascript:void(0);"><span class="dir">Сезон Шедевра</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~T8Bxp">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1810sos&action=a1810sos_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                                                          <li><a href="?act=a1810sos&action=a1810sos_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1810sos&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
     </ul>
 </li>
 

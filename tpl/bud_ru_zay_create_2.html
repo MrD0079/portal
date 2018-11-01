@@ -41,9 +41,16 @@
 
     function check_required(increment)
     {
-            $cnt=$cnt+increment;
+	$cnt = $cnt + increment;
+//	var select = $('#bud_ru_acceptors_new' + $cnt );
+//	var innEmployee = '';
+
+//	$(select )	
+
+	//$('#save').attr('disabled', true);
+           // $cnt=$cnt+increment;
             $cnt>0 ? $("#acc").val($cnt) : $("#acc").val(null);
-            $cnt>0 ? $("#save").attr('disabled',false) : $("#save").attr('disabled',true);
+           // $cnt>0 ? $("#save").attr('disabled',false) : $("#save").attr('disabled',true);
     }
 
     function add_executor(id)
@@ -54,8 +61,37 @@
             $a++;
     }
 
+	
+	
+	
+	
     </script>
     {/literal}
+	
+	{if $smarty.request.for_kk == 'on'}
+		{literal}
+		<script>
+			$(document).ready(function(){
+		$('#save').click(function(e){
+			var babec = false;
+			var select = $('[id^="bud_ru_acceptors_new"]');
+			for(var i = 0; i <= $cnt; i++){
+				if( $(select[i]).val() != undefined && $(select[i]).val() === '2923402273' ){
+					console.log($(select[i]).val())
+					babec = true;
+				}
+			}
+			if(babec){
+				$(this).attr('disabled', false);
+			}else{
+				alert('Роман Бабец обязательный участник согласования заявки КК.');
+			return false;
+			}
+		})
+	})
+		</script>
+		{/literal}
+	{/if}
     {if $smarty.request.save}
             {if $smarty.request.admin}
                     <h1>{if $smarty.request.tu eq 1}Цели на переговоры{else}Заявка на активность{/if}, документ сохранен</h1>

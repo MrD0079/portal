@@ -26,7 +26,7 @@ echo "</pre>";
 isset($akcii_local)?$smarty->assign("akcii_local", $akcii_local):null;
 
 
-
+$smarty->force_compile = true;
 $smarty->display('menu.html');
 
 
