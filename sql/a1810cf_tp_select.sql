@@ -11,7 +11,7 @@
                  FROM routes
                 WHERE tp_kod = a1810cf.tp_kod AND ROWNUM = 1))
             contact_lpr
-    FROM A1810CF_TP_SELECT a1810cftps, a1810cf, user_list st
+    FROM a1810cf_tp_select a1810cftps, a1810cf, user_list st
    WHERE     a1810cf.tab_num = st.tab_num
          AND (   st.tn IN (SELECT slave
                              FROM full

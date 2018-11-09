@@ -9,22 +9,13 @@ SELECT d.tp_kod,
                0, 0,
                d.fact_target / d.plan_target * 100)
           perc_target,
-       d.plan_akc,
-       d.fact_akc,
-       DECODE (NVL (d.plan_akc, 0),
-               0, 0,
-               d.fact_akc / d.plan_akc * 100)
-          perc_akc,
        CASE
           WHEN     DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
                AND DECODE (NVL (d.plan_target, 0),
                            0, 0,
                            d.fact_target / d.plan_target * 100) >= 100
-               AND DECODE (NVL (d.plan_akc, 0),
-                           0, 0,
-                           d.fact_akc / d.plan_akc * 100) >= 100
           THEN
-             NVL (d.plan, 0) * 0.06
+             NVL (d.plan, 0) * 0.08
        END
           max_bonus,
        d.fio_eta,

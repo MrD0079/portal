@@ -2,7 +2,7 @@
 {if not $smarty.request.print}
 	<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
 	{if $is_ts eq 1}
-		{include file="a1810otb_report_a_select.html"}
+		{include file="a1810sos_report_a_select.html"}
 		<p>
 		{if $smarty.request.selected_tp}
 			{foreach key=tp_key item=tp_item from=$tp name=tp}
@@ -12,7 +12,7 @@
 			{/foreach}
 		{/if}
 		</p>
-		{include file="a1810otb_report_a_action_nakl_select.html"}
+		{include file="a1810sos_report_a_action_nakl_select.html"}
 	{/if}
 	{if $is_ts neq 1 and $is_eta neq 1}
 		По руководителю:
@@ -67,16 +67,16 @@
 
 {if $smarty.request.generate}
 	{if not $smarty.request.print}
-		<p><a href="?act=a1810otb&action=a1810otb_report_a&print=1&excel=1&generate=1&filename=Ход акции Сезон Baristi 5">Экспорт в Excel</a></p>
+		<p><a href="?act=a1810sos&action=a1810sos_report_a&print=1&excel=1&generate=1&filename=Ход акции Сезон Шедевра">Экспорт в Excel</a></p>
 		<input type=hidden name=generate value="Выбрать">
 	{/if}
 
-	{include file="a1810otb_report_a_1.html"}
-	{include file="a1810otb_report_a_2.html"}
+	{include file="a1810sos_report_a_1.html"}
+	{include file="a1810sos_report_a_2.html"}
 
 
 	{if $is_eta neq 1}
-		{include file="a1810otb_report_a_3.html"}
+		{include file="a1810sos_report_a_3.html"}
 	{/if}
 
 
@@ -88,14 +88,14 @@
 {if $smarty.request.generate and not $smarty.request.print and not $is_eta and $is_ts and not $ok_chief}
 	<form target="_self" method="POST" name=form_report1 id=form_report1 enctype="multipart/form-data">
 	<input type=hidden name=generate value='Выбрать'>
-	{include file="a1810otb_report_a_4.html"}
+	{include file="a1810sos_report_a_4.html"}
 	</form>
 {/if}
 
 {if $smarty.request.generate and not $smarty.request.print and $is_db}
 	<form target="_self" method="POST" name=form_report1 id=form_report1 enctype="multipart/form-data">
 	<input type=hidden name=generate value='Выбрать'>
-	{include file="a1810otb_report_a_5.html"}
+	{include file="a1810sos_report_a_5.html"}
 	</form>
 {/if}
 
