@@ -13,3 +13,4 @@
 /.htaccess
 /php_errors.log
 /nbproject
+.idea/
