@@ -417,15 +417,20 @@
     </ul>
 </li>
 
-<!--
-<li><a href="javascript:void(0);"><span class="dir">Октябрь</span></a>
-<ul>
-</ul>
-</li>
 <li><a href="javascript:void(0);"><span class="dir">Ноябрь</span></a>
 <ul>
+    <li><a href="javascript:void(0);"><span class="dir">Выгодное предложение</span></a>
+        <ul>
+            <li><a target=_blank href="https://bitrix.avk.ua/~Zzuvx">Условия акции</a></li>
+            {if $is_ts}                             <li><a href="?act=a1811pp&action=a1811pp_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+            <li><a href="?act=a1811pp&action=a1811pp_report_a">Отчет по акции</a></li>
+            {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811pp&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+        </ul>
+    </li>
 </ul>
 </li>
+
+<!--
 <li><a href="javascript:void(0);"><span class="dir">Декабрь</span></a>
 <ul>
 </ul>
