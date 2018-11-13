@@ -18,9 +18,9 @@
         <td>ПЛАН стр. Бренд,<br>{$valuta}</td>
         <td>ФАКТ стр. Бренд,<br>{$valuta}</td>
         <td>% выполнения по стр. Бренд</td>
-        <td>ПЛАН Акционный асортимент,<br>{$valuta}</td>
-        <td>ФАКТ Акционный асортимент,<br>{$valuta}</td>
-        <td>% выполнения по Акционный асортимент</td>
+        <!--<td>ПЛАН Акционный асортимент,<br>{$valuta}</td>-->
+        <!--<td>ФАКТ Акционный асортимент,<br>{$valuta}</td>-->
+        <!--<td>% выполнения по Акционный асортимент</td>-->
         <td>Бонус расчетный</td>
         <td>Дата<br>выдачи<br>бонуса<br>
             {if $is_ts and not $smarty.request.print}
@@ -49,9 +49,9 @@
     <td style="text-align:right">{$list_item.fact_target|default:0|num:2}</td>
     <td style="text-align:right">{$list_item.perc_target|default:0|num:2}</td>
 
-    <td style="text-align:right">{$list_item.plan_akc|default:0|num:2}</td>
-    <td style="text-align:right">{$list_item.fact_akc|default:0|num:2}</td>
-    <td style="text-align:right">{$list_item.perc_akc|default:0|num:2}</td>
+    <!--<td style="text-align:right">{$list_item.plan_akc|default:0|num:2}</td>-->
+    <!--<td style="text-align:right">{$list_item.fact_akc|default:0|num:2}</td>-->
+    <!--<td style="text-align:right">{$list_item.perc_akc|default:0|num:2}</td>-->
 
 
     <td style="text-align:right">{$list_item.max_bonus|default:0|num:2}</td>
