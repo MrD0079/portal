@@ -1,0 +1,19 @@
+{if not $smarty.request.print}
+<h2>
+    Отчет по акции закончил
+    {if not $list_db.ok_traid}
+    <input
+            type=checkbox
+            {if $list_db.part1 eq 1}checked{/if}
+    onClick="
+    $('#ok_db').attr('disabled',false);
+    $('#ok_db').val(this.checked?1:0);
+    "
+    >
+    <input type=submit name=save id=save value="Сохранить">
+    <input type=hidden disabled name=ok_db id=ok_db {if $list_db.part1 eq 1}value=1{/if}>
+    {else}
+    {$list_db.lu}
+    {/if}
+</h2>
+{/if}
