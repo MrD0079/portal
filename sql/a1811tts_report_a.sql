@@ -88,8 +88,9 @@ SELECT d.tp_kod,
        AND (   :ok_plan = 0
             OR :ok_plan =
                   CASE
-                     WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >=
-                             100
+                     WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
+                          -- if all uslovija fkcii
+                          AND  DECODE (NVL (d.plan_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
                      THEN
                         1
                      ELSE
