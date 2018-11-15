@@ -23,7 +23,7 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
 
                           ELSE NVL (d.plan, 0) * 0.1 --uslovie 1
                      END
-                  ELSE 0
+                  --ELSE 0
                END
 --                CASE
 --                WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
@@ -82,4 +82,12 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                AND d.tp_kod = tp.tp_kod
                AND DECODE ( :eta_list, '', d.h_fio_eta, :eta_list) = d.h_fio_eta
                AND DECODE ( :ok_bonus, 0, 0, DECODE (tp.bonus_dt1, NULL, 2, 1)) = :ok_bonus
-               AND ( :ok_plan = 0 OR :ok_plan = CASE WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100 THEN 1 ELSE 2 END))
+               AND ( :ok_plan = 0
+                    OR :ok_plan = CASE
+                                    WHEN DECODE (NVL (d.fact, 0), 0, 0, d.fact / d.plan * 100) >= 100
+                                      AND  DECODE (NVL (d.fact_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
+                                    THEN 1
+                                    ELSE 2
+                                  END)
+        )
+
