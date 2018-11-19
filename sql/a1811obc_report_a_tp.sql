@@ -1,4 +1,3 @@
-/* Formatted on 29/01/2015 12:13:22 (QP5 v5.227.12220.39724) */
   SELECT a1811obc.tab_num,
          st.fio fio_ts,
          a1811obc.fio_eta,

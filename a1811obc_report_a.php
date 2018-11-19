@@ -1,4 +1,5 @@
 <?php
+
 include "act_report_a_1.php";
 if (isset($_REQUEST["add"])) {
     if (isset($_REQUEST["keys"])) {
@@ -100,6 +101,9 @@ if (isset($_REQUEST["save"])) {
         }
     }
 }
+
+
+
 $sql=rtrim(file_get_contents('sql/'.$_REQUEST['act'].'_report_a_tp.sql'));
 $sql=stritr($sql,$params);
 $tp = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -110,6 +114,7 @@ if ($_REQUEST["selected_tp"]!=0) {
     $nakl_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('nakl_list', $nakl_list);
 }
+
 include "act_report_a_2.php";
 include "act_report_a_3.php";
 ?>
