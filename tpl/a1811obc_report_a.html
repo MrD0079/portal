@@ -1,4 +1,5 @@
-<h1>Отчет по акции "Только лучшее Шоколад"</h1>
+<pre>{$sql_l}</pre>
+<h1>Отчет по акции "Только лучшее_Шоколад"</h1>
 {if not $smarty.request.print}
 	<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
 	{if $is_ts eq 1}
@@ -16,7 +17,7 @@
 	{/if}
 	{if $is_ts neq 1 and $is_eta neq 1}
 		<br>
-		<select name=exp_list_without_ts id=exp_list_without_ts >
+		<select name=exp_list_without_ts id=exp_list_without_ts class="chosen-select" data-placeholder="По руководителю:">
 			<option value=0>По руководителю:</option>
 			{foreach key=key item=item from=$exp_list_without_ts}
 			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
@@ -40,7 +41,7 @@
 
 		<br>
 		<select name=eta_list id=eta_list class="chosen-select" data-placeholder="По ЭТА:">
-			<option value="0">По ЭТА:</option>
+			<option value="">По ЭТА:</option>
 			{foreach key=key item=item from=$eta_list}
 			<option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
 			{/foreach}

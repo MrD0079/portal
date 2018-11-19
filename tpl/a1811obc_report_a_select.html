@@ -1,7 +1,7 @@
 <p>
 
 <select name=selected_tp id=selected_tp class="chosen-select" data-placeholder="ֲûבונטעו ֿׂ:">
-	<option value="0">ֲûבונטעו ֿׂ:</option>
+	<option>ֲûבונטעו ֿׂ:</option>
 	{foreach key=tp_key item=tp_item from=$tp name=tp}
 	<option value="{$tp_item.tp_kod}">{$tp_item.tp_kod} {$tp_item.tp_ur} ({$tp_item.tp_addr})</option>
 	{/foreach}
