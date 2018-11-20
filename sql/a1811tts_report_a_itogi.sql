@@ -1,24 +1,24 @@
 SELECT COUNT (DISTINCT tp_kod) cnt_tp,
        COUNT (DISTINCT DECODE (max_bonus, NULL, NULL, tp_kod)) if_cnt,
        SUM (plan) plan,
-       SUM (fact) fact,
+       SUM (fact_target) fact_target,
        SUM (max_bonus) max_bonus,
        SUM (bonus_sum1) bonus_sum1,
        COUNT (DISTINCT DECODE (bonus_dt1, NULL, NULL, tp_kod)) bonus_fakt_cnt,
-       DECODE (SUM (fact), 0, 0, SUM (bonus_sum1) / SUM (fact) * 100) zat
+       DECODE (SUM (fact_target), 0, 0, SUM (bonus_sum1) / SUM (fact_target) * 100) zat
   FROM (SELECT d.tp_kod,
                d.plan,
-               d.fact,
-               DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) perc,
+               d.fact_target,
+               DECODE (NVL (d.plan, 0), 0, 0, d.fact_target / d.plan * 100) perc,
                CASE
-                  WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
-                       AND  DECODE (NVL (d.plan_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
+                  WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact_target / d.plan * 100) >= 100
+                       AND  DECODE (NVL (d.plan_akc, 0), 0, 0, d.fact_akc / d.plan_akc * 100) >= 100
                   THEN
                      CASE
-                          WHEN DECODE(NVL(d.fact,0), 0 , 0, NVL(d.fact,0)) >= 12000 --uslovie 3
+                          WHEN DECODE(NVL(d.fact_target,0), 0 , 0, NVL(d.fact_target,0)) >= 12000 --uslovie 3
                           THEN 1200
 
-                          WHEN DECODE(NVL(d.fact,0), 0 , 0, NVL(d.fact,0)) >= 7000 --uslovie 2
+                          WHEN DECODE(NVL(d.fact_target,0), 0 , 0, NVL(d.fact_target,0)) >= 7000 --uslovie 2
                           THEN 700
 
                           ELSE NVL (d.plan, 0) * 0.1 --uslovie 1
@@ -84,8 +84,8 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                AND DECODE ( :ok_bonus, 0, 0, DECODE (tp.bonus_dt1, NULL, 2, 1)) = :ok_bonus
                AND ( :ok_plan = 0
                     OR :ok_plan = CASE
-                                    WHEN DECODE (NVL (d.fact, 0), 0, 0, d.fact / d.plan * 100) >= 100
-                                      AND  DECODE (NVL (d.fact_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
+                                    WHEN DECODE (NVL (d.fact_target, 0), 0, 0, d.fact_target / d.plan * 100) >= 100
+                                      AND  DECODE (NVL (d.fact_akc, 0), 0, 0, d.fact_akc / d.plan_akc * 100) >= 100
                                     THEN 1
                                     ELSE 2
                                   END)

@@ -1,22 +1,22 @@
 SELECT d.tp_kod,
        d.plan,
-       d.fact,
-       DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) perc,
-       d.plan_target,
        d.fact_target,
-       DECODE (NVL (d.plan_target, 0), -- check if (target != 0) or (plan != 0)
+       DECODE (NVL (d.plan, 0), 0, 0, d.fact_target / d.plan * 100) perc,
+       d.plan_akc,
+       d.fact_akc,
+       DECODE (NVL (d.plan_akc, 0), -- check if (target != 0) or (plan != 0)
                0, 0,
-               d.fact_target / d.plan_target * 100)
-          perc_target,
+               d.fact_akc / d.plan_akc * 100)
+          perc_akc,
       CASE
-          WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
-               AND  DECODE (NVL (d.plan_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
+          WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact_target / d.plan * 100) >= 100
+               AND  DECODE (NVL (d.plan_akc, 0), 0, 0, d.fact_akc / d.plan_akc * 100) >= 100
           THEN
              CASE
-                  WHEN DECODE(NVL(d.fact,0), 0 , 0, NVL(d.fact,0)) >= 12000 --uslovie 3
+                  WHEN DECODE(NVL(d.fact_target,0), 0 , 0, NVL(d.fact_target,0)) >= 12000 --uslovie 3
                   THEN 1200
 
-                  WHEN DECODE(NVL(d.fact,0), 0 , 0, NVL(d.fact,0)) >= 7000 --uslovie 2
+                  WHEN DECODE(NVL(d.fact_target,0), 0 , 0, NVL(d.fact_target,0)) >= 7000 --uslovie 2
                   THEN 700
 
                   ELSE NVL (d.plan, 0) * 0.1 --uslovie 1
@@ -88,9 +88,9 @@ SELECT d.tp_kod,
        AND (   :ok_plan = 0
             OR :ok_plan =
                   CASE
-                     WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
+                     WHEN DECODE (NVL (d.plan, 0), 0, 0, d.fact_target / d.plan * 100) >= 100
                           -- if all uslovija fkcii
-                          AND  DECODE (NVL (d.plan_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
+                          AND  DECODE (NVL (d.plan_akc, 0), 0, 0, d.fact_akc / d.plan_akc * 100) >= 100
                      THEN
                         1
                      ELSE

@@ -12,8 +12,8 @@
         <td>ФИО ТС<br></td>
         <td>ФИО ЭТА<br></td>
         <td>Код/Название/Адрес ТП<br></td>
-        <td>ПЛАН Вал грн. <br>{$valuta}</td>
-        <td>ФАКТ Вал грн.<br>{$valuta}</td>
+        <td>ПЛАН Вал <br>{$valuta}</td>
+        <td>ФАКТ Вал <br>{$valuta}</td>
         <td>% выполнения</td>
         <td>ПЛАН Акционный асортимент,<br>{$valuta}</td>
         <td>ФАКТ Акционный асортимент,<br>{$valuta}</td>
@@ -40,11 +40,11 @@
     <td>{$list_item.fio_eta}</td>
     <td>{$list_item.tp_kod} {$list_item.tp_ur} {$list_item.tp_addr}</td>
     <td style="text-align:right">{$list_item.plan|default:0|num:2}</td>
-    <td style="text-align:right">{$list_item.fact|default:0|num:2}</td>
-    <td style="text-align:right">{$list_item.perc|default:0|num:2}</td>
-    <td style="text-align:right">{$list_item.plan_target|default:0|num:2}</td>
     <td style="text-align:right">{$list_item.fact_target|default:0|num:2}</td>
-    <td style="text-align:right">{$list_item.perc_target|default:0|num:2}</td>
+    <td style="text-align:right">{$list_item.perc|default:0|num:2}</td>
+    <td style="text-align:right">{$list_item.plan_akc|default:0}</td>
+    <td style="text-align:right">{$list_item.fact_akc|default:0}</td>
+    <td style="text-align:right">{$list_item.perc_akc|default:0|num:2}</td>
     <td style="text-align:right">{$list_item.max_bonus|default:0|num:2}</td>
     <td style="text-align:center">
         {if not $smarty.request.print and $is_ts and $ok_chief_4ts.part1 neq 1 and $list_item.max_bonus}
@@ -116,6 +116,3 @@
     <input type=submit name=save id=save class=save value="Сохранить">
     {/if}
 </p>
-
-
-
