@@ -1,0 +1,55 @@
+<table border=0 cellpadding=0 cellspacing=0 width=100% style="font-size:8pt">
+    <tr style="text-align:center;">
+        <td colspan="2" style="text-align:center;">
+            <p><img src="design/logo.png" border="0"/></p>
+            <h3>
+                ДИРЕКЦИЯ ПО ПРОДАЖАМ ООО "АВК КОНФЕКШИНЭРИ"
+            </h3>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:left;">№{$data_tpl.head.id} от {$data_tpl.head.created}</td>
+        <td style="text-align:right;">
+            <b>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$data_tpl.head.dt_start}<br>
+            <b>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$data_tpl.head.dt_end}<br>
+            <b>Регион / Подразделение:</b>{$data_tpl.head.region_name}<br>
+            <b>ФИО РМ:</b>{$data_tpl.head.rm_fio}<br>
+            <b>Статья:</b>{$data_tpl.head.st_name}<br>
+            <b>Категория:</b>{$data_tpl.head.kat_name}<br>
+            <b>Дистрибьютор:</b>{$data_tpl.head.fil_name}<br>
+            <b>Фонд:</b>{$data_tpl.head.funds_name}<br>
+            <b>Инициатор:</b>{$data_tpl.head.creator_pos_name},{$data_tpl.head.creator_department_name},<font style="color:red">{$data_tpl.head.creator}</font><br>
+            <b>Адресат:</b>{$data_tpl.head.recipient_pos_name},{$data_tpl.head.recipient_department_name},<font style="color:red">{$data_tpl.head.recipient}</font><br>
+            <b>Исполнители:</b><br>
+            {foreach key=k1 item=i1 from=$data_tpl.executors name=ex}
+            {if $i1.executor_name neq null}
+            <b>{$smarty.foreach.ex.iteration}.</b> {$i1.executor_pos_name}, {$i1.executor_department_name}, <font style="color:red">{$i1.executor_name}</font><br>
+            {/if}
+            {/foreach}
+            <b>Дата {if $smarty.request.tu eq 1}внесения результатов переговоров{else}отчета по заявке{/if}:</b><br>
+            {if $data_tpl.head.report_data}
+            {$data_tpl.head.report_data}<br>
+            <font style="font-weight:bold;color:green">{$data_tpl.head.report_data_fio|escape} {$data_tpl.head.report_data_lu}</font><br>
+            {$data_tpl.head.report_data_text|nl2br}<br>
+            {/if}
+        </td>
+    </tr>
+    <tr style="text-align:center;">
+        <td colspan=2>
+            <h3>{$data.title}</h3>
+        </td>
+    </tr>
+</table>
+
+
+<p style="text-align:center;font-size:11pt">
+    Цели на переговоры
+</p>
+
+<p></p>
+<p></p>
+<table border=0 cellpadding=0 cellspacing=0 width=100% style="font-size:8pt">
+    <tr>
+        <td style="text-align:right; vertical-align: bottom">{$data_tpl.head.creator_pos_name},{$data_tpl.head.creator_department_name},<font style="color:red">{$data_tpl.head.creator}</font></td>
+    </tr>
+</table>

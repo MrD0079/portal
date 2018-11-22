@@ -483,6 +483,7 @@ foreach ($d as $k=>$v)
 
 isset($d) ? $smarty->assign('d', $d) : null;
 
+
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
 $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);

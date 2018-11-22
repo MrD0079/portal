@@ -370,6 +370,9 @@
                 </select><br>
 		<input type="submit" name="save_cost_assign_month" id="save_cost_assign_month" value="Сохранить месяц отнесения затрат"><br>
                 <script>$('#cost_assign_month{$i.head.id} option[value="{$i.head.cost_assign_month}"]').prop('selected', true);</script>
+			{if $i.head.current_status eq 1}
+			<a href="/?action=bud_ru_zay_report_pdf&tu=1&get_pdf={$i.head.id}&print=1&pdf=1" target="_blank" class="hide fade none" style="display: none;">Согласованные Договорные условия</a><br>
+			{/if}
             {/if}
             {if $i.head.net_name}
                 <p style="border:1px dotted red">
