@@ -34,6 +34,8 @@ if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
 <meta http-equiv="content-type" content="text/html; charset=windows-1251"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="-1"/>
+<link rel="stylesheet" href="js/chosen/chosen.min.css"> <!--chosen css-->
+<link rel="stylesheet" href="css/select2/select2.min.css">
 <?
 }
 

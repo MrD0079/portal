@@ -469,7 +469,7 @@
                                                                                 {$i.rep_var_name}
                                                                                 -->
                                                                                 <input
-                                                                                        size=70
+                                                                                        size={if $i.type eq 'datepicker'}10{else}70{/if}
                                                                                         id=new_st_{$i.id}
                                                                                         name=new_st[{$i.id}]
                                                                                         class="{$i.class}"

@@ -67,7 +67,7 @@
                                         <option value="{$item.bud_id}">{$item.bud_name|escape}</option>
                                 {/foreach}-->
                                 </select>
-                                <script>$('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);</script>
+                                <script>$('#new_fil').find( 'option[value="{$smarty.request.new.fil}"]').prop('selected', true);</script>
                         </td>
                 </tr>
                 {if not $smarty.request.tu eq 1}
@@ -82,7 +82,7 @@
                                         <option value="{$item.id}">{$item.name|escape}</option>
                                 {/foreach}
                                 </select>
-                                <script>$('#new_funds option[value="{$smarty.request.new.funds}"]').prop('selected', true);</script>
+                                <script>$('#new_funds').find( 'option[value="{$smarty.request.new.funds}"]').prop('selected', true);</script>
                         </td>
                 </tr>
                 {/if}

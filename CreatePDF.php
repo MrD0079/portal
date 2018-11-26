@@ -77,6 +77,7 @@ class CreatePDF {
         $a = '<html>
             <head>
             <meta	http-equiv="Content-Type"	content="charset=utf-8" />
+            <!--<style type="text/css"> * {font-family: "Times-Roman", monospace;}</style>-->
             <style type="text/css"> * {font-family: "DejaVu Sans Mono", monospace;}</style>
             </head>
             <body>
@@ -96,7 +97,7 @@ class CreatePDF {
         $params["file_name"] = isset($params["file_name"]) ? $params["file_name"]."_".$params["id"] : "file_".explode(".",$page_tpl_name)[0]."_".$params["id"];
         $params["to_file"] = isset($params["to_file"]) ? $params["to_file"] : 0;
         $params["catalog"] = $this->AddSlashToDir($params["catalog"]);
-
+        //return $a;
         // Output the generated PDF to Browser
         if (!$params["to_file"]) {
             try {
@@ -106,7 +107,7 @@ class CreatePDF {
                 $dompdf->load_html($b);
 
                 $dompdf->render();
-                //return $a;
+
                 if (headers_sent($filename, $linenum)) {
                     echo $a;
                     return "\nHeaders was alredy send in $filename line: $linenum\n ( Use &print=1 )";

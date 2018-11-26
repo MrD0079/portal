@@ -1,55 +1,137 @@
-<table border=0 cellpadding=0 cellspacing=0 width=100% style="font-size:8pt">
+<style>
+    body{
+        font-size: 11px;
+        text-align: justify;
+    }
+    table.head_tabe{
+        font-weight: bold;
+    }
+    .info-row{
+        display: block;
+        padding-left: 20px;
+    }
+</style>
+<table border=0 cellpadding=0 cellspacing=0 width=100% class="head_tabe">
     <tr style="text-align:center;">
         <td colspan="2" style="text-align:center;">
             <p><img src="design/logo.png" border="0"/></p>
-            <h3>
-                ДИРЕКЦИЯ ПО ПРОДАЖАМ ООО "АВК КОНФЕКШИНЭРИ"
+            <h3 style="font-style: italic;font-weight: bold;font-size: 16px;">
+                Коммерческое Соглашение
             </h3>
         </td>
     </tr>
+</table>
+<table border=0 cellpadding=0 cellspacing=0 width=100% class="head_tabe">
     <tr>
-        <td style="text-align:left;">№{$data_tpl.head.id} от {$data_tpl.head.created}</td>
-        <td style="text-align:right;">
-            <b>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$data_tpl.head.dt_start}<br>
-            <b>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$data_tpl.head.dt_end}<br>
-            <b>Регион / Подразделение:</b>{$data_tpl.head.region_name}<br>
-            <b>ФИО РМ:</b>{$data_tpl.head.rm_fio}<br>
-            <b>Статья:</b>{$data_tpl.head.st_name}<br>
-            <b>Категория:</b>{$data_tpl.head.kat_name}<br>
-            <b>Дистрибьютор:</b>{$data_tpl.head.fil_name}<br>
-            <b>Фонд:</b>{$data_tpl.head.funds_name}<br>
-            <b>Инициатор:</b>{$data_tpl.head.creator_pos_name},{$data_tpl.head.creator_department_name},<font style="color:red">{$data_tpl.head.creator}</font><br>
-            <b>Адресат:</b>{$data_tpl.head.recipient_pos_name},{$data_tpl.head.recipient_department_name},<font style="color:red">{$data_tpl.head.recipient}</font><br>
-            <b>Исполнители:</b><br>
+        <td>Представитель компании «АВК» <span style="width: 100%;">{$data_tpl.head.creator_pos_name}, {$data_tpl.head.creator_department_name}, {$data_tpl.head.creator}</span></td>
+    </tr>
+    <tr>
+        <td>договорился с <span style="width: 100%;">
             {foreach key=k1 item=i1 from=$data_tpl.executors name=ex}
-            {if $i1.executor_name neq null}
-            <b>{$smarty.foreach.ex.iteration}.</b> {$i1.executor_pos_name}, {$i1.executor_department_name}, <font style="color:red">{$i1.executor_name}</font><br>
-            {/if}
-            {/foreach}
-            <b>Дата {if $smarty.request.tu eq 1}внесения результатов переговоров{else}отчета по заявке{/if}:</b><br>
-            {if $data_tpl.head.report_data}
-            {$data_tpl.head.report_data}<br>
-            <font style="font-weight:bold;color:green">{$data_tpl.head.report_data_fio|escape} {$data_tpl.head.report_data_lu}</font><br>
-            {$data_tpl.head.report_data_text|nl2br}<br>
-            {/if}
-        </td>
+                {if $i1.executor_name neq null}{if $smarty.foreach.ex.iteration > 1}; {/if} {$i1.executor_pos_name}, {$i1.executor_department_name}, {$i1.executor_name}
+                {/if}
+            {/foreach}</span></td>
     </tr>
-    <tr style="text-align:center;">
-        <td colspan=2>
-            <h3>{$data.title}</h3>
-        </td>
-    </tr>
-</table>
-
-
-<p style="text-align:center;font-size:11pt">
-    Цели на переговоры
-</p>
-
-<p></p>
-<p></p>
-<table border=0 cellpadding=0 cellspacing=0 width=100% style="font-size:8pt">
     <tr>
-        <td style="text-align:right; vertical-align: bottom">{$data_tpl.head.creator_pos_name},{$data_tpl.head.creator_department_name},<font style="color:red">{$data_tpl.head.creator}</font></td>
+        <td>об условиях работы на период с <span style="font-weight: bold;">{$data_tpl.head.dt_start}</span> по <span style="font-weight: bold;">{$data_tpl.head.dt_end} г.:</span></td>
     </tr>
 </table>
+<br>
+<table border=0 cellpadding=0 cellspacing=0 width=100% class="head_tabe">
+    <tr>
+        <td>Поставка продукции осуществляется на основании договора поставки </td>
+    </tr>
+    <tr>
+        <td>№{$data_tpl.head.id} от
+            {if count(explode(" ",$data_tpl.head.created)) > 0}
+                {assign var="dt_created" value=" "|explode:$data_tpl.head.created}
+                {$dt_created[0]}
+            {else}
+                {$data_tpl.head.created}
+            {/if}
+            дистрибутором  {$data_tpl.head.fil_name}.</td>
+    </tr>
+</table>
+<br>
+
+        {foreach key=k1 item=i1 from=$data_tpl.ff }
+    {if $i1.name|strstr:"Торговые условия в предыдущем году:"
+    or $i1.name|strstr:"Аргументация предоставления торговых условий"
+    or $i1.name|strstr:"Дополнение"
+    or $i1.name|strstr:"Проект заполненного коммерческого соглашения"
+    or $i1.name|strstr:"Система договорных условий"
+    or $i1.name|strstr:"ИТОГО ЗАТРАТЫ"
+    or $i1.name|strstr:"Основания для предоставления ТУ"
+    }
+        {continue}
+    {else}
+   <div class="info-row">
+            <span style="font-weight :bold;">{$i1.name}: </span>
+        {if $i1.type eq 'formula'} {$i1.val_formula}{/if}
+        {if $i1.type eq 'list'} {$i1.val_list_name}{/if}
+        {if $i1.type eq 'string'} {$i1.val_string}{/if}
+        {if $i1.type eq 'textarea'} {$i1.val_textarea}{/if}
+        {if $i1.type eq 'number_int'} {$i1.val_number_int|num:0}{/if}
+        {if $i1.type eq 'number'} {$i1.val_number|num:5}{/if}
+        {if $i1.type eq 'datepicker'}	{$i1.val_datepicker}{/if}
+        {if $i1.type eq 'bool'} {if $i1.val_bool eq 1}да{else}нет{/if}{/if}
+   </div>
+    {/if}
+        {/foreach}
+    <div class="info-row">
+            <span style="font-weight: bold;">Порядок начисления и выплаты:</span> В объем закупок клиента не включаются бонусные (безоплатные) накладные, полученные в течение отчетного месяца. В нарушения изложенных выше соглашений, компания «АВК» оставляет за собой право выплаты не предоставлять. Предоставление выплат возможно при условии отсутствия просроченной дебиторской задолженности за отчетный месяц и более ранние периоды.
+    </div>
+<br>
+{if count($data_tpl.ff) > 0}
+<table class="content">
+    <tr>
+        <td><span style="font-weight: bold;">Дополнения:</span></td>
+    </tr>
+        {assign var="count" value=1}
+        {foreach key=k1 item=i1 from=$data_tpl.ff }
+            {if $i1.type eq 'file'}
+    <tr>
+        <td>
+            <span style="font-weight: bold;">
+                {if $i1.name|strstr:"Локация"}Дополнение №{$count}. Локация {assign var="count" value=$count+1}
+                {elseif $i1.name|strstr:"Спецификация"}Дополнение №{$count}. Спецификация {assign var="count" value=$count+1}
+                {elseif $i1.name|strstr:"Планограмма"}Дополнение №{$count}. Планограмма {assign var="count" value=$count+1}
+                {/if}
+            </span>
+        </td>
+    </tr>
+
+            {/if}
+        {/foreach}
+
+</table>
+<br>
+<br>
+{/if}
+
+<div style="display: inline-block; width: 49%;">
+    <table border=0 cellpadding=0 cellspacing=0 width=100% >
+        <tr>
+            <td><stong>Представитель компании «АВК»</stong></td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px;">_________________________/ ФИО, должность </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px;">_________________________/ дата, подпись</td>
+        </tr>
+    </table>
+</div>
+<div style="display: inline-block; width: 49%;">
+    <table border=0 cellpadding=0 cellspacing=0 width=100%>
+        <tr>
+            <td><stong>Клиент</stong></td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px;">__________________________/ ФИО, должность</td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px;">_________________________/ дата, подпись</td>
+        </tr>
+    </table>
+</div>

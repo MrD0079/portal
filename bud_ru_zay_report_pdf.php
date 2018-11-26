@@ -1,5 +1,5 @@
 <?php
-$_REQUEST["tu"]==1?$doc_str="торговые услови¤":$doc_str="за¤явка на проведение активности";
+$_REQUEST["tu"]==1?$doc_str="торговые услови¤":$doc_str="заявка на проведение активности";
 
 InitRequestVar("exp_list_without_ts",0);
 InitRequestVar("dates_list1",$_SESSION["month_list"]);
@@ -117,33 +117,30 @@ if (isset($d)) {
     }
 //Add button for download reestr in PDF file
 if (isset($_REQUEST['get_pdf'])) {
-
     $params = array(
         "id" => $_REQUEST['get_pdf'],
         "file_name" => 'bud_ru_zay_report',
-        "to_file" => 0,
-        "catalog" => ''
+        "to_file" => 0, // 1 - to save created pdf file on server
+        "catalog" => 'bud_ru_zay_report'
     );
 
     $data = array();
-        if (isset($d)) {
-            foreach ($d as $item) {
-                if ($item['head']['id'] == $_REQUEST['get_pdf']) {
-                    $data_current = $item;
-                    break;
-                }
-            }
-            if (isset($data_current)) {
-                //$smarty->assign('data_current', $data_current);
-                $data = $data_current; //send as argument
-                require_once "CreatePDF.php";
-                $pdf = new CreatePDF ($smarty);
-                $pdf_res = $pdf->create('tpl','bud_ru_zay_report_pdf.html', $params, $data);
-                //$pdf_res = $pdf->create('','testpdf.html', $params, $data);
-                if ($pdf_res != "ok") {
-                    echo "<div class='error_pdf_text'>" . $pdf_res . "</div>";
-                }
-            }
+	if (isset($d)) {
+		foreach ($d as $item) {
+			if ($item['head']['id'] == $_REQUEST['get_pdf']) {
+				$data_current = $item;
+				break;
+			}
+		}
+		if (isset($data_current)) {
+
+			require_once "CreatePDF.php";
+			$pdf = new CreatePDF ($smarty);
+			$pdf_res = $pdf->create('tpl','bud_ru_zay_report_pdf.html', $params, $data_current);
+			if ($pdf_res != "ok") {
+				echo "<div class='error_pdf_text'>" . $pdf_res . "</div>";
+			}
+		}
     }
 }
 }
