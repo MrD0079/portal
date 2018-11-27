@@ -699,7 +699,7 @@
             {foreach key=k1 item=i1 from=$i.zchat}
                 <font style="color:red">{$i1.zchat_time}</font>
                 <font style="color:green">{$i1.zchater}:</font>
-                <font style="color:blue">{$i1.ztext}</font>
+                <font style="color:blue">{$i1.ztext|nl2br}</font>
                 <br>
             {/foreach}
             </p>
@@ -711,7 +711,7 @@
             {foreach key=k1 item=i1 from=$i.chat}
                 <font style="color:red">{$i1.chat_time}</font>
                 <font style="color:green">{$i1.chater}:</font>
-                <font style="color:blue">{$i1.text}</font>
+                <font style="color:blue">{$i1.text|nl2br}</font>
                 <br>
             {/foreach}
             </p>

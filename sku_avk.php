@@ -55,7 +55,8 @@ function utf8ize($mixed) {
 }
 
 //$('#statya').select2({
-//ajax: {
+//multiple: true,
+//            ajax: {
 //    url: "?action=sku_avk&print=1&pdf=1",
 //                dataType: 'json',
 //                delay: 250,
@@ -81,8 +82,8 @@ function utf8ize($mixed) {
 //                },
 //                cache: true
 //            },
-//language: "ru",
-//            placeholder: 'Поиск товара по имени, по id, по tag',
+//            language: "ru",
+//            placeholder: 'РџРѕРёСЃРє С‚РѕРІР°СЂР° РїРѕ РёРјРµРЅРё, РїРѕ id, РїРѕ tag',
 //            escapeMarkup: function (markup) {return markup; }, // let our custom formatter work
 //            minimumInputLength: 1,
 //            templateResult: formatRepo,
@@ -97,7 +98,7 @@ function utf8ize($mixed) {
 //            }
 //            var markup1 = "<div class=''>("+repo.sku_id+") "+
 //                repo.name+
-//                " ("+repo.type_name+": "+repo.weight+" кг. "+")"+
+//                " ("+repo.type_name+": "+repo.weight+" РєРі. "+")"+
 //                "</div>";
 //            return markup1;
 //        }
