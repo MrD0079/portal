@@ -161,12 +161,42 @@ ORDER BY name
                     foreach ($_REQUEST["new_st"] as $k=>$v)
                     {
                             $var_type = $db->getOne("select type from bud_ru_ff where id=".$k);
-                            $var_type=="datepicker"&&isset($v) ? $v=OraDate2MDBDate($_REQUEST["new_st"][$k]) : null;
+                            $var_type == "datepicker" && isset($v) ? $v=OraDate2MDBDate($_REQUEST["new_st"][$k]) : null;
                             $keys = array("z_id"=>$id,"ff_id"=>$k);
                             $vals = array("val_".$var_type=>$v);
                             Table_Update("bud_ru_zay_ff",$keys,$vals);
                     }
             }
+            //add new field for SKU_AVK (selected products)
+            if (isset($_REQUEST["sku_list"]) && is_array($_REQUEST["sku_list"]))
+            {
+                //check if sku not selected yet - then set status 0
+                if(isset($_REQUEST['id'])){
+                    $selected_sku = $db->getAll("select sku_id from bud_ru_zay_sku_avk where status = 1 OR status IS NULL AND z_id=".$_REQUEST['id']);
+                    if(count($selected_sku) > 0){
+                        foreach ($selected_sku as $k => $v) {
+                            if(!in_array($v[0],$_REQUEST["sku_list"])){
+                                $status = 0;
+                                $keys = array("z_id"=>$_REQUEST['id'],"sku_id"=>$v[0]);
+                                $vals = array("z_id"=>$_REQUEST['id'],"sku_id"=>$v[0],"lu"=>OraDate2MDBDate(date('d.m. Y h:i:s', time())),"status"=>$status);
+                                Table_Update("bud_ru_zay_sku_avk",$keys,$vals);
+                            }
+                        }
+
+                    }
+                }
+
+                //add and update selected sku
+                foreach ($_REQUEST["sku_list"] as $k=>$v)
+                {
+                    $keys = array("z_id"=>$id,"sku_id"=>$v);
+                    $status = 1;
+                    $vals = array("z_id"=>$id,"sku_id"=>$v,"lu"=>OraDate2MDBDate(date('d.m. Y h:i:s', time())),"status"=>$status);
+                    Table_Update("bud_ru_zay_sku_avk",$keys,$vals);
+                }
+                return;
+            }
+
             if (isset($_REQUEST["productList"]))
             {
                     foreach ($_REQUEST["productList"] as $k=>$v)
