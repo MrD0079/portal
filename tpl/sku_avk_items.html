@@ -1,0 +1,35 @@
+{foreach key=k item=i from=$data.sku_items name=sk_i}
+<tr style="text-align: center;">
+    <td><input type="text" name="sku_params[num_id][]" size="7" style="text-align: center;" disabled="disabled" value="{$i.tag_id}"></td>
+    <td>{$i.name_brand}</td>
+    <td>{$i.name}</td>
+    <td><input type="text" name="sku_params[weight][]" size="5" style="text-align: center;" disabled="disabled" value="{$i.weight}"></td>
+    <td><input type="text" name="sku_params[price_ss][]" size="7" style="text-align: center;" disabled="disabled" value="{$i.price_ss}"></td>
+    <td><input type="text" name="sku_params[price_urkaine][]" size="5" style="text-align: center;" disabled="disabled" value="{$i.price_urkaine}"></td>
+    <td><input type="text" name="sku_params[price_s_kk][]" size="5" style="text-align: center;" disabled="disabled" value="{$i.price_s_kk}"></td>
+    <td><input type="text" name="sku_params[price_one][]" size="5" style="text-align: center;" disabled="disabled" value="{$i.price_one}"></td>
+    {if $data.akc_type eq 2}
+    <td><input type="text" name="sku_params[price_one_discount][]" size="5" style="text-align: center;" disabled="disabled" value="{$i.price_one_discount}"></td>
+    {/if}
+    <td><input type="text" name="sku_params[total_volume_q][]" size="7" style="text-align: center;" value=""></td>
+    <td><input type="text" name="sku_params[total_volume_price][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[total_volume_price_one][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    {if $data.akc_type eq 2}
+    <td><input type="text" name="sku_params[total_volume_price_one_discount][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    {/if}
+    <td><input type="text" name="sku_params[ss_volume][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[expected_vp][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[bonus_net][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    {if $data.akc_type eq 1}
+    <td><input type="text" name="sku_params[akc_expences][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    {/if}
+    <td><input type="text" name="sku_params[share_expenñes][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[logistics_expenses][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[company_expenses][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[net_clear][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    {if $data.akc_type eq 2}
+    <td><input type="text" name="sku_params[prom_costs_discount][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    <td><input type="text" name="sku_params[total_network_costs][]" size="5" style="text-align: center;" disabled="disabled" value=""></td>
+    {/if}
+</tr>
+{/foreach}
