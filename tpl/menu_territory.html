@@ -35,7 +35,7 @@
 {/if}
 
 {if ($cnt_kod eq "ua" or $cnt_kod eq "exp") and not $is_eta and $cnt_kod neq 'nr'}
-    {if $cnt_kod eq "ua"}
+	{if ($cnt_kod eq "ua" or $cnt_kod eq "exp")}
         <li><a href="javascript:void(0);"><span class="dir">Стандарт А 2.0</span></a>
                 <ul>
                                 {if $is_ts}<li><a href="?action=a18to_report">Вечерний отчет</a></li>{/if}

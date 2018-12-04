@@ -112,7 +112,19 @@
             {
             $("#form1").attr("action", "?action=bud_ru_zay_create");
             $("#form1").find(":input[required]").attr('required',false);
+            $("#form1").find("input[name=sku_values]").val(escapeHtml(JSON.stringify(GetSkuSelectedAll())));
             $("#form1").submit();
+            }
+            function escapeHtml(text) {
+                var map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+
+                return text.replace(/[&<>"']/g, function(m) { return map[m]; });
             }
             {/literal}
             </script>
@@ -405,6 +417,7 @@
                                         border: 1px solid #eee;
                                         padding: 5px;
                                         border-radius: 3px;
+                                        background-color: #f3f3f3;
                                     }
                                     .select2-container--default .select2-results__option--highlighted[aria-selected]{
                                         background-color: transparent;
@@ -428,32 +441,38 @@
                                     .sku_item_option tbody tr td:first-child {
                                         font-size: 10px;
                                     }
+                                    .hide-dev{
+                                        display:none;
+                                        border: 2px dashed red;
+                                        background-color: #ffe9e9;
+                                    }
                                 </style>
                                 <select id="sku_select" name="sku_select" style="width:100%;"></select>
                             </td>
                         </tr>
-                        <tr style="display:none;border: 2px dashed red;background-color: #ffe9e9;">
+                        <tr class="hide-dev">
                             <td>Тип акции:</td>
                             <td>
                                 <select name="akciya_type" id="akciya_type">
-                                    <option value="1" selected="selected">Компенсация</option>
-                                    <option value="2">По накладной</option>
+                                    <option value="1" {if $smarty.request.akciya_type eq 1}selected="selected"{/if}>Компенсация</option>
+                                    <option value="2" {if $smarty.request.akciya_type eq 2}selected="selected"{/if}>По накладной</option>
                                 </select>
+                                <input type="hidden" name="sku_values" value='{if $smarty.request.sku_values}{$smarty.request.sku_values}{/if}'>
                             </td>
                         </tr>
-                        <tr style="display:none;border: 2px dashed red;background-color: #ffe9e9;">
+                        <tr class="hide-dev">
                             <td>Бонус сети, %:</td>
-                            <td><input type="text" name="bonus_net_perc" id="bonus_net_perc" value=""></td>
+                            <td><input type="text" name="bonus_net_perc" id="bonus_net_perc" value="3.5" disabled="disabled"></td>
                         </tr>
-                        <tr style="display:none;border: 2px dashed red;background-color: #ffe9e9;">
+                        <tr class="hide-dev">
                             <td>Бонус дистрибьютора, %:</td>
-                            <td><input type="text" name="bonus_distr_pers" id="bonus_distr_pers" value=""></td>
+                            <td><input type="text" name="bonus_distr_pers" id="bonus_distr_pers" value="10" disabled="disabled"></td>
                         </tr>
-                        <tr style="display:none;border: 2px dashed red;background-color: #ffe9e9;">
+                        <tr class="hide-dev">
                             <td>Скидка по акции, %:</td>
-                            <td><input type="text" name="akciya_expences_perc" id="akciya_expences_perc" value=""></td>
+                            <td><input type="text" name="akciya_expences_perc" id="akciya_expences_perc" value="{$smarty.request.akciya_expences_perc}"></td>
                         </tr>
-                        <tr style="display:none;border: 2px dashed red;background-color: #ffe9e9;">
+                        <tr class="hide-dev">
                             <td colspan="2">
 
                                 <table id="sku_selected" width="100%" border="1" style="max-width: 900px;background-color: #fff;">
