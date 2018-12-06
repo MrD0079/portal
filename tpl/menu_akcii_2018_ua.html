@@ -418,37 +418,53 @@
 </li>
 
 <li><a href="javascript:void(0);"><span class="dir">Ноябрь</span></a>
-<ul>
-    <li><a href="javascript:void(0);"><span class="dir">Время продавать</span></a>
-        <ul>
-            <li><a target=_blank href="https://bitrix.avk.ua/~bUIzL">Условия акции</a></li>
-            {if $is_ts}                             <li><a href="?act=a1811tts&action=a1811tts_tp_select">Выбор ТП для участия в акции</a></li>{/if}
-            <li><a href="?act=a1811tts&action=a1811tts_report_a">Отчет по акции</a></li>
-            {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811tts&action=act_report_v">Отчет ВСТМ</a></li>{/if}
-        </ul>
-    </li>
-    <li><a href="javascript:void(0);"><span class="dir">Выгодное предложение</span></a>
-        <ul>
-            <li><a target=_blank href="https://bitrix.avk.ua/~Zzuvx">Условия акции</a></li>
-            {if $is_ts}                             <li><a href="?act=a1811pp&action=a1811pp_tp_select">Выбор ТП для участия в акции</a></li>{/if}
-            <li><a href="?act=a1811pp&action=a1811pp_report_a">Отчет по акции</a></li>
-            {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811pp&action=act_report_v">Отчет ВСТМ</a></li>{/if}
-        </ul>
-    </li>
-	<li><a href="javascript:void(0);"><span class="dir">Только лучшее Шоколад</span></a>
-        <ul>
-            <li><a target=_blank href="https://bitrix.avk.ua/~8Hgnp">Условия акции</a></li>
-            {if $is_ts}                             <li><a href="?act=a1811obc&action=a1811obc_tp_select_list">Выбор ТП для участия в акции</a></li>{/if}
-            <li><a href="?act=a1811obc&action=a1811obc_report_a">Отчет по акции</a></li>
-            {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811obc&action=act_report_v">Отчет ВСТМ</a></li>{/if}
-        </ul>
-    </li>
-</ul>
+    <ul>
+        <li><a href="javascript:void(0);"><span class="dir">Время продавать</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~bUIzL">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1811tts&action=a1811tts_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                <li><a href="?act=a1811tts&action=a1811tts_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811tts&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+        <li><a href="javascript:void(0);"><span class="dir">Выгодное предложение</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~Zzuvx">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1811pp&action=a1811pp_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                <li><a href="?act=a1811pp&action=a1811pp_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811pp&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+        <li><a href="javascript:void(0);"><span class="dir">Только лучшее Шоколад</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~8Hgnp">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1811obc&action=a1811obc_tp_select_list">Выбор ТП для участия в акции</a></li>{/if}
+                <li><a href="?act=a1811obc&action=a1811obc_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1811obc&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+        <li><a href="javascript:void(0);"><span class="dir">В стиле АВК</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~hcplR">Условия акции</a></li>
+                {if $is_ts}
+                <li><a href="?act=a1811avk&action=a1811avk_tp_select&y=2018&month=11">Выбор ТП для участия в акции</a></li>
+                {/if}
+                <li><a href="?act=a1811avk&action=a1811avk_report_a&y=2018&month=11">Отчет по акции</a></li>
+            </ul>
+        </li>
+    </ul>
 </li>
 
-<!--
 <li><a href="javascript:void(0);"><span class="dir">Декабрь</span></a>
-<ul>
-</ul>
+    <ul>
+        <li><a href="javascript:void(0);"><span class="dir">В стиле АВК</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~PuSGX">Условия акции</a></li>
+                {if $is_ts}
+                <li><a href="?act=a1812avk&action=a1812avk_tp_select&y=2018&month=12">Выбор ТП для участия в акции</a></li>
+                {/if}
+                <li><a href="?act=a1812avk&action=a1812avk_report_a&y=2018&month=12">Отчет по акции</a></li>
+            </ul>
+        </li>
+    </ul>
 </li>
--->

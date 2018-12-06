@@ -80,6 +80,7 @@ function getItemsFromDB($db,$sku_list = null){
         if (isset($_REQUEST["q"])) {
             if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                 $q = htmlentities(utf8_decode($_POST['q'])); // right
+                $_REQUEST["net_id"] = $_REQUEST["net_id"];
             }else{
                 $q = charset_x_win($_REQUEST["q"]);
             }
@@ -89,13 +90,38 @@ function getItemsFromDB($db,$sku_list = null){
         $params[":query"] = "'" . $q . "%'";
         //$params[":name_p"] = "'" . $q . "'";
         $params[":name_p"] = $q ;
+        $params[":net_id"] = isset($_REQUEST["net_id"]) ? $_REQUEST["net_id"] : 0;
+
+        if(isset($_REQUEST['sku_list']) && !empty($_REQUEST['sku_list'])){
+            if(is_array($_REQUEST['sku_list']))
+                $_REQUEST['sku_list'] = implode(",",$_REQUEST['sku_list']);
+            $params[':sku_list'] = $_REQUEST['sku_list'];
+            $params[':show_list'] = 1;
+            $params[':show_q'] = 0;
+        }else{
+            $params[':show_q'] = 1;
+            $params[':sku_list'] = 0;
+            $params[':show_list'] = 0;
+        }
+
 
         $sql = rtrim(file_get_contents('sql/sku_avk.sql'));
         $sql = stritr($sql, $params);
+
         $sql = trim(preg_replace('/\s+/', ' ', $sql));
+        //PrintJSONFromArray(array(),'not founds: '.$sql);
 
         $sku_avk = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-        PrintJSONFromArray($sku_avk,'not founds: '.$q);
+        if (isset($sku_avk))
+        {
+            if (PEAR::isError($sku_avk))
+            {
+                PrintJSONFromArray(array(),'error: '.$sku_avk->getMessage() . " " . $sku_avk->getDebugInfo());
+            }else{
+                PrintJSONFromArray($sku_avk,'not founds: '.$q);
+            }
+        }
+
 
     }catch(Exception $e){
         PrintJSONFromArray(array(),'Some error: ' . $e->getMessage());

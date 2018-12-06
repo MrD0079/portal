@@ -9,6 +9,7 @@ $(window).load(function(){
             data: function (params) {
                 return {
                     q: params.term, // search term
+                    net_id: ($("#net").val() != "") ? $("#net").val() : 0,
                     page: params.page
                 };
             },
@@ -68,12 +69,13 @@ $(window).load(function(){
             '<tr>'+
             '<td>Бренд</td>'+
             '<td>'+repo.name_brand+'</td>'+
-            '</tr>'+
-            '<tr>'+
+            '</tr>';
+        if(repo.type_name != null && repo.weight != null)
+            item_table += '<tr>'+
             '<td>Упаковка</td>'+
             '<td>'+repo.weight+' '+repo.type_name+'</td>'+
-            '</tr>'+
-            '<tr>'+
+            '</tr>';
+        item_table +='<tr>'+
             '<td>TAG ID</td>'+
             '<td>'+repo.tag_id+'</td>'+
             '</tr>';
@@ -122,6 +124,17 @@ $(window).load(function(){
     });
     //if some value is not initialize then set random() value
     function CheckInicialization(arr){
+        if(arr['total_volume_q'] == null || arr['total_volume_q'] === "undefined"){
+            if($("input[name=sku_values]").val() != "") {
+                var sku_list = JSON.parse($("input[name=sku_values]").val());
+                $.each(sku_list,function(k,v){
+                    if(arr['id'] == v.id){
+                        arr['total_volume_q'] = v.total_volume_q;
+                        return false;
+                    }
+                });
+            }
+        }
         for(name in arr){
             if(arr[name] === "undefined" || arr[name] == null)
                 arr[name] = Math.floor((Math.random() * 10) + 1);
@@ -135,18 +148,21 @@ $(window).load(function(){
 
     // Fetch the preselected item, and add to the control
     console.log("zid: "+zid);
-    $.ajax({
-        url: "?action=sku_avk&print=1&pdf=1",
-        dataType: 'json',
-        contentType: "application/x-www-form-urlencoded;charset=utf-8",
-        data: {get_list:1,z_id:zid}
-    }).then(function (data) {
-        if(data.items[0].text && data.items[0].text.length > 0){
-            console.log("empty");
-        }else{
-            AddSku(data.items);
-        }
-    });
+    if(zid != null && zid != 0 && zid != ""){
+        $.ajax({
+            url: "?action=sku_avk&print=1&pdf=1",
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            data: {get_list:1,z_id:zid}
+        }).then(function (data) {
+            if(data.items[0].text && data.items[0].text.length > 0){
+                console.log("empty");
+            }else{
+                AddSku(data.items);
+            }
+        });
+    }
+
 
     //test function for load selected sku from DB by some z_id
     window.testLoadSku = function(id){
@@ -184,10 +200,46 @@ $(window).load(function(){
         });
     }
 
+    function LoadSkuListValues(sku_list){
+        $.ajax({
+            url: "?action=sku_avk&print=1&pdf=1",
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded;charset=utf-8",
+            data: {
+                net_id: ($("#net").val() != "") ? $("#net").val() : 0,
+                q:0,
+                sku_list: sku_list
+            }
+        }).then(function (data) {
+            if(data.items[0].text && data.items[0].text.length > 0){
+                console.log("empty");
+            }else{
+                AddSku(data.items);
+            }
+        });
+    }
+
     //initialize sku list again if we back to the step1
     if($("input[name=sku_values]").val() != ""){
         var arr = JSON.parse($("input[name=sku_values]").val());
-        AddSku(arr);
+        if($("input[name=step_params]").val() != ""){
+            var step_params = JSON.parse($("input[name=step_params]").val());
+            if(step_params.id_net != $('[name*="new[id_net]"]').val()){
+                //достать из БД новые цены для текущей сети
+                console.log("New old_net_id: "+step_params.id_net);
+                var sku_list = [];
+                $.each( arr, function( key, value ) {
+                    sku_list.push(value.id);
+                });
+                sku_list = sku_list.join(',');
+                LoadSkuListValues(sku_list);
+            }else{
+                AddSku(arr);
+            }
+        }else{
+            AddSku(arr);
+        }
+
     }
     function escapeHtml(text) {
         var map = {
@@ -323,6 +375,12 @@ $(window).load(function(){
                 });
                 result.push(res);
             });
+            return result;
+        }
+        window.GetStepParams = function(){
+            var result = {};
+            result['id_net'] = $('[name*="new[id_net]"]').val();
+
             return result;
         }
 

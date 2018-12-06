@@ -1,5 +1,5 @@
   SELECT
-    sa.id_num id,
+    sa.sku_id id,
     sa.*,
     1 price_ss,
     2 price_urkaine,
@@ -10,6 +10,6 @@
     7 all_company_expenses,
     8 mark_cost_plan_cur_m
   FROM PERSIK.sku_avk sa
-  INNER JOIN PERSIK.bud_ru_zay_sku_avk bsa ON sa.id_num IN bsa.sku_id
+  INNER JOIN PERSIK.bud_ru_zay_sku_avk bsa ON sa.sku_id IN bsa.sku_id
   WHERE bsa.z_id = :z_id AND bsa.status = 1
   ORDER BY sa.name

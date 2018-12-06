@@ -113,6 +113,7 @@
             $("#form1").attr("action", "?action=bud_ru_zay_create");
             $("#form1").find(":input[required]").attr('required',false);
             $("#form1").find("input[name=sku_values]").val(escapeHtml(JSON.stringify(GetSkuSelectedAll())));
+            $("#form1").find("input[name=step_params]").val(escapeHtml(JSON.stringify(GetStepParams())));
             $("#form1").submit();
             }
             function escapeHtml(text) {
@@ -458,6 +459,7 @@
                                     <option value="2" {if $smarty.request.akciya_type eq 2}selected="selected"{/if}>По накладной</option>
                                 </select>
                                 <input type="hidden" name="sku_values" value='{if $smarty.request.sku_values}{$smarty.request.sku_values}{/if}'>
+                                <input type="hidden" name="step_params" value='{if $smarty.request.step_params}{$smarty.request.step_params}{/if}'>
                             </td>
                         </tr>
                         <tr class="hide-dev">
