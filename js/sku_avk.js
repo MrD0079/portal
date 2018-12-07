@@ -22,7 +22,7 @@ $(window).load(function(){
                 return {
                     results: data.items,
                     pagination: {
-                        more: (params.page * 3) < data.total_count
+                        more: (params.page * 2) < data.total_count
                     }
                 };
             },
@@ -31,7 +31,7 @@ $(window).load(function(){
         language: "ru",
         placeholder: 'Поиск товара по имени, по sku, по tag',
         escapeMarkup: function (markup) {return markup; }, // let our custom formatter work
-        minimumInputLength: 1,
+        minimumInputLength: 3,
         templateResult: formatRepo,
         templateSelection: formatRepoSelection
     });
@@ -40,7 +40,7 @@ $(window).load(function(){
             return repo.text;
         }
         if(repo.text){
-            return "<div>"+repo.text+"</div>";
+            return "<div style='color:#000;'>"+repo.text+"</div>";
         }
 
         var item = "<div class='sku_item_option'>(<strong>"+repo.sku_id+"</strong>) "+
@@ -142,8 +142,15 @@ $(window).load(function(){
         return arr;
     }
     //delete sku item from table
-    $('#sku_select').on("select2:unselect", function (e) {
-        RemoveSkuHTML(e.params.data.id);
+    // $('#sku_select').on("select2:unselect", function (e) {
+    //     RemoveSkuHTML(e.params.data.id);
+    // });
+    $('#sku_select').on('select2:unselecting', function (e) {
+        if (confirm('Удалить товар из списка ?')) {
+            RemoveSkuHTML(e.params.args.data.id);
+        }else{
+            e.preventDefault();
+        }
     });
 
     // Fetch the preselected item, and add to the control
@@ -170,7 +177,7 @@ $(window).load(function(){
             url: "?action=sku_avk&print=1&pdf=1",
             dataType: 'json',
             contentType: "application/x-www-form-urlencoded;charset=utf-8",
-            data: {get_list:1,z_id:id}
+            data: {z_id:id}
         }).then(function (data) {
             if(data.items[0].text && data.items[0].text.length > 0){
                 console.log("empty");
@@ -299,11 +306,23 @@ $(window).load(function(){
     function RemoveSkuHTML(sku_id){
         $("#sku_selected tr[data-sku-id='"+sku_id+"']").remove();
     }
-
+    function SetAkciyaTypeToSelect(){
+        var akc_type = $("#akciya_type").val();
+        if(akc_type != ""){
+            $(".akc_type_base").val($(".akc_type_base option[data-type='"+akc_type+"']").val());
+        }
+    }
+    function SetAkciyaTypeFromSelect(akc_type){
+        if(akc_type !== "undefined")
+            $("#akciya_type").val(akc_type);
+    }
+    SetAkciyaTypeToSelect();
     //recalculate sku values when akciya type was change
-    $('#akciya_type').on('change', function (e) {
-        var valueSelected = this.value;
+    $('.akc_type_base').on('change', function (e) {
+        var $optionSelected = $("option:selected", this);
+        var valueSelected = $optionSelected.data("type");
         setTimeout(function () {
+            SetAkciyaTypeFromSelect(valueSelected);
             ChangeAkciyaType(valueSelected);
         },500);
     });
@@ -406,7 +425,8 @@ $(window).load(function(){
             //sku.total_volume_q;//объем продаж шт.
             sku_values['total_volume_price'] = sku.total_volume_q*sku.weight;//объем продаж кг.
             sku_values['total_volume_price_one'] = sku.total_volume_q*sku.price_one;//объем продаж грн
-            sku_values['total_volume_price_one_discount'] = sku.total_volume_q*sku.price_one_discount;//объем продаж грн. СКИДКА
+            sku_values['price_one_discount'] = sku.price_one - ((sku.price_one*akciya_expences_perc)/100);
+            sku_values['total_volume_price_one_discount'] = sku.total_volume_q*sku_values['price_one_discount'];//объем продаж грн. СКИДКА
             sku_values['ss_volume'] = sku.total_volume_q*sku.price_ss;//СС на объем отгрузки
             if(akc_type == 1){
                 sku_values['expected_vp'] = sku_values['total_volume_price_one']-sku_values['ss_volume'];//Ожидаемая ВП

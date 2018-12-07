@@ -71,9 +71,9 @@ if (isset($_REQUEST["sku_list"]) && is_array($_REQUEST["sku_list"]))
     return;
 }
 
-getItemsFromDB($db);
+getItemsFromDB($db,15);
 
-function getItemsFromDB($db,$sku_list = null){
+function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
     include_once "a.charset.php";
     $params = array();
     try {
@@ -104,21 +104,47 @@ function getItemsFromDB($db,$sku_list = null){
             $params[':show_list'] = 0;
         }
 
+        //get sku_list when edit old 'zayavka' by z_id
+        if(isset($_REQUEST["z_id"]) && $_REQUEST["z_id"] != 0){
+            $params[":z_id"] = $_REQUEST["z_id"];
+            $params[':show_save_list'] = 1;
+            $params[':show_list'] = 0;
+            $params[':show_q'] = 0;
+        }else{
+            $params[":z_id"] = 0;
+            $params[':show_save_list'] = 0;
+        }
+        if($q == "" && !isset($_REQUEST["z_id"]))
+            PrintJSONFromArray(array(),'not founds: wrong request');
 
-        $sql = rtrim(file_get_contents('sql/sku_avk.sql'));
-        $sql = stritr($sql, $params);
+        if(isset($_REQUEST['page'])) {
+            $page_num = ($_REQUEST['page']-1)*$limit;
+        }else{
+            $page_num = 0;
+        }
 
+        $params[':pagination_head'] = 'select * from (select r.*, ROWNUM rnum from (';
+        $params[':pagination_footer'] = ') r where ROWNUM <= '.($limit+$page_num).' ) where rnum > '.$page_num;
+
+        $sql_base = rtrim(file_get_contents('sql/sku_avk.sql'));
+        $sql = stritr($sql_base, $params);
         $sql = trim(preg_replace('/\s+/', ' ', $sql));
-        //PrintJSONFromArray(array(),'not founds: '.$sql);
-
         $sku_avk = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+
+        $params[':pagination_head'] = '';
+        $params[':pagination_footer'] = '';
+        $sql = stritr($sql_base, $params);
+        $sql = trim(preg_replace('/\s+/', ' ', $sql));
+        $r = $db->query($sql);
+        $total_count = $r->numRows();
+
         if (isset($sku_avk))
         {
             if (PEAR::isError($sku_avk))
             {
                 PrintJSONFromArray(array(),'error: '.$sku_avk->getMessage() . " " . $sku_avk->getDebugInfo());
             }else{
-                PrintJSONFromArray($sku_avk,'not founds: '.$q);
+                PrintJSONFromArray($sku_avk,'not founds: '.$q,$total_count);
             }
         }
 
@@ -129,9 +155,9 @@ function getItemsFromDB($db,$sku_list = null){
     }
 }
 
-function PrintJSONFromArray($array,$errorText=""){
+function PrintJSONFromArray($array,$errorText="",$total_count = false){
     if(count($array) > 0) {
-        $answer['total_count'] = count($array);
+        $answer['total_count'] = ($total_count != false) ? $total_count : count($array);
         $array = utf8ize($array);
         $answer['items'] = $array;
         header('Content-Type: application/json; charset=utf-8');
@@ -144,6 +170,7 @@ function PrintJSONFromArray($array,$errorText=""){
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($answer, JSON_UNESCAPED_UNICODE);
     }
+    return;
 }
 function utf8ize($mixed) {
     if (is_array($mixed)) {

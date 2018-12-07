@@ -403,13 +403,28 @@
                         <td>Значение</td>
                 </tr>
                 {foreach key=k item=i from=$st name=st_fields}
-                        {if $smarty.foreach.st_fields.iteration eq 3 and $smarty.request.for_kk == 'on'}
+                        {if $smarty.foreach.st_fields.iteration eq 4 and $smarty.request.for_kk == 'on'}
+                        <tr class="hide-dev">
+                            <td>Бонус сети, %:</td>
+                            <td><input type="text" name="bonus_net_perc" id="bonus_net_perc" value="3.5" disabled="disabled"></td>
+                        </tr>
+                        <tr class="hide-dev">
+                            <td>Бонус дистрибьютора, %:</td>
+                            <td><input type="text" name="bonus_distr_pers" id="bonus_distr_pers" value="10" disabled="disabled"></td>
+                        </tr>
+                        <tr class="hide-dev">
+                            <td>Скидка по акции, %:</td>
+                            <td><input type="text" name="akciya_expences_perc" id="akciya_expences_perc" value="{$smarty.request.akciya_expences_perc}"></td>
+                        </tr>
                         <tr style="">
                             <td>
                                 Продукты:
                                 <span style="color:red;display:none;"> Тестовое поле. В заявке НЕ учавтсвует</span>
                             </td>
                             <td style="max-width: 475px;">
+                                <input type="hidden" name="akciya_type" id="akciya_type" value="{$smarty.request.akciya_type}">
+                                <input type="hidden" name="sku_values" value='{if $smarty.request.sku_values}{$smarty.request.sku_values}{/if}'>
+                                <input type="hidden" name="step_params" value='{if $smarty.request.step_params}{$smarty.request.step_params}{/if}'>
                                 <style>
                                     .select2-container .select2-search--inline, .select2-container .select2-search--inline input {
                                         width: 100%!important;
@@ -452,33 +467,10 @@
                             </td>
                         </tr>
                         <tr class="hide-dev">
-                            <td>Тип акции:</td>
-                            <td>
-                                <select name="akciya_type" id="akciya_type">
-                                    <option value="1" {if $smarty.request.akciya_type eq 1}selected="selected"{/if}>Компенсация</option>
-                                    <option value="2" {if $smarty.request.akciya_type eq 2}selected="selected"{/if}>По накладной</option>
-                                </select>
-                                <input type="hidden" name="sku_values" value='{if $smarty.request.sku_values}{$smarty.request.sku_values}{/if}'>
-                                <input type="hidden" name="step_params" value='{if $smarty.request.step_params}{$smarty.request.step_params}{/if}'>
-                            </td>
-                        </tr>
-                        <tr class="hide-dev">
-                            <td>Бонус сети, %:</td>
-                            <td><input type="text" name="bonus_net_perc" id="bonus_net_perc" value="3.5" disabled="disabled"></td>
-                        </tr>
-                        <tr class="hide-dev">
-                            <td>Бонус дистрибьютора, %:</td>
-                            <td><input type="text" name="bonus_distr_pers" id="bonus_distr_pers" value="10" disabled="disabled"></td>
-                        </tr>
-                        <tr class="hide-dev">
-                            <td>Скидка по акции, %:</td>
-                            <td><input type="text" name="akciya_expences_perc" id="akciya_expences_perc" value="{$smarty.request.akciya_expences_perc}"></td>
-                        </tr>
-                        <tr class="hide-dev">
                             <td colspan="2">
 
                                 <table id="sku_selected" width="100%" border="1" style="max-width: 900px;background-color: #fff;">
-                                    <thead>
+                                    <thead style="background-color: #03a9f454;">
                                     <tr style="font-size: 10px;font-weight: bold;text-align: center;">
                                         <td rowspan="2">TAG_ID</td>
                                         <td rowspan="2">Бренд</td>
@@ -567,12 +559,24 @@
                                                                         {/literal}
                                                                         </script>
                                                                 {else}
-                                                                        <select id=new_st_{$i.id} name=new_st[{$i.id}] {if $i.required}required{/if}>
-                                                                                <option></option>
-                                                                                {foreach key=lk item=li from=$i.list}	
-                                                                                        <option value={$li.id}>{$li.name}</option>
-                                                                                {/foreach}
-                                                                        </select>
+                                                                        {if $i.id eq 176856141}
+                                                                            <select id=new_st_{$i.id} class="akc_type_base" name=new_st[{$i.id}] {if $i.required}required{/if}>
+                                                                            {foreach key=lk item=li from=$i.list name=list_akc}
+                                                                            <option
+                                                                                    value={$li.id}
+                                                                                    {if $smarty.foreach.list_akc.iteration eq 1}selected="selected"{/if}
+                                                                                    data-type={$smarty.foreach.list_akc.iteration}
+                                                                            >{$li.name}</option>
+                                                                            {/foreach}
+                                                                            </select>
+                                                                        {else}
+                                                                            <select id=new_st_{$i.id} name=new_st[{$i.id}] {if $i.required}required{/if}>
+                                                                            <option></option>
+                                                                            {foreach key=lk item=li from=$i.list}
+                                                                                    <option value={$li.id}>{$li.name}</option>
+                                                                            {/foreach}
+                                                                            </select>
+                                                                        {/if}
                                                                 {/if}
                                                         {else}
                                                                 {if $i.type eq 'bool'}
