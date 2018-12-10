@@ -1,5 +1,6 @@
 $(window).load(function(){
-    $('#sku_select').select2({
+    var init_glob = false;
+    var $sku_select2 = $('#sku_select').select2({
         multiple: true,
         ajax: {
             url: "?action=sku_avk&print=1&pdf=1",
@@ -146,12 +147,14 @@ $(window).load(function(){
     //     RemoveSkuHTML(e.params.data.id);
     // });
     $('#sku_select').on('select2:unselecting', function (e) {
-        if (confirm('Удалить товар из списка ?')) {
+        if (confirm('Удалить продукт из списка ?')) {
             RemoveSkuHTML(e.params.args.data.id);
         }else{
             e.preventDefault();
         }
     });
+
+
 
     // Fetch the preselected item, and add to the control
     console.log("zid: "+zid);
@@ -263,6 +266,7 @@ $(window).load(function(){
     //add sku item into table
     function AddSkuHTML(akc_type,sku){
         var outputHTML = '<tr style="text-align: center;" data-sku-id="'+sku.id+'">'+
+            '<td><input type="button" value="X" class="del_sku_current new" title="Удалить SKU"></td>'+
             '<td>'+
             '<input type="text" name="sku_params[tag_id][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.tag_id+'">'+
             '<input type="hidden" name="sku_params[id][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.id+'">'+
@@ -364,8 +368,27 @@ $(window).load(function(){
     $('#akciya_expences_perc').on("input change",reCalculateSkuAllEvent);
 
     //init all functions for new sku item
-    SkuSelectedInit();
+    if(!init_glob)
+        SkuSelectedInit();
     function SkuSelectedInit(){
+        init_glob = true;
+        //console.log("set init");
+        var DelSKUTrigger = function(){
+            var $elem = $(this);
+            $elem.removeClass('new');
+            if (confirm('Удалить продукт из списка ?')) {
+                RemoveSkuByButton($elem);
+            }
+        }
+        function RemoveSkuByButton($button){
+            var $row = $($button.parents('tr')[0]);
+            var id = $row.find('input[name*="sku_params[id]"]').val();
+            var wanted_option = $('#sku_select option[value="'+id+'"]');
+            wanted_option.prop('selected', false);
+            $('#sku_select').trigger('change.select2');
+            $row.remove();
+        }
+        $(".del_sku_current.new").on("click",DelSKUTrigger);
         // --- Actions
         var wto;
         var inputWeight = function(){
@@ -456,5 +479,6 @@ $(window).load(function(){
                 $(el.parents('tr')[0]).find('input[name*="sku_params['+param+']"]').val(data[param]);
             }
         }
+        $("#sku_selected .new").removeClass('new');
     }
 });

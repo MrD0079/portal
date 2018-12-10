@@ -462,6 +462,18 @@
                                         border: 2px dashed red;
                                         background-color: #ffe9e9;
                                     }
+                                    .del_sku_current {
+                                        font-size: 11px;
+                                        cursor: pointer;
+                                        border-radius: 1px;
+                                        border-width: 2px;
+                                        border-style: outset;
+                                        transition: all 0.2s;
+                                    }
+                                    .del_sku_current:hover {
+                                        background-color: #f4433670;
+                                        border-style: inset;
+                                    }
                                 </style>
                                 <select id="sku_select" name="sku_select" style="width:100%;"></select>
                             </td>
@@ -472,6 +484,7 @@
                                 <table id="sku_selected" width="100%" border="1" style="max-width: 900px;background-color: #fff;">
                                     <thead style="background-color: #03a9f454;">
                                     <tr style="font-size: 10px;font-weight: bold;text-align: center;">
+                                        <td rowspan="2"></td>
                                         <td rowspan="2">TAG_ID</td>
                                         <td rowspan="2">Бренд</td>
                                         <td rowspan="2">Продукт</td>
