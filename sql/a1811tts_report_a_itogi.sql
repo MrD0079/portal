@@ -16,9 +16,11 @@ SELECT COUNT (DISTINCT tp_kod) cnt_tp,
                   THEN
                      CASE
                           WHEN DECODE(NVL(d.fact_target,0), 0 , 0, NVL(d.fact_target,0)) >= 12000 --uslovie 3
+                             AND d.fact_akc >= 4
                           THEN 1200
 
                           WHEN DECODE(NVL(d.fact_target,0), 0 , 0, NVL(d.fact_target,0)) >= 7000 --uslovie 2
+                            AND d.fact_akc >= 2
                           THEN 700
 
                           ELSE NVL (d.plan, 0) * 0.1 --uslovie 1

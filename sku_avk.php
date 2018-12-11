@@ -21,25 +21,39 @@ if(isset($_REQUEST["get_list"]) && isset($_REQUEST["z_id"])){
 //.fail(function (req, status, err ) {
 //    console.log( 'something went wrong', status, err );
 //});
-if (isset($_REQUEST["sku_list"]) && is_array($_REQUEST["sku_list"]))
+if (isset($_REQUEST["sku_select"]) && isset($_REQUEST["sku_params"]))
 {
     if (!isset($_REQUEST["z_id"])) {
         $id = get_new_id();
+        echo "new id";
     }else{
         $id = $_REQUEST["z_id"];
+        echo "old id: ".$_REQUEST["z_id"];
     }
     //check if sku not selected yet - then set status 0
     $q_status_0 = false;
     $q_status_1 = false;
-    if(isset($id)){
+    //$sku_params = is_array($_REQUEST["sku_params"]) ? $_REQUEST["sku_params"] : json_decode($_REQUEST["sku_params"],true);
+    $sku_params = $_REQUEST["sku_params"];
+
+    echo "sku_select: ".json_encode($_REQUEST["sku_select"]);
+    if(isset($_REQUEST["z_id"])){
         try {
-            $selected_sku = $db->getAll("select sku_id from bud_ru_zay_sku_avk where status = 1 OR status IS NULL AND z_id=" . $id);
+            $selected_sku = $db->getAll("select id_num from bud_ru_zay_sku_avk where (status = 1 OR status IS NULL) AND z_id=" . $_REQUEST["z_id"]);
+            echo "selected_sku: ".json_encode($selected_sku);
             if (count($selected_sku) > 0) {
                 foreach ($selected_sku as $k => $v) {
-                    if (!in_array($v[0], $_REQUEST["sku_list"])) {
+                    if (!in_array($v[0], $_REQUEST["sku_select"])) {
                         $status = 0;
-                        $keys = array("z_id" => $id, "sku_id" => $v[0]);
-                        $vals = array("z_id" => $id, "sku_id" => $v[0], "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())), "status" => $status);
+                        $id_num = $v[0];
+                        //$keys = array("z_id" => $id, "sku_id" => $v[0]);
+                        //$vals = array("z_id" => $id, "sku_id" => $v[0], "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())), "status" => $status);
+                        $keys = array("z_id" => $_REQUEST["z_id"],'id_num'=>$id_num);
+                        $vals = array(
+                            "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
+                            "status" => $status
+                        );
+                        echo "Update: ".json_encode(array_merge($keys,$vals));
                         Table_Update("bud_ru_zay_sku_avk", $keys, $vals);
                     }
                 }
@@ -53,11 +67,25 @@ if (isset($_REQUEST["sku_list"]) && is_array($_REQUEST["sku_list"]))
 
     //add and update selected sku
     try {
-        foreach ($_REQUEST["sku_list"] as $k=>$v)
+        foreach ($_REQUEST["sku_select"] as $k=>$v)
         {
-            $keys = array("z_id"=>$id,"sku_id"=>$v);
             $status = 1;
-            $vals = array("z_id"=>$id,"sku_id"=>$v,"lu"=>OraDate2MDBDate(date('d.m. Y h:i:s', time())),"status"=>$status);
+            //$keys = array("z_id"=>$id,"sku_id"=>$v);
+            //$vals = array("z_id"=>$id,"sku_id"=>$v,"lu"=>OraDate2MDBDate(date('d.m. Y h:i:s', time())),"status"=>$status);
+            $id_num = $v;
+            $keys = array("z_id" => $id,'id_num'=>$id_num, "sku_id" => $sku_params[$id_num]['sku_id']);
+            $vals = array(
+                'logistic_expens'=>$sku_params[$id_num]['logistic_expens_m_plan'],
+                'market_val'=>$sku_params[$id_num]['mark_cost_plan_cur_m'],
+                'price_ss'=>$sku_params[$id_num]['price_ss'],
+                'price_uk'=>$sku_params[$id_num]['price_urkaine'],
+                'price_kk'=>$sku_params[$id_num]['price_s_kk'],
+                'price_net'=>$sku_params[$id_num]['price_one'],
+                'total_q'=>$sku_params[$id_num]['total_volume_q'],
+                "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
+                "status" => $status
+            );
+            echo(json_encode(array_merge($keys,$vals)));
             Table_Update("bud_ru_zay_sku_avk",$keys,$vals);
         }
         $q_status_1 = true;
@@ -66,8 +94,10 @@ if (isset($_REQUEST["sku_list"]) && is_array($_REQUEST["sku_list"]))
     }
     if($q_status_0 && $q_status_1)
         echo "ok";
+    else if(!$q_status_0)
+        echo "ok. not update";
     else
-        echo "error";
+        echo "not save";
     return;
 }
 
@@ -110,9 +140,14 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
             $params[':show_save_list'] = 1;
             $params[':show_list'] = 0;
             $params[':show_q'] = 0;
+            //$params[':bsa_field'] = ',bsa.total_q';
+            $params[':bsa_table'] = ', bud_ru_zay_sku_avk bsa';
+            $params[':bsa_where'] = 'AND (bsa.z_id = '.$_REQUEST["z_id"].' AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id)';
         }else{
             $params[":z_id"] = 0;
             $params[':show_save_list'] = 0;
+            $params[':bsa_table'] = '';
+            $params[':bsa_where'] = '';
         }
         if($q == "" && !isset($_REQUEST["z_id"]))
             PrintJSONFromArray(array(),'not founds: wrong request');

@@ -1,10 +1,11 @@
  :pagination_head
         SELECT
-          DISTINCT sa.sku_id id,
-            sa.id_num,
+          DISTINCT sa.sku_id sku_id,
+            sa.id_num id,
             sa.name,
+            sa.weight,
             sa.name_brand,
-            sa.sku_id,
+            sa.id_num,
             sa.tag_id,
           NVL((SELECT ss.price FROM sku_avk_prime_cost ss,
             (SELECT sku_id, CONCAT(sku_id,MAX(date_s)) sku_date
@@ -23,13 +24,13 @@
           0 logistic_expens_m_plan,
           0 all_company_expenses,
           0 mark_cost_plan_cur_m
-        FROM sku_avk sa , bud_ru_zay_sku_avk bsa
+        FROM sku_avk sa :bsa_table
         WHERE (:show_q = 0 OR (lower(sa.name) LIKE lower('%:name_p%')
               OR sa.sku_id LIKE :query
               OR sa.tag_id LIKE :query))
            AND (:show_list = 0
               OR (sa.sku_id in (:sku_list)))
-          AND (:show_save_list = 0 OR (bsa.z_id = :z_id AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id))
-
+          :bsa_where
+        /*AND (:show_save_list = 0 OR (bsa.z_id = :z_id AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id))*/
         ORDER BY sa.name
   :pagination_footer

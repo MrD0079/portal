@@ -71,10 +71,11 @@ $(window).load(function(){
             '<td>Бренд</td>'+
             '<td>'+repo.name_brand+'</td>'+
             '</tr>';
-        if(repo.type_name != null && repo.weight != null)
+        //if(repo.type_name != null && repo.weight != null)
+        if(repo.weight != null)
             item_table += '<tr>'+
             '<td>Упаковка</td>'+
-            '<td>'+repo.weight+' '+repo.type_name+'</td>'+
+            '<td>'+repo.weight+' '+(repo.type_name != null ? repo.type_name : 'кг')+'</td>'+
             '</tr>';
         item_table +='<tr>'+
             '<td>TAG ID</td>'+
@@ -110,7 +111,9 @@ $(window).load(function(){
         try {
             var repo = e.params.data,
                 akc_type = $("#akciya_type").val() ? $("#akciya_type").val() : 1;
-            if($.isArray(repo)){
+
+            //if($.isArray(repo) || typeof repo === "object"){
+            if($.isArray(repo) ){
                 $.each(repo,function (i,v) {
                     v = CheckInicialization(v);
                     AddSkuHTML(akc_type,v);
@@ -126,19 +129,24 @@ $(window).load(function(){
     //if some value is not initialize then set random() value
     function CheckInicialization(arr){
         if(arr['total_volume_q'] == null || arr['total_volume_q'] === "undefined"){
-            if($("input[name=sku_values]").val() != "") {
-                var sku_list = JSON.parse($("input[name=sku_values]").val());
-                $.each(sku_list,function(k,v){
-                    if(arr['id'] == v.id){
-                        arr['total_volume_q'] = v.total_volume_q;
-                        return false;
-                    }
-                });
+            if($("input[name=sku_values]").val() != "" && $("input[name=sku_values]").val() != "[]") {
+                try{
+                    var sku_list = JSON.parse($("input[name=sku_values]").val());
+                    $.each(sku_list,function(k,v){
+                        if(arr['id'] == v.id){
+                            arr['total_volume_q'] = v.total_volume_q;
+                            return false;
+                        }
+                    });
+                }catch(err) {
+                    console.log(err);
+                }
             }
         }
         for(name in arr){
             if(arr[name] === "undefined" || arr[name] == null)
-                arr[name] = Math.floor((Math.random() * 10) + 1);
+                arr[name] = 0;
+                //arr[name] = Math.floor((Math.random() * 10) + 1);
         }
         return arr;
     }
@@ -268,39 +276,42 @@ $(window).load(function(){
         var outputHTML = '<tr style="text-align: center;" data-sku-id="'+sku.id+'">'+
             '<td><input type="button" value="X" class="del_sku_current new" title="Удалить SKU"></td>'+
             '<td>'+
-            '<input type="text" name="sku_params[tag_id][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.tag_id+'">'+
-            '<input type="hidden" name="sku_params[id][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.id+'">'+
-            '<input type="hidden" name="sku_params[logistic_expens_m_plan][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.logistic_expens_m_plan+'">'+
-            '<input type="hidden" name="sku_params[all_company_expenses][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.all_company_expenses+'">'+
-            '<input type="hidden" name="sku_params[mark_cost_plan_cur_m][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.mark_cost_plan_cur_m+'">'+
+            '<input type="text" name="sku_params['+sku.id_num+'][tag_id]" size="7" style="text-align: center;" readonly="readonly" value="'+sku.tag_id+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][id_num]" size="7" style="text-align: center;" value="'+sku.id_num+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][id]" size="7" style="text-align: center;" value="'+sku.id+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][sku_id]" size="7" style="text-align: center;" value="'+sku.sku_id+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][logistic_expens_m_plan]" size="7" style="text-align: center;" d value="'+sku.logistic_expens_m_plan+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][all_company_expenses]" size="7" style="text-align: center;"  value="'+sku.all_company_expenses+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][mark_cost_plan_cur_m]" size="7" style="text-align: center;"  value="'+sku.mark_cost_plan_cur_m+'">'+
             '</td>'+
             '<td>'+sku.name_brand;
-        outputHTML +=    "<input type='hidden' name='sku_params[name_brand][]' size='7' style='text-align: center;' disabled='disabled' value='"+sku.name_brand+"'>";
+        outputHTML +=    "<input type='hidden' name='sku_params["+sku.id_num+"][name_brand]' size='7' style='text-align: center;'  value='"+sku.name_brand+"'>";
         outputHTML += '</td>'+
             '<td>'+sku.name;
-        outputHTML +=    "<input type='hidden' name='sku_params[name][]' size='7' style='text-align: center;' disabled='disabled' value='"+sku.name+"'>";
+        outputHTML +=    "<input type='hidden' name='sku_params["+sku.id_num+"][name]' size='7' style='text-align: center;' value='"+sku.name+"'>";
         outputHTML += '</td>'+
-            '<td><input type="text" name="sku_params[weight][]" size="3" style="text-align: center;" disabled="disabled" value="'+sku.weight+'"></td>'+
-            '<td><input type="text" name="sku_params[price_ss][]" size="7" style="text-align: center;" disabled="disabled" value="'+sku.price_ss+'"></td>'+
-            '<td><input type="text" name="sku_params[price_urkaine][]" size="3" style="text-align: center;" disabled="disabled" value="'+sku.price_urkaine+'"></td>'+
-            '<td><input type="text" name="sku_params[price_s_kk][]" size="3" style="text-align: center;" disabled="disabled" value="'+sku.price_s_kk+'"></td>'+
-            '<td><input type="text" name="sku_params[price_one][]" size="3" style="text-align: center;" disabled="disabled" value="'+sku.price_one+'"></td>';
-        outputHTML += '<td class="type2"><input type="text" name="sku_params[price_one_discount][]" size="3" style="text-align: center;" disabled="disabled" value="'+sku.price_one_discount+'"></td>';
+            '<td><input type="text" name="sku_params['+sku.id_num+'][weight]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.weight+'"></td>'+
+            '<td><input type="text" name="sku_params['+sku.id_num+'][price_ss]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_ss+'"></td>'+
+            '<td><input type="text" name="sku_params['+sku.id_num+'][price_urkaine]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_urkaine+'"></td>'+
+            '<td><input type="text" name="sku_params['+sku.id_num+'][price_s_kk]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_s_kk+'"></td>'+
+            '<td><input type="text" name="sku_params['+sku.id_num+'][price_one]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_one+'"></td>';
+        outputHTML += '<td class="type2"><input type="text" name="sku_params['+sku.id_num+'][price_one_discount]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_one_discount+'"></td>';
         sku.total_volume_q = (typeof sku.total_volume_q !== "undefined") ? sku.total_volume_q : 0;
-        outputHTML += '<td><input type="text" class="new" name="sku_params[total_volume_q][]" size="7" style="text-align: center;" value="'+sku.total_volume_q+'"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[total_volume_price][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[total_volume_price_one][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>';
-        outputHTML += '<td class="type2"><input type="text" class="calc-input" name="sku_params[total_volume_price_one_discount][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>';
-        outputHTML += '<td><input type="text" class="calc-input" name="sku_params[ss_volume][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[expected_vp][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[bonus_net][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>';
-        outputHTML += '<td class="type1"><input type="text" class="calc-input" name="sku_params[akc_expenses][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>';
-        outputHTML += '<td><input type="text" class="calc-input" name="sku_params[share_expenses][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[logistics_expenses][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[company_expenses][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params[net_clear][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>';
-        outputHTML += '<td class="type2"><input type="text" class="calc-input" name="sku_params[prom_costs_discount][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>'+
-            '<td class="type2"><input type="text" class="calc-input" name="sku_params[total_network_costs][]" size="3" style="text-align: center;" disabled="disabled" value="0"></td>';
+        outputHTML += '<td><input type="text" class="new" name="sku_params['+sku.id_num+'][total_volume_q]" size="6" style="text-align: center;" value="'+sku.total_volume_q+'"></td>';
+        var outputHTMLCalculated = '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price_one]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price_one_discount]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][ss_volume]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][expected_vp]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][bonus_net]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td class="type1"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][akc_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][share_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][logistics_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][company_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][net_clear]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][prom_costs_discount]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_network_costs]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
+        //outputHTML += outputHTMLCalculated;
         outputHTML +=  '</tr>';
         $("#sku_selected tbody").append($(outputHTML));
         SkuSelectedInit();
@@ -321,6 +332,71 @@ $(window).load(function(){
             $("#akciya_type").val(akc_type);
     }
     SetAkciyaTypeToSelect();
+
+
+
+    function SyncElem(elem1,elem2,reverse = false){
+        var tmp_val = elem2.val();
+        if(!reverse){
+            if(tmp_val != "")
+                elem1.val(tmp_val);
+        }else{
+            tmp_val = elem1.val();
+            if(tmp_val != "")
+                elem2.val(tmp_val);
+        }
+    }
+    var SyncElemEvent = function($elem1,$elem2){
+        // do stuff when user has been idle for 0.5 second
+        if($elem1.val() != $elem1.prop("data-val") && $elem1.val() != ""){
+            $elem1.prop("data-val",$elem1.val());
+            SyncElem($elem1,$elem2,true);
+            $('#akciya_expences_perc').trigger("change");
+        }
+    }
+
+    SyncElem($(".akciya_expences_perc"),$("#akciya_expences_perc"),false);
+    SyncElem($(".bonus_net_perc"),$("#bonus_net_perc"),false);
+
+    $('.akciya_expences_perc, .bonus_net_perc').on("input change",function(){
+        SyncElemEvent($(this),$("#"+$(this).attr('class')));
+    });
+
+
+    $('.akciya_expences_perc, .bonus_net_perc').on('keypress', function(e){
+        return SetOnlyFloatNumber($(this),e);
+    });
+
+    function SetOnlyFloatNumber(el,e){
+        e = e || event;
+        if (e.ctrlKey || e.altKey || e.metaKey) return;
+        var chr = getChar(e);
+        // с null надо осторожно в неравенствах,
+        // т.к. например null >= '0' => true
+        // на всякий случай лучше вынести проверку chr == null отдельно
+        if (chr == null) return;
+        if (chr < '0' || chr > '9') {
+            if(chr != '.')
+                return false;
+        }
+        if(chr == '.' && el.val().indexOf('.') > 0){
+            return false;
+        }
+    }
+    // event.type должен быть keypress
+    function getChar(event) {
+        if (event.which == null) { // IE
+            if (event.keyCode < 32) return null; // спец. символ
+            return String.fromCharCode(event.keyCode)
+        }
+
+        if (event.which != 0 && event.charCode != 0) { // все кроме IE
+            if (event.which < 32) return null; // спец. символ
+            return String.fromCharCode(event.which); // остальные
+        }
+
+        return null; // спец. символ
+    }
     //recalculate sku values when akciya type was change
     $('.akc_type_base').on('change', function (e) {
         var $optionSelected = $("option:selected", this);
@@ -346,7 +422,7 @@ $(window).load(function(){
             reCalculateSkuAll();
     }
     function reCalculateSkuAll(){
-        $('#sku_selected input[name*="sku_params[total_volume_q]"]').each(function(){
+        $('#sku_selected input[name*="[total_volume_q]"]').each(function(){
             CalculateSku($(this));
         });
     }
@@ -382,7 +458,7 @@ $(window).load(function(){
         }
         function RemoveSkuByButton($button){
             var $row = $($button.parents('tr')[0]);
-            var id = $row.find('input[name*="sku_params[id]"]').val();
+            var id = $row.find('input[name*="[id]"]').val();
             var wanted_option = $('#sku_select option[value="'+id+'"]');
             wanted_option.prop('selected', false);
             $('#sku_select').trigger('change.select2');
@@ -405,16 +481,22 @@ $(window).load(function(){
                 }
             }, 500);
         }
-        $('#sku_selected input.new[name*="sku_params[total_volume_q]"]').on("input change",inputWeight);
+        $('#sku_selected input.new[name*="[total_volume_q]"]').on("input change",inputWeight);
 
         //get object with all sku items values as assoc. array
         window.GetSkuSelectedAll = function (){
             var result = [];
+            //var result = {};
             $('#sku_selected tbody').find('tr').each(function(){
                 var res = {};
                 $(this).find('input[name*="sku_params"]').not(".calc-input").each(function(){
-                    res[$(this).prop('name').split(/sku_params\[([a-z_]*)/)[1]] = $(this).val();
+                    //res[$(this).prop('name').split(/sku_params\[\]\[([a-z_]*)/)[1]] = $(this).val();
+                    var tmp_ = $(this).prop('name').split('][')[1];
+                    res[tmp_.substr(0,tmp_.length-1)] = $(this).val();
+                    //res[$(this).prop('name').split(/sku_params\[([a-z_]*)/)[1]] = $(this).val();
                 });
+                var id_num = ""+$(this).attr('data-sku-id')+"";
+                //result[id_num ] = res;
                 result.push(res);
             });
             return result;
@@ -431,7 +513,9 @@ $(window).load(function(){
             var container = $(el.parents('tr')[0]);
             var result = [];
             container.find('input[name*="sku_params"]').each(function(){
-                result[$(this).prop('name').split(/sku_params\[([a-z_]*)/)[1]] = ($(this).val() !== "undefined" ) ? $(this).val() : 0;
+                var tmp_ = $(this).prop('name').split('][')[1];
+                result[tmp_.substr(0,tmp_.length-1)] = ($(this).val() !== "undefined" ) ? $(this).val() : 0;
+                //result[$(this).prop('name').split(/sku_params\[([a-z_]*)/)[1]] = ($(this).val() !== "undefined" ) ? $(this).val() : 0;
             });
             return result;
         }
@@ -469,15 +553,16 @@ $(window).load(function(){
                 sku_values['net_clear'] -= sku_values['akc_expenses'];//чистая прибыль
             sku_values['prom_costs_discount'] = sku_values['total_volume_price_one']-sku_values['total_volume_price_one_discount'];//Расходы по акции в скидке
             sku_values['total_network_costs'] = sku_values['bonus_net']+sku_values['share_expenses']+sku_values['logistics_expenses']+sku_values['company_expenses']+sku_values['prom_costs_discount'];//Всего затрат по сети
-            SetCalculateField(el,sku_values);
+            SetCalculateField(el,sku.id,sku_values);
         }
         function ClearCalculatedFields(el){
             $(el.parents('tr')[0]).find('input.calc-input').val('0');
         }
-        function SetCalculateField(el,data){
+        function SetCalculateField(el,id_num,data){
             for (var param in data) {
-                $(el.parents('tr')[0]).find('input[name*="sku_params['+param+']"]').val(data[param]);
+                $(el.parents('tr')[0]).find('input[name*="sku_params['+id_num+']['+param+']"]').val(data[param]);
             }
+            $("input[name=sku_values]").val(escapeHtml(JSON.stringify(GetSkuSelectedAll())));
         }
         $("#sku_selected .new").removeClass('new');
     }

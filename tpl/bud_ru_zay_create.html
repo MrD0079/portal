@@ -168,9 +168,14 @@
                 {/if}
         </table>
         <input type="hidden" name="sku_values" value="{$smarty.request.sku_values}">
+        <input type="hidden" name="bonus_net_perc" value="{$smarty.request.bonus_net_perc}" >
         <input type="hidden" name="akciya_expences_perc" value='{$smarty.request.akciya_expences_perc}'>
         <input type="hidden" name="akciya_type" value='{$smarty.request.akciya_type}'>
         <input type="hidden" name="step_params" value='{$smarty.request.step_params}'>
+
+                <pre style="display: none;">
+                        {$smarty.request.sku_params|@debug_print_var}
+                </pre>
         <script>
         {literal}
         $(

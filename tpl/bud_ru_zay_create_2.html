@@ -403,26 +403,21 @@
                         <td>Значение</td>
                 </tr>
                 {foreach key=k item=i from=$st name=st_fields}
-                        {if $smarty.foreach.st_fields.iteration eq 4 and $smarty.request.for_kk == 'on'}
-                        <tr class="hide-dev">
-                            <td>Бонус сети, %:</td>
-                            <td><input type="text" name="bonus_net_perc" id="bonus_net_perc" value="3.5" disabled="disabled"></td>
-                        </tr>
+                        {if $smarty.foreach.st_fields.iteration eq 5 and $smarty.request.for_kk == 'on'}
                         <tr class="hide-dev">
                             <td>Бонус дистрибьютора, %:</td>
                             <td><input type="text" name="bonus_distr_pers" id="bonus_distr_pers" value="10" disabled="disabled"></td>
                         </tr>
-                        <tr class="hide-dev">
-                            <td>Скидка по акции, %:</td>
-                            <td><input type="text" name="akciya_expences_perc" id="akciya_expences_perc" value="{$smarty.request.akciya_expences_perc}"></td>
-                        </tr>
+                {/if}
+                {if $smarty.foreach.st_fields.iteration eq 6 and $smarty.request.for_kk == 'on'}
                         <tr style="">
                             <td>
                                 Продукты:
-                                <span style="color:red;display:none;"> Тестовое поле. В заявке НЕ учавтсвует</span>
                             </td>
                             <td style="max-width: 475px;">
                                 <input type="hidden" name="akciya_type" id="akciya_type" value="{$smarty.request.akciya_type}">
+                                <input type="hidden" name="bonus_net_perc" id="bonus_net_perc" value="{$smarty.request.bonus_net_perc}">
+                                <input type="hidden" name="akciya_expences_perc" id="akciya_expences_perc" value="{$smarty.request.akciya_expences_perc}">
                                 <input type="hidden" name="sku_values" value='{if $smarty.request.sku_values}{$smarty.request.sku_values}{/if}'>
                                 <input type="hidden" name="step_params" value='{if $smarty.request.step_params}{$smarty.request.step_params}{/if}'>
                                 <style>
@@ -465,7 +460,7 @@
                                     .del_sku_current {
                                         font-size: 11px;
                                         cursor: pointer;
-                                        border-radius: 1px;
+                                        border-radius: 3px;
                                         border-width: 2px;
                                         border-style: outset;
                                         transition: all 0.2s;
@@ -474,8 +469,20 @@
                                         background-color: #f4433670;
                                         border-style: inset;
                                     }
+                                    input[readonly="readonly"] {
+
+                                        background-color: #eee;
+                                        border: none;
+                                        border: 1px solid #ae9797e6;
+                                        border-top-style: solid;
+                                        border-right-style: solid;
+                                        border-bottom-style: solid;
+                                        border-left-style: solid;
+                                        border-style: inset;
+
+                                    }
                                 </style>
-                                <select id="sku_select" name="sku_select" style="width:100%;"></select>
+                                <select id="sku_select" name="sku_select[]" style="width:100%;"></select>
                             </td>
                         </tr>
                         <tr class="hide-dev">
@@ -493,33 +500,29 @@
                                         <td rowspan="2">Цена своб.-отпускн. Укр.,грн с НДС</td>
                                         <td rowspan="2">Цена Спец-ии КК, грн с НДС</td>
                                         <td rowspan="2">Цена за продажи в сеть за ед.,грн с НДС</td>
-                                        <!-- if akcija_type == 2-->
                                         <td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн с НДС</td>
-                                        <!-- endif -->
                                         <td rowspan="2">Объем продажи,шт.</td>
+                                        <!--
                                         <td rowspan="2">Объем продажи,кг.</td>
                                         <td rowspan="2">Объем продаж, грн с НДС</td>
-                                        <!-- if akcija type == 2-->
                                         <td rowspan="2" class="type2">Объем продаж с учетом скидки, грн с НДС</td>
-                                        <!-- endif -->
                                         <td rowspan="2">СС на объем отгрузки,грн с НДС</td>
                                         <td rowspan="2">Ожидаемая ВП,грн с НДС</td>
                                         <td colspan="5" class="colspan5">Расходы сети итого, вт.ч.</td>
                                         <td rowspan="2">Чистая прибыль, грн с НДС</td>
-                                        <!-- if akcija_type == 2-->
                                         <td rowspan="2" class="type2">Расходы по акции в скидке, грн с НДС</td>
                                         <td rowspan="2" class="type2">Всего затрат по сети, грн с НДС</td>
-                                        <!-- endif -->
+                                        -->
                                     </tr>
+                                    <!--
                                     <tr style="font-size: 10px;font-weight: bold;text-align: center;">
                                         <td>Бонус сети, грн с НДС</td>
-                                        <!--if akcija type == 1-->
                                         <td class="type1">Затраты по акции б/н (компенсация), грн с НДС</td>
-                                        <!--endif-->
                                         <td>Бонус дистриб, грн с НДС</td>
                                         <td>Расходы по логистике</td>
                                         <td>Расходы Компании, грн с НДС</td>
                                     </tr>
+                                    -->
                                     </thead>
                                     <tbody>
                                     <!-- SKU -->
@@ -618,14 +621,26 @@
                                                                                 {$i.var_name}
                                                                                 {$i.rep_var_name}
                                                                                 -->
+                                                                            {if $i.id eq 176933669 or $i.id eq 177005005}
                                                                                 <input
-                                                                                        size={if $i.type eq 'datepicker'}10{else}70{/if}
-                                                                                        id=new_st_{$i.id}
-                                                                                        name=new_st[{$i.id}]
-                                                                                        class="{$i.class}"
-                                                                                        {if $i.required}required{/if}
-                                                                                        onKeyUp="calc_formula();"
-                                                                                >
+                                                                                    type="text"
+                                                                                    size=10
+                                                                                    id=new_st_{$i.id}
+                                                                                    name=new_st[{$i.id}]
+                                                                                    class="{if $i.id eq 177005005}bonus_net_perc{else}akciya_expences_perc{/if}"
+                                                                                    {if $i.required}required{/if}
+
+                                                                                    >
+                                                                            {else}
+                                                                                <input
+                                                                                    size={if $i.type eq 'datepicker'}10{else}70{/if}
+                                                                                    id=new_st_{$i.id}
+                                                                                    name=new_st[{$i.id}]
+                                                                                    class="{$i.class}"
+                                                                                    {if $i.required}required{/if}
+                                                                                    onKeyUp="calc_formula();"
+                                                                                    >
+                                                                            {/if}
                                                                         {/if}
                                                                 {/if}
                                                         {/if}
