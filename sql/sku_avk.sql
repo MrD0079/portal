@@ -7,6 +7,7 @@
             sa.name_brand,
             sa.id_num,
             sa.tag_id,
+            :bsa_fields
           NVL((SELECT ss.price FROM sku_avk_prime_cost ss,
             (SELECT sku_id, CONCAT(sku_id,MAX(date_s)) sku_date
                   FROM (
@@ -29,7 +30,7 @@
               OR sa.sku_id LIKE :query
               OR sa.tag_id LIKE :query))
            AND (:show_list = 0
-              OR (sa.sku_id in (:sku_list)))
+              OR (sa.id_num in (:sku_list)))
           :bsa_where
         /*AND (:show_save_list = 0 OR (bsa.z_id = :z_id AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id))*/
         ORDER BY sa.name

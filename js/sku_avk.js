@@ -1,4 +1,5 @@
 $(window).load(function(){
+    LoadDistribBonus();
     var init_glob = false;
     var $sku_select2 = $('#sku_select').select2({
         multiple: true,
@@ -135,7 +136,7 @@ $(window).load(function(){
                     $.each(sku_list,function(k,v){
                         if(arr['id'] == v.id){
                             arr['total_volume_q'] = v.total_volume_q;
-                            return false;
+                             return false;
                         }
                     });
                 }catch(err) {
@@ -144,9 +145,11 @@ $(window).load(function(){
             }
         }
         for(name in arr){
-            if(arr[name] === "undefined" || arr[name] == null)
+            if(arr[name] === "undefined" || arr[name] == null){
                 arr[name] = 0;
-                //arr[name] = Math.floor((Math.random() * 10) + 1);
+            }
+            //arr[name] = Math.floor((Math.random() * 10) + 1);
+            arr[name] = NormalizeFloat(arr[name]);
         }
         return arr;
     }
@@ -162,8 +165,30 @@ $(window).load(function(){
         }
     });
 
-
-
+    function LoadDistribBonus(){
+        if($('#bonus_distr_pers').val() == ""){
+            var net_id = ($("#net").val() != "") ? $("#net").val() : 0;
+            $('#bonus_distr_pers').load('?action=sku_avk&print=1&pdf=1',{distrib_bonus:net_id},function(response, status, xhr) {
+                if(status == "success"){
+                    var resp = JSON.parse(response);
+                    var perc = resp.items[0].procent;
+                    if(typeof perc !== "undefined"){
+                        perc = NormalizeFloat(perc);
+                    }else{
+                        perc = 0;
+                    }
+                    $(this).val(perc);
+                }
+                InitSkuList();
+            });
+        }
+    }
+    function NormalizeFloat(float){
+        float = float+"";
+        if(float.substr(0,1) == ".")
+            float = "0"+float ;
+        return float;
+    }
     // Fetch the preselected item, and add to the control
     console.log("zid: "+zid);
     if(zid != null && zid != 0 && zid != ""){
@@ -171,7 +196,7 @@ $(window).load(function(){
             url: "?action=sku_avk&print=1&pdf=1",
             dataType: 'json',
             contentType: "application/x-www-form-urlencoded;charset=utf-8",
-            data: {get_list:1,z_id:zid}
+            data: {z_id:zid}
         }).then(function (data) {
             if(data.items[0].text && data.items[0].text.length > 0){
                 console.log("empty");
@@ -238,27 +263,30 @@ $(window).load(function(){
     }
 
     //initialize sku list again if we back to the step1
-    if($("input[name=sku_values]").val() != ""){
-        var arr = JSON.parse($("input[name=sku_values]").val());
-        if($("input[name=step_params]").val() != ""){
-            var step_params = JSON.parse($("input[name=step_params]").val());
-            if(step_params.id_net != $('[name*="new[id_net]"]').val()){
-                //достать из БД новые цены для текущей сети
-                console.log("New old_net_id: "+step_params.id_net);
-                var sku_list = [];
-                $.each( arr, function( key, value ) {
-                    sku_list.push(value.id);
-                });
-                sku_list = sku_list.join(',');
-                LoadSkuListValues(sku_list);
+    function InitSkuList(){
+        if($("input[name=sku_values]").val() != "" && $("input[name=sku_values]").val() != "[]"){
+            var arr = JSON.parse($("input[name=sku_values]").val());
+            if($("input[name=step_params]").val() != ""){
+                var step_params = JSON.parse($("input[name=step_params]").val());
+                if(step_params.id_net != $('[name*="new[id_net]"]').val()){
+                    //достать из БД новые цены для текущей сети
+                    console.log("New old_net_id: "+step_params.id_net);
+                    var sku_list = [];
+                    $.each( arr, function( key, value ) {
+                        sku_list.push(value.id);
+                    });
+                    sku_list = sku_list.join(',');
+                    LoadSkuListValues(sku_list);
+                }else{
+                    AddSku(arr);
+                }
             }else{
                 AddSku(arr);
             }
-        }else{
-            AddSku(arr);
-        }
 
+        }
     }
+
     function escapeHtml(text) {
         var map = {
             '&': '&amp;',
@@ -316,10 +344,13 @@ $(window).load(function(){
         $("#sku_selected tbody").append($(outputHTML));
         SkuSelectedInit();
         ChangeAkciyaType(akc_type);
+        $("#sku_selected").css("display","table");
     }
 
     function RemoveSkuHTML(sku_id){
         $("#sku_selected tr[data-sku-id='"+sku_id+"']").remove();
+        if($("#sku_selected tbody tr").length <= 0)
+            $("#sku_selected").css("display","none");
     }
     function SetAkciyaTypeToSelect(){
         var akc_type = $("#akciya_type").val();
@@ -463,6 +494,8 @@ $(window).load(function(){
             wanted_option.prop('selected', false);
             $('#sku_select').trigger('change.select2');
             $row.remove();
+            if($("#sku_selected tbody tr").length <= 0)
+                $("#sku_selected").css("display","none");
         }
         $(".del_sku_current.new").on("click",DelSKUTrigger);
         // --- Actions
@@ -562,7 +595,7 @@ $(window).load(function(){
             for (var param in data) {
                 $(el.parents('tr')[0]).find('input[name*="sku_params['+id_num+']['+param+']"]').val(data[param]);
             }
-            $("input[name=sku_values]").val(escapeHtml(JSON.stringify(GetSkuSelectedAll())));
+            //$("input[name=sku_values]").val(escapeHtml(JSON.stringify(GetSkuSelectedAll())));
         }
         $("#sku_selected .new").removeClass('new');
     }

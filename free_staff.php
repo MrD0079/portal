@@ -10,7 +10,7 @@ if (isset($_REQUEST["free_staff"]))
 	$_REQUEST["free_staff"]["creator"]=$tn;
 	Table_Update("free_staff",$_REQUEST["free_staff"],$_REQUEST["free_staff"]);
 
-	$res=$db->getAll("select e_mail from user_list where is_admin=1 and e_mail is not null", null, null, null, MDB2_FETCHMODE_ASSOC);
+	$res=$db->getAll("select e_mail from user_list where is_admin=1 and e_mail is not null AND DATAUVOL IS null", null, null, null, MDB2_FETCHMODE_ASSOC);
 	$creator_fio=$db->getOne("select fio from user_list where tn=".$_REQUEST["free_staff"]["creator"]);
 	$free_fio=$db->getOne("select fio from user_list where tn=".$_REQUEST["free_staff"]["tn"]);
 	foreach($res as $k=>$v)

@@ -1,11 +1,21 @@
 <?php
 //get products from AJAX when page is load
-if(isset($_REQUEST["get_list"]) && isset($_REQUEST["z_id"])){
-    $params[":z_id"] = $_REQUEST["z_id"];
-    $sql = rtrim(file_get_contents('sql/bud_ru_zay_sku_avk.sql'));
+if(isset($_REQUEST["distrib_bonus"])){
+    $params[":net_id"] = $_REQUEST["distrib_bonus"];
+    $sql = rtrim(file_get_contents('sql/sku_avk_distrib_bonus.sql'));
     $sql = stritr($sql, $params);
+    $sql = trim(preg_replace('/\s+/', ' ', $sql));
+
     $get_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-    PrintJSONFromArray($get_list,"Empty");
+    if (isset($get_list))
+    {
+        if (PEAR::isError($get_list))
+        {
+            PrintJSONFromArray(array(),'error: '.$get_list->getMessage() . " " . $get_list->getDebugInfo());
+        }else{
+            PrintJSONFromArray($get_list,'not founds: '.$q,$total_count);
+        }
+    }
     return;
 }
 
@@ -137,15 +147,17 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
         //get sku_list when edit old 'zayavka' by z_id
         if(isset($_REQUEST["z_id"]) && $_REQUEST["z_id"] != 0){
             $params[":z_id"] = $_REQUEST["z_id"];
-            $params[':show_save_list'] = 1;
+            //$params[':show_save_list'] = 1;
             $params[':show_list'] = 0;
             $params[':show_q'] = 0;
             //$params[':bsa_field'] = ',bsa.total_q';
             $params[':bsa_table'] = ', bud_ru_zay_sku_avk bsa';
             $params[':bsa_where'] = 'AND (bsa.z_id = '.$_REQUEST["z_id"].' AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id)';
+            $params[':bsa_fields'] = 'bsa.total_q total_volume_q,';
         }else{
             $params[":z_id"] = 0;
             $params[':show_save_list'] = 0;
+            $params[':bsa_fields'] = '';
             $params[':bsa_table'] = '';
             $params[':bsa_where'] = '';
         }
