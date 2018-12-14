@@ -44,7 +44,8 @@
          DECODE (m.is_zakaz_nal, 1, 1, 0) is_zakaz_nal,
          bud_z_id,
          m.payer,
-         f.name payer_name
+         f.name payer_name,
+        DECODE(m.row_id,NULL,0,M.row_id) row_id
     FROM nets_plan_month m,
          nets_plan_year y,
          statya s,

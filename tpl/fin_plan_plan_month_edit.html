@@ -86,6 +86,7 @@
 						</td>
 						<td>МКК территории</td>
 						<td>плательщик</td>
+						<td class="dev-hide">Бренды</td>
 					</tr>
 					{foreach key=key item=item from=$statya}
 					<tr
@@ -128,6 +129,12 @@
 							</select>
 							<script>$("#payer{$item.id} option[value='{$item.payer}']").prop('selected', true);</script>
 						</td>
+						<!-- new -->
+						<td class="dev-hide">
+							<input type="hidden" class="row_id_{$item.id}" name="row_id[{$item.id}]" value="{$item.row_id}">
+							<select class="brand_select" name="brand_select[{$item.id}][]" style=""></select>
+						</td>
+						<!-- end new-->
 					</tr>
 					{/foreach}
 				</table>
@@ -174,6 +181,7 @@
 					{if $smarty.request.payment_format eq 1}
 						$('#bonus{$item.statya_id}').attr('disabled',false);
 						$('#bonus{$item.statya_id}').val("{$item.bonus|default:0}");
+        				$(".row_id_{$item.statya_id}").val("{$item.row_id}");
 					{/if}
 					{if $smarty.request.payment_format eq 2}
 						$('#price{$item.statya_id}').attr('disabled',false);
@@ -181,6 +189,7 @@
 					{/if}
 					$("#mkk_ter{$item.statya_id} option[value='{$item.mkk_ter|default:0}']").prop('selected', true);
 					$("#payer{$item.statya_id} option[value='{$item.payer|default:0}']").prop('selected', true);
+
 				{/if}
 			{/foreach}
 		{else}
@@ -196,3 +205,4 @@
 	{/if}
 </form>
 <hr><br>
+

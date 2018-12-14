@@ -142,6 +142,7 @@ if (isset($_REQUEST["save_month"]))
 	audit("сохранил статью в месячный фин. план сети","fin_plan");
 	foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 	{
+        $row_id = $_REQUEST['row_id'][$key];
 		$keys=array("id" => $_REQUEST["edit"]);
 		$values=array(
 			"id_net" => $_REQUEST["nets"],
@@ -154,7 +155,8 @@ if (isset($_REQUEST["save_month"]))
 			"payment_format" => $_REQUEST["payment_format"],
 			"cnt" => str_replace(",", ".", $_REQUEST["cnt"][$key]),
 			"payer" => $_REQUEST["payer"][$key],
-			"mkk_ter" => $_REQUEST["mkk_ter"][$key]
+			"mkk_ter" => $_REQUEST["mkk_ter"][$key],
+            "row_id" => $row_id
 		);
 		if (isset($_REQUEST["bonus"]))
 		{
@@ -165,6 +167,40 @@ if (isset($_REQUEST["save_month"]))
 			$values["price"] = str_replace(",", ".", $_REQUEST["price"][$key]);
 		}
 		Table_Update ("nets_plan_month", $keys, $values);
+        if(isset($_REQUEST['brand_select'])){
+            //unset
+            if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "") {
+                $brand_selected = $db->getAll("select brand_id from nets_plan_month_brand  where status = 1 AND row_id=" . $_REQUEST['row_id'][$key]);
+                if (count($brand_selected) > 0) {
+                    foreach ($brand_selected as $k => $v) {
+                        if (!in_array($v[0], $_REQUEST["brand_select"][$key])) {
+                            $brand_id = $v[0];
+                            $keys_tmp = array("row_id" => $_REQUEST['row_id'][$key], 'brand_id' => $brand_id);
+                            $vals_tmp = array(
+                                "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
+                                "status" => 0
+                            );
+                            // echo "Update: " . json_encode(array_merge($keys_tmp, $vals_tmp)) . "\n";
+                            Table_Update("nets_plan_month_brand", $keys_tmp, $vals_tmp);
+                        }
+                    }
+
+                }
+            }
+            //add, update
+            foreach ($_REQUEST['brand_select'][$key] as $k => $item) {
+                $brand_keys = array(
+                    "row_id" => $row_id,
+                    "brand_id" => $item
+                );
+                $brand_values = array(
+                    "status" => 1,
+                    "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time()))
+                );
+                //echo "Add: " . json_encode(array_merge($brand_keys, $brand_values)) . "\n";
+                Table_Update("nets_plan_month_brand ", $brand_keys, $brand_values);
+            }
+        }
 	}
 	$_REQUEST["month"] = null;
 	$_REQUEST["edit"] = null;
@@ -181,6 +217,11 @@ if (isset($_REQUEST["add_month"]))
 	{
 		foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 		{
+            if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != ""){
+                $row_id = $_REQUEST['row_id'][$key];
+            }else{
+                $row_id = get_new_id();
+            }
 			$keys=array("id" => 0);
 			$values=array(
 				"id_net" => $_REQUEST["nets"],
@@ -195,7 +236,8 @@ if (isset($_REQUEST["add_month"]))
 				"payer" => $_REQUEST["payer"][$key],
 				"mkk_ter" => $_REQUEST["mkk_ter"][$key],
 				"bonus" => $_REQUEST["bonus"][$key],
-				"price" => $_REQUEST["price"][$key]
+				"price" => $_REQUEST["price"][$key],
+                "row_id" => $row_id
 			);
 			if ($_REQUEST["statya_on_year"]==1)
 			{
@@ -218,6 +260,40 @@ if (isset($_REQUEST["add_month"]))
 			{
 				Table_Update ("nets_plan_month", $keys, $values);
 			}
+            if(isset($_REQUEST['brand_select'])){
+                //unset
+                if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "") {
+                    $brand_selected = $db->getAll("select brand_id from nets_plan_month_brand  where status = 1 AND row_id=" . $_REQUEST['row_id'][$key]);
+                    if (count($brand_selected) > 0) {
+                        foreach ($brand_selected as $k => $v) {
+                            if (!in_array($v[0], $_REQUEST["brand_select"][$key])) {
+                                $brand_id = $v[0];
+                                $keys_tmp = array("row_id" => $_REQUEST['row_id'][$key], 'brand_id' => $brand_id);
+                                $vals_tmp = array(
+                                    "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
+                                    "status" => 0
+                                );
+                               // echo "Update: " . json_encode(array_merge($keys_tmp, $vals_tmp)) . "\n";
+                                Table_Update("nets_plan_month_brand", $keys_tmp, $vals_tmp);
+                            }
+                        }
+
+                    }
+                }
+                //add, update
+                foreach ($_REQUEST['brand_select'][$key] as $k => $item) {
+                    $brand_keys = array(
+                        "row_id" => $row_id,
+                        "brand_id" => $item
+                    );
+                    $brand_values = array(
+                        "status" => 1,
+                        "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time()))
+                    );
+                    //echo "Add: " . json_encode(array_merge($brand_keys, $brand_values)) . "\n";
+                    Table_Update("nets_plan_month_brand ", $brand_keys, $brand_values);
+                }
+            }
 		}
 	}
 	

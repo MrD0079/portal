@@ -587,6 +587,11 @@
                             </td>
                         </tr>
                         {/if}
+            {if $smarty.request.for_kk != 'on'}
+                {if $i.id eq 176933669 or $i.id eq 177005005 or $i.id eq 176856141}
+                    {continue}
+                {/if}
+            {/if}
                         <tr style="background-color:#{$i.color};font-weight:{if $i.bold eq 1}bold{/if};">
                                 <td>
                                         {$i.name}
@@ -678,6 +683,7 @@
                                                                                 {$i.rep_var_name}
                                                                                 -->
                                                                             {if $i.id eq 176933669 or $i.id eq 177005005}
+
                                                                                 <input
                                                                                     type="text"
                                                                                     size=10
@@ -902,5 +908,5 @@
     {/foreach}
 
     </script>
-    <script src="js/sku_avk.js" type="text/javascript"></script>
+    <script src="js/sku_avk.js?{filemtime( 'js/sku_avk.js' )}" type="text/javascript"></script>
 {/if}

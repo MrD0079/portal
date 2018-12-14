@@ -30,6 +30,7 @@
 	<td>Итоговая сумма, тыс. {$valuta}</td>
 	<td>ТМКК территории</td>
 	<td>плательщик</td>
+	<td class="dev-hide">Бренды</td>
 	{if $smarty.request.plan_type eq 4}
 	<td>Услугу подтвердил</td>
 	{/if}
@@ -135,6 +136,12 @@
 	<td align=right>{$item.total|default:0|num:3}</td>
 	<td>{$item.mkk_name}</td>
 	<td>{$item.payer_name}</td>
+	<!-- new -->
+	<td class="dev-hide">
+		<input type="hidden" class="row_id" value="{$item.row_id}">
+		<span class="brands"></span>
+	</td>
+	<!-- end new-->
 	{if $smarty.request.plan_type eq 4}
 	<td>{$item.tn_confirmed} {$item.date_confirmed}</td>
 	{/if}
