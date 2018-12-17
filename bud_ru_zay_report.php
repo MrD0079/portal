@@ -93,7 +93,7 @@ if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
 	$vals = array("report_done"=>null,"report_zero_cost"=>null,"report_fakt_equal_plan"=>null);
 	Table_Update("bud_ru_zay",$keys,$vals);
 	$keys = array("z_id"=>$_REQUEST["reset_z_id"]);
-	$vals = array("rep_accepted"=>0);
+	$vals = array(sz_accept0);
 	Table_Update("bud_ru_zay_accept",$keys,$vals);
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"],"plan_type"=>4);
 	Table_Update("nets_plan_month",$keys,null);
