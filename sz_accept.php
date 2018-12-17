@@ -152,6 +152,14 @@ if (isset($_REQUEST["save"]))
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
 						send_mail($email,$subj,$text);
 					}
+					//add chat with rejection detail
+                    if(isset($_REQUEST['sz_failed_id'][$k])){
+                        $keys_reject = array(
+                            "tn"=>$tn,
+                            "sz_id"=>$_REQUEST['sz_failed_id'][$k],
+                            "text"=>"нрйкнмемн: ".$v["failure"]);
+                        Table_Update("sz_chat",$keys_reject,$keys_reject);
+                    }
 				}
 				if ($v["accepted"]!=0)
 				{

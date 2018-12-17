@@ -156,14 +156,14 @@ if (isset($_REQUEST["send2scm"])){
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     foreach ($data as $k=>$v)
     {
-    $d[$v["id"]]["head"]=$v;
-    $d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
-    $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
-    if ($v["chat_id"]!="")
-    {
-    $d[$v["id"]]["chat"][$v["chat_id"]]=$v;
-    }
-    $d[$v["id"]]["files"][$v["fn"]]=$v;
+        $d[$v["id"]]["head"]=$v;
+        $d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
+        $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
+        if ($v["chat_id"]!="")
+        {
+            $d[$v["id"]]["chat"][$v["chat_id"]]=$v;
+        }
+        $d[$v["id"]]["files"][$v["fn"]]=$v;
     }
     isset($d) ? $smarty->assign('d', $d) : null;
     $sql=rtrim(file_get_contents('sql/sz_reestr_total.sql'));
