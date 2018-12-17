@@ -459,13 +459,13 @@
                         <td>Значение</td>
                 </tr>
                 {foreach key=k item=i from=$st name=st_fields}
-                        {if $smarty.foreach.st_fields.iteration eq 5 and $smarty.request.for_kk == 'on'}
+                        {if $smarty.foreach.st_fields.iteration eq 5 and ($smarty.request.for_kk or $smarty.request.new.id_net)}
                         <tr class="hide-dev1">
                             <td>Бонус дистрибьютора, %:</td>
                             <td><input type="text" name="bonus_distr_pers" id="bonus_distr_pers" size="10" value="" disabled="disabled"></td>
                         </tr>
                 {/if}
-                {if $smarty.foreach.st_fields.iteration eq 6 and $smarty.request.for_kk == 'on'}
+                {if $smarty.foreach.st_fields.iteration eq 6 and ($smarty.request.for_kk or $smarty.request.new.id_net)}
                         <tr style="">
                             <td>
                                 Продукты:
@@ -587,7 +587,7 @@
                             </td>
                         </tr>
                         {/if}
-            {if $smarty.request.for_kk != 'on'}
+            {if (!$smarty.request.for_kk and !$smarty.request.new.id_net)}
                 {if $i.id eq 176933669 or $i.id eq 177005005 or $i.id eq 176856141}
                     {continue}
                 {/if}

@@ -81,6 +81,7 @@
 						{$i2.id}==2?null:$('#sz_accept_failure_{$i.head.current_accept_id}').val();
 						" value={$i2.id}>{$i2.name}</nobr><br>
 			{/foreach}
+			<input type="hidden" name="sz_failed_id[{$i.head.current_accept_id}]" value="{$i.head.id}">
 			<textarea rows=5 cols=20 disabled required name="sz_accept[{$i.head.current_accept_id}][failure]" id="sz_accept_failure_{$i.head.current_accept_id}"></textarea>
 			<script>$("input[name='sz_accept[{$i.head.current_accept_id}][accepted]'][value=0]").attr('checked',true);</script>
 			<br>

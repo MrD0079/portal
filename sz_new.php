@@ -21,11 +21,20 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["id"]))
 	{
+	    /*
+	     * <input type="hidden" name="sz[tn]" value="3400602397">
+	     * sz[cat]
+	     * <textarea required="" cols="120" rows="1" name="sz[head]" id="sz_head">Тестовая СЗ</textarea>
+	     *<textarea required="" cols="120" rows="10" name="sz[body]" id="sz_body">Проверка переноса строк в теле СЗ и в комментариях.
+            Тут вторая строка.
+            И еще одна.</textarea>
+	     */
+
 		Table_Update("sz",array("id"=>$_REQUEST["id"]),$_REQUEST["sz"]);
 		$id=$_REQUEST["id"];
 		$keys = array("sz_id"=>$id);
-		Table_Update("sz_accept",$keys,null);
-		Table_Update("sz_executors",$keys,null);
+		Table_Update("sz_accept",$keys,null); //delete all status history
+		Table_Update("sz_executors",$keys,null); //delete all ispolniteli
 		audit ("сохранил СЗ №".$id,"sz");
 	}
 	else
