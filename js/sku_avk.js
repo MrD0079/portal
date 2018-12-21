@@ -164,8 +164,26 @@ $(window).load(function(){
             e.preventDefault();
         }
     });
+    function DeleteAllSku(){
+        $.each($('#sku_select').val(),function(k,v){
+            RemoveSkuHTML(v);
+        });
+        $('#sku_select').val(null).trigger('change');
+    }
+    TriggerChangeNet = function(){
+        var $net = $(this);
+        var old_id_net = $net.attr("data-old-id");
+        if(old_id_net != ""){
+            $('#bonus_distr_pers').val("");
+            LoadDistribBonus(old_id_net);
+        }
+    }
+    $("#net").on('focus', function () {
+        $(this).attr("data-old-id",$(this).val());
+    });
+    $("#net").on("change",TriggerChangeNet);
 
-    function LoadDistribBonus(){
+    function LoadDistribBonus(old_id_net = false){
         if($('#bonus_distr_pers').val() == ""){
             var net_id = ($("#net").val() != "") ? $("#net").val() : 0;
             $('#bonus_distr_pers').load('?action=sku_avk&print=1&pdf=1',{distrib_bonus:net_id},function(response, status, xhr) {
@@ -179,7 +197,7 @@ $(window).load(function(){
                     }
                     $(this).val(perc);
                 }
-                InitSkuList();
+                InitSkuList(old_id_net);
             });
         }
     }
@@ -243,7 +261,7 @@ $(window).load(function(){
         });
     }
 
-    function LoadSkuListValues(sku_list){
+    function LoadSkuListValues(sku_list,z_id = 0){
         $.ajax({
             url: "?action=sku_avk&print=1&pdf=1",
             dataType: 'json',
@@ -251,7 +269,8 @@ $(window).load(function(){
             data: {
                 net_id: ($("#net").val() != "") ? $("#net").val() : 0,
                 q:0,
-                sku_list: sku_list
+                sku_list: sku_list,
+                z_id:z_id
             }
         }).then(function (data) {
             if(data.items[0].text && data.items[0].text.length > 0){
@@ -263,7 +282,7 @@ $(window).load(function(){
     }
 
     //initialize sku list again if we back to the step1
-    function InitSkuList(){
+    function InitSkuList(old_id_net = false){
         if($("input[name=sku_values]").val() != "" && $("input[name=sku_values]").val() != "[]"){
             var arr = JSON.parse($("input[name=sku_values]").val());
             if($("input[name=step_params]").val() != ""){
@@ -284,6 +303,20 @@ $(window).load(function(){
                 AddSku(arr);
             }
 
+        }else if(old_id_net && $("input[name=sku_values]").val() == ""){ //when edit
+            if(old_id_net != $('[name*="new[id_net]"]').val()){
+                //достать из БД новые цены для текущей сети
+                console.log("New old_net_id: "+old_id_net);
+                var sku_list = $("#sku_select").val();
+                sku_list = sku_list.join(',');
+                if(zid === null && zid == 0 && zid == "") {
+                    zid_tmp = false;
+                }else{
+                    zid_tmp = zid;
+                    DeleteAllSku();
+                }
+                LoadSkuListValues(sku_list,zid_tmp);
+            }
         }
     }
 

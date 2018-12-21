@@ -168,31 +168,36 @@ ORDER BY name
                     }
             }
             //add new field for SKU_AVK (selected products)
-            if (isset($_REQUEST["sku_select"]) && isset($_REQUEST["sku_params"]))
-            {
-                $sku_params = $_REQUEST["sku_params"];
-                //check if sku not selected yet - then set status 0
-                //ONLY if it is not NEW zay
-                if(isset($_REQUEST['id'])){
-                    $selected_sku = $db->getAll("select id_num from bud_ru_zay_sku_avk where (status = 1 OR status IS NULL) AND z_id=".$_REQUEST['id']);
-                    if(count($selected_sku) > 0){
-                        foreach ($selected_sku as $k => $v) {
-                            if(!in_array($v[0],$_REQUEST["sku_select"])){
-                                $status = 0;
-                                //$keys = array("z_id"=>$_REQUEST['id'],"sku_id"=>$v[0]);
-                               //$vals = array("z_id"=>$_REQUEST['id'],"sku_id"=>$v[0],"lu"=>OraDate2MDBDate(date('d.m. Y h:i:s', time())),"status"=>$status);
-                                $id_num = $v[0];
-                                $keys = array("z_id" => $_REQUEST["id"],'id_num'=>$id_num);
-                                $vals = array(
-                                    "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
-                                    "status" => $status
-                                );
-                                Table_Update("bud_ru_zay_sku_avk",$keys,$vals);
-                            }
+
+            //check if sku not selected yet - then set status 0
+            //ONLY if it is not NEW zay
+            if(!isset($_REQUEST['sku_select'])){
+                $sku_selects = array();
+            }else{
+                $sku_selects = $_REQUEST["sku_select"];
+            }
+            if(isset($_REQUEST['id'])){
+                $selected_sku = $db->getAll("select id_num from bud_ru_zay_sku_avk where (status = 1 OR status IS NULL) AND z_id=".$_REQUEST['id']);
+                if(count($selected_sku) > 0){
+                    foreach ($selected_sku as $k => $v) {
+                        if(!in_array($v[0],$sku_selects) or count($sku_selects) == 0){
+                            $status = 0;
+                            //$keys = array("z_id"=>$_REQUEST['id'],"sku_id"=>$v[0]);
+                           //$vals = array("z_id"=>$_REQUEST['id'],"sku_id"=>$v[0],"lu"=>OraDate2MDBDate(date('d.m. Y h:i:s', time())),"status"=>$status);
+                            $id_num = $v[0];
+                            $keys = array("z_id" => $_REQUEST["id"],'id_num'=>$id_num);
+                            $vals = array(
+                                "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
+                                "status" => $status
+                            );
+                            Table_Update("bud_ru_zay_sku_avk",$keys,$vals);
                         }
                     }
                 }
-
+            }
+            if (isset($_REQUEST["sku_select"]) && isset($_REQUEST["sku_params"]))
+            {
+                $sku_params = $_REQUEST["sku_params"];
                 //add and update selected sku
                 foreach ($_REQUEST["sku_select"] as $k=>$v)
                 {
@@ -214,7 +219,7 @@ ORDER BY name
                     );
                     Table_Update("bud_ru_zay_sku_avk",$keys,$vals);
                 }
-                return;
+
             }
 
             if (isset($_REQUEST["productList"]))

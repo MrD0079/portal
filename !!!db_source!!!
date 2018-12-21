@@ -51133,6 +51133,7 @@ PR_BUD_REPLACE_DB	PROCEDURE	317
 PR_BUD_REPLACE_DB	PROCEDURE	318	   COMMIT;
 
 PR_BUD_REPLACE_DB	PROCEDURE	319	END;
+
 PR_BONUS_SZ_OK	PROCEDURE	1	PROCEDURE        "PR_BONUS_SZ_OK" (p_sz_id IN INTEGER)
 
 PR_BONUS_SZ_OK	PROCEDURE	2	AS
@@ -51398,6 +51399,227 @@ PR_BONUS_SZ_OK	PROCEDURE	131	      PR_SENDMAIL (a.val_string, v_head, v_body);
 PR_BONUS_SZ_OK	PROCEDURE	132	   END LOOP;
 
 PR_BONUS_SZ_OK	PROCEDURE	133	END;
+
+PR_BONUS_NEW_OK	PROCEDURE	1	PROCEDURE        "PR_BONUS_NEW_OK" (p_sz_id IN INTEGER)
+
+PR_BONUS_NEW_OK	PROCEDURE	2	AS
+
+PR_BONUS_NEW_OK	PROCEDURE	3	   v_head                      VARCHAR2 (4000);
+
+PR_BONUS_NEW_OK	PROCEDURE	4	   v_body                      VARCHAR2 (32767);
+
+PR_BONUS_NEW_OK	PROCEDURE	5	   v_tn                        INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	6	   v_dpt_id                    INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	7	   i                           INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	8	   too_many_lines              INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	9	   PRAGMA AUTONOMOUS_TRANSACTION;
+
+PR_BONUS_NEW_OK	PROCEDURE	10	   v_bonus_type                INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	11	   v_bonus_subtype             INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	12	   v_bonus_type_name           VARCHAR (255);
+
+PR_BONUS_NEW_OK	PROCEDURE	13	   v_bonus_subtype_name        VARCHAR (255);
+
+PR_BONUS_NEW_OK	PROCEDURE	14	   v_bonus_id                  INTEGER;
+
+PR_BONUS_NEW_OK	PROCEDURE	15	   v_text                      VARCHAR2 (1000);
+
+PR_BONUS_NEW_OK	PROCEDURE	16	   v_creator_fio               VARCHAR (255);
+
+PR_BONUS_NEW_OK	PROCEDURE	17	   v_creator_pos_name          VARCHAR (255);
+
+PR_BONUS_NEW_OK	PROCEDURE	18	   v_creator_department_name   VARCHAR (255);
+
+PR_BONUS_NEW_OK	PROCEDURE	19	   v_created                   VARCHAR (255);
+
+PR_BONUS_NEW_OK	PROCEDURE	20	BEGIN
+
+PR_BONUS_NEW_OK	PROCEDURE	21	   SELECT u1.fio,
+
+PR_BONUS_NEW_OK	PROCEDURE	22	          u1.pos_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	23	          u1.department_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	24	          TO_CHAR (v.created, 'dd.mm.yyyy') created,
+
+PR_BONUS_NEW_OK	PROCEDURE	25	          v.tn,
+
+PR_BONUS_NEW_OK	PROCEDURE	26	          v.bonus_type,
+
+PR_BONUS_NEW_OK	PROCEDURE	27	          v.bonus_subtype,
+
+PR_BONUS_NEW_OK	PROCEDURE	28	          (SELECT name
+
+PR_BONUS_NEW_OK	PROCEDURE	29	             FROM bonus_types
+
+PR_BONUS_NEW_OK	PROCEDURE	30	            WHERE id = v.bonus_type)
+
+PR_BONUS_NEW_OK	PROCEDURE	31	             bonus_type_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	32	          (SELECT name
+
+PR_BONUS_NEW_OK	PROCEDURE	33	             FROM bonus_types
+
+PR_BONUS_NEW_OK	PROCEDURE	34	            WHERE id = v.bonus_subtype)
+
+PR_BONUS_NEW_OK	PROCEDURE	35	             bonus_subtype_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	36	          v.id,
+
+PR_BONUS_NEW_OK	PROCEDURE	37	          v.dpt_id,
+
+PR_BONUS_NEW_OK	PROCEDURE	38	          sz1.body
+
+PR_BONUS_NEW_OK	PROCEDURE	39	     INTO v_creator_fio,
+
+PR_BONUS_NEW_OK	PROCEDURE	40	          v_creator_pos_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	41	          v_creator_department_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	42	          v_created,
+
+PR_BONUS_NEW_OK	PROCEDURE	43	          v_tn,
+
+PR_BONUS_NEW_OK	PROCEDURE	44	          v_bonus_type,
+
+PR_BONUS_NEW_OK	PROCEDURE	45	          v_bonus_subtype,
+
+PR_BONUS_NEW_OK	PROCEDURE	46	          v_bonus_type_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	47	          v_bonus_subtype_name,
+
+PR_BONUS_NEW_OK	PROCEDURE	48	          v_bonus_id,
+
+PR_BONUS_NEW_OK	PROCEDURE	49	          v_dpt_id,
+
+PR_BONUS_NEW_OK	PROCEDURE	50	          v_text
+
+PR_BONUS_NEW_OK	PROCEDURE	51	     FROM BONUS_head v, user_list u1, sz sz1
+
+PR_BONUS_NEW_OK	PROCEDURE	52	    WHERE v.sz_id = p_sz_id AND u1.tn(+) = v.tn AND sz1.ID(+) = v.sz_id;
+
+PR_BONUS_NEW_OK	PROCEDURE	53	
+
+PR_BONUS_NEW_OK	PROCEDURE	54	   v_head :=
+
+PR_BONUS_NEW_OK	PROCEDURE	55	      'Заявка на применение административных мер согласована';
+
+PR_BONUS_NEW_OK	PROCEDURE	56	   v_body :=
+
+PR_BONUS_NEW_OK	PROCEDURE	57	         '№ заявки '
+
+PR_BONUS_NEW_OK	PROCEDURE	58	      || v_bonus_id
+
+PR_BONUS_NEW_OK	PROCEDURE	59	      || '<br>'
+
+PR_BONUS_NEW_OK	PROCEDURE	60	      || 'Дата заявки '
+
+PR_BONUS_NEW_OK	PROCEDURE	61	      || v_created
+
+PR_BONUS_NEW_OK	PROCEDURE	62	      || '<br>'
+
+PR_BONUS_NEW_OK	PROCEDURE	63	      || 'ФИО инициатора '
+
+PR_BONUS_NEW_OK	PROCEDURE	64	      || v_creator_fio
+
+PR_BONUS_NEW_OK	PROCEDURE	65	      || '<br>'
+
+PR_BONUS_NEW_OK	PROCEDURE	66	      || 'должность инициатора '
+
+PR_BONUS_NEW_OK	PROCEDURE	67	      || v_creator_pos_name
+
+PR_BONUS_NEW_OK	PROCEDURE	68	      || '<br>'
+
+PR_BONUS_NEW_OK	PROCEDURE	69	      || 'подразделение инициатора '
+
+PR_BONUS_NEW_OK	PROCEDURE	70	      || v_creator_department_name
+
+PR_BONUS_NEW_OK	PROCEDURE	71	      || '<br>'
+
+PR_BONUS_NEW_OK	PROCEDURE	72	      || v_text;
+
+PR_BONUS_NEW_OK	PROCEDURE	73	   i := 1;
+
+PR_BONUS_NEW_OK	PROCEDURE	74	
+
+PR_BONUS_NEW_OK	PROCEDURE	75	   FOR a IN (  SELECT *
+
+PR_BONUS_NEW_OK	PROCEDURE	76	                 FROM bonus_body t, calendar c
+
+PR_BONUS_NEW_OK	PROCEDURE	77	                WHERE t.bonus_id = v_bonus_id AND t.mz = c.data
+
+PR_BONUS_NEW_OK	PROCEDURE	78	             ORDER BY t.fio)
+
+PR_BONUS_NEW_OK	PROCEDURE	79	   LOOP
+
+PR_BONUS_NEW_OK	PROCEDURE	80	      IF NVL (LENGTH (v_body), 0) < 10000
+
+PR_BONUS_NEW_OK	PROCEDURE	81	      THEN
+
+PR_BONUS_NEW_OK	PROCEDURE	82	         i := i + 1;
+
+PR_BONUS_NEW_OK	PROCEDURE	83	         too_many_lines := 0;
+
+PR_BONUS_NEW_OK	PROCEDURE	84	      ELSE
+
+PR_BONUS_NEW_OK	PROCEDURE	85	         too_many_lines := 1;
+
+PR_BONUS_NEW_OK	PROCEDURE	86	      END IF;
+
+PR_BONUS_NEW_OK	PROCEDURE	87	   END LOOP;
+
+PR_BONUS_NEW_OK	PROCEDURE	88	
+
+PR_BONUS_NEW_OK	PROCEDURE	89	   IF too_many_lines = 1
+
+PR_BONUS_NEW_OK	PROCEDURE	90	   THEN
+
+PR_BONUS_NEW_OK	PROCEDURE	91	      v_body :=
+
+PR_BONUS_NEW_OK	PROCEDURE	92	            v_body
+
+PR_BONUS_NEW_OK	PROCEDURE	93	         || '<p>Отображен не весь список. Полный список вы можете увидеть непосредственно на портале</p>';
+
+PR_BONUS_NEW_OK	PROCEDURE	94	   END IF;
+
+PR_BONUS_NEW_OK	PROCEDURE	95	
+
+PR_BONUS_NEW_OK	PROCEDURE	96	   v_body :=
+
+PR_BONUS_NEW_OK	PROCEDURE	97	         v_body
+
+PR_BONUS_NEW_OK	PROCEDURE	98	      || '<p><a href="https://ps.avk.ua/?action=sz_reestr&sz_id='
+
+PR_BONUS_NEW_OK	PROCEDURE	99	      || p_sz_id
+
+PR_BONUS_NEW_OK	PROCEDURE	100	      || '">ссылка на СЗ</a></p>';
+
+PR_BONUS_NEW_OK	PROCEDURE	101	
+
+PR_BONUS_NEW_OK	PROCEDURE	102	   FOR a
+
+PR_BONUS_NEW_OK	PROCEDURE	103	      IN (SELECT val_string
+
+PR_BONUS_NEW_OK	PROCEDURE	104	            FROM parameters
+
+PR_BONUS_NEW_OK	PROCEDURE	105	           WHERE     dpt_id = v_dpt_id
+
+PR_BONUS_NEW_OK	PROCEDURE	106	                 AND param_name IN ('pers1', 'pers2', 'accept1', 'accept2'))
+
+PR_BONUS_NEW_OK	PROCEDURE	107	   LOOP
+
+PR_BONUS_NEW_OK	PROCEDURE	108	      PR_SENDMAIL (a.val_string, v_head, v_body);
+
+PR_BONUS_NEW_OK	PROCEDURE	109	   END LOOP;
+
+PR_BONUS_NEW_OK	PROCEDURE	110	END;
+
 PR_BONUS_SZ_CREATE	PROCEDURE	1	PROCEDURE        "PR_BONUS_SZ_CREATE" (
 
 PR_BONUS_SZ_CREATE	PROCEDURE	2	   p_bonus_id IN INTEGER)

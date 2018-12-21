@@ -33,6 +33,9 @@ InitRequestVar("department_name","0");
 InitRequestVar("z_id",0);
 InitRequestVar("date_between_brzr","dt12");
 
+$dev_req = isset($_REQUEST['dev']) ? $_REQUEST['dev'] : 0;
+InitRequestVar("dev",$dev_req);
+
 
 
 
@@ -298,6 +301,9 @@ $bud_ru_ff_st = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('bud_ru_ff_st', $bud_ru_ff_st);
 
 }
+include "SkuSelect.php";
+$skuObj = new \SkuSelect\SkuSelect($db);
+$smarty->assign('skuObj', $skuObj);
 
 $smarty->display('bud_ru_zay_reestr.html');
 

@@ -129,7 +129,8 @@ if (isset($_REQUEST["save"]))
 						}
 						if ($h["cat"]==927672)
 						{
-							$db->query("BEGIN PR_BONUS_SZ_OK (".$h["id"]."); END;");
+//							$db->query("BEGIN PR_BONUS_SZ_OK (".$h["id"]."); END;");
+							$db->query("BEGIN PR_BONUS_NEW_OK (".$h["id"]."); END;"); //create from persik.sz
 						}
 					}
 				}

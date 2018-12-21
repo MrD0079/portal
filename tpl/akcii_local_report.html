@@ -54,6 +54,11 @@
       <td style="vertical-align: top;">{$i.contact_tel}</td>
       <td style="vertical-align: top; text-align:right;">{$i.summa|num:3}</td>
       <td style="vertical-align: top; text-align: center;" id="d_{$i.tp_kod}_tp_kod">
+          <pre style="display: none;">
+              {$is_db|@debug_print_var}
+              {$has_parent_db|@debug_print_var}
+              {$act_head.ok_db_tn|@debug_print_var}
+          </pre>
 {if not $smarty.request.print and ($is_db or $has_parent_db) and not $act_head.ok_db_tn}
 		<input
 			name="selected[{$i.tp_kod}]"

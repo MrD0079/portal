@@ -93,14 +93,13 @@ if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
 	$vals = array("report_done"=>null,"report_zero_cost"=>null,"report_fakt_equal_plan"=>null);
 	Table_Update("bud_ru_zay",$keys,$vals);
 	$keys = array("z_id"=>$_REQUEST["reset_z_id"]);
-	$vals = array(sz_accept0);
+	$vals = array("rep_accepted"=>0);
 	Table_Update("bud_ru_zay_accept",$keys,$vals);
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"],"plan_type"=>4);
 	Table_Update("nets_plan_month",$keys,null);
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"]);
 	Table_Update("invoice",$keys,null);
 }
-
 if (
         isset($_REQUEST["save_cost_assign_month"])
         &&isset($_REQUEST["reset_z_id"])
@@ -115,7 +114,6 @@ if (
             Table_Update("bud_ru_zay",$keys,$vals);
         }
 }
-
 if (isset($_REQUEST["save"]))
 {
 	

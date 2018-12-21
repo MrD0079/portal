@@ -201,7 +201,12 @@
                 <tr>
                         <td>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <input id="master" class="datepicker" size=10 name=new[dt_start] value="{$smarty.request.new.dt_start}"
+                                   onchange="load_fils({$smarty.request.new.fil});">
+                            {else}
                             <input id="master" class="" size=10 name=new[dt_start] value="{$smarty.request.new.dt_start}" readonly="readonly">
+                            {/if}
                             <!--<input id="master" class="datepicker" size=10 name=new[dt_start] value="{$smarty.request.new.dt_start}"
                                    onchange="load_fils({$smarty.request.new.fil});">-->
                         </td>
@@ -209,7 +214,11 @@
                 <tr>
                         <td>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <input id="slave" class="datepicker" size=10 name=new[dt_end] value="{$smarty.request.new.dt_end}">
+                            {else}
                             <input id="slave" class="" size=10 name=new[dt_end] value="{$smarty.request.new.dt_end}" readonly="readonly">
+                            {/if}
                             <!--<input id="slave" class="datepicker" size=10 name=new[dt_end] value="{$smarty.request.new.dt_end}">-->
                         </td>
                 </tr>
@@ -281,6 +290,12 @@
                 <tr>
                         <td>Дистрибутор(ы)</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <select name=new[fil] id=new_fil required></select>
+                            <script>
+                                $('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);
+                            </script>
+                            {else}
                             <input type=hidden name=new[fil] value="{$smarty.request.new.fil}">
                             <span class="fil_name"></span>
                             <script>
@@ -293,6 +308,7 @@
                                     $(this).text(fil_name);
                                 });
                             </script>
+                            {/if}
                             <!--{$fil_name}-->
                             <!--<select name=new[fil] id=new_fil required></select>-->
                             <script>
@@ -338,13 +354,26 @@
                 <tr>
                         <td>Фонд</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <select name=new[funds] id=funds
+                            required
+                            >
+                            <option></option>
+                            {foreach key=key item=item from=$funds}
+                            <option value="{$item.id}">{$item.name|escape}</option>
+                            {/foreach}
+                            </select>
+                            <script>
+                                $('#funds option[value={$smarty.request.new.funds}]').prop('selected', true);
+                            </script>
+                            {else}
                             <input type=hidden name=new[funds] value="{$smarty.request.new.funds}">
                             {foreach key=key item=item from=$funds}
                             {if $item.id eq $smarty.request.new.funds}
                             <span class="funds_name">{$item.name|escape}</span>
                             {/if}
                             {/foreach}
-
+                            {/if}
                                 <!--<select name=new[funds] id=funds-->
                                         <!--required-->
                                 <!--&gt;-->
@@ -382,13 +411,26 @@
                 <tr>
                         <td>Сеть</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <select name=new[id_net] id=net
+                            required
+                            >
+                            <option></option>
+                            {foreach key=key item=item from=$nets}
+                            <option value="{$item.id_net}">{$item.net_name|escape}</option>
+                            {/foreach}
+                            </select>
+                            <script>
+                                $('#net option[value={$smarty.request.new.id_net}]').prop('selected', true);
+                            </script>
+                            {else}
                             <input type=hidden name=new[id_net] id=net value="{$smarty.request.new.id_net}">
                             {foreach key=key item=item from=$nets}
                             {if $item.id_net eq $smarty.request.new.id_net}
                             <span class="net_name">{$item.net_name|escape}</span>
                             {/if}
                             {/foreach}
-
+                            {/if}
                                 <!--<select name=new[id_net] id=net-->
                                         <!--required-->
                                 <!--&gt;-->
@@ -405,13 +447,26 @@
                 <tr>
                         <td>Форма оплаты</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <select name=new[payment_type] id=payment_type
+                            required
+                            >
+                            <option value=0></option>
+                            {foreach key=key item=item from=$payment_type}
+                            <option value={$item.id}>{$item.pay_type}</option>
+                            {/foreach}
+                            </select>
+                            <script>
+                                $('#payment_type option[value={$smarty.request.new.payment_type}]').prop('selected', true);
+                            </script>
+                            {else}
                             <input type=hidden name=new[payment_type] id=payment_type value="{$smarty.request.new.payment_type}">
                             {foreach key=key item=item from=$payment_type}
                             {if $item.id eq $smarty.request.new.payment_type}
                             <span class="payment_name">{$item.pay_type}</span>
                             {/if}
                             {/foreach}
-
+                            {/if}
                                 <!--<select name=new[payment_type] id=payment_type-->
                                         <!--required-->
                                 <!--&gt;-->
@@ -428,13 +483,26 @@
                 <tr>
                         <td>Статья затрат</td>
                         <td>
+                            {if !$smarty.request.for_kk and $smarty.request.new.id_net}
+                            <select name=new[statya] id=statya
+                            required
+                            >
+                            <option value=0></option>
+                            {foreach key=key item=item from=$statya_list}
+                            <option {if $item.parent eq 0}disabled{/if} value={$item.id}>{if $item.parent neq 0}&nbsp&nbsp&nbsp{/if}{$item.cost_item}</option>
+                            {/foreach}
+                            </select>
+                            <script>
+                                 $('#statya option[value={$smarty.request.new.statya}]').prop('selected', true);
+                            </script>
+                            {else}
                             <input type=hidden name=new[statya] id=statya value="{$smarty.request.new.statya}">
                             {foreach key=key item=item from=$statya_list}
                             {if $item.id eq $smarty.request.new.statya}
                             <span class="payment_name">{$item.cost_item}</span>
                             {/if}
                             {/foreach}
-
+                            {/if}
                                 <!--<select name=new[statya] id=statya-->
                                         <!--required-->
                                 <!--&gt;-->

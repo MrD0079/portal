@@ -7,7 +7,7 @@
 if (isset($_REQUEST["add"])&&isset($_REQUEST["head"])&&isset($_REQUEST["data"]))
 {
 	isset($_REQUEST["head"]["id"]) ? $id=$_REQUEST["head"]["id"] : $id=get_new_id();
-	$_REQUEST["head"]["id"]=$id;
+	$_REQUEST["sz_accept"]["id"]=$id;
 	$_REQUEST["head"]["tn"]=$tn;
 	$_REQUEST["head"]["dpt_id"]=$_SESSION['dpt_id'];
 	Table_Update("bonus_head",array('id'=>$id),$_REQUEST["head"]);

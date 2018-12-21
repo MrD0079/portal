@@ -12,7 +12,7 @@ SELECT d.tp_kod,
           WHEN     DECODE (NVL (d.plan, 0), 0, 0, d.fact / d.plan * 100) >= 100
                AND DECODE (NVL (d.plan_target, 0), 0, 0, d.fact_target / d.plan_target * 100) >= 100
           THEN
-             352 /*NVL (d.plan, 0) * 0.05*/
+             380 /*NVL (d.plan, 0) * 0.05*/
        END
           max_bonus,
        d.fio_eta,
