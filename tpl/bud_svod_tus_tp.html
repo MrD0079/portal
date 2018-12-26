@@ -124,7 +124,7 @@
 			<td><a target=_blank href="files/{$i.last_fn}">{$i.last_fn}</a></td>
 			<td style="text-align:right">{$i.summa|num:2}</td>
 			<td style=" text-align: center;" id="d_{$i.tp_kod}_tp_kod">
-				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{if $i.selected}да{/if}
 				{else}
 					<input
@@ -156,7 +156,7 @@
 			<td style=" text-align:right" id="d_{$i.tp_kod}_summa_return">{$i.summa_return|num:2}</td>
 			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_tp">{$i.bonus_tp|num:2}</td>
 			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_fakt">
-				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i.bonus_fakt|num:2}
 				{else}
 					<input
@@ -173,7 +173,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.tp_kod}_fixed_fakt">
-				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i.fixed_fakt|num:2}
 				{else}
 					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.tp_kod}').val('{$i.fixed}');$('#fixed_fakt_{$i.tp_kod}').change();">{$i.fixed|num:3} =></a>
@@ -193,7 +193,7 @@
 			<td style=" text-align:right ; /*{if $i.total > $i.maxtp}*/ background-color:red /*{/if}*/ " id="d_{$i.tp_kod}_maxtp">{$i.maxtp|num:2}</td>
 			<td style=" text-align:right ;background-color: rgb(153, 255, 153);" id="d_{$i.tp_kod}_total">{$i.total|num:2}</td>
 			<td style=" text-align:center" id="d_{$i.tp_kod}_cash">
-				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{if $i.cash}да{/if}
 				{else}
 					<input
@@ -210,7 +210,7 @@
 			<td style=" text-align:right;background-color:#FFCC99;" id="d_{$i.tp_kod}_compens_distr">{$i.compens_distr|num:2}</td>
 			<td style=" text-align:right" id="d_{$i.tp_kod}_zat">{$i.zat|num:2}</td>
 			<td style=" text-align:center;" id="d_{$i.tp_kod}_ok_db_tn">
-				{if not $i.selected or $tn neq $i.parent_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $i.selected or $tn neq $i.parent_tn or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 				{else}
 					<input
 						name="ok_db_tn[{$i.tp_kod}]"
@@ -227,7 +227,7 @@
 				{$i.ok_db_lu}
 			</td>
 			<td style=" text-align:left;" id="d_{$i.tp_kod}_comm">
-				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i.comm|nl2br}
 				{else}
 					<textarea

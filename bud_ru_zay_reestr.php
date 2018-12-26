@@ -199,25 +199,27 @@ if ($_REQUEST["z_id"]!=0)
 if (isset($_REQUEST["select"])&&(!isset($_REQUEST["showonlysvod"])))
 {
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr.sql'));
-$sql=stritr($sql,$params);
+    $sql=rtrim(file_get_contents('sql/bud_ru_zay_reestr.sql'));
+    $sql=stritr($sql,$params);
 
-//$_REQUEST["SQL"]=$sql;
+    //$_REQUEST["SQL"]=$sql;
 
-//exit;
+    //exit;
 
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-foreach ($data as $k=>$v)
-{
-$d[$v["id"]]["head"]=$v;
-$d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
-$d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
-if ($v["chat_id"]!="")
-{
-$d[$v["id"]]["chat"][$v["chat_id"]]=$v;
-}
-}
+
+
+    foreach ($data as $k=>$v)
+    {
+        $d[$v["id"]]["head"]=$v;
+        $d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
+        $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
+        if ($v["chat_id"]!="")
+        {
+            $d[$v["id"]]["chat"][$v["chat_id"]]=$v;
+        }
+    }
 
 if (isset($d))
 {
@@ -227,9 +229,13 @@ foreach ($d as $k=>$v)
 	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
 	$p=array(':z_id' => $k);
 	$sql=stritr($sql,$p);
-	//$_REQUEST["SQL"]=$sql;
-	
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+
+	//fix. Check is set any TP for local akciya
+    $sql_tp="SELECT count(tp_kod) count_tp FROM akcii_local_tp WHERE z_id = ".$k;
+    $data_tp = $db->getAll($sql_tp, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $d[$k]["local_tp"]=$data_tp[0];
+
 	foreach ($data as $k1=>$v1)
 	{
 		if ($v1["type"]=="file")

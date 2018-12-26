@@ -1,2 +1,86 @@
-
+<form action="/?action=testSkuSelect" method="POST">
 {$skuObj->GetSkuList(177501410,1)}
+    <br><input type="submit" name="save" id="save" data-submit="false" data-save-id="177501410" data-count-tp="6" value="Сохранить"><br>
+    <style>
+        .open-table-sku {
+            display: inline-block;
+            cursor: pointer;
+            padding: 2px 5px;
+            background-color: #eee;
+            border-radius: 3px;
+            border: 1px solid #b6b6b6;
+
+        }
+        .info-sku{
+            display: block;
+            text-align: center;
+            margin: 10px auto;
+        }
+        .info-message .ui-dialog-titlebar.ui-widget-header {
+
+            text-align: center;
+            background: #ec5555cc;
+
+        }
+    </style>
+    <script>
+        $("#save").parents("form").submit(function(e){
+            var $btn = $(this).find("#save");
+            if($btn.attr("data-submit") == "false"){
+                e.preventDefault();
+                var count_tp = $btn.attr("data-count-tp");
+                if(typeof count_tp !== "undefined" && count_tp != ""){
+                    var title = "Предупреждение для №"+$btn.attr("data-save-id");
+                    var message = "<br><br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
+                    var msg_type = 0;
+                    if(count_tp == 0){
+                        message = "Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message;
+                        msg_type = 1;
+                    }else{
+                        message = "Перед сохранением заявки на МА убедитесь что отчет для текущей локальной акции заполен."+message;
+                        msg_type = 2;
+                    }
+                    if(ConfirmDialog(title,message,$btn,msg_type) == false){
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+            }
+        });
+        function ConfirmDialog(title,message,$submit,msg_type){
+            var btn_params = {};
+            if(msg_type == 2){
+                btn_params = {
+                    'Сохранить': function () {
+                        //submit form;
+                        $submit.attr("data-submit", true);
+                        $submit.click();
+                        $(this).dialog("close");
+                    },
+                    'Отменить': function () {
+                        //cancel submit form
+                        $(this).dialog("close");
+                        return false;
+                    }
+                }
+            }else if(msg_type == 1){
+                btn_params = {}
+            }
+            $('<div></div>').appendTo('body')
+                .html('<div><h6 style="font-size: 12px;font-weight: normal;">'+message+'</h6></div>')
+                .dialog({
+                    modal: true, title: title, zIndex: 10000, autoOpen: true,
+                    width: 'auto', resizable: false,
+                    classes: {
+                        "ui-dialog": "info-message"
+                    },
+                    buttons: btn_params,
+                    close: function (event, ui) {
+                        //cancel submit form
+                        $(this).remove();
+                        return false;
+                    }
+                });
+        };
+    </script>
+</form>

@@ -34,6 +34,24 @@ $v['fn']!==null&&$v['fio_ts']!==null&&$v['id']!==null?$d['data'][$v['fio_ts']]['
 }
 }
 isset($d)?$smarty->assign('svodf', $d):null;
+
+//add fix for close/open access to MA
+$param_tmp = array(
+    ':dt' => "'".$_REQUEST["dt"]."'"
+);
+$sql = rtrim(file_get_contents('sql/params_for_MAreport.sql'));
+$sql=stritr($sql,$param_tmp);
+$parameters = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$access_edit = false;
+foreach ($parameters as $key => $param) {
+    if($param['access_edit'] == 1){
+        $access_edit = true;
+    }
+}
+$smarty->assign('access_edit', $access_edit);
+//end
+
+
 $smarty->display('bud_svod_tun_tp_svodf.html');
 
 ?>

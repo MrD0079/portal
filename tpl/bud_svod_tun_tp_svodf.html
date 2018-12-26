@@ -8,7 +8,7 @@
 	{foreach key=k item=i from=$svodf.data}
 	{foreach key=k1 item=i1 from=$i.data}
 	<tr id="reestr_tr_{$k1}" style="text-align:center" bgcolor="{cycle values="#ccffff,#ffffcc"}">
-		<td>{if $is_ts and not $smarty.request.print}<a href="javascript:void(0);" onclick="del_reestr({$k1});">[x]</a>{/if}</td>
+		<td>{if $is_ts and not $smarty.request.print and $access_edit eq true}<a href="javascript:void(0);" class="access_edit" onclick="del_reestr({$k1});">[x]</a>{/if}</td>
 		<td><a target=_blank href="files/{$i1.fn}">{$i1.fn}</a></td>
 		<td>{$i1.summa|default:0|num:2}</td>
 	</tr>
@@ -30,22 +30,24 @@
 <script>
 $('#reestr_fn').attr('disabled',true);
 </script>
-<div id=reestr_load>
-	<p style="color:red">Файл не будет загружен, если не будет введена сумма по реестру!</p>
-	Сумма по реестру:
-	<input
-		class="number"
-		size="10"
-		name="reestr_sum"
-		id="reestr_sum"
-		onChange="$('#reestr_fn').attr('disabled',this.value=='');"
-	>
-	файл:
-	<input
-		disabled
-		type=file
-		id="reestr_fn"
-		onChange="save_reestr();"
-	>
-</div>
+	{if $access_edit eq true}
+	<div id=reestr_load>
+		<p style="color:red">Файл не будет загружен, если не будет введена сумма по реестру!</p>
+		Сумма по реестру:
+		<input
+			class="number"
+			size="10"
+			name="reestr_sum"
+			id="reestr_sum"
+			onChange="$('#reestr_fn').attr('disabled',this.value=='');"
+		>
+		файл:
+		<input
+			disabled
+			type=file
+			id="reestr_fn"
+			onChange="save_reestr();"
+		>
+	</div>
+	{/if}
 {/if}

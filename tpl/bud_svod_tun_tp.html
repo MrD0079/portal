@@ -116,7 +116,7 @@
 			<td style=" text-align:right" id="d_{$i.tp_kod}_bonus_tp">{$i.bonus_tp|num:2}</td>
 			<td style=" text-align:right; /*{if $i.total > $i.maxtp}*/ background-color:red /*{else}*/ background-color: rgb(255, 255, 204) /*{/if}*/ " id="d_{$i.tp_kod}_maxtp">{$i.maxtp|num:2}</td>
 			<td style=" text-align: center;" id="d_{$i.tp_kod}_tp_kod">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{if $i.selected}да{/if}
 				{else}
 					<input
@@ -140,7 +140,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.tp_kod}_bonus_fakt">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i.bonus_fakt|num:2}
 				{else}
 					<input
@@ -157,7 +157,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.tp_kod}_fixed_fakt">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i.fixed_fakt|num:2}
 				{else}
 					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.tp_kod}').val('{$i.fixed}');$('#fixed_fakt_{$i.tp_kod}').change();">{$i.fixed|num:3} =></a>
@@ -176,7 +176,7 @@
 			</td>
 			<td style=" text-align:right ;/*{if $i.total > $i.maxtp}*/ background-color:red /*{else}*/background-color: rgb(153, 255, 153)/*{/if}*/" id="d_{$i.tp_kod}_total">{$i.total|num:2}</td>
 			<td style=" text-align:center" id="d_{$i.tp_kod}_cash">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{if $i.cash}да{/if}
 				{else}
 					<input
@@ -255,7 +255,7 @@
 {/if}
 			<td style=" text-align: center;">{$i1.fname}</td>
 			<td style=" text-align: center;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_net_kod_db_fil">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{if $i1.selected}да{/if}
 				{else}
 					<input
@@ -279,7 +279,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_bonus_fakt">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i1.bonus_fakt|num:2}
 				{else}
 					<input
@@ -296,7 +296,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_fixed_fakt">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{$i1.fixed_fakt|num:2}
 				{else}
 					<a href="javascript:void(0);" onclick="$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').val('{$i1.fixed}');$('#fixed_fakt_{$i.net_kod}_{$i.db}_{$i1.fil}').change();">{$i1.fixed|num:3} =></a>
@@ -315,7 +315,7 @@
 			</td>
 			<td style=" text-align:right ;/*{if $i.total > $i.maxtp}*/ background-color:red /*{else}*/background-color: rgb(153, 255, 153) /*{/if}*/" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_total">{$i1.total|num:2}</td>
 			<td style=" text-align:center" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_cash">
-				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn}
+				{if not $is_ts or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false}
 					{if $i1.cash}да{/if}
 				{else}
 					<input
@@ -362,21 +362,22 @@ function save_tp(id,id1,field,val)
 	fd.append('val',  val);
 	fd.append('dt',  v_dt);
 	$.ajax({
-	type: 'POST',
-	url: '?action=bud_svod_tun_tp_save&nohead=1',
-	data: fd,
-	processData: false,
-	contentType: false,
-	success: function(data) {
-	$('#ok').html(''+data+'');
-	get_val(id1,id1,'bonus_tp');
-	get_val(id1,id1,'maxtp');
-	get_val(id1,id,'total');
-	get_val(id1,id,'compens_distr');
-	get_val(id1,id1,'zat');
-	load_tp_total();
-	$('#d_'+id+'_'+field).css('background-color','white');
-}});
+        type: 'POST',
+        url: '?action=bud_svod_tun_tp_save&nohead=1',
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $('#ok').html(''+data+'');
+            get_val(id1,id1,'bonus_tp');
+            get_val(id1,id1,'maxtp');
+            get_val(id1,id,'total');
+            get_val(id1,id,'compens_distr');
+            get_val(id1,id1,'zat');
+            load_tp_total();
+            $('#d_'+id+'_'+field).css('background-color','white');
+        }
+	});
 }
 
 function get_val(key,key1,field)

@@ -14,14 +14,14 @@ SELECT d.tp_kod,
           THEN
              CASE
                   WHEN DECODE(NVL(d.plan,0), 0 , 0, d.fact / d.plan * 100) >= 150
-                     AND (d.fact_target / ((d.plan*150)/100) *100) >= 40
+                   --  AND (d.fact_target / ((d.plan*150)/100) *100) >= 40
                   THEN NVL (((d.plan*150)/100), 0) * 0.1
 
-                  WHEN DECODE(NVL(d.fact_target,0), 0 , 0, d.fact / d.plan * 100) >= 130
-                      AND (d.fact_target / ((d.plan*130)/100) *100) >= 40
-                  THEN NVL (((d.plan*130)/100), 0) * 0.07
+                  WHEN DECODE(NVL(d.plan,0), 0 , 0, d.fact / d.plan * 100) >= 130
+                   --   AND (d.fact_target / ((d.plan*130)/100) *100) >= 40
+                  THEN d.fact * 0.07
 
-                  ELSE NVL (d.plan, 0) * 0.05
+                  ELSE d.fact * 0.05
              END
        END
           max_bonus,

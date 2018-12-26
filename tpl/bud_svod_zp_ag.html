@@ -31,13 +31,13 @@
 			<td style="text-align:center">{$smarty.foreach.ag.iteration}</td>
 			<td style="text-align:center">
 				{if $i.unscheduled}да{/if}
-				{if $i.unscheduled and $is_ts and not $i.ok_db_tn}
+				{if $i.unscheduled and $is_ts and not $i.ok_db_tn and $access_edit eq true}
 				<a href='javascript:void(0);' onClick="del_unscheduled({$i.id});">[X]</a>
 				{/if}
 			</td>
 			<td style="text-align:center">{if $i.eta_coffee}да{/if}</td>
 			<td style=" text-align:left;" id="d_{$i.id}_fio">
-				{if not $is_ts or not $i.unscheduled or $i.ok_db_tn}
+				{if not $is_ts or not $i.unscheduled or $i.ok_db_tn or $access_edit eq false}
 					{$i.eta}
 				{else}
 					<input
@@ -50,7 +50,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.id}_eta_tab_number">
-				{if not $is_ts or not $i.unscheduled or $i.ok_db_tn}
+				{if not $is_ts or not $i.unscheduled or $i.ok_db_tn or $access_edit eq false}
 					{$i.eta_tab_number}
 				{else}
 					<input
@@ -66,7 +66,7 @@
 			<td style="text-align:left">{$i.ts}</td>
 			<td style="text-align:left">{$i.ts_tn}</td>
 			<td id="d_{$i.id}_fil">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{$i.fil_name}
 				{else}
 					<select id="fil_{$i.id}" onChange="
@@ -90,7 +90,7 @@
 			<!--<td style="text-align:right" id="d_{$i.id}_akb_penalty"></td>-->
 			<td style="text-align:right" id="d_{$i.id}_zp_plan">{$i.zp_plan|num:3}</td>
 			<td style="text-align:right" id="d_{$i.id}_zp_fakt">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{$i.zp_fakt|num:3}
 				{else}
 					<nobr>
@@ -122,7 +122,7 @@
 
 <div id="ok" style="display: inline;"></div>
 
-{if $is_ts}
+{if $is_ts and $access_edit eq true}
 <!-- тут скрыть -->
 <p><a href="javascript:void(0);" onClick="new_unsheduled();">Добавить</a></p>
 {/if}

@@ -76,7 +76,11 @@
                            tp_nets tpn,
                            bud_fil f,
                            bud_tn_fil tf
-                     WHERE m.tp_kod = tpn.tp_kod AND u.is_spd = 1 AND u.tn = p.tn AND m.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt AND u.tab_num = m.tab_num AND u.dpt_id = m.dpt_id AND f.id = tf.bud_id AND tf.tn = p.parent AND f.dpt_id = m.dpt_id AND (f.data_end IS NULL OR TRUNC (f.data_end, 'mm') >= TO_DATE ( :dt, 'dd.mm.yyyy'))) s,
+                     WHERE m.tp_kod = tpn.tp_kod AND u.is_spd = 1 AND u.tn = p.tn
+                       AND m.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt
+                       AND u.tab_num = m.tab_num AND u.dpt_id = m.dpt_id
+                       AND f.id = tf.bud_id AND tf.tn = p.parent AND f.dpt_id = m.dpt_id
+                       AND (f.data_end IS NULL OR TRUNC (f.data_end, 'mm') >= TO_DATE ( :dt, 'dd.mm.yyyy'))) s,
                    (SELECT z_all.chain,
                            z_all.delay,
                            z_all.discount,

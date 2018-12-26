@@ -88,7 +88,25 @@
 			{/foreach}
 		</td>
 		<td>
-			{foreach key=k1 item=i1 from=$i.ff}
+			{foreach key=k1 item=i1 from=$i.ff name=ff_array}
+				{if $i.head.net_name and $i1.type eq 'list' and $i1.ff_id eq 176856141}
+					{if $i1.val_list eq 176856076}
+						{assign var="akc_type" value=1}
+					{else}
+						{assign var="akc_type" value=2}
+					{/if}
+				{/if}
+				{if $smarty.foreach.ff_array.iteration eq 6 and $i.head.net_name}
+				<div style="">
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">Список продуктов: </span>
+					<span id="open-table-sku-{$i.head.id}" class="open-table-sku" data-sz-id="{$i.head.id}">Показать таблицу</span>
+					<div id="sku_table-{$i.head.id}" class="sku_table" data-sz-id="{$i.head.id}" style="display: none;">
+						<!-- content -->
+						{$skuObj->GetSkuList($i.head.id,$akc_type)}
+						<!-- end content -->
+					</div>
+				</div>
+				{/if}
 				<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
 				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
@@ -153,7 +171,47 @@
 		</td>
 	</tr>
 </table>
+	<style>
+		.open-table-sku {
+			display: inline-block;
+			cursor: pointer;
+			padding: 2px 5px;
+			background-color: #eee;
+			border-radius: 3px;
+			border: 1px solid #b6b6b6;
 
+		}
+		.info-sku{
+			display: block;
+			text-align: center;
+			margin: 10px auto;
+		}
+	</style>
+	<script>
+        $(window).load(function(){
+            $( ".sku_table" ).each(function(){
+                $(this).dialog({
+                    autoOpen: false,
+                    modal: true,
+                    title: "Список продуктов для заявки №"+$(this).attr("data-sz-id"),
+                    width: $(window).width()*0.5,
+                    show: {
+                        // effect: "clip",
+                        duration: 300
+                    },
+                    hide: {
+                        // effect: "puff",
+                        duration: 200
+                    }
+                });
+            });
+
+            $( ".open-table-sku" ).on( "click", function() {
+                var sz_id = $(this).attr("data-sz-id");
+                $( "#sku_table-"+sz_id ).dialog( "open" );
+            });
+        });
+	</script>
 </form>
 
 

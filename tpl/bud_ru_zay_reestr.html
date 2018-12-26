@@ -349,9 +349,12 @@
 			{if $i.head.current_status eq 1 and $i.head.valid_no neq 1}<a target=_blank href="?action=bud_ru_zay_view&id={$i.head.id}&print=1&pdf=1&tn={$tn}&tu={$smarty.request.tu}">Экспорт</a>{/if}
 
 			{if $is_db or $is_do or $is_traid or $is_traid_kk}
-				<input type="submit" name="save" id="save" value="Сохранить"><br>
+				{if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}
+					<input type="submit" name="save" id="save" data-submit="false" data-save-id="{$i.head.id}" data-count-tp="{$i.local_tp.count_tp}" value="Сохранить"><br>
+				{else}
+					<input type="submit" name="save" id="save" value="Сохранить"><br>
+				{/if}
 			{/if}
-
 			{if ($is_admin or $is_do) and not $i.head.report_done}
 				<input type="submit" name="reset" id="reset" value="Сбросить подтверждения"><br>
 				<input type=hidden name='reset_z_id' value='{$i.head.id}'>
@@ -368,7 +371,15 @@
 						<b>Возмещение дистрибутору:</b>{if $i.head.distr_compensation eq 1}да{else}нет{/if}<br>
 			</p>
 			{/if}
-
+			{if $i.head.st_id eq 19534552}
+				{if $i.local_tp.count_tp}
+			<script>
+				var count_tp_{$i.head.id} = {$i.local_tp.count_tp};
+				if(count_tp_{$i.head.id} > 0)
+					console.log("count_tp for {$i.head.id}: "+count_tp_{$i.head.id});
+			</script>
+				{/if}
+			{/if}
 			<b>Дата создания:</b>{$i.head.created}<br>
 			<b>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_start}<br>
 			<b>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}:</b>{$i.head.dt_end}<br>
@@ -456,47 +467,6 @@
 						<!-- end content -->
 					</div>
 				</div>
-				<style>
-					.open-table-sku {
-						display: inline-block;
-						cursor: pointer;
-						padding: 2px 5px;
-						background-color: #eee;
-						border-radius: 3px;
-						border: 1px solid #b6b6b6;
-
-					}
-					.info-sku{
-						display: block;
-						text-align: center;
-						margin: 10px auto;
-					}
-				</style>
-				<script>
-					$(window).load(function(){
-                        $( ".sku_table" ).each(function(){
-                        	$(this).dialog({
-                                autoOpen: false,
-                                modal: true,
-                                title: "Список продуктов для заявки №"+$(this).attr("data-sz-id"),
-                                width: $(window).width()*0.5,
-                                show: {
-                                    // effect: "clip",
-                                    duration: 300
-                                },
-                                hide: {
-                                    // effect: "puff",
-                                    duration: 200
-                                }
-                            });
-                    	});
-
-						$( ".open-table-sku" ).on( "click", function() {
-							var sz_id = $(this).attr("data-sz-id");
-							$( "#sku_table-"+sz_id ).dialog( "open" );
-						});
-					});
-				</script>
 				{/if}
 				<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
@@ -592,9 +562,113 @@
 		{/foreach}
 		</td>
 	</tr>
+	<style>
+		.open-table-sku {
+			display: inline-block;
+			cursor: pointer;
+			padding: 2px 5px;
+			background-color: #eee;
+			border-radius: 3px;
+			border: 1px solid #b6b6b6;
 
+		}
+		.info-sku{
+			display: block;
+			text-align: center;
+			margin: 10px auto;
+		}
+		.info-message .ui-dialog-titlebar.ui-widget-header {
 
+			text-align: center;
+			background: #ec5555cc;
 
+		}
+	</style>
+	<script>
+        $("#save").parents("form").submit(function(e){
+            var $btn = $(this).find("#save");
+            if($btn.attr("data-submit") == "false"){
+                e.preventDefault();
+                var count_tp = $btn.attr("data-count-tp");
+                if(typeof count_tp !== "undefined" && count_tp != ""){
+                    var title = "Предупреждение для №"+$btn.attr("data-save-id");
+                    var message = "<br><br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
+                    var msg_type = 0;
+                    if(count_tp == 0){
+                        message = "Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message;
+                        msg_type = 1;
+                    }else{
+                        message = "Перед сохранением заявки на МА <strong>убедитесь</strong> что отчет для текущей локальной акции заполен."+message;
+                        msg_type = 2;
+                    }
+                    if(ConfirmDialog(title,message,$btn,msg_type) == false){
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+            }
+        });
+        function ConfirmDialog(title,message,$submit,msg_type){
+            var btn_params = {};
+            if(msg_type == 2){
+                btn_params = {
+                    'Сохранить': function () {
+                        //submit form;
+                        $submit.attr("data-submit", true);
+                        $submit.click();
+                        $(this).dialog("close");
+                    },
+                    'Отменить': function () {
+                        //cancel submit form
+                        $(this).dialog("close");
+                        return false;
+                    }
+                }
+            }else if(msg_type == 1){
+                btn_params = {}
+            }
+            $('<div></div>').appendTo('body')
+                .html('<div><h6 style="font-size: 12px;font-weight: normal;">'+message+'</h6></div>')
+                .dialog({
+                    modal: true, title: title, zIndex: 10000, autoOpen: true,
+                    width: 'auto', resizable: false,
+                    classes: {
+                        "ui-dialog": "info-message"
+                    },
+                    buttons: btn_params,
+                    close: function (event, ui) {
+                        //cancel submit form
+                        $(this).remove();
+                        return false;
+                    }
+                });
+        };
+	</script>
+	<script>
+        $(window).load(function(){
+            $( ".sku_table" ).each(function(){
+                $(this).dialog({
+                    autoOpen: false,
+                    modal: true,
+                    title: "Список продуктов для заявки №"+$(this).attr("data-sz-id"),
+                    width: $(window).width()*0.5,
+                    show: {
+                        // effect: "clip",
+                        duration: 300
+                    },
+                    hide: {
+                        // effect: "puff",
+                        duration: 200
+                    }
+                });
+            });
+
+            $( ".open-table-sku" ).on( "click", function() {
+                var sz_id = $(this).attr("data-sz-id");
+                $( "#sku_table-"+sz_id ).dialog( "open" );
+            });
+        });
+	</script>
 
 
 

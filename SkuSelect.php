@@ -36,8 +36,8 @@ class SkuSelect
                     '<td rowspan="2">Цена своб.-отпускн. Укр.,грн с НДС</td>'.
                     '<td rowspan="2">Цена Спец-ии КК, грн с НДС</td>'.
                     '<td rowspan="2">Цена за продажи в сеть за ед.,грн с НДС</td>';
-                if ($ack_type == 2)
-                    '<td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн с НДС</td>';
+                if ($ack_type == 2 && $is_calc)
+                    $html .= '<td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн с НДС</td>';
         $html .= '<td rowspan="2">Объем продажи,шт.</td>';
         if($is_calc) {
             $html .= '<td rowspan="2">Объем продажи,кг.</td>' .

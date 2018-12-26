@@ -44,6 +44,7 @@ $sql = stritr($sql,$params);
 $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('clusters', $r);
 
+
 $smarty->display('bud_svod_tus.html');
 
 ?>

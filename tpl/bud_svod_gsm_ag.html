@@ -30,7 +30,7 @@
 			<td style=" text-align:left;" id="d_{$i.id}_fio">{$i.eta}</td>
 			<td style=" text-align:right;" id="d_{$i.id}_eta_tab_number">{$i.eta_tab_number}</td>
 			<td style=" text-align:right;" id="d_{$i.id}_probeg">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{$i.probeg|num:2}
 				{else}
 					<input
@@ -46,7 +46,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:center;" id="d_{$i.id}_gbo">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{if $i.gbo}да{/if}
 				{else}
 					<input
@@ -64,7 +64,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.id}_gbo_warmup">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{$i.gbo_warmup|num:2}
 				{else}
 					<input
@@ -81,7 +81,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.id}_fal_payment">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{$i.fal_payment|num:2}
 				{else}
 					<input
@@ -97,7 +97,7 @@
 				{/if}
 			</td>
 			<td style=" text-align:right;" id="d_{$i.id}_amort">
-				{if not $is_ts or $i.ok_db_tn}
+				{if not $is_ts or $i.ok_db_tn or $access_edit eq false}
 					{$i.amort|num:2}
 				{else}
 					<input
