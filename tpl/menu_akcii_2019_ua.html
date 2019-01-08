@@ -1,0 +1,12 @@
+<li><a href="javascript:void(0);"><span class="dir">Январь</span></a>
+    <ul>
+        <li><a href="javascript:void(0);"><span class="dir">Налетай, Торопись</span></a>
+            <ul>
+                <li><a target=_blank href="https://bitrix.avk.ua/~yRXz7">Условия акции</a></li>
+                {if $is_ts}                             <li><a href="?act=a1901sh&action=a1901sh_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                                                        <li><a href="?act=a1901sh&action=a1901sh_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a1901sh&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+    </ul>
+</li>
