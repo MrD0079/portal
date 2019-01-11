@@ -40,7 +40,6 @@ else
 	InitRequestVar("st_tm",1);
 	InitRequestVar("dt",$now);
 
-
 	$params=array(
 		':dpt_id' => $_SESSION["dpt_id"],
 		':tn'=>$tn,
