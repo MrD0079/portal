@@ -96,12 +96,21 @@
 						{assign var="akc_type" value=2}
 					{/if}
 				{/if}
+				{if $i.head.net_name and $i1.type eq 'number' and $i1.ff_id eq 177005005}
+					{assign var="bonus_net_perc" value=$i1.val_number}
+				{/if}
+				{if $i.head.net_name and $i1.type eq 'number' and $i1.ff_id eq 176933669}
+					{assign var="akciya_expences_perc" value=$i1.val_number}
+				{/if}
 				{if $smarty.foreach.ff_array.iteration eq 6 and $i.head.net_name}
 				<div style="">
 					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">Список продуктов: </span>
 					<span id="open-table-sku-{$i.head.id}" class="open-table-sku" data-sz-id="{$i.head.id}">Показать таблицу</span>
 					<div id="sku_table-{$i.head.id}" class="sku_table" data-sz-id="{$i.head.id}" style="display: none;">
 						<!-- content -->
+						{*
+							{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc)}
+						*}
 						{$skuObj->GetSkuList($i.head.id,$akc_type)}
 						<!-- end content -->
 					</div>
@@ -154,6 +163,9 @@
 		</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.chat}
+				{if $i1.chater_tn eq 1111111111}
+				<hr>
+				{/if}
 				<font style="color:red">{$i1.chat_time}</font>
 				<font style="color:green">{$i1.chater}:</font>
 				<font style="color:blue" class="nl2br">{$i1.text|nl2br}</font>

@@ -135,6 +135,11 @@ class SkuSelect
             return false;
         $is_calc = false;
         try {
+            if (!is_null($net_id)) {
+                $bonus_distr_pers = $this->modalGetDistribBonus($net_id);
+            }else{
+                $bonus_distr_pers = 0;
+            }
             foreach ($data as $k => $sku) {
                 foreach ($sku as $key => $item) {
                     $data[$k][$key] = $this->NormalizeFloat($item);
@@ -142,7 +147,7 @@ class SkuSelect
                 //calculate
                 if (!is_null($bonus_net_perc)) {
                     $is_calc = true;
-                    $bonus_distr_pers = $this->modalGetDistribBonus($net_id);
+                    //$bonus_distr_pers = $this->modalGetDistribBonus($net_id);
 
                     //$data[$k]['total_q'];//объем продаж шт.
                     $data[$k]['total_volume_price'] = $data[$k]['total_q'] * $data[$k]['weight'];//объем продаж кг.
@@ -159,15 +164,16 @@ class SkuSelect
                     }
                     $data[$k]['share_expenses'] = $data[$k]['price_uk'] * $data[$k]['total_q'] * $bonus_distr_pers;//Бонус дистриб
                     $data[$k]['akc_expenses'] = $data[$k]['total_volume_price_one'] * $akciya_expences_perc;//затраты по акции б/н
-                    $data[$k]['logistics_expens_total'] = $data[$k]['total_volume_price'] * $data[$k]['logistic_expens'];//Расходы по логистике
-// --- Расходы компании: (все расходы компании)+(маркетинг к себестоимости из плана тек. месяца)
-                    //$data[$k]['company_expens'] + $data[$k]['market_val']
-                    $data[$k]['company_expens_total'] = ($data[$k]['company_expens'] + $data[$k]['market_val']) * $data[$k]['ss_volume'];//Расходы компании
-                    $data[$k]['net_clear'] = $data[$k]['expected_vp'] - $data[$k]['logistics_expens'] - $data[$k]['company_expenses'];//чистая прибыль
+                    $data[$k]['logistics_expens_total'] = $data[$k]['logistic_expens']*$data[$k]['total_volume_price']*0.001;//Расходы по логистике
+
+                    $company_expens = $data[$k]['company_expens']*$data[$k]['total_volume_price']*0.001; //цена за тонну
+                    $market_val = $data[$k]['market_val']*$data[$k]['total_volume_price']*0.001;
+                    $data[$k]['company_expens_total'] = ($company_expens + $market_val) * $data[$k]['ss_volume'];//Расходы компании
+                    $data[$k]['net_clear'] = $data[$k]['expected_vp'] - $data[$k]['bonus_net_sku'] - $data[$k]['share_expenses'] - $data[$k]['logistics_expens_total'] - $data[$k]['company_expens_total'];//чистая прибыль
                     if ($akc_type == 1)
                         $data[$k]['net_clear'] -= $data[$k]['akc_expenses'];//чистая прибыль
                     $data[$k]['prom_costs_discount'] = $data[$k]['total_volume_price_one'] - $data[$k]['total_volume_price_one_discount'];//Расходы по акции в скидке
-                    $data[$k]['total_network_costs'] = $data[$k]['bonus_net_sku'] + $data[$k]['share_expenses'] + $data[$k]['logistics_expens_total'] + $data[$k]['company_expens_total'] + $data[$k]['prom_costs_discount'];//Всего затрат по сети
+                    $data[$k]['total_network_costs'] = ( 0 /*Расходы сети итого, вт.ч.*/ ) + $data[$k]['prom_costs_discount'];//Всего затрат по сети
                 }
             }
             return $is_calc;

@@ -214,7 +214,10 @@ $(window).load(function(){
             url: "?action=sku_avk&print=1&pdf=1",
             dataType: 'json',
             contentType: "application/x-www-form-urlencoded;charset=utf-8",
-            data: {z_id:zid}
+            data: {
+                z_id:zid,
+                net_id: ($("#net").val() != "") ? $("#net").val() : 0
+            }
         }).then(function (data) {
             if(data.items[0].text && data.items[0].text.length > 0){
                 console.log("empty");
@@ -341,9 +344,9 @@ $(window).load(function(){
             '<input type="hidden" name="sku_params['+sku.id_num+'][id_num]" size="7" style="text-align: center;" value="'+sku.id_num+'">'+
             '<input type="hidden" name="sku_params['+sku.id_num+'][id]" size="7" style="text-align: center;" value="'+sku.id+'">'+
             '<input type="hidden" name="sku_params['+sku.id_num+'][sku_id]" size="7" style="text-align: center;" value="'+sku.sku_id+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][logistic_expens_m_plan]" size="7" style="text-align: center;" d value="'+sku.logistic_expens_m_plan+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][all_company_expenses]" size="7" style="text-align: center;"  value="'+sku.all_company_expenses+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][mark_cost_plan_cur_m]" size="7" style="text-align: center;"  value="'+sku.mark_cost_plan_cur_m+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][logistic_expens]" size="7" style="text-align: center;" d value="'+sku.logistic_expens+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][company_expenses]" size="7" style="text-align: center;"  value="'+sku.company_expenses+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][market_val]" size="7" style="text-align: center;"  value="'+sku.market_val+'">'+
             '</td>'+
             '<td>'+sku.name_brand;
         outputHTML +=    "<input type='hidden' name='sku_params["+sku.id_num+"][name_brand]' size='7' style='text-align: center;'  value='"+sku.name_brand+"'>";
@@ -372,7 +375,7 @@ $(window).load(function(){
             '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][net_clear]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
         outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][prom_costs_discount]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_network_costs]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        //outputHTML += outputHTMLCalculated;
+        // outputHTML += outputHTMLCalculated;
         outputHTML +=  '</tr>';
         $("#sku_selected tbody").append($(outputHTML));
         SkuSelectedInit();
@@ -610,15 +613,16 @@ $(window).load(function(){
             }
             sku_values['share_expenses'] = sku.price_urkaine*sku.total_volume_q*bonus_distr_pers;//Бонус дистриб
             sku_values['akc_expenses'] = sku_values['total_volume_price_one']*akciya_expences_perc;//затраты по акции б/н
-            sku_values['logistics_expenses'] = sku_values['total_volume_price']*sku.logistic_expens_m_plan;//Расходы по логистике
-// --- Расходы компании: (все расходы компании)+(маркетинг к себестоимости из плана тек. месяца)
-            //sku.all_company_expenses + sku.mark_cost_plan_cur_m
-            sku_values['company_expenses'] = (sku.all_company_expenses + sku.mark_cost_plan_cur_m)*sku_values['ss_volume'];//Расходы компании
-            sku_values['net_clear'] = sku_values['expected_vp']-sku_values['logistics_expenses']-sku_values['company_expenses'];//чистая прибыль
+            sku_values['logistics_expenses'] = sku_values['total_volume_price']*sku.logistic_expens*0.001;//Расходы по логистике
+
+            company_expens = sku.company_expenses * sku_values['total_volume_price'] * 0.001; //цена за тонну
+            market_val = sku.market_val * sku_values['total_volume_price'] * 0.001;
+            sku_values['company_expenses'] = (company_expens + market_val) * sku_values['ss_volume'];//Расходы компании
+            sku_values['net_clear'] = sku_values['expected_vp']-sku_values['bonus_net'] - sku_values['share_expenses'] - sku_values['logistics_expenses'] - sku_values['company_expenses'];//чистая прибыль
             if(akc_type == 1)
                 sku_values['net_clear'] -= sku_values['akc_expenses'];//чистая прибыль
             sku_values['prom_costs_discount'] = sku_values['total_volume_price_one']-sku_values['total_volume_price_one_discount'];//Расходы по акции в скидке
-            sku_values['total_network_costs'] = sku_values['bonus_net']+sku_values['share_expenses']+sku_values['logistics_expenses']+sku_values['company_expenses']+sku_values['prom_costs_discount'];//Всего затрат по сети
+            sku_values['total_network_costs'] = ( 0 /*Расходы сети итого, вт.ч.*/ )+sku_values['prom_costs_discount'];//Всего затрат по сети
             SetCalculateField(el,sku.id,sku_values);
         }
         function ClearCalculatedFields(el){

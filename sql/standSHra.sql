@@ -1,4 +1,3 @@
-/* Formatted on 15.06.2017 09:37:44 (QP5 v5.252.13127.32867) */
   SELECT TO_CHAR (t.visitdate, 'dd.mm.yyyy') vd,
          t.fio_ts,
          t.fio_eta,

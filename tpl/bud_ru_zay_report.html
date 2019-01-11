@@ -702,6 +702,9 @@
             Комментарии по {if $smarty.request.tu eq 1}целям на переговоры{else}заявке{/if}:
             <br>
             {foreach key=k1 item=i1 from=$i.zchat}
+				{if $i1.zchater_tn eq 1111111111}
+					<hr>
+				{/if}
                 <font style="color:red">{$i1.zchat_time}</font>
                 <font style="color:green">{$i1.zchater}:</font>
                 <font style="color:blue">{$i1.ztext|nl2br}</font>
@@ -714,6 +717,9 @@
             Комментарии по {if $smarty.request.tu eq 1}торговым условиям{else}отчету{/if}:
             <br>
             {foreach key=k1 item=i1 from=$i.chat}
+				{if $i1.chater_tn eq 1111111111}
+				<hr>
+				{/if}
                 <font style="color:red">{$i1.chat_time}</font>
                 <font style="color:green">{$i1.chater}:</font>
                 <font style="color:blue">{$i1.text|nl2br}</font>

@@ -21,21 +21,38 @@ if (isset($_REQUEST["save"]))
 	}
 	if (isset($_REQUEST["id"]))
 	{
-	    /*
-	     * <input type="hidden" name="sz[tn]" value="3400602397">
-	     * sz[cat]
-	     * <textarea required="" cols="120" rows="1" name="sz[head]" id="sz_head">Тестовая СЗ</textarea>
-	     *<textarea required="" cols="120" rows="10" name="sz[body]" id="sz_body">Проверка переноса строк в теле СЗ и в комментариях.
-            Тут вторая строка.
-            И еще одна.</textarea>
-	     */
 
 		Table_Update("sz",array("id"=>$_REQUEST["id"]),$_REQUEST["sz"]);
 		$id=$_REQUEST["id"];
+
+        //add chat with rejection detail
+
+        $sql_acc = 'SELECT accepted FROM sz_accept WHERE sz_id=' . $id.' ORDER BY lu desc';
+        $accepted = $db->getCol($sql_acc);
+        if (is_array($accepted) && count($accepted) > 0) {
+//            if sz rejected
+            if ($accepted[0] == 2) {
+                $sql_text = "SELECT p.param_name, p.val_string FROM PARAMETERS p where dpt_id=" . $_SESSION["dpt_id"] . " and p.param_name = 'sz_message_after_resubmission'";
+                $reject_data = $db->getAll($sql_text, null, null, null, MDB2_FETCHMODE_ASSOC);
+                if (is_array($reject_data) && count($reject_data) > 0) {
+                    $reject_text = $reject_data[0]['val_string'];
+                } else {
+                    $reject_text = 'Новый этап согласования после отклонения.';
+                }
+                $keys_reject = array(
+                    "tn" => 1111111111, // СИСТЕМА
+                    "sz_id" => $id,
+                    "text" => $reject_text);
+                Table_Update("sz_chat", $keys_reject, $keys_reject);
+            }
+        }
+
 		$keys = array("sz_id"=>$id);
 		Table_Update("sz_accept",$keys,null); //delete all status history
 		Table_Update("sz_executors",$keys,null); //delete all ispolniteli
 		audit ("сохранил СЗ №".$id,"sz");
+
+
 	}
 	else
 	{
@@ -143,6 +160,7 @@ if (isset($_REQUEST["id"]))
 	$sql=stritr($sql,$params);
 	$data = $db->getAssoc($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$_REQUEST["sz_files"]=$data;
+
 }
 else
 {

@@ -121,7 +121,31 @@ ORDER BY name
             }
             if (isset($_REQUEST["id"]))
             {
-                    $id = $_REQUEST["id"];
+                $id = $_REQUEST["id"];
+                //add chat with rejection detail
+                try {
+                    $sql_acc = 'SELECT accepted FROM bud_ru_zay_accept WHERE z_id=' . $id . ' ORDER BY lu desc';
+                    $accepted = $db->getCol($sql_acc);
+                    if (is_array($accepted) && count($accepted) > 0) {
+//            if sz rejected
+                        if ($accepted[0] == 2) {
+                            $sql_text = "SELECT p.param_name, p.val_string FROM PARAMETERS p where dpt_id=" . $_SESSION["dpt_id"] . " and p.param_name = 'sz_message_after_resubmission'";
+                            $reject_data = $db->getAll($sql_text, null, null, null, MDB2_FETCHMODE_ASSOC);
+                            if (is_array($reject_data) && count($reject_data) > 0) {
+                                $reject_text = $reject_data[0]['val_string'];
+                            } else {
+                                $reject_text = 'Новый этап согласования после отклонения.';
+                            }
+                            $keys_reject = array(
+                                "tn" => 1111111111, // СИСТЕМА
+                                "z_id" => $id,
+                                "text" => $reject_text);
+                            Table_Update("bud_ru_zay_chat", $keys_reject, $keys_reject);
+                        }
+                    }
+                }catch (Exception $e){
+
+                }
             }
             else
             {
@@ -207,8 +231,8 @@ ORDER BY name
                     $id_num = $v;
                     $keys = array("z_id" => $id,'id_num'=>$id_num, "sku_id" => $sku_params[$id_num]['sku_id']);
                     $vals = array(
-                        'logistic_expens'=>$sku_params[$id_num]['logistic_expens_m_plan'],
-                        'market_val'=>$sku_params[$id_num]['mark_cost_plan_cur_m'],
+                        'logistic_expens'=>$sku_params[$id_num]['logistic_expens'],
+                        'market_val'=>$sku_params[$id_num]['market_val'],
                         'price_ss'=>$sku_params[$id_num]['price_ss'],
                         'price_uk'=>$sku_params[$id_num]['price_urkaine'],
                         'price_kk'=>$sku_params[$id_num]['price_s_kk'],

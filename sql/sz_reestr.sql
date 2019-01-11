@@ -87,6 +87,7 @@
                  sc.id cat_id,
                  sc.name cat_name,
                  fn_getname (a.tn) chater,
+                 a.tn chater_tn,
                  a.text,
                  a.lu chat_time_d,
                  TO_CHAR (a.lu, 'dd.mm.yyyy hh24:mi:ss') chat_time,

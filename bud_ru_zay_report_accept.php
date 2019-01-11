@@ -242,6 +242,7 @@ if (isset($_REQUEST["save"]))
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
 						send_mail($email,$subj,$text);
 					}
+
 				}
 				if ($v["rep_accepted"]!=0)
 				{
