@@ -8,6 +8,7 @@
 	InitRequestVar("by_who",'eta');
 	InitRequestVar("rep_type",'brief');
 //	InitRequestVar("rep_type",'detailed');
+	//InitRequestVar("show_desc",0);
 	InitRequestVar("stand_type",'all');
 	$params=array(
 		':dpt_id' => $_SESSION["dpt_id"],
@@ -30,6 +31,11 @@
 		':st_auditor' => 1,
 		':standart' => 3 /* стандарт В*/
 	);
+	if($_REQUEST['show_desc'] == 1){
+        $params[':eta_list'] = "'".$_REQUEST['h_tn']."'";
+        $sql_file_all = false;
+        /* отобразить детальный отчет по Выбранному  стандарту и выбранному ЭТА | ТС | ТМ | РМ */
+    }
 	$sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
 	$sql=stritr($sql,$params);
 	$exp_list_only_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -114,6 +120,13 @@
             $tt['st_sh']=$st_sh_t;
 
             foreach ($d as $key => $item) {
+//                if($_REQUEST['by_who'] != "tm" && $_REQUEST['by_who'] != "rm"){
+                    $d[$key]['h_tn'] = GetVal($item,'key');
+//                }else if ($_REQUEST['by_who'] == "tm"){
+//                    $d[$key]['h_tn'] = GetVal($item,'tn_tm');
+//                }else{
+//                    $d[$key]['h_tn'] = GetVal($item,'tn_rm');
+//                }
                 $d[$key]['eta_tab_number'] = GetVal($item,'eta_tab_number');
                 $d[$key]['fio_eta'] = GetVal($item,'fio_eta');
                 $d[$key]['tab_num_ts'] = GetVal($item,'tab_num_ts');
@@ -123,7 +136,9 @@
                 $d[$key]['tab_num_rm'] = GetVal($item,'tab_num_rm');
                 $d[$key]['fio_rm'] = GetVal($item,'fio_rm');
             }
-
+            echo "<pre style='display: none;text-align: left;'>";
+            print_r($d);
+            echo "</pre>";
             $smarty->assign('d', $d);
             $smarty->assign('tt', $tt);
 		}

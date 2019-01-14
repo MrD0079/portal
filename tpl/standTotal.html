@@ -80,8 +80,8 @@
 	<p><a href="?action=standSHst&print=1&excel=1&generate=1&filename=Стандарт - статистика">Экспорт в Excel</a></p>
 {/if}
 
-{if $smarty.request.rep_type eq 'brief'}
-<table style="text-align: center;" border=1>
+{if not $smarty.request.show_desc}
+<table style="text-align: center;" border=1 class="total-standart">
 <tbody>
 	{foreach key=k item=i from=$d name=d}
 	{if $smarty.foreach.d.iteration%20 eq 1 and not ($smarty.request.print and $smarty.foreach.d.iteration > 1)}
@@ -138,27 +138,27 @@
 		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td style="text-align: left;">{$i.fio_rm}</td>{/if}
 		<!--<td>{$i.visit}</td>-->
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_a.sttotp neq 0}<a href="/action=standTotal&show_desc=1&stand=a">{$i.st_a.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.st_a.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}">{$i.st_a.sttotp}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'a'}
-		<td>{if $i.sttotp neq 0}<a href="/action=standTotal&show_desc=1&stand=a">{$i.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}">{$i.sttotp}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_b.sttotp neq 0}<a href="/action=standTotal&show_desc=1&stand=b">{$i.st_b.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.st_b.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}">{$i.st_b.sttotp}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'b'}
-		<td>{if $i.sttotp neq 0}<a href="/action=standTotal&show_desc=1&stand=b">{$i.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}">{$i.sttotp}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all' }
-		<td>{if $i.st_c.tp_st neq 0}<a href="/action=standTotal&show_desc=1&stand=coffee">{$i.st_c.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.st_c.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}">{$i.st_c.tp_st}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'coffee'}
-		<td>{if $i.tp_st neq 0}<a href="/action=standTotal&show_desc=1&stand=coffee">{$i.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}">{$i.tp_st}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all' }
-		<td>{if $i.st_sh.tp_st neq 0}<a href="/action=standTotal&show_desc=1&stand=sh">{$i.st_sh.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.st_sh.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=sh&h_tn={$i.h_tn}">{$i.st_sh.tp_st}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'sh'}
-		<td>{if $i.tp_st neq 0}<a href="/action=standTotal&show_desc=1&stand=sh">{$i.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=sh&h_tn={$i.h_tn}">{$i.tp_st}</a>{else}0{/if}</td>
 		{/if}
 		<!--<td>{$i.visit_st_ts_reject_tm_or_traid}</td>-->
 		<!--<td>{$i.tp_st_ts_reject_tm_or_traid}</td>-->
@@ -197,7 +197,8 @@
 </tbody>
 </table>
 {/if}
-{if $smarty.request.rep_type eq 'detailed'}
+
+{if $smarty.request.show_desc eq 1}
 <table style="text-align: center;" border=1 class="total-standart">
 <tbody>
 	{foreach key=k item=i from=$d name=d}
@@ -271,5 +272,8 @@
 <style>
 	.total-standart a {
 		color: #2196F3;
+	}
+	tbody tr:hover {
+		background-color: rgba(0,0,0,.075);
 	}
 </style>
