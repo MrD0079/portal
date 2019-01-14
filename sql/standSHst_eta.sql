@@ -35,8 +35,8 @@
          TAB_NUM_TM,
          TAB_NUM_RM,
          DPT_ID,
-         COUNT (DISTINCT visit) visit,
-         COUNT (DISTINCT visit_st_ts) visit_st_ts,
+         COUNT (DISTINCT visit) visit, /* кол-во визитов*/
+         COUNT (DISTINCT visit_st_ts) visit_st_ts, /* кол-во ПОДТВЕРЖДКННЫХ визитов ТС-ом*/
          COUNT (DISTINCT tp_st_ts) tp_st_ts,
          COUNT (DISTINCT visit_st_ts_reject_tm_or_traid)
             visit_st_ts_reject_tm_or_traid,
@@ -58,7 +58,7 @@
                     WHEN :by_who = 'ts' THEN bonus_ts
                  END
                     bonus
-            FROM standSH_mv z
+            FROM standSH_mv z /* выбор стандарта*/
            WHERE     visitdate BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
                                    AND TO_DATE ( :ed, 'dd.mm.yyyy')
                  AND (   :exp_list_without_ts = 0
@@ -93,31 +93,31 @@
                             FROM user_list
                            WHERE tn = :tn) = 1)
                  AND dpt_id = :dpt_id
-                 AND ( :eta_list IS NULL OR :eta_list = h_fio_eta))
-GROUP BY FIO_RM,
-         TN_RM,
-         FIO_TM,
-         TN_TM,
-         TN,
-         H_FIO_ETA,
-         FIO_TS,
-         FIO_ETA,
-         TP_KOD_KEY,
-         TP,
-         TP_TYPE_SHORT,
-         ETA_TAB_NUMBER,
-         TAB_NUM_TS,
-         TAB_NUM_TM,
-         TAB_NUM_RM,
-         DPT_ID, bonus
-ORDER BY fio_rm,
-         tn_rm,
-         fio_tm,
-         tn_tm,
-         fio_ts,
-         tn,
-         fio_eta,
-         tp)
+                 AND ( :eta_list IS NULL OR :eta_list = h_fio_eta)) /* stand_SH*/
+      GROUP BY FIO_RM,
+               TN_RM,
+               FIO_TM,
+               TN_TM,
+               TN,
+               H_FIO_ETA,
+               FIO_TS,
+               FIO_ETA,
+               TP_KOD_KEY,
+               TP,
+               TP_TYPE_SHORT,
+               ETA_TAB_NUMBER,
+               TAB_NUM_TS,
+               TAB_NUM_TM,
+               TAB_NUM_RM,
+               DPT_ID, bonus
+      ORDER BY fio_rm,
+               tn_rm,
+               fio_tm,
+               tn_tm,
+               fio_ts,
+               tn,
+               fio_eta,
+               tp)
 GROUP BY fio_rm,
          tn_rm,
          fio_tm,
