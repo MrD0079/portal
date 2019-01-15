@@ -5,36 +5,58 @@
 	InitRequestVar("eta_list",$_SESSION["h_eta"]);
 	InitRequestVar("sd",$now);
 	InitRequestVar("ed",$now);
+	InitRequestVar("date",$now.'|'.$now);
 	InitRequestVar("by_who",'eta');
 	InitRequestVar("rep_type",'brief');
 //	InitRequestVar("rep_type",'detailed');
 	//InitRequestVar("show_desc",0);
 	InitRequestVar("stand_type",'all');
+
+	$date = explode("|",$_REQUEST["date"]);
+	//$date = array($_SESSION["sd"],$_SESSION["ed"]);
 	$params=array(
 		':dpt_id' => $_SESSION["dpt_id"],
 		':tn'=>$tn,
 		':eta_list' => "'".$_REQUEST["eta_list"]."'",
-		':sd' => "'".$_REQUEST["sd"]."'",
-		':ed' => "'".$_REQUEST["ed"]."'",
+		':sd' => "'".$date[0]."'",
+		':ed' => "'".$date[1]."'",
 		':exp_list_without_ts' => $_REQUEST["exp_list_without_ts"],
 		':exp_list_only_ts' => $_REQUEST["exp_list_only_ts"],
 		':by_who'=>"'".$_REQUEST['by_who']."'",
 		':stand_type'=>"'".$_REQUEST['stand_type']."'",
 
         ':region_list' => "'".$_REQUEST["region_list"]."'",
-        ':ok_st_tm' => 1, /*2 - ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚ Ð·Ð°ÑÑ‡Ð¸Ñ‚Ð°Ð½ Ð¢Ðœ-Ð¾Ð¼ (Ð)*/
-        ':zst' => 1, /*2 - Ð²ÑÐµ Ð¢ÐŸ ÑÐ¾ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð¾Ð¼ Ð*/
+        ':ok_st_tm' => 1, /*2 - ñòàíäàðò çàñ÷èòàí ÒÌ-îì (À)*/
+        ':zst' => 1, /*2 - âñå ÒÏ ñî ñòàíäàðòîì À*/
 
-        ':ok_ts' => 2,
-		':ok_auditor' => 1,
-		':st_ts' => 2,
-		':st_auditor' => 1,
-		':standart' => 3 /* ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚ Ð’*/
+        ':ok_ts' => 1, /*2- ÒÑ ïðîâåðèë*/
+		':ok_auditor' => 1, /* àóäèòîð - âñå*/
+		':st_ts' => 1, /* 2 - ÒÑ ñîîòâåòñòâóåò ñòàíäàðòó*/
+		':st_auditor' => 1, /* âñå (ñîîòâ, íå ñîîòâåò) ñòàíäàðòó àóäèòîð*/
+		':standart' => 3 /* ñòàíäàðò Â*/
 	);
-	if($_REQUEST['show_desc'] == 1){
-        $params[':eta_list'] = "'".$_REQUEST['h_tn']."'";
-        $sql_file_all = false;
-        /* Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð·Ð¸Ñ‚ÑŒ Ð´ÐµÑ‚Ð°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¾Ñ‚Ñ‡ÐµÑ‚ Ð¿Ð¾ Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð¼Ñƒ  ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ñƒ Ð¸ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð¾Ð¼Ñƒ Ð­Ð¢Ð | Ð¢Ð¡ | Ð¢Ðœ | Ð Ðœ */
+	//print_r($params);
+	$is_show_desc = false;
+	if($_REQUEST['show_desc'] == 1)
+        $is_show_desc = true;
+	if($is_show_desc){
+        if($_REQUEST['by_who'] == 'eta'){
+            $params[':eta_list'] = "'".$_REQUEST['h_tn']."'";
+        }else{
+            $params[':ok_st_tm'] = 2;
+            $params[':ok_ts'] = 2;
+            $params[':st_ts'] = 2;
+            $params[':ok_ts'] = 2;
+        }
+        if($_REQUEST['by_who'] == 'ts'){
+            $params[':exp_list_only_ts'] = $_REQUEST['h_tn'];
+        }
+        if($_REQUEST['by_who'] == 'tm'){
+            $params[':exp_list_without_ts'] = $_REQUEST['h_tn'];
+        }
+
+        $_REQUEST['stand_type'] = $_REQUEST['stand'];
+        /* îòîáðàçèòü äåòàëüíûé îò÷åò ïî Âûáðàííîìó  ñòàíäàðòó è âûáðàííîìó ÝÒÀ | ÒÑ | ÒÌ | ÐÌ */
     }
 	$sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
 	$sql=stritr($sql,$params);
@@ -49,7 +71,7 @@
 	$eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$smarty->assign('eta_list', $eta_list);
 
-	if (isset($_REQUEST['generate']))
+	if (isset($_REQUEST['generate']) || $is_show_desc)
 	{
         $sql_file_all = false;
         switch ($_REQUEST['stand_type']) {
@@ -57,21 +79,30 @@
                 $sql_file_all = true;
                 break;
             case "a": /*sttotp*/
-                $params[':brief']=rtrim(file_get_contents('sql/a18to_stat_brief.sql'));
+                //if(!$is_show_desc)
+                    $params[':brief']=rtrim(file_get_contents('sql/a18to_stat_brief.sql'));
                 $sql_file = "sql/a18to_stat_";
+                $stand_title = "À";
+                $standT = "a18to";
                 break;
             case "b":
                 $sql_file = "sql/a14to_stat2et_";
+                $stand_title = "Â";
+                $standT = "a14to";
                 break;
             case "coffee":
                 $sql_file = "sql/a16cost_";
+                $stand_title = "Êîôå";
+                $standT = "a16co";
                 break;
             case "sh":
                 $sql_file = "sql/standSHst_";
+                $stand_title = "Øòó÷êà";
+                $standT = "standSH";
                 break;
         }
 
-	    if ($sql_file_all) //$_REQUEST["rep_type"]=="brief")
+	    if ($sql_file_all)
 		{
 		    //standart A
             $sql=rtrim(file_get_contents('sql/a18to_stat_'.$_REQUEST['by_who'].'.sql'));
@@ -120,13 +151,7 @@
             $tt['st_sh']=$st_sh_t;
 
             foreach ($d as $key => $item) {
-//                if($_REQUEST['by_who'] != "tm" && $_REQUEST['by_who'] != "rm"){
-                    $d[$key]['h_tn'] = GetVal($item,'key');
-//                }else if ($_REQUEST['by_who'] == "tm"){
-//                    $d[$key]['h_tn'] = GetVal($item,'tn_tm');
-//                }else{
-//                    $d[$key]['h_tn'] = GetVal($item,'tn_rm');
-//                }
+                $d[$key]['h_tn'] = GetVal($item,'key');
                 $d[$key]['eta_tab_number'] = GetVal($item,'eta_tab_number');
                 $d[$key]['fio_eta'] = GetVal($item,'fio_eta');
                 $d[$key]['tab_num_ts'] = GetVal($item,'tab_num_ts');
@@ -136,28 +161,112 @@
                 $d[$key]['tab_num_rm'] = GetVal($item,'tab_num_rm');
                 $d[$key]['fio_rm'] = GetVal($item,'fio_rm');
             }
-            echo "<pre style='display: none;text-align: left;'>";
-            print_r($d);
-            echo "</pre>";
+//            echo "<pre style='display: none;text-align: left;'>";
+//            print_r($d);
+//            echo "</pre>";
             $smarty->assign('d', $d);
             $smarty->assign('tt', $tt);
-		}
-		else if(!$sql_file_all){
-            $sql=rtrim(file_get_contents($sql_file.$_REQUEST['by_who'].'.sql'));
+		}else{
+            if($is_show_desc){
+                $postfix_file = 'detailed';
+                
+            }else{
+                $postfix_file = $_REQUEST['by_who'];
+            }
+            $sql=rtrim(file_get_contents($sql_file.$postfix_file.'.sql'));
             $sql=stritr($sql,$params);
             $sql=stritr($sql,$params);
+            if($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh"){
+                $sql = "SELECT * FROM (".$sql.") WHERE tp_st_ts IS NOT NULL AND tp_st_ts <> 0";
+            }else{
+                $sql = "SELECT * FROM (".$sql.") WHERE zst_lu IS NOT NULL OR standart_tp IS NOT NULL";
+            }
+//            echo $sql;
             $t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+
+            //print_r($t);
+            if($is_show_desc) {
+                $params_tmp = $params;
+                $params_tmp[':standT'] = $standT;
+                $params_tmp[':ok_ts'] = 2;
+                $params_tmp[':ok_tm'] = 1;
+                $params_tmp[':st_ts'] = 2;
+                $params_tmp[':st_tm'] = 1;
+                if($_REQUEST['by_who'] == 'ts' || $_REQUEST['by_who'] == 'tm' || $_REQUEST['by_who'] == 'rm'){
+                    $params_tmp[':tn'] = $_REQUEST['h_tn'];
+                }
+                if($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {
+                    foreach ($t as $k => $item) {
+                        $sql = rtrim(file_get_contents('sql/standPhotoSt.sql'));
+                        $params_tmp[':tp_kod'] = $item['tp_kod_key'];
+                        $sql = stritr($sql, $params_tmp);
+                        $sql = stritr($sql, $params_tmp);
+                        $t[$k]['photos'] = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                    }
+                }else{
+                    foreach ($t as $k => $item) {
+                        $sql = rtrim(file_get_contents('sql/standPhotoStA_B.sql'));
+                        $params_tmp[':tp_kod'] = $item['tp_kod_key'];
+                        $sql = stritr($sql, $params_tmp);
+                        $sql = stritr($sql, $params_tmp);
+                        $t[$k]['photos'] = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                        //$t[$k]['photos'] = array();
+                    }
+                }
+            }
+
+            foreach ($t as $key => $item) {
+                $t[$key]['h_tn'] = $item['key'];
+            }
+            echo "<pre style='display: none;text-align: left;'>";
+            print_r($t);
+            echo "</pre>";
             $smarty->assign('d', $t);
-        }
-        if (!$sql_file_all){
+
+            if($is_show_desc){
+                $desc = array();
+                if($_REQUEST['by_who'] == 'eta'){
+                    $fio = array();
+                    $fio['fio_title'] = 'ÔÈÎ ÝÒÀ';
+                    $fio['fio'] = $t[0]['fio_eta'];
+                    $desc[] = $fio;
+                }
+                if($_REQUEST['by_who'] == 'eta' || $_REQUEST['by_who'] == 'ts'){
+                    $fio = array();
+                    $fio['fio_title'] = 'ÔÈÎ ÒÑ';
+                    $fio['fio'] = $t[0]['fio_ts'];
+                    $desc[] = $fio;
+                }
+                if($_REQUEST['by_who'] == 'eta' || $_REQUEST['by_who'] == 'ts' || $_REQUEST['by_who'] == 'tm'){
+                    $fio = array();
+                    $fio['fio_title'] = 'ÔÈÎ ÒÌ';
+                    $fio['fio'] = $t[0]['fio_tm'];
+                    $desc[] = $fio;
+                }
+                if($_REQUEST['by_who'] == 'eta' || $_REQUEST['by_who'] == 'ts' || $_REQUEST['by_who'] == 'tm' || $_REQUEST['by_who'] == 'rm'){
+                    $fio = array();
+                    $fio['fio_title'] = 'ÔÈÎ ÐÌ';
+                    $fio['fio'] = $t[0]['fio_rm'];
+                    $desc[] = $fio;
+                }
+                $smarty->assign('stand_title',$stand_title);
+                $smarty->assign('desc',$desc);
+            }
+            //total
             $sql=rtrim(file_get_contents($sql_file.'total.sql'));
             $sql=stritr($sql,$params);
             $sql=stritr($sql,$params);
-            $t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-            $smarty->assign('tt', $t);
+            $tt = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+            $smarty->assign('tt', $tt);
+//            echo "<pre style='display: none;text-align: left;'>";
+//            print_r($tt);
+//            echo "</pre>";
         }
-
 	}
+    $sql = rtrim(file_get_contents('sql/month_list.sql'));
+    $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('month_list', $res);
+
 	$smarty->display('standTotal.html');
 
 	function GetVal($item,$field){

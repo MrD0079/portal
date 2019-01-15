@@ -4,17 +4,47 @@
 </style>
 {/literal}
 
-<h1>Стандарт - Статистика</h1>
+<h1>Стандарт{if $stand_title} {$stand_title}{/if} - Статистика</h1>
 {if not $smarty.request.print}
 	<form target="_self" method="POST" name=form_report id=form_report>
 	<p>
-	Дата
-	с
-	<input id=sd name=sd class=datepicker value='{$smarty.request.sd}'>
-	по
-	<input id=ed name=ed class=datepicker value='{$smarty.request.ed}'>
+
+	<!--с-->
+	<!--<input id=sd name=sd class=datepicker value='{$smarty.request.sd}'>-->
+	<!--по-->
+	<!--<input id=ed name=ed class=datepicker value='{$smarty.request.ed}'>-->
+	{if $smarty.request.show_desc eq 1}
+		Месяц:
+		{foreach key=key item=item from=$month_list}
+		{$date_select = "`$item.sd_c`|`$item.ed_c`"}
+		{if $smarty.request.date eq $date_select}<span style="font-size: 14px;font-weight: bold;text-transform: capitalize;">{$item.my}</span>{/if}
+		{/foreach}
+	{else}
+	<select name=date id=date class="chosen-select" style="min-width: 150px;" data-placeholder="Месяц:">
+		{foreach key=key item=item from=$month_list}
+		{$date_select = "`$item.sd_c`|`$item.ed_c`"}
+		<option value="{$date_select}" {if $smarty.request.date eq $date_select}selected="selected"{/if}>{$item.my}</option>
+		{/foreach}
+	</select>
+	{/if}
+	<!--<script>$('#date').val('{$smarty.request.date}');</script>-->
 	</p>
 
+	{if $smarty.request.show_desc eq 1}
+		<table style="text-align: center;" border=1>
+			<tr>
+				{foreach key=key item=item from=$desc}
+					<td>{$item.fio_title}</td>
+				{/foreach}
+			</tr>
+			<tr>
+				{foreach key=key item=item from=$desc}
+				<td>{$item.fio}</td>
+				{/foreach}
+			</tr>
+		</table>
+		<p></p>
+	{else}
 	{if $is_ts neq 1 and $is_eta neq 1}
 		<p>
 		<select class="chosen-select" data-placeholder="По руководителю:" name=exp_list_without_ts id=exp_list_without_ts>
@@ -79,6 +109,7 @@
 	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
 	<p><a href="?action=standSHst&print=1&excel=1&generate=1&filename=Стандарт - статистика">Экспорт в Excel</a></p>
 {/if}
+		{/if}
 
 {if not $smarty.request.show_desc}
 <table style="text-align: center;" border=1 class="total-standart">
@@ -138,27 +169,27 @@
 		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td style="text-align: left;">{$i.fio_rm}</td>{/if}
 		<!--<td>{$i.visit}</td>-->
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_a.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}">{$i.st_a.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.st_a.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}" target="_blank">{$i.st_a.sttotp}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'a'}
-		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}">{$i.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}" target="_blank">{$i.sttotp}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_b.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}">{$i.st_b.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.st_b.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.st_b.sttotp}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'b'}
-		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}">{$i.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.sttotp}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all' }
-		<td>{if $i.st_c.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}">{$i.st_c.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.st_c.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}" target="_blank">{$i.st_c.tp_st}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'coffee'}
-		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}">{$i.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}" target="_blank">{$i.tp_st}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all' }
-		<td>{if $i.st_sh.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=sh&h_tn={$i.h_tn}">{$i.st_sh.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.st_sh.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=sh&h_tn={$i.h_tn}" target="_blank">{$i.st_sh.tp_st}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'sh'}
-		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=sh&h_tn={$i.h_tn}">{$i.tp_st}</a>{else}0{/if}</td>
+		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=sh&h_tn={$i.h_tn}" target="_blank">{$i.tp_st}</a>{else}0{/if}</td>
 		{/if}
 		<!--<td>{$i.visit_st_ts_reject_tm_or_traid}</td>-->
 		<!--<td>{$i.tp_st_ts_reject_tm_or_traid}</td>-->
@@ -204,70 +235,63 @@
 	{foreach key=k item=i from=$d name=d}
 	{if $smarty.foreach.d.iteration%20 eq 1 and not ($smarty.request.print and $smarty.foreach.d.iteration > 1)}
 	<tr style="font-weight: bold;">
-		{if $smarty.request.by_who eq 'eta'}
-		<td class="w100">т.н. ЭТА</td>
+		{if $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' || $smarty.request.by_who eq 'rm'}
 		<td>ФИО ЭТА</td>
 		{/if}
-		{if $smarty.request.by_who eq 'ts'}
-		<td>т.н. ТС</td>
-		{/if}
+		{if $smarty.request.by_who eq 'tm' || $smarty.request.by_who eq 'rm'}
 		<td>ФИО ТС</td>
+		{/if}
+		{if $smarty.request.by_who eq 'rm'}
 		<td>ФИО ТМ</td>
-		<td>ФИО РМ</td>
+		{/if}
 		<td>Код ТП</td>
 		<td>Название/Адрес ТП</td>
 		<td class="w100">Тип ТП</td>
-                <td class="w100">Кол-во визитов по Стандарту "Штучка"</td>
-		<td class="w100">Кол-во ТП со Стандартом Кофе (ТС)</td>
-                <td class="w100">отклонено (ТМ, ВСТМ) визитов со стандартом</td>
-                <td class="w100">отклонено (ТМ, ВСТМ) ТП со стандартом</td>
-                <td class="w100">Стандарт по ТП</td>
-                <td class="w100">Сумма бонуса, {$valuta}</td>
-                <td>отг. цел. ассортимент</td>
+		<td>Дата визита<br>(стандарт)</td>
+		<td>Фото</td>
 	</tr>
 	{/if}
 	<tr>
-		{if $smarty.request.by_who eq 'eta'}
-		<td>{$i.eta_tab_number}</td>
-		<td style="text-align: left;">{$i.fio_eta}</td>
+		{if $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' || $smarty.request.by_who eq 'rm'}
+		<td>{$i.fio_eta}</td>
 		{/if}
-		{if $smarty.request.by_who eq 'ts'}
-		<td style="text-align: left;">{$i.tab_num_ts}</td>
+		{if $smarty.request.by_who eq 'tm' || $smarty.request.by_who eq 'rm'}
+		<td>{$i.fio_ts}</td>
 		{/if}
-		<td style="text-align: left;">{$i.fio_ts}</td>
-		<td style="text-align: left;">{$i.fio_tm}</td>
-		<td style="text-align: left;">{$i.fio_rm}</td>
+		{if $smarty.request.by_who eq 'rm'}
+		<td>{$i.fio_tm}</td>
+		{/if}
 		<td style="text-align: left;">{$i.tp_kod_key}</td>
-		<td style="text-align: left;">{$i.tp}</td>
+		<td style="text-align: left;">{if $smarty.request.stand eq 'coffee' or $smarty.request.stand eq 'sh'}{$i.tp}{else}{$i.tp_ur} / {$i.tp_addr}{/if}</td>
 		<td>{$i.tp_type_short}</td>
-		<td>{$i.visit}</td>
-		<td>{$i.tp_st_ts}</td>
-		<td>{$i.visit_st_ts_reject_tm_or_traid}</td>
-		<td>{$i.tp_st_ts_reject_tm_or_traid}</td>
-		<td>{$i.tp_st}</td>
-		<td>{$i.bonus|num:2}</td>
-                <td>
-                    <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
-                </td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.photos name=photos1}
+			<nobr>{$i1.visitdate} ({$smarty.foreach.photos1.iteration})</nobr><br>
+			{/foreach}
+		</td>
+		<td>
+			{foreach key=k1 item=i1 from=$i.photos name=photos2}
+			<nobr><a target="_blank" href="{$i1.url}">Фото {$smarty.foreach.photos2.iteration}</a></nobr><br>
+			{/foreach}
+		</td>
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
-		<td colspan="{if $smarty.request.by_who eq 'eta'}8{else}7{/if}">ИТОГО</td>
-		<td>{$tt.visit}</td>
-		<td>{$tt.tp_st_ts}</td>
-		<td>{$tt.visit_st_ts_reject_tm_or_traid}</td>
-		<td>{$tt.tp_st_ts_reject_tm_or_traid}</td>
-		<td>{$tt.tp_st}</td>
-		<td>{$tt.bonus|num:2}</td>
-                <td></td>
-        </tr>
+		<td colspan="{if $smarty.request.by_who eq 'eta'}3{else if $smarty.request.by_who eq 'ts'}4{else if $smarty.request.by_who eq 'tm'}5{else}6{/if}">ИТОГО</td>
+		<!--<td colspan="2">{$tt.tp_st_ts}</td>-->
+		{if $smarty.request.stand eq 'a' or $smarty.request.stand eq 'b' }
+		<td colspan="2">{$tt.sttotp|default:'0'}</td>
+		{else}
+		<td colspan="2">{$tt.tp_st_ts|default:'0'}</td>
+		{/if}
+	</tr>
 </tbody>
 </table>
 {/if}
 
 {if not $smarty.request.print}
 </form>
-{/if}
+
 
 <style>
 	.total-standart a {
@@ -277,3 +301,4 @@
 		background-color: rgba(0,0,0,.075);
 	}
 </style>
+{/if}
