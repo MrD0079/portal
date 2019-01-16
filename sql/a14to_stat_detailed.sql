@@ -1,24 +1,4 @@
-/* Formatted on 24/12/2014 15:26:57 (QP5 v5.227.12220.39724) */
-  SELECT parent_fio,
-         parent_tn,
-         fio_ts,
-         parent_tn tn_tm,
-         parent_fio fio_tm,
-         tn key,
-         COUNT(ts1r) ts1r,
-         wm_concat (distinct region_name) region_name,
-         COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
-         COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
-            visit_cnt
-    FROM (  /* Formatted on 06/01/2015 16:42:43 (QP5 v5.227.12220.39724) */
-  SELECT u1.fio parent_fio,
-         u1.tn parent_tn,
-         u1.tn tn_tm,
-         u1.fio fio_tm,
-         u.tn,
-         u.region_name,
-         t.h_fio_eta,
-         t.visitdate,
+  SELECT t.visitdate,
          TO_CHAR (t.visitdate, 'dd.mm.yyyy') vd,
          t.fio_ts,
          t.fio_eta,
@@ -32,16 +12,24 @@
          t.visit,
          SUM (DECODE (t.url, NULL, 0, 1)) urls,
          SUM (DECODE (s.ts, 1, 1, 0)) ts1,
-         SUM(CASE WHEN DECODE(NVL(s.ts, 0), 1, 1, 0) = 1 AND s.auditor <> 2
-                      THEN 1
-                      ELSE 0
-                    END)
-                   ts1r,
+         SUM(CASE WHEN DECODE(NVL(s.ts, 0), 1, 1, 0) = 1 AND NVL(s.auditor, 0) <> 2
+                  THEN 1
+                  ELSE 0
+              END)
+             ts1r,
          SUM (DECODE (s.auditor, 1, 1, 0)) auditor1,
          SUM (DECODE (t.h_url, NULL, 0, 1) * DECODE (s.ts, NULL, 1, 0)) tsnull,
          SUM (DECODE (t.h_url, NULL, 0, 1) * DECODE (s.auditor, NULL, 1, 0))
             auditornull,
-         AVG (sp.VALUE) VALUE
+         (    SELECT DECODE (COUNT (*), 0, 0, 1)
+                FROM (SELECT master, slave
+                        FROM full
+                       WHERE full = 1)
+               WHERE master = :tn
+          START WITH slave = u.tn
+          CONNECT BY PRIOR master = slave)
+            is_chief,
+         u.tn
     FROM a14to t,
          (SELECT DISTINCT tp_place,
                           tp_type,
@@ -52,23 +40,13 @@
             FROM routes
            WHERE dpt_id = :dpt_id) r,
          user_list u,
-         a14tost s,
-         parents p,
-         user_list u1,
-                  (  SELECT data, h_fio_eta, AVG (VALUE) VALUE
-              FROM a14tosp
-             WHERE data BETWEEN TRUNC (TO_DATE (:sd, 'dd.mm.yyyy'), 'mm')
-                            AND TRUNC (TO_DATE (:ed, 'dd.mm.yyyy'), 'mm')
-          GROUP BY data, h_fio_eta) sp
-   WHERE     p.tn = u.tn
-         AND t.h_fio_eta = sp.h_fio_eta(+)
-         AND TRUNC (t.visitdate, 'mm') = sp.data(+)
-         AND p.parent = u1.tn
-         AND /*r.tab_number = u.tab_num
-         AND */ u.tab_num = t.tab_num
+         a14tost s
+   WHERE     /*r.tab_number = u.tab_num
+         AND */
+        u    .tab_num = t.tab_num
          AND u.dpt_id = :dpt_id
-      and u.is_spd=1
-   AND (   :exp_list_without_ts = 0
+and u.is_spd=1
+         AND (   :exp_list_without_ts = 0
                       OR u.tn IN (SELECT slave
                                   FROM full
                                  WHERE master = :exp_list_without_ts))
@@ -103,8 +81,6 @@
          AND t.visitdate BETWEEN TO_DATE (:sd, 'dd.mm.yyyy')
                              AND TO_DATE (:ed, 'dd.mm.yyyy')
          AND (:eta_list is null OR :eta_list = t.h_fio_eta)
-         AND DECODE (:region_list, '', nvl(u.region_name,'0'), :region_list) =
-                nvl(u.region_name,'0')
          AND CASE
                 WHEN    :ok_visit = 1
                      OR :ok_visit = 2 AND t.visit = 1
@@ -167,12 +143,8 @@
             ELSE
                0
          END = 1
-GROUP BY u1.fio,
-         u1.tn,
-         u.tn,
-         u.region_name,
-         t.h_fio_eta,
-         t.visitdate,
+
+GROUP BY t.visitdate,
          t.fio_ts,
          t.fio_eta,
          t.tp_kod_key,
@@ -182,20 +154,12 @@ GROUP BY u1.fio,
          r.tp_type,
          r.stelag,
          r.tumb,
-         t.visit
+         t.visit,
+         u.tn
 ORDER BY t.visitdate,
          t.fio_ts,
-         u.tn,
          t.fio_eta,
          t.tp_ur,
          t.tp_addr,
          r.tp_place,
-         t.tp_kod_key)
-GROUP BY parent_fio,
-         parent_tn,
-         fio_ts,
-         tn
-ORDER BY parent_fio,
-         parent_tn,
-         fio_ts,
-         tn
+         t.tp_kod_key

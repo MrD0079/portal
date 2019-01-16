@@ -1,14 +1,18 @@
 /* Formatted on 12/02/2015 11:03:29 (QP5 v5.227.12220.39724) */
   SELECT parent_fio,
          parent_tn,
+         parent_tn tn_tm,
+         parent_fio fio_tm,
          fio_ts,
          tn,
          wm_concat (distinct region_name) region_name,
          fio_eta,
+         COUNT(ts1r) ts1r,
          h_fio_eta key,
          COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
             visit_cnt
+
     FROM (  SELECT u1.fio parent_fio,
                    u1.tn parent_tn,
                    u.tn,
@@ -28,6 +32,11 @@
                    t.visit,
                    SUM (DECODE (t.url, NULL, 0, 1)) urls,
                    SUM (DECODE (s.ts, 1, 1, 0)) ts1,
+                   SUM(CASE WHEN DECODE(NVL(s.ts, 0), 1, 1, 0) = 1 AND s.auditor <> 2
+                      THEN 1
+                      ELSE 0
+                    END)
+                   ts1r,
                    SUM (DECODE (s.auditor, 1, 1, 0)) auditor1,
                    SUM (DECODE (t.h_url, NULL, 0, 1) * DECODE (s.ts, NULL, 1, 0))
                       tsnull,

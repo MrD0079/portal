@@ -4,6 +4,7 @@
          fio_tm,
          tn_tm,
          tn_tm key,
+         SUM (ts1r) ts1r, /* стандарты по визитам */
          wm_concat (DISTINCT region_name) region_name,
          COUNT (DISTINCT tp_kod_key) tp_cnt,
          sum(visitdate)/*COUNT (DISTINCT tp_kod_key || visitdate)*/ visit_plan,

@@ -1,5 +1,4 @@
 <?php
-
 	InitRequestVar("exp_list_without_ts",0);
 	InitRequestVar("exp_list_only_ts",0);
 	InitRequestVar("eta_list",$_SESSION["h_eta"]);
@@ -24,16 +23,17 @@
 		':exp_list_only_ts' => $_REQUEST["exp_list_only_ts"],
 		':by_who'=>"'".$_REQUEST['by_who']."'",
 		':stand_type'=>"'".$_REQUEST['stand_type']."'",
-
+        /* standart A arams*/
         ':region_list' => "'".$_REQUEST["region_list"]."'",
         ':ok_st_tm' => 1, /*2 - стандарт засчитан ТМ-ом (А)*/
         ':zst' => 1, /*2 - все ТП со стандартом А*/
-
+        /* standart B params */
+        ':ok_photo' => 1,
         ':ok_ts' => 1, /*2- ТС проверил*/
 		':ok_auditor' => 1, /* аудитор - все*/
-		':st_ts' => 1, /* 2 - ТС соответствует стандарту*/
+		':st_ts' => 2, /* 2 - ТС соответствует стандарту*/
 		':st_auditor' => 1, /* все (соотв, не соответ) стандарту аудитор*/
-		':standart' => 3 /* стандарт В*/
+		':ok_visit' => 1
 	);
 	//print_r($params);
 	$is_show_desc = false;
@@ -57,20 +57,20 @@
 
         $_REQUEST['stand_type'] = $_REQUEST['stand'];
         /* отобразить детальный отчет по Выбранному  стандарту и выбранному ЭТА | ТС | ТМ | РМ */
+    }else {
+        $sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
+        $sql = stritr($sql, $params);
+        $exp_list_only_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        $smarty->assign('exp_list_only_ts', $exp_list_only_ts);
+        $sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
+        $sql = stritr($sql, $params);
+        $exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        $smarty->assign('exp_list_without_ts', $exp_list_without_ts);
+        $sql = rtrim(file_get_contents('sql/a14to_eta_list.sql'));
+        $sql = stritr($sql, $params);
+        $eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        $smarty->assign('eta_list', $eta_list);
     }
-	$sql = rtrim(file_get_contents('sql/exp_list_from_parent_only_ts.sql'));
-	$sql=stritr($sql,$params);
-	$exp_list_only_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$smarty->assign('exp_list_only_ts', $exp_list_only_ts);
-	$sql = rtrim(file_get_contents('sql/exp_list_from_parent_without_ts.sql'));
-	$sql=stritr($sql,$params);
-	$exp_list_without_ts = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$smarty->assign('exp_list_without_ts', $exp_list_without_ts);
-	$sql = rtrim(file_get_contents('sql/a14to_eta_list.sql'));
-	$sql=stritr($sql,$params);
-	$eta_list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-	$smarty->assign('eta_list', $eta_list);
-
 	if (isset($_REQUEST['generate']) || $is_show_desc)
 	{
         $sql_file_all = false;
@@ -86,7 +86,7 @@
                 $standT = "a18to";
                 break;
             case "b":
-                $sql_file = "sql/a14to_stat2et_";
+                $sql_file = "sql/a14to_stat_";
                 $stand_title = "В";
                 $standT = "a14to";
                 break;
@@ -110,33 +110,29 @@
             $sql=stritr($sql,$params);
             $sql=stritr($sql,$params);
             $st_a = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-            $sql=rtrim(file_get_contents('sql/a18to_stat_'.'total.sql'));
+            $sql=rtrim(file_get_contents('sql/a18to_stat_total.sql'));
             $sql=stritr($sql,$params);
             $sql=stritr($sql,$params);
             $st_a_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
             //standart B
-            $sql=rtrim(file_get_contents('sql/a14to_stat2et_'.$_REQUEST['by_who'].'.sql'));
-            $sql=stritr($sql,$params);
+            $sql=rtrim(file_get_contents('sql/a14to_stat_'.$_REQUEST['by_who'].'.sql'));
             $sql=stritr($sql,$params);
             $st_b = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-            $sql=rtrim(file_get_contents('sql/a14to_stat2et_'.'total.sql'));
-            $sql=stritr($sql,$params);
+            $sql=rtrim(file_get_contents('sql/a14to_stat_total.sql'));
             $sql=stritr($sql,$params);
             $st_b_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
             //standart Coffee
             $sql=rtrim(file_get_contents('sql/a16cost_'.$_REQUEST['by_who'].'.sql'));
             $sql=stritr($sql,$params);
             $st_c = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-            $sql=rtrim(file_get_contents('sql/a16cost_'.'total.sql'));
-            $sql=stritr($sql,$params);
+            $sql=rtrim(file_get_contents('sql/a16cost_total.sql'));
             $sql=stritr($sql,$params);
             $st_c_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
             //standart Sh
             $sql=rtrim(file_get_contents('sql/standSHst_'.$_REQUEST['by_who'].'.sql'));
             $sql=stritr($sql,$params);
             $st_sh = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-            $sql=rtrim(file_get_contents('sql/standSHst_'.'total.sql'));
-            $sql=stritr($sql,$params);
+            $sql=rtrim(file_get_contents('sql/standSHst_total.sql'));
             $sql=stritr($sql,$params);
             $st_sh_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
@@ -161,9 +157,9 @@
                 $d[$key]['tab_num_rm'] = GetVal($item,'tab_num_rm');
                 $d[$key]['fio_rm'] = GetVal($item,'fio_rm');
             }
-//            echo "<pre style='display: none;text-align: left;'>";
-//            print_r($d);
-//            echo "</pre>";
+            echo "<pre style='display: none;text-align: left;'>";
+            print_r($d);
+            echo "</pre>";
             $smarty->assign('d', $d);
             $smarty->assign('tt', $tt);
 		}else{
@@ -175,15 +171,23 @@
             }
             $sql=rtrim(file_get_contents($sql_file.$postfix_file.'.sql'));
             $sql=stritr($sql,$params);
-            $sql=stritr($sql,$params);
-            if($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh"){
-                $sql = "SELECT * FROM (".$sql.") WHERE tp_st_ts IS NOT NULL AND tp_st_ts <> 0";
-            }else{
-                $sql = "SELECT * FROM (".$sql.") WHERE zst_lu IS NOT NULL OR standart_tp IS NOT NULL";
+            if($_REQUEST['stand_type'] == 'a') {
+                $sql = stritr($sql, $params);
             }
+            if($is_show_desc) {
+                if ($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {
+                    $sql = "SELECT * FROM (" . $sql . ") WHERE tp_st_ts IS NOT NULL AND tp_st_ts <> 0";
+                } else {
+                    $sql = "SELECT * FROM (" . $sql . ") WHERE ts1r IS NOT NULL AND ts1r <> 0";
+                }
+            }
+
 //            echo $sql;
             $t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
+//            echo "<pre style='display: none;text-align: left;'>";
+//            print_r($t);
+//            echo $sql;
+//            echo "</pre>";
             //print_r($t);
             if($is_show_desc) {
                 $params_tmp = $params;
@@ -205,12 +209,16 @@
                     }
                 }else{
                     foreach ($t as $k => $item) {
-                        $sql = rtrim(file_get_contents('sql/standPhotoStA_B.sql'));
+                        if($_REQUEST['stand_type'] == 'a'){
+                            $sql = rtrim(file_get_contents('sql/standPhotoStA.sql'));
+                        }else{
+                            $sql = rtrim(file_get_contents('sql/standPhotoStB.sql'));
+                        }
+
                         $params_tmp[':tp_kod'] = $item['tp_kod_key'];
                         $sql = stritr($sql, $params_tmp);
                         $sql = stritr($sql, $params_tmp);
                         $t[$k]['photos'] = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-                        //$t[$k]['photos'] = array();
                     }
                 }
             }
@@ -218,11 +226,13 @@
             foreach ($t as $key => $item) {
                 $t[$key]['h_tn'] = $item['key'];
             }
-            echo "<pre style='display: none;text-align: left;'>";
-            print_r($t);
-            echo "</pre>";
+//            echo "<pre style='display: none;text-align: left;'>";
+//            print_r($t);
+//            echo $sql;
+//            echo "</pre>";
             $smarty->assign('d', $t);
 
+            /* title info */
             if($is_show_desc){
                 $desc = array();
                 if($_REQUEST['by_who'] == 'eta'){
@@ -252,7 +262,8 @@
                 $smarty->assign('stand_title',$stand_title);
                 $smarty->assign('desc',$desc);
             }
-            //total
+
+            /* total TP with standart */
             $sql=rtrim(file_get_contents($sql_file.'total.sql'));
             $sql=stritr($sql,$params);
             $sql=stritr($sql,$params);

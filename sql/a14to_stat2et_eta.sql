@@ -7,6 +7,7 @@
          tn,
          wm_concat (DISTINCT region_name) region_name,
          fio_eta,
+         SUM (ts1r) ts1r, /* стандарты по визитам */
          h_fio_eta key,
          COUNT (DISTINCT tp_kod_key) tp_cnt,
          COUNT (DISTINCT tp_kod_key || visitdate) visit_plan,

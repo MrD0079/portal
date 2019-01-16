@@ -1,5 +1,6 @@
 /* Formatted on 10.08.2018 09:53:30 (QP5 v5.252.13127.32867) */
 SELECT COUNT (DISTINCT tp_kod_key) tp_cnt,
+        SUM (ts1r) ts1r,
        sum(visitdate)/*COUNT (DISTINCT tp_kod_key || visitdate)*/ visit_plan,
        sum(visit)/*   COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))*/
           visit_fakt,

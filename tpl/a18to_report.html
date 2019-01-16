@@ -62,14 +62,14 @@ $('#dt').change(function(){
 		<td rowspan=2>Фото</td>
 		<td rowspan=2>Подтип стандарта</td>
 		<td colspan=3>Выполнение стандарта</td>
-		<td colspan=2>Задачи</td>
+		<!--<td colspan=2>Задачи</td>-->
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 		<td>ТС</td>
 		<td>Аудит</td>
 		<td>Коммент ТС</td>
-		<td>ассортимент</td>
-		<td>мерчандайзинг</td>
+		<!--<td>ассортимент</td>-->
+		<!--<td>мерчандайзинг</td>-->
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 			<tr>
@@ -136,20 +136,20 @@ $('#dt').change(function(){
                                                     {$i1.ts_comm|escape}
                                                     {/if}
                                             </td>
-                                            <td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_tasks_assort>
-                                                    {if not $i1.auditor}
-                                                    <textarea id="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>
-                                                    {else}
-                                                    {$i1.tasks_assort|escape}
-                                                    {/if}
-                                            </td>
-                                            <td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_tasks_mr>
-                                                    {if not $i1.auditor}
-                                                    <textarea id="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>
-                                                    {else}
-                                                    {$i1.tasks_mr|escape}
-                                                    {/if}
-                                            </td>
+                                            <!--<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_tasks_assort>-->
+                                                    <!--{if not $i1.auditor}-->
+                                                    <!--<textarea id="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>-->
+                                                    <!--{else}-->
+                                                    <!--{$i1.tasks_assort|escape}-->
+                                                    <!--{/if}-->
+                                            <!--</td>-->
+                                            <!--<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}_tasks_mr>-->
+                                                    <!--{if not $i1.auditor}-->
+                                                    <!--<textarea id="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" name="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}_{$i1.h_name_to}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','{$i1.h_name_to}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>-->
+                                                    <!--{else}-->
+                                                    <!--{$i1.tasks_mr|escape}-->
+                                                    <!--{/if}-->
+                                            <!--</td>-->
                                         </tr>
 					{/foreach}
 			</tr>

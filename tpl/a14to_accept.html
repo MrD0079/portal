@@ -181,15 +181,15 @@
 		<td rowspan=2>Визит</td>
 		<td rowspan=2>Фото</td>
 		<td colspan=4>Выполнение стандарта ТО</td>
-		<td colspan=2>Задачи</td>
+		<!--<td colspan=2>Задачи</td>-->
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 		<td>ТС</td>
 		<td>Аудит</td>
 		<td>Коммент ТС</td>
 		<td>Коммент Аудит</td>
-		<td>ассортимент</td>
-		<td>мерчандайзинг</td>
+		<!--<td>ассортимент</td>-->
+		<!--<td>мерчандайзинг</td>-->
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 			<tr>
@@ -204,7 +204,7 @@
 				<td rowspan={$i.urls+1} style="text-align:center">{$i.stelag}</td>
 				<td rowspan={$i.urls+1} style="text-align:center">{$i.tumb}</td>
 				<td rowspan={$i.urls+1} style="text-align:center" {if $i.visit eq 0}bgcolor="red"{/if}>{if $i.visit}да{/if}</td>
-				<td colspan=7 {if $i.urls eq 0}bgcolor="red"{/if}></td>
+				<td colspan=5 {if $i.urls eq 0}bgcolor="red"{/if}></td>
 			</tr>
 			{foreach key=k1 item=i1 from=$i.photos name=photos}
 			<tr>
@@ -245,12 +245,12 @@
 						{$i1.auditor_comm|nl2br}
 					{/if}
 				</td>
-				<td>
-					{$i1.tasks_assort|nl2br}
-				</td>
-				<td>
-					{$i1.tasks_mr|nl2br}
-				</td>
+				<!--<td>-->
+					<!--{$i1.tasks_assort|nl2br}-->
+				<!--</td>-->
+				<!--<td>-->
+					<!--{$i1.tasks_mr|nl2br}-->
+				<!--</td>-->
 			</tr>
 			{/foreach}
 	{/foreach}

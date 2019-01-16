@@ -1,9 +1,11 @@
 /* Formatted on 12/02/2015 11:03:59 (QP5 v5.227.12220.39724) */
 SELECT COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
+      COUNT(ts1r) ts1r,
        COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
           visit_cnt,
        COUNT (DISTINCT tp_kod_key || visitdate) / SUM (VALUE) * 100
           perc_pokr_sto
+
   FROM (  SELECT u1.fio parent_fio,
                  u1.tn parent_tn,
                  u.tn,
@@ -23,6 +25,11 @@ SELECT COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
                  t.visit,
                  SUM (DECODE (t.url, NULL, 0, 1)) urls,
                  SUM (DECODE (s.ts, 1, 1, 0)) ts1,
+                 SUM(CASE WHEN DECODE(NVL(s.ts, 0), 1, 1, 0) = 1 AND s.auditor <> 2
+                      THEN 1
+                      ELSE 0
+                    END)
+                   ts1r,
                  SUM (DECODE (s.auditor, 1, 1, 0)) auditor1,
                  SUM (DECODE (t.h_url, NULL, 0, 1) * DECODE (s.ts, NULL, 1, 0))
                     tsnull,
@@ -39,7 +46,7 @@ SELECT COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
                                   tab_number,
                                   tp_kod
                     FROM routes
-           WHERE dpt_id = :dpt_id) r,
+                  WHERE dpt_id = :dpt_id) r,
                  user_list u,
                  a14tost s,
                  parents p,

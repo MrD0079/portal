@@ -83,7 +83,7 @@
 				<input type=radio id="by_who" name="by_who" value='eta' >ïî İÒÀ
 				<input type=radio id="by_who" name="by_who" value='ts'>ïî ÒÑ
 				<input type=radio id="by_who" name="by_who" value='tm'>ïî ÒÌ
-				<input type=radio id="by_who" name="by_who" value='rm'>ïî ĞÌ
+				<!--<input type=radio id="by_who" name="by_who" value='rm'>ïî ĞÌ-->
 			</td>
 		</tr>
 		<script>$("input[name=by_who][value={$smarty.request.by_who}]").attr('checked',true);</script>
@@ -125,9 +125,9 @@
 		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts'}<td>ÔÈÎ ÒÑ</td>{/if}
 		{if $smarty.request.by_who eq 'tm'}<td class="w100">ò.í. ÒÌ</td>{/if}
 		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm'}<td>ÔÈÎ ÒÌ</td>{/if}
-		{if $smarty.request.by_who eq 'rm'}<td class="w100">ò.í. ĞÌ</td>{/if}
-		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td>ÔÈÎ ĞÌ</td>{/if}
-                <!--<td class="w100">Êîë-âî âèçèòîâ ïî Ñòàíäàğòó "Øòó÷êà"</td>-->
+		<!--{if $smarty.request.by_who eq 'rm'}<td class="w100">ò.í. ĞÌ</td>{/if}-->
+		<!--{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td>ÔÈÎ ĞÌ</td>{/if}-->
+                <!--&lt;!&ndash;<td class="w100">Êîë-âî âèçèòîâ ïî Ñòàíäàğòó "Øòó÷êà"</td>&ndash;&gt;-->
 		{if $smarty.request.stand_type eq 'all' or $smarty.request.stand_type eq 'a'}
 		<td class="w100">Êîë-âî ÒÏ ñî <br>Ñòàíäàğòîì À</td>
 		{/if}
@@ -165,19 +165,19 @@
 		{/if}
 		{if $smarty.request.by_who eq 'tm'}<td>{$i.tab_num_tm}</td>{/if}
 		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm'}<td style="text-align: left;">{$i.fio_tm}</td>{/if}
-		{if $smarty.request.by_who eq 'rm'}<td>{$i.tab_num_rm}</td>{/if}
-		{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td style="text-align: left;">{$i.fio_rm}</td>{/if}
-		<!--<td>{$i.visit}</td>-->
+		<!--{if $smarty.request.by_who eq 'rm'}<td>{$i.tab_num_rm}</td>{/if}-->
+		<!--{if $smarty.request.by_who eq 'eta' or $smarty.request.by_who eq 'ts' or $smarty.request.by_who eq 'tm' or $smarty.request.by_who eq 'rm'}<td style="text-align: left;">{$i.fio_rm}</td>{/if}-->
+		<!--&lt;!&ndash;<td>{$i.visit}</td>&ndash;&gt;-->
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_a.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}" target="_blank">{$i.st_a.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.st_a.ts1r neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}" target="_blank">{$i.st_a.ts1r}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'a'}
-		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}" target="_blank">{$i.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.ts1r neq 0}<a href="/?action=standTotal&show_desc=1&stand=a&h_tn={$i.h_tn}" target="_blank">{$i.ts1r}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_b.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.st_b.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.st_b.ts1r neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.st_b.ts1r}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'b'}
-		<td>{if $i.sttotp neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.sttotp}</a>{else}0{/if}</td>
+		<td>{if $i.ts1r neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.ts1r}</a>{else}0{/if}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all' }
@@ -200,19 +200,19 @@
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
-		{if $smarty.request.by_who eq 'eta'}<td colspan=5>ÈÒÎÃÎ</td>{/if}
-		{if $smarty.request.by_who eq 'ts'}<td colspan=4>ÈÒÎÃÎ</td>{/if}
-		{if $smarty.request.by_who eq 'tm'}<td colspan=3>ÈÒÎÃÎ</td>{/if}
-		{if $smarty.request.by_who eq 'rm'}<td colspan=2>ÈÒÎÃÎ</td>{/if}
+		{if $smarty.request.by_who eq 'eta'}<td colspan=4>ÈÒÎÃÎ</td>{/if}
+		{if $smarty.request.by_who eq 'ts'}<td colspan=3>ÈÒÎÃÎ</td>{/if}
+		{if $smarty.request.by_who eq 'tm'}<td colspan=2>ÈÒÎÃÎ</td>{/if}
+		<!--{if $smarty.request.by_who eq 'rm'}<td colspan=2>ÈÒÎÃÎ</td>{/if}-->
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{$tt.st_a.sttotp|default:'0'}</td>
+		<td>{$tt.st_a.ts1r|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'a'}
-		<td>{$tt.sttotp|default:'0'}</td>
+		<td>{$tt.ts1r|default:'0'}</td>
 		{/if}
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{$tt.st_b.tp_st|default:'0'}</td>
+		<td>{$tt.st_b.ts1r|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'b'}
-		<td>{$tt.sttotp|default:'0'}</td>
+		<td>{$tt.ts1r|default:'0'}</td>
 		{/if}
 		{if $smarty.request.stand_type eq 'all' }
 		<td>{$tt.st_c.tp_st|default:'0'}</td>
@@ -241,9 +241,9 @@
 		{if $smarty.request.by_who eq 'tm' || $smarty.request.by_who eq 'rm'}
 		<td>ÔÈÎ ÒÑ</td>
 		{/if}
-		{if $smarty.request.by_who eq 'rm'}
-		<td>ÔÈÎ ÒÌ</td>
-		{/if}
+		<!--{if $smarty.request.by_who eq 'rm'}-->
+		<!--<td>ÔÈÎ ÒÌ</td>-->
+		<!--{/if}-->
 		<td>Êîä ÒÏ</td>
 		<td>Íàçâàíèå/Àäğåñ ÒÏ</td>
 		<td class="w100">Òèï ÒÏ</td>
@@ -258,9 +258,9 @@
 		{if $smarty.request.by_who eq 'tm' || $smarty.request.by_who eq 'rm'}
 		<td>{$i.fio_ts}</td>
 		{/if}
-		{if $smarty.request.by_who eq 'rm'}
-		<td>{$i.fio_tm}</td>
-		{/if}
+		<!--{if $smarty.request.by_who eq 'rm'}-->
+		<!--<td>{$i.fio_tm}</td>-->
+		<!--{/if}-->
 		<td style="text-align: left;">{$i.tp_kod_key}</td>
 		<td style="text-align: left;">{if $smarty.request.stand eq 'coffee' or $smarty.request.stand eq 'sh'}{$i.tp}{else}{$i.tp_ur} / {$i.tp_addr}{/if}</td>
 		<td>{$i.tp_type_short}</td>
@@ -277,10 +277,10 @@
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
-		<td colspan="{if $smarty.request.by_who eq 'eta'}3{else if $smarty.request.by_who eq 'ts'}4{else if $smarty.request.by_who eq 'tm'}5{else}6{/if}">ÈÒÎÃÎ</td>
+		<td colspan="{if $smarty.request.by_who eq 'eta'}2{else if $smarty.request.by_who eq 'ts'}3{else if $smarty.request.by_who eq 'tm'}4{else}5{/if}">ÈÒÎÃÎ</td>
 		<!--<td colspan="2">{$tt.tp_st_ts}</td>-->
 		{if $smarty.request.stand eq 'a' or $smarty.request.stand eq 'b' }
-		<td colspan="2">{$tt.sttotp|default:'0'}</td>
+		<td colspan="2">{$tt.ts1r|default:'0'}</td>
 		{else}
 		<td colspan="2">{$tt.tp_st_ts|default:'0'}</td>
 		{/if}

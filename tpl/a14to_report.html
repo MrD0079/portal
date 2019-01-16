@@ -69,14 +69,14 @@ $('#dt').change(function(){
 		<td rowspan=2>Визит</td>
 		<td rowspan=2>Фото</td>
 		<td colspan=3>Выполнение стандарта ТО</td>
-		<td colspan=2>Задачи</td>
+		<!--<td colspan=2>Задачи</td>-->
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 		<td>ТС</td>
 		<td>Аудит</td>
 		<td>Коммент ТС</td>
-		<td>ассортимент</td>
-		<td>мерчандайзинг</td>
+		<!--<td>ассортимент</td>-->
+		<!--<td>мерчандайзинг</td>-->
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 			<tr>
@@ -127,20 +127,20 @@ $('#dt').change(function(){
 					{$i1.ts_comm|escape}
 					{/if}
 				</td>
-				<td id=td_{$i1.h_url}_tasks_assort>
-					{if not $i1.auditor}
-					<textarea id="tasks_assort{$i1.h_url}" name="tasks_assort{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>
-					{else}
-					{$i1.tasks_assort|escape}
-					{/if}
-				</td>
-				<td id=td_{$i1.h_url}_tasks_mr>
-					{if not $i1.auditor}
-					<textarea id="tasks_mr{$i1.h_url}" name="tasks_mr{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>
-					{else}
-					{$i1.tasks_mr|escape}
-					{/if}
-				</td>
+				<!--<td id=td_{$i1.h_url}_tasks_assort>-->
+					<!--{if not $i1.auditor}-->
+					<!--<textarea id="tasks_assort{$i1.h_url}" name="tasks_assort{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_assort',this.value)">{$i1.tasks_assort}</textarea>-->
+					<!--{else}-->
+					<!--{$i1.tasks_assort|escape}-->
+					<!--{/if}-->
+				<!--</td>-->
+				<!--<td id=td_{$i1.h_url}_tasks_mr>-->
+					<!--{if not $i1.auditor}-->
+					<!--<textarea id="tasks_mr{$i1.h_url}" name="tasks_mr{$i1.h_url}" onChange="save('{$i1.h_url}','tasks_mr',this.value)">{$i1.tasks_mr}</textarea>-->
+					<!--{else}-->
+					<!--{$i1.tasks_mr|escape}-->
+					<!--{/if}-->
+				<!--</td>-->
 			</tr>
 			{/foreach}
 	{/foreach}

@@ -101,18 +101,18 @@
                 {if $is_ts}
 		<td rowspan=2>Фото кофе</td>
                 {/if}
-		<td colspan=5>Выполнение стандарта</td>
-		<td colspan=2>Задачи</td>
-                <td rowspan=2>отг. цел. ассортимент</td>
+		<td colspan=4>Выполнение стандарта</td>
+		<!--<td colspan=2>Задачи</td>-->
+                <!--<td rowspan=2>отг. цел. ассортимент</td>-->
 	</tr>
 	<tr style="font-weight:bold;text-align:center">
 		<td>ТС</td>
 		<td>ТМ</td>
 		<td>Коммент ТС</td>
 		<td>Коммент ТМ</td>
-		<td>Коммент ВСТМ</td>
-		<td>ассортимент</td>
-		<td>мерчандайзинг</td>
+		<!--<td>Коммент ВСТМ</td>-->
+		<!--<td>ассортимент</td>-->
+		<!--<td>мерчандайзинг</td>-->
 	</tr>
 	{foreach key=k item=i from=$d name=d}
 			<tr>
@@ -210,58 +210,58 @@
 						{$i.tm_comm|nl2br}
 					{/if}
 				</td>
-				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_traid_comm>
-					{if ($is_traid) and not $smarty.request.print}
-						<textarea
-							id="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
-							name="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"
-						>{$i.traid_comm}</textarea>
-						<br>
-						<a
-							href="javascript:void(0);"
-							onClick="
-                                                            save(
-                                                            '{$i.visitdate}'
-                                                            ,'{$i.visitdate_key}'
-                                                            ,'{$i.tp_kod_key}'
-                                                            ,'traid_comm'
-                                                            ,$('#traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}').val()
-                                                            ,'traid'
-                                                            ,$('#cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid').prop('checked')?1:0
-                                                            );
-                                                        "
-						>Сохранить</a>
-                                                &nbsp;
-                                                <div style="display: inline; /*{if $i.traid eq 1}*/background-color:red;/*{/if}*/"
-                                                     id="td_{$i.visitdate_key}_{$i.tp_kod_key}_traid">
-                                                <input
-                                                    type="checkbox"
-                                                    id="cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid"
-                                                       > отк. станд
-                                                </div>
-                                                <script>$("#cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid").prop('checked','{$i.traid}'=='1'?true:false);</script>
-					{else}
-						{$i.traid_comm|nl2br}
-                                                {if $i.traid eq 1}&nbsp;<div style="display: inline; background-color:red;">отк. станд</div>{/if}
-					{/if}
-				</td>
-				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_tasks_assort>
-					{if not $i.tm and $is_ts}
-					<textarea id="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}" name="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','tasks_assort',this.value)">{$i.tasks_assort}</textarea>
-					{else}
-					{$i.tasks_assort|escape}
-					{/if}
-				</td>
-				<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_tasks_mr>
-					{if not $i.tm and $is_ts}
-					<textarea id="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}" name="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','tasks_mr',this.value)">{$i.tasks_mr}</textarea>
-					{else}
-					{$i.tasks_mr|escape}
-					{/if}
-				</td>
-                                <td>
-                                    <div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>
-                                </td>
+				<!--<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_traid_comm>-->
+					<!--{if ($is_traid) and not $smarty.request.print}-->
+						<!--<textarea-->
+							<!--id="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"-->
+							<!--name="traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}"-->
+						<!--&gt;{$i.traid_comm}</textarea>-->
+						<!--<br>-->
+						<!--<a-->
+							<!--href="javascript:void(0);"-->
+							<!--onClick="-->
+                                                            <!--save(-->
+                                                            <!--'{$i.visitdate}'-->
+                                                            <!--,'{$i.visitdate_key}'-->
+                                                            <!--,'{$i.tp_kod_key}'-->
+                                                            <!--,'traid_comm'-->
+                                                            <!--,$('#traid_comm_{$i.visitdate_key}_{$i.tp_kod_key}').val()-->
+                                                            <!--,'traid'-->
+                                                            <!--,$('#cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid').prop('checked')?1:0-->
+                                                            <!--);-->
+                                                        <!--"-->
+						<!--&gt;Сохранить</a>-->
+                                                <!--&nbsp;-->
+                                                <!--<div style="display: inline; /*{if $i.traid eq 1}*/background-color:red;/*{/if}*/"-->
+                                                     <!--id="td_{$i.visitdate_key}_{$i.tp_kod_key}_traid">-->
+                                                <!--<input-->
+                                                    <!--type="checkbox"-->
+                                                    <!--id="cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid"-->
+                                                       <!--&gt; отк. станд-->
+                                                <!--</div>-->
+                                                <!--<script>$("#cb_{$i.visitdate_key}_{$i.tp_kod_key}_traid").prop('checked','{$i.traid}'=='1'?true:false);</script>-->
+					<!--{else}-->
+						<!--{$i.traid_comm|nl2br}-->
+                                                <!--{if $i.traid eq 1}&nbsp;<div style="display: inline; background-color:red;">отк. станд</div>{/if}-->
+					<!--{/if}-->
+				<!--</td>-->
+				<!--<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_tasks_assort>-->
+					<!--{if not $i.tm and $is_ts}-->
+					<!--<textarea id="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}" name="tasks_assort_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','tasks_assort',this.value)">{$i.tasks_assort}</textarea>-->
+					<!--{else}-->
+					<!--{$i.tasks_assort|escape}-->
+					<!--{/if}-->
+				<!--</td>-->
+				<!--<td id=td_{$i.visitdate_key}_{$i.tp_kod_key}_tasks_mr>-->
+					<!--{if not $i.tm and $is_ts}-->
+					<!--<textarea id="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}" name="tasks_mr_{$i.visitdate_key}_{$i.tp_kod_key}" onChange="save('{$i.visitdate}','{$i.visitdate_key}','{$i.tp_kod_key}','tasks_mr',this.value)">{$i.tasks_mr}</textarea>-->
+					<!--{else}-->
+					<!--{$i.tasks_mr|escape}-->
+					<!--{/if}-->
+				<!--</td>-->
+                                <!--<td>-->
+                                    <!--<div class="pics">{$i.target}<div class="hov">{$i.target_info|nl2br}</div></div>-->
+                                <!--</td>-->
 			</tr>
 	{/foreach}
     </table>

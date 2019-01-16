@@ -1,5 +1,5 @@
 SELECT t.url, TO_CHAR ( s.visitdate, 'dd.mm.yyyy') visitdate
-  FROM a18to t, a18totp s
+  FROM :standT t, :standTtp s
  WHERE     t.tp_kod_key = :tp_kod
        AND t.visitdate BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE(:ed,'dd.mm.yyyy')
        AND t.url IS NOT NULL
