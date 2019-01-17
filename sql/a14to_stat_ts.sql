@@ -9,7 +9,8 @@
          wm_concat (distinct region_name) region_name,
          COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
-            visit_cnt
+            visit_cnt,
+          tab_num_ts
     FROM (  /* Formatted on 06/01/2015 16:42:43 (QP5 v5.227.12220.39724) */
   SELECT u1.fio parent_fio,
          u1.tn parent_tn,
@@ -29,6 +30,7 @@
          r.tp_type,
          r.stelag,
          r.tumb,
+         r.tab_number tab_num_ts,
          t.visit,
          SUM (DECODE (t.url, NULL, 0, 1)) urls,
          SUM (DECODE (s.ts, 1, 1, 0)) ts1,
@@ -182,7 +184,8 @@ GROUP BY u1.fio,
          r.tp_type,
          r.stelag,
          r.tumb,
-         t.visit
+         t.visit,
+         r.tab_number
 ORDER BY t.visitdate,
          t.fio_ts,
          u.tn,
@@ -194,7 +197,8 @@ ORDER BY t.visitdate,
 GROUP BY parent_fio,
          parent_tn,
          fio_ts,
-         tn
+         tn,
+         tab_num_ts
 ORDER BY parent_fio,
          parent_tn,
          fio_ts,

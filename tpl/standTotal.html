@@ -277,7 +277,7 @@
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
-		<td colspan="{if $smarty.request.by_who eq 'eta'}2{else if $smarty.request.by_who eq 'ts'}3{else if $smarty.request.by_who eq 'tm'}4{else}5{/if}">хрнцн</td>
+		<td colspan="{if $smarty.request.by_who eq 'eta'}3{else if $smarty.request.by_who eq 'ts'}4{else}5{/if}">хрнцн</td>
 		<!--<td colspan="2">{$tt.tp_st_ts}</td>-->
 		{if $smarty.request.stand eq 'a' or $smarty.request.stand eq 'b' }
 		<td colspan="2">{$tt.ts1r|default:'0'}</td>

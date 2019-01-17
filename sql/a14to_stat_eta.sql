@@ -11,11 +11,14 @@
          h_fio_eta key,
          COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
-            visit_cnt
-
+            visit_cnt,
+          eta_tab_number,
+          tab_num_ts
     FROM (  SELECT u1.fio parent_fio,
                    u1.tn parent_tn,
+                   u1.tab_num tab_num_ts,
                    u.tn,
+                   r.eta_tab_number,
                    u.region_name,
                    t.h_fio_eta,
                    t.visitdate,
@@ -45,15 +48,17 @@
                       * DECODE (s.auditor, NULL, 1, 0))
                       auditornull,
                    AVG (sp.VALUE) VALUE
+
               FROM a14to t,
                    (SELECT DISTINCT tp_place,
                                     tp_type,
                                     stelag,
                                     tumb,
                                     tab_number,
-                                    tp_kod
+                                    tp_kod,
+                                    ETA_TAB_NUMBER
                       FROM routes
-           WHERE dpt_id = :dpt_id) r,
+                      WHERE dpt_id = :dpt_id) r,
                    user_list u,
                    a14tost s,
                    parents p,
@@ -63,7 +68,20 @@
                        WHERE data BETWEEN TRUNC (TO_DATE (:sd, 'dd.mm.yyyy'), 'mm')
                                       AND TRUNC (TO_DATE (:ed, 'dd.mm.yyyy'), 'mm')
                     GROUP BY data, h_fio_eta) sp
+                   /* ,(SELECT dpt_id,
+                       tp_kod,
+                       dt,
+                       summa,
+                       coffee,
+                       eta_tab_number
+                      FROM a14mega) m*/
+                      /*user_list utm*/
              WHERE     p.tn = u.tn
+                  /* AND ptm.parent = utm.tn
+                   AND ptm.tn = u.tn */
+                   /*AND u.dpt_id = m.dpt_id
+                   AND TRUNC(t.visitdate, 'mm') = m.dt (+)
+                   AND t.tp_kod_key = m.tp_kod (+)*/
                    AND t.h_fio_eta = sp.h_fio_eta(+)
                    AND TRUNC (t.visitdate, 'mm') = sp.data(+)
                    AND p.parent = u1.tn
@@ -181,6 +199,7 @@
                    END = 1
           GROUP BY u1.fio,
                    u1.tn,
+                   u1.tab_num,
                    u.tn,
                    u.region_name,
                    t.h_fio_eta,
@@ -194,7 +213,9 @@
                    r.tp_type,
                    r.stelag,
                    r.tumb,
-                   t.visit
+                   t.visit,
+                   r.eta_tab_number
+
           ORDER BY t.visitdate,
                    t.fio_ts,
                    u.tn,
@@ -208,7 +229,9 @@ GROUP BY parent_fio,
          fio_ts,
          tn,
          fio_eta,
-         h_fio_eta
+         h_fio_eta,
+         eta_tab_number,
+         tab_num_ts
 ORDER BY parent_fio,
          parent_tn,
          fio_ts,

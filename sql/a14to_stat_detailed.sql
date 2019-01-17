@@ -29,7 +29,14 @@
           START WITH slave = u.tn
           CONNECT BY PRIOR master = slave)
             is_chief,
-         u.tn
+         u.tn,
+         utm.tab_num tab_num_tm,
+         utm.fio fio_tm,
+         utm.tn tn_tm
+         /* eta_tab_number,
+         tab_num_ts,
+         tab_num_tm,
+         tab_num_rm */
     FROM a14to t,
          (SELECT DISTINCT tp_place,
                           tp_type,
@@ -40,10 +47,14 @@
             FROM routes
            WHERE dpt_id = :dpt_id) r,
          user_list u,
+         user_list utm,
+         parents ptm,
          a14tost s
    WHERE     /*r.tab_number = u.tab_num
          AND */
         u    .tab_num = t.tab_num
+         AND ptm.parent = utm.tn
+        AND ptm.tn = u.tn
          AND u.dpt_id = :dpt_id
 and u.is_spd=1
          AND (   :exp_list_without_ts = 0
@@ -155,7 +166,10 @@ GROUP BY t.visitdate,
          r.stelag,
          r.tumb,
          t.visit,
-         u.tn
+         u.tn,
+         utm.fio,
+         utm.tn,
+         utm.tab_num
 ORDER BY t.visitdate,
          t.fio_ts,
          t.fio_eta,

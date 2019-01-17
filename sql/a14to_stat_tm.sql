@@ -7,9 +7,11 @@
          wm_concat (distinct region_name) region_name,
          COUNT (DISTINCT tp_kod_key || visitdate) tp_cnt,
          COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))
-            visit_cnt
+            visit_cnt,
+            tab_num_tm
     FROM (  SELECT u1.fio parent_fio,
                    u1.tn parent_tn,
+                   u1.TAB_NUM tab_num_tm,
                    u.tn,
                    u.region_name,
                    t.h_fio_eta,
@@ -189,7 +191,8 @@
                    r.tp_type,
                    r.stelag,
                    r.tumb,
-                   t.visit
+                   t.visit,
+                   u1.TAB_NUM
           ORDER BY t.visitdate,
                    t.fio_ts,
                    u.tn,
@@ -198,5 +201,5 @@
                    t.tp_addr,
                    r.tp_place,
                    t.tp_kod_key)
-GROUP BY parent_fio, parent_tn
+GROUP BY parent_fio, parent_tn, tab_num_tm
 ORDER BY parent_fio, parent_tn

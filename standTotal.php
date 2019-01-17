@@ -228,7 +228,7 @@
             }
 //            echo "<pre style='display: none;text-align: left;'>";
 //            print_r($t);
-//            echo $sql;
+////            echo $sql;
 //            echo "</pre>";
             $smarty->assign('d', $t);
 
@@ -253,12 +253,12 @@
                     $fio['fio'] = $t[0]['fio_tm'];
                     $desc[] = $fio;
                 }
-                if($_REQUEST['by_who'] == 'eta' || $_REQUEST['by_who'] == 'ts' || $_REQUEST['by_who'] == 'tm' || $_REQUEST['by_who'] == 'rm'){
-                    $fio = array();
-                    $fio['fio_title'] = 'тхн пл';
-                    $fio['fio'] = $t[0]['fio_rm'];
-                    $desc[] = $fio;
-                }
+//                if($_REQUEST['by_who'] == 'eta' || $_REQUEST['by_who'] == 'ts' || $_REQUEST['by_who'] == 'tm' || $_REQUEST['by_who'] == 'rm'){
+//                    $fio = array();
+//                    $fio['fio_title'] = 'тхн пл';
+//                    $fio['fio'] = $t[0]['fio_rm'];
+//                    $desc[] = $fio;
+//                }
                 $smarty->assign('stand_title',$stand_title);
                 $smarty->assign('desc',$desc);
             }
