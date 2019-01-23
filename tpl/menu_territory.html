@@ -60,7 +60,7 @@
                     <li><a href="?action=a14to_nophoto">Нет фото</a></li>
             </ul>
     </li>
-    {if $cnt_kod eq "ua" and false}
+    {if $cnt_kod eq "ua"}
         <li><a href="javascript:void(0);"><span class="dir">Стандарт кофе</span></a>
                 <ul>
                                 <li><a href="?action=a16cora">Вечерний отчет / Подтверждение</a></li>
@@ -84,12 +84,7 @@
 					<li><a href="?action=a18to_accept">Подтверждение</a></li>
 				</ul>
 			</li>
-			<li><a href="javascript:void(0);"><span class="dir">Стандарт Б</span></a>
-				<ul>
-					{if $is_ts}<li><a href="?action=a14to_report">Вечерний отчет</a></li>{/if}
-					<li><a href="?action=a14to_accept">Подтверждение</a></li>
-				</ul>
-			</li>
+			<li><a href="?action=standBra">Стандарт B (Вечерний отчет / Подтверждение)</a></li>
 			<li><a href="?action=a16cora">Стандарт Кофе (Вечерний отчет / Подтверждение)</a></li>
 			<li><a href="?action=standSHra">Стандарт Ш (Вечерний отчет / Подтверждение)</a></li>
 			<li><a href="?action=standTotal">Статистика</a></li>

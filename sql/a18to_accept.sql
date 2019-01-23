@@ -33,6 +33,7 @@ SELECT DISTINCT TO_CHAR (t.visitdate, 'dd.mm.yyyy') vd,
        a18totp s,
        user_list u
  WHERE     u.tab_num = t.tab_num
+       AND t.tab_num = r.tab_number /* fix row */
        AND u.dpt_id = :dpt_id
        AND u.is_spd = 1
        AND (   :exp_list_without_ts = 0

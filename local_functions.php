@@ -215,30 +215,30 @@ function array_diff_my($a1, $a2)
 
 function Table_Update ($table/* string */ , $keys/* array(field1=>value1,...)*/ , $values/* array(field1=>value1,...) if $values is empty then only delete */)
 {
-	global $db,$smarty;
-	$k = array();
-	$k1 = array();
-	$v1 = array();
-	foreach ($keys as $key => $val)
-	{
-		$k[] = $key . "='" . $val."'";
-		$k1[] = $key . "=?";
-		$v1[] = $val;
-	}
-	if (count($values) != 0)
-	{
-		$values = array_map("cube", $values);
-		$sql = "select " . implode(", ", array_keys($values)) . " from $table where " . implode(" and ", $k1);
-		$res = $db->getRow($sql, null, $v1, null, MDB2_FETCHMODE_ASSOC);
-		if ($res)
-		{ ////////////////////////////////////////// record exist, updating...
-			if (!array_diff_my($res, $values))
-			{
-				$affectedRows = $db->extended->autoExecute($table, $values, MDB2_AUTOQUERY_UPDATE, implode(" and ", $k));
-                                //if ($table=="merch_report"||$table=="merch_report_ok") 
-                                    audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
-			}
-		}
+    global $db,$smarty;
+    $k = array();
+    $k1 = array();
+    $v1 = array();
+    foreach ($keys as $key => $val)
+    {
+        $k[] = $key . "='" . $val."'";
+        $k1[] = $key . "=?";
+        $v1[] = $val;
+    }
+    if (count($values) != 0)
+    {
+        $values = array_map("cube", $values);
+        $sql = "select " . implode(", ", array_keys($values)) . " from $table where " . implode(" and ", $k1);
+        $res = $db->getRow($sql, null, $v1, null, MDB2_FETCHMODE_ASSOC);
+        if ($res)
+        { ////////////////////////////////////////// record exist, updating...
+            if (!array_diff_my($res, $values))
+            {
+                $affectedRows = $db->extended->autoExecute($table, $values, MDB2_AUTOQUERY_UPDATE, implode(" and ", $k));
+                //if ($table=="merch_report"||$table=="merch_report_ok")
+                audit("TABLE=".$table."\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values),$table);
+            }
+        }
 		else
 		{ ////////////////////////////////////////// record not exist, inserting...
 			if (implode("",$values)!="")

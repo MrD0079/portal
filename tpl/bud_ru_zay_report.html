@@ -344,7 +344,7 @@
         <td>Комментарии / Уточнения</td>
     </tr>
     {foreach key=k item=i from=$d}
-    <form target="_self" method="POST" enctype="multipart/form-data">
+    <form target="_self" method="POST" {if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}id="{$i.head.id}" class="doc_form"{/if} enctype="multipart/form-data">
     {if $i.head.current_status eq 0}{assign var=color value="#FFFF66"}{/if}
     {if $i.head.current_status eq 1}{assign var=color value="#66FF66"}{/if}
     {if $i.head.current_status eq 2}{assign var=color value="#FFCC99"}{/if}
@@ -748,6 +748,7 @@
 <script>
 function calc_formula (zid)
 {literal}{{/literal}
+    {literal}try{{/literal}
 	{foreach key=k item=i from=$d}
 		{foreach key=k1 item=i1 from=$i.ff}
 			{if $i1.type eq 'number' or $i1.type eq 'number_int' and $i1.rep_var_name}
@@ -765,6 +766,11 @@ function calc_formula (zid)
 			{/if}
 		{/foreach}
 	{/foreach}
+        {literal}
+    } catch (err) {
+		  console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+	}
+            {/literal}
 {literal}}{/literal}
 </script>
 <style>
@@ -789,42 +795,57 @@ function calc_formula (zid)
 
 	}
 </style>
+
 <script>
-    $("#save").parents("form").submit(function(e){
-        var $btn = $(this).find("#save");
-        if($btn.attr("data-submit") == "false"){
-            e.preventDefault();
-            var count_tp = $btn.attr("data-count-tp");
-            if(typeof count_tp !== "undefined" && count_tp != ""){
-                var title = "Предупреждение для №"+$btn.attr("data-save-id");
-                var message = "<br><br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
-                var msg_type = 0;
-                if(count_tp == 0){
-                    message = "Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message;
-                    msg_type = 1;
-                }else{
-                    message = "Перед сохранением заявки на МА <strong>убедитесь</strong> что отчет для текущей локальной акции заполен."+message;
-                    msg_type = 2;
-                }
-                if(ConfirmDialog(title,message,$btn,msg_type) == false){
-                    e.preventDefault();
-                    return false;
+
+
+    $('form.doc_form + tr > td:first-child input[type=submit]').on("click",function(e){
+        var $form = $('form#'+$(this).attr('data-save-id'));
+        var $btn = $(this);
+        if($btn.attr("name") == "save"){
+            if($btn.attr("data-submit")  == "false"){
+                var count_tp = $btn.attr("data-count-tp");
+                if(typeof count_tp !== "undefined" && count_tp != ""){
+                    var title = "Предупреждение для №"+$btn.attr("data-save-id");
+                    var message = "<br><br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
+                    var msg_type = 0;
+                    if(count_tp == 0){
+                        message = "Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message;
+                        msg_type = 1;
+                    }else{
+                        message = "Перед сохранением заявки на МА убедитесь что отчет для текущей локальной акции заполен."+message;
+                        msg_type = 2;
+                    }
+                    if(ConfirmDialog($form,title,message,$btn,msg_type) == false){
+                        e.preventDefault();
+                        return false;
+                    }
                 }
             }
+        }else{
+            $form.removeClass('doc_form');
+            $form.submit();
         }
     });
-    function ConfirmDialog(title,message,$submit,msg_type){
+    $('form.doc_form').submit(function (e) {
+        if($(this).hasClass('doc_form')){
+            e.preventDefault();
+            return false;
+        }
+    });
+    function ConfirmDialog($form,title,message,$submit,msg_type){
         var btn_params = {};
         if(msg_type == 2){
             btn_params = {
                 'Сохранить': function () {
-                    //submit form;
+                    /*submit form;*/
+                    $form.removeClass('doc_form');
                     $submit.attr("data-submit", true);
                     $submit.click();
                     $(this).dialog("close");
                 },
                 'Отменить': function () {
-                    //cancel submit form
+                    /*cancel submit form*/
                     $(this).dialog("close");
                     return false;
                 }
@@ -842,7 +863,7 @@ function calc_formula (zid)
                 },
                 buttons: btn_params,
                 close: function (event, ui) {
-                    //cancel submit form
+                    /*cancel submit form*/
                     $(this).remove();
                     return false;
                 }

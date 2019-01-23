@@ -10,8 +10,9 @@
       <td>ФИО увольняющегося сотрудника
       </td>
       <td>
-	<select required name="free_staff[tn]" onChange="this.value!=''?$('#uploadOutput').load('?action=free_staff_my_emp_all&nohead=1&tn='+this.value):$('#uploadOutput').text('');">
-		<option></option>
+	<select required name="free_staff[tn]" onChange="this.value!=''?$('#uploadOutput').load('?action=free_staff_my_emp_all&nohead=1&tn='+this.value):$('#uploadOutput').text('');"
+            class="chosen-select" data-placeholder="ФИО увольняющегося сотрудника:">
+		<option>ФИО увольняющегося сотрудника:</option>
 		{foreach from=$my_emp key=k item=i}
 			<option value={$i.emp_tn}>{$i.emp_name}</option>
 		{/foreach}
@@ -24,8 +25,8 @@
       <td>Причина увольнения
       </td>
       <td>
-      <select required name="free_staff[seat]">
-		<option></option>
+      <select required name="free_staff[seat]"  class="chosen-select" data-placeholder="Причина увольнения:">
+		<option>Причина увольнения:</option>
 		{foreach from=$seat key=k item=i}
 			<option value={$i.id}>{$i.name}</option>
 		{/foreach}

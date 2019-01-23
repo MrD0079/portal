@@ -178,10 +178,13 @@
 					$('#payer{$item.statya_id}').attr('disabled',false);
 					$("#statya_enabled{$item.statya_id}").prop('checked',true);
 					$('#cnt{$item.statya_id}').val({$item.cnt});
+					{if $smarty.request.plan_type eq 1 or $smarty.request.plan_type eq 3}
+					$(".row_id_{$item.statya_id}").val("{$item.row_id}");
+					{/if}
 					{if $smarty.request.payment_format eq 1}
 						$('#bonus{$item.statya_id}').attr('disabled',false);
 						$('#bonus{$item.statya_id}').val("{$item.bonus|default:0}");
-        				$(".row_id_{$item.statya_id}").val("{$item.row_id}");
+
 					{/if}
 					{if $smarty.request.payment_format eq 2}
 						$('#price{$item.statya_id}').attr('disabled',false);

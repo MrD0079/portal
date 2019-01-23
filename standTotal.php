@@ -85,10 +85,15 @@
                 $stand_title = "À";
                 $standT = "a18to";
                 break;
-            case "b":
+            /*case "b":
                 $sql_file = "sql/a14to_stat_";
                 $stand_title = "Â";
                 $standT = "a14to";
+                break;*/
+            case "b":
+                $sql_file = "sql/standBst_";
+                $stand_title = "B";
+                $standT = "standB";
                 break;
             case "coffee":
                 $sql_file = "sql/a16cost_";
@@ -115,10 +120,17 @@
             $sql=stritr($sql,$params);
             $st_a_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
             //standart B
-            $sql=rtrim(file_get_contents('sql/a14to_stat_'.$_REQUEST['by_who'].'.sql'));
+            /*$sql=rtrim(file_get_contents('sql/a14to_stat_'.$_REQUEST['by_who'].'.sql'));
             $sql=stritr($sql,$params);
             $st_b = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
             $sql=rtrim(file_get_contents('sql/a14to_stat_total.sql'));
+            $sql=stritr($sql,$params);
+            $st_b_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);*/
+            //standart B new
+            $sql=rtrim(file_get_contents('sql/standBst_'.$_REQUEST['by_who'].'.sql'));
+            $sql=stritr($sql,$params);
+            $st_b = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+            $sql=rtrim(file_get_contents('sql/standBst_total.sql'));
             $sql=stritr($sql,$params);
             $st_b_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
             //standart Coffee
@@ -135,6 +147,7 @@
             $sql=rtrim(file_get_contents('sql/standSHst_total.sql'));
             $sql=stritr($sql,$params);
             $st_sh_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+
 
             foreach ($st_a as $k=>$v) {$d[$v['key']]['st_a']=$v;}
             foreach ($st_b as $k=>$v) {$d[$v['key']]['st_b']=$v;}
@@ -157,11 +170,22 @@
                 $d[$key]['tab_num_rm'] = GetVal($item,'tab_num_rm');
                 $d[$key]['fio_rm'] = GetVal($item,'fio_rm');
             }
-            echo "<pre style='display: none;text-align: left;'>";
-            print_r($d);
-            echo "</pre>";
+//            echo "<pre style='display: none;text-align: left;'>";
+//            print_r($st_a);
+//            echo "</pre>";
             $smarty->assign('d', $d);
             $smarty->assign('tt', $tt);
+
+            $dataStandLabels = GetChart($st_a,"labels");
+
+            $dataStand['A'] = GetChart($st_a,"data","a");
+            $dataStand['B'] = GetChart($st_b,"data","b");
+            $dataStand['Coffee'] = GetChart($st_c,"data","c");
+            $dataStand['Sh'] = GetChart($st_sh,"data","sh");
+
+
+            $smarty->assign('dataStandLabels', $dataStandLabels);
+            $smarty->assign('dataStand', $dataStand);
 		}else{
             if($is_show_desc){
                 $postfix_file = 'detailed';
@@ -175,7 +199,8 @@
                 $sql = stritr($sql, $params);
             }
             if($is_show_desc) {
-                if ($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {
+                /*if ($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {*/
+                if ($_REQUEST['stand_type'] != "a" ) {
                     $sql = "SELECT * FROM (" . $sql . ") WHERE tp_st_ts IS NOT NULL AND tp_st_ts <> 0";
                 } else {
                     $sql = "SELECT * FROM (" . $sql . ") WHERE ts1r IS NOT NULL AND ts1r <> 0";
@@ -184,10 +209,19 @@
 
 //            echo $sql;
             $t = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-//            echo "<pre style='display: none;text-align: left;'>";
-//            print_r($t);
+
+            if(!$is_show_desc){
+
+                $dataStandLabels = GetChart($t,"labels","");
+                $dataStand[$_REQUEST['stand_type']] = GetChart($t,"data",$_REQUEST['stand_type']);
+                $smarty->assign('dataStandLabels', $dataStandLabels);
+                $smarty->assign('dataStand', $dataStand);
+            }
+
+           // print_r($t);
+            //print_r($dataStand);
 //            echo $sql;
-//            echo "</pre>";
+            //echo "</pre>";
             //print_r($t);
             if($is_show_desc) {
                 $params_tmp = $params;
@@ -199,11 +233,11 @@
                 if($_REQUEST['by_who'] == 'ts' || $_REQUEST['by_who'] == 'tm' || $_REQUEST['by_who'] == 'rm'){
                     $params_tmp[':tn'] = $_REQUEST['h_tn'];
                 }
-                if($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {
+                /*if($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {*/
+               if($_REQUEST['stand_type'] != "a" ) {
                     foreach ($t as $k => $item) {
                         $sql = rtrim(file_get_contents('sql/standPhotoSt.sql'));
                         $params_tmp[':tp_kod'] = $item['tp_kod_key'];
-                        $sql = stritr($sql, $params_tmp);
                         $sql = stritr($sql, $params_tmp);
                         $t[$k]['photos'] = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
                     }
@@ -225,6 +259,7 @@
 
             foreach ($t as $key => $item) {
                 $t[$key]['h_tn'] = $item['key'];
+
             }
 //            echo "<pre style='display: none;text-align: left;'>";
 //            print_r($t);
@@ -272,6 +307,7 @@
 //            echo "<pre style='display: none;text-align: left;'>";
 //            print_r($tt);
 //            echo "</pre>";
+
         }
 	}
     $sql = rtrim(file_get_contents('sql/month_list.sql'));
@@ -279,6 +315,25 @@
     $smarty->assign('month_list', $res);
 
 	$smarty->display('standTotal.html');
+
+    function GetChart($t,$param=false,$stand=""){
+        $dataStand_tmp = array();
+        $dataStandLabels_tmp = array();
+        foreach ($t as $key => $item) {
+                $dataStand_tmp[] = array(
+                    "label" => $_REQUEST['by_who'] == "tm" ? $item['fio_tm'] : $_REQUEST['by_who'] == "ts" ? $item['fio_ts'] : $item['fio_eta'],
+                    "y" => ($stand != "a") ? $item['tp_st_ts'] : $item['ts1r']
+                );
+
+                $dataStandLabels_tmp[] = $_REQUEST['by_who'] == "tm" ? $item['fio_tm'] : $_REQUEST['by_who'] == "ts" ? $item['fio_ts'] : $item['fio_eta'];
+        }
+        $dataStand_tmp = utf8ize($dataStand_tmp);
+        if($param == "labels")
+            return $dataStandLabels_tmp;
+        if($param == "data")
+            return json_encode($dataStand_tmp,JSON_NUMERIC_CHECK);
+        return array();
+    }
 
 	function GetVal($item,$field){
         if($item['st_a'][$field] != ""){
@@ -295,4 +350,14 @@
             return "-";
         }
     }
+function utf8ize($mixed) {
+    if (is_array($mixed)) {
+        foreach ($mixed as $key => $value) {
+            $mixed[$key] = utf8ize($value);
+        }
+    } elseif (is_string($mixed)) {
+        return mb_convert_encoding($mixed, "UTF-8", "Windows-1251");
+    }
+    return $mixed;
+}
 ?>

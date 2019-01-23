@@ -62,7 +62,12 @@ else
 		$sql=rtrim(file_get_contents('sql/a18to_accept.sql'));
 		$sql=stritr($sql,$params);
 		//echo $sql.";";
+
 		$d = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+//        echo "<pre style='display: none;text-align: left;'>";
+//        print_r($d);
+//        echo $sql;
+//        echo "</pre>";
 		foreach($d as $k=>$v)
 		{
 			$sql="

@@ -85,18 +85,54 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('department_list', $data);
 
-if (isset($_REQUEST["reset"])&&isset($_REQUEST["reset_z_id"]))
+if (isset($_REQUEST["reset"]) && isset($_REQUEST["reset_z_id"]))
 {
-	
-	$_REQUEST["select"]=1;
-	$keys = array("id"=>$_REQUEST["reset_z_id"]);
-	$vals = array("report_done"=>null,"report_zero_cost"=>null,"report_fakt_equal_plan"=>null);
-	Table_Update("bud_ru_zay",$keys,$vals);
+
+    $_REQUEST["select"]=1;
+    $keys = array("id"=>$_REQUEST["reset_z_id"]);
+    $vals = array("report_done"=>null,"report_zero_cost"=>null,"report_fakt_equal_plan"=>null);
+    Table_Update("bud_ru_zay",$keys,$vals);
+
 	$keys = array("z_id"=>$_REQUEST["reset_z_id"]);
 	$vals = array("rep_accepted"=>0);
-	Table_Update("bud_ru_zay_accept",$keys,$vals);
+	#region start_debug
+/*
+	echo "<pre style='display:none; text-align: left;'>";
+	echo "keys - ";
+	print_r($keys);
+    echo "vals - ";
+	print_r($vals);
+	try {
+        foreach ($keys as $key => $val) {
+            $k[] = $key . "='" . $val . "'";
+            $k1[] = $key . "=?";
+            $v1[] = $val;
+        }
+        $values = array_map("cube", $vals);
+        $sql_tmp = "select " . implode(", ", array_keys($values)) . " from bud_ru_zay_accept where " . implode(" and ", $k1);
+        $res = $db->getRow($sql_tmp, null, $v1, null, MDB2_FETCHMODE_ASSOC);
+        $res_ar = $db->getAll($sql_tmp, null, $v1, null, MDB2_FETCHMODE_ASSOC);
+        echo $sql_tmp . "<br>";
+        echo "res - ";
+        print_r($res);
+        var_dump($res);
+        echo "res_ar - ";
+        print_r($res_ar);
+        echo "values - ";
+        print_r($values);
+        echo (!array_diff_my($res, $values)) ? "array_diff_my: update" : "array_diff_my: nothing";
+    }catch (Exception $e){
+	    echo "Error: ".$e->getMessage();
+    }
+	echo "</pre>";
+*/
+	#endregion end_debug
+
+	Table_Update("bud_ru_zay_accept",$keys,$vals); /* не обновилась*/
+
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"],"plan_type"=>4);
 	Table_Update("nets_plan_month",$keys,null);
+
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"]);
 	Table_Update("invoice",$keys,null);
 }

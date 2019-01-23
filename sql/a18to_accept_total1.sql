@@ -13,8 +13,17 @@ SELECT SUM (cto) cto,
                  s.auditor,
                  s.traid,
                  COUNT (DISTINCT NVL (t.name_to, 'null')) cto
-            FROM a18to t, a18totp s, user_list u
+            FROM a18to t, a18totp s, user_list u,
+                  (SELECT DISTINCT tp_place,
+                            tp_type,
+                            tp_type_short,
+                            tab_number,
+                            tp_kod
+                  FROM routes
+                 WHERE dpt_id = :dpt_id) r
            WHERE     u.tab_num = t.tab_num
+                 AND t.tab_num = r.tab_number /* fix row */
+                 AND t.tp_kod_key = r.tp_kod(+) /* fix row */
                  AND u.dpt_id = :dpt_id
                  AND u.is_spd = 1
                  AND (   :exp_list_without_ts = 0

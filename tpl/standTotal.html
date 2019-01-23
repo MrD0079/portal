@@ -175,10 +175,12 @@
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{if $i.st_b.ts1r neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.st_b.ts1r}</a>{else}0{/if}</td>
+		<td>{if $i.st_b.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.st_b.tp_st}</a>{else}0{/if}</td>
 		{else if $smarty.request.stand_type eq 'b'}
-		<td>{if $i.ts1r neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.ts1r}</a>{else}0{/if}</td>
+		<td>{if $i.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=b&h_tn={$i.h_tn}" target="_blank">{$i.tp_st}</a>{else}0{/if}</td>
 		{/if}
+
+
 
 		{if $smarty.request.stand_type eq 'all' }
 		<td>{if $i.st_c.tp_st neq 0}<a href="/?action=standTotal&show_desc=1&stand=coffee&h_tn={$i.h_tn}" target="_blank">{$i.st_c.tp_st}</a>{else}0{/if}</td>
@@ -210,10 +212,11 @@
 		<td>{$tt.ts1r|default:'0'}</td>
 		{/if}
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{$tt.st_b.ts1r|default:'0'}</td>
+		<td>{$tt.st_b.tp_st|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'b'}
-		<td>{$tt.ts1r|default:'0'}</td>
+		<td>{$tt.tp_st|default:'0'}</td>
 		{/if}
+
 		{if $smarty.request.stand_type eq 'all' }
 		<td>{$tt.st_c.tp_st|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'coffee'}
@@ -226,6 +229,7 @@
 		{/if}
 	</tr>
 </tbody>
+
 </table>
 {/if}
 
@@ -262,7 +266,8 @@
 		<!--<td>{$i.fio_tm}</td>-->
 		<!--{/if}-->
 		<td style="text-align: left;">{$i.tp_kod_key}</td>
-		<td style="text-align: left;">{if $smarty.request.stand eq 'coffee' or $smarty.request.stand eq 'sh'}{$i.tp}{else}{$i.tp_ur} / {$i.tp_addr}{/if}</td>
+		<td style="text-align: left;">{if $smarty.request.stand neq 'a'}{$i.tp}{else}{$i.tp_ur} / {$i.tp_addr}{/if}</td>
+
 		<td>{$i.tp_type_short}</td>
 		<td>
 			{foreach key=k1 item=i1 from=$i.photos name=photos1}
@@ -279,7 +284,8 @@
 	<tr style="font-weight: bold;">
 		<td colspan="{if $smarty.request.by_who eq 'eta'}3{else if $smarty.request.by_who eq 'ts'}4{else}5{/if}">ИТОГО</td>
 		<!--<td colspan="2">{$tt.tp_st_ts}</td>-->
-		{if $smarty.request.stand eq 'a' or $smarty.request.stand eq 'b' }
+		{if $smarty.request.stand eq 'a'}
+
 		<td colspan="2">{$tt.ts1r|default:'0'}</td>
 		{else}
 		<td colspan="2">{$tt.tp_st_ts|default:'0'}</td>
@@ -301,4 +307,109 @@
 		background-color: rgba(0,0,0,.075);
 	}
 </style>
+<!-- test dashboard-->
+
+<div style="display: none;position: relative; height:95vh; width:88vw">
+	<canvas id="myChart">Your browser does not support the canvas element.</canvas>
+</div>
+{literal}
+<script>
+    window.onload = function () {
+        // Chart.plugins.unregister(ChartDataLabels);
+        // Chart.helpers.merge(Chart.defaults.global.plugins.datalabels, {
+        //     color: '#FE777B'
+        // });
+        var ctx = $("#myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data:{
+
+
+                labels: [
+                    {/literal}
+                    {foreach key=stand_name item=label from=$dataStandLabels}
+                    {literal}
+                    "{/literal}{$label}{literal}",
+                    {/literal}
+                    {/foreach}
+                    {literal}
+				],
+                datasets: [
+                    //standart one
+                    {/literal}
+                    {foreach key=stand_name item=stand from=$dataStand name=data_for}
+                    {literal}
+                    {
+                        label: 'Стандарт {/literal}{$stand_name}{literal}',
+                        data:{/literal}{$stand|replace:'"label"':'label'|replace:'"y"':'y'}{literal},
+						borderWidth: 1,
+                        backgroundColor: getColorRand({/literal}{$smarty.foreach.data_for.iteration}{literal}),
+                    },
+                    {/literal}
+                    {/foreach}
+                    {literal}
+                ]
+				// 	,
+				// datalabels: {
+				// 	align: 'start',
+				// 	anchor: 'end'
+				// }
+            },
+			// plugins: [ChartDataLabels],
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        // stacked: true,
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                },
+				responsive: true,
+				title: {
+                    display: true,
+					text: 'Показатели эффективности'
+                },
+                tooltips: {
+                    mode: 'index',
+					intersect: true
+                }
+                // ,
+                // plugins: {
+                //     datalabels: {
+                //         color: 'green',
+					// 	display: function(context) {
+                //             return context.dataset.data[context.dataIndex] > 15;
+                //         },
+                //         font: {
+                //             weight: 'bold'
+                //         },
+                //         formatter: Math.round
+                //     }
+                // }
+            }
+
+        });
+    }
+    function getColorRand(num=0){
+        var back = [
+            '#f67019',
+            '#acc236',
+            '#00a950',
+            '#8549ba'];
+        // if(max <= 10)
+        //     max /= 10;
+        // else if(max <= 100)
+        //     max /= 100;
+        // else if(max <= 1000)
+        //     max /= 1000;
+        // var rand = back[Math.floor((Math.random() + max) * back.length)];
+        return back[num-1];
+	}
+</script>
+{/literal}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.5.0"></script>-->
 {/if}
