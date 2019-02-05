@@ -5,6 +5,9 @@ SELECT t.url, TO_CHAR ( s.visitdate, 'dd.mm.yyyy') visitdate
        AND t.url IS NOT NULL
        AND t.visitdate = s.visitdate(+)
        AND t.tp_kod_key = s.tp_kod(+)
+       /*AND (:standAcheck = 0
+        OR (:standAcheck = 1 AND t.standart_tp IS NOT NULL )
+        )*/
        AND CASE
               WHEN    :ok_ts = 1
                    OR     :ok_ts = 2

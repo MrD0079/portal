@@ -7,15 +7,20 @@ if (isset($_REQUEST["save"]))
             'tp_kod'=>$_REQUEST['tp_kod'],
             'h_name_to'=>$_REQUEST['h_name_to']
         );
+
 	if ($_REQUEST['field1']=='undefined')
         {
-            $vals = array($_REQUEST['field']=>$_REQUEST['val']);
+            $vals = array($_REQUEST['field'] => $_REQUEST['val']);
         }
         else
         {
-            $vals = array($_REQUEST['field']=>$_REQUEST['val'],$_REQUEST['field1']=>$_REQUEST['val1']);
+            $vals = array($_REQUEST['field'] => $_REQUEST['val'],$_REQUEST['field1'] => $_REQUEST['val1']);
         }
+
+
 	Table_Update('a18totp', $keys,$vals);
+    print_r($vals);
+
 }
 else
 {

@@ -66,13 +66,8 @@
             THEN
                10
          END
-            standart_price,
-         /*standart_price,*/
-         /*reject_traid_in_month,*/
-         a18toGetTarget (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy')) target,
-         a18toGetTargetInfo (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy'))
-            target_info
-    FROM (SELECT z.* 
+            standart_price
+    FROM (SELECT z.*
             FROM a18to_mv z
            WHERE     visitdate BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
                                    AND TO_DATE ( :ed, 'dd.mm.yyyy')
@@ -118,8 +113,11 @@
                  AND DECODE ( :ok_st_tm, 1, ok_st_tm, :ok_st_tm) = ok_st_tm*/
                  /*AND (   :zst = 1
                       OR ( :zst = 2 AND DECODE (zst_lu, NULL, 0, 1) = 1))*/
-
+                      AND( :sttype = 0
+                          OR ( :sttype = 1 AND 'Стандарт А' = standart_tp )
+                          OR ( :sttype = 2 AND 'Стандарт А (минимум)' = standart_tp )
                       )
+                )
 GROUP BY fio_rm,
          tn_rm,
          fio_tm,

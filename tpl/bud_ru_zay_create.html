@@ -131,7 +131,7 @@
                                 >
                                 <option></option>
                                 {foreach key=key item=item from=$nets}
-                                        <option value="{$item.id_net}">{$item.net_name|escape}</option>
+                                        <option value="{$item.id_net}" data-swkod="{$item.sw_kod}">{$item.net_name|escape}</option>
                                 {/foreach}
                                 </select>
                                 <script>$('#net option[value="{$smarty.request.new.id_net}"]').prop('selected', true);</script>

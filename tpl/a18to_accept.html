@@ -277,6 +277,8 @@ console.log(field);
 console.log(val);
 console.log(field1);
 console.log(val1);*/
+    console.log(fd.getAll('field')+ " -> " +fd.getAll('val'));
+
 $.ajax({
   type: 'POST',
   url: '?action=a18to_accept&save=1&nohead=1',
@@ -295,7 +297,7 @@ $.ajax({
    {
     (val1==1) ? $('#td_'+visitdate_key+'_'+tp_kod+'_'+h_name_to+'_'+field1).css('background-color','red') : null;
    }
-   //console.log(data);
+   console.log(data);
   }
 });
 }

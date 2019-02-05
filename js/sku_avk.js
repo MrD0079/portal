@@ -12,6 +12,7 @@ $(window).load(function(){
                 return {
                     q: params.term, // search term
                     net_id: ($("#net").val() != "") ? $("#net").val() : 0,
+                    sw_kod: ($("#sw_kod").val() != "") ? $("#sw_kod").val() : 0,
                     page: params.page
                 };
             },
@@ -185,16 +186,25 @@ $(window).load(function(){
 
     function LoadDistribBonus(old_id_net = false){
         if($('#bonus_distr_pers').val() == ""){
-            var net_id = ($("#net").val() != "") ? $("#net").val() : 0;
-            $('#bonus_distr_pers').load('?action=sku_avk&print=1&pdf=1',{distrib_bonus:net_id},function(response, status, xhr) {
+            var fil_kod = 0;
+            if(typeof $("#fil_kod").val() != "undefined" && $("#fil_kod").val() != ""){
+                fil_kod = $("#fil_kod").val() ;
+            }else if (typeof $("#new_fil").val() != "undefined" && $("#new_fil").val() != "") {
+                fil_kod = $("[name*='new[fil]']").val() ;
+            };
+            $('#bonus_distr_pers').load('?action=sku_avk&print=1&pdf=1',{distrib_bonus:fil_kod},function(response, status, xhr) {
                 if(status == "success"){
                     var resp = JSON.parse(response);
                     var perc = resp.items[0].procent;
                     if(typeof perc !== "undefined"){
                         perc = NormalizeFloat(perc);
+                        perc *= 100;
+                        perc = perc.toFixed(2);
+
                     }else{
                         perc = 0;
                     }
+
                     $(this).val(perc);
                 }
                 InitSkuList(old_id_net);
@@ -216,7 +226,8 @@ $(window).load(function(){
             contentType: "application/x-www-form-urlencoded;charset=utf-8",
             data: {
                 z_id:zid,
-                net_id: ($("#net").val() != "") ? $("#net").val() : 0
+                net_id: ($("#net").val() != "") ? $("#net").val() : 0,
+                sw_kod: ($("#net").val() != "") ? $("#sw_kod").val() : 0
             }
         }).then(function (data) {
             if(data.items[0].text && data.items[0].text.length > 0){
@@ -271,6 +282,7 @@ $(window).load(function(){
             contentType: "application/x-www-form-urlencoded;charset=utf-8",
             data: {
                 net_id: ($("#net").val() != "") ? $("#net").val() : 0,
+                sw_kod: ($("#sw_kod").val() != "") ? $("#sw_kod").val() : 0,
                 q:0,
                 sku_list: sku_list,
                 z_id:z_id
@@ -283,6 +295,7 @@ $(window).load(function(){
             }
         });
     }
+
 
     //initialize sku list again if we back to the step1
     function InitSkuList(old_id_net = false){
@@ -345,7 +358,7 @@ $(window).load(function(){
             '<input type="hidden" name="sku_params['+sku.id_num+'][id]" size="7" style="text-align: center;" value="'+sku.id+'">'+
             '<input type="hidden" name="sku_params['+sku.id_num+'][sku_id]" size="7" style="text-align: center;" value="'+sku.sku_id+'">'+
             '<input type="hidden" name="sku_params['+sku.id_num+'][logistic_expens]" size="7" style="text-align: center;" d value="'+sku.logistic_expens+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][company_expenses]" size="7" style="text-align: center;"  value="'+sku.company_expenses+'">'+
+            '<input type="hidden" name="sku_params['+sku.id_num+'][company_expens]" size="7" style="text-align: center;"  value="'+sku.company_expenses+'">'+
             '<input type="hidden" name="sku_params['+sku.id_num+'][market_val]" size="7" style="text-align: center;"  value="'+sku.market_val+'">'+
             '</td>'+
             '<td>'+sku.name_brand;
@@ -357,25 +370,28 @@ $(window).load(function(){
             '<td><input type="text" name="sku_params['+sku.id_num+'][weight]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.weight+'"></td>'+
             '<td><input type="text" name="sku_params['+sku.id_num+'][price_ss]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_ss+'"></td>'+
             '<td><input type="text" name="sku_params['+sku.id_num+'][price_urkaine]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_urkaine+'"></td>'+
-            '<td><input type="text" name="sku_params['+sku.id_num+'][price_s_kk]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_s_kk+'"></td>'+
-            '<td><input type="text" name="sku_params['+sku.id_num+'][price_one]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_one+'"></td>';
-        outputHTML += '<td class="type2"><input type="text" name="sku_params['+sku.id_num+'][price_one_discount]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_one_discount+'"></td>';
+            '<td><input type="text" class="new change_input" name="sku_params['+sku.id_num+'][price_s_kk]" size="4" style="text-align: center;"  value="'+sku.price_s_kk+'"></td>'+ /* readonly="readonly" */
+            '<td><input type="text" class="new change_input" name="sku_params['+sku.id_num+'][price_one]" size="4" style="text-align: center;"  value="'+sku.price_one+'"></td>'; /* readonly="readonly" */
+        outputHTML += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][price_one_discount]" size="4" style="text-align: center;" readonly="readonly" value="'+sku.price_one_discount+'"></td>';
         sku.total_volume_q = (typeof sku.total_volume_q !== "undefined") ? sku.total_volume_q : 0;
-        outputHTML += '<td><input type="text" class="new" name="sku_params['+sku.id_num+'][total_volume_q]" size="6" style="text-align: center;" value="'+sku.total_volume_q+'"></td>';
+        sku.add_expenses = (typeof sku.add_expenses !== "undefined") ? sku.add_expenses : 0;
+        outputHTML += '<td><input type="text" class="new change_input" name="sku_params['+sku.id_num+'][total_volume_q]" size="5" style="text-align: center;" value="'+sku.total_volume_q+'"></td>';
         var outputHTMLCalculated = '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price_one]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price_one_discount]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        outputHTMLCalculated += '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][ss_volume]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][expected_vp]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][bonus_net]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        outputHTMLCalculated += '<td class="type1"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][akc_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        outputHTMLCalculated += '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][share_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][logistics_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][company_expenses]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][net_clear]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][prom_costs_discount]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_network_costs]" size="4" style="text-align: center;" readonly="readonly" value="0"></td>';
-        // outputHTML += outputHTMLCalculated;
+            '<td style="background-color: #ffeb3b8a;"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price_one]" size="5" style="text-align: center;font-weight: bold" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_volume_price_one_discount]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td style="display: none;"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][ss_volume]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][expected_vp]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][bonus_net]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td class="type1"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][akc_expenses]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][share_expenses]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][logistics_expenses]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][company_expenses]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="new change_input" name="sku_params['+sku.id_num+'][add_expenses]" size="5" style="text-align: center;"  value="'+sku.add_expenses+'"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][net_clear]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][summ_prom_cost]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][prom_costs_discount]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>'+
+            '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_network_costs]" size="5" style="text-align: center;" readonly="readonly" value="0"></td>';
+        outputHTML += outputHTMLCalculated;
         outputHTML +=  '</tr>';
         $("#sku_selected tbody").append($(outputHTML));
         SkuSelectedInit();
@@ -392,6 +408,8 @@ $(window).load(function(){
         var akc_type = $("#akciya_type").val();
         if(akc_type != ""){
             $(".akc_type_base").val($(".akc_type_base option[data-type='"+akc_type+"']").val());
+        }else{
+            $("#akciya_type").val($(".akc_type_base option:selected").attr("data-type"));
         }
     }
     function SetAkciyaTypeFromSelect(akc_type){
@@ -407,6 +425,8 @@ $(window).load(function(){
         if(!reverse){
             if(tmp_val != "")
                 elem1.val(tmp_val);
+            else
+                elem2.val(elem1.val());
         }else{
             tmp_val = elem1.val();
             if(tmp_val != "")
@@ -441,7 +461,37 @@ $(window).load(function(){
         // с null надо осторожно в неравенствах,
         // т.к. например null >= '0' => true
         // на всякий случай лучше вынести проверку chr == null отдельно
-        if (chr == null) return;
+        if (chr == null){
+            if(el.val() != ""){ /* ctrl+v */
+                var str = el.val();
+                var is_dot = false;
+                var output_str = "";
+                for (var i = 0; i < str.length; i++) {
+                    chr = str.charAt(i);
+                    if(chr == ','){
+                        chr = '.';
+                    }
+                    if (chr < '0' || chr > '9') {
+                        if(chr != '.'){
+                            el.val("");
+                            return false;
+                        }else if (!is_dot){
+                            is_dot = true;
+                            output_str += chr;
+                            continue;
+                        }
+                    }
+                    if(chr == '.' && is_dot){
+                        el.val("");
+                        return false;
+                    }
+                    output_str += chr;
+                }
+                el.val(output_str);
+            }
+            return;
+        }
+
         if (chr < '0' || chr > '9') {
             if(chr != '.')
                 return false;
@@ -479,11 +529,13 @@ $(window).load(function(){
         if(akc_type == 1){
             $('#sku_selected .type1').css("display","");
             $('#sku_selected .type2').css("display","none");
-            $('#sku_selected .colspan5').prop("colspan","5");
+            $('#sku_selected .colspan6').prop("colspan","6");
+            $('#sku_selected .colspan11').prop("colspan","11");
         }else{
             $('#sku_selected .type2').css("display","");
             $('#sku_selected .type1').css("display","none");
-            $('#sku_selected .colspan5').prop("colspan","4");
+            $('#sku_selected .colspan6').prop("colspan","5");
+            $('#sku_selected .colspan11').prop("colspan","12");
         }
         if(recalc)
             reCalculateSkuAll();
@@ -515,7 +567,9 @@ $(window).load(function(){
         SkuSelectedInit();
     function SkuSelectedInit(){
         init_glob = true;
-        //console.log("set init");
+        $('.change_input').on('keypress  input change', function(e){
+            return SetOnlyFloatNumber($(this),e);
+        });
         var DelSKUTrigger = function(){
             var $elem = $(this);
             $elem.removeClass('new');
@@ -536,7 +590,7 @@ $(window).load(function(){
         $(".del_sku_current.new").on("click",DelSKUTrigger);
         // --- Actions
         var wto;
-        var inputWeight = function(){
+        var inputChange = function(){
             clearTimeout(wto);
             var $elem = $(this);
             wto = setTimeout(function() {
@@ -550,7 +604,8 @@ $(window).load(function(){
                 }
             }, 500);
         }
-        $('#sku_selected input.new[name*="[total_volume_q]"]').on("input change",inputWeight);
+        //$('#sku_selected input.new[name*="[total_volume_q]"]').on("input change",inputWeight);
+        $('#sku_selected input.new.change_input').on("input change",inputChange);
 
         //get object with all sku items values as assoc. array
         window.GetSkuSelectedAll = function (){
@@ -591,19 +646,20 @@ $(window).load(function(){
 
         window.CalculateSku = function(el){
             var sku = GetSkuSelectedOne($(el));
+            // console.log(sku);
             var akc_type = $("#akciya_type").val() ? $("#akciya_type").val() : 1,
-                bonus_net_perc = $("#bonus_net_perc").val() ? $("#bonus_net_perc").val() : 0,
-                bonus_distr_pers = $("#bonus_distr_pers").val() ? $("#bonus_distr_pers").val() : 0,
-                akciya_expences_perc = $("#akciya_expences_perc").val() ? $("#akciya_expences_perc").val() : 0;
+                bonus_net_perc = $("#bonus_net_perc").val() ? $("#bonus_net_perc").val()/100 : 0,
+                bonus_distr_pers = $("#bonus_distr_pers").val() ? $("#bonus_distr_pers").val()/100 : 0,
+                akciya_expences_perc = $("#akciya_expences_perc").val() ? $("#akciya_expences_perc").val()/100 : 0;
 
             ChangeAkciyaType(akc_type,false);
             var sku_values = [];
             //sku.total_volume_q;//объем продаж шт.
             sku_values['total_volume_price'] = sku.total_volume_q*sku.weight;//объем продаж кг.
             sku_values['total_volume_price_one'] = sku.total_volume_q*sku.price_one;//объем продаж грн
-            sku_values['price_one_discount'] = sku.price_one - ((sku.price_one*akciya_expences_perc)/100);
+            sku_values['price_one_discount'] = sku.price_one - (sku.price_one*akciya_expences_perc);
             sku_values['total_volume_price_one_discount'] = sku.total_volume_q*sku_values['price_one_discount'];//объем продаж грн. СКИДКА
-            sku_values['ss_volume'] = sku.total_volume_q*sku.price_ss;//СС на объем отгрузки
+            sku_values['ss_volume'] = sku_values['total_volume_price'] *sku.price_ss;//СС на объем отгрузки
             if(akc_type == 1){
                 sku_values['expected_vp'] = sku_values['total_volume_price_one']-sku_values['ss_volume'];//Ожидаемая ВП
                 sku_values['bonus_net'] = sku_values['total_volume_price_one']*bonus_net_perc;//бонус сети
@@ -615,22 +671,45 @@ $(window).load(function(){
             sku_values['akc_expenses'] = sku_values['total_volume_price_one']*akciya_expences_perc;//затраты по акции б/н
             sku_values['logistics_expenses'] = sku_values['total_volume_price']*sku.logistic_expens*0.001;//Расходы по логистике
 
-            company_expens = sku.company_expenses * sku_values['total_volume_price'] * 0.001; //цена за тонну
+            company_expens = sku.company_expens * sku_values['total_volume_price'] * 0.001; //цена за тонну -> кг
             market_val = sku.market_val * sku_values['total_volume_price'] * 0.001;
-            sku_values['company_expenses'] = (company_expens + market_val) * sku_values['ss_volume'];//Расходы компании
-            sku_values['net_clear'] = sku_values['expected_vp']-sku_values['bonus_net'] - sku_values['share_expenses'] - sku_values['logistics_expenses'] - sku_values['company_expenses'];//чистая прибыль
+            sku_values['company_expenses'] = (company_expens + market_val) / 1 /* Выручка от реализации */ * sku_values['ss_volume'];//Расходы компании
+            all_expenses = sku_values['bonus_net'] + sku_values['share_expenses'] + sku_values['logistics_expenses'] + sku_values['company_expenses'] + parseFloat(sku.add_expenses);
+            sku_values['net_clear'] = sku_values['expected_vp']-(all_expenses);//чистая прибыль
             if(akc_type == 1)
                 sku_values['net_clear'] -= sku_values['akc_expenses'];//чистая прибыль
+            sku_values['summ_prom_cost'] = sku_values['akc_expenses'] * 1.2; // Сумма затрат по акции, грн с НДС
             sku_values['prom_costs_discount'] = sku_values['total_volume_price_one']-sku_values['total_volume_price_one_discount'];//Расходы по акции в скидке
-            sku_values['total_network_costs'] = ( 0 /*Расходы сети итого, вт.ч.*/ )+sku_values['prom_costs_discount'];//Всего затрат по сети
+            sku_values['total_network_costs'] = all_expenses+sku_values['prom_costs_discount'];//Всего затрат по сети
             SetCalculateField(el,sku.id,sku_values);
+            calcTotal();
+        }
+        function calcTotal(){
+            var total_arr = {};
+            total_arr['total_vol_price'] = 0;
+            total_arr['total_prom_cost'] = 0;
+            $("#sku_selected tbody tr").each(function(e){
+                total_arr['total_vol_price'] += parseFloat($(this).find("input[name*='[total_volume_price_one]']").val());
+                total_arr['total_prom_cost'] += parseFloat($(this).find("input[name*='[summ_prom_cost]']").val());
+            });
+            total_arr['total_vol_price'] = total_arr['total_vol_price'].toFixed(5);
+            total_arr['total_prom_cost'] = total_arr['total_prom_cost'].toFixed(5);
+            $("#sku_selected .total_vol_price").val(total_arr['total_vol_price']);
+            $("#sku_selected .total_prom_cost").val(total_arr['total_prom_cost']);
         }
         function ClearCalculatedFields(el){
             $(el.parents('tr')[0]).find('input.calc-input').val('0');
         }
         function SetCalculateField(el,id_num,data){
             for (var param in data) {
-                $(el.parents('tr')[0]).find('input[name*="sku_params['+id_num+']['+param+']"]').val(data[param]);
+                var val = data[param];
+                if(param != "total_volume_price" && param != "price_one_discount"){ // обьем продаж кг
+                    val = (data[param]/1000).toFixed(5); // перевод в тыс. грн
+                }
+                if(param == "price_one_discount"){
+                    val = data[param].toFixed(2);
+                }
+                $(el.parents('tr')[0]).find('input[name*="sku_params['+id_num+']['+param+']"]').val(val);
             }
             //$("input[name=sku_values]").val(escapeHtml(JSON.stringify(GetSkuSelectedAll())));
         }

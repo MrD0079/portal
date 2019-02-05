@@ -128,7 +128,10 @@ if (isset($_REQUEST["reset"]) && isset($_REQUEST["reset_z_id"]))
 */
 	#endregion end_debug
 
-	Table_Update("bud_ru_zay_accept",$keys,$vals); /* не обновилась*/
+	//Table_Update("bud_ru_zay_accept",$keys,$vals); /* не обновилась, потому что выборка достает только одну строку*/
+    $db->query("update bud_ru_zay_accept set rep_accepted=0 where z_id=".$_REQUEST["reset_z_id"]);
+    $values_ = array_map("cube", $vals);
+    audit("TABLE=bud_ru_zay_accept\nKEYS: ".serialize($keys)."\nVALS: ".serialize($values_),"bud_ru_zay_accept");
 
 	$keys = array("bud_z_id"=>$_REQUEST["reset_z_id"],"plan_type"=>4);
 	Table_Update("nets_plan_month",$keys,null);

@@ -13,7 +13,7 @@ class SkuSelect
     }
 
     private function modalLoadSku($z_id){
-        $sql = "SELECT bsa.*,sa.NAME name, sa.WEIGHT weight, sa.TAG_ID tag_id, sa.NAME_BRAND brand FROM bud_ru_zay_sku_avk bsa, sku_avk sa WHERE bsa.id_num = sa.id_num(+) AND bsa.status = 1 AND bsa.z_id = ".$z_id;
+        $sql = "SELECT bsa.*,sa.NAME name, иг.WEIGHT weight, sa.TAG_ID tag_id, sa.NAME_BRAND brand FROM bud_ru_zay_sku_avk bsa, sku_avk sa WHERE bsa.id_num = sa.id_num(+) AND bsa.status = 1 AND bsa.z_id = ".$z_id;
 
         $sku_list = $this->db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
@@ -24,6 +24,7 @@ class SkuSelect
             return $sku_list;
 //        }
     }
+
     private function controllerCreateHtml($data,$ack_type,$is_calc = false){
         echo '<pre style="display: none;">';
         //print_r($data);
@@ -130,6 +131,7 @@ class SkuSelect
         }
         return $html;
     }
+
     private function CalculateSku(&$data,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null){
         if(count($data) <=0 )
             return false;
@@ -148,13 +150,16 @@ class SkuSelect
                 if (!is_null($bonus_net_perc)) {
                     $is_calc = true;
                     //$bonus_distr_pers = $this->modalGetDistribBonus($net_id);
+                    $akciya_expences_perc /= 100;
+                    $bonus_net_perc /= 100;
+                    $bonus_distr_pers /= 100;
 
                     //$data[$k]['total_q'];//объем продаж шт.
                     $data[$k]['total_volume_price'] = $data[$k]['total_q'] * $data[$k]['weight'];//объем продаж кг.
                     $data[$k]['total_volume_price_one'] = $data[$k]['total_q'] * $data[$k]['price_net'];//объем продаж грн
-                    $data[$k]['price_net_disc'] = $data[$k]['price_net'] - (($data[$k]['price_net'] * $akciya_expences_perc) / 100);
+                    $data[$k]['price_net_disc'] = $data[$k]['price_net'] - ($data[$k]['price_net'] * $akciya_expences_perc);
                     $data[$k]['total_volume_price_one_discount'] = $data[$k]['total_q'] * $data[$k]['price_net_disc'];//объем продаж грн. СКИДКА
-                    $data[$k]['ss_volume'] = $data[$k]['total_q'] * $data[$k]['price_ss'];//СС на объем отгрузки
+                    $data[$k]['ss_volume'] = $data[$k]['total_volume_price'] * $data[$k]['price_ss'];//СС на объем отгрузки
                     if ($akc_type == 1) {
                         $data[$k]['expected_vp'] = $data[$k]['total_volume_price_one'] - $data[$k]['ss_volume'];//Ожидаемая ВП
                         $data[$k]['bonus_net_sku'] = $data[$k]['total_volume_price_one'] * $bonus_net_perc;//бонус сети
@@ -209,13 +214,14 @@ class SkuSelect
         }
         return $number;
     }
+
     public function GetSkuList($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$print = true){
         if(is_null($z_id) || $z_id == "")
             return false;
         try {
             $sku_list = $this->modalLoadSku($z_id);
             if(!is_null($bonus_net_perc)){
-                $is_calc = $this->CalculateSku($sku_list,$akc_type,$bonus_net_perc,$net_id,$akciya_expences_perc);
+                $is_calc = $this->CalculateSku($sku_list,$akc_type,$bonus_net_perc,$net_id,$akciya_expences_perc); // show all fields
             }else{
                 $is_calc = $this->CalculateSku($sku_list,$akc_type);
             }
@@ -225,7 +231,7 @@ class SkuSelect
                 echo $skuHtml;
             else
                 return $skuHtml;
-        }catch (Exception $e){
+        }catch (\Exception $e){
             echo "Some error. ".$e->getMessage();
         }
     }

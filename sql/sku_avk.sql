@@ -20,8 +20,8 @@
             WHERE CONCAT(ss.sku_id,ss.date_s) = mss.sku_date AND mss.sku_id = sa.sku_id
             ),0) price_ss ,
           NVL((SELECT fs.price FROM sku_avk_free_sell_uk fs WHERE fs.sku_id = sa.sku_id  AND fs.currency = 980),0) price_urkaine,
-          NVL((SELECT kk.price FROM sku_avk_kk_price kk WHERE kk.sku_id = sa.sku_id AND kk.network_id = :net_id),0) price_one,
-          0 price_s_kk,
+          NVL((SELECT kk.price FROM sku_avk_kk_price kk WHERE kk.sku_id = sa.sku_id AND kk.network_id = :net_id),0) price_s_kk, /* price spec-cii KK */
+          0 price_one,
           NVL((SELECT nc.sum_logist FROM sku_avk_net_costs nc,
             (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date
                   FROM (
@@ -31,7 +31,7 @@
                   )
                   GROUP BY brand
               ) ncc
-            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :net_id),0) logistic_expens,
+            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) logistic_expens,
           NVL((SELECT nc.sum_all_costs FROM sku_avk_net_costs nc,
             (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date
                   FROM (
@@ -41,7 +41,7 @@
                   )
                   GROUP BY brand
               ) ncc
-            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :net_id),0) company_expenses,
+            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) company_expenses,
           NVL((SELECT nc.sum_market FROM sku_avk_net_costs nc,
             (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date
                   FROM (
@@ -51,7 +51,7 @@
                   )
                   GROUP BY brand
               ) ncc
-            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :net_id),0) market_val
+            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) market_val
         FROM sku_avk sa :bsa_table
         WHERE (:show_q = 0 OR (lower(sa.name) LIKE lower('%:name_p%')
               OR sa.sku_id LIKE :query

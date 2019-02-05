@@ -7,4 +7,6 @@
       )
   GROUP BY kod_filiala ) mss
   WHERE CONCAT(di.kod_filiala,di.date_p) = mss.distib_date
-    AND mss.kod_filiala = :net_id
+    AND mss.kod_filiala = (
+      SELECT DISTINCT sw_kod FROM bud_fil where id = :fil_kod
+    )

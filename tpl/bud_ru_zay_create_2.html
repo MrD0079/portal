@@ -273,7 +273,7 @@
                                 $('#new_fil option[value="{$smarty.request.new.fil}"]').prop('selected', true);
                             </script>
                             {else}
-                            <input type=hidden name=new[fil] value="{$smarty.request.new.fil}">
+                            <input type=hidden name=new[fil] id="fil_kod" value="{$smarty.request.new.fil}">
                             <span class="fil_name"></span>
                             <script>
                                 $('.fil_name').load('?action=bud_ru_zay_create_fils&nohead=1&dt='+$('#master').val(),function(Response, st,xh) {
@@ -397,15 +397,21 @@
                             <option value="{$item.id_net}">{$item.net_name|escape}</option>
                             {/foreach}
                             </select>
+                            {foreach key=key item=item from=$nets}
+                                {if $item.id_net eq $smarty.request.new.id_net}
+                                <input type=hidden name=sw_kod id=sw_kod value="{$item.sw_kod}">
+                                {/if}
+                            {/foreach}
                             <script>
                                 $('#net option[value={$smarty.request.new.id_net}]').prop('selected', true);
                             </script>
                             {else}
                             <input type=hidden name=new[id_net] id=net value="{$smarty.request.new.id_net}">
                             {foreach key=key item=item from=$nets}
-                            {if $item.id_net eq $smarty.request.new.id_net}
-                            <span class="net_name">{$item.net_name|escape}</span>
-                            {/if}
+                                {if $item.id_net eq $smarty.request.new.id_net}
+                                <input type=hidden name=sw_kod id=sw_kod value="{$item.sw_kod}">
+                                <span class="net_name">{$item.net_name|escape}</span>
+                                {/if}
                             {/foreach}
                             {/if}
                                 <!--<select name=new[id_net] id=net-->
@@ -589,42 +595,52 @@
                         <tr class="hide-dev1">
                             <td colspan="2">
 
-                                <table id="sku_selected" width="100%" border="1" style="max-width: 900px;background-color: #fff;display: none;">
+                                <table id="sku_selected" width="100%" border="1" style="max-width: 900px;background-color: #fff;display: none;margin: 20px auto;box-shadow: 3px 3px 5px 1px rgba(155, 155, 155, 0.55);">
                                     <thead style="background-color: #03a9f454;">
                                     <tr style="font-size: 10px;font-weight: bold;text-align: center;">
                                         <td rowspan="2"></td>
-                                        <td rowspan="2">TAG_ID</td>
+                                        <td rowspan="2">TAG ID</td>
                                         <td rowspan="2">Бренд</td>
                                         <td rowspan="2">Продукт</td>
                                         <td rowspan="2">Вес, кг</td>
                                         <td rowspan="2">СС,грн/кг</td>
-                                        <td rowspan="2">Цена своб.-отпускн. Укр.,грн с НДС</td>
-                                        <td rowspan="2">Цена Спец-ии КК, грн с НДС</td>
-                                        <td rowspan="2">Цена за продажи в сеть за ед.,грн с НДС</td>
-                                        <td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн с НДС</td>
+                                        <td rowspan="2">Цена своб.-отпускн. Укр.,грн</td>
+                                        <td rowspan="2">Цена Спец-ии КК, грн</td>
+                                        <td rowspan="2">Цена за продажи в сеть за ед.,грн</td>
+                                        <td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн</td>
                                         <td rowspan="2">Объем продажи,шт.</td>
                                         <!-- -->
                                         <td rowspan="2">Объем продажи,кг.</td>
-                                        <td rowspan="2">Объем продаж, грн с НДС</td>
-                                        <td rowspan="2" class="type2">Объем продаж с учетом скидки, грн с НДС</td>
-                                        <td rowspan="2">СС на объем отгрузки,грн с НДС</td>
-                                        <td rowspan="2">Ожидаемая ВП,грн с НДС</td>
-                                        <td colspan="5" class="colspan5">Расходы сети итого, вт.ч.</td>
-                                        <td rowspan="2">Чистая прибыль, грн с НДС</td>
-                                        <td rowspan="2" class="type2">Расходы по акции в скидке, грн с НДС</td>
-                                        <td rowspan="2" class="type2">Всего затрат по сети, грн с НДС</td>
+                                        <td rowspan="2">Объем продаж, тыс. грн</td>
+                                        <td rowspan="2" class="type2">Объем продаж с учетом скидки, тыс. грн</td>
+                                        <td rowspan="2" style="display: none;">СС на объем отгрузки,тыс. грн</td>
+                                        <td rowspan="2">Ожидаемая ВП,тыс. грн</td>
+                                        <td colspan="6" class="colspan6">Расходы сети итого, вт.ч.</td>
+                                        <td rowspan="2">Чистая прибыль, тыс. грн</td>
+                                        <td rowspan="2" >Сумма затрат по акции, тыс. грн с НДС</td>
+                                        <td rowspan="2" class="type2">Расходы по акции в скидке, тыс. грн</td>
+                                        <td rowspan="2" class="type2">Всего затрат по сети, тыс. грн</td>
                                      <!--   -->
                                     </tr>
                                     <!-- -->
                                     <tr style="font-size: 10px;font-weight: bold;text-align: center;">
-                                        <td>Бонус сети, грн с НДС</td>
-                                        <td class="type1">Затраты по акции б/н (компенсация), грн с НДС</td>
-                                        <td>Бонус дистриб, грн с НДС</td>
-                                        <td>Расходы по логистике</td>
-                                        <td>Расходы Компании, грн с НДС</td>
+                                        <td>Бонус сети, тыс. грн</td>
+                                        <td class="type1">Затраты по акции б/н (компенсация), тыс. грн</td>
+                                        <td>Бонус дистриб, тыс. грн</td>
+                                        <td>Расходы по логистике, тыс. грн</td>
+                                        <td>Расходы Компании, тыс. грн</td>
+                                        <td>Доп. затраты, грн</td>
                                     </tr>
                                 <!--    -->
                                     </thead>
+                                    <tfoot align="center" style="background: #ffc">
+                                        <tr style="font-weight:bold">
+                                            <td colspan="11" class="colspan11">ИТОГО</td>
+                                            <td><input type="text" class="total_vol_price" style="text-align: center; font-weight: bold;" readonly="readonly" size="6" value="0"></td>
+                                            <td colspan="8" ></td>
+                                            <td><input type="text" class="total_prom_cost" style="text-align: center; font-weight: bold;" readonly="readonly" size="6" value="0"></td>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
                                     <!-- SKU -->
                                     </tbody>

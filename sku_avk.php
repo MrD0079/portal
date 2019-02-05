@@ -1,7 +1,7 @@
 <?php
 //get products from AJAX when page is load
 if(isset($_REQUEST["distrib_bonus"])){
-    $params[":net_id"] = $_REQUEST["distrib_bonus"];
+    $params[":fil_kod"] = $_REQUEST["distrib_bonus"];
     $sql = rtrim(file_get_contents('sql/sku_avk_distrib_bonus.sql'));
     $sql = stritr($sql, $params);
     $sql = trim(preg_replace('/\s+/', ' ', $sql));
@@ -131,6 +131,7 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
         //$params[":name_p"] = "'" . $q . "'";
         $params[":name_p"] = $q ;
         $params[":net_id"] = isset($_REQUEST["net_id"]) ? $_REQUEST["net_id"] : 0;
+        $params[":sw_kod"] = isset($_REQUEST["sw_kod"]) ? $_REQUEST["sw_kod"] : 0;
 
         if(isset($_REQUEST['sku_list']) && !empty($_REQUEST['sku_list'])){
             if(is_array($_REQUEST['sku_list']))
@@ -150,10 +151,10 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
             //$params[':show_save_list'] = 1;
             $params[':show_list'] = 0;
             $params[':show_q'] = 0;
-            //$params[':bsa_field'] = ',bsa.total_q';
             $params[':bsa_table'] = ', bud_ru_zay_sku_avk bsa';
             $params[':bsa_where'] = 'AND (bsa.z_id = '.$_REQUEST["z_id"].' AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id)';
             $params[':bsa_fields'] = 'bsa.total_q total_volume_q,';
+            $params[':bsa_fields'] = 'NVL(bsa.add_expens,0) add_expenses,';
         }else{
             $params[":z_id"] = 0;
             $params[':show_save_list'] = 0;
