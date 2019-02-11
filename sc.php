@@ -112,11 +112,11 @@ $list_files = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($list as $k=>$v)
 {
-$d[$v["tp_kod"]]["head"]=$v;
+    $d[$v["tp_kod"]]["head"]=$v;
 }
 foreach ($list_files as $k=>$v)
 {
-$d[$v["tp_kod"]]["files"][$v["id"]]=$v;
+    $d[$v["tp_kod"]]["files"][$v["id"]]=$v;
 }
 isset($d)?$smarty->assign('list',$d):null;
 //print_r($d);

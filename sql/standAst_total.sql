@@ -1,7 +1,5 @@
-/* Formatted on 10.08.2018 09:53:30 (QP5 v5.252.13127.32867) */
 SELECT COUNT (DISTINCT tp_kod_key) tp_cnt,
         SUM (ts1r) ts1r,
-        (sum(standA) + sum(standAmin)) tsr1_sum,
        sum(visitdate)/*COUNT (DISTINCT tp_kod_key || visitdate)*/ visit_plan,
        sum(visit)/*   COUNT (DISTINCT DECODE (visit, 0, NULL, tp_kod_key || visitdate))*/
           visit_fakt,
@@ -17,9 +15,6 @@ SELECT COUNT (DISTINCT tp_kod_key) tp_cnt,
        /*COUNT (DISTINCT DECODE (zst_lu, NULL, NULL, tp_kod_key)) STTOTP*/
        COUNT (DISTINCT CASE WHEN standart_tp IS NOT NULL OR zst_lu IS NOT NULL /*AND NVL (reject_traid_in_month, 0) = 0*/
                        THEN tp_kod_key END) STTOTP
-      ,sum(standA) count_standA
+       ,sum(standA) count_standA
        ,sum(standAmin) count_standAmin
   FROM (:brief)
-WHERE :sttype = 0
-      OR ( :sttype = 1 AND 'Стандарт А' = standart_tp )
-      OR ( :sttype = 2 AND 'Стандарт А (минимум)' = standart_tp )

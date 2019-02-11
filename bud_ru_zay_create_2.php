@@ -238,6 +238,8 @@ ORDER BY name
                         'price_kk'=>$sku_params[$id_num]['price_s_kk'],
                         'price_net'=>$sku_params[$id_num]['price_one'],
                         'add_expens'=>$sku_params[$id_num]['add_expenses'],
+                        'company_expens'=>$sku_params[$id_num]['company_expens'],
+                        'revenue_val'=>$sku_params[$id_num]['revenue_val'],
                         'total_q'=>$sku_params[$id_num]['total_volume_q'],
                         "lu" => OraDate2MDBDate(date('d.m. Y h:i:s', time())),
                         "status" => $status

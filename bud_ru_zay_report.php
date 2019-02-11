@@ -438,99 +438,100 @@ if ($_REQUEST["z_id"]!=0)
 if (isset($_REQUEST["select"])&&(!isset($_REQUEST["showonlysvod"])))
 {
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report.sql'));
-$sql=stritr($sql,$params);
-//echo $sql;
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $sql=rtrim(file_get_contents('sql/bud_ru_zay_report.sql'));
+    $sql=stritr($sql,$params);
+    echo "<pre style='display: none;text-align: left;'>";
+    echo $sql;
+    echo "</pre>";
+    $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-foreach ($data as $k=>$v)
-{
-$d[$v["id"]]["head"]=$v;
-$d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
-$d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
-if ($v["chat_id"]!="")
-{
-$d[$v["id"]]["chat"][$v["chat_id"]]=$v;
-}
-if ($v["zchat_id"]!="")
-{
-$d[$v["id"]]["zchat"][$v["zchat_id"]]=$v;
-}
-}
+    foreach ($data as $k=>$v)
+    {
+        $d[$v["id"]]["head"]=$v;
+        $d[$v["id"]]["executors"][$v["executor_tn"]]=$v;
+        $d[$v["id"]]["data"][$v["acceptor_tn"]]=$v;
+        if ($v["chat_id"]!="")
+        {
+            $d[$v["id"]]["chat"][$v["chat_id"]]=$v;
+        }
+        if ($v["zchat_id"]!="")
+        {
+            $d[$v["id"]]["zchat"][$v["zchat_id"]]=$v;
+        }
+    }
 
-if (isset($d))
-{
+    if (isset($d)){
 
-foreach ($d as $k=>$v)
-{
-	$sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
-	$p=array(':z_id' => $k);
-	$sql=stritr($sql,$p);
-	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        foreach ($d as $k=>$v)
+        {
+            $sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
+            $p=array(':z_id' => $k);
+            $sql=stritr($sql,$p);
+            $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
-    //fix. Check is set any TP for local akciya
-    $sql_tp="SELECT count(tp_kod) count_tp FROM akcii_local_tp WHERE z_id = ".$k;
-    $data_tp = $db->getAll($sql_tp, null, null, null, MDB2_FETCHMODE_ASSOC);
-    $d[$k]["local_tp"]=$data_tp[0];
+            //fix. Check is set any TP for local akciya
+            $sql_tp="SELECT count(tp_kod) count_tp, SUM(bonus_sum) total_summ FROM akcii_local_tp WHERE z_id = ".$k;
+            $data_tp = $db->getAll($sql_tp, null, null, null, MDB2_FETCHMODE_ASSOC);
+            $d[$k]["local_tp"]=$data_tp[0];
 
-	foreach ($data as $k1=>$v1)
-	{
-		if ($v1["type"]=="file")
-		{
-			$v1["val_file"]!=null?$data[$k1]["val_file"]=explode("\n",$v1["val_file"]):null;
-			$v1["rep_val_file"]!=null?$data[$k1]["rep_val_file"]=explode("\n",$v1["rep_val_file"]):null;
-		}
-		/*if ($v1['type']=='list')
-		{
-			if ($v1['val_list'])
-			{
-			$sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
-			$params[':id'] = $v1['val_list'];
-			$sql=stritr($sql,$params);
-			$list = $db->getOne($sql);
-			$data[$k1]['val_list_name'] = $list;
-			}
+            foreach ($data as $k1=>$v1)
+            {
+                if ($v1["type"]=="file")
+                {
+                    $v1["val_file"]!=null?$data[$k1]["val_file"]=explode("\n",$v1["val_file"]):null;
+                    $v1["rep_val_file"]!=null?$data[$k1]["rep_val_file"]=explode("\n",$v1["rep_val_file"]):null;
+                }
+                /*if ($v1['type']=='list')
+                {
+                    if ($v1['val_list'])
+                    {
+                    $sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
+                    $params[':id'] = $v1['val_list'];
+                    $sql=stritr($sql,$params);
+                    $list = $db->getOne($sql);
+                    $data[$k1]['val_list_name'] = $list;
+                    }
 
-			if ($v1['rep_val_list'])
-			{
-			$sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
-			$params[':id'] = $v1['rep_val_list'];
-			$sql=stritr($sql,$params);
-			$list = $db->getOne($sql);
-			$data[$k1]['rep_val_list_name'] = $list;
-			}
+                    if ($v1['rep_val_list'])
+                    {
+                    $sql=$db->getOne('SELECT get_item FROM bud_ru_ff_subtypes WHERE id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
+                    $params[':id'] = $v1['rep_val_list'];
+                    $sql=stritr($sql,$params);
+                    $list = $db->getOne($sql);
+                    $data[$k1]['rep_val_list_name'] = $list;
+                    }
 
-		}*/
-		if (($v1['type']=='list')&&($v1['autocomplete']!=1))
-		{
-			$sql=$db->getOne('select get_list from bud_ru_ff_subtypes where id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
-			$sql=stritr($sql,$params);
-			$list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-			$data[$k1]['list'] = $list;
-		}
+                }*/
+                if (($v1['type']=='list')&&($v1['autocomplete']!=1))
+                {
+                    $sql=$db->getOne('select get_list from bud_ru_ff_subtypes where id = (SELECT subtype FROM bud_ru_ff WHERE id = '.$v1['ff_id'].')');
+                    $sql=stritr($sql,$params);
+                    $list = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+                    $data[$k1]['list'] = $list;
+                }
 
-	}
-	include "bud_ru_zay_formula.php";
-	$d[$k]["ff"]=$data;
-	$v["head"]["sup_doc"]!=null?$d[$k]["head"]["sup_doc"]=explode("\n",$v["head"]["sup_doc"]):null;
-}
-}
+            }
+            include "bud_ru_zay_formula.php";
+            $d[$k]["ff"]=$data;
+            $v["head"]["sup_doc"]!=null?$d[$k]["head"]["sup_doc"]=explode("\n",$v["head"]["sup_doc"]):null;
+        }
+    }
 
-//print_r($d);
+    //print_r($d);
 
-//$_REQUEST["d"]=$d;
-
-
-//print_r($params);
+    //$_REQUEST["d"]=$d;
 
 
-isset($d) ? $smarty->assign('d', $d) : null;
+    //print_r($params);
 
 
-$sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
-$sql=stritr($sql,$params);
-$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$smarty->assign('d1', $data);
+    isset($d) ? $smarty->assign('d', $d) : null;
+
+
+    $sql=rtrim(file_get_contents('sql/bud_ru_zay_report_total.sql'));
+    $sql=stritr($sql,$params);
+    $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $smarty->assign('d1', $data);
 
 }
 
@@ -568,7 +569,9 @@ $smarty->assign('bud_ru_ff_st', $bud_ru_ff_st);
 
 }
 
-
+include "SkuSelect.php";
+$skuObj = new \SkuSelect\SkuSelect($db);
+$smarty->assign('skuObj', $skuObj);
 
 
 $smarty->display('bud_ru_zay_report.html');

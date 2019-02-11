@@ -132,12 +132,13 @@
                 $sql=stritr($sql,$params);
 
                 $st_a = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-                $sql=rtrim(file_get_contents('sql/a18to_stat_total.sql'));
+                //$sql=rtrim(file_get_contents('sql/a18to_stat_total.sql'));
+                $sql=rtrim(file_get_contents('sql/standA_stat_total.sql'));
                 $sql=stritr($sql,$params);
                 $sql=stritr($sql,$params);
-
+//echo $sql;
                 $st_a_t = $db->getRow($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-                print_r($st_a);
+              //  print_r($st_a);
             }else{
 //                if($_REQUEST['by_who'] == "tm"){
 //                    $sql_new=rtrim(file_get_contents('sql/standA_stat_'.$_REQUEST['by_who'].'.sql'));
@@ -245,7 +246,7 @@
             if($is_show_desc) {
                 /*if ($_REQUEST['stand_type'] == "coffee" || $_REQUEST['stand_type'] == "sh") {*/
                 if ($_REQUEST['stand_type'] != "a" ) {
-                    $sql = "SELECT * FROM (" . $sql . ") WHERE tp_st_ts IS NOT NULL AND tp_st_ts <> 0";
+                    $sql = "SELECT * FROM (" . $sql . ") WHERE tp_st_ts IS NOT NULL AND tp_st_ts <> 0 AND tp_st_ts_reject_tm_or_traid = 0";
                 } else {
                     $sql = "SELECT * FROM (" . $sql . ") WHERE ts1r IS NOT NULL AND ts1r <> 0";
                 }

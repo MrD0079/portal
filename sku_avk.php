@@ -31,6 +31,7 @@ if(isset($_REQUEST["distrib_bonus"])){
 //.fail(function (req, status, err ) {
 //    console.log( 'something went wrong', status, err );
 //});
+/*
 if (isset($_REQUEST["sku_select"]) && isset($_REQUEST["sku_params"]))
 {
     if (!isset($_REQUEST["z_id"])) {
@@ -46,7 +47,7 @@ if (isset($_REQUEST["sku_select"]) && isset($_REQUEST["sku_params"]))
     //$sku_params = is_array($_REQUEST["sku_params"]) ? $_REQUEST["sku_params"] : json_decode($_REQUEST["sku_params"],true);
     $sku_params = $_REQUEST["sku_params"];
 
-    echo "sku_select: ".json_encode($_REQUEST["sku_select"]);
+   // echo "sku_select: ".json_encode($_REQUEST["sku_select"]);
     if(isset($_REQUEST["z_id"])){
         try {
             $selected_sku = $db->getAll("select id_num from bud_ru_zay_sku_avk where (status = 1 OR status IS NULL) AND z_id=" . $_REQUEST["z_id"]);
@@ -109,7 +110,7 @@ if (isset($_REQUEST["sku_select"]) && isset($_REQUEST["sku_params"]))
     else
         echo "not save";
     return;
-}
+}*/
 
 getItemsFromDB($db,15);
 
@@ -151,10 +152,19 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
             //$params[':show_save_list'] = 1;
             $params[':show_list'] = 0;
             $params[':show_q'] = 0;
+            /* значения, введенные пользователем. */
             $params[':bsa_table'] = ', bud_ru_zay_sku_avk bsa';
             $params[':bsa_where'] = 'AND (bsa.z_id = '.$_REQUEST["z_id"].' AND bsa.status = 1 AND sa.sku_id IN bsa.sku_id)';
-            $params[':bsa_fields'] = 'bsa.total_q total_volume_q,';
-            $params[':bsa_fields'] = 'NVL(bsa.add_expens,0) add_expenses,';
+            $params[':bsa_fields'] = 'bsa.total_q total_volume_q, 
+            NVL(bsa.add_expens,0) add_expenses, 
+            NVL(bsa.company_expens,0) company_expenses_old, 
+            NVL(bsa.logistic_expens,0) logistic_expens_old, 
+            NVL(bsa.revenue_val,0) revenue_val_old,
+            NVL(bsa.price_net,0) price_one_old,
+            NVL(bsa.price_kk,0) price_s_kk_old,
+            ';
+
+
         }else{
             $params[":z_id"] = 0;
             $params[':show_save_list'] = 0;

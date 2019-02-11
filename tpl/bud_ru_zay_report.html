@@ -353,7 +353,12 @@
         <td>
             {if $is_do or $is_traid or $is_traid_kk or $is_db or $is_admin}
 			{if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}
-			<input type="submit" name="save" id="save" data-submit="false" data-save-id="{$i.head.id}" data-count-tp="{$i.local_tp.count_tp}" value="Сохранить"><br>
+			<input type="submit" name="save" id="save"
+				   data-submit="false"
+				   data-save-id="{$i.head.id}"
+				   data-count-tp="{$i.local_tp.count_tp}"
+				   data-count-summa="{$i.local_tp.total_summ}"
+				   value="Сохранить"><br>
 			{else}
 			<input type="submit" name="save" id="save" value="Сохранить"><br>
 			{/if}
@@ -424,7 +429,37 @@
             {if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}
         </td>
         <td>
-            {foreach key=k1 item=i1 from=$i.ff}
+            {foreach key=k1 item=i1 from=$i.ff name=ff_array}
+				{if $i.head.net_name and $i1.type eq 'list' and $i1.ff_id eq 176856141}
+					{if $i1.val_list eq 176856076}
+						{assign var="akc_type" value=1}
+					{else}
+						{assign var="akc_type" value=2}
+					{/if}
+				{/if}
+				{if $i.head.net_name and $i1.type eq 'number' and $i1.ff_id eq 177005005}
+					{assign var="bonus_net_perc" value=$i1.val_number}
+				{/if}
+				{if $i.head.net_name and $i1.type eq 'number' and $i1.ff_id eq 176933669}
+					{assign var="akciya_expences_perc" value=$i1.val_number}
+				{/if}
+				{if $smarty.foreach.ff_array.iteration eq 6 and $i.head.net_name}
+					{if $i.head.kat_id eq 49476666 or $i.head.kat_id eq 51604771 or $i.head.kat_id eq 169138070 or $i.head.kat_id eq 125932750}
+				<div style="">
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">Список продуктов: </span>
+					<span id="open-table-sku-{$i.head.id}" class="open-table-sku" data-sz-id="{$i.head.id}">Показать таблицу</span>
+					<div id="sku_table-{$i.head.id}" class="sku_table" data-sz-id="{$i.head.id}" style="display: none;">
+						<!-- content -->
+						<!--($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null,$print = tru)-->
+							{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc,$i.head.fil)}
+						{*
+						{$skuObj->GetSkuList($i.head.id,$akc_type)}
+						*}
+						<!-- end content -->
+					</div>
+				</div>
+					{/if}
+				{/if}
                 <span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
                 {if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
                 {if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
@@ -788,32 +823,51 @@ function calc_formula (zid)
 		text-align: center;
 		margin: 10px auto;
 	}
-	.info-message .ui-dialog-titlebar.ui-widget-header {
-
+	.error-message .ui-dialog-titlebar.ui-widget-header {
 		text-align: center;
 		background: #ec5555cc;
-
+	}
+	.info-message .ui-dialog-titlebar.ui-widget-header {
+		text-align: center;
+		background: rgba(236, 222, 58, 0.8);
+	}
+	.ui-widget-content a {
+		font-weight: bold;
+		color: #4671ed;
 	}
 </style>
 
 <script>
 
 
-    $('form.doc_form + tr > td:first-child input[type=submit]').on("click",function(e){
-        var $form = $('form#'+$(this).attr('data-save-id'));
+    $('form.doc_form + tr input[type=submit]').on("click",function(e){
+        var data_save_id = 0;
+    	if($(this).attr("name") == "save"){
+            data_save_id = $(this).attr('data-save-id');
+    	}else{
+            data_save_id = $(this).parents('tr').find('input[name="save"]').attr('data-save-id');
+    	}
+
+        var $form = $('form#'+data_save_id);
         var $btn = $(this);
         if($btn.attr("name") == "save"){
             if($btn.attr("data-submit")  == "false"){
                 var count_tp = $btn.attr("data-count-tp");
                 if(typeof count_tp !== "undefined" && count_tp != ""){
-                    var title = "Предупреждение для №"+$btn.attr("data-save-id");
-                    var message = "<br><br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
+                    var title = "№"+$btn.attr("data-save-id");
+                    var message = "";
+                    var message_end = "<br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
                     var msg_type = 0;
                     if(count_tp == 0){
-                        message = "Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message;
+						title = "Предупреждение для "+title;
+                        message = "В отчете по локальной акции не выбраны ТП для участия в <a href='https://ps.avk.ua/?action=akcii_local_report&z_id="+$btn.attr("data-save-id")+"' target='_blank'>акции</a>.";
+                        message += "<br>Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message_end;
                         msg_type = 1;
                     }else{
-                        message = "Перед сохранением заявки на МА убедитесь что отчет для текущей локальной акции заполен."+message;
+                        title = "Сохранение отчета по заявке "+title;
+                        message = "Количество ТП, участвующих в активности: <strong>"+$btn.attr("data-count-tp")+"</strong>";
+                        message += "<br>Сумма предоставленной скидки: <strong>"+$btn.attr("data-count-summa")+" грн.</strong>";
+                        message += "<br><br>Перед сохранением заявки на МА убедитесь что отчет для текущей локальной <a href='https://ps.avk.ua/?action=akcii_local_report&z_id="+$btn.attr("data-save-id")+"' target='_blank'>акции</a> заполен."+message_end;
                         msg_type = 2;
                     }
                     if(ConfirmDialog($form,title,message,$btn,msg_type) == false){
@@ -859,7 +913,7 @@ function calc_formula (zid)
                 modal: true, title: title, zIndex: 10000, autoOpen: true,
                 width: 'auto', resizable: false,
                 classes: {
-                    "ui-dialog": "info-message"
+                    "ui-dialog": (msg_type == 1) ? "error-message" : "info-message"
                 },
                 buttons: btn_params,
                 close: function (event, ui) {
@@ -870,7 +924,32 @@ function calc_formula (zid)
             });
     };
 </script>
+<script>
+    $(window).load(function(){
+        $( ".sku_table" ).each(function(){
+            $(this).dialog({
+                autoOpen: false,
+                modal: true,
+                title: "Список SKU по заявке №"+$(this).attr("data-sz-id"),
+                //width: $(window).width()*0.5,
+                width: 'auto',
+                show: {
+                    // effect: "clip",
+                    duration: 300
+                },
+                hide: {
+                    // effect: "puff",
+                    duration: 200
+                }
+            });
+        });
 
+        $( ".open-table-sku" ).on( "click", function() {
+            var sz_id = $(this).attr("data-sz-id");
+            $( "#sku_table-"+sz_id ).dialog( "open" );
+        });
+    });
+</script>
 {/if}
 
 

@@ -32,10 +32,7 @@
             tp_st_ts_reject_tm_or_traid,
          COUNT (DISTINCT tp_st) tp_st,
          /*SUM (bonus)*/
-         bonus,
-         a16coGetTarget (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy')) target,
-         a16coGetTargetInfo (tp_kod_key, TO_DATE ( :ed, 'dd.mm.yyyy'))
-            target_info
+         bonus
     FROM (SELECT z.*,
                  CASE
                     WHEN :by_who = 'eta' THEN bonus_eta

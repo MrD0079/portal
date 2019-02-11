@@ -232,7 +232,7 @@ foreach ($d as $k=>$v)
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 	//fix. Check is set any TP for local akciya
-    $sql_tp="SELECT count(tp_kod) count_tp FROM akcii_local_tp WHERE z_id = ".$k;
+    $sql_tp="SELECT count(tp_kod) count_tp, SUM(bonus_sum) total_summ FROM akcii_local_tp WHERE z_id = ".$k;
     $data_tp = $db->getAll($sql_tp, null, null, null, MDB2_FETCHMODE_ASSOC);
     $d[$k]["local_tp"]=$data_tp[0];
 

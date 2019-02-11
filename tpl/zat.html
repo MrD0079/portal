@@ -70,6 +70,11 @@
 		Подразделение: <b>{$department}</b>
 		<br>
 		Отчет принят:
+
+		<pre style="display: none;text-align: left;">
+			is_acceptor-{if $is_acceptor eq 1} true {else} false{/if}
+		</pre>
+
 		{if not $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $zat_monthly.is_processed neq 1 and $is_acceptor neq 1}
 			<select name="zat_monthly[is_accepted]" id="zat_monthly_is_accepted"><option value=0>нет</option><option value=1>да</option></select>
 			<script>$("#zat_monthly_is_accepted option[value='{$zat_monthly.is_accepted}']").prop('selected', true);</script>

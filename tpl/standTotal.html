@@ -47,77 +47,78 @@
 				{/foreach}
 			</tr>
 		</table>
+		<p><a href="?{$smarty.server.QUERY_STRING}&print=1&excel=1&filename=Стандарт {if $stand_title} {$stand_title}{/if} - статистика">Экспорт в Excel</a></p>
 		<p></p>
 	{else}
-	{if $is_ts neq 1 and $is_eta neq 1}
-		<p>
-		<select class="chosen-select" data-placeholder="По руководителю:" name=exp_list_without_ts id=exp_list_without_ts>
-			<option value=0>По руководителю:</option>
-			{foreach key=key item=item from=$exp_list_without_ts}
-			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
-			{/foreach}
-		</select>
-		</p>
-		<p>
-		<select class="chosen-select" data-placeholder="По супервайзеру:" name=exp_list_only_ts id=exp_list_only_ts>
-			<option value=0>По супервайзеру:</option>
-			{foreach key=key item=item from=$exp_list_only_ts}
-			<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
-			{/foreach}
-		</select>
-		<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
-		<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
-		</p>
-	{/if}
-	{if $is_eta neq 1}
-		<p>
-
-		<select class="chosen-select" data-placeholder="По ЭТА:" name=eta_list id=eta_list>
-			<option value="">По ЭТА:</option>
-			{foreach key=key item=item from=$eta_list}
-			<option value="{$item.h_eta}">{$item.eta}</option>
-			{/foreach}
-		</select>
-		<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
-		</p>
-	{/if}
-	<table border=0>
-		<tr>
-			<td>
-				<input type=radio id="by_who" name="by_who" value='eta' >по ЭТА
-				{if $is_tm or $is_rm or $is_admin or $is_super}
-				<input type=radio id="by_who" name="by_who" value='ts'>по ТС
-				{/if}
-				{if $is_rm or $is_admin or $is_super}
-				<input type=radio id="by_who" name="by_who" value='tm'>по ТМ
-				{/if}
-				<!--<input type=radio id="by_who" name="by_who" value='rm'>по РМ-->
-			</td>
-		</tr>
-		<script>$("input[name=by_who][value={$smarty.request.by_who}]").attr('checked',true);</script>
-		<tr>
-			<td>
-				<input type=hidden id="rep_type" name="rep_type" value='brief'>
-				<!--<input type=radio id="rep_type" name="rep_type" value='brief'>краткий-->
-				<!--<input type=radio id="rep_type" name="rep_type" value='detailed' {if $smarty.request.by_who eq 'tm'}disabled{/if}>развернутый-->
-			</td>
-		</tr>
-		<script>$("input[name=rep_type][value={$smarty.request.rep_type}]").attr('checked',true);</script>
-		<tr>
-			<td>
-				<input type=radio id="stand_type" name="stand_type" value='all' checked="checked">Все стандарты
-				<input type=radio id="stand_type" name="stand_type" value='a'>Стандарт А
-				<input type=radio id="stand_type" name="stand_type" value='b'>Стандарт В
-				<input type=radio id="stand_type" name="stand_type" value='coffee'>Стандарт Кофе
-				<input type=radio id="stand_type" name="stand_type" value='sh'>Стандарт Штучка
-			</td>
-		</tr>
-		<script>$("input[name=stand_type][value={$smarty.request.stand_type}]").attr('checked',true);</script>
-	</table>
-	<p><input type=submit name=generate id=generate value="Построить отчет"></p>
-	<p><a href="?action=standTotal&print=1&excel=1&generate=1&filename=Стандарт - статистика">Экспорт в Excel</a></p>
-{/if}
+		{if $is_ts neq 1 and $is_eta neq 1}
+			<p>
+			<select class="chosen-select" data-placeholder="По руководителю:" name=exp_list_without_ts id=exp_list_without_ts>
+				<option value=0>По руководителю:</option>
+				{foreach key=key item=item from=$exp_list_without_ts}
+				<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+				{/foreach}
+			</select>
+			</p>
+			<p>
+			<select class="chosen-select" data-placeholder="По супервайзеру:" name=exp_list_only_ts id=exp_list_only_ts>
+				<option value=0>По супервайзеру:</option>
+				{foreach key=key item=item from=$exp_list_only_ts}
+				<option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+				{/foreach}
+			</select>
+			<script>$("#exp_list_without_ts option[value={$smarty.request.exp_list_without_ts}]").prop('selected', true);</script>
+			<script>$("#exp_list_only_ts option[value={$smarty.request.exp_list_only_ts}]").prop('selected', true);</script>
+			</p>
 		{/if}
+		{if $is_eta neq 1}
+			<p>
+
+			<select class="chosen-select" data-placeholder="По ЭТА:" name=eta_list id=eta_list>
+				<option value="">По ЭТА:</option>
+				{foreach key=key item=item from=$eta_list}
+				<option value="{$item.h_eta}">{$item.eta}</option>
+				{/foreach}
+			</select>
+			<script>$("#eta_list option[value='{$smarty.request.eta_list}']").prop('selected', true);</script>
+			</p>
+		{/if}
+		<table border=0>
+			<tr>
+				<td>
+					<input type=radio id="by_who" name="by_who" value='eta' >по ЭТА
+					{if $is_tm or $is_rm or $is_admin or $is_super}
+					<input type=radio id="by_who" name="by_who" value='ts'>по ТС
+					{/if}
+					{if $is_rm or $is_admin or $is_super}
+					<input type=radio id="by_who" name="by_who" value='tm'>по ТМ
+					{/if}
+					<!--<input type=radio id="by_who" name="by_who" value='rm'>по РМ-->
+				</td>
+			</tr>
+			<script>$("input[name=by_who][value={$smarty.request.by_who}]").attr('checked',true);</script>
+			<tr>
+				<td>
+					<input type=hidden id="rep_type" name="rep_type" value='brief'>
+					<!--<input type=radio id="rep_type" name="rep_type" value='brief'>краткий-->
+					<!--<input type=radio id="rep_type" name="rep_type" value='detailed' {if $smarty.request.by_who eq 'tm'}disabled{/if}>развернутый-->
+				</td>
+			</tr>
+			<script>$("input[name=rep_type][value={$smarty.request.rep_type}]").attr('checked',true);</script>
+			<tr>
+				<td>
+					<input type=radio id="stand_type" name="stand_type" value='all' checked="checked">Все стандарты
+					<input type=radio id="stand_type" name="stand_type" value='a'>Стандарт А
+					<input type=radio id="stand_type" name="stand_type" value='b'>Стандарт В
+					<input type=radio id="stand_type" name="stand_type" value='coffee'>Стандарт Кофе
+					<input type=radio id="stand_type" name="stand_type" value='sh'>Стандарт Штучка
+				</td>
+			</tr>
+			<script>$("input[name=stand_type][value={$smarty.request.stand_type}]").attr('checked',true);</script>
+		</table>
+		<p><input type=submit name=generate id=generate value="Построить отчет"></p>
+		<p><a href="?action=standTotal&date={$smarty.request.date}&print=1&excel=1&generate=1&filename=Стандарт - статистика">Экспорт в Excel</a></p>
+	{/if}
+{/if}
 
 {if not $smarty.request.show_desc}
 <table style="text-align: center;" border=1 class="total-standart">
@@ -218,39 +219,66 @@
 	</tr>
 	{/foreach}
 	<tr style="font-weight: bold;">
-		{if $smarty.request.by_who eq 'eta'}<td colspan=4>ИТОГО</td>{/if}
-		{if $smarty.request.by_who eq 'ts'}<td colspan=3>ИТОГО</td>{/if}
-		{if $smarty.request.by_who eq 'tm'}<td colspan=2>ИТОГО</td>{/if}
+		{if $smarty.request.by_who eq 'eta'}<td colspan=4 {if $smarty.request.stand_type eq 'all' or $smarty.request.stand_type eq 'a'}rowspan="2"{/if}>ИТОГО</td>{/if}
+		{if $smarty.request.by_who eq 'ts'}<td colspan=3 {if $smarty.request.stand_type eq 'all' or $smarty.request.stand_type eq 'a'}rowspan="2"{/if}>ИТОГО</td>{/if}
+		{if $smarty.request.by_who eq 'tm'}<td colspan=2 {if $smarty.request.stand_type eq 'all' or $smarty.request.stand_type eq 'a'}rowspan="2"{/if}>ИТОГО</td>{/if}
 		<!--{if $smarty.request.by_who eq 'rm'}<td colspan=2>ИТОГО</td>{/if}-->
 		{if $smarty.request.stand_type eq 'all'}
-		<td colspan="2">{$tt.st_a.ts1r|default:'0'}</td>
-		<!--<td>{$tt.st_a.ts1r|default:'0'}</td>-->
+		<td>{$tt.st_a.count_standa|default:'0'} </td>
+		<td>{$tt.st_a.count_standamin|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'a'}
-		<td colspan="2">{$tt.ts1r|default:'0'}</td>
+		<td >{$tt.count_standa|default:'0'}</td>
+		<td >{$tt.count_standamin|default:'0'}</td>
 		{/if}
 		{if $smarty.request.stand_type eq 'all'}
-		<td>{$tt.st_b.tp_st|default:'0'}</td>
+		<td rowspan="2">{$tt.st_b.tp_st|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'b'}
 		<td>{$tt.tp_st|default:'0'}</td>
 		{/if}
 
 		{if $smarty.request.stand_type eq 'all' }
-		<td>{$tt.st_c.tp_st|default:'0'}</td>
+		<td rowspan="2">{$tt.st_c.tp_st|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'coffee'}
 		<td>{$tt.tp_st|default:'0'}</td>
 		{/if}
 		{if $smarty.request.stand_type eq 'all' }
-		<td>{$tt.st_sh.tp_st|default:'0'}</td>
+		<td rowspan="2">{$tt.st_sh.tp_st|default:'0'}</td>
 		{else if $smarty.request.stand_type eq 'sh'}
 		<td>{$tt.tp_st|default:'0'}</td>
 		{/if}
 	</tr>
+	{if $smarty.request.stand_type eq 'all' or $smarty.request.stand_type eq 'a'}
+	<tr>
+		{if $smarty.request.stand_type eq 'all'}
+		<td colspan="2">{$tt.st_a.tsr1_sum|default:'0'}</td>
+		<!--<td>{$tt.st_a.ts1r|default:'0'}</td>-->
+		{else if $smarty.request.stand_type eq 'a'}
+		<td colspan="2">{$tt.tsr1_sum|default:'0'}</td>
+		{/if}
+	</tr>
+	{/if}
 </tbody>
 
 </table>
 {/if}
 
 {if $smarty.request.show_desc eq 1}
+		{if $smarty.request.print eq 1}
+		<table style="text-align: center;" border=1>
+			<tr>
+				{foreach key=key item=item from=$desc}
+				<td>{$item.fio_title}</td>
+				{/foreach}
+			</tr>
+			<tr>
+				{foreach key=key item=item from=$desc}
+				<td>{$item.fio}</td>
+				{/foreach}
+			</tr>
+		</table>
+		<p></p>
+		<p></p>
+		{/if}
 <table style="text-align: center;" border=1 class="total-standart">
 <tbody>
 	{foreach key=k item=i from=$d name=d}
@@ -305,7 +333,7 @@
 
 		<td colspan="2">{$tt.ts1r|default:'0'}</td>
 		{else}
-		<td colspan="2">{$tt.tp_st_ts|default:'0'}</td>
+		<td colspan="2">{$tt.tp_st|default:'0'}</td>
 		{/if}
 	</tr>
 </tbody>

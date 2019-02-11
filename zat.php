@@ -2,6 +2,7 @@
 isset($_REQUEST["exp_tn"]) ? $exp_tn=$_REQUEST["exp_tn"]: $exp_tn=$tn;
 isset($_REQUEST["emp_tn"]) ? $emp_tn=$_REQUEST["emp_tn"]: $emp_tn=$exp_tn;
 !isset($_REQUEST["readonly"]) ? $_REQUEST["readonly"]=0: null;
+
 if ($exp_tn==$emp_tn)
 {
 $smarty->assign('self', 1);
@@ -28,7 +29,7 @@ $sql = rtrim(file_get_contents('sql/month_list.sql'));
 $res = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('month_list', $res);
 
-//audit("открыл затраты ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+//audit("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 
 foreach($res as $k=>$v)
 {
@@ -46,16 +47,16 @@ $y=substr($_REQUEST["month_list"], 6, 4);
 
 if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 {
-	audit("отправил сообщение по затратам ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+	audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	if ($exp_tn==$emp_tn)
 	{
 		$email=$db->getOne("select e_mail from user_list where tn=(select parent from parents where tn=".$emp_tn.")");
-		$subj="Комментарии по отчету о затратах за ".$period.", сотрудник ".$emp_fio;
+		$subj="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ".$period.", пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_fio;
 	}
 	else
 	{
 		$email=$db->getOne("select e_mail from user_list where tn=".$emp_tn);
-		$subj="Комментарии по отчету о затратах за ".$period;
+		$subj="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ".$period;
 	}
 	$text=nl2br($_REQUEST["msg"]);
 	send_mail($email,$subj,$text,null);
@@ -82,7 +83,7 @@ if (isset($_REQUEST["send_msg"])&&isset($_REQUEST["msg"]))
 
 if (isset($_REQUEST["save"])||isset($_REQUEST["copy_city"]))
 {
-	audit("сохранил затраты ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+	audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	if (isset($_REQUEST["zat_daily_car"]))
 	{
 		//$sum_pet=0;
@@ -156,16 +157,16 @@ if (isset($_REQUEST["save"])||isset($_REQUEST["copy_city"]))
 			$is_accepted!=$_REQUEST["zat_monthly"]["is_accepted"] ? $accepted_changed=1: $accepted_changed=0;
 			if ($accepted_changed==1)
 			{
-				$who="руководителем";
-				$status="принят";
+				$who="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
+				$status="пїЅпїЅпїЅпїЅпїЅпїЅ";
 				$email=$db->getOne("select e_mail from user_list where tn=".$emp_tn);
 				setlocale(LC_TIME, "rus_RUS");
-				$subj="Изменение статуса отчета о затратах на ".$period;
-				$text="Здравствуйте.<br>";
-				$text.="Статус вашего отчета о затратах на ".$period." изменен ".$who." с '".$status."'-'".Int2Text($is_accepted)."' на '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_accepted"])."'.<br>";
-				$text.="Время изменения: ".$now_date_time.".";
+				$subj="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ".$period;
+				$text="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.<br>";
+				$text.="пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ".$period." пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$who." пїЅ '".$status."'-'".Int2Text($is_accepted)."' пїЅпїЅ '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_accepted"])."'.<br>";
+				$text.="пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ".$now_date_time.".";
 				send_mail($email,$subj,$text,null);
-				audit("статус отчета о затратах ".$emp_tn." за ".$_REQUEST["month_list"]." изменен ".$who." с '".$status."'-'".Int2Text($is_accepted)."' на '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_accepted"]),"zat");
+				audit("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"]." пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$who." пїЅ '".$status."'-'".Int2Text($is_accepted)."' пїЅпїЅ '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_accepted"]),"zat");
                         }
 		}
 		if (isset($_REQUEST["zat_monthly"]["is_processed"]))
@@ -173,16 +174,16 @@ if (isset($_REQUEST["save"])||isset($_REQUEST["copy_city"]))
 			$is_processed!=$_REQUEST["zat_monthly"]["is_processed"] ? $processed_changed=1: $processed_changed=0;
 			if ($processed_changed==1)
 			{
-				$who="сотрудником департамента оплаты и стимулирования персонала";
-				$status="обработан";
+				$who="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
+				$status="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 				$email=$db->getOne("select e_mail from user_list where tn=".$emp_tn);
 				setlocale(LC_TIME, "rus_RUS");
-				$subj="Изменение статуса отчета о затратах на ".$period;
-				$text="Здравствуйте.<br>";
-				$text.="Статус вашего отчета о затратах на ".$period." изменен ".$who." с '".$status."'-'".Int2Text($is_processed)."' на '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_processed"])."'.<br>";
-				$text.="Время изменения: ".$now_date_time.".";
+				$subj="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ".$period;
+				$text="пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.<br>";
+				$text.="пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ".$period." пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$who." пїЅ '".$status."'-'".Int2Text($is_processed)."' пїЅпїЅ '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_processed"])."'.<br>";
+				$text.="пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: ".$now_date_time.".";
 				send_mail($email,$subj,$text,null);
-				audit("статус отчета о затратах ".$emp_tn." за ".$_REQUEST["month_list"]." изменен ".$who." с '".$status."'-'".Int2Text($is_processed)."' на '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_processed"]),"zat");
+				audit("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"]." пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$who." пїЅ '".$status."'-'".Int2Text($is_processed)."' пїЅпїЅ '".$status."'-'".Int2Text($_REQUEST["zat_monthly"]["is_processed"]),"zat");
 			}
 		}
 	}
@@ -190,7 +191,7 @@ if (isset($_REQUEST["save"])||isset($_REQUEST["copy_city"]))
 
 if (isset($_REQUEST["copy_city"]))
 {
-	audit("скопировал города ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+	audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	if (isset($_REQUEST["zat_daily_car"]))
 	{
 		foreach ($_REQUEST["zat_daily_car"] as $key=>$val)
@@ -212,7 +213,7 @@ if (isset($_REQUEST["copy_city"]))
 
 if (isset($_REQUEST["error"])||isset($_REQUEST["error_stat"]))
 {
-	audit("отправил сообщение об ошибке  затратах ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+	audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	if (isset($_REQUEST["error_stat"]))
 	{
 		$keys = array(
@@ -227,28 +228,28 @@ if (isset($_REQUEST["error"])||isset($_REQUEST["error_stat"]))
 	$p=array(":tn"=>$emp_tn);
 	$sql=stritr($sql,$p);
 	$emails = $db->getCol($sql);
-	$subj = "Ошибка в отчете о затратах";
+	$subj = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ";
 	$text =
-	"В отчете о затратах сотрудника - <b>".$emp_fio."</b> - специалистом департамента оплаты и стимулирования персонала обнаружена ошибка:".
+	"пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - <b>".$emp_fio."</b> - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ:".
 	"<p style=\"color: red;\">".$_REQUEST["txt"]."</p>";
 	if (isset($_REQUEST["error"]))
 	{
-		$text.= "Просьба учесть информацию в дальнейшем при заполнении отчета о затратах.<br>";
+		$text.= "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.<br>";
 	}
 	if (isset($_REQUEST["error_stat"]))
 	{
-		$text.= "Просим в кратчайшие сроки: исправить ошибку, руководителю выставить статус 'Отчет принят' на значение 'ДА'.<br>";
+		$text.= "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 'пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ' пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 'пїЅпїЅ'.<br>";
 	}
-	$text.= "В противном случае дальнейшие выплаты по сотруднику - <b>".$emp_fio."</b> - будут приостановлены.";
+	$text.= "пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - <b>".$emp_fio."</b> - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.";
 	foreach ($emails as $val)
 	{
 		send_mail($val,$subj,$text,null);
 	}
 	/*
-	Сообщения сотрудников оплаты добавлять в переписку.
-	Сейчас они только рассылаются по почте, в переписке не остаются.
-	Оставлять только текст, написанный сотрудником оплаты.
-	Префикс типа "....Оплаты будут приостановлены" - в переписку НЕ ДОБАВЛЯТЬ.
+	пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+	пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+	пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
+	пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ "....пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" - пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 	*/
 
 
@@ -312,7 +313,7 @@ if (isset($_REQUEST["del_file"]))
 	foreach ($_REQUEST["del_file"] as $k=>$v)
 	{
 		unlink($v);
-		audit("удалил файл ".$v." из затрат ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+		audit("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ ".$v." пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	}
 }
 
@@ -333,7 +334,7 @@ foreach ($_FILES as $k=>$v)
 		if (!file_exists($d5."/".$k)) {mkdir($d5."/".$k);}
 		if (is_uploaded_file($v['tmp_name'][$k1])){
 			move_uploaded_file($v["tmp_name"][$k1], $d5."/".$k."/".translit($v["name"][$k1]));
-			audit("успешно сохранен файл ".translit($v["name"][$k1])." в затратах ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+			audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ ".translit($v["name"][$k1])." пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 		}
 	}
 }
@@ -361,7 +362,7 @@ fl_func("other");
 
 if (isset($_REQUEST["save_car"]))
 {
-	audit("сохранил авто ".$_REQUEST["car"]." в затратах ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+	audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ ".$_REQUEST["car"]." пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	$keys = array(
 		"svideninn"=>$emp_tn,
 	);
@@ -377,7 +378,7 @@ $smarty->assign('car_rashod', $car_rashod);
 
 if (isset($_REQUEST["save_limits"]))
 {
-	audit("сохранил лимиты в затратах ".$emp_tn." за ".$_REQUEST["month_list"],"zat");
+	audit("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ".$emp_tn." пїЅпїЅ ".$_REQUEST["month_list"],"zat");
 	$keys = array(
 		"tn"=>$emp_tn,
 		"lu"=>null
@@ -393,7 +394,7 @@ if (isset($_REQUEST["save_limits"]))
             else
             {
                     $smarty->assign('error', 1);
-                    $smarty->assign('error_text', "Указанная СЗ не относится к категории 'Оплата: установка / корректировка лимитов'");
+                    $smarty->assign('error_text', "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 'пїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ / пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ'");
             }
         }
 	if ($_REQUEST["limits"]["zay_id"]!=null)
@@ -406,7 +407,7 @@ if (isset($_REQUEST["save_limits"]))
             else
             {
                 $smarty->assign('error', 1);
-                $smarty->assign('error_text', "Указанная заявка на активность не относится к категории 'Ст. 10 Установка ГБО'");
+                $smarty->assign('error_text', "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 'пїЅпїЅ. 10 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ'");
             }
         }
 }

@@ -369,6 +369,10 @@ $sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('d1', $data);
 
+include "SkuSelect.php";
+$skuObj = new \SkuSelect\SkuSelect($db);
+$smarty->assign('skuObj', $skuObj);
+
 $smarty->display('bud_ru_zay_report_accept.html');
 
 ?>

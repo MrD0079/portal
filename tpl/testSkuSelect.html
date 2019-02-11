@@ -1,13 +1,9 @@
-<form id="177501410" class="doc_form" action="/?action=testSkuSelect" method="POST">
-    <p>Заяка МА (№ 177637674) - тип: скидка по акции (компенсации) </p>
-    {$skuObj->GetSkuList(177637674,1,12,145,20)}
-    <br>
-    <p>Заяка МА (№ 177637674) - тип: скидка по акции (скидка в накладной) </p>
-    {$skuObj->GetSkuList(177637674,2,12,145,20)}
-    <br><input type="submit" name="save" id="save" data-submit="false" data-save-id="177501410" data-count-tp="6" value="Save0"><br>
-    <br><input type="submit" name="reset" id="reset" value="Reset0"><br>
 
-</form>
+    <p>Заяка МА (№ 180152622) - тип: скидка по акции (компенсации) </p>
+    <!--($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null,$print = tru)-->
+    {$skuObj->GetSkuList(180152622,2,12.5,325,15,83140896)}
+
+<!--
 <style>
     .open-table-sku {
         display: inline-block;
@@ -30,6 +26,7 @@
 
     }
 </style>
+
 <script>
     $('form.doc_form').submit(function (e) {
         if($(this).hasClass('doc_form')){
@@ -134,3 +131,6 @@
             });
     };
 </script>
+-->
+<!--<link rel="stylesheet" href="css/footable.standalone.min.css">-->
+<!--<script src="js/footable.min.js" type="text/javascript"></script>-->

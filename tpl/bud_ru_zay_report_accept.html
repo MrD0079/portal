@@ -102,7 +102,35 @@
 			{if $i.head.report_short eq 1}<font style="font-weight:bold;color:green">{if $smarty.request.tu eq 1}Сокращенное внесение результатов переговоров{else}Сокращенный отчет{/if}</font><br>{/if}
 		</td>
 		<td>
-			{foreach key=k1 item=i1 from=$i.ff}
+			{foreach key=k1 item=i1 from=$i.ff name=ff_array}
+				{if $i.head.net_name and $i1.type eq 'list' and $i1.ff_id eq 176856141}
+					{if $i1.val_list eq 176856076}
+						{assign var="akc_type" value=1}
+					{else}
+						{assign var="akc_type" value=2}
+					{/if}
+				{/if}
+				{if $i.head.net_name and $i1.type eq 'number' and $i1.ff_id eq 177005005}
+					{assign var="bonus_net_perc" value=$i1.val_number}
+				{/if}
+				{if $i.head.net_name and $i1.type eq 'number' and $i1.ff_id eq 176933669}
+					{assign var="akciya_expences_perc" value=$i1.val_number}
+				{/if}
+				{if $smarty.foreach.ff_array.iteration eq 6 and $i.head.net_name}
+				<div style="">
+					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">Список продуктов: </span>
+					<span id="open-table-sku-{$i.head.id}" class="open-table-sku" data-sz-id="{$i.head.id}">Показать таблицу</span>
+					<div id="sku_table-{$i.head.id}" class="sku_table" data-sz-id="{$i.head.id}" style="display: none;">
+						<!-- content -->
+						<!--($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null,$print = tru)-->
+						{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc,$i.head.fil)}
+						{*
+						{$skuObj->GetSkuList($i.head.id,$akc_type)}
+						*}
+						<!-- end content -->
+					</div>
+				</div>
+				{/if}
 				<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
 				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
@@ -162,10 +190,11 @@
 					<td style="vertical-align: top;">Плановый показатель<br></td>
 					<td style="vertical-align: top;">Фактический показатель<br></td>
 				</tr>
-				{foreach key=k1 item=i1 from=$i.ff}
+				{foreach key=k1 item=i1 from=$i.ff }
 				{if $i1.rep_r_visible}
 				<tr>
 					<td>
+
 					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.name}:&nbsp</span>
 					{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 					{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
@@ -182,6 +211,7 @@
 					{/if}
 						</td>
 						<td>
+
 					<span style="background-color:#{$i1.color};font-weight:{if $i1.bold eq 1}bold{/if};">{$i1.rep_name}:&nbsp</span>
 					{if $i.head.creator_tn eq $tn and $i.head.not_seen}
 						{if $i1.type eq 'textarea'}
@@ -364,5 +394,46 @@
 
 
 </form>
+<style>
+	.open-table-sku {
+		display: inline-block;
+		cursor: pointer;
+		padding: 2px 5px;
+		background-color: #eee;
+		border-radius: 3px;
+		border: 1px solid #b6b6b6;
 
+	}
+	.info-sku{
+		display: block;
+		text-align: center;
+		margin: 10px auto;
+	}
+</style>
+<script>
+    $(window).load(function(){
+        $( ".sku_table" ).each(function(){
+            $(this).dialog({
+                autoOpen: false,
+                modal: true,
+                title: "Список SKU по заявке №"+$(this).attr("data-sz-id"),
+                //width: $(window).width()*0.5,
+                width: 'auto',
+                show: {
+                    // effect: "clip",
+                    duration: 300
+                },
+                hide: {
+                    // effect: "puff",
+                    duration: 200
+                }
+            });
+        });
+
+        $( ".open-table-sku" ).on( "click", function() {
+            var sz_id = $(this).attr("data-sz-id");
+            $( "#sku_table-"+sz_id ).dialog( "open" );
+        });
+    });
+</script>
 

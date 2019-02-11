@@ -108,10 +108,11 @@
 					<span id="open-table-sku-{$i.head.id}" class="open-table-sku" data-sz-id="{$i.head.id}">Показать таблицу</span>
 					<div id="sku_table-{$i.head.id}" class="sku_table" data-sz-id="{$i.head.id}" style="display: none;">
 						<!-- content -->
+						<!--($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null,$print = tru)-->
+						{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc,$i.head.fil)}
 						{*
-							{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc)}
-						*}
 						{$skuObj->GetSkuList($i.head.id,$akc_type)}
+						*}
 						<!-- end content -->
 					</div>
 				</div>
@@ -205,8 +206,9 @@
                 $(this).dialog({
                     autoOpen: false,
                     modal: true,
-                    title: "Список продуктов для заявки №"+$(this).attr("data-sz-id"),
-                    width: $(window).width()*0.5,
+                    title: "Список SKU по заявке №"+$(this).attr("data-sz-id"),
+                    //width: $(window).width()*0.5,
+                    width: 'auto',
                     show: {
                         // effect: "clip",
                         duration: 300

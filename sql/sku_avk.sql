@@ -22,7 +22,7 @@
           NVL((SELECT fs.price FROM sku_avk_free_sell_uk fs WHERE fs.sku_id = sa.sku_id  AND fs.currency = 980),0) price_urkaine,
           NVL((SELECT kk.price FROM sku_avk_kk_price kk WHERE kk.sku_id = sa.sku_id AND kk.network_id = :net_id),0) price_s_kk, /* price spec-cii KK */
           0 price_one,
-          NVL((SELECT nc.sum_logist FROM sku_avk_net_costs nc,
+          NVL((SELECT nc.sum_logist_1t FROM sku_avk_net_costs nc,
             (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date
                   FROM (
                       SELECT *
@@ -51,7 +51,17 @@
                   )
                   GROUP BY brand
               ) ncc
-            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) market_val
+            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) market_val,
+            NVL((SELECT nc.revenue FROM sku_avk_net_costs nc,
+            (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date
+                  FROM (
+                      SELECT *
+                      FROM sku_avk_net_costs
+                      WHERE ym <= to_number(CONCAT(to_char(sysdate,'yyyy'),to_char(sysdate,'mm')))
+                  )
+                  GROUP BY brand
+              ) ncc
+            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) revenue_val
         FROM sku_avk sa :bsa_table
         WHERE (:show_q = 0 OR (lower(sa.name) LIKE lower('%:name_p%')
               OR sa.sku_id LIKE :query

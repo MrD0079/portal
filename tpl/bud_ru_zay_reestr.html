@@ -329,7 +329,7 @@
 	</tr>
 	{foreach key=k item=i from=$d}
 
-<form target="_self" method="POST">
+<form target="_self" method="POST" {if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}id="{$i.head.id}" class="doc_form"{/if}>
 
 	{if $i.head.current_status eq 0}{assign var=color value="#FFFF66"}{/if}
 	{if $i.head.current_status eq 1}{assign var=color value="#66FF66"}{/if}
@@ -350,7 +350,21 @@
 
 			{if $is_db or $is_do or $is_traid or $is_traid_kk}
 				{if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}
-					<input type="submit" name="save" id="save" data-submit="false" data-save-id="{$i.head.id}" data-count-tp="{$i.local_tp.count_tp}" value="Сохранить"><br>
+					<!--<input type="submit" -->
+						   <!--name="save" -->
+						   <!--id="save" -->
+						   <!--data-submit="false" -->
+						   <!--data-save-id="{$i.head.id}" -->
+						   <!--data-count-tp="{$i.local_tp.count_tp}" -->
+						   <!--value="Сохранить"><br>-->
+					<input type="submit"
+						   name="save"
+						   id="save"
+						   data-submit="false"
+						   data-save-id="{$i.head.id}"
+						   data-count-tp="{$i.local_tp.count_tp}"
+						   data-count-summa="{$i.local_tp.total_summ}"
+						   value="Сохранить"><br>
 				{else}
 					<input type="submit" name="save" id="save" value="Сохранить"><br>
 				{/if}
@@ -471,10 +485,12 @@
 					<span id="open-table-sku-{$i.head.id}" class="open-table-sku" data-sz-id="{$i.head.id}">Показать таблицу</span>
 					<div id="sku_table-{$i.head.id}" class="sku_table" data-sz-id="{$i.head.id}" style="display: none;">
 						<!-- content -->
+
+							<!--($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null,$print = tru)-->
+							{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc,$i.head.fil)}
 						{*
-							{$skuObj->GetSkuList($i.head.id,$akc_type,$bonus_net_perc,$i.head.id_net,$akciya_expences_perc)}
-						*}
 						{$skuObj->GetSkuList($i.head.id,$akc_type)}
+						*}
 						<!-- end content -->
 					</div>
 				</div>
@@ -592,49 +608,80 @@
 			text-align: center;
 			margin: 10px auto;
 		}
-		.info-message .ui-dialog-titlebar.ui-widget-header {
-
+		.error-message .ui-dialog-titlebar.ui-widget-header {
 			text-align: center;
 			background: #ec5555cc;
-
+		}
+		.info-message .ui-dialog-titlebar.ui-widget-header {
+			text-align: center;
+			background: rgba(236, 222, 58, 0.8);
+		}
+		.ui-widget-content a {
+			font-weight: bold;
+			color: #4671ed;
 		}
 	</style>
 	<script>
-        $("#save").parents("form").submit(function(e){
-            var $btn = $(this).find("#save");
-            if($btn.attr("data-submit") == "false"){
-                e.preventDefault();
-                var count_tp = $btn.attr("data-count-tp");
-                if(typeof count_tp !== "undefined" && count_tp != ""){
-                    var title = "Предупреждение для №"+$btn.attr("data-save-id");
-                    var message = "<br><br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
-                    var msg_type = 0;
-                    if(count_tp == 0){
-                        message = "Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message;
-                        msg_type = 1;
-                    }else{
-                        message = "Перед сохранением заявки на МА <strong>убедитесь</strong> что отчет для текущей локальной акции заполен."+message;
-                        msg_type = 2;
-                    }
-                    if(ConfirmDialog(title,message,$btn,msg_type) == false){
-                        e.preventDefault();
-                        return false;
+        $('form.doc_form + tr input[type=submit]').on("click",function(e){
+            var data_save_id = 0;
+            if($(this).attr("name") == "save"){
+                data_save_id = $(this).attr('data-save-id');
+            }else{
+                data_save_id = $(this).parents('tr').find('input[name="save"]').attr('data-save-id');
+            }
+
+            var $form = $('form#'+data_save_id);
+            var $btn = $(this);
+            if($btn.attr("name") == "save"){
+                if($btn.attr("data-submit")  == "false"){
+                    var count_tp = $btn.attr("data-count-tp");
+                    if(typeof count_tp !== "undefined" && count_tp != ""){
+                        var title = "№"+$btn.attr("data-save-id");
+                        var message = "";
+                        var message_end = "<br>После сохранения заявки МА  возможность редактировать отчет по локальной акции будет <strong>недосупна</strong>.";
+                        var msg_type = 0;
+                        if(count_tp == 0){
+                            title = "Предупреждение для "+title;
+                            message = "В отчете по локальной акции не выбраны ТП для участия в <a href='https://ps.avk.ua/?action=akcii_local_report&z_id="+$btn.attr("data-save-id")+"' target='_blank'>акции</a>.";
+                            message += "<br>Для сохранения заявки на МА необходимо заполнить отчет по текущей локальной акции."+message_end;
+                            msg_type = 1;
+                        }else{
+                            title = "Сохранение отчета по заявке "+title;
+                            message = "Количество ТП, участвующих в активности: <strong>"+$btn.attr("data-count-tp")+"</strong>";
+                            message += "<br>Сумма предоставленной скидки: <strong>"+$btn.attr("data-count-summa")+" грн.</strong>";
+                            message += "<br><br>Перед сохранением заявки на МА убедитесь что отчет для текущей локальной <a href='https://ps.avk.ua/?action=akcii_local_report&z_id="+$btn.attr("data-save-id")+"' target='_blank'>акции</a> заполен."+message_end;
+                            msg_type = 2;
+                        }
+                        if(ConfirmDialog($form,title,message,$btn,msg_type) == false){
+                            e.preventDefault();
+                            return false;
+                        }
                     }
                 }
+            }else{
+                $form.removeClass('doc_form');
+                $form.submit();
             }
         });
-        function ConfirmDialog(title,message,$submit,msg_type){
+        $('form.doc_form').submit(function (e) {
+            if($(this).hasClass('doc_form')){
+                e.preventDefault();
+                return false;
+            }
+        });
+        function ConfirmDialog($form,title,message,$submit,msg_type){
             var btn_params = {};
             if(msg_type == 2){
                 btn_params = {
                     'Сохранить': function () {
-                        //submit form;
+                        /*submit form;*/
+                        $form.removeClass('doc_form');
                         $submit.attr("data-submit", true);
                         $submit.click();
                         $(this).dialog("close");
                     },
                     'Отменить': function () {
-                        //cancel submit form
+                        /*cancel submit form*/
                         $(this).dialog("close");
                         return false;
                     }
@@ -648,11 +695,11 @@
                     modal: true, title: title, zIndex: 10000, autoOpen: true,
                     width: 'auto', resizable: false,
                     classes: {
-                        "ui-dialog": "info-message"
+                        "ui-dialog": (msg_type == 1) ? "error-message" : "info-message"
                     },
                     buttons: btn_params,
                     close: function (event, ui) {
-                        //cancel submit form
+                        /*cancel submit form*/
                         $(this).remove();
                         return false;
                     }
@@ -665,7 +712,7 @@
                 $(this).dialog({
                     autoOpen: false,
                     modal: true,
-                    title: "Список продуктов для заявки №"+$(this).attr("data-sz-id"),
+                    title: "Список SKU по заявке №"+$(this).attr("data-sz-id"),
                     //width: $(window).width()*0.5,
                     width: 'auto',
                     show: {
