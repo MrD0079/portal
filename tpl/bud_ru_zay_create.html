@@ -205,7 +205,8 @@
                                                 parseInt(dts[2], 10),
                                                 parseInt(dts[1], 10) - 1,
                                                 parseInt(dts[0], 10));
-                                dtd.setDate(dtd.getDate() + 365); 
+                                //dtd.setDate(dtd.getDate() + 365);
+                                dtd.setDate(dtd.getDate() + 90);
                                 var formatted = $.datepicker.formatDate("dd.mm.yy", dtd);
                                 $('#slave').datepicker('option', 'minDate', formatted);
                         {else}

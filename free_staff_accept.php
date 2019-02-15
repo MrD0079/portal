@@ -36,7 +36,7 @@ if (isset($_REQUEST["free"])&&isset($_REQUEST["free_staff"]))
 			$v["sz_id"]!=''?$sz="СЗ№: ".$v["sz_id"]."<br>":$sz="";
 			if ($r[$k]==0)
 			{
-				$subj=$dpt_staff.". Запрос на увольнение сотрудника";
+				$subj=$dpt_staff.". Запрос на увольнение сотрудника ".$fio_staff;
 				$text="Здравствуйте.<br>";
 				$text.="Заявка на увольнение сотрудника ".$fio_staff." отклонена.<br>";
 				$text.="Это связано с неполнотой / некорректностью поданных Вами данных.<br>";
@@ -50,7 +50,7 @@ if (isset($_REQUEST["free"])&&isset($_REQUEST["free_staff"]))
 			}
 			if ($r[$k]==1)
 			{
-				$subj=$dpt_staff.". Увольнение сотрудника";
+				$subj=$dpt_staff.". Увольнение сотрудника ".$fio_staff;
         
 				$text="Здравствуйте.<br>";
 				$text.="Здравствуйте, запрос на увольнение сотрудника ".$fio_staff." обработан и подтвержден.<br>Данный запрос отправлен ассистенту НДП, в отдел оплаты и ИТ-специалистам.<br>".$sz;
@@ -96,18 +96,18 @@ $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($data as $k=>$v)
 {
-$p = array(':tn' => $v["creator"]);
-$sql=rtrim(file_get_contents('sql/free_staff_childs.sql'));
-$sql=stritr($sql,$p);
-//echo $sql."<br>";
-$data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$data[$k]['childs']=$data1;
+    $p = array(':tn' => $v["creator"]);
+    $sql=rtrim(file_get_contents('sql/free_staff_childs.sql'));
+    $sql=stritr($sql,$p);
+    //echo $sql."<br>";
+    $data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $data[$k]['childs']=$data1;
 
-$sql=rtrim(file_get_contents('sql/free_staff_my_emp_all.sql'));
-$p = array(':tn' => $v["creator"]);
-$sql=stritr($sql,$p);
-$data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-$data[$k]['my_emp_all']=$data1;
+    $sql=rtrim(file_get_contents('sql/free_staff_my_emp_all.sql'));
+    $p = array(':tn' => $v["creator"]);
+    $sql=stritr($sql,$p);
+    $data1 = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    $data[$k]['my_emp_all']=$data1;
 }
 
 $smarty->assign('free_staff', $data);

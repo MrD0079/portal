@@ -519,7 +519,7 @@
 
 				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'string'}	{$i1.val_string}{/if}
-				{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
+				{if $i1.type eq 'textarea'}	{$i1.val_textarea|nl2br}{/if}
 				{if $i1.type eq 'number_int'}	{$i1.val_number_int|num:0}{/if}
 				{if $i1.type eq 'number'}	{$i1.val_number|num:5}{/if}
 				{if $i1.type eq 'datepicker'}	{$i1.val_datepicker}{/if}

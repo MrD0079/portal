@@ -12,22 +12,22 @@ v_dt='{$smarty.request.dt}';
 {literal}
 function load_ag()
 {
-x=loadwait_show('tp');
-$('#tp').load('?action=bud_svod_zp_ag&nohead=1',
-{
-	eta_list: $('#eta_list').val(),
-	exp_list_without_ts: $('#exp_list_without_ts').val(),
-	exp_list_only_ts: $('#exp_list_only_ts').val(),
-	fil: $('#fil').val(),
-	clusters: $('#clusters').val(),
-	dt: v_dt
-}
-,
-function() {
-	loadwait_hide(x);
-	
-}
-);
+    x=loadwait_show('tp');
+    $('#tp').load('?action=bud_svod_zp_ag&nohead=1',
+    {
+        eta_list: $('#eta_list').val(),
+        exp_list_without_ts: $('#exp_list_without_ts').val(),
+        exp_list_only_ts: $('#exp_list_only_ts').val(),
+        fil: $('#fil').val(),
+        clusters: $('#clusters').val(),
+        dt: v_dt
+    }
+    ,
+    function() {
+        loadwait_hide(x);
+
+    }
+    );
 }
 
 function new_unsheduled()

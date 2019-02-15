@@ -184,31 +184,43 @@ $(window).load(function(){
     });
     $("#net").on("change",TriggerChangeNet);
 
+    var flag_load_fil = false;
     function LoadDistribBonus(old_id_net = false){
-        if($('#bonus_distr_pers').val() == ""){
-            var fil_kod = 0;
-            if(typeof $("#fil_kod").val() != "undefined" && $("#fil_kod").val() != ""){
-                fil_kod = $("#fil_kod").val() ;
-            }else if (typeof $("#new_fil").val() != "undefined" && $("#new_fil").val() != "") {
-                fil_kod = $("[name*='new[fil]']").val() ;
-            };
-            $('#bonus_distr_pers').load('?action=sku_avk&print=1&pdf=1',{distrib_bonus:fil_kod},function(response, status, xhr) {
-                if(status == "success"){
-                    var resp = JSON.parse(response);
-                    var perc = resp.items[0].procent;
-                    if(typeof perc !== "undefined"){
-                        perc = NormalizeFloat(perc);
-                        perc *= 100;
-                        perc = perc.toFixed(2);
+        var fil_kod = 0;
 
-                    }else{
-                        perc = 0;
+        if(typeof $("#fil_kod").val() != "undefined" && $("#fil_kod").val() != ""){
+            fil_kod = $("#fil_kod").val() ;
+            flag_load_fil = true;
+        }else if (typeof $("#new_fil").val() != "undefined" && $("#new_fil").val() != "") {
+            fil_kod = $("[name*='new[fil]']").val() ;
+            flag_load_fil = true;
+        };
+        if(!flag_load_fil || fil_kod === null){
+            setTimeout(function(){
+                LoadDistribBonus();
+            },1000)
+        }else{
+            if($('#bonus_distr_pers').val() == ""){
+
+                $('#bonus_distr_pers').load('?action=sku_avk&print=1&pdf=1',{distrib_bonus:fil_kod},function(response, status, xhr) {
+                    if(status == "success"){
+                        var resp = JSON.parse(response);
+                        var perc = resp.items[0].procent;
+                        if(typeof perc !== "undefined"){
+                            perc = NormalizeFloat(perc);
+                            perc *= 100;
+                            perc = perc.toFixed(2);
+
+                        }else{
+                            perc = 0;
+                        }
+
+                        $(this).val(perc);
                     }
-
-                    $(this).val(perc);
-                }
-                InitSkuList(old_id_net);
-            });
+                    InitSkuList(old_id_net);
+                    reCalculateSkuAll();
+                });
+            }
         }
     }
     function NormalizeFloat(float){
@@ -227,7 +239,7 @@ $(window).load(function(){
             data: {
                 z_id:zid,
                 net_id: ($("#net").val() != "") ? $("#net").val() : 0,
-                sw_kod: ($("#net").val() != "") ? $("#sw_kod").val() : 0
+                sw_kod: ($("#sw_kod").val() != "") ? $("#sw_kod").val() : 0
             }
         }).then(function (data) {
             if(data.items[0].text && data.items[0].text.length > 0){
@@ -438,7 +450,7 @@ $(window).load(function(){
             '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][company_expenses]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td><input type="text" class="new change_input" name="sku_params['+sku.id_num+'][add_expenses]" size="5" style="text-align: center;"  value="'+sku.add_expenses+'"></td>'+
             '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][net_clear]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
-            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][summ_prom_cost]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>';
+            '<td style="background-color: #ffeb3b8a;"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][summ_prom_cost]" size="7" style="text-align: center;font-weight: bold;" readonly="readonly" value="0"></td>';
         outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][prom_costs_discount]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][total_network_costs]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>';
         outputHTML += outputHTMLCalculated;
@@ -738,6 +750,7 @@ $(window).load(function(){
             var total_arr = {};
             total_arr['total_vol_price'] =0;
             total_arr['total_volume_price_one_discount'] =0;
+            total_arr['bonus_net_sku'] =0;
             total_arr['expected_vp'] =0;
             total_arr['akc_expenses'] =0;
             total_arr['share_expenses'] =0;
@@ -751,6 +764,7 @@ $(window).load(function(){
             $("#sku_selected tbody tr").each(function(e){
                 total_arr['total_vol_price'] += parseFloat($(this).find("input[name*='[total_volume_price_one]']").val());
                 total_arr['total_volume_price_one_discount'] += parseFloat($(this).find("input[name*='[total_volume_price_one_discount]']").val());
+                total_arr['bonus_net_sku'] += parseFloat($(this).find("input[name*='[bonus_net]']").val());
                 total_arr['expected_vp'] += parseFloat($(this).find("input[name*='[expected_vp]']").val());
                 total_arr['akc_expenses'] += parseFloat($(this).find("input[name*='[akc_expenses]']").val());
                 total_arr['share_expenses'] += parseFloat($(this).find("input[name*='[share_expenses]']").val());

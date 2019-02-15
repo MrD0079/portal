@@ -109,7 +109,7 @@ ORDER BY name
 
     if (isset($_REQUEST["save"]))
     {
-            if (!isset($_REQUEST["admin"]))
+            if (!isset($_REQUEST["admin"]) || $tn == 614206005612) /* access to Kajdashova */
             {
                     foreach ($_REQUEST["bud_ru_acceptors"] as $k=>$v)
                     {
@@ -156,7 +156,7 @@ ORDER BY name
             isset($_REQUEST["new"]["dt_end"]) ? $_REQUEST["new"]["dt_end"]=OraDate2MDBDate($_REQUEST["new"]["dt_end"]) : null;
             Table_Update("bud_ru_zay",$keys,$_REQUEST["new"]);
             $keys = array("z_id"=>$id);
-            if (!isset($_REQUEST["admin"]))
+            if (!isset($_REQUEST["admin"]) || $tn == 614206005612) /* access to Kajdashova */
             {
                     Table_Update("bud_ru_zay_accept",$keys,null);
                     Table_Update("bud_ru_zay_executors",$keys,null);

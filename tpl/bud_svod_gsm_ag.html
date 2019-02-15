@@ -1,5 +1,11 @@
 {if $zp_ag_total.fil_null}<p style="color:red;">На закладке "Заработная плата" не привязаны к филиалам {$zp_ag_total.fil_null} агентов(-а)</p>{/if}
 
+{if $is_ts and $access_edit eq false}
+<p style="font-weight: bold;padding: 5px 10px;border: 1px solid #eee;display: inline-block;background-color: #eee;color: #e63434;">
+	Период редактирования данных закрыт. По всем вопросам обращаться в "фин.отдел"
+</p>
+{/if}
+
 <h3>
 ГСМ
 </h3>

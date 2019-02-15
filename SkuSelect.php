@@ -37,10 +37,10 @@ class SkuSelect
                 '<td rowspan="2">Вес, кг</td>' .
                 '<td rowspan="2">СС,грн/кг</td>' .
                 '<td rowspan="2">Цена своб.-отпускн. Укр.,грн</td>' .
-                '<td rowspan="2">Цена Спец-ии КК, грн</td>' .
-                '<td rowspan="2">Цена за продажи в сеть за ед.,грн</td>';
+                '<td rowspan="2">Цена Спец-ии КК, грн без НДС</td>' .
+                '<td rowspan="2">Цена за продажи в сеть за ед.,грн без НДС</td>';
             if ($ack_type == 2 && $is_calc)
-                $html .= '<td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн</td>';
+                $html .= '<td rowspan="2" class="type2">Цена за продажи в сеть за ед. со скидкой,грн без НДС</td>';
             $html .= '<td rowspan="2">Объем продажи,шт.</td>';
             if ($is_calc) {
                 $html .= '<td rowspan="2">Объем продажи,кг.</td>' .
@@ -66,7 +66,7 @@ class SkuSelect
                 $html .= '<td>Бонус дистриб, тыс. грн</td>' .
                     '<td>Расходы по логистике, тыс. грн</td>' .
                     '<td>Расходы Компании, тыс. грн</td>' .
-                    '<td>Доп. затраты, тыс. грн</td>' .
+                    '<td>Доп. затраты, грн</td>' .
                     '</tr>';
             }
             $html .= '</thead>' .
@@ -130,7 +130,7 @@ class SkuSelect
                         '<td>'.$this->transferToThousands($sku['company_expens_total']).'</td>'.
                         '<td>'.$sku['add_expens'].'</td>'.
                         '<td>'.$this->transferToThousands($sku['net_clear']).'</td>'.
-                        '<td>'.$this->transferToThousands($sku['summ_prom_cost']).'</td>';
+                        '<td style="background-color: #ffeb3b8a;">'.$this->transferToThousands($sku['summ_prom_cost']).'</td>';
                     if ($ack_type == 2)
                         $html .= '<td class="type2">'.$this->transferToThousands($sku['prom_costs_discount']).'</td>'.
                         '<td class="type2">'.$this->transferToThousands($sku['total_network_costs']).'</td>';
@@ -156,7 +156,7 @@ class SkuSelect
             if($is_calc) {
                 $html .= '<tfoot align="center" style="background: #ffc">' .
                     '<tr style="font-weight:bold; text-align: center;">' .
-                    '<td colspan="'.(($ack_type == 1)?'10':'11').'" class="colspan11" >ИТОГО</td>' .
+                    '<td colspan="'.(($ack_type == 1)?'10':'11').'" class="colspan11" >ИТОГО (тыс. грн)</td>' .
                     '<td>' . $this->transferToThousands($data_total['total_vol_price']) . '</td>' ;
                     if ($ack_type == 2)
                         $html .='<td>' . $this->transferToThousands($data_total['total_volume_price_one_discount']) . '</td>' ;
@@ -169,7 +169,7 @@ class SkuSelect
                     '<td>' . $this->transferToThousands($data_total['company_expens_total']) . '</td>' .
                     '<td>' . $this->transferToThousands($data_total['add_expens']) . '</td>' .
                     '<td>' . $this->transferToThousands($data_total['net_clear']) . '</td>' .
-                    '<td>' . $this->transferToThousands($data_total['summ_prom_cost']) . '</td>' ;
+                    '<td >' . $this->transferToThousands($data_total['summ_prom_cost']) . '</td>' ;
                     if ($ack_type == 2) {
                         $html .= '<td>' . $this->transferToThousands($data_total['prom_costs_discount']) . '</td>' .
                             '<td>' . $this->transferToThousands($data_total['total_network_costs']) . '</td>';
@@ -188,7 +188,10 @@ class SkuSelect
     }
 
     private function transferToThousands($number){
-       return number_format(($number*0.001), 5, '.', ' ');
+        $dec_point = '.';
+        if(isset($_REQUEST['print']) && $_REQUEST['print'] == 1)
+            $dec_point = ',';
+       return number_format(($number*0.001), 5, $dec_point, ' ');
     }
 
     private function CalculateSku(&$data,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null){
@@ -196,7 +199,7 @@ class SkuSelect
             return false;
         $is_calc = false;
         try {
-            if (!is_null($net_id)) {
+            if (!is_null($fil_kod)) {
                 $bonus_distr_pers = $this->modalGetDistribBonus($fil_kod);
             }else{
                 $bonus_distr_pers = 0;
@@ -204,7 +207,7 @@ class SkuSelect
             if (!is_null($bonus_net_perc)) {
                 $akciya_expences_perc /= 100;
                 $bonus_net_perc /= 100;
-                $bonus_distr_pers /= 100;
+                //$bonus_distr_pers /= 100;
             }
 
             foreach ($data as $k => $sku) {
@@ -233,9 +236,9 @@ class SkuSelect
                     $data[$k]['akc_expenses'] = $data[$k]['total_volume_price_one'] * $akciya_expences_perc;//затраты по акции б/н
                     $data[$k]['logistics_expens_total'] = $data[$k]['logistic_expens']*$data[$k]['total_volume_price'];//Расходы по логистике
 
-/*company_expens*/  $company_expens = $data[$k]['company_expens']*$data[$k]['total_volume_price'];
-                    $market_val = $data[$k]['market_val']*$data[$k]['total_volume_price'];
-/*revenue_val*/     $data[$k]['company_expens_total'] = ($company_expens + $market_val) / ($data[$k]['revenue_val'] * 1000) * $data[$k]['total_volume_price_one'];//Расходы компании
+/*company_expens*/  $company_expens = $data[$k]['company_expens'];
+                    $market_val = $data[$k]['market_val'];
+/*revenue_val*/     $data[$k]['company_expens_total'] = ($company_expens + $market_val) / $data[$k]['revenue_val']  * $data[$k]['total_volume_price_one'];//Расходы компании
                     $all_expenses = $data[$k]['bonus_net_sku'] + $data[$k]['share_expenses'] + $data[$k]['logistics_expens_total'] + $data[$k]['company_expens_total'] + $data[$k]['add_expens'];
                     $data[$k]['net_clear'] = $data[$k]['expected_vp'] - $all_expenses;//чистая прибыль
                     if ($akc_type == 1)
@@ -243,6 +246,7 @@ class SkuSelect
                     $data[$k]['summ_prom_cost'] = $data[$k]['akc_expenses'] * 1.2; // Сумма затрат по акции, грн с НДС
                     $data[$k]['prom_costs_discount'] = $data[$k]['total_volume_price_one'] - $data[$k]['total_volume_price_one_discount'];//Расходы по акции в скидке
                     $data[$k]['total_network_costs'] = $all_expenses + $data[$k]['prom_costs_discount'];//Всего затрат по сети
+
                 }
             }
             return $is_calc;
@@ -262,17 +266,17 @@ class SkuSelect
             $sql = trim(preg_replace('/\s+/', ' ', $sql));
 
             $get_list = $this->db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-            if (isset($get_list))
+            if (isset($get_list) && count($get_list) >= 1)
             {
-                $distrBonus = $get_list['procent'];
+                $distrBonus = $get_list[0]['procent'];
             }
-
         }
         return $distrBonus;
     }
 
     private function NormalizeFloat($number){
         $number = $number."";
+
         if(substr($number,0,1) == "."){
             return number_format((float)$number, 3, '.', '');
         }
@@ -282,7 +286,10 @@ class SkuSelect
     }
 
     public function convertFloatToHTML($number = 0,$decimals = 3){
-        return number_format($number, $decimals, '.', '');
+        $dec_point = '.';
+        if(isset($_REQUEST['print']) && $_REQUEST['print'] == 1)
+            $dec_point = ',';
+        return number_format($number, $decimals, $dec_point, '');
     }
 
     public function GetSkuList($z_id,$akc_type,$bonus_net_perc = null,$net_id = null,$akciya_expences_perc = null,$fil_kod=null,$print = true){

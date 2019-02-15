@@ -135,7 +135,7 @@
 				{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 				{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 				{if $i1.type eq 'string'}	{$i1.val_string}{/if}
-				{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
+				{if $i1.type eq 'textarea'}	{$i1.val_textarea|nl2br}{/if}
 				{if $i1.type eq 'number_int'}	{$i1.val_number_int|num:0}{/if}
 				{if $i1.type eq 'number'}	{$i1.val_number|num:5}{/if}
 				{if $i1.type eq 'datepicker'}	{$i1.val_datepicker}{/if}
@@ -199,7 +199,7 @@
 					{if $i1.type eq 'formula'}	{$i1.val_formula}{/if}
 					{if $i1.type eq 'list'}		{$i1.val_list_name}{/if}
 					{if $i1.type eq 'string'}	{$i1.val_string}{/if}
-					{if $i1.type eq 'textarea'}	{$i1.val_textarea}{/if}
+					{if $i1.type eq 'textarea'}	{$i1.val_textarea|nl2br}{/if}
 					{if $i1.type eq 'number_int'}	{$i1.val_number_int|num:0}{/if}
 					{if $i1.type eq 'number'}	{$i1.val_number|num:5}{/if}
 					{if $i1.type eq 'datepicker'}	{$i1.val_datepicker}{/if}
@@ -265,7 +265,7 @@
 							{/if}
 						{/if}
 					{else}
-						{if $i1.type eq 'textarea'}	{$i1.rep_val_textarea}{/if}
+						{if $i1.type eq 'textarea'}	{$i1.rep_val_textarea|nl2br}{/if}
 						{if $i1.type eq 'file'}
 							{foreach key=k2 item=i2 from=$i1.rep_val_file}
 								<nobr><a target=_blank href="files/bud_ru_zay_files/{$i.head.id}/{$i1.ff_id}/report/{$i2}">{$i2}</a></nobr>&nbsp
