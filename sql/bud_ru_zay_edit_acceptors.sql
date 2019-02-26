@@ -25,7 +25,7 @@ SELECT ROWNUM - 1 num, tn
             FROM PERSIK.bud_ru_zay_accept
            WHERE z_id = :id
              and child=0
-           UNION select 2923402273 , 9999999 as accept_order  FROM Dual
+           /*UNION select 2923402273 , 9999999 as accept_order  FROM Dual*/ /* add Babec */
       )
     GROUP BY tn
    ORDER BY accept_order

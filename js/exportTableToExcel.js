@@ -135,6 +135,7 @@
             if (isBrowserIE()) {
 
                 alert('Pleas, use another browser!');
+                return "";
             }
             else {
                 var excelFile = "<html xml:lang=" + $defaults.locale + " xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
@@ -156,16 +157,20 @@
                 excelFile += "</x:ExcelWorkbook>";
                 excelFile += "</xml>";
                 excelFile += "<![endif]-->";
+                excelFile += "<title>{worksheet}</title>";
                 excelFile += "</head>";
                 excelFile += "<body>";
-                excelFile += htmltable.replace(/"/g, '\'');
+                excelFile += "{table}";
+                //excelFile += htmltable.replace(/"/g, '\'');
                 excelFile += "</body>";
                 excelFile += "</html>";
 
                 var uri = "data:application/vnd.ms-excel;base64,";
                 var ctx = { worksheet: $settings.worksheetName, table: htmltable };
-
-                return (uri + base64(format(excelFile, ctx)));
+                console.log($settings.worksheetName);
+                var doc = format(excelFile, ctx);
+                var res = uri + base64(doc);
+                return res;
             }
         }
 

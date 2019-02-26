@@ -459,12 +459,14 @@ $(window).load(function(){
         SkuSelectedInit();
         ChangeAkciyaType(akc_type);
         $("#sku_selected").css("display","table");
+        $("#export-to-excel").css("display","inline-block");
     }
 
     function RemoveSkuHTML(sku_id){
         $("#sku_selected tr[data-sku-id='"+sku_id+"']").remove();
-        if($("#sku_selected tbody tr").length <= 0)
-            $("#sku_selected").css("display","none");
+        if($("#sku_selected tbody tr").length <= 0){
+            $("#sku_selected, #export-to-excel").css("display","none");
+        }
     }
     function SetAkciyaTypeToSelect(){
         var akc_type = $("#akciya_type").val();
