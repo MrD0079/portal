@@ -164,6 +164,7 @@ if (isset($_REQUEST["save"]))
 			$keys = array("id"=>$k);
 			$vals = array("report_done"=>$v);
 			Table_Update("bud_ru_zay",$keys,$vals);
+			//tu: save
 		}
 	}
 	if (isset($_REQUEST["report_zero_cost"]))
