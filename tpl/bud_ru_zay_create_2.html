@@ -175,8 +175,10 @@
                         <td>Дата создания {if $smarty.request.tu eq 1}ТУ{else}заявки{/if}</td>
                         <td>{$now}</td>
                 </tr>
-                <tr>
-                        <td>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}</td>
+                <tr>    {$kk_categories = [39,37,2,3,4,5,6,41,8]}
+                        <td>Дата начала {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности
+                            {if $smarty.request.tu neq 1 and $smarty.request.new.statya|in_array:$kk_categories}<br>(загрузки сети под акцию){/if}
+                            {/if}</td>
                         <td>
                             {if !$smarty.request.for_kk and !$smarty.request.new.id_net}
                             <input id="master" class="datepicker" size=10 name=new[dt_start] value="{$smarty.request.new.dt_start}"
@@ -189,7 +191,9 @@
                         </td>
                 </tr>
                 <tr>
-                        <td>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности{/if}</td>
+                        <td>Дата окончания {if $smarty.request.tu eq 1}действия ТУ{else}проведения активности
+                            {if $smarty.request.tu neq 1 and $smarty.request.new.statya|in_array:$kk_categories}<br>(загрузки сети под акцию){/if}
+                            {/if}</td>
                         <td>
                             {if !$smarty.request.for_kk and !$smarty.request.new.id_net}
                             <input id="slave" class="datepicker" size=10 name=new[dt_end] value="{$smarty.request.new.dt_end}">

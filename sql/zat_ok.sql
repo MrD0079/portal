@@ -112,5 +112,5 @@ SELECT ROWNUM,
                         TO_DATE ( :sd, 'dd.mm.yyyy')
         ORDER BY emp_name, zm.y, zm.m) z
  WHERE     INSTR ( :is_accepted, TO_CHAR (zat_monthly_is_accepted)) > 0
-       AND INSTR ( :is_processed, TO_CHAR (zat_monthly_is_processed)) > 0
+       /*AND INSTR ( :is_processed, TO_CHAR (zat_monthly_is_processed)) > 0*/
        AND exp_tn_compare = :exp_tn

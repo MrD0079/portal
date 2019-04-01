@@ -29,7 +29,11 @@ $smarty->assign('tp', $x);
 
 $sql = rtrim(file_get_contents('sql/bud_svod_tun_tpn.sql'));
 $sql=stritr($sql,$params);
+
+//echo "<pre style='display: none;text-align: left;'>";
 //echo $sql;
+//echo "</pre>";
+
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $sqld = rtrim(file_get_contents('sql/bud_svod_tun_tpn_det.sql'));
 foreach ($x as $k=>$v)

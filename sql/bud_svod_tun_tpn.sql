@@ -1,4 +1,10 @@
 /* Formatted on 03.08.2017 13:31:51 (QP5 v5.252.13127.32867) */
+
+ SELECT
+    NVL(tc_st.status,-1) as status,
+    tc_st.date_upd as tc_status_upd,
+    q.*
+  FROM (
   SELECT s.net_kod,
          s.net,
          s.isrc,
@@ -202,3 +208,10 @@ GROUP BY s.net_kod,
          s.db,
          s.taf_ok_db_tn
 ORDER BY s.net
+  ) q
+  ,bud_ru_zay_ff zf,
+  tc_status tc_st
+  WHERE q.NET_KOD = zf.val_list(+)
+        AND zf.FF_ID = 100027047
+        AND zf.z_id = tc_st.zay_id(+)
+ORDER BY q.net

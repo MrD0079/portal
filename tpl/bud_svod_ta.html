@@ -86,15 +86,17 @@
 		</td>
 	</tr>
 	<tr>
+
 		<td>
 		</td>
 		<td>
-			<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=1 checked>все
-			<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=2>подтверждено ПР ДБ
-			<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=3>не подтверждено ПР ДБ
-			<script>
-				$("input[name=ok_pr][value={$smarty.request.ok_pr}]").attr('checked',true);
-			</script>
+			<input type="hidden" name="ok_pr" value="1">
+			<!--<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=1 checked>все-->
+			<!--<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=2>подтверждено ПР ДБ-->
+			<!--<input onClick="$('#ok_pr').val(this.value)" type=radio name="ok_pr" value=3>не подтверждено ПР ДБ-->
+			<!--<script>-->
+				<!--$("input[name=ok_pr][value={$smarty.request.ok_pr}]").attr('checked',true);-->
+			<!--</script>-->
 		</td>
 	</tr>
 	<tr>
@@ -155,7 +157,7 @@ $('#tp').load('?action=bud_svod_ta_list&nohead=1',
 	dt: $('#dt').val(),
 	ok_db: $('input[name=ok_db]:checked').val(),
 	ok_t1: $('input[name=ok_t1]:checked').val(),
-	ok_pr: $('input[name=ok_pr]:checked').val(),
+	ok_pr: $('input[name=ok_pr]:checked').val(), //<-- не учавствует (убрать это)
 	ok_t2: $('input[name=ok_t2]:checked').val(),
 }
 ,

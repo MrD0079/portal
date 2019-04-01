@@ -31,7 +31,7 @@
 <td>{$funds.prm.fund_name}</td>
 <td style="background-color: rgb(204, 255, 255);">Затраты через ДБ</td>
 <td>ДБ</td>
-<td>Прямой руководитель ДБ</td>
+<!--<td>Прямой руководитель ДБ</td>-->
 <td>ВСТМ 1й этап</td>
 <td>ВСТМ 2й этап</td>
 </tr>
@@ -88,19 +88,21 @@
 	{$i.ok_db_lu}
 	{$i.ok_db_fio}
 </td>
-<td id=td_ok_pr_tn{$i.fil_id} style="text-align:center">
-	{if $tn eq $i.tn_pr and not $i.ok_t1_tn}
-	<input
-		type=checkbox
-		{if $i.ok_pr_tn}checked{/if}
-		onChange="save('{$smarty.request.dt}','f','ok_pr_tn',this.checked?{$tn}:'',{$i.fil_id});"
-	>
-	{/if}
-	{$i.ok_pr_lu}
-	{$i.ok_pr_fio}
-</td>
+	<!-- delete-->
+<!--<td id=td_ok_pr_tn{$i.fil_id} style="text-align:center">-->
+	<!--{if $tn eq $i.tn_pr and not $i.ok_t1_tn}-->
+	<!--<input-->
+		<!--type=checkbox-->
+		<!--{if $i.ok_pr_tn}checked{/if}-->
+		<!--onChange="save('{$smarty.request.dt}','f','ok_pr_tn',this.checked?{$tn}:'',{$i.fil_id});"-->
+	<!--&gt;-->
+	<!--{/if}-->
+	<!--{$i.ok_pr_lu}-->
+	<!--{$i.ok_pr_fio}-->
+<!--</td>-->
+	<!--delete end-->
 <td id=td_ok_t1_tn{$i.fil_id} style="text-align:center">
-	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and $i.ok_pr_tn and not $i.ok_t2_tn}
+	{if (($is_traid and $i.fil_kk eq 0) or ($is_traid_kk and $i.fil_kk eq 1)) and not $i.ok_t2_tn}
 	<input
 		type=checkbox
 		{if $i.ok_t1_tn}checked{/if}

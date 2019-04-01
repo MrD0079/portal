@@ -29,8 +29,9 @@ $params=array(
 $sql = rtrim(file_get_contents('sql/bud_svod_tus_tp.sql'));
 $sql=stritr($sql,$params);
 
-
-//echo $sql;
+echo "<pre style='display: none;text-align: left;'>";
+echo $sql;
+echo "</pre>";
 
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('tp', $x);

@@ -7,6 +7,8 @@
          s.tp_kod,
          s.tp_type,
          s.bedt_summ,
+         NVL(tc_st.status,-1) as status,
+         tc_st.date_upd as tc_status_upd,
          t.delay,
          t.discount,
          t.bonus,
@@ -91,8 +93,10 @@
                  AND fil IS NOT NULL) zp,
          (SELECT fil, ok_db_tn
             FROM bud_svod_taf
-           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf
+           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf,
+        tc_status tc_st
    WHERE     zp.fil = taf.fil(+)
+         AND t.id = tc_st.zay_id(+)
          AND s.tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
     and u.is_spd=1

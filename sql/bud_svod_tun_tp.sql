@@ -7,6 +7,8 @@
          s.tp_kod,
          s.tp_type,
          s.bedt_summ,
+         NVL(tc_st.status,-1) as status,
+         tc_st.date_upd as tc_status_upd,
          t.delay,
          t.discount,
          t.bonus,
@@ -77,7 +79,8 @@
             FROM a14mega m
            WHERE m.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt) s,
          user_list u,
-         (  SELECT tp_kod,
+         (  SELECT id,
+                   tp_kod,
                    chain,
                    AVG (delay) delay,
                    AVG (discount) discount,
@@ -132,7 +135,7 @@
                                   1                                      /*0*/
                            AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))
                                   IS NOT NULL)
-          GROUP BY tp_kod, chain) t,
+          GROUP BY id, tp_kod, chain) t,
          sc_svodn sv,
          (SELECT fil, h_eta
             FROM bud_svod_zp
@@ -141,8 +144,10 @@
                  AND fil IS NOT NULL) zp,
          (SELECT fil, ok_db_tn
             FROM bud_svod_taf
-           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf
+           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf,
+        tc_status tc_st
    WHERE     zp.fil = taf.fil(+)
+         AND t.id = tc_st.zay_id(+)
          AND s.tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
    and u.is_spd=1

@@ -7,7 +7,7 @@
 		<li><a href="files/ua/INSTRUKTSIYA_BYUDZHETI.pdf">Начало работы</a></li>
 
 		{if
-			($is_kk or $is_admin or $is_super or $is_fin_man)
+			($is_kk or $is_admin or $is_super or $is_fin_man or $is_tm)
 			and
 			($cnt_kod eq "ua" or $cnt_kod eq "exp")
 			and
@@ -72,7 +72,7 @@
 				<li>
 					<a href="javascript:void(0);"><span class="dir">Возврат</span></a>
 					<ul>
-						{if $is_admin or $is_mkk}
+						{if $is_admin or $is_mkk or $is_tm}
 							<li><a href="?action=rzaycreate">Заявка на возврат</a></li>
 						{/if}
 						<li><a href="?action=rzayreestr">Реестр возвратов</a></li>

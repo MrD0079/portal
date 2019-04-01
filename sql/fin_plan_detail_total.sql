@@ -136,6 +136,7 @@ SELECT SUM (m.cnt) cnt,
                                        WHERE svideninn = :tn),
                                     24, n.tn_mkk,
                                     34, n.tn_rmkk,
+                                    181976662, n.tn_rmkk, /* Cherkasski */
                                     63, :tn,
                                     65, :tn,
                                     67, :tn,
@@ -151,6 +152,9 @@ SELECT SUM (m.cnt) cnt,
                                    34, (SELECT DISTINCT tn_rmkk
                                           FROM nets
                                          WHERE tn_mkk = m.mkk_ter),
+                                   181976662, (SELECT DISTINCT tn_rmkk
+                                              FROM nets
+                                             WHERE tn_mkk = m.mkk_ter),
                                    63, :tn,
                                    65, :tn,
                                    67, :tn,

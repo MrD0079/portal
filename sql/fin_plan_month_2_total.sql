@@ -53,6 +53,7 @@
                             WHERE svideninn = :tn),
                           24, n.tn_mkk,
                           34, n.tn_rmkk,
+                          181976662, n.tn_rmkk, /* Cherkasski */
                           63, :tn,
                           65, :tn,
                           67, :tn,

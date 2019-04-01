@@ -200,7 +200,9 @@ function getTable($payer,$invoice_sended,$ok_fm,$ok_rmkk)
 		':tn'=>$tn
 	);
 	$sql=stritr($sql,$params);
-	//echo $sql;
+//	echo "<pre style='display: none;text-align:left;'>";
+//	echo $sql;
+//    echo "</pre>";
 	$invoices = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	foreach ($invoices as $k=>$v)
 	{

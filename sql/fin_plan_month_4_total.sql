@@ -55,6 +55,9 @@
                             34, (SELECT DISTINCT tn_rmkk
                                    FROM nets
                                   WHERE tn_mkk = m.mkk_ter),
+                            181976662, (SELECT DISTINCT tn_rmkk
+                                    FROM nets
+                                    WHERE tn_mkk = m.mkk_ter), /* Cherkasski */
                             63, :tn,
                             65, :tn,
                             67, :tn,

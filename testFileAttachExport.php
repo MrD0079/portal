@@ -1,28 +1,49 @@
 <?php
-$p=array(':zid' => isset($_REQUEST['zid']) ? 'AND Z.SOURCE_KOD = '.$_REQUEST['zid'] : '');
+$p=isset($_REQUEST['zid']) ? ' AND Z.SOURCE_KOD = '.$_REQUEST['zid'] : '';
 
-$sql = "
-
-SELECT  
+$source_kod = array(181174764,
+    180709914,
+    180910554,
+    180640327,
+    180776907,
+    180488876,
+    181037399,
+    181245372,
+    181037711,
+    180640592,
+    180640507,
+    181174676,
+    180910906,
+    181245503,
+    180911499,
+    180911133);
+$in = " AND z.source_kod IN (".implode(',',$source_kod).")";
+$in = "";
+$params = array(
+    ':zid'=>$p,
+    ':in_array'=> $in
+);
+$sql = "SELECT  
         z.file_type,
+
         CASE 
             WHEN z.file_type = 'last_year'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/102209275/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 102209275)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/102209275/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 102209275)
 
             WHEN z.file_type = 'location'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100829427/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829427)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100829427/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829427)
             
             WHEN z.file_type = 'spec'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100829429/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829429)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100829429/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829429)
             
             WHEN z.file_type = 'planogram'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100829430/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829430)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100829430/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829430)
             
             WHEN z.file_type = 'comm_agree'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100850052/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100850052)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100850052/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100850052)
             
             WHEN z.file_type = 'syst_dc'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/103466356/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 103466356)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/103466356/report/'||zf.val_file FROM bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 103466356)
             
             ELSE NULL
           END url,
@@ -56,6 +77,7 @@ SELECT
           THEN 'syst_dc'
           ELSE NULL
         END file_type
+        
 
     FROM bud_ru_zay z,
         bud_ru_zay_ff ff,
@@ -66,11 +88,11 @@ SELECT
          AND z.fil = f.id(+)
          AND z.id = ff.z_id     
         ) z
-WHERE z.file_type IS NOT NULL AND z.report_data IS NOT NULL 
+WHERE z.file_type IS NOT NULL AND z.report_data IS NOT NULL :in_array
   /*AND Z.SOURCE_KOD = 121500341 */
   :zid
 ";
-$sql=stritr($sql,$p);
+$sql=stritr($sql,$params);
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($data as $k=>$v)

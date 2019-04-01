@@ -9,7 +9,7 @@ InitRequestVar("dt",$_SESSION["month_list"]);
 InitRequestVar("funds",0);
 InitRequestVar("ok_db",1);
 InitRequestVar("ok_t1",1);
-InitRequestVar("ok_pr",1);
+InitRequestVar("ok_pr",1); //<----- убрать это
 InitRequestVar("ok_t2",1);
 
 $params=array(

@@ -9,7 +9,7 @@
    WHERE     bud_ru_zay.tn = u.tn
          AND bud_ru_zay.funds = b.id
          AND u.tn > 0
-         AND TRIM (u.department_name) IS NOT NULL
+          /*AND TRIM (u.department_name) IS NOT NULL*/
 /*         AND (   f.slave = bud_ru_zay.tn
               OR (SELECT NVL (is_do, 0)
                     FROM user_list

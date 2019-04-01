@@ -568,6 +568,7 @@ $smarty->assign('bud_ru_ff_st', $bud_ru_ff_st);
 
 
 
+
 }
 
 include "SkuSelect.php";

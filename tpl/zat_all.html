@@ -104,20 +104,8 @@
 					{/foreach}
 				</select>
 				<br>
-				<table width=200px>
-					<tr>
-						<td valign=top align=left>
-							Показывать сотрудников, у которых статус отчета:
-							<br>
-							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_processed id=is_processed value=10>Любой
-							<br>
-							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_processed id=is_processed value=1>Обработан
-							<br>
-							<input type=radio onchange="$('#form_zat').trigger('submit');" name=is_processed id=is_processed value=0>Не обработан
-						</td>
-					</tr>
-				</table>
-				<br>
+				<input type=hidden name=is_processed id=is_processed value=10>
+
 				{foreach key=key1 item=item1 from=$zat_processed}
 					{$item1.rownum}
 					<a target=_blank href="?action=zat&emp_tn={$item1.emp_tn}&month_list={$item1.rep_date}&readonly=1">{$item1.emp_name}</a>

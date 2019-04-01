@@ -545,6 +545,7 @@ ORDER BY act_month, act_name)
                    AND sv.dt(+) = s.dt
                    AND :dpt_id = sv.dpt_id(+)
                    AND (discount > 0 OR bonus > 0 OR fixed > 0 OR margin > 0 OR sv.bonus_fakt > 0 OR sv.fixed_fakt > 0)
+                   AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                    AND zp.h_eta = s.h_eta
                    AND s.dt = zp.dt
                    AND (SELECT COUNT (*)
@@ -636,6 +637,7 @@ ORDER BY act_month, act_name)
                            AND sv.dt(+) = s.dt
                            AND s.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
                            AND :dpt_id = sv.dpt_id(+)
+                           AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                            AND (   :exp_list_without_ts = 0
                                 OR u.tn IN (SELECT slave
                                               FROM full
@@ -772,6 +774,7 @@ ORDER BY act_month, act_name)
                              AND s.db = sv.db(+)
                              AND s.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy') AND TO_DATE ( :ed, 'dd.mm.yyyy')
                              AND :dpt_id = sv.dpt_id(+)
+                             AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                              AND (SELECT COUNT (*)
                                     FROM bud_funds
                                    WHERE dpt_id = :dpt_id AND id = :funds AND kod = 'svs') <> 0

@@ -19,6 +19,9 @@
                    WHERE tn = :tn) = 1
               OR (SELECT NVL (is_super, 0)
                     FROM user_list
+                   WHERE tn = :tn) = 1
+              OR (SELECT NVL (is_tm, 0)
+                    FROM user_list
                    WHERE tn = :tn) = 1)
          AND (f.data_end IS NULL OR f.data_end >= TRUNC (SYSDATE))
          AND f.kk = 1

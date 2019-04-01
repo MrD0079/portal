@@ -653,6 +653,7 @@ GROUP BY fil, fund_id) act,
                                           OR margin > 0
                                           OR sv.bonus_fakt > 0
                                           OR sv.fixed_fakt > 0)
+                                     AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                                      AND zp.h_eta = s.h_eta
                                      AND (   :exp_list_without_ts = 0
                                           OR u.tn IN (SELECT slave
@@ -902,6 +903,7 @@ GROUP BY fil, fund_id) act,
                                              AND sv.dt(+) = s.dt
                                              AND s.dt = TO_DATE ( :dt, 'dd.mm.yyyy')
                                              AND :dpt_id = sv.dpt_id(+)
+                                             AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                                              AND (   :exp_list_without_ts = 0
                                                   OR u.tn IN (SELECT slave
                                                                 FROM full
@@ -1109,6 +1111,7 @@ GROUP BY fil, fund_id) act,
                                                AND s.db = sv.db(+)
                                                AND s.dt = TO_DATE ( :dt, 'dd.mm.yyyy')
                                                AND :dpt_id = sv.dpt_id(+)
+                                               AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                                       GROUP BY s.dt, s.fil)
                             GROUP BY fil) svs_new
                      WHERE     tf.fil_id = zay.fil(+)

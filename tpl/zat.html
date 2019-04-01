@@ -18,8 +18,7 @@
 	)
 	and
 	$smarty.request.print neq 1
-	and
-	$zat_monthly.is_processed neq 1
+
 }
 {assign var=zat_enabled value=1}
 {else}
@@ -63,7 +62,7 @@
 <table border=0 cellspacing=0 cellpadding=10>
 	<tr>
 	<td>
-		Ф.И.О.: <b>{$emp_fio}</b>
+		Ф.И.О.: <b>{$emp_fio}	</b>
 		<br>
 		Должность: <b>{$pos}</b>
 		<br>
@@ -71,11 +70,7 @@
 		<br>
 		Отчет принят:
 
-		<pre style="display: none;text-align: left;">
-			is_acceptor-{if $is_acceptor eq 1} true {else} false{/if}
-		</pre>
-
-		{if not $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $zat_monthly.is_processed neq 1 and $is_acceptor neq 1}
+		{if not $self and $smarty.request.print neq 1 and $smarty.request.readonly neq 1 and $is_acceptor neq 1}
 			<select name="zat_monthly[is_accepted]" id="zat_monthly_is_accepted"><option value=0>нет</option><option value=1>да</option></select>
 			<script>$("#zat_monthly_is_accepted option[value='{$zat_monthly.is_accepted}']").prop('selected', true);</script>
 		{else}
@@ -84,18 +79,10 @@
 			</b>
 		{/if}
 		<br>
-		Отчет обработан:
-		{if not $self and $smarty.request.print neq 1 and $zat_monthly.is_accepted eq 1 and $is_acceptor eq 1}
-			<select name="zat_monthly[is_processed]" id="zat_monthly_is_processed"><option value=0>нет</option><option value=1>да</option></select>
-			<script>$("#zat_monthly_is_processed option[value='{$zat_monthly.is_processed}']").prop('selected', true);</script>
-		{else}
-			<b>
-			{if $zat_monthly.is_processed eq 1}да{else}нет{/if}
-			</b>
-		{/if}
+
 	</td>
 	{if ($smarty.request.print neq 1 and $smarty.request.readonly neq 1) or ($is_acceptor eq 1 and $smarty.request.print neq 1)}
-	{if $self and $zat_monthly.is_processed neq 1 and $zat_monthly.is_accepted neq 1}
+	{if $self and $zat_monthly.is_accepted neq 1}
 	<td>
 		<input type=submit name=copy_city value="Скопировать города тр.=>ком.">
 	</td>
@@ -123,16 +110,14 @@
 			$self
 			and
 			$zat_monthly.is_accepted neq 1
-			and
-			$zat_monthly.is_processed neq 1
+
 			)
 			or
 			(
 			$is_acceptor
 			and
 			$zat_monthly.is_accepted eq 1
-			and
-			$zat_monthly.is_processed neq 1
+
 			))
 		}
 			<select id="zat_monthly_cur_id" name="zat_monthly[cur_id]">

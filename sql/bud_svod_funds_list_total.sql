@@ -711,6 +711,7 @@ ORDER BY act_month, act_name)
                                 OR margin > 0
                                 OR sv.bonus_fakt > 0
                                 OR sv.fixed_fakt > 0)
+                           AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                            AND zp.h_eta = s.h_eta
                            AND s.dt = zp.dt
                            AND (SELECT COUNT (*)
@@ -841,6 +842,7 @@ ORDER BY act_month, act_name)
                                    AND s.tp_kod = t.tp_kod
                                    AND s.tp_kod = sv.tp_kod(+)
                                    AND sv.dt(+) = s.dt
+                                   AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                                    AND s.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
                                                 AND TO_DATE ( :ed, 'dd.mm.yyyy')
                                    AND :dpt_id = sv.dpt_id(+)
@@ -1039,6 +1041,7 @@ ORDER BY act_month, act_name)
                                      AND s.net_kod = sv.net_kod(+)
                                      AND s.fil = sv.fil(+)
                                      AND s.db = sv.db(+)
+                                     AND sv.ok_db_tn is not null /* fix 29.03.2019 */
                                      AND s.dt BETWEEN TO_DATE ( :sd, 'dd.mm.yyyy')
                                                   AND TO_DATE ( :ed, 'dd.mm.yyyy')
                                      AND :dpt_id = sv.dpt_id(+)
