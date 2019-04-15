@@ -110,7 +110,8 @@ SELECT ROWNUM,
                     payer_name,
                  m.distr_compensation,
                  inv.urlic,
-                 inv.ur_name
+                 inv.ur_name,
+                 m.id
             FROM nets n,
                  nets_plan_month m,
                  statya s,

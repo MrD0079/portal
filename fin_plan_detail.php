@@ -102,6 +102,64 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["plan_type"]))
 //echo $sql_total;
 	$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 	$data_total = $db->getAll($sql_total, null, null, null, MDB2_FETCHMODE_ASSOC);
+	/* fix: ADD brands*/
+	foreach ($data as $k => $v){
+        $brands = array();
+        if(isset($v['bud_z_id']) && $v['bud_z_id'] != ""){
+            $barand_param = array(":bud_z_id"=>$v['bud_z_id']);
+            $brands_sql =  "SELECT sa.name_brand as name
+                            FROM persik.SKU_AVK sa,
+                                 persik.BUD_RU_ZAY_SKU_AVK z
+                            WHERE sa.sku_id = z.sku_id
+                                AND z_id = :bud_z_id
+                        GROUP BY sa.name_brand ";
+            $brands_sql=stritr($brands_sql,$barand_param);
+            $brands = $db->getAll($brands_sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        }else{
+            $barand_param = array(":plan_id"=>$v['id']);
+            $brands_sql = "SELECT b.name
+                        FROM nets_plan_month_brand pb,
+                             nets_plan_month p,
+                             sku_avk_brand b
+                        WHERE pb.row_id = p.row_id
+                              AND pb.brand_id = b.brand_id
+                              AND p.id = :plan_id";
+            $brands_sql=stritr($brands_sql,$barand_param);
+            $brands = $db->getAll($brands_sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        }
+
+        /* через дескрипшн */
+        if(count($brands) == 0){
+            $barand_param = array(":plan_id"=>$v['id']);
+            $brands_sql = "SELECT b.name 
+                            FROM nets_plan_month_brand pb,
+                                 nets_plan_month p3,
+                                 nets_plan_month p4,
+                                 sku_avk_brand b
+                            WHERE pb.row_id = p3.row_id 
+                                  AND pb.brand_id = b.brand_id 
+                                  AND p3.descript = p4.descript
+                                  AND p3.row_id IS NOT null
+                                  AND p3.plan_type = 3
+                                  AND p4.plan_type = 4
+                                  AND p4.id = :plan_id
+                            GROUP BY b.name";
+            $brands_sql=stritr($brands_sql,$barand_param);
+            $brands = $db->getAll($brands_sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+        }
+        $brands_str = "";
+        if(count($brands) > 0){
+            foreach ($brands as $k1 => $v1){
+                $brands_str .= ($k1 != 0 ? ', ' : '' ).$v1['name'];
+            }
+        }
+
+        $data[$k]['brands'] = $brands_str;
+    }
+//
+//    echo "<pre style='display: none; text-align: left;'>";
+//    print_r($data);
+//    echo "</pre>";
 	$smarty->assign('fin_plan_detail', $data);
 	$smarty->assign('fin_plan_detail_total', $data_total);
 }

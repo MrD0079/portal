@@ -250,7 +250,7 @@ class SkuSelect
                 }
             }
             return $is_calc;
-        }catch (Exception $e){
+        }catch (\Exception $e){
             echo $e->getMessage();
             return false;
         }

@@ -212,9 +212,7 @@
 				<input
 						name="ok_db_tn[{$i.tp_kod}]"
 						id="ok_db_tn_{$i.tp_kod}" type="checkbox"
-						onChange="
-										save_tp('{$i.tp_kod}','{$i.tp_kod}','ok_db_tn',this.checked?'{$i.parent_tn}':'');
-									"
+						onChange="save_tp('{$i.tp_kod}','{$i.tp_kod}','ok_db_tn',this.checked?'{$i.parent_tn}':'');"
 				>
 				<script>
 					$('#ok_db_tn_{$i.tp_kod}').prop('checked','{$i.ok_db_tn}'!==''?true:false);
@@ -372,14 +370,12 @@
 {/if}
 			<td style=" text-align:center;">{$i1.lu_fio} {$i1.lu}</td>
 			<td style=" text-align:center;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_ok_db_tn">
-			{if not $i.selected or $tn neq $i.db or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false or $i.status eq 0}
+			{if not $i1.selected or $tn neq $i.db or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false or $i.status eq 0}
 			{else}
 			<input
 					name="ok_db_tn[{$i.net_kod}_{$i.db}_{$i1.fil}]"
 					id="ok_db_tn_{$i.net_kod}_{$i.db}_{$i1.fil}" type="checkbox"
-					onChange="
-													save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','ok_db_tn',this.checked?'{$i.db}':'');
-												"
+					onChange="save_tp('{$i.net_kod}_{$i.db}_{$i1.fil}','{$i.net_kod}_{$i.db}','ok_db_tn',this.checked?'{$i.db}':'');"
 			>
 			<script>
 				$('#ok_db_tn_{$i.net_kod}_{$i.db}_{$i1.fil}').prop('checked','{$i.ok_db_tn}'!==''?true:false);

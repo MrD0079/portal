@@ -254,6 +254,7 @@
 		{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
 		<td>№ заявки</td>
 		<td>Возмещение<br>дистрибутору</td>
+		<td>Бренды</td>
 		{/if}
 		{if $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
 		<td>номер счета</td>
@@ -310,6 +311,7 @@
 		{if $smarty.request.plan_type eq 3 or $smarty.request.plan_type eq 4 or $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
 		<td>{$fin_plan_detail_item.bud_z_id}</td>
 		<td>{if $fin_plan_detail_item.distr_compensation eq 1}да{else}нет{/if}</td>
+		<td>{$fin_plan_detail_item.brands}</td>
 		{/if}
 		{if $smarty.request.plan_type eq 5 or $smarty.request.plan_type eq 7}
 		<td>{$fin_plan_detail_item.inv_num}</td>

@@ -1,8 +1,21 @@
 /* Formatted on 03.08.2017 13:31:51 (QP5 v5.252.13127.32867) */
 
  SELECT
-    NVL(tc_st.status,-1) as status,
-    tc_st.date_upd as tc_status_upd,
+   /* NVL(tc_st.status,-1) as status,
+    tc_st.date_upd as tc_status_upd,*/
+   NVL((select tc_st.status
+    from tc_status tc_st, bud_ru_zay z
+    WHERE tc_st.zay_id in (select DISTINCT zf.z_id from bud_ru_zay_ff zf where q.net_kod = zf.val_list AND zf.FF_ID = 100027047 )
+          and z.id = tc_st.zay_id(+)
+          and TO_DATE ( :dt, 'dd.mm.yyyy') <= TO_DATE (z.dt_end) AND ROWNUM = 1
+    ),-1)
+    status,
+  (select tc_st.date_upd
+    from tc_status tc_st, bud_ru_zay z
+    WHERE tc_st.zay_id in (select DISTINCT zf.z_id from bud_ru_zay_ff zf where q.net_kod = zf.val_list AND zf.FF_ID = 100027047 )
+          and z.id = tc_st.zay_id(+)
+          and TO_DATE ( :dt, 'dd.mm.yyyy') <= TO_DATE (z.dt_end) AND ROWNUM = 1
+    ) as tc_status_upd,
     q.*
   FROM (
   SELECT s.net_kod,
@@ -29,6 +42,9 @@
          NVL (SUM (sv.fixed_fakt), 0) + SUM (s.summa) * s.bonus / 100 maxtp,
          SUM (sv.cash) cash,
          SUM ( (NVL (sv.bonus_fakt, 0) + NVL (sv.fixed_fakt, 0)) * CASE WHEN NVL (sv.cash, 0) = 1 THEN 1 ELSE s.compens_distr_koef END) compens_distr
+         ,sv.ok_db_tn,
+         sv.ok_db_fio,
+         TO_CHAR (sv.ok_db_lu, 'dd.mm.yyyy hh24:mi:ss') ok_db_lu
     FROM (  SELECT s.net_kod,
                    s.net,
                    s.isrc,
@@ -207,11 +223,14 @@ GROUP BY s.net_kod,
          s.margin,
          s.db,
          s.taf_ok_db_tn
+         ,sv.ok_db_tn,
+         sv.ok_db_fio,
+         sv.ok_db_lu
 ORDER BY s.net
   ) q
-  ,bud_ru_zay_ff zf,
+  /*,bud_ru_zay_ff zf,
   tc_status tc_st
   WHERE q.NET_KOD = zf.val_list(+)
         AND zf.FF_ID = 100027047
-        AND zf.z_id = tc_st.zay_id(+)
+        AND zf.z_id = tc_st.zay_id(+)*/
 ORDER BY q.net

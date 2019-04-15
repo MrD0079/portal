@@ -27,9 +27,17 @@ $smarty->display('bud_svod.html');
 
 if (isset($_REQUEST['print']))
 {
-require_once "bud_svod_tus.php";
-require_once "bud_svod_tus_tp_total.php";
-require_once "bud_svod_tus_tp.php";
+    if($_REQUEST['page'] == "tus"){
+        require_once "bud_svod_tus.php";
+        require_once "bud_svod_tus_tp_total.php";
+        require_once "bud_svod_tus_tp.php";
+    }
+    if($_REQUEST['page'] == "tun"){
+        require_once "bud_svod_tun.php";
+        require_once "bud_svod_tun_tp_total.php";
+        require_once "bud_svod_tun_tp.php";
+    }
+
 }
 
 //require_once "bud_svod_zp_ag_total.php";

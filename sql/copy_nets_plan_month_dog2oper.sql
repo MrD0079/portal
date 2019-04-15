@@ -12,7 +12,8 @@ INSERT INTO nets_plan_month (id_net,
                              plan_type,
                              mkk_ter,
                              tn_confirmed,
-                             payer)
+                             payer,
+                             row_id)
    SELECT n1.id_net,
           n1.YEAR,
           n1.MONTH,
@@ -26,6 +27,7 @@ INSERT INTO nets_plan_month (id_net,
           :plan_type,
           mkk_ter,
           :tn_confirmed,
-          n1.payer
+          n1.payer,
+          n1.row_id
      FROM nets_plan_month n1
     WHERE n1.ID = :ID

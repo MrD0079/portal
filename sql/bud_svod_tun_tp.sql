@@ -1,4 +1,23 @@
 /* Formatted on 06/06/2016 14:02:13 (QP5 v5.252.13127.32867) */
+
+     SELECT
+
+   NVL(
+    (select tc_st.status
+    from PERSIK.tc_status tc_st, PERSIK.bud_ru_zay z
+    WHERE tc_st.zay_id in (select DISTINCT zf.z_id from PERSIK.bud_ru_zay_ff zf where q.tp_kod = zf.val_list AND zf.FF_ID = 38477666 )
+          and z.id = tc_st.zay_id(+)
+          and TO_DATE ( '01.02.2019', 'dd.mm.yyyy') <= TO_DATE (z.dt_end) AND ROWNUM = 1
+    ),-1)
+    status,
+  (select tc_st.date_upd
+    from PERSIK.tc_status tc_st, PERSIK.bud_ru_zay z
+    WHERE tc_st.zay_id in (select DISTINCT zf.z_id from PERSIK.bud_ru_zay_ff zf where q.tp_kod = zf.val_list AND zf.FF_ID = 38477666 )
+          and z.id = tc_st.zay_id(+)
+          and TO_DATE ( '01.02.2019', 'dd.mm.yyyy') <= TO_DATE (z.dt_end) AND ROWNUM = 1
+    ) as tc_status_upd,
+    q.*
+  FROM (
   SELECT u.fio ts,
          s.h_eta,
          s.eta,
@@ -7,8 +26,8 @@
          s.tp_kod,
          s.tp_type,
          s.bedt_summ,
-         NVL(tc_st.status,-1) as status,
-         tc_st.date_upd as tc_status_upd,
+        -- NVL(tc_st.status,-1) as status,
+         --tc_st.date_upd as tc_status_upd,
          t.delay,
          t.discount,
          t.bonus,
@@ -63,6 +82,9 @@
            END
             compens_distr,
          taf.ok_db_tn taf_ok_db_tn
+         ,sv.ok_db_tn,
+         sv.ok_db_fio,
+         TO_CHAR (sv.ok_db_lu, 'dd.mm.yyyy hh24:mi:ss') ok_db_lu
     FROM (SELECT m.tab_num,
                  m.tp_kod,
                  m.y,
@@ -79,7 +101,7 @@
             FROM a14mega m
            WHERE m.dpt_id = :dpt_id AND TO_DATE ( :dt, 'dd.mm.yyyy') = m.dt) s,
          user_list u,
-         (  SELECT id,
+         (  SELECT --id,
                    tp_kod,
                    chain,
                    AVG (delay) delay,
@@ -92,12 +114,12 @@
                               chain,
                            TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))
                               tp_kod,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 710)) delay,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1000))
+                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 710),'999999999D99999999','NLS_NUMERIC_CHARACTERS=.,') delay,
+                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1000),'999999999D99999999','NLS_NUMERIC_CHARACTERS=.,')
                               discount,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1010)) bonus,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1020)) fixed,
-                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 735)) margin,
+                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1010),'999999999D99999999','NLS_NUMERIC_CHARACTERS=.,') bonus,
+                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 1020),'999999999D99999999','NLS_NUMERIC_CHARACTERS=.,') fixed,
+                           TO_NUMBER (getZayFieldVal (z.id, 'var1', 735),'999999999D99999999','NLS_NUMERIC_CHARACTERS=.,') margin,
                            u.dpt_id
                       FROM bud_ru_zay z, user_list u
                      WHERE     (SELECT NVL (tu, 0)
@@ -135,7 +157,7 @@
                                   1                                      /*0*/
                            AND TO_NUMBER (getZayFieldVal (z.id, 'admin_id', 4))
                                   IS NOT NULL)
-          GROUP BY id, tp_kod, chain) t,
+          GROUP BY tp_kod, chain) t,
          sc_svodn sv,
          (SELECT fil, h_eta
             FROM bud_svod_zp
@@ -144,10 +166,10 @@
                  AND fil IS NOT NULL) zp,
          (SELECT fil, ok_db_tn
             FROM bud_svod_taf
-           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf,
-        tc_status tc_st
+           WHERE dt = TO_DATE ( :dt, 'dd.mm.yyyy')) taf
+           --,tc_status tc_st
    WHERE     zp.fil = taf.fil(+)
-         AND t.id = tc_st.zay_id(+)
+        -- AND t.id = tc_st.zay_id(+)
          AND s.tab_num = u.tab_num
          AND u.dpt_id = :dpt_id
    and u.is_spd=1
@@ -181,4 +203,5 @@
                               FROM clusters_fils
                              WHERE :clusters = CLUSTER_ID)
               OR :clusters = 0)
-ORDER BY ts, eta, tp_name
+    ) q
+ORDER BY q.ts, q.eta, q.tp_name

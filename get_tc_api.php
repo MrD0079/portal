@@ -5,7 +5,10 @@
  * Date: 26.02.2019
  * Time: 9:59
  */
+
+
 header('Content-Type: application/json; charset=utf-8');
+
 /* coonect to DB AND load PHP functions */
 if(!isset($_REQUEST['action'])){
     require_once "function.php";
@@ -18,8 +21,7 @@ if(!isset($_REQUEST['action'])){
     //  var_dump($db);
     if (PEAR::isError($db))
     {
-        echo json_encode(var_dump($db));
-        die();
+        set_log(0,'Error [db]: '.$db->getMessage(). ' Info: '.$db->getDebugInfo());
     }
     $db->loadModule('Extended');
     $db->loadModule('Function');
@@ -28,16 +30,20 @@ $sync_status = 0;
 $sync_message = "Error: ";
 $p=array(':zid' => isset($_REQUEST['zid']) ? 'AND Z.SOURCE_KOD = '.$_REQUEST['zid'] : '');
 $date_sync = "";
+$syncURL = "t-dm.avk.ua"."/sync_from_portal_tc";
 
 /* Get sync_date param*/
 
 //Table_Update('TCSYNCINFO',null,null);
 $sql = "select * from PERSIK_RO.TCSYNCINFO ORDER BY LU DESC";
 $date_s = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+
 if(!isset($date_s) || count($date_s) == 0){
     /* set first sync date*/
+    //set_log(0,'Error: Not load last date_sync param');
     $keys = array(
-        "date_sync"=>OraDate2MDBDate('22/02/2019'),
+       // "date_sync"=>OraDate2MDBDate('27/02/2019'),
+        "date_sync"=>OraDate2MDBDate('01/01/2015'),
         'lu'=>OraDate2MDBDate(date('d.m.Y h:i:s', time())),
         'id'=>1
     );
@@ -65,53 +71,60 @@ if(!isset($date_s) || count($date_s) == 0){
 
 #region Get TC
 /* get Head TC */
-$sql = "SELECT * FROM  PERSIK_RO.".'"'."TCHead".'"'."  WHERE trunc(to_date(dt_created,'dd.mm.yyyy hh24:mi:ss')) >= trunc(to_date('".$date_sync."','yyyy-mm-dd hh24:mi:ss'))";
-$data_head = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+$sql = "SELECT * FROM  PERSIK_RO.".'"'."TCHead".'"'."  WHERE trunc(rep_lu) >= trunc(to_date('".$date_sync."','yyyy-mm-dd hh24:mi:ss'))";
+try {
+
+    $data_head = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+    if (PEAR::isError($data_head)) {
+        set_log(0,'Error: '.$data_head->getMessage(). " [".$data_head->getTraceAsString()."]");
+    }
+}catch (Exception $e){
+    set_log(0,'Error: '.$e->getMessage(). " [".$e->getTraceAsString()."]");
+}
 
 if(count($data_head) == 0){
     set_log(0,'Empty of selected TC begin with date ['.$date_sync.']');
 }
-$source_kod = array();
+$source_key = array();
 try {
     foreach ($data_head as $key => $item) {
-        $source_kod[] = $item['source_kod'];
+        $source_key[] = $item['source_key'];
     }
 }catch (\Exception $e){
     set_log(0,'Error: '.$e->getMessage());
 }
 
 /* get Detail TC */
-$sql = 'SELECT * FROM PERSIK_RO."TCDetailed" WHERE source_kod IN ('.implode(",",$source_kod).')';
+$sql = 'SELECT * FROM PERSIK_RO."TCDetailed" WHERE source_key IN ('.implode(",",$source_key).')';
 $data_detail= $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
-
 
 /* get files attach */
 $sql = " SELECT
-        z.file_type,
+        z.file_type as FILE_TYPE,
         CASE
             WHEN z.file_type = 'last_year'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/102209275/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 102209275)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/102209275/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 102209275)
 
             WHEN z.file_type = 'location'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100829427/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829427)
-
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100829427/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829427)
+            
             WHEN z.file_type = 'spec'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100829429/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829429)
-
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100829429/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829429)
+            
             WHEN z.file_type = 'planogram'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100829430/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829430)
-
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100829430/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100829430)
+            
             WHEN z.file_type = 'comm_agree'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/100850052/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100850052)
-
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/100850052/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 100850052)
+            
             WHEN z.file_type = 'syst_dc'
-            THEN (SELECT '/files/bud_ru_zay_files/' || z.id || '/103466356/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 103466356)
+            THEN (SELECT '/files/bud_ru_zay_files/' || z.source_kod || '/103466356/report/'||zf.val_file FROM PERSIK.bud_ru_zay_ff zf WHERE zf.z_id = z.source_kod AND zf.FF_ID = 103466356)
 
             ELSE NULL
           END url,
 
-        z.source,
-        z.source_kod
+        z.source as SOURCE,
+        z.source_kod as SOURCE_KEY
     FROM (SELECT
          ff.*,
          1 source,
@@ -149,13 +162,16 @@ $sql = " SELECT
          AND z.fil = f.id(+)
          AND z.id = ff.z_id
         ) z
-WHERE z.file_type IS NOT NULL AND z.report_data IS NOT NULL AND z.source_kod IN (".implode(',',$source_kod).")
+WHERE z.file_type IS NOT NULL AND z.report_data IS NOT NULL AND z.source_kod IN (".implode(',',$source_key).")
   /*AND Z.SOURCE_KOD = 121500341 */
   :zid
 ";
 $sql=stritr($sql,$p);
 $sql = trim(preg_replace('/\s+/', ' ', $sql));
 $data_files_attach = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+
+
+
 foreach ($data_files_attach as $k=>$v)
 {
     if($v["url"]!=null){
@@ -183,35 +199,44 @@ foreach ($data_files_attach as $k=>$v)
 
 /* data collection */
 $data = array();
-$data['tchead'] = $data_head;
-$data['tcdetail'] = $data_detail;
-$data['tcfile_attach'] = $data_files_attach;
+$data['TCHEAD'] = array_change_key_case($data_head,CASE_UPPER);
+$data['TCDETAIL'] = array_change_key_case($data_detail,CASE_UPPER);
+$data['TCFILE_ATTACH'] = array_change_key_case($data_files_attach,CASE_UPPER);
 $data = utf8ize($data);
+$send_data_tmp = array();//todo: DELETE
 
 #region SYNCHRONIZATION
 $all_ok = true;
 foreach ($data as $table => $records) {
-    $sends_count = 5;
+    $sends_count = 2;
     $response_data = get_response($table,$records);
     if($response_data){
         $current_status = false;
+        $send_data_tmp[] = $response_data; //todo: DELETE
         do{
-            $send_status = 0;//send_data($response_data,"https://ps.avk.ua/testImportDataJSON.php");
+            $send_data_responce = send_data($response_data,$syncURL);
+            $send_status = $send_data_responce['STATUS'] ? $send_data_responce['STATUS'] : 0;
             if($send_status){
                 $current_status = true;
                 break;
             }
             $sends_count--;
-        }while($sends_count >= 0);
+            // задержка на повторную отправку данных в сек
+            sleep(5);
+
+        }while($sends_count > 0);
         if(!$current_status){
             $all_ok = false;
-            $sync_message .= "Not all data synchronized. It was be breaking. Last sync_date is [".$date_sync."]";
+            if($send_data_responce['Message'])
+                $sync_message .= "DM answer: ".$send_data_responce['Message'];
+            else
+                $sync_message .= "Not all data synchronized. It was be breaking. Last sync_date is [".$date_sync."]";
             break;
         }
     }
 }
 #endregion
-
+//$all_ok = false;
 /* WHEN is OK THEN: update sync_date AND write info in LOG*/
 if($all_ok){
 //    $new_sync_date = strtotime($date_sync.' +1 day');
@@ -229,14 +254,20 @@ if($all_ok){
         }else{
             /* send message that is all OK */
             $sync_status = 1;
-            $sync_message = 'All data is synchronized';
+            $sync_message = 'All data is synchronized. New syc_date ['.$keys['date_sync'].']';
         }
     }else{
         $sync_status = 2;
         $sync_message = 'Some error to update last date_sync param. Last sync_date - ['.$date_sync.']';
     }
 }
+
+header('Content-Type: application/json; charset=utf-8'); //todo: DELETE
+echo json_encode(array('status'=>$sync_status,'message'=>$sync_message)); //todo: DELETE
+
 set_log($sync_status,$sync_message);
+
+
 
 
 function set_log($sync_status=-1,$sync_message=""){
@@ -255,8 +286,8 @@ function set_log($sync_status=-1,$sync_message=""){
     die();
 }
 
-function get_response($table = "",$data = array()){
-    if($table == "" || count($data) == 0){
+function get_response($table = "",$reqords = array()){
+    if($table == "" || count($reqords) == 0){
         return false;
     }
     $request = array();
@@ -266,23 +297,24 @@ function get_response($table = "",$data = array()){
     //$request['DEVICE_MODEL'] = 'SM-T211';
     //$request['DEVICE_NUMBER'] = 'RF1DA04GPXB';
     $request['DATA'] = '';
-    $request['TOKEN'] = 'asjdh87asOQWPVBZlrylSf87Aslsa1nfALFNrown3ka';
+    $request['TOKEN'] = 'asjdh87asOQWPnlqlrylSf87Asls3i9cALFNrown3ka';
 
     $data = array();
     $data['DB_VERSION'] = '1';
     //$data['SYNC_SESSION'] = '6f37d839-d0c8-4154-ab2f-999999999999';
     $data['TABLE'] = $table;
-    $data['RECORDS'] = $data;
+    $data['RECORDS'] = $reqords;
     $request['DATA'] = json_encode($data);
 
     return $request;
 }
 
 function send_data($request = "",$url = ""){
-    if($url == "" || $request = ""){
+    if($url == "" || $request == ""){
         return 0;
     }
-    $ch = curl_init();
+
+     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -298,10 +330,12 @@ function send_data($request = "",$url = ""){
     $response = curl_exec($ch);
 
     /* write response parser */
-    $response_array = json_decode($response);
-    $status = $response_array['status'];
+    $response_obj = json_decode($response);
+    $response_array['STATUS'] = $response_obj->STATUS;
+    $response_array['Message'] = $response_obj->Message;
+    //$status = $response_array['STATUS'];
 
-    return $status;
+    return $response_array;
 }
 
 function utf8ize($mixed) {
