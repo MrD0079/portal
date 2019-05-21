@@ -56,6 +56,7 @@ BEGIN
          || '<tr style="font-weight:bold">'
          || '<td>Период</td><td>Сеть</td><td>Адрес ТЗ</td><td>Сканкопии накладных</td>'
          || '<td>Плановая сумма возврата, тыс.грн..</td>'
+         || '<td>Комментарий</td>'
          || '</tr>';
 
       FOR b
@@ -65,6 +66,7 @@ BEGIN
                       c.mt || ' ' || c.y period,
                       n.net_name,
                       r.tp_name
+                      ,(CASE WHEN r.comm IS NULL THEN '' ELSE r.comm END) as comm
                  FROM rzay r,
                       nets n,
                       bud_fil p,
@@ -117,6 +119,7 @@ BEGIN
          END LOOP;
 
          attach := attach || '</td><td>' || TO_CHAR (b.summa) || '</td>';
+         attach := attach || '</td><td>' || b.comm || '</td>';
          attach := attach || '</tr>';
       END LOOP;
 

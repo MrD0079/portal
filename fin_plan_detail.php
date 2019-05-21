@@ -123,6 +123,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["plan_type"]))
                              sku_avk_brand b
                         WHERE pb.row_id = p.row_id
                               AND pb.brand_id = b.brand_id
+                              AND pb.status = 1
                               AND p.id = :plan_id";
             $brands_sql=stritr($brands_sql,$barand_param);
             $brands = $db->getAll($brands_sql, null, null, null, MDB2_FETCHMODE_ASSOC);
@@ -142,6 +143,7 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["plan_type"]))
                                   AND p3.row_id IS NOT null
                                   AND p3.plan_type = 3
                                   AND p4.plan_type = 4
+                                  AND pb.status = 1
                                   AND p4.id = :plan_id
                             GROUP BY b.name";
             $brands_sql=stritr($brands_sql,$barand_param);

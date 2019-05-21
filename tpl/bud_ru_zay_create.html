@@ -189,7 +189,11 @@
                         {if $smarty.request.tu eq 1}
                                 $('#master').change();
                         {else}
-                                $('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+                                $('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'));
+                                var minDateTmp = $('#master').datepicker('getDate');
+                                var newMaxDate = new Date(minDateTmp.getFullYear(),minDateTmp.getMonth() +1,0);
+                                var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                                $('#slave').datepicker('option', 'maxDate', formatted);
                         {/if}
                         {literal}
                 }
@@ -211,6 +215,17 @@
                                 $('#slave').datepicker('option', 'minDate', formatted);
                         {else}
                                 $('#slave').val($('#master').val());
+
+                                var dts = $('#master').val().split(".");
+                                var dtd = new Date(
+                                    parseInt(dts[2], 10),
+                                    parseInt(dts[1], 10) - 1,
+                                    parseInt(dts[0], 10));
+
+                                /* максимальа€ дата в рамках выбранного мес€ца */
+                                var newMaxDate = new Date(dtd.getFullYear(),dtd.getMonth() +1,0);
+                                var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                                $('#slave').datepicker('option', 'maxDate', formatted);
                         {/if}
                         {literal}
                 }

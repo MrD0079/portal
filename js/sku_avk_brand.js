@@ -14,6 +14,13 @@ $(window).load(function(){
             },
             processResults: function (data, params) {
                 params.page = params.page || 1;
+                for (key in data.items){
+                    for (name in data.items[key]) {
+                        if (name == "disabled") {
+                            data.items[key][name] = data.items[key][name] == "1" ? true : false;
+                        }
+                    }
+                }
                 return {
                     results: data.items,
                     pagination: {
@@ -37,7 +44,8 @@ $(window).load(function(){
         if(repo.text){
             return "<div style='color:#000;'>"+repo.text+"</div>";
         }
-        var item = "<div class='sku_item_option'>"+repo.name+"</div>";
+        var isDisabledClass = repo.status ? '' : 'field-disabled';
+        var item = "<div class='sku_item_option "+isDisabledClass+"'>"+repo.name+"</div>";
         return item;
     }
     //text was show if option is selected

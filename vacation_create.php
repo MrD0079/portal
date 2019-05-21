@@ -16,15 +16,15 @@ if (isset($_REQUEST["add"])&&isset($_REQUEST["new_vacation"]))
 	{
 		foreach ($_REQUEST["tasks"] as $k=>$v)
 		{
-		foreach ($v as $k1=>$v1)
-		{
-			//$keys=v;
-			$v1["vac_id"]=$id;
-			$v1["part_id"]=$k;
-			$v1["id"]=get_new_id();
-			isset($v1["dt_end"]) ? $v1["dt_end"]=OraDate2MDBDate($v1["dt_end"]) : null;
-			Table_Update("vacation_tasks",$v1,$v1);
-		}
+            foreach ($v as $k1=>$v1)
+            {
+                //$keys=v;
+                $v1["vac_id"]=$id;
+                $v1["part_id"]=$k;
+                $v1["id"]=get_new_id();
+                isset($v1["dt_end"]) ? $v1["dt_end"]=OraDate2MDBDate($v1["dt_end"]) : null;
+                Table_Update("vacation_tasks",$v1,$v1);
+            }
 		}
 	}
 	$db->query("BEGIN PR_VACATION_SZ_CREATE (".$id."); END;");

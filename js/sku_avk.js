@@ -118,11 +118,13 @@ $(window).load(function(){
             if($.isArray(repo) ){
                 $.each(repo,function (i,v) {
                     v = CheckInicialization(v);
-                    AddSkuHTML(akc_type,v);
+                    if(v != false && v !== undefined)
+                        AddSkuHTML(akc_type,v);
                 })
             }else{
                 repo = CheckInicialization(repo);
-                AddSkuHTML(akc_type,repo);
+                if(repo != false && repo !== undefined)
+                    AddSkuHTML(akc_type,repo);
             }
         } catch (err) {
             console.log(err);
@@ -146,6 +148,23 @@ $(window).load(function(){
             }
         }
         for(name in arr){
+            if(name === "name_brand"){
+                /* сохраняем первый бренд как основной */
+                if($("#sku_select").attr('data-brand') === undefined || $("#sku_select").attr('data-brand') == "" ){
+                    $("#sku_select").attr('data-brand',arr[name]);
+                }else{ /* проверяем все последующие бренды */
+                    if(arr[name] != $("#sku_select").attr('data-brand')){
+                        alert('Заявка должна содержать товары только одного бренда.');
+                        let id = arr['id'];
+                        let wanted_option = $('#sku_select option[value="'+id+'"]');
+                        wanted_option.prop('selected', false);
+                        $('#sku_select').trigger('change.select2');
+                        arr = false;
+                        return;
+                    }
+                }
+
+            }
             if(arr[name] === "undefined" || arr[name] == null){
                 arr[name] = 0;
             }
@@ -161,6 +180,7 @@ $(window).load(function(){
     $('#sku_select').on('select2:unselecting', function (e) {
         if (confirm('Удалить продукт из списка ?')) {
             RemoveSkuHTML(e.params.args.data.id);
+
         }else{
             e.preventDefault();
         }
@@ -466,6 +486,7 @@ $(window).load(function(){
         $("#sku_selected tr[data-sku-id='"+sku_id+"']").remove();
         if($("#sku_selected tbody tr").length <= 0){
             $("#sku_selected, #export-to-excel").css("display","none");
+            $("#sku_select").removeAttr('data-brand');
         }
     }
     function SetAkciyaTypeToSelect(){
@@ -648,8 +669,11 @@ $(window).load(function(){
             wanted_option.prop('selected', false);
             $('#sku_select').trigger('change.select2');
             $row.remove();
-            if($("#sku_selected tbody tr").length <= 0)
+            if($("#sku_selected tbody tr").length <= 0){
                 $("#sku_selected").css("display","none");
+                $("#sku_select").removeAttr('data-brand');
+            }
+
         }
         $(".del_sku_current.new").on("click",DelSKUTrigger);
         // --- Actions

@@ -12,6 +12,7 @@
 		<td>Дистрибьютор</td>-->
 		<td>Должность</td>
 		<td>Ф.И.О.</td>
+		<td>Табельный номер</td>
 		<td>Аванс</td>
 		<td>Транспортные расходы</td>
 		<td>Командировочные расходы</td>
@@ -93,6 +94,7 @@
 				<font style="font-weight:bold;color:#8FFFFF"> уволен {$item.datauvol}</font>
 			{/if}
 		</td>
+		<td>{$item.emp_tabnum}</td>
 		<td>
 		{if $is_acceptor and $item.rep_date eq $smarty.request.month_list}
 			<input size=5 name=avans[{$item.emp_tn}] id=avans[{$item.emp_tn}] value={if $smarty.request.refresh}{$smarty.request.avans.$tn}{else}{$item.avans}{/if}>

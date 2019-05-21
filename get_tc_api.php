@@ -30,7 +30,8 @@ $sync_status = 0;
 $sync_message = "Error: ";
 $p=array(':zid' => isset($_REQUEST['zid']) ? 'AND Z.SOURCE_KOD = '.$_REQUEST['zid'] : '');
 $date_sync = "";
-$syncURL = "t-dm.avk.ua"."/sync_from_portal_tc";
+$syncDomain = "t-dm.avk.ua";
+$syncURL = $syncDomain."/sync_from_portal_tc";
 
 /* Get sync_date param*/
 

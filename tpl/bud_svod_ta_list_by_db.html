@@ -1,0 +1,90 @@
+{if not $smarty.request.print}
+<!--<p>-->
+    <!--<a target=_blank href="-->
+<!--?action=bud_svod_ta-->
+<!--&print=1-->
+<!--&dt={$smarty.request.dt}-->
+<!--&exp_list_without_ts={$smarty.request.exp_list_without_ts}-->
+<!--&db={$smarty.request.db}-->
+<!--&fil={$smarty.request.fil}-->
+<!--&clusters={$smarty.request.clusters}-->
+<!--&ok_db={$smarty.request.ok_db}-->
+<!--&ok_pr={$smarty.request.ok_pr}-->
+<!--&ok_t1={$smarty.request.ok_t1}-->
+<!--&ok_t2={$smarty.request.ok_t2}-->
+<!--&excel=1-->
+<!--&filename=ТИТУЛ - Подтверждение отчета - {$smarty.request.dt}-->
+<!--">Excel</a>-->
+<!--</p>-->
+{/if}
+
+<table border=1 style="width:300px">
+    {if $smarty.request.show_head eq 1}
+    <tr style="font-weight:bold; text-align:center">
+        <td>ДБ ФИО</td>
+        <!--<td>Дистрибутор / филиал</td>-->
+        <td>Объем продаж общий</td>
+        <td>Объем продаж по ДБ</td>
+        <td>{$funds.zp.fund_name}</td>
+        <td>{$funds.gbo.fund_name}</td>
+        <td>{$funds.svs.fund_name}</td>
+        <td>{$funds.prm.fund_name}</td>
+        <td style="background-color: rgb(204, 255, 255);">Затраты через ДБ</td>
+        <!--<td>ДБ</td>-->
+        <!--<td>ВСТМ 1й этап</td>-->
+        <!--<td>ВСТМ 2й этап</td>-->
+    </tr>
+    {/if}
+    {foreach key=k item=i from=$x}
+
+    {if $zp_ag_total.fil_null eq 0}
+    {assign var=enabled value=1}
+    {/if}
+
+    <tr>
+        <td><nobr>{$i.db_fio}</nobr></td>
+        <!--<td><nobr>{$i.fil_name}</nobr></td>-->
+        <td style="text-align:right"></td>
+        <td style="text-align:right">{$i.sales|num:2}</td>
+        <td style="text-align:right">{$i.zp_total|num:2}</td>
+        <td style="text-align:right">{$i.gsm_total|num:2}</td>
+        <td style="text-align:right">{$i.svs_total|num:2}</td>
+        <td style="text-align:right">{$i.promo_total|num:2}</td>
+        <td style="text-align:right; background-color: rgb(204, 255, 255);">{$i.compens_db|num:2}</td>
+        <!--<td id=td_ok_db_tn{$i.fil_id} style="text-align:left">-->
+
+            <!--{if not $smarty.request.print}-->
+                <!--{if $i.prot_db }-->
+                <!--<div id=list_prot_db{$i.fil_id}>-->
+                    <!--<a target="_blank" href="files/bud_svod_ta_files/{$i.prot_db}">{$i.prot_db}</a>-->
+                <!--</div>-->
+                <!--{/if}-->
+            <!--{/if}-->
+
+            <!--{$i.ok_db_lu}-->
+            <!--{$i.ok_db_fio}-->
+
+        <!--</td>-->
+        <!--<td id=td_ok_t1_tn{$i.fil_id} style="text-align:center">-->
+            <!--{$i.ok_t1_lu}-->
+            <!--{$i.ok_t1_fio}-->
+        <!--</td>-->
+        <!--<td id=td_ok_t2_tn{$i.fil_id} style="text-align:center">-->
+            <!--{$i.ok_t2_lu}-->
+            <!--{$i.ok_t2_fio}-->
+        <!--</td>-->
+    </tr>
+    {/foreach}
+    {if $smarty.request.with_total eq 1 }
+    <tr style="font-weight:bold; text-align:center; background-color: #ecde3a;">
+        <td>ИТОГО</td>
+        <td style="text-align:right">{$xt.sales_fact|num:2}</td>
+        <td style="text-align:right">{$xt.sales|num:2}</td>
+        <td style="text-align:right">{$xt.zp_total|num:2}</td>
+        <td style="text-align:right">{$xt.gsm_total|num:2}</td>
+        <td style="text-align:right">{$xt.svs_total|num:2}</td>
+        <td style="text-align:right">{$xt.promo_total|num:2}</td>
+        <td style="text-align:right;background-color: rgb(204, 255, 255);">{$xt.compens_db|num:2}</td>
+    </tr>
+    {/if}
+</table>

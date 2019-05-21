@@ -219,7 +219,11 @@
                             {if $smarty.request.tu eq 1}
                                     $('#master').change();
                             {else}
-                                    $('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+                                    $('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'));
+                                    var minDateTmp = $('#master').datepicker('getDate');
+                                    var newMaxDate = new Date(minDateTmp.getFullYear(),minDateTmp.getMonth() +1,0);
+                                    var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                                    $('#slave').datepicker('option', 'maxDate', formatted);
                             {/if}
                             {literal}
                     }
@@ -227,7 +231,7 @@
             $('#master').change(
                     function()
                     {
-                            $('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'))
+                            $('#slave').datepicker('option', 'minDate', $('#master').datepicker('getDate'));
                             {/literal}
                             {if $smarty.request.tu eq 1}
                                     var dts = $('#master').val().split(".");
@@ -240,6 +244,17 @@
                                     $('#slave').datepicker('option', 'minDate', formatted);
                             {else}
                                     $('#slave').val($('#master').val());
+
+                                    var dts = $('#master').val().split(".");
+                                    var dtd = new Date(
+                                        parseInt(dts[2], 10),
+                                        parseInt(dts[1], 10) - 1,
+                                        parseInt(dts[0], 10));
+
+                                    /* максимальа€ дата в рамках выбранного мес€ца */
+                                    var newMaxDate = new Date(dtd.getFullYear(),dtd.getMonth() +1,0);
+                                    var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                                    $('#slave').datepicker('option', 'maxDate', formatted);
                             {/if}
                                 {if $smarty.request.new.st eq 169138069}
                                     loadProductList($('#master').val(),$('#slave').val());
@@ -807,6 +822,39 @@
                         {/if}
                 {/foreach}
                 </script>
+            {if not $smarty.request.admin and $smarty.request.tu neq 1}
+            <script>
+                $(window).on('load',
+                    function()
+                    {
+                        if($('#new_st_176095245').val() !== ""){
+                            console.log($('#new_st_176095245').val());
+
+                            $('#new_st_176095246').datepicker('option', 'minDate', $('#new_st_176095245').datepicker('getDate'));
+                            var minDateTmp = $('#new_st_176095245').datepicker('getDate');
+                            var newMaxDate = new Date(minDateTmp.getFullYear(),minDateTmp.getMonth() +1,0);
+                            var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                            $('#new_st_176095246').datepicker('option', 'maxDate', formatted);
+                        }
+                    }
+                    );
+                $('#new_st_176095245').change(function(){
+                    $('#new_st_176095246').datepicker('option', 'minDate', $('#new_st_176095245').datepicker('getDate'));
+                        //$('#new_st_176095246').val($('#new_st_176095245').val());
+
+                        var dts = $('#new_st_176095245').val().split(".");
+                        var dtd = new Date(
+                            parseInt(dts[2], 10),
+                            parseInt(dts[1], 10) - 1,
+                            parseInt(dts[0], 10));
+
+                        /* максимальа€ дата в рамках выбранного мес€ца */
+                        var newMaxDate = new Date(dtd.getFullYear(),dtd.getMonth() +1,0);
+                        var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                        $('#new_st_176095246').datepicker('option', 'maxDate', formatted);
+                    });
+            </script>
+            {/if}
         </table>
             {if $smarty.request.new.st eq 169138069}
                 <h3>“аблица расчета</h3>

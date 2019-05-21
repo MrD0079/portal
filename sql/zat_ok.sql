@@ -17,6 +17,7 @@ SELECT ROWNUM,
           total
   FROM (  SELECT DISTINCT
                  s.svideninn emp_tn,
+                 (SELECT NVL(tab_num,0) FROM USER_LIST WHERE tn = s.svideninn) AS emp_tabnum,
                  s.dolgn emp_dolgn,
                  fn_getname (s.svideninn) emp_name,
                    NVL (

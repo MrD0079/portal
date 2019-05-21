@@ -1,0 +1,52 @@
+
+<h1>Статусы брендов</h1>
+
+<form target="_self" method="POST" name=form1 id=form1 enctype="multipart/form-data">
+    <table border="1">
+        <tbody>
+        <tr>
+            <td>№</td>
+           <td>Бренд</td>
+            <td>Статус</td>
+        </tr>
+        {foreach key=k item=i from=$brands name=brands_it}
+        <tr class="{if $i.status neq 1}disabled{/if}">
+            <td>{$smarty.foreach.brands_it.iteration}</td>
+            <td>{$i.name}</td>
+            <td>
+                <input type=checkbox id="{$i.brand_id}" class="brand_status"  value="1" name="brands[{$i.brand_id}]" {if $i.status eq 1}checked{/if} >
+                <input type=hidden id="b_hidden_{$i.brand_id}"  name="brands[{$i.brand_id}]" value="0" >
+            </td>
+        </tr>
+        {/foreach}
+    
+        </tbody>
+    </table>
+    {if $is_admin}
+    <p><input type='submit' id='save' name='save' value="Сохранить"></p>
+    {/if}
+</form>
+<style>
+    .disabled {
+        background-color: #cd0a0aab;
+    }
+</style>
+<script>
+    $('.brand_status').each(function(){
+        //$(this).val($(this).is(':checked')?1:0);
+        if($(this).is(':checked')){
+            $("#b_hidden_"+$(this).attr("id")).attr("disabled",true);
+        }else{
+            $("#b_hidden_"+$(this).attr("id")).attr("disabled",false);
+        }
+    });
+    $('.brand_status').change(function(){
+        //$(this).val($(this).is(':checked')?1:0);
+        if(!$(this).is(':checked')){
+            $(this).removeAttr('checked');
+            $("#b_hidden_"+$(this).attr("id")).attr("disabled",false);
+        }else{
+            $("#b_hidden_"+$(this).attr("id")).attr("disabled",true);
+        }
+    });
+</script>

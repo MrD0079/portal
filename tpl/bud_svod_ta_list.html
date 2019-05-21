@@ -41,8 +41,8 @@
     {assign var=enabled value=1}
 {/if}
 
-<tr>
-<td><nobr>{$i.fil_name}</nobr></td>
+<tr class="fill_{$i.fil_id}">
+<td><nobr>{$i.fil_name}</nobr>{if $smarty.request.db eq 0 and not $smarty.request.print}<span class="show-detail"  data-id="{$i.fil_id}">Детально по ДБ</span>{/if}</td>
 <td style="text-align:right">{$i.sales_fact|num:2}</td>
 <td style="text-align:right">{$i.sales|num:2}</td>
 <td style="text-align:right">{$i.zp_total|num:2}</td>
@@ -136,3 +136,133 @@
 <td style="text-align:right;background-color: rgb(204, 255, 255);">{$xt.compens_db|num:2}</td>
 </tr>
 </table>
+{if $smarty.request.db eq 0 and not $smarty.request.print}
+<style>
+	.db_row > td:first-child > nobr{
+		display: block;
+		position: relative;
+	}
+
+	.db_row > td:first-child > nobr::before {
+		content: "";
+		display: inline-block;
+		width: 5px;
+		height: 5px;
+		position: absolute;
+		top: 5px;
+		left: -8px;
+		background-color: #424242;
+		border-radius: 50%;
+	}
+
+	.db_row > td:first-child {
+		position: relative;
+	}
+
+	.db_row > td:first-child::before {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 1px;
+		height: 100%;
+		background-color: #000;
+		left: 24px;
+		top: -8px;
+	}
+
+	.db_row.db_row_first > td:first-child::after {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 9px;
+		height: 9px;
+		background-color: #515151;
+		left: 20px;
+		top: -17px;
+		border-radius: 50%;
+	}
+	tr[class*='fill_']> td > nobr {
+		display: block;
+		padding: 20px 0 0 0;
+	}
+
+	tr[class*='fill_'].with-detail > td > nobr {
+
+		padding-bottom: 20px;
+
+	}
+	.show-detail {
+
+		display: inline-block;
+		margin: 0 0 20px 0;
+		cursor: pointer;
+		text-decoration: underline;
+		color: #0b3dc9;
+		position: relative;
+
+	}
+
+	.show-detail::after {
+		content: "";
+		display: inline-block;
+		position: absolute;
+		width: 20px;
+		height: 15px;
+		top: 0px;
+		right: -25px;
+		opacity: 0;
+		background-image: url('data:image/gif;base64,R0lGODlhHAAEAPcAAAAAAAEBAQICAgMDAwQEBAUFBQYGBgcHBwgICAkJCQoKCgsLCwwMDA0NDQ4ODg8PDxAQEBERERISEhMTExQUFBUVFRYWFhcXFxgYGBkZGRoaGhsbGxwcHB0dHR4eHh8fHyAgICEhISIiIiMjIyQkJCUlJSYmJicnJygoKCkpKSoqKisrKywsLC0tLS4uLi8vLzAwMDExMTIyMjMzMzQ0NDU1NTY2Njc3Nzg4ODk5OTo6Ojs7Ozw8PD09PT4+Pj8/P0BAQEFBQUJCQkNDQ0REREVFRUZGRkdHR0hISElJSUpKSktLS0xMTE1NTU5OTk9PT1BQUFFRUVJSUlNTU1RUVFVVVVZWVldXV1hYWFlZWVpaWltbW1xcXF1dXV5eXl9fX2BgYGFhYWJiYmNjY2RkZGVlZWZmZmdnZ2hoaGlpaWpqamtra2xsbG1tbW5ubm9vb3BwcHFxcXJycnNzc3R0dHV1dXZ2dnd3d3h4eHl5eXp6ent7e3x8fH19fX5+fn9/f4GBgYKCgoODg4SEhIWFhYaGhoeHh4iIiImJiYqKiouLi4yMjI2NjY6Ojo+Pj5CQkJGRkZKSkpOTk5SUlJWVlZaWlpeXl5iYmJmZmZqampubm5ycnJ2dnZ6enp+fn6CgoKGhoaKioqOjo6SkpKWlpaampqenp6ioqKmpqaqqqqurq6ysrK2tra6urq+vr7CwsLGxsbKysrOzs7S0tLW1tba2tre3t7i4uLm5ubq6uru7u7y8vL29vb6+vr+/v8DAwMHBwcLCwsPDw8TExMXFxcbGxsfHx8jIyMnJycrKysvLy8zMzM3Nzc7Ozs/Pz9DQ0NHR0dLS0tPT09TU1NXV1dbW1tfX19jY2NnZ2dra2tvb29zc3N3d3d7e3t/f3+Dg4OHh4eLi4uPj4+Tk5OXl5ebm5ufn5+jo6Onp6erq6uvr6+zs7O3t7e7u7u/v7/Dw8PHx8fLy8vPz8/T09PX19fb29vf39/j4+Pn5+fr6+vv7+/z8/P39/f7+/v///////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJCgD/ACwAAAAAHAAEAAAIKAATCRwo8N+/cggTIjSoUCFBggwbLjwosdzDgRElZmx4sSBFjR8bBgQAIfkECQoA/wAsAAAAABwABAAACCwAAQgcKPDfv0QIEyI0WK6hw4YECRpUqJDhQ4cRB06kuPDfRYwZAWzkaPFjQAAh+QQJCgD/ACwAAAAAHAAEAAAIJwATCRwo8N8/AAgTIjRIsKHDRAYVKmT4sGJEiQv/VbR4ECMAig4DAgAh+QQJCgD/ACwAAAAAHAAEAAAILADLCRwo8N+/RAgTIjQIoKHDhgQJGlSokOFDhxEHTqS48N9FjBnLbeRo8WNAACH5BAkKAP8ALAAAAAAcAAQAAAgoAMsJHCjw3z+CBA0mWshwIcKBBh8W/NewocRyESUqrOhQ40GPHBcGBAAh+QQJGQD/ACwAAAAAHAAEAAAIHwDLCRwo8N8/ggQNIlyIUCFDhwwfHpQYMSLEhhMXBgQAOw==');
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.show-detail.load::after {
+		opacity: 1;
+	}
+</style>
+<script>
+    $(".show-detail").on("click",function(){
+        $btn = $(this);
+        if($btn.hasClass('disabled'))
+            return false;
+        $btn.addClass('disabled');
+        let fill_id = $btn.attr('data-id');
+        let dt = $("#dt").val();
+        let exp_list_without_ts = $("#exp_list_without_ts").val();
+        let clusters = $("#clusters").val();
+        let ok_db = $("#ok_db").val();
+        let ok_t1 = $("#ok_t1").val();
+        let ok_t2 = $("#ok_t2").val();
+
+        $btn.addClass('load');
+        $.ajax({
+            method: "POST",
+            url: '/?action=bud_svod_ta_list_by_db&show_head=0&with_total=0&nohead=1&print=1',
+            data: {
+                exp_list_without_ts:exp_list_without_ts,
+				clusters:clusters,
+				fil:fill_id,
+				db:0,
+				dt:dt,
+				ok_db:ok_db,
+				ok_t1:ok_t1,
+				ok_t2:ok_t2 }
+        }).done(function( data  ) {
+            /* контроллер вернул html с формой */
+            if(data){
+                $newHTML = $(data);
+                $rowFill = $(".fill_"+fill_id);
+                $newHTML.find('tr').addClass("db_row");
+                $newHTML.find('tr:first-child').addClass("db_row_first");
+                $newHTML.find('tr > td:first-child').css("padding-left","30px");
+                $newHTML.find('tr').insertAfter($rowFill);
+                $btn.remove();
+                $rowFill.addClass('with-detail');
+            }
+        }).fail(function(msg){
+            console.log( "Data Not Load: " + msg );
+        });
+    });
+</script>
+{/if}
