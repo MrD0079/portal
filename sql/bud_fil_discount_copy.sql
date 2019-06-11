@@ -6,11 +6,13 @@ BEGIN
    INSERT INTO bud_fil_discount_body (distr,
                                       dt,
                                       discount,
+                                      discount_kk,
                                       comm,
                                       fio)
       SELECT distr,
              TO_DATE (:dt_to, 'dd.mm.yyyy'),
              discount,
+             discount_kk,
              comm,
              (SELECT fio
                 FROM user_list

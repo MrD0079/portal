@@ -227,7 +227,12 @@
 </table>
 
 <p>Сетевые ТП</p>
-<table id=mytable style="text-align: left; " border="1" cellpadding="2" cellspacing="0">
+{if not $smarty.request.print and $access_edit eq true and $smarty.request.exp_list_only_ts neq 0}
+<p style="font-weight: bold;padding: 5px 10px;display: inline-block;color: #e63434;">
+	Подтверждение затрат доступно только в рамках всей сети, т.к. сетевые ТП распределены по разным Торговым Супервайзерам.
+</p>
+{/if}
+<table id=mytable style="text-align: left; " border="1" cellpadding="2" cellspacing="0" class="net-tp">
 <tbody>
 <tr style="font-weight:bold">
 <td style="text-align: center;">№ п/п</td>
@@ -370,7 +375,7 @@
 {/if}
 			<td style=" text-align:center;">{$i1.lu_fio} {$i1.lu}</td>
 			<td style=" text-align:center;" id="d_{$i.net_kod}_{$i.db}_{$i1.fil}_ok_db_tn">
-			{if not $i1.selected or $tn neq $i.db or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false or $i.status eq 0}
+			{if not $i1.selected or $tn neq $i.db or $smarty.request.print or $i.taf_ok_db_tn or $access_edit eq false or $i.status eq 0 or $smarty.request.exp_list_only_ts neq 0}
 			{else}
 			<input
 					name="ok_db_tn[{$i.net_kod}_{$i.db}_{$i1.fil}]"

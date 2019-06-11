@@ -2,6 +2,7 @@
   SELECT bud.id,
          bud.name,
          b.discount,
+         b.discount_kk,
          TO_CHAR (b.lu, 'dd.mm.yyyy hh24:mi:ss') lu,
          b.fio,
          b.comm

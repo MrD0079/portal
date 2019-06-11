@@ -89,6 +89,7 @@ $('#fd').val()==''?alert('¬ыберите исходный период дл€ копировани€ скидок!'):$('
 			<td>є п/п</td>
 			<td>дистр</td>
 			<td>скидка</td>
+			<td>скидка KK</td>
 			<td>коммент</td>
 			<td>когда и кто изменил</td>
 		</tr>
@@ -110,6 +111,22 @@ $('#fd').val()==''?alert('¬ыберите исходный период дл€ копировани€ скидок!'):$('
 				>
 				{else}
 				{$i.discount|num:2}
+				{/if}
+			</td>
+			<td id=td_discount_kk{$i.id} style="text-align:right">
+				{if not $disabled}
+				<input
+						class="number"
+						size=5
+						{$disabled}
+						value="{$i.discount_kk}"
+						onChange="
+					save('{$smarty.request.sd}','body','discount_kk',this.value,{$i.id});
+					save('{$smarty.request.sd}','body','fio','{$fio}',{$i.id});
+				"
+				>
+				{else}
+				{$i.discount_kk|num:2}
 				{/if}
 			</td>
 			<td id=td_comm{$i.id} style="text-align:right">
