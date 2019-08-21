@@ -24,11 +24,11 @@
          faktoplachusl_cur_total,
          faktoplachusl_prev_total,
          SUM (faktokazusl_total) faktokazusl_total,
-           NVL (tm_prev_sum_per, 0)
-         - NVL (faktoplachusl_prev_total, 0)
-         + NVL (sum_per, 0)
-         - NVL (faktoplachusl_cur_total, 0)
-            remain,
+           NVL (tm_prev_sum_per, 0) --promo_tm 04.2019 (выдано в прошлом месяце)
+         - NVL (faktoplachusl_prev_total, 0) -- 04.2019 (потрачено в прошлом месяце)
+         + NVL (sum_per, 0) -- 05.2019 (выдано в тек. месяце)
+         - NVL (faktoplachusl_cur_total, 0) --05.2019 (потрачено в тек. месяце)
+            remain, -- остаток на тек. месяц
          NVL (tm_prev_sum_per, 0) - NVL (faktoplachusl_prev_total, 0)
             remain_prev
     FROM (  SELECT rmkk,
@@ -231,6 +231,9 @@
                                               TO_DATE (
                                                  '1.' || :plan_month || '.' || :y,
                                                  'dd.mm.yyyy')
+                                         /* [fix] Старт учета с 1 мая 2019 в связи изменением  привязкой МКК - Сеть */
+                                         /*AND TO_DATE ('01.'|| i.m || '.'|| i.y,'dd.mm.yyyy') >= TO_DATE ('01.04.2019','dd.mm.yyyy')*/
+                                         AND c.data >= TO_DATE ('01.04.2019','dd.mm.yyyy')
                               GROUP BY m.mkk_ter) faktoplachusl_prev,
                              (  SELECT m.mkk_ter, m.id_net, SUM (m.total) total
                                   FROM nets_plan_month m

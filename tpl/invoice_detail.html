@@ -1,5 +1,8 @@
+{if $read_only eq 0}
 <h2>Привязать статьи к счету</h2>
-
+{else}
+<h2>Статьи затрат</h2>
+{/if}
 
 <form target="_self" method="POST" name=invoice_detail id=invoice_detail>
 
@@ -78,7 +81,11 @@
 
 <hr>
 
+{if $read_only eq 0}
 <h3>Подтвержденные статьи затрат для привязки к счету {$invoice.num} за выбранный период:</h3>
+{else}
+<h3>Статьи затрат привязаных к счету {$invoice.num} за выбранный период:</h3>
+{/if}
 	<table border=1 cellpadding=3 cellspacing=0>
 		<tr style="font-weight:bold">
 			<td>Год</td>
@@ -97,9 +104,12 @@
 			<td>
 				Сумма, покрываемая счетом, тыс.{$valuta}
 				<br>
-				(сумма привязанных статей /
+				(сумма привязанных статей
+				{if $read_only eq 0}/
 				<br>
-				сумма по данному столбцу)
+				сумма по данному столбцу
+				{/if}
+				)
 			</td>
 		</tr>
 		{foreach key=key item=item from=$invoice_detail name=invoice_detail}
@@ -122,12 +132,14 @@
 			<td align=right {if $item.nocover < 0}style="background-color:#FF99FF"{/if}>{$item.nocover|default:0|num:3}</td>
 			<td align=center {if $item.linked2invoice neq 0}style="background-color:rgb(51,255,51)"{/if}><input
 				{if $item.linked2invoice neq 0} checked {/if}
+				{if $read_only eq 1} disabled="disabled" {/if}
 				onclick="$('#ok1{$item.rid}').val(this.checked?1:0)"
 				type=checkbox name=st[] value="{$item.rid}">
 			</td>
 			<input type=hidden name=ok1[{$item.rid}] id=ok1{$item.rid}>
 			<td>
 				<input name=summa[{$item.rid}]
+			   {if $read_only eq 1} disabled="disabled" {/if}
 				onChange="$('#ok1{$item.rid}').val(1)"
 				value="{$item.invoice_summa|default:$item.nocover}" class=number5>
 			</td>
@@ -143,15 +155,19 @@
 			<td></td>
 			<td align=right>
 				{$invoice_detail_total.invoice_summa|default:0|num:3}
+			{if $read_only eq 0}
 				/
 				{$invoice_detail_total.cover|default:0|num:3}
+			{/if}
 			</td>
 		</tr>
 	</table>
 <br>
 
 <center>
+	{if $read_only eq 0}
 <input type=submit name="link" value="Привязать статьи / Сохранить изменения">
+	{/if}
 </center>
 
 </form>

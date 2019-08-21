@@ -40,7 +40,11 @@ $smarty->assign('d1', $d1);
 
 $sql = rtrim(file_get_contents('sql/bud_svod_ta_list_by_db.sql'));
 $sql=stritr($sql,$params);
-
+if(!isset($_REQUEST['print'])){
+    echo "<pre style='display: none;text-align: left;'>";
+    echo $sql;
+    echo "</pre>";
+}
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('x', $x);
 

@@ -759,10 +759,14 @@ $(window).load(function(){
             sku_values['akc_expenses'] = sku_values['total_volume_price_one']*akciya_expences_perc;//затраты по акции б/н
             sku_values['logistics_expenses'] = sku_values['total_volume_price']*sku.logistic_expens;//Расходы по логистике
 
-            company_market_expens = (parseFloat(sku.company_expens) + parseFloat(sku.market_val)) * 1;// * sku_values['total_volume_price'] ;
+            var company_market_expens = (parseFloat(sku.company_expens) + parseFloat(sku.market_val)) * 1;// * sku_values['total_volume_price'] ;
             //market_val = parseFloat(sku.market_val);// * sku_values['total_volume_price'] ;
-            sku_values['company_expenses'] = company_market_expens / (sku.revenue_val*1) /* Выручка от реализации */ * sku_values['total_volume_price_one'];//Расходы компании
-            all_expenses = sku_values['bonus_net'] + sku_values['share_expenses'] + sku_values['logistics_expenses'] + sku_values['company_expenses'] + parseFloat(sku.add_expenses);
+            if(company_market_expens == 0){
+                sku_values['company_expenses'] = 0;//Расходы компании
+            }else{
+                sku_values['company_expenses'] = company_market_expens / (sku.revenue_val*1) /* Выручка от реализации */ * sku_values['total_volume_price_one'];//Расходы компании
+            }
+            var all_expenses = sku_values['bonus_net'] + sku_values['share_expenses'] + sku_values['logistics_expenses'] + sku_values['company_expenses'] + parseFloat(sku.add_expenses);
             sku_values['net_clear'] = sku_values['expected_vp']-(all_expenses);//чистая прибыль
             if(akc_type == 1)
                 sku_values['net_clear'] -= sku_values['akc_expenses'];//чистая прибыль

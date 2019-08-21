@@ -9,11 +9,29 @@
             fcount,
          p.name payer_name,
          n.net_name,
-         c.mt || ' ' || c.y period
+         c.mt || ' ' || c.y period,
+         (CASE
+               WHEN NVL(s.TOTALSALES,0) > 0
+               THEN s.TOTALSALES / 1000
+               ELSE 0
+         END) AS TOTALSALES,
+         (CASE
+               WHEN NVL(s.TOTALSALES,0) > 0
+               /*THEN ROUND((NVL(r.summafact,0)*1000 / NVL(s.TOTALSALES,1) * 100),3)*/
+               THEN ROUND((NVL(r.summa,0)*1000 / NVL(s.TOTALSALES,1) * 100),3)
+               ELSE 0
+         END) AS persentSumma
     FROM rzay r,
          nets n,
          bud_fil p,
-         calendar c
+         calendar c,
+         (SELECT m.tp_kod, SUM(m.summa) AS totalSales
+          FROM a14mega m
+          WHERE TO_DATE('01.'||m.m||'.'||m.y ,'dd.mm.yyyy')
+                      BETWEEN add_months(trunc(TO_DATE ( :sd, 'dd.mm.yyyy'),'mm'),-1)
+                      AND last_day(add_months(trunc(TO_DATE ( :sd, 'dd.mm.yyyy'),'mm'),-1))
+          GROUP BY M.tp_kod
+          ) s
    WHERE     c.data = r.dt
          AND n.id_net = r.id_net
          AND r.payer = p.id
@@ -27,4 +45,5 @@
                       AND TO_DATE ( :ed, 'dd.mm.yyyy')
          AND ( :sendstatus = 0 OR :sendstatus = r.sendstatus + 1)
          AND ( :acceptstatus = 0 OR :acceptstatus = r.acceptstatus + 1)
+         AND r.TP = s.TP_KOD(+)
 ORDER BY r.dt, payer_name, net_name

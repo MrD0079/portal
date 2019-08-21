@@ -71,7 +71,8 @@
                              faktoplachusl_cur_total,
                              faktoplachusl_prev_total,
                              SUM (faktokazusl_total) faktokazusl_total
-                        FROM (  SELECT m.rmkk,
+                        FROM (
+                        SELECT m.rmkk,
                                        m.rmkk_name,
                                        m.mkk_diff,
                                        m.mkk_ter,
@@ -266,6 +267,8 @@
                                                            || '.'
                                                            || :y,
                                                            'dd.mm.yyyy')
+                                                  /* [fix] Старт учета с 1 мая 2019 в связи изменением  привязкой МКК - Сеть */
+                                                 AND TO_DATE ('01.'|| i.m || '.'|| i.y,'dd.mm.yyyy') >= TO_DATE ('01.05.2019','dd.mm.yyyy')
                                         GROUP BY m.mkk_ter) faktoplachusl_prev,
                                        (  SELECT m.mkk_ter,
                                                  m.id_net,

@@ -15,6 +15,11 @@ InitRequestVar("ok_fm","all");
 InitRequestVar("ok_rmkk","all");
 InitRequestVar("invoice_sended","all");
 InitRequestVar("ok_acts_redisplayed","all");
+
+/* 3205712428   Булава Анна Ивановна (финансовый менеджер) */
+$fin_access = ($tn == 3205712428) ? 1 : 0;
+$smarty->assign("fin_access", $fin_access);
+
 if (isset($_REQUEST["add"]))
 {
 	$v=$_REQUEST["new"];

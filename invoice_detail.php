@@ -34,6 +34,9 @@ if (isset($_REQUEST["link"])&&isset($_REQUEST["ok1"]))
 InitRequestVar("sd",$_SESSION["month_list"]);
 InitRequestVar("ed",$_SESSION["month_list"]);
 
+$read_only = (isset($_REQUEST['rdnly']) && $_REQUEST['rdnly'] == 1) ? 1 : 0;
+$smarty->assign("read_only", $read_only);
+
 $sql=rtrim(file_get_contents('sql/invoice.sql'));
 $params=array(':invoice'=>$_REQUEST["id"]);
 $sql=stritr($sql,$params);
@@ -42,6 +45,11 @@ $smarty->assign("invoice", $invoice);
 
 $sql=rtrim(file_get_contents('sql/invoice_detail.sql'));
 $sqlt=rtrim(file_get_contents('sql/invoice_detail_total.sql'));
+if($read_only == 1){
+    $sql = 'SELECT * FROM ('.$sql.') WHERE linked2invoice > 0';
+    $sqlt=rtrim(file_get_contents('sql/invoice_detail_total_ok.sql'));
+}
+
 $params=array(
 	':sd'=>"'".$_REQUEST["sd"]."'",
 	':ed'=>"'".$_REQUEST["ed"]."'",
@@ -52,6 +60,9 @@ $params=array(
 	);
 $sql=stritr($sql,$params);
 $sqlt=stritr($sqlt,$params);
+echo "<pre style='display: none;text-align: left;'>";
+echo $sqlt;
+echo "</pre>";
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign("invoice_detail", $data);

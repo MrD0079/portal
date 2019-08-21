@@ -211,6 +211,7 @@
             $(
                     function()
                     {
+                        try{
                             //$('#master').datepicker('option', 'minDate', -154);
                             //$('#master').datepicker('option', 'minDate', '01.01.2015');
                             $('#master').datepicker('option', 'minDate', '{/literal}{$now1}{literal}');
@@ -226,6 +227,9 @@
                                     $('#slave').datepicker('option', 'maxDate', formatted);
                             {/if}
                             {literal}
+                            }catch(e){
+                                console.log(e);
+                            }
                     }
             )
             $('#master').change(
@@ -1040,6 +1044,15 @@
             color: #2196F3;
             font-weight: 600;
             cursor: pointer;
+        }
+        .ui-autocomplete .ui-menu-item {
+            border: 1px solid #aeaeae;
+            margin-bottom: 3px;
+            padding: 2px 0px;
+            font-size: 12px;
+        }
+        .ui-autocomplete .ui-menu-item:hover {
+            background-color: #cffbd7;
         }
     </style>
     <script>

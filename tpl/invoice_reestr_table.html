@@ -64,6 +64,10 @@
 		{if $is_mkk or $is_rmkk or $is_fin_man or $is_admin}
 			<a target=_blank href="?action=invoice_detail&id={$item.id}">Привязать</a>
 		{/if}
+	{else}
+		{if $is_mkk or $is_rmkk or $is_fin_man or $is_admin}
+			<a target=_blank href="?action=invoice_detail&id={$item.id}&rdnly=1">Привязанные статьи</a>
+		{/if}
 	{/if}
 	</td>
 	{/if}
@@ -137,7 +141,7 @@
 	<td>{$item.lu_t}</td>
 	<td style="text-align: center;/*{if $item.ok_fm eq 1}*/background-color: rgb(51, 255, 51);/*{/if}*/">
 	{if not $smarty.request.print}
-		<input onclick="$('#data_{$item.id}_ok_fm').val(this.checked?1:0);" {if not $is_fin_man}disabled{/if} {if $item.ok_fm eq 1}checked="checked"{/if} type="checkbox">
+		<input onclick="$('#data_{$item.id}_ok_fm').val(this.checked?1:0);" {if not $is_fin_man or $fin_access eq 0}disabled{/if} {if $item.ok_fm eq 1}checked="checked"{/if} type="checkbox">
 		<input type=hidden name=data[{$item.id}][ok_fm] id=data_{$item.id}_ok_fm value="{$item.ok_fm}">
 	{else}
 		{if $item.ok_fm eq 1}да{/if}

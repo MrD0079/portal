@@ -107,7 +107,9 @@
 		<td>Сканкопии накладных</td>
 		<td>Плановая сумма возврата, тыс.{$valuta}.<br>      </td>
 		<td>Подтверждение НМКК</td>
+		<td>Cумма продаж предыдущего месяца, тыс.{$valuta}.</td>
 		<td>Фактическая сумма, тыс.{$valuta}.<br>      </td>
+		<td>% возвратов от продаж</td>
 		<td>Отправлено плательщику</td>
 	</tr>
 	{foreach key=key item=i from=$invoice name=invoice}
@@ -133,6 +135,7 @@
 				{if $i.acceptstatus eq 1}да {$i.acceptstatuslut}{/if}
 			{/if}
 		</td>
+		<td style="text-align:center">{$i.totalsales|default:0|num:3}</td>
 		<td style="text-align:right">
 			{if not $smarty.request.print and ($is_mkk or $is_rmkk)}
 				<input name=data[{$i.id}][summafact] id=data{$i.id}summafact value="{$i.summafact}" class=number3 {if $i.acceptstatus neq 1}disabled="disabled"{/if}>
@@ -140,6 +143,7 @@
 				{$i.summafact|default:0|num:3}
 			{/if}
 		</td>
+		<td style="text-align:center">{$i.persentsumma|default:0|num:2}</td>
 		<td style="text-align:center">{if $i.sendstatus}да{/if}</td>
 	</tr>
 	{/foreach}
@@ -147,7 +151,9 @@
 		<td colspan=8>Итого</td>
 		<td style="text-align:right">{$total.summa|default:0|num:3}</td>
 		<td style="text-align:right">{$total.acceptstatus|default:0|num:0}</td>
+		<td style="text-align:right">{$total.summasales|default:0|num:3}</td>
 		<td style="text-align:right">{$total.summafact|default:0|num:3}</td>
+		<td style="text-align:right"></td>
 		<td style="text-align:right">{$total.sendstatus|default:0|num:0}</td>
 	</tr>
 </table>

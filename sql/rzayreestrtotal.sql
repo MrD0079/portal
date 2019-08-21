@@ -3,7 +3,8 @@ SELECT COUNT (*) total,
        SUM (summa) summa,
        SUM (summafact) summafact,
        SUM (acceptstatus) acceptstatus,
-       SUM (sendstatus) sendstatus
+       SUM (sendstatus) sendstatus,
+       sum (totalSales) summaSales
   FROM (  SELECT r.*,
                  fn_getname (n.tn_mkk) mkk,
                  fn_getname (n.tn_rmkk) rmkk,
@@ -15,13 +16,26 @@ SELECT COUNT (*) total,
                     fcount,
                  p.name payer_name,
                  n.net_name,
-                 c.mt || ' ' || c.y period
+                 c.mt || ' ' || c.y period,
+                 (CASE
+                       WHEN NVL(s.TOTALSALES,0) > 0
+                       THEN s.TOTALSALES / 1000
+                       ELSE 0
+                 END) AS TOTALSALES
             FROM rzay r,
                  nets n,
                  bud_fil p,
-                 calendar c
+                 calendar c,
+                 (SELECT m.tp_kod, SUM(m.summa) AS totalSales
+                  FROM a14mega m
+                  WHERE TO_DATE('01.'||m.m||'.'||m.y ,'dd.mm.yyyy')
+                              BETWEEN add_months(trunc(TO_DATE ('01.06.2019', 'dd.mm.yyyy'),'mm'),-1)
+                              AND last_day(add_months(trunc(TO_DATE ( '30.06.2019', 'dd.mm.yyyy'),'mm'),-1))
+                  GROUP BY m.tp_kod
+                  ) s
            WHERE     c.data = r.dt
                  AND n.id_net = r.id_net
+                 AND r.tp = s.tp_kod(+)
                  AND r.payer = p.id
                  AND DECODE ( :tn_rmkk, 0, n.tn_rmkk, :tn_rmkk) = n.tn_rmkk
                  AND DECODE ( :tn_mkk, 0, n.tn_mkk, :tn_mkk) = n.tn_mkk
