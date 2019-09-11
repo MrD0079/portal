@@ -646,7 +646,9 @@
                             {if $i1.type eq 'formula'}
                                                                             <input type=hidden name=new_st[{$i1.id}] value=0>
                                                                             <!--
-                                                                            {$i1.formula}
+                                                                            {$i1.formula} = {$i1.val_formula}
+                                                                            --
+                                                                            {$i1.rep_formula} ={$i1.rep_val_formula}
                                                                             -->
                                                                             <input disabled id=new_st_{$i1.id} class="number5">
                                                                             <script>
@@ -786,7 +788,7 @@ function calc_formula (zid)
     {literal}try{{/literal}
 	{foreach key=k item=i from=$d}
 		{foreach key=k1 item=i1 from=$i.ff}
-			{if $i1.type eq 'number' or $i1.type eq 'number_int' and $i1.rep_var_name}
+			{if ($i1.type eq 'number' or $i1.type eq 'number_int') and $i1.rep_var_name}
 				var {$i1.rep_var_name}=parseFloat($('#new_st_{$i1.id}').val());
 			{/if}
 		{/foreach}

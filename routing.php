@@ -2,6 +2,12 @@
 
 //audit("открыл routes","routes");
 
+ echo '<p style="text-align: center;font-size: 24px;">Данный раздел перенесен в DM.<br>
+        DM - <a href="https://dm.avk.ua" target="_blank">https://dm.avk.ua</a><br>
+        Раздел: Отчеты - Команда продаж - Маршруты.<br>
+        С замечаниями и предложениями обращаться на email: <a href="mailto:support-dm@avk.com.ua">support-dm@avk.com.ua</a>
+        </p>';
+return;
 
 
 InitRequestVar("exp_list_without_ts",0);

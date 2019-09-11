@@ -17,7 +17,7 @@
 	{
 	$list1[$prefix.$lv]=0;
 	}
-	//print_r($list1);
+
 	extract($list1,EXTR_OVERWRITE/*,$prefix*/);
 	$d[$k]["formula_vals"]=array();
 	foreach ($data as $k1=>$v1)
@@ -31,6 +31,7 @@
 			$d[$k]["formula_vals"][$prefix.$v1["rep_var_name"]]=$v1['rep_val_'.$v1["type"]];
 		}
 	}
+
 	extract($d[$k]["formula_vals"],EXTR_OVERWRITE/*,$prefix*/);
 	foreach ($data as $k1=>$v1)
 	{
@@ -54,6 +55,7 @@
 			if ($data[$k1]["rep_formula"]!='')
 			{
 				$data[$k1]["rep_formula"]=stritr($data[$k1]["rep_formula"],$z);
+                echo "<pre class='asd' style='display: none;text-align: left;'>";
 				//echo '$rx='.$data[$k1]["rep_formula"].';';
 				@eval('$rx='.$data[$k1]["rep_formula"].';');
 				isset($rx)?$data[$k1]["rep_val_formula"]=$rx:null;
