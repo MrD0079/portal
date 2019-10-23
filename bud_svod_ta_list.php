@@ -39,9 +39,13 @@ $smarty->assign('d1', $d1);
 $sql = rtrim(file_get_contents('sql/bud_svod_ta_list.sql'));
 $sql=stritr($sql,$params);
 
+echo "<pre style='display: none;text-align: left;'>";
+echo var_dump($sql);
+echo "</pre>";
 
 $x = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 $smarty->assign('x', $x);
+
 
 $d2=date("Y-m-d H:i:s");
 $smarty->assign('d2', $d2);

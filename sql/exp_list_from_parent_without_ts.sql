@@ -1,4 +1,6 @@
-/* Formatted on 23/05/2016 11:30:53 (QP5 v5.252.13127.32867) */
+/* Formatted on 23/05/2016 11:30:53 (QP5 v5.252.13127.32867)
+    fix emp_name
+*/
   SELECT u.tn emp_svid,
          u.fio emp_name,
          u.pos_name emp_pos,
@@ -24,7 +26,7 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND NVL (u.is_ts, 0) <> 1
-         AND u.datauvol IS NULL
+         AND (u.datauvol IS NULL OR u.tn = 3130406555) /* fix 09.10.2019 отобразить ТМ Соловьева */
          AND EXISTS
                 (SELECT *
                    FROM parents
