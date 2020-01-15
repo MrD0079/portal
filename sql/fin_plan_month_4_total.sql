@@ -1,5 +1,7 @@
 /* Formatted on 12/8/2015 1:38:28  (QP5 v5.252.13127.32867) */
-  SELECT NVL (SUM (CASE WHEN s.parent NOT IN (42, 96882041) THEN m.total END),
+  SELECT
+    /*NVL (SUM (CASE WHEN s.parent NOT IN (42, 96882041) THEN m.total END),*/
+    NVL (SUM (CASE WHEN s.parent NOT IN (96882041) THEN m.total END),
               0)
             zatr,
          NVL (SUM (CASE WHEN s.parent = 42 THEN m.total END), 0) zatr_ng,

@@ -1,0 +1,94 @@
+<h2>Отчет по акции "Праздник приближается 3+1 (усл. 2)"</h2>
+{if not $smarty.request.print}
+<form target="_self" method="POST" name=form_report id=form_report enctype="multipart/form-data">
+    {if $is_ts neq 1 and $is_eta neq 1}
+    <br>
+    <select name=exp_list_without_ts id=exp_list_without_ts data-placeholder="По руководителю:" class="chosen-select-deselect">
+        <option value=0>По руководителю</option>
+        {foreach key=key item=item from=$exp_list_without_ts}
+        <option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+        {/foreach}
+    </select>
+    <br>
+    <br>
+    <select name=exp_list_only_ts id=exp_list_only_ts data-placeholder="По супервайзеру:" class="chosen-select-deselect">
+        <option value=0>По супервайзеру</option>
+        {foreach key=key item=item from=$exp_list_only_ts}
+        <option value={$item.emp_svid}><b>{$item.emp_name}</b> ({$item.emp_pos}) {if $item.datauvol}уволен {$item.datauvol}{/if}</option>
+        {/foreach}
+    </select>
+    <br>
+    <script>$("#exp_list_without_ts option[value='{$smarty.request.exp_list_without_ts}']").prop('selected', true);</script>
+    <script>$("#exp_list_only_ts option[value='{$smarty.request.exp_list_only_ts}']").prop('selected', true);</script>
+    {/if}
+    {if $is_eta neq 1}
+    <br>
+    <select name=eta_list id=eta_list data-placeholder="По ЭТА:" class="chosen-select-deselect">
+        <option value="">По ЭТА</option>
+        {foreach key=key item=item from=$eta_list}
+        <option value="{$item.h_fio_eta}">{$item.fio_eta}</option>
+        {/foreach}
+    </select>
+    <script>
+        $('#eta_list').val('{$smarty.request.eta_list}');
+    </script>
+    <br>
+    {/if}
+
+    <table border=0>
+        <tr style="vertical-align: top;">
+            <td>
+                <input type=radio id="ok_bonus" name="ok_bonus" value=0>все ТП<br>
+                <input type=radio id="ok_bonus" name="ok_bonus" value=1>бонус выдан<br>
+                <input type=radio id="ok_bonus" name="ok_bonus" value=2>бонус не выдан<br>
+                <script>$("input[name=ok_bonus][value={$smarty.request.ok_bonus|default:0}]").attr('checked',true);</script>
+            </td>
+        </tr>
+    </table>
+    <table border=0>
+        <tr style="vertical-align: top;">
+            <td>
+                <input type=radio id="ok_plan" name="ok_plan" value=0>все ТП<br>
+                <input type=radio id="ok_plan" name="ok_plan" value=1>план выполнен<br>
+                <input type=radio id="ok_plan" name="ok_plan" value=2>план не выполнен<br>
+                <script>$("input[name=ok_plan][value={$smarty.request.ok_plan|default:0}]").attr('checked',true);</script>
+            </td>
+        </tr>
+    </table>
+    <input type=submit name=generate id=generate value='Выбрать'>
+    {/if}
+
+    {if $smarty.request.generate}
+    {if not $smarty.request.print}
+    <p><a href="?act=a1912hc2&action=a1912hc2_report_a&y={$smarty.request.y}&month={$smarty.request.month}&print=1&excel=1&generate=1&filename=Отчет по акции Праздник приближается 3+1 (условие 2)">Экспорт в Excel</a></p>
+    <input type=hidden name=generate value="Выбрать">
+    {/if}
+
+    {include file="a1912hc2_report_a_1.html"}
+    {include file="a1912hc2_report_a_2.html"}
+
+
+    {if $is_eta neq 1}
+    {include file="a1912hc2_report_a_3.html"}
+    {/if}
+
+
+    {/if}
+    {if not $smarty.request.print}
+</form>
+{/if}
+
+{if $smarty.request.generate and not $smarty.request.print and not $is_eta and $is_ts and $ok_chief_4ts.part1 neq 1}
+<form target="_self" method="POST" name=form_report1 id=form_report1 enctype="multipart/form-data">
+    <input type=hidden name=generate value='Выбрать'>
+    {include file="a1912hc2_report_a_4.html"}
+</form>
+{/if}
+
+{if $smarty.request.generate and not $smarty.request.print and $is_db}
+<form target="_self" method="POST" name=form_report1 id=form_report1 enctype="multipart/form-data">
+    <input type=hidden name=generate value='Выбрать'>
+    {include file="a1912hc2_report_a_5.html"}
+</form>
+{/if}
+

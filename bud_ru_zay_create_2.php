@@ -23,7 +23,8 @@ ORDER BY name
     //echo $sql;
     $r = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
     $smarty->assign('x', $r);
-} elseif (isset($_REQUEST["getProduct"])){
+}
+elseif (isset($_REQUEST["getProduct"])){
     $sql="SELECT sku_id,
        tagid,
        product_id,

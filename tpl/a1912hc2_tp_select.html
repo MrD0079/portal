@@ -1,0 +1,44 @@
+<h1>Выбор ТП для участия в акции "Праздник приблжается 3+1 (усл. 2)"</h1>
+<form target="_self" method="POST" name=form_tp id=form_tp>
+    <input type=submit name=save id=save class=save value="Сохранить">
+    <br>
+    <br>
+    <table border=1 cellspacing=0 cellpadding=3>
+        <tr style="font-weight:bold; text-align:center">
+            <td>№ п/п</td>
+            <td>Код ТП</td>
+            <td>Название ТП</td>
+            <td>Адрес ТП</td>
+            <td>ФИО ЭТА</td>
+            <td>Участвует<br>в акции</td>
+            <td>Контактный<br>номер ЛПР, имя</td>
+        </tr>
+        {foreach key=tp_key item=tp_item from=$tp name=tp}
+        <tr {if $tp_item.enabled eq 1}style="font-weight:bold;color:red"{/if}>
+        <td>{$smarty.foreach.tp.iteration}</td>
+        <td>{$tp_item.tp_kod}</td>
+        <td>{$tp_item.tp_ur}</td>
+        <td>{$tp_item.tp_addr}</td>
+        <td>{$tp_item.fio_eta}</td>
+        <td {if $tp_item.selected eq 1}bgcolor="#00ff00"{/if} style="text-align:center">
+        <input type=checkbox {if $tp_item.selected eq 1}checked{/if} onclick="
+        $('#selected_changed_{$tp_item.tp_kod}').val(this.checked?1:0);
+        $('#selected_changed_{$tp_item.tp_kod}').attr('disabled',this.checked);
+        $('#contact_lpr_{$tp_item.tp_kod}').attr('disabled',!this.checked);
+        ">
+        <input type=hidden disabled=disabled id=selected_changed_{$tp_item.tp_kod} name=del[{$tp_item.tp_kod}]>
+        </td>
+        <td><input {if $tp_item.selected neq 1} disabled {/if} type=text required="required" size=25 name=data[{$tp_item.tp_kod}][contact_lpr] id=contact_lpr_{$tp_item.tp_kod} value="{$tp_item.contact_lpr|escape}"></td>
+        </tr>
+        {/foreach}
+        <tr style="font-weight:bold; text-align:center">
+            <td colspan=5>Итого</td>
+            <td style="text-align:right">{$tp_total|default:0}</td>
+            <td colspan=2></td>
+        </tr>
+    </table>
+    <br>
+    <input type=submit name=save id=save class=save value="Сохранить">
+    <br>
+    <br>
+</form>

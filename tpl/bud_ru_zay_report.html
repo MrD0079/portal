@@ -352,21 +352,16 @@
     <tr style="background-color:{$color};vertical-align:top">
         <td>
             {if $is_do or $is_traid or $is_traid_kk or $is_db or $is_admin}
-			{if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}
-			<input type="submit" name="save" id="save"
-				   data-submit="false"
-				   data-save-id="{$i.head.id}"
-				   data-count-tp="{$i.local_tp.count_tp}"
-				   data-count-summa="{$i.local_tp.total_summ}"
-				   value="Сохранить"><br>
-			{else}
-			<input type="submit" name="save" id="save" value="Сохранить"><br>
-			{/if}
-
-		<!--
-		<a href="javascript:void(0);" onClick='$("#form{$i.head.id} input").prop("disabled", true);'>test</a>
-		<a href="javascript:void(0);" onClick='$(".required{$i.head.id}").attr("disabled","disabled");'>test</a>
-		-->
+				{if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}
+					<input type="submit" name="save" id="save"
+						   data-submit="false"
+						   data-save-id="{$i.head.id}"
+						   data-count-tp="{$i.local_tp.count_tp}"
+						   data-count-summa="{$i.local_tp.total_summ}"
+						   value="Сохранить"><br>
+				{else}
+					<input type="submit" name="save" id="save" value="Сохранить"><br>
+				{/if}
             {/if}
             {if $is_admin or $is_traid}
 		<input type="submit" name="reset" id="reset" value="Сбросить подтверждения"><br>

@@ -280,19 +280,28 @@ if (isset($_REQUEST["save"]))
 			$s=array();
 			foreach ($v as $k1=>$v1)
 			{
-			if (is_uploaded_file($v1))
-			{
-				$a=pathinfo($_FILES["new_st"]["name"][$k][$k1]);
-				$fn=translit($_FILES["new_st"]["name"][$k][$k1]);
-				$path="files/bud_ru_zay_files/".$id."/".$ff_id."/report";
-				if (!file_exists($path)) {mkdir($path,0777,true);}
-				move_uploaded_file($v1, $path."/".$fn);
-				$s[]=$fn;
-				$ss=implode($s,"\n");
-				$keys = array("id"=>$k);
-				$vals = array("rep_val_file"=>$ss.$old_val);
-				Table_Update("bud_ru_zay_ff",$keys,$vals);
-			}
+                if (is_uploaded_file($v1))
+                {
+                    $a=pathinfo($_FILES["new_st"]["name"][$k][$k1]);
+                    $fn=translit($_FILES["new_st"]["name"][$k][$k1]);
+                    $path="files/bud_ru_zay_files/".$id."/".$ff_id."/report";
+                    if (!file_exists($path)) {mkdir($path,0777,true);}
+                    $moved = move_uploaded_file($v1, $path."/".$fn);
+                    if( $moved ) {
+                        $s[]=$fn;
+                        $ss=implode($s,"\n");
+                        $keys = array("id"=>$k);
+                        $vals = array("rep_val_file"=>$ss.$old_val);
+                        Table_Update("bud_ru_zay_ff",$keys,$vals);
+                    }else{
+                        try{
+                            $errorText = "из-за ошибки #".$_FILES["new_st"]["error"];
+                        }catch (Exception $e){
+                            $errorText = '';
+                        }
+                        echo "<p style='color:red;'>Файл(ы) ".implode($s,'; ')." в заявке №".$k." не был(и) загружен(ы) ".$errorText."</p>";
+                    }
+                }
 			}
 		}
 	}
@@ -441,9 +450,9 @@ if (isset($_REQUEST["select"])&&(!isset($_REQUEST["showonlysvod"])))
 
     $sql=rtrim(file_get_contents('sql/bud_ru_zay_report.sql'));
     $sql=stritr($sql,$params);
-    echo "<pre style='display: none;text-align: left;'>";
-    echo $sql;
-    echo "</pre>";
+//    echo "<pre style='display: none;text-align: left;'>";
+//    echo $sql;
+//    echo "</pre>";
     $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
     foreach ($data as $k=>$v)
@@ -468,6 +477,9 @@ if (isset($_REQUEST["select"])&&(!isset($_REQUEST["showonlysvod"])))
             $sql=rtrim(file_get_contents('sql/bud_ru_zay_get_ff.sql'));
             $p=array(':z_id' => $k);
             $sql=stritr($sql,$p);
+//        echo "<pre style='display: none;text-align: left;'>";
+//        echo $sql;
+//        echo "</pre>";
             $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
             //fix. Check is set any TP for local akciya

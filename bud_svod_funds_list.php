@@ -34,9 +34,9 @@ $sql = rtrim(file_get_contents('sql/bud_svod_funds_list.sql'));
 $sql=stritr($sql,$params);
 $xx = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 //echo $sql;
-echo "<pre style='display: none;text-align: left;'>";
-echo var_dump($sql);
-echo "</pre>";
+//echo "<pre style='display: none;text-align: left;'>";
+//echo var_dump($sql);
+//echo "</pre>";
 /*foreach ($x as $k=>$v)
 {
 	foreach ($x1 as $k1=>$v1)
@@ -57,6 +57,10 @@ $smarty->assign('xx', $xx);
 
 $sql = rtrim(file_get_contents('sql/bud_svod_funds_act.sql'));
 $sql=stritr($sql,$params);
+
+echo "<pre style='display: none;text-align: left;'>";
+echo var_dump($sql);
+echo "</pre>";
 
 $act = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 

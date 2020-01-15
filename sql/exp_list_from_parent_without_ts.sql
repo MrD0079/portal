@@ -26,7 +26,9 @@
                     FROM user_list
                    WHERE tn = :tn) = 1)
          AND NVL (u.is_ts, 0) <> 1
-         AND (u.datauvol IS NULL OR u.tn = 3130406555) /* fix 09.10.2019 отобразить ТМ Соловьева */
+         AND (u.datauvol IS NULL
+                OR u.TN = 3130406555 /* fix 09.10.2019 отобразить ТМ Соловьева */
+                OR u.tn = 2440803752) /* fix 14.11.2019 отобразить ТМ Луговской (Твердохлеб) */
          AND EXISTS
                 (SELECT *
                    FROM parents

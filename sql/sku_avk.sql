@@ -20,7 +20,7 @@
             WHERE CONCAT(ss.sku_id,ss.date_s) = mss.sku_date AND mss.sku_id = sa.sku_id
             ),0) price_ss ,
           NVL((SELECT fs.price FROM sku_avk_free_sell_uk fs WHERE fs.sku_id = sa.sku_id  AND fs.currency = 980),0) price_urkaine,
-          NVL((SELECT kk.price FROM sku_avk_kk_price kk WHERE kk.sku_id = sa.sku_id AND kk.network_id = :net_id),0) price_s_kk, /* price spec-cii KK */
+          NVL((SELECT kk.price FROM sku_avk_kk_price kk WHERE kk.sku_id = sa.sku_id AND kk.network_id = :sw_kod/*:net_id*/),0)*sa.weight price_s_kk, /* price spec-cii KK by 1Kg*/
           0 price_one,
           NVL((SELECT nc.sum_logist_1t FROM sku_avk_net_costs nc,
             (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date

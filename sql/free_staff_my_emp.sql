@@ -17,5 +17,5 @@
          AND s.datauvol IS NULL
          AND e.emp_tn = f.tn(+)
          --AND f.tn IS NULL
-         AND (f.tn IS NULL OR (s.fdata > f.datauvol))
+         AND (f.tn IS NULL OR (s.fdata > f.datauvol) OR (s.start_pos > f.datauvol))
 ORDER BY emp_name

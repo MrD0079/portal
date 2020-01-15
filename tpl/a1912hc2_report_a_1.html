@@ -1,0 +1,26 @@
+{if not $smarty.request.print}
+<table style="text-align: left;" border="1" cellpadding="2" cellspacing="0">
+    <tr style="font-weight:bold; text-align:center; vertical-align: top; text-align: center;">
+        <td>ТП в акции</td>
+        <td>Выполнили условие</td>
+        <td>ПЛАН,<br>{$valuta}</td>
+        <td>ФАКТ,<br>{$valuta}</td>
+        <td>Бонус расчетный,<br>{$valuta}</td>
+        <td>Бонус фактический,<br>{$valuta}</td>
+        <td>Бонус выдан, кол-во клиентов</td>
+        <td>Сумма по всем загруженным реестрам</td>
+        <td>Затраты на акцию, %</td>
+    </tr>
+    <tr style="text-align:right">
+        <td>{$itogi.cnt_tp|default:0}</td>
+        <td>{$itogi.if_cnt|default:0}</td>
+        <td>{$itogi.plan|default:0|num:2}</td>
+        <td>{$itogi.fact|default:0|num:2}</td>
+        <td>{$itogi.max_bonus|default:0|num:2}</td>
+        <td>{$itogi.bonus_sum1|default:0|num:2}</td>
+        <td>{$itogi.bonus_fakt_cnt|default:0|num:2}</td>
+        <td>{$file_list_total.bonus|default:0|num:2}</td>
+        <td>{$itogi.zat|default:0|num:2}</td>
+    </tr>
+</table>
+{/if}

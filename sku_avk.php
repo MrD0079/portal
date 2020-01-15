@@ -121,7 +121,7 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
         if (isset($_REQUEST["q"])) {
             if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                 $q = htmlentities(utf8_decode($_POST['q'])); // right
-                $_REQUEST["net_id"] = $_REQUEST["net_id"];
+                //$_REQUEST["net_id"] = $_REQUEST["net_id"];
             }else{
                 $q = charset_x_win($_REQUEST["q"]);
             }
