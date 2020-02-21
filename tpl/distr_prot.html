@@ -108,46 +108,46 @@ function get_val(id,field)
 function send_file()
 {
 
-var x=0;
-$(".new_prot:required").each(
-function(){
-if (!$(this).val())
-x=x+1;
-}
-);
-if (x>0)
-{
-alert('не все обязательные поля заполнены');
-return;
-}
+	var x=0;
+	$(".new_prot:required").each(
+		function(){
+			if (!$(this).val())
+				x=x+1;
+		}
+	);
+	if (x>0)
+	{
+		alert('не все обязательные поля заполнены');
+		return;
+	}
 
-$('#td').css('background-color','red');
-var fd = new FormData();
-fd.append('distr', $('#distr').val());
-fd.append('comm', $('#comm').val());
-fd.append('cat', $('#cat').val());
-fd.append('conq', $('#conq').val());
-fd.append('result', $('#result').val());
-jQuery.each($('#files')[0].files, function(i, file) {
-fd.append('img['+i+']', file);
-});
-$.ajax({
-  type: 'POST',
-  url: '?action=distr_prot_f_save&nohead=1',
-  data: fd,
-  processData: false,
-  contentType: false,
-  success: function(data) {
-    $('#files_list').html(data);
-    $('#td').css('background-color','white');
-    //$('#form2').trigger('reset');
-    //$('#refresh').click();
-  },
-  error: function(data) {
-    $('#files_list').html(data);
-    $('#td').css('background-color','white');
-  }
-});
+	$('#td').css('background-color','red');
+	var fd = new FormData();
+	fd.append('distr', $('#distr').val());
+	fd.append('comm', $('#comm').val());
+	fd.append('cat', $('#cat').val());
+	fd.append('conq', $('#conq').val());
+	fd.append('result', $('#result').val());
+	jQuery.each($('#files')[0].files, function(i, file) {
+		fd.append('img['+i+']', file);
+	});
+	$.ajax({
+	  type: 'POST',
+	  url: '?action=distr_prot_f_save&nohead=1',
+	  data: fd,
+	  processData: false,
+	  contentType: false,
+	  success: function(data) {
+		$('#files_list').html(data);
+		$('#td').css('background-color','white');
+		//$('#form2').trigger('reset');
+		//$('#refresh').click();
+	  },
+	  error: function(data) {
+		$('#files_list').html(data);
+		$('#td').css('background-color','white');
+	  }
+	});
 }
 
 function del_prot(id)

@@ -351,6 +351,13 @@
     {if $i.head.valid_no eq 1}{assign var=color value="#66FFFF"}{/if}
     <tr style="background-color:{$color};vertical-align:top">
         <td>
+			<pre style="display: none;text-align: left;">
+				is_do - {$is_do|@debug_print_var} |
+				is_traid - {$is_traid|@debug_print_var} |
+				is_traid_kk - {$is_traid_kk|@debug_print_var} |
+				is_db - {$is_db|@debug_print_var} |
+				is_admin - {$is_admin|@debug_print_var} |
+			</pre>
             {if $is_do or $is_traid or $is_traid_kk or $is_db or $is_admin}
 				{if $i.head.st_id eq 19534552 and isset($i.local_tp.count_tp)}
 					<input type="submit" name="save" id="save"

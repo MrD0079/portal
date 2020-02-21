@@ -143,7 +143,7 @@ if (isset($_REQUEST["save_month"]))
 	foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 	{
         $row_id = $_REQUEST['row_id'][$key];
-        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != ""){
+        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0){
             $row_id = $_REQUEST['row_id'][$key];
         }else{
             $row_id = get_new_id();
@@ -173,12 +173,12 @@ if (isset($_REQUEST["save_month"]))
 		}
 		Table_Update ("nets_plan_month", $keys, $values);
         //unset
-        if($_REQUEST['brand_select'][$key] === null && $_REQUEST['brand_select'][$key] == ""){
+        if($_REQUEST['brand_select'][$key] === null || $_REQUEST['brand_select'][$key] == ""){
             $brands = array();
         }else{
             $brands = $_REQUEST["brand_select"][$key];
         }
-        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "") {
+        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0) {
             $brand_selected = $db->getAll("select brand_id from nets_plan_month_brand  where status = 1 AND row_id=" . $_REQUEST['row_id'][$key]);
             if (count($brand_selected) > 0) {
                 foreach ($brand_selected as $k => $v) {
@@ -227,7 +227,7 @@ if (isset($_REQUEST["add_month"]))
 	{
 		foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 		{
-            if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != ""){
+            if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0){
                 $row_id = $_REQUEST['row_id'][$key];
             }else{
                 $row_id = get_new_id();
@@ -287,13 +287,14 @@ if (isset($_REQUEST["add_month"]))
 			{
 				Table_Update ("nets_plan_month", $keys, $values);
                 //unset
-                if($_REQUEST['brand_select'][$key] === null && $_REQUEST['brand_select'][$key] == ""){
+                if($_REQUEST['brand_select'][$key] === null || $_REQUEST['brand_select'][$key] == ""){
                     $brands = array();
                 }else{
                     $brands = $_REQUEST["brand_select"][$key];
                 }
 
-                if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "") {
+                /* достаем из базы выбранные бренды... но это ветка для добавления новой статьи и брендов быть не может ?? */
+                if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0) {
                     $brand_selected = $db->getAll("select brand_id from nets_plan_month_brand  where status = 1 AND row_id=" . $_REQUEST['row_id'][$key]);
                     if (count($brand_selected) > 0) {
                         foreach ($brand_selected as $k => $v) {
@@ -416,6 +417,9 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$sql=stritr($sql,$params);
 		$sqlt=stritr($sqlt,$params);
 		//print_r($params);
+        echo "<pre style='display: none;text-align: left;'>";
+        echo var_dump($sql);
+        echo "</pre>";
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign("nets_plan_month", $data);

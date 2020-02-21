@@ -188,7 +188,7 @@ if (isset($_REQUEST["save"]))
 					foreach ($data as $k1=>$v1)
 					{
 						$text="Здравствуйте ".$v1["fio"]."<br>";
-						$text.=$doc_str." №".$h["id"].". ".$fio." согласовал(а) ".$now_date_time."<br>";
+						$text.=$doc_str." <a href='https://ps.avk.ua/?action=bud_ru_zay_report&z_id=".$h["id"]."&tu=".$_REQUEST["tu"]."'>№".$h["id"]."</a>. ".$fio." согласовал(а) ".$now_date_time."<br>";
 						if ($h["rep_bud_ru_zay_ok"]==1)
 						{
 							$text.="<font style=\"color: green; font-weight:bold\">".$doc_str." №".$h["id"]." от ".$h["created"].". завершено согласование.</font><br>";
@@ -213,7 +213,7 @@ if (isset($_REQUEST["save"]))
 					{
 						if (count($e)>0)
 						{
-							$text=$doc_str." №".$h["id"]." от ".$h["created"].". Вы назначены исполнителем";
+							$text=$doc_str." <a href='https://ps.avk.ua/?action=bud_ru_zay_report&z_id=".$h["id"]."&tu=".$_REQUEST["tu"]."'>№".$h["id"]."</a> от ".$h["created"].". Вы назначены исполнителем";
 							foreach ($e as $k2=>$v2)
 							{
 								$email=$v2["e_mail"];
@@ -225,7 +225,7 @@ if (isset($_REQUEST["save"]))
 				if ($v["rep_accepted"]==2)
 				{
 					$subj=$doc_str." №".$h["id"]." от ".$h["created"].". Отклонение";
-					echo "<font style=\"color: red;\">".$doc_str." №".$h["id"]." от ".$h["created"].". Вами НЕ подтверждена</font>";
+					echo "<font style=\"color: red;\">".$doc_str." <a href='https://ps.avk.ua/?action=bud_ru_zay_report&z_id=".$h["id"]."&tu=".$_REQUEST["tu"]."'>№".$h["id"]."</a> от ".$h["created"].". Вами НЕ подтверждена</font>";
 					echo "<br><font style=\"color: red;\">Информирование об этом отправлено:</font><br>";
 					$sql=rtrim(file_get_contents('sql/bud_ru_zay_accept_mail_rep_no.sql'));
 					$params=array(':accept_id' => $k);
@@ -236,7 +236,7 @@ if (isset($_REQUEST["save"]))
 					foreach ($data as $k1=>$v1)
 					{
 						$text="Здравствуйте ".$v1["fio"]."<br>";
-						$text.=$doc_str." №".$h["id"].". ".$fio." отклонил(а) ".$now_date_time."<br>";
+						$text.=$doc_str." <a href='https://ps.avk.ua/?action=bud_ru_zay_report&z_id=".$h["id"]."&tu=".$_REQUEST["tu"]."'>№".$h["id"]."</a>. ".$fio." отклонил(а) ".$now_date_time."<br>";
 						$text.="Причина отклонения: ".$v["rep_failure"]."<br>";
 						$email=$v1["email"];
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";

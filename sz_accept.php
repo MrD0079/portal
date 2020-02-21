@@ -58,7 +58,7 @@ if (isset($_REQUEST["save"]))
 					$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 					foreach ($data as $k1=>$v1)
 					{
-						$text=$h["dpt_name"].".<br> Здравствуйте ".$v1["fio"]."<br>".$fio." согласовал(а) СЗ №".$h["id"]." ".$now_date_time."<br>";
+						$text=$h["dpt_name"].".<br> Здравствуйте ".$v1["fio"]."<br>".$fio." согласовал(а) СЗ <a href='https://ps.avk.ua/?action=sz_reestr&sz_id=".$h["id"]."&select=1'>№".$h["id"]."</a> ".$now_date_time."<br>";
 						if ($h["sz_ok"]==1)
 						{
 							$text.="<font style=\"color: green; font-weight:bold\">Согласование служебной записки завершено</font><br>";
@@ -86,7 +86,7 @@ if (isset($_REQUEST["save"]))
 						//$subj="Закончено согласование СЗ №".$h["id"]." по теме: ".$h["head"]." от ".$h["created"];
 						if (count($e)>0)
 						{
-							$text=$h["dpt_name"].".<br> Вы назначены исполнителем по СЗ №".$h["id"]." по теме ".$h["head"]." от ".$h["created"]."<br>";
+							$text=$h["dpt_name"].".<br> Вы назначены исполнителем по СЗ <a href='https://ps.avk.ua/?action=sz_reestr&sz_id=".$h["id"]."&select=1'>№".$h["id"]."</a> по теме ".$h["head"]." от ".$h["created"]."<br>";
 							$text.="<b>".nl2br($h["body"])."</b><br>";
 							$text.="Инициатором данной СЗ выступил(а) ".$h["creator"]."<br>";
 							$text.="Комментарии по СЗ:<br>";
@@ -148,7 +148,7 @@ if (isset($_REQUEST["save"]))
 					//print_r($data);
 					foreach ($data as $k1=>$v1)
 					{
-						$text=$h["dpt_name"].".<br> Здравствуйте ".$v1["fio"]."<br>".$fio." отклонил(а) СЗ №".$h["id"]." ".$now_date_time."<br>Причина отклонения: ".$v["failure"]."<br>";
+						$text=$h["dpt_name"].".<br> Здравствуйте ".$v1["fio"]."<br>".$fio." отклонил(а) СЗ <a href='https://ps.avk.ua/?action=sz_reestr&sz_id=".$h["id"]."&select=1'>№".$h["id"]."</a> ".$now_date_time."<br>Причина отклонения: ".$v["failure"]."<br>";
 						$email=$v1["email"];
 						echo "<font style=\"color: red;\">".$v1["fio"]."</font>";
 						send_mail($email,$subj,$text);
@@ -195,7 +195,7 @@ if (isset($_REQUEST["add_chat"]))
                             {
                                 $subj="Уточнение по СЗ №".$v1["sz_id"]." по теме: ".$v1["head"]." от ".$v1["created"];
                                 $text="Здравствуйте ".$v1["fio"]."<br>";
-                                $text.="По СЗ №".$v1["sz_id"]." по теме: ".$v1["head"]." от ".$v1["created"]."<br>";
+                                $text.="По СЗ <a href='https://ps.avk.ua/?action=sz_reestr&sz_id=".$v1["sz_id"]."&select=1'>№".$v1["sz_id"]."</a> по теме: ".$v1["head"]." от ".$v1["created"]."<br>";
                                 $text.=$fio." оставил(а) комментарий/уточнение: ".$v."<br>";
                                 $text.="Просьба ответить на комментарий/уточнение по данной СЗ в разделе <a href=\"https://ps.avk.ua/?action=sz_accept\">Согласование СЗ</a>";
                                 $email=$v1["email"];

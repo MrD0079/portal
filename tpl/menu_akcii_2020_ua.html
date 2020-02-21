@@ -1,0 +1,18 @@
+<li><a href="javascript:void(0);"><span class="dir">Январь</span></a>
+    <ul>
+        <li><a href="javascript:void(0);"><span class="dir">Труфалье 2+1</span></a>
+            <ul>
+                {if $is_ts}                             <li><a href="?act=a2001ttpo&action=a2001ttpo_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                <li><a href="?act=a2001ttpo&action=a2001ttpo_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a2001ttpo&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+        <li><a href="javascript:void(0);"><span class="dir">НП 1+1</span></a>
+            <ul>
+                {if $is_ts}                             <li><a href="?act=a2001opo&action=a2001opo_tp_select">Выбор ТП для участия в акции</a></li>{/if}
+                <li><a href="?act=a2001opo&action=a2001opo_report_a">Отчет по акции</a></li>
+                {if $is_admin or $is_traid or $is_super}<li><a href="?act=a2001opo&action=act_report_v">Отчет ВСТМ</a></li>{/if}
+            </ul>
+        </li>
+    </ul>
+</li>

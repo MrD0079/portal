@@ -324,15 +324,23 @@
             var fd = new FormData();
             fd.append('fn',  fn);
             fd.append('sz_id',  sz_id);
-            successNoty("Заявка "+fn+" по СЗ "+sz_id+" отправлена...",5000);
+            successNoty("Выполняется отправка заявки "+fn+" по СЗ "+sz_id,5000);
             $.ajax({
                     type: 'POST',
                     url: '?action=sz_reestr&print=1&nohead=1&send2scm=1',
                     data: fd,
+                	dataType: 'JSON',
                     processData: false,
                     contentType: false,
-                    success: function(data) {
-                        successNoty(data,5000);
+                    success: function(responce) {
+                        if(responce.status){
+                            successNoty(responce.message,5000);
+                        }else{
+                            errorNoty(responce.message);
+                    	}
+                    },
+					fail: function(responce){
+                    	console.log(responce);
                     }
             });
         }

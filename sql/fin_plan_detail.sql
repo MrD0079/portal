@@ -215,7 +215,8 @@ SELECT ROWNUM,
                                              67, :tn,
                                              (SELECT pos_id
                                                 FROM user_list
-                                               WHERE tn = :tn AND is_super = 1), :tn))
+                                               WHERE tn = :tn AND is_super = 1), :tn)
+                                            ,3064820178 /*Sevastyanov */)
                                OR :tn = m.mkk_ter
                                OR :tn IN (SELECT tn_rmkk
                                             FROM nets

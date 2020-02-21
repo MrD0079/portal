@@ -50,9 +50,10 @@ $params=array(
     ':date_between_brzr' => "'".$_REQUEST["date_between_brzr"]."'",
     ':tu'=>$_REQUEST['tu']
 );
+//echo "flag 1";
 $sql=rtrim(file_get_contents('sql/bud_ru_zay_report.sql'));
 $sql=stritr($sql,$params);
-//echo $sql;
+
 $data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 
 foreach ($data as $k=>$v)

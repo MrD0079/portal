@@ -7,7 +7,9 @@
 				<select name="nets" id="nets">
 					<option></option>
 					{foreach key=key item=item from=$nets}
-						<option {if $item.ter_mkk eq 1 or $item.ter_rmkk eq 1}style="color:red"{/if} value={$item.id_net}>{$item.net_name}</option>
+						<option {if $item.ter_mkk eq 1 or $item.ter_rmkk eq 1}style="color:red"{/if} value={$item.id_net}>
+					{$item.net_name}{if $item.ter_mkk eq 1 or $item.ter_rmkk eq 1}(неактивная){/if}
+					</option>
 					{/foreach}
 				</select>
 				<script>$('#nets option[value="{$smarty.request.nets}"]').prop('selected', true);</script>

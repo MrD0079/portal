@@ -103,8 +103,14 @@ if (isset($_REQUEST["save"])&&isset($_REQUEST["new_staff"]))
 				$text.="У руководителя ".$fio_creator." начал работать новый сотрудник ".$fio_staff."<br>";
 				$text.="Просим внести его личную карточку в программу \"Кадры\".<br>";
 				$text.="Страна: ".$_SESSION["cnt_name"]."<br>";
-				send_mail($pers1,$subj,$text,$fn);
-				send_mail($pers2,$subj,$text,$fn);
+
+				if($pers1 !== "") {
+                    send_mail($pers1, $subj, $text, $fn);
+                }
+				if($pers2 !== ""){
+                    send_mail($pers2,$subj,$text,$fn);
+                }
+
 
 				$subj="Новый сотрудник";
 				$text="Здравствуйте.<br>";

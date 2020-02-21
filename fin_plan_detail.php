@@ -159,9 +159,9 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["plan_type"]))
         $data[$k]['brands'] = $brands_str;
     }
 //
-//    echo "<pre style='display: none; text-align: left;'>";
-//    print_r($data);
-//    echo "</pre>";
+    echo "<pre style='display: none; text-align: left;'>";
+    var_dump($sql);
+    echo "</pre>";
 	$smarty->assign('fin_plan_detail', $data);
 	$smarty->assign('fin_plan_detail_total', $data_total);
 }

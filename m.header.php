@@ -108,7 +108,7 @@ tinymce.init({
 if (!isset($_REQUEST["nohead"])&&!isset($_REQUEST["google"]))
 //if (!isset($_REQUEST["nohead"]))
 {
-?><title>Портал дирекции по продажам АВК</title><?
+?><title>?????? ???????? ?? ???????? ???</title><?
 ?></head><body>
 <link rel="icon" href="design/favicon.ico" type="image/x-icon">
 <a id="toTop" href="javascript:void(0);" title="Up"></a>

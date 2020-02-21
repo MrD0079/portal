@@ -1,5 +1,9 @@
 <?
 if (isset($_REQUEST["send2scm"])){
+    $answer = [
+        'status' => 0,
+        'message' => '',
+    ];
     //ini_set("soap.wsdl_cache_enabled", "0");
     $options = array(
             'trace' => true,
@@ -7,32 +11,36 @@ if (isset($_REQUEST["send2scm"])){
             'cache_wsdl' => 'WSDL_CACHE_NONE',
             'soap_version' => 'SOAP_1_2'
     );
-    try
-    {  
-            //$client = new SoapClient("http://10.10.11.4/Orders/ws/Orders/?wsdl"/*,$options*/);
-            $client = new SoapClient("http://scm.avk.company/SCM/ws/SCM_Exchange?wsdl"/*,$options*/);
-            //var_dump($client->__getFunctions());
-            //var_dump($client->__getTypes());
+    try{
+        //$client = new SoapClient("http://10.10.11.4/Orders/ws/Orders/?wsdl"/*,$options*/);
+        $client = new SoapClient("http://scm.avk.company/SCM/ws/SCM_Exchange?wsdl"/*,$options*/);
+        //var_dump($client->__getFunctions());
+        //var_dump($client->__getTypes());
+    
+        $result = $client->ExecuteProcessing(
+                array
+                (
+                        'BinaryData'=>base64_encode(file_get_contents('files/'.$_REQUEST["fn"])),
+                        'Processing'=>'WebSendOrder',
+                        'StringData'=>$_REQUEST["sz_id"]
+                )
+        )->return;
+        $keys=array("tn"=>$tn,"sz_id"=>$_REQUEST["sz_id"],"text"=>"Результат загрузки заявки в SCM: ".mb_convert_encoding($result,'windows-1251','utf-8'));
+        Table_Update("sz_chat",$keys,$keys);
+
+        if(strpos(mb_strtolower(mb_convert_encoding($result,'windows-1251','utf-8'),'windows-1251'),'ошибка') === false){
+            $answer['status'] = 1;
+        }
+        $answer['message'] = mb_convert_encoding("Результат загрузки заявки в SCM: ",'utf-8','windows-1251').$result;
+    }catch (Exception $e){
+        $answer['message'] = $e->getMessage();
     }
-    catch (Exception $e)
-    { 
-            echo $e->getMessage();
-    }  
-    $result = $client->ExecuteProcessing(
-            array
-            (
-                    'BinaryData'=>base64_encode(file_get_contents('files/'.$_REQUEST["fn"])),
-                    'Processing'=>'WebSendOrder',
-                    'StringData'=>$_REQUEST["sz_id"]
-            )
-    )->return;
-    //echo mb_convert_encoding($result,'utf-8','windows-1251');
-    $keys=array("tn"=>$tn,"sz_id"=>$_REQUEST["sz_id"],"text"=>"Результат загрузки заявки в SCM: ".mb_convert_encoding($result,'windows-1251','utf-8'));
-    Table_Update("sz_chat",$keys,$keys);
-    echo mb_convert_encoding($result,'windows-1251','utf-8');
-    //var_dump($result);
-    //var_dump($result->Result);
-} else {
+
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($answer);
+
+}
+else {
     //audit ("открыл реестр СЗ","sz");
     InitRequestVar("dates_list1",$_SESSION["month_list"]);
     InitRequestVar("dates_list2",$now);

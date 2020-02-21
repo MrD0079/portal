@@ -8,8 +8,7 @@ if (isset($_REQUEST["new_staff"]))
 	$_REQUEST["new_staff"]["creator"]=$tn;
 	$ds=$_REQUEST["new_staff"]["datastart"];
 
-	if (($x1+$x2)==0)
-	{
+	if (($x1+$x2)==0){
 		$id=get_new_id();
 		$_REQUEST["new_staff"]["datastart"]=OraDate2MDBDate($_REQUEST["new_staff"]["datastart"]);
 		$_REQUEST["new_staff"]["limitkom"]=str_replace(",", ".", $_REQUEST["new_staff"]["limitkom"]);

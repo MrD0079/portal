@@ -1,0 +1,162 @@
+{if not $smarty.request.print}
+<h3>Отчет по национальным акциям за период: 01.01.2019 - 30.01.2020</h3>
+<form target="_self" method="POST" name=form_akcii_report_2019 id=form_akcii_report_2019 enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td style="text-align:right">Сети </td>
+            <td>
+                <select name=id_net_report[] id=id_net_report class="chosen-select-deselect" data-placeholder="Выберите сети:" multiple="multiple">
+                    <option value=0></option>
+                    {foreach key=key item=item from=$nets}
+                    <option value="{$item.id_net}">{$item.net_name}</option>
+                    {/foreach}
+                </select>
+                <input type="hidden" name="id_net_report_empty" id=id_net_report_empty value="0">
+                <script>
+                        let idNets = {$netsSelected};
+                        if(idNets !== undefined && $.isArray(idNets)){
+                            let valsNets = []
+                            $.each(idNets,function(index, value){
+                                valsNets.push(+value);
+                            });
+                            $('#id_net_report').val(valsNets);//.trigger('chosen:updated');
+                        }
+                    $('#id_net_report').on('change',function () {
+                        if($(this).val() === null){
+                            $('#id_net_report_empty').val(1);
+                        }else{
+                            $('#id_net_report_empty').val(0);
+                        }
+                    })
+                </script>
+            </td>
+        </tr>
+    </table>
+
+    <p>
+        <input type="submit" name="select" id="select" value="Отобразить отчет">
+    </p>
+
+</form>
+{/if}
+{if $smarty.request.select}
+    {if not $smarty.request.print}
+        <a href="?action=akcii_report_2019&id_net={$smarty.request.id_net}&print=1&excel=1&select=1&filename=Отчет по национальным акциям за период: 01.01.2019 - 30.01.2020">Экспорт Excel</a>
+    {/if}
+
+<table border=1 cellpadding=5 cellspacing="0">
+    <thead>
+        <tr>
+            <td rowspan="2">№</td>
+            <td rowspan="2">Сеть</td>
+            <td rowspan="2">№ заявки</td>
+            <td rowspan="2">Файлы отчета</td>
+            <td colspan="2">Период проведения акции</td>
+            <td rowspan="2">Бренд</td>
+            <td rowspan="2">SKU</td>
+            <td rowspan="2">Объем продаж, т.</td>
+            <td rowspan="2">Объем продаж, тыс. грн</td>
+            <td rowspan="2">Общий объем продаж, тыс. грн.</td>
+            <td rowspan="2">% скидки/компенсации</td>
+        </tr>
+        <tr>
+            <td>C</td>
+            <td>По</td>
+        </tr>
+    </thead>
+    <tbody>
+
+    {assign var=colorOdd value="rgba(102, 255, 102, 0.4)"}
+    {assign var=colorOddPrint value="rgb(102, 255, 102)"}
+    {assign var=colorEven value="rgba(255, 255, 102, 0.5)"}
+    {assign var=colorEvenPrint value="rgb(255, 255, 102)"}
+
+    {if not $smarty.request.print}
+        {assign var=colorCurrent value=$colorOdd}
+    {else}
+        {assign var=colorCurrent value=$colorOddPrint}
+    {/if}
+    {assign var=oldZayId value=0}
+
+    {foreach key=key item=item from=$akcii_report_source}
+        {if $oldZayId neq $item.id}
+            {assign var=oldZayId value=$item.id}
+            {if not $smarty.request.print}
+                {if $colorCurrent eq $colorOdd}
+                    {assign var=colorCurrent value=$colorEven}
+                {else}
+                    {assign var=colorCurrent value=$colorOdd}
+                {/if}
+            {else}
+                {if $colorCurrent eq $colorOddPrint}
+                    {assign var=colorCurrent value=$colorEvenPrint}
+                {else}
+                    {assign var=colorCurrent value=$colorOddPrint}
+                {/if}
+            {/if}
+        {/if}
+        <tr style="background-color: {$colorCurrent};">
+            <td>{$key+1}</td>
+            <td>{$item.net_name}</td>
+            <td><a href="https://ps.avk.ua/?action=bud_ru_zay_report&tu=0&z_id={$item.id}&select=1" target="_blank">{$item.id}</a></td>
+            <td>
+                {foreach key=key2 item=fileUrl from=$item.filepath}
+                    <a href="https://ps.avk.ua/{$fileUrl}" target="_blank">Файл_{$key2+1}</a><br>
+                {/foreach}
+            </td>
+            <td>{$item.dt_start}</td>
+            <td>{$item.dt_end}</td>
+            <td>{$item.name_brand}</td>
+            <td>{$item.sku_name}</td>
+            <td>{$item.sku_sales_weight}</td>
+            <td>{$item.sku_sales_cost}</td>
+            <td>{$item.fact_sales_total}</td>
+            <td>{$item.discount_total}</td>
+        </tr>
+
+
+    {/foreach}
+    </tbody>
+</table>
+{if not $smarty.request.print}
+
+<p><p></p></p>
+
+<table border=1 cellpadding=5 cellspacing=0 style="display: none;">
+    <tr style="text-align:center;font-weight:bold">
+        <td>Бренд</td>
+        <td>SKU</td>
+        <td>Объем продаж, т.</td>
+        <td>Объем продаж, тыс. грн</td>
+    </tr>
+
+
+    {foreach key=zay_id item=item from=$akcii_report}
+        <tr class="tr-title">
+            <td>№ заявки</td>
+            <td >Период проведения акции</td>
+            <td >% скидки/компенсации</td>
+            <td >Общий объем продаж, тыс. грн.</td>
+        </tr>
+        <tr class="tr-title-val">
+            <td>
+                <a href="https://ps.avk.ua/?action=bud_ru_zay_report&tu=0&z_id={$zay_id}&select=1">{$zay_id}</a>
+                <a href="">Экспорт в PDF</a>
+            </td>
+            <td>{$item.dt_start} - {$item.dt_end}</td>
+            <td>{$item.discount_total}</td>
+            <td>{$item.sales_total}</td>
+        </tr>
+
+        {foreach key=key2 item=sku from=$item.skuList}
+            <tr>
+                <td>{$sku.brand}</td>
+                <td>{$sku.sku_name}</td>
+                <td>{$sku.sales_weight}</td>
+                <td>{$sku.sales_cost}</td>
+            </tr>
+        {/foreach}
+    {/foreach}
+</table style>
+{/if}
+{/if}

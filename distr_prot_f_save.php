@@ -46,9 +46,11 @@ if (isset($_FILES['img']))
 				'fn'=>$fn
 			);
 			//print_r($vals);
-			Table_Update('distr_prot_files', $vals,$vals);
+
 			if (!file_exists('files/distr_prot_files')) {mkdir('files/distr_prot_files',0777,true);}
-			move_uploaded_file($_FILES['img']['tmp_name'][$k], 'files/distr_prot_files/'.$fn);
+			$move_uploaded_file = move_uploaded_file($_FILES['img']['tmp_name'][$k], 'files/distr_prot_files/'.$fn);
+			if($move_uploaded_file)
+                Table_Update('distr_prot_files', $vals,$vals);
 		}
 		else
 		{
