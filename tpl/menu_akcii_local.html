@@ -1,29 +1,29 @@
 {foreach key=k item=i from=$akcii_local}
-<li><a href="javascript:void(0);"><span class="dir">{$k}</span></a>
-<ul>
-{foreach key=k1 item=i1 from=$i}
-<li><a href="javascript:void(0);"><span class="dir">{$i1.mt}</span></a>
-<ul>
-{foreach key=k2 item=i2 from=$i1.data}
-<li><a href="javascript:void(0);"><span class="dir">{$i2.fil_name}</span></a>
-<ul>
-{foreach key=k3 item=i3 from=$i2.data}
-<li><a href="javascript:void(0);"><span class="dir">{$i3.val_string}</span></a>
-<ul>
-<li><a href="?action=bud_ru_zay_reestr&tu={$i3.tu}&z_id={$i3.id}&select=1">Заявка</a></li>
-{if $is_db or $has_parent_db or $is_admin or $is_traid or $is_traid_kk}
-<li><a href="?action=akcii_local_report&z_id={$i3.id}">Отчет по акции</a></li>
-{/if}
-<li><a href="?action=akcii_local_terms&z_id={$i3.id}">Условия акции</a></li>
-</ul>
-</li>
-{/foreach}
-</ul>
-</li>
-{/foreach}
-</ul>
-</li>
-{/foreach}
-</ul>
-</li>
+    <li><a href="javascript:void(0);"><span class="dir">{$k}</span></a>
+        <ul>
+        {foreach key=k1 item=i1 from=$i}
+            <li><a href="javascript:void(0);"><span class="dir">{$i1.mt}</span></a>
+                <ul>
+                {foreach key=k2 item=i2 from=$i1.data}
+                    <li><a href="javascript:void(0);"><span class="dir">{$i2.fil_name}</span></a>
+                        <ul>
+                        {foreach key=k3 item=i3 from=$i2.data}
+                            <li><a href="javascript:void(0);"><span class="dir">{$i3.val_string}</span></a>
+                                <ul>
+                                    <li><a href="?action=bud_ru_zay_reestr&tu={$i3.tu}&z_id={$i3.id}&select=1">Заявка</a></li>
+                                        {if $is_db or $has_parent_db or $is_admin or $is_traid or $is_traid_kk}
+                                            <li><a href="?action=akcii_local_report&z_id={$i3.id}">Отчет по акции</a></li>
+                                        {/if}
+                                    <li><a href="?action=akcii_local_terms&z_id={$i3.id}">Условия акции</a></li>
+                                </ul>
+                            </li>
+                        {/foreach}
+                        </ul>
+                    </li>
+                {/foreach}
+                </ul>
+            </li>
+        {/foreach}
+        </ul>
+    </li>
 {/foreach}

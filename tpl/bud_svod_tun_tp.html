@@ -227,7 +227,7 @@
 </table>
 
 <p>Сетевые ТП</p>
-{if not $smarty.request.print and $access_edit eq true and $smarty.request.exp_list_only_ts neq 0}
+{if not $smarty.request.print and $access_edit eq true and ($smarty.request.exp_list_only_ts neq 0 or $is_ts)}
 <p style="font-weight: bold;padding: 5px 10px;display: inline-block;color: #e63434;">
 	Подтверждение затрат доступно только в рамках всей сети, т.к. сетевые ТП распределены по разным Торговым Супервайзерам.
 </p>

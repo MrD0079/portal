@@ -188,6 +188,7 @@ function getItemsFromDB($db,$limit = 9999999,$sku_list = null){
         $sql = stritr($sql_base, $params);
         $sql = trim(preg_replace('/\s+/', ' ', $sql));
         $sku_avk = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
+       // PrintJSONFromArray(array($sql),'SQL');
         if (PEAR::isError($sku_avk))
         {
             PrintJSONFromArray(array(),'error: '.$sku_avk->getMessage() . " " . $sku_avk->getDebugInfo());

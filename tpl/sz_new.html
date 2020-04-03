@@ -92,10 +92,14 @@ $('#sz_cat').attr('required',false);
 
 function cat ($val)
 {
-if ($val>0)
-{
-$('#cat_hint').load('?action=sz_new_get_cat_hint&nohead=1&id='+$val);
-}
+    $('#sz_head, #sz_body, #save').prop('disabled',false);
+	if ($val>0)
+	{
+		$('#cat_hint').load('?action=sz_new_get_cat_hint&nohead=1&id='+$val);
+		if(parseInt($val) === 927679){/* отпуск */
+            $('#sz_head, #sz_body, #save').prop('disabled',true);
+		}
+	}
 }
 </script>
 {/literal}

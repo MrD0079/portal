@@ -14,7 +14,7 @@ if (isset($_REQUEST["plan_type"]))
 	$res = $db->getOne('select name from nets_plan_type where id='.$_REQUEST["plan_type"]);
 	$smarty->assign('plan_type_name', $res);
 }
-if ($_REQUEST["plan_type"]==4&&isset($_REQUEST["plan_month"])&&isset($_REQUEST["save"]))
+if ($_REQUEST["plan_type"]==4 && isset($_REQUEST["plan_month"]) && isset($_REQUEST["save"]))
 {
 	!isset($_REQUEST["db_sum"]) ? $_REQUEST["db_sum"]=0: null;
 	!isset($_REQUEST["db_sum_coffee"]) ? $_REQUEST["db_sum_coffee"]=0: null;
@@ -27,10 +27,10 @@ if ($_REQUEST["plan_type"]==4&&isset($_REQUEST["plan_month"])&&isset($_REQUEST["
 	$keys["month"]=$_REQUEST["plan_month"];
 	$vals["bonus_base"]=$_REQUEST["db_type"];
 	$vals["bonus_base_coffee"]=$_REQUEST["db_type_coffee"];
-	$vals["bonus_base_ng"]=$_REQUEST["db_type_ng"];
+	//$vals["bonus_base_ng"]=$_REQUEST["db_type_ng"];
 	$vals["bonus_sum"]=$_REQUEST["db_sum"];
 	$vals["bonus_sum_coffee"]=$_REQUEST["db_sum_coffee"];
-	$vals["bonus_sum_ng"]=$_REQUEST["db_sum_ng"];
+	//$vals["bonus_sum_ng"]=$_REQUEST["db_sum_ng"];
 	Table_Update ("nets_plan_month_ok", $keys, $vals);
 	$db->query("BEGIN nets_plan_month_ok_update(".$_REQUEST["plan_type"].",".$_REQUEST["nets"].",".$_REQUEST["calendar_years"].",".$_REQUEST["plan_month"]."); END;");
 }
@@ -140,14 +140,18 @@ if (isset($_REQUEST["senddog2fm"]))
 if (isset($_REQUEST["save_month"]))
 {
 	audit("сохранил статью в месячный фин. план сети","fin_plan");
+
+
 	foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 	{
         $row_id = $_REQUEST['row_id'][$key];
-        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0){
+        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] !== "" && intval($_REQUEST['row_id'][$key]) !== 0){
             $row_id = $_REQUEST['row_id'][$key];
         }else{
             $row_id = get_new_id();
         }
+
+
 		$keys=array("id" => $_REQUEST["edit"]);
 		$values=array(
 			"id_net" => $_REQUEST["nets"],
@@ -178,7 +182,7 @@ if (isset($_REQUEST["save_month"]))
         }else{
             $brands = $_REQUEST["brand_select"][$key];
         }
-        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0) {
+        if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] !== "" && intval($_REQUEST['row_id'][$key]) !== 0) {
             $brand_selected = $db->getAll("select brand_id from nets_plan_month_brand  where status = 1 AND row_id=" . $_REQUEST['row_id'][$key]);
             if (count($brand_selected) > 0) {
                 foreach ($brand_selected as $k => $v) {
@@ -227,7 +231,7 @@ if (isset($_REQUEST["add_month"]))
 	{
 		foreach ($_REQUEST["statya_enabled"] as $key=>$val)
 		{
-            if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0){
+            if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] !== "" && intval($_REQUEST['row_id'][$key]) !== 0){
                 $row_id = $_REQUEST['row_id'][$key];
             }else{
                 $row_id = get_new_id();
@@ -294,7 +298,7 @@ if (isset($_REQUEST["add_month"]))
                 }
 
                 /* достаем из базы выбранные бренды... но это ветка для добавления новой статьи и брендов быть не может ?? */
-                if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] != "" && $_REQUEST['row_id'][$key] != 0) {
+                if (isset($_REQUEST['row_id'][$key]) && $_REQUEST['row_id'][$key] !== null && $_REQUEST['row_id'][$key] !== "" && intval($_REQUEST['row_id'][$key]) !== 0) {
                     $brand_selected = $db->getAll("select brand_id from nets_plan_month_brand  where status = 1 AND row_id=" . $_REQUEST['row_id'][$key]);
                     if (count($brand_selected) > 0) {
                         foreach ($brand_selected as $k => $v) {
@@ -417,9 +421,9 @@ if (isset($_REQUEST["calendar_years"])&&isset($_REQUEST["nets"]))
 		$sql=stritr($sql,$params);
 		$sqlt=stritr($sqlt,$params);
 		//print_r($params);
-        echo "<pre style='display: none;text-align: left;'>";
-        echo var_dump($sql);
-        echo "</pre>";
+//        echo "<pre style='display: none;text-align: left;'>";
+//        echo var_dump($sql);
+//        echo "</pre>";
 		$data = $db->getAll($sql, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$datat = $db->getRow($sqlt, null, null, null, MDB2_FETCHMODE_ASSOC);
 		$smarty->assign("nets_plan_month", $data);

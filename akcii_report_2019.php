@@ -2,8 +2,13 @@
 
 InitRequestVar("id_net_report",[0]);
 InitRequestVar("id_net_report_empty",0);
+InitRequestVar("akcii_start",$_SESSION["month_list"]);
+InitRequestVar("akcii_end",$now);
 
-$params=array(':tn'=>$tn,':dpt_id' => $_SESSION["dpt_id"]);
+$params=array(
+    ':tn'=>$tn,
+    ':dpt_id' => $_SESSION["dpt_id"],
+);
 
 $sql=rtrim(file_get_contents('sql/nets.sql'));
 $sql=stritr($sql,$params);
@@ -16,6 +21,8 @@ if($_REQUEST['id_net_report_empty'] && $_REQUEST['id_net_report_empty'] == 1){
 
 $params=array(
     ":id_net_report"    =>  isset($_REQUEST["id_net_report"]) ? 'in ('.implode(',',$_REQUEST["id_net_report"]).')' : ' = 0',
+    ":akcii_start"=>"'".$_REQUEST["akcii_start"]."'",
+    ":akcii_end"=>"'".$_REQUEST["akcii_end"]."'",
 );
 
 

@@ -52,7 +52,7 @@
                   GROUP BY brand
               ) ncc
             WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) market_val,
-            NVL((SELECT nc.revenue FROM sku_avk_net_costs nc,
+          NVL((SELECT nc.revenue FROM sku_avk_net_costs nc,
             (SELECT brand, CONCAT(brand,MAX(ym)) tmp_date
                   FROM (
                       SELECT *
@@ -61,7 +61,16 @@
                   )
                   GROUP BY brand
               ) ncc
-            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) revenue_val
+            WHERE CONCAT(nc.brand,nc.ym) = ncc.tmp_date AND lower((CAST (nc.brand AS VARCHAR2(50)))) = lower(sa.name_brand) and nc.networkID = :sw_kod),0) revenue_val,
+          NVL((SELECT
+                 (CASE
+                    WHEN eb.ebitda > 0
+                    THEN eb.ebitda
+                    ELSE eb.network_ebitda
+                 END) as ebitda
+               FROM sku_avk_ebitda eb
+               WHERE eb.net_id = :sw_kod and eb.BRAND_ID = sa.BRAND_ID AND EXTRACT(MONTH FROM eb.DATE_P) = EXTRACT(MONTH FROM SYSDATE) AND EXTRACT(YEAR FROM eb.DATE_P) = EXTRACT(YEAR FROM SYSDATE)),0) as ebitda,
+          sa.BRAND_ID
         FROM sku_avk sa :bsa_table
         WHERE (:show_q = 0 OR (lower(sa.name) LIKE lower('%:name_p%')
               OR sa.sku_id LIKE :query

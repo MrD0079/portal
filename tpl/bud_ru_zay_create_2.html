@@ -639,6 +639,7 @@
                                         <td rowspan="2" style="display: none;">СС на объем отгрузки,тыс. грн</td>
                                         <td rowspan="2">Ожидаемая ВП,тыс. грн</td>
                                         <td colspan="6" class="colspan6">Расходы сети итого, вт.ч.</td>
+                                        <td rowspan="2">Чистая прибыль EBITDA, тыс. грн</td>
                                         <td rowspan="2">Чистая прибыль, тыс. грн</td>
                                         <td rowspan="2" >Сумма затрат по акции, тыс. грн с НДС</td>
                                         <td rowspan="2" class="type2">Расходы по акции в скидке, тыс. грн</td>
@@ -668,6 +669,7 @@
                                             <td><input type="text" class="logistics_expens_total" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
                                             <td><input type="text" class="company_expens_total" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
                                             <td><input type="text" class="add_expens" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
+                                            <td><input type="text" class="ebitda" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
                                             <td><input type="text" class="net_clear" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
                                             <td><input type="text" class="total_prom_cost" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
                                             <td class="type2"><input type="text" class="prom_costs_discount" style="text-align: center; font-weight: bold;" readonly="readonly" size="7" value="0"></td>
@@ -831,15 +833,18 @@
                 $(window).on('load',
                     function()
                     {
-                        if($('#new_st_176095245').val() !== ""){
-                            console.log($('#new_st_176095245').val());
+                        if($('#new_st_176095245').length > 0){
+                            if($('#new_st_176095245').val() !== ""){
+                                console.log($('#new_st_176095245').val());
 
-                            $('#new_st_176095246').datepicker('option', 'minDate', $('#new_st_176095245').datepicker('getDate'));
-                            var minDateTmp = $('#new_st_176095245').datepicker('getDate');
-                            var newMaxDate = new Date(minDateTmp.getFullYear(),minDateTmp.getMonth() +1,0);
-                            var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
-                            $('#new_st_176095246').datepicker('option', 'maxDate', formatted);
+                                $('#new_st_176095246').datepicker('option', 'minDate', $('#new_st_176095245').datepicker('getDate'));
+                                var minDateTmp = $('#new_st_176095245').datepicker('getDate');
+                                var newMaxDate = new Date(minDateTmp.getFullYear(),minDateTmp.getMonth() +1,0);
+                                var formatted = $.datepicker.formatDate("dd.mm.yy", newMaxDate);
+                                $('#new_st_176095246').datepicker('option', 'maxDate', formatted);
+                            }
                         }
+
                     }
                     );
                 $('#new_st_176095245').change(function(){

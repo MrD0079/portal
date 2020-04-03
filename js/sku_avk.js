@@ -331,6 +331,14 @@ $(window).load(function(){
             }else{
 
             }
+
+            if(value.ebitda_val_old == 0){
+                value.ebitda_val_old = value.ebitda_val;
+            }else if(value.ebitda_val == 0){
+                value.ebitda_val = value.ebitda_val_old;
+            }else{
+
+            }
         });
         return items;
     }
@@ -434,14 +442,15 @@ $(window).load(function(){
         var outputHTML = '<tr style="text-align: center;" data-sku-id="'+sku.id+'">'+
             '<td><input type="button" value="X" class="del_sku_current new" title="Удалить SKU"></td>'+
             '<td>'+
-            '<input type="text" name="sku_params['+sku.id_num+'][tag_id]" size="7" style="text-align: center;" readonly="readonly" value="'+sku.tag_id+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][id_num]" size="7" style="text-align: center;" value="'+sku.id_num+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][id]" size="7" style="text-align: center;" value="'+sku.id+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][sku_id]" size="7" style="text-align: center;" value="'+sku.sku_id+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][logistic_expens]" size="7" style="text-align: center;" d value="'+sku.logistic_expens+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][company_expens]" size="7" style="text-align: center;"  value="'+sku.company_expenses+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][market_val]" size="7" style="text-align: center;"  value="'+sku.market_val+'">'+
-            '<input type="hidden" name="sku_params['+sku.id_num+'][revenue_val]" size="7" style="text-align: center;"  value="'+sku.revenue_val+'">'+
+                '<input type="text" name="sku_params['+sku.id_num+'][tag_id]" size="7" style="text-align: center;" readonly="readonly" value="'+sku.tag_id+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][id_num]" size="7" style="text-align: center;" value="'+sku.id_num+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][id]" size="7" style="text-align: center;" value="'+sku.id+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][sku_id]" size="7" style="text-align: center;" value="'+sku.sku_id+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][logistic_expens]" size="7" style="text-align: center;" d value="'+sku.logistic_expens+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][company_expens]" size="7" style="text-align: center;"  value="'+sku.company_expenses+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][market_val]" size="7" style="text-align: center;"  value="'+sku.market_val+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][revenue_val]" size="7" style="text-align: center;"  value="'+sku.revenue_val+'">'+
+                '<input type="hidden" name="sku_params['+sku.id_num+'][ebitda_val]" size="7" style="text-align: center;"  value="'+sku.ebitda+'">'+
             '</td>'+
             '<td>'+sku.name_brand;
         outputHTML +=    "<input type='hidden' name='sku_params["+sku.id_num+"][name_brand]' size='7' style='text-align: center;'  value='"+sku.name_brand+"'>";
@@ -469,6 +478,7 @@ $(window).load(function(){
             '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][logistics_expenses]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][company_expenses]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td><input type="text" class="new change_input" name="sku_params['+sku.id_num+'][add_expenses]" size="5" style="text-align: center;"  value="'+sku.add_expenses+'"></td>'+
+            '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][ebitda]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][net_clear]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
             '<td style="background-color: #ffeb3b8a;"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][summ_prom_cost]" size="7" style="text-align: center;font-weight: bold;" readonly="readonly" value="0"></td>';
         outputHTMLCalculated += '<td class="type2"><input type="text" class="calc-input" name="sku_params['+sku.id_num+'][prom_costs_discount]" size="7" style="text-align: center;" readonly="readonly" value="0"></td>'+
@@ -770,6 +780,7 @@ $(window).load(function(){
             sku_values['net_clear'] = sku_values['expected_vp']-(all_expenses);//чистая прибыль
             if(akc_type == 1)
                 sku_values['net_clear'] -= sku_values['akc_expenses'];//чистая прибыль
+            sku_values['ebitda'] = sku.ebitda_val * sku_values['total_volume_price'] + sku_values['net_clear'];// EBITDA
             sku_values['summ_prom_cost'] = sku_values['akc_expenses'] * 1.2; // Сумма затрат по акции, грн с НДС
             sku_values['prom_costs_discount'] = sku_values['total_volume_price_one']-sku_values['total_volume_price_one_discount'];//Расходы по акции в скидке
             sku_values['total_network_costs'] = all_expenses+sku_values['prom_costs_discount'];//Всего затрат по сети
@@ -788,6 +799,7 @@ $(window).load(function(){
             total_arr['company_expens_total'] =0;
             total_arr['add_expens'] =0;
             total_arr['net_clear'] =0;
+            total_arr['ebitda'] =0;
             total_arr['total_prom_cost'] =0;
             total_arr['prom_costs_discount'] =0;
             total_arr['total_network_costs'] =0;
@@ -802,6 +814,7 @@ $(window).load(function(){
                 total_arr['company_expens_total'] += parseFloat($(this).find("input[name*='[company_expenses]']").val());
                 total_arr['add_expens'] += parseFloat($(this).find("input[name*='[add_expenses]']").val());
                 total_arr['net_clear'] += parseFloat($(this).find("input[name*='[net_clear]']").val());
+                total_arr['ebitda'] += parseFloat($(this).find("input[name*='[ebitda]']").val());
                 total_arr['total_prom_cost'] += parseFloat($(this).find("input[name*='[summ_prom_cost]']").val());
                 total_arr['prom_costs_discount'] += parseFloat($(this).find("input[name*='[prom_costs_discount]']").val());
                 total_arr['total_network_costs'] += parseFloat($(this).find("input[name*='[total_network_costs]']").val());

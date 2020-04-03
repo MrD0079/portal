@@ -68,6 +68,9 @@
 			</td>
 		</tr>
 	</table>
+	<input type=hidden name=nets value="{$smarty.request.nets}">
+	<input type=hidden name=calendar_years value="{$smarty.request.calendar_years}">
+	<input type="hidden" name="month_plan" value="{$smarty.request.plan_month}">
 	{if $enabled}
 	<input type=submit name=save value="Сохранить и пересчитать">
 	{/if}

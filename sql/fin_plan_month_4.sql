@@ -36,7 +36,8 @@
          m.total_fakt,
          m.mkk_ter,
          fn_getname (m.mkk_ter) mkk_name,
-         bud_z_id,m.payer,f.name payer_name
+         bud_z_id,m.payer,f.name payer_name,
+         DECODE(m.row_id,NULL,0,M.row_id) row_id
     FROM nets_plan_month m,
          statya s,
          statya gr,

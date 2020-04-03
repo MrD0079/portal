@@ -50,6 +50,7 @@ class SkuSelect
                 $html .= //'<td rowspan="2">СС на объем отгрузки,грн</td>' .
                     '<td rowspan="2">Ожидаемая ВП, тыс. грн</td>' .
                     '<td colspan="' . ($ack_type == 2 ? "5" : "6") . '" class="colspan6">Расходы сети итого, вт.ч.</td>' .
+                    '<td rowspan="2">Чистая прибыль EBITDA, тыс. грн</td>' .
                     '<td rowspan="2">Чистая прибыль, тыс. грн</td>' .
                     '<td rowspan="2" >Сумма затрат по акции, тыс. грн с НДС</td>';
                 if ($ack_type == 2) {
@@ -81,6 +82,7 @@ class SkuSelect
             $data_total['logistics_expens_total'] = 0;
             $data_total['company_expens_total'] = 0;
             $data_total['add_expens'] = 0;
+            $data_total['ebitda'] = 0;
             $data_total['net_clear'] = 0;
             $data_total['prom_costs_discount'] = 0;
             $data_total['total_network_costs'] = 0;
@@ -129,6 +131,7 @@ class SkuSelect
                         '<td>'.$this->transferToThousands($sku['logistics_expens_total']).'</td>'.
                         '<td>'.$this->transferToThousands($sku['company_expens_total']).'</td>'.
                         '<td>'.$sku['add_expens'].'</td>'.
+                        '<td>'.$this->transferToThousands($sku['ebitda']).'</td>'.
                         '<td>'.$this->transferToThousands($sku['net_clear']).'</td>'.
                         '<td style="background-color: #ffeb3b8a;">'.$this->transferToThousands($sku['summ_prom_cost']).'</td>';
                     if ($ack_type == 2)
@@ -146,6 +149,7 @@ class SkuSelect
                 $data_total['logistics_expens_total'] += $sku['logistics_expens_total'];
                 $data_total['company_expens_total'] += $sku['company_expens_total'];
                 $data_total['add_expens'] += $sku['add_expens'];
+                $data_total['ebitda'] += $sku['ebitda'];
                 $data_total['net_clear'] += $sku['net_clear'];
                 $data_total['summ_prom_cost'] += $sku['summ_prom_cost'];
                 $data_total['prom_costs_discount'] += $sku['prom_costs_discount']; /* 2 */
@@ -168,6 +172,7 @@ class SkuSelect
                     '<td>' . $this->transferToThousands($data_total['logistics_expens_total']) . '</td>' .
                     '<td>' . $this->transferToThousands($data_total['company_expens_total']) . '</td>' .
                     '<td>' . $this->transferToThousands($data_total['add_expens']) . '</td>' .
+                    '<td>' . $this->transferToThousands($data_total['ebitda']) . '</td>' .
                     '<td>' . $this->transferToThousands($data_total['net_clear']) . '</td>' .
                     '<td >' . $this->transferToThousands($data_total['summ_prom_cost']) . '</td>' ;
                     if ($ack_type == 2) {
@@ -243,6 +248,7 @@ class SkuSelect
                     $data[$k]['net_clear'] = $data[$k]['expected_vp'] - $all_expenses;//чистая прибыль
                     if ($akc_type == 1)
                         $data[$k]['net_clear'] -= $data[$k]['akc_expenses'];//чистая прибыль
+                    $data[$k]['ebitda'] = $data[$k]['ebitda_val'] * $data[$k]['total_volume_price'] + $data[$k]['net_clear'];// EBITDA
                     $data[$k]['summ_prom_cost'] = $data[$k]['akc_expenses'] * 1.2; // Сумма затрат по акции, грн с НДС
                     $data[$k]['prom_costs_discount'] = $data[$k]['total_volume_price_one'] - $data[$k]['total_volume_price_one_discount'];//Расходы по акции в скидке
                     $data[$k]['total_network_costs'] = $all_expenses + $data[$k]['prom_costs_discount'];//Всего затрат по сети

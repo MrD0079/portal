@@ -21,7 +21,7 @@ FROM ( SELECT Z.ID,
                  ON zf.Z_ID = Z.ID
                JOIN BUD_RU_FF ff
                  ON zf.FF_ID = ff.ID
-             WHERE Z.DT_START >= TO_DATE('01.01.2019 00:00:00', 'dd.mm.yyyy hh24:mi:ss')
+             WHERE Z.DT_START BETWEEN TO_DATE(:akcii_start, 'dd.mm.yyyy hh24:mi:ss') AND TO_DATE(:akcii_end, 'dd.mm.yyyy hh24:mi:ss')
                    AND 1 = (SELECT AC.REP_ACCEPTED
                             FROM BUD_RU_ZAY_ACCEPT AC
                             WHERE AC.Z_ID = z.id
@@ -44,7 +44,7 @@ FROM ( SELECT Z.ID,
                  ON zf.Z_ID = Z.ID
                JOIN BUD_RU_FF ff
                  ON zf.FF_ID = ff.ID
-             WHERE Z.DT_START >= TO_DATE('01.01.2019 00:00:00', 'dd.mm.yyyy hh24:mi:ss')
+             WHERE Z.DT_START BETWEEN TO_DATE(:akcii_start, 'dd.mm.yyyy hh24:mi:ss') AND TO_DATE(:akcii_end, 'dd.mm.yyyy hh24:mi:ss')
                    AND 1 = (SELECT AC.REP_ACCEPTED
                             FROM BUD_RU_ZAY_ACCEPT AC
                             WHERE AC.Z_ID = z.id
@@ -54,7 +54,7 @@ FROM ( SELECT Z.ID,
                                                                AND REP_ACCEPTED IS NOT NULL
                                                                AND INN_NOT_REPORTMA(TN) = 0))
                    AND ff.ID = 176933669 /* % скидка/компенсация */ ) Z
-       WHERE z.DT_START >= TO_DATE('01.01.2019 00:00:00','dd.mm.yyyy hh24:mi:ss')
+       WHERE z.DT_START BETWEEN TO_DATE(:akcii_start, 'dd.mm.yyyy hh24:mi:ss') AND TO_DATE(:akcii_end, 'dd.mm.yyyy hh24:mi:ss')
 
              AND (SELECT COUNT(*)
                   FROM BUD_RU_ZAY_FF

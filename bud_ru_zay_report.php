@@ -155,12 +155,7 @@ if (
 }
 if (isset($_REQUEST["save"]))
 {
-    $date = new DateTime();
-    $fp = fopen('/srv/www/1.txt', 'w+');
-    ob_start();
-    var_dump(['save' => $date->format('Y-m-d H:i:s') ]);
-    fwrite($fp, ob_get_clean());
-
+	
 	$_REQUEST["select"]=1;
 	if (isset($_REQUEST["report_done"]))
 	{
@@ -283,33 +278,31 @@ if (isset($_REQUEST["save"]))
 			$old_val=$db->getOne("select rep_val_file from bud_ru_zay_ff where id=".$k);
 			isset($old_val)?$old_val="\n".$old_val:null;
 			$s=array();
-
-                foreach ($v as $k1 => $v1) {
-                    if (is_uploaded_file($v1)) {
-                        $a = pathinfo($_FILES["new_st"]["name"][$k][$k1]);
-                        $fn = translit($_FILES["new_st"]["name"][$k][$k1]);
-                        $path = "files/bud_ru_zay_files/" . $id . "/" . $ff_id . "/report";
-                        if (!file_exists($path)) {
-                            mkdir($path, 0777, true);
+			foreach ($v as $k1=>$v1)
+			{
+                if (is_uploaded_file($v1))
+                {
+                    $a=pathinfo($_FILES["new_st"]["name"][$k][$k1]);
+                    $fn=translit($_FILES["new_st"]["name"][$k][$k1]);
+                    $path="files/bud_ru_zay_files/".$id."/".$ff_id."/report";
+                    if (!file_exists($path)) {mkdir($path,0777,true);}
+                    $moved = move_uploaded_file($v1, $path."/".$fn);
+                    if( $moved ) {
+                        $s[]=$fn;
+                        $ss=implode($s,"\n");
+                        $keys = array("id"=>$k);
+                        $vals = array("rep_val_file"=>$ss.$old_val);
+                        Table_Update("bud_ru_zay_ff",$keys,$vals);
+                    }else{
+                        try{
+                            $errorText = "из-за ошибки #".$_FILES["new_st"]["error"];
+                        }catch (Exception $e){
+                            $errorText = '';
                         }
-                        $moved = move_uploaded_file($v1, $path . "/" . $fn);
-                        if ($moved) {
-                            $s[] = $fn;
-                            $ss = implode($s, "\n");
-                            $keys = array("id" => $k);
-                            $vals = array("rep_val_file" => $ss . $old_val);
-                            Table_Update("bud_ru_zay_ff", $keys, $vals);
-                        } else {
-                            try {
-                                $errorText = "из-за ошибки #" . $_FILES["new_st"]["error"];
-                            } catch (Exception $e) {
-                                $errorText = '';
-                            }
-                            echo "<p style='color:red;'>Файл(ы) " . implode($s, '; ') . " в заявке №" . $k . " не был(и) загружен(ы) " . $errorText . "</p>";
-                        }
+                        echo "<p style='color:red;'>Файл(ы) ".implode($s,'; ')." в заявке №".$k." не был(и) загружен(ы) ".$errorText."</p>";
                     }
                 }
-
+			}
 		}
 	}
 
@@ -334,119 +327,29 @@ if (isset($_REQUEST["save"]))
 
 	if (isset($_FILES["sup_doc"]))
 	{
-	    try{
-            $fp = fopen('/srv/www/1.txt', 'a+');
-            ob_start();
-            var_dump($_FILES["sup_doc"]["tmp_name"]);
-            fwrite($fp, ob_get_clean());
 		foreach ($_FILES["sup_doc"]["tmp_name"] as $k=>$v)
 		{
-
-
-
 			$old_val=$db->getOne("select sup_doc from bud_ru_zay where id=".$k);
 			isset($old_val)?$old_val="\n".$old_val:null;
 			$s=array();
-
-            $fp = fopen('/srv/www/1.txt', 'a+');
-            ob_start();
-            var_dump($v);
-            fwrite($fp, ob_get_clean());
-
 			foreach ($v as $k1=>$v1)
 			{
-                $isUploadFile = false;
-			    try{
-                    $fp = fopen('/srv/www/1.txt', 'a+');
-                    ob_start();
-                    var_dump(["is_uploaded_file" => $v1]);
-                    fwrite($fp, ob_get_clean());
-
-                    $isUploadFile = is_uploaded_file($v1);
-
-                    $fp = fopen('/srv/www/1.txt', 'a+');
-                    ob_start();
-                    var_dump(["is_uploaded_file" => $isUploadFile]);
-                    fwrite($fp, ob_get_clean());
-                }catch (Exception $e){
-                    $fp = fopen('/srv/www/1.txt', 'a+');
-                    ob_start();
-                    var_dump([$e->getMessage()]);
-                    fwrite($fp, ob_get_clean());
-                }
-
-                if ($isUploadFile)
-                {
-                    $fp = fopen('/srv/www/1.txt', 'a+');
-                    ob_start();
-                    var_dump(["pathinfo"]);
-                    fwrite($fp, ob_get_clean());
-
-                    $a=pathinfo($_FILES["sup_doc"]["name"][$k][$k1]);
-                    $fn=translit($_FILES["sup_doc"]["name"][$k][$k1]);
-                    $path="files/bud_ru_zay_files/".$k."/sup_doc";
-
-                    $fp = fopen('/srv/www/1.txt', 'a+');
-                    ob_start();
-                    var_dump(["path" => $path]);
-                    fwrite($fp, ob_get_clean());
-
-                    if (!file_exists($path)) {
-                        $fp = fopen('/srv/www/1.txt', 'a+');
-                        ob_start();
-                        var_dump(["mkdir" => $path]);
-                        fwrite($fp, ob_get_clean());
-
-                        try{
-                            mkdir($path,0777,true);
-                            $fp = fopen('/srv/www/1.txt', 'a+');
-                            ob_start();
-                            var_dump(["mkdir" => true]);
-                            fwrite($fp, ob_get_clean());
-                        }catch (Exception $e){
-                            $fp = fopen('/srv/www/1.txt', 'a+');
-                            ob_start();
-                            var_dump($e->getMessage());
-                            fwrite($fp, ob_get_clean());
-                        }
-
-
-                    }
-
-
-                    try{
-                        move_uploaded_file($v1, $path."/".$fn);
-                        $fp = fopen('/srv/www/1.txt', 'a+');
-                        ob_start();
-                        var_dump(["move_uploaded_file" => true]);
-                        fwrite($fp, ob_get_clean());
-                    }catch (Exception $e){
-                        $fp = fopen('/srv/www/1.txt', 'a+');
-                        ob_start();
-                        var_dump($e->getMessage());
-                        fwrite($fp, ob_get_clean());
-                    }
-
-
-                    $fp = fopen('/srv/www/1.txt', 'a+');
-                    ob_start();
-                    var_dump(["move_uploaded_file" => $path]);
-                    fwrite($fp, ob_get_clean());
-
-                    $s[]=$fn;
-                    $ss=implode($s,"\n");
-                    $keys = array("id"=>$k);
-                    $vals = array("sup_doc"=>$ss.$old_val);
-                    Table_Update("bud_ru_zay",$keys,$vals);
-                }
+			if (is_uploaded_file($v1))
+			{
+				$a=pathinfo($_FILES["sup_doc"]["name"][$k][$k1]);
+				$fn=translit($_FILES["sup_doc"]["name"][$k][$k1]);
+				$path="files/bud_ru_zay_files/".$k."/sup_doc";
+				if (!file_exists($path)) {mkdir($path,0777,true);}
+				move_uploaded_file($v1, $path."/".$fn);
+				$s[]=$fn;
+				$ss=implode($s,"\n");
+				$keys = array("id"=>$k);
+				$vals = array("sup_doc"=>$ss.$old_val);
+				Table_Update("bud_ru_zay",$keys,$vals);
+			}
 			}
 		}
-        }catch (Exception $e){
-            echo $e->getMessage().' '.$e->getFile().' '.$e->getCode();
-            die();
-        }
 	}
-
 }
 
 

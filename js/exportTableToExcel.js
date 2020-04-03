@@ -97,7 +97,7 @@
                         $.each(td.attributes,function(p,e){
                             td_params += e.name;
                             var val = e.value;
-                            if(e.name == "colspan")
+                            if(e.name === "colspan" && j === tab.rows.length-1)
                                 val -= 1;
                             td_params += "='"+val+"' ";
                             if((e.name == "class" && e.value == "type"+akciya_type_revers) || (e.name == "style" && e.value == "display: none;")){
